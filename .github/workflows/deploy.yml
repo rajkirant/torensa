@@ -38,18 +38,21 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          # save what we need first
+          # Save required artifacts first
           cp -r backend /tmp/backend
           cp -r frontend/dist /tmp/dist
 
-          # create clean deploy branch
+          # Create clean deploy branch
           git checkout --orphan deploy
           git rm -rf .
 
-          # restore needed files
+          # Restore only what we want
           cp -r /tmp/backend backend
           mkdir -p deploy
           cp -r /tmp/dist deploy/dist
+
+          # SAFETY: ensure frontend is never included
+          rm -rf frontend
 
           git add .
           git commit -m "Deploy build ${GITHUB_SHA::7}"
