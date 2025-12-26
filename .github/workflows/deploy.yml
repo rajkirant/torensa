@@ -1,52 +1,30 @@
-name: Build and Prepare Deploy
+- name: Create deploy branch
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  run: |
+    git config user.name "github-actions"
+    git config user.email "github-actions@github.com"
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    # create deploy branch from main
+    git checkout -B deploy
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    # remove everything EXCEPT .git
+    rsync -a --delete \
+      --exclude '.git' \
+      --exclude 'backend' \
+      --exclude 'frontend/dist' \
+      ./ /tmp/clean/
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    # now clean working tree
+    git rm -rf .
 
-      # ---------- Frontend ----------
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
+    # copy backend as-is
+    cp -r backend backend
 
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
+    # copy frontend build
+    mkdir -p deploy
+    cp -r frontend/dist deploy/dist
 
-      - name: Build frontend
-        working-directory: frontend
-        run: npm run build
-
-      # ---------- Create deploy branch ----------
-      - name: Create deploy branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git checkout --orphan deploy
-          git rm -rf .
-
-          cp -r backend backend
-          mkdir -p deploy
-          cp -r frontend/dist deploy/dist
-
-          git add .
-          git commit -m "Deploy build ${GITHUB_SHA::7}"
-          git push origin deploy --force
+    git add .
+    git commit -m "Deploy build ${GITHUB_SHA::7}"
+    git push origin deploy --force
