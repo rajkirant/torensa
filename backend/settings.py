@@ -25,7 +25,7 @@ SECRET_KEY = "***REMOVED-DJANGO-SECRET-KEY***"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['torensa.pythonanywhere.com']
+ALLOWED_HOSTS = ['torensa.pythonanywhere.com','127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "api",
 ]
 
 MIDDLEWARE = [
