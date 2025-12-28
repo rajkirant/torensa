@@ -57,9 +57,28 @@ jobs:
           git add .
           git commit -m "Deploy build ${GITHUB_SHA::7}"
           git push origin deploy --force
-      - name: Upload index.html to PythonAnywhere
+      # - name: Upload index.html to PythonAnywhere
+      #   run: |
+      #     curl -X POST \
+      #       -H "Authorization: Token 6eb86b7ecbc8ea5e066b27ffe813096288a8edb3" \
+      #       -F "content=@deploy/dist/index.html" \
+      #       "https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/index.html"
+      - name: Upload entire dist folder to PythonAnywhere
+        env:
+          PA_TOKEN: 6eb86b7ecbc8ea5e066b27ffe813096288a8edb3
         run: |
-          curl -X POST \
-            -H "Authorization: Token 6eb86b7ecbc8ea5e066b27ffe813096288a8edb3" \
-            -F "content=@deploy/dist/index.html" \
-            "https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/index.html"
+          DIST_DIR="deploy/dist"
+          BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/dist"
+
+          # Loop through all files in dist
+          find "$DIST_DIR" -type f | while read FILE; do
+            # Remove the leading deploy/dist/ to get relative path
+            REL_PATH="${FILE#$DIST_DIR/}"
+
+            echo "Uploading $REL_PATH"
+
+            curl -X POST \
+              -H "Authorization: Token $PA_TOKEN" \
+              -F "content=@$FILE" \
+              "$BASE_URL/$REL_PATH"
+          done
