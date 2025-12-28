@@ -57,15 +57,9 @@ jobs:
           git add .
           git commit -m "Deploy build ${GITHUB_SHA::7}"
           git push origin deploy --force
-      # - name: Upload index.html to PythonAnywhere
-      #   run: |
-      #     curl -X POST \
-      #       -H "Authorization: Token 6eb86b7ecbc8ea5e066b27ffe813096288a8edb3" \
-      #       -F "content=@deploy/dist/index.html" \
-      #       "https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/index.html"
       - name: Upload entire dist folder to PythonAnywhere
         env:
-          PA_TOKEN: 6eb86b7ecbc8ea5e066b27ffe813096288a8edb3
+          PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
         run: |
           DIST_DIR="deploy/dist"
           BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa/deploy/dist"
