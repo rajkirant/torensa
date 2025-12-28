@@ -68,7 +68,7 @@ jobs:
           PA_TOKEN: 6eb86b7ecbc8ea5e066b27ffe813096288a8edb3
         run: |
           DIST_DIR="deploy/dist"
-          BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/dist"
+          BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa/deploy/dist"
 
           # Loop through all files in dist
           find "$DIST_DIR" -type f | while read FILE; do
