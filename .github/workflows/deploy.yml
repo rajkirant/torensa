@@ -103,4 +103,4 @@ jobs:
         run: |
           curl -X POST \
             -H "Authorization: Token $PA_TOKEN" \
-            "https://www.pythonanywhere.com/api/v1/user/torensa/websites/torensa.pythonanywhere.com/reload/"
+            "https://www.pythonanywhere.com/api/v0/user/torensa/webapps/torensa.pythonanywhere.com/reload/"
