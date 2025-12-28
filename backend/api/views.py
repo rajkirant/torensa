@@ -10,7 +10,7 @@ def send_test_email(request):
         subject="Test email from Torensa",
         message="Hello! This is a test email sent from Django.",
         from_email=None,
-        recipient_list=["rajkiran047@gmail.com"],
+        recipient_list=["admin@torensa.com"],
         fail_silently=False,
     )
     return JsonResponse({"status": "Email sent"})
