@@ -16,16 +16,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Print files changed in this push with operation
+      - name: Print backend files in current commit with operation
         run: |
-          echo "Files changed between ${{ github.event.before }} and ${{ github.sha }}:"
-          git diff --name-status "${{ github.event.before }}" "${{ github.sha }}" | while IFS=$'\t' read -r status file; do
+          echo "Files in commit $GITHUB_SHA (backend/ only):"
+          git show --name-status --pretty="" "$GITHUB_SHA" | \
+          grep -E "^([AMDRC]|C)[0-9]*\s+backend/" || true | \
+          while IFS=$'\t' read -r status file; do
             case "$status" in
               A) op="created" ;;
               M) op="modified" ;;
               D) op="deleted" ;;
-              R*) op="renamed" ;;
-              C*) op="copied" ;;
+              R*|C*) op="renamed/copied" ;;
               *) op="changed ($status)" ;;
             esac
             printf "%-8s %s\n" "$op" "$file"
