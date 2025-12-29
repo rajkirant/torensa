@@ -10,6 +10,7 @@ media/
 
 # React / frontend
 node_modules/
+dist/
 
 # OS
 .DS_Store
