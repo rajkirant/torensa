@@ -109,7 +109,7 @@ jobs:
           # Loop through all files in dist
           find "$DIST_DIR" -type f | while read FILE; do
 
-            echo "Uploading $$BASE_URL/$FILE"
+            echo "Uploading $BASE_URL/$FILE"
 
             curl -X POST \
               -H "Authorization: Token $PA_TOKEN" \
