@@ -16,6 +16,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Debug runner
+        uses: mxschmitt/action-tmate@v3
+
       - name: Print backend files in current commit with operation
         run: |
           PA_BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa"

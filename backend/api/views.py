@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 
 
 def hello(request):
-    return JsonResponse({"message": "Hello World print full path correction"})
+    return JsonResponse({"message": "Hello World print full path shell"})
 
 def send_test_email(request):
     send_mail(
