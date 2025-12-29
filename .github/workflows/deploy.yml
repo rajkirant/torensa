@@ -26,7 +26,7 @@ jobs:
           | while IFS=$'\t' read -r status file; do
               echo "$PA_BASE_URL/$file"
               echo "$file"
-              if [ "$status" = "M" ]; then
+              if [ "$status" = "M" ] || [ "$status" = "A" ]; then
                 echo "Uploading modified file: $file"
 
                 curl -X POST \
