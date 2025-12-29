@@ -1,35 +1,34 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-
-function App() {
-  const [count, setCount] = useState(0);
-
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+    <div className="container">
+      <header className="header">
+        <h1>Torensa</h1>
+        <p>Freelance Software Developer</p>
+      </header>
+
+      <section>
+        <h2>About</h2>
         <p>
-          Edit <code>src/App.jsx</code> and save to reload HMR
+          I build reliable web applications using React, Java, and Spring Boot.
+          Available for freelance and contract work.
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      </section>
+
+      <section>
+        <h2>Services</h2>
+        <ul>
+          <li>Web application development</li>
+          <li>Backend APIs and integrations</li>
+          <li>Cloud deployment and maintenance</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>Email: contact@torensa.com</p>
+      </section>
+
+      <footer className="footer">© {new Date().getFullYear()} Torensa</footer>
+    </div>
   );
 }
-
-export default App;
