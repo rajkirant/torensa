@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 
 
 def hello(request):
-    return JsonResponse({"message": "Hello World sync"})
+    return JsonResponse({"message": "Hello World sync missing"})
 
 def send_test_email(request):
     send_mail(
