@@ -16,10 +16,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Print files in current commit
+      - name: Print files changed in this push with operation
         run: |
-          echo "Files in commit $GITHUB_SHA:"
-          git show --name-only --pretty="" "$GITHUB_SHA"
+          echo "Files changed between ${{ github.event.before }} and ${{ github.sha }}:"
+          git diff --name-status "${{ github.event.before }}" "${{ github.sha }}" | while IFS=$'\t' read -r status file; do
+            case "$status" in
+              A) op="created" ;;
+              M) op="modified" ;;
+              D) op="deleted" ;;
+              R*) op="renamed" ;;
+              C*) op="copied" ;;
+              *) op="changed ($status)" ;;
+            esac
+            printf "%-8s %s\n" "$op" "$file"
+          done
 
       - name: Upload changed backend files to PythonAnywhere
         env:
