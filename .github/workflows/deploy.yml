@@ -21,6 +21,42 @@ jobs:
           echo "Files in commit $GITHUB_SHA:"
           git show --name-only --pretty="" "$GITHUB_SHA"
 
+      - name: Upload changed backend files to PythonAnywhere
+        env:
+          PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+        run: |
+          # local prefix and remote base (no trailing slash on REMOTE_BASE)
+          LOCAL_PREFIX="backend/"
+          REMOTE_BASE="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa/backend"
+
+          echo "Changed files between ${{ github.event.before }} and ${{ github.sha }}:"
+          git --no-pager diff --name-only "${{ github.event.before }}" "${{ github.sha }}" || true
+
+          # iterate changed files that start with backend/
+          git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" | grep -E "^${LOCAL_PREFIX}" || true | while IFS= read -r path; do
+            [ -z "$path" ] && continue
+
+            # relative path under backend (strip leading LOCAL_PREFIX)
+            REL_PATH="${path#${LOCAL_PREFIX}}"
+
+            # remote URL for this file
+            REMOTE_URL="${REMOTE_BASE}/${REL_PATH}"
+
+            if [ -f "$path" ]; then
+              echo "Uploading $path -> $REMOTE_URL"
+              curl -s -X POST \
+                -H "Authorization: Token $PA_TOKEN" \
+                -F "content=@${path}" \
+                "$REMOTE_URL"
+            else
+              echo "Local file removed: $path — deleting remote: $REMOTE_URL"
+              curl -s -X DELETE \
+                -H "Authorization: Token $PA_TOKEN" \
+                "$REMOTE_URL" || true
+            fi
+          done
+            echo "Backend sync finished."
+
       # ---------- Frontend ----------
       - name: Setup Node.js
         uses: actions/setup-node@v4
