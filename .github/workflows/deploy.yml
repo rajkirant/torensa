@@ -35,7 +35,7 @@ jobs:
           PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
         run: |
           BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa/deploy/dist"
-          curl -X POST \
+          curl -X DELETE \
             -H "Authorization: Token $PA_TOKEN" $BASE_URL
 
       - name: Upload entire dist folder to PythonAnywhere
