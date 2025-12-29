@@ -24,8 +24,8 @@ jobs:
           grep -E "^([AMDRC]|C)[0-9]*\s+backend/" || true | \
           while IFS=$'\t' read -r status file; do
             echo -e "$status\t$file"
-            FULL_URL="$PA_BASE_URL\t$file"
-            echo -e "$FULL_URL"
+            FULL_URL="$PA_BASE_URL/$file"
+            echo "$FULL_URL"
           done
 
       # ---------- Frontend ----------
