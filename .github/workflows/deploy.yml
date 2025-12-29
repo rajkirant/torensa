@@ -16,20 +16,31 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug runner
-        uses: mxschmitt/action-tmate@v3
-
-      - name: Print backend files in current commit with operation
+      - name: Backend files sync to PythonAnywhere
         run: |
           PA_BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa"
-          echo "Files in commit $GITHUB_SHA (backend/ only):"
-          git show --name-status --pretty="" "$GITHUB_SHA" | \
-          grep -E "^([AMDRC]|C)[0-9]*\s+backend/" || true | \
-          while IFS=$'\t' read -r status file; do
-            echo -e "$status\t$file"
-            FULL_URL="$PA_BASE_URL/$file"
-            echo "$FULL_URL"
-          done
+          git show --name-status --pretty="" "$GITHUB_SHA" \
+          | grep -E "^([AMDRC]|C)[0-9]*\s+backend/" \
+          | while IFS=$'\t' read -r status file; do
+              echo "$PA_BASE_URL/$file"
+              echo "$file"
+              if [ "$status" = "M" ]; then
+                echo "Uploading modified file: $file"
+
+                curl -X POST \
+                  -H "Authorization: Token $PA_TOKEN" \
+                  -F "content=@$file" \
+                  "$PA_BASE_URL/$file"
+            elif [ "$status" = "D" ]; then
+                echo "Deleting file: $file"
+
+                curl -X DELETE \
+                  -H "Authorization: Token $PA_TOKEN" \
+                  "$PA_BASE_URL/$file"
+              else
+                echo "Skipping (status=$status)"
+              fi
+            done || true
 
       # ---------- Frontend ----------
       - name: Setup Node.js
