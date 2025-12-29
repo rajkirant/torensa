@@ -21,27 +21,60 @@ jobs:
           PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
         run: |
           PA_BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa"
+
           git show --name-status --pretty="" "$GITHUB_SHA" \
           | grep -E "^([AMDRC]|C)[0-9]*\s+backend/" \
-          | while IFS=$'\t' read -r status file; do
-              echo "$PA_BASE_URL/$file"
-              echo "$file"
-              if [ "$status" = "M" ] || [ "$status" = "A" ]; then
-                echo "Uploading modified file: $file"
+          | while IFS=$'\t' read -r status file1 file2; do
+
+              echo "Status: $status"
+
+              # -----------------------------
+              # Added or Modified
+              # -----------------------------
+              if [ "$status" = "A" ] || [ "$status" = "M" ]; then
+                echo "Uploading file: $file1"
 
                 curl -X POST \
                   -H "Authorization: Token $PA_TOKEN" \
-                  -F "content=@$file" \
-                  "$PA_BASE_URL/$file"
-            elif [ "$status" = "D" ]; then
-                echo "Deleting file: $file"
+                  -F "content=@$file1" \
+                  "$PA_BASE_URL/$file1"
+
+              # -----------------------------
+              # Deleted
+              # -----------------------------
+              elif [ "$status" = "D" ]; then
+                echo "Deleting file: $file1"
 
                 curl -X DELETE \
                   -H "Authorization: Token $PA_TOKEN" \
-                  "$PA_BASE_URL/$file"
+                  "$PA_BASE_URL/$file1"
+
+              # -----------------------------
+              # Renamed (R100, R090, etc.)
+              # -----------------------------
+              elif [[ "$status" == R* ]]; then
+                OLD_FILE="$file1"
+                NEW_FILE="$file2"
+
+                echo "Renamed:"
+                echo "  Old: $OLD_FILE"
+                echo "  New: $NEW_FILE"
+
+                # Delete old file
+                curl -X DELETE \
+                  -H "Authorization: Token $PA_TOKEN" \
+                  "$PA_BASE_URL/$OLD_FILE"
+
+                # Upload new file
+                curl -X POST \
+                  -H "Authorization: Token $PA_TOKEN" \
+                  -F "content=@$NEW_FILE" \
+                  "$PA_BASE_URL/$NEW_FILE"
+
               else
                 echo "Skipping (status=$status)"
               fi
+
             done || true
 
       # ---------- Frontend ----------
