@@ -104,7 +104,7 @@ jobs:
           PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
         run: |
           DIST_DIR="frontend/dist"
-          BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa"
+          BASE_URL="https://www.pythonanywhere.com/api/v0/user/torensa/files/path/home/torensa/torensa/frontend"
 
           # Loop through all files in dist
           find "$DIST_DIR" -type f | while read FILE; do
