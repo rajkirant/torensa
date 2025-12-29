@@ -55,7 +55,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, "deploy/dist"),
+            os.path.join(BASE_DIR, "frontend"),
             ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -132,7 +132,7 @@ STATIC_ROOT = '/home/torensa/torensa/static'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "deploy/dist", "assets"),
+    os.path.join(BASE_DIR, "frontend", "assets"),
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
