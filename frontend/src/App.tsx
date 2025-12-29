@@ -4,12 +4,38 @@ import Contact from "./Contact";
 export default function App() {
   return (
     <div className="container">
-      {/* simple test nav */}
-      <div style={{ textAlign: "right", marginBottom: 20 }}>
-        <Link to="/contact">Contact</Link>
+      {/* NAV (always visible) */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 40,
+        }}
+      >
+        <Link
+          to="/"
+          style={{
+            fontSize: 20,
+            fontWeight: 700,
+            color: "var(--primary)",
+            textDecoration: "none",
+          }}
+        >
+          Torensa
+        </Link>
+
+        <div>
+          <Link to="/" style={{ marginRight: 20 }}>
+            Home
+          </Link>
+          <Link to="/contact">Contact</Link>
+        </div>
       </div>
 
+      {/* ROUTES */}
       <Routes>
+        {/* HOME PAGE */}
         <Route
           path="/"
           element={
@@ -67,7 +93,7 @@ export default function App() {
                 </ul>
               </section>
 
-              {/* CONTACT SECTION (home anchor still works) */}
+              {/* CONTACT SECTION (home anchor) */}
               <section id="contact">
                 <h2>Contact</h2>
                 <div className="card">
@@ -81,6 +107,7 @@ export default function App() {
           }
         />
 
+        {/* CONTACT PAGE */}
         <Route path="/contact" element={<Contact />} />
       </Routes>
 
