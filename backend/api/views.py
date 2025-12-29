@@ -8,7 +8,7 @@ def hello(request):
 def send_test_email(request):
     send_mail(
         subject="Test email from Torensa",
-        message="Hello! This is a test email sent from Django.",
+        message="Hello! This is a test email sent from now.",
         from_email=None,
         recipient_list=["admin@torensa.com"],
         fail_silently=False,

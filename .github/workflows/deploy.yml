@@ -16,6 +16,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Print files in current commit
+        run: |
+          echo "Files in commit $GITHUB_SHA:"
+          git show --name-only --pretty="" "$GITHUB_SHA"
+
       # ---------- Frontend ----------
       - name: Setup Node.js
         uses: actions/setup-node@v4
