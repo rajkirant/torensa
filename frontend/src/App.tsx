@@ -1,5 +1,6 @@
 import { Routes, Route, Link } from "react-router-dom";
 import Contact from "./Contact";
+import Login from "./Login";
 
 export default function App() {
   return (
@@ -29,7 +30,10 @@ export default function App() {
           <Link to="/" style={{ marginRight: 20 }}>
             Home
           </Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact" style={{ marginRight: 20 }}>
+            Contact
+          </Link>
+          <Link to="/login">Login</Link>
         </div>
       </div>
 
@@ -98,6 +102,7 @@ export default function App() {
 
         {/* CONTACT PAGE */}
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
       <footer
