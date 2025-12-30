@@ -131,10 +131,6 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/torensa/torensa/static'
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend", "assets"),
-]
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = "smtp.gmail.com"
