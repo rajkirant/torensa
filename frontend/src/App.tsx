@@ -29,7 +29,7 @@ export default function App() {
           <Link to="/" style={{ marginRight: 20 }}>
             Home
           </Link>
-          <Link to="/contact">Contact Us</Link>
+          <Link to="/contact">Contact</Link>
         </div>
       </div>
 
