@@ -16,13 +16,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug SHAs and changes
+      - name: Detect frontend changes
+        id: detect_frontend
         shell: bash
+        env:
+          TARGET_DIR: frontend
         run: |
           echo "Before SHA: ${{ github.event.before }}"
           echo "Current SHA: ${{ github.sha }}"
+          echo "Checking changes in: $TARGET_DIR/"
+
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed files:"
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+          echo "$CHANGED_FILES"
+
+          if echo "$CHANGED_FILES" | grep -q "^${TARGET_DIR}/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Frontend folder changed"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Frontend folder NOT changed"
+          fi
 
       - name: Backend files sync to PythonAnywhere
         env:
