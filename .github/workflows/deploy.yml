@@ -16,8 +16,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug runner
-        uses: mxschmitt/action-tmate@v3
+      - name: Debug SHAs and changes
+        shell: bash
+        run: |
+          echo "Before SHA: ${{ github.event.before }}"
+          echo "Current SHA: ${{ github.sha }}"
+          echo "Changed files:"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
 
       - name: Backend files sync to PythonAnywhere
         env:
