@@ -92,17 +92,6 @@ export default function App() {
                   <li>Docker</li>
                 </ul>
               </section>
-
-              {/* CONTACT SECTION (home anchor) */}
-              <section id="contact">
-                <h2>Contact</h2>
-                <div className="card">
-                  <p>
-                    Email:{" "}
-                    <a href="mailto:admin@torensa.com">admin@torensa.com</a>
-                  </p>
-                </div>
-              </section>
             </>
           }
         />
@@ -111,7 +100,87 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
       </Routes>
 
-      <footer className="footer">© {new Date().getFullYear()} Torensa</footer>
+      <footer
+        className="footer"
+        style={{
+          marginTop: 80,
+          paddingTop: 40,
+          borderTop: "1px solid #e5e7eb",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 30,
+          }}
+        >
+          {/* BRAND */}
+          <div>
+            <h3 style={{ marginBottom: 10, color: "var(--primary)" }}>
+              Torensa
+            </h3>
+            <p>
+              Freelance software developer building scalable and maintainable
+              web applications.
+            </p>
+          </div>
+
+          {/* NAVIGATION */}
+          <div>
+            <h4>Navigation</h4>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              <li>
+                <a href="#/" style={{ textDecoration: "none" }}>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#/contact" style={{ textDecoration: "none" }}>
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* CONTACT */}
+          <div>
+            <h4>Contact</h4>
+
+            <p>
+              Email:
+              <br />
+              <a href="mailto:admin@torensa.com">admin@torensa.com</a>
+            </p>
+
+            <p style={{ marginTop: 10 }}>
+              LinkedIn:
+              <br />
+              <a
+                href="https://www.linkedin.com/in/rajkirant/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                linkedin.com/in/rajkirant
+              </a>
+            </p>
+
+            <p style={{ marginTop: 10 }}>Based in the UK · Remote friendly</p>
+          </div>
+        </div>
+
+        {/* COPYRIGHT */}
+        <div
+          style={{
+            marginTop: 40,
+            fontSize: 14,
+            color: "#6b7280",
+            textAlign: "center",
+          }}
+        >
+          © {new Date().getFullYear()} Torensa. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
