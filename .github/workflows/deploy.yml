@@ -16,6 +16,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Detect frontend changes
+        id: frontend_changes
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^frontend/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Backend files sync to PythonAnywhere
         env:
           PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
