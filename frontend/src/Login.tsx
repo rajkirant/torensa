@@ -37,6 +37,7 @@ export default function Login() {
         <div style={{ marginBottom: 16 }}>
           <label>Username</label>
           <input
+            autoComplete="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -48,6 +49,7 @@ export default function Login() {
         <div style={{ marginBottom: 16 }}>
           <label>Password</label>
           <input
+            autoComplete="current-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
