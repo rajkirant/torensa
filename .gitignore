@@ -3,7 +3,9 @@ __pycache__/
 *.pyc
 .env
 venv/
-db.sqlite3
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
 
 # Django uploads
 media/
