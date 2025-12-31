@@ -1,23 +1,36 @@
+from django.db import connection
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 import json
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, get_connection
 
 def hello(request):
     return JsonResponse({"message": "Hello World sync missing and syntax"})
 
+
 def send_test_email(request):
-    email = EmailMessage(
-        subject="Test email from Torensa",
-        body="Hello! This is a test email sent from now.",
-        from_email=None,  # Uses DEFAULT_FROM_EMAIL
-        to=["admin@torensa.com"],
+    # 🔐 Custom SMTP connection (Gmail SSL)
+    connection = get_connection(
+        host="smtp.gmail.com",
+        port=465,
+        username="rajkiran047@gmail.com",
+        password="pjxv ssso xrzw srgy",
+        use_ssl=True,
+        use_tls=False,
     )
 
-    # ✅ Attach a text file
+    email = EmailMessage(
+        subject="Test email from Torensa",
+        body="Hello! This email uses Gmail SMTP with SSL.",
+        from_email="admin@torensa.com",
+        to=["admin@torensa.com"],
+        connection=connection,
+    )
+
+    # 📎 Optional attachment
     email.attach(
         filename="hello.txt",
         content="This is a test attachment",
@@ -26,10 +39,9 @@ def send_test_email(request):
 
     email.send(fail_silently=False)
 
-    return JsonResponse({"status": "Email sent with attachment"})
+    return JsonResponse({"status": "Email sent using Gmail SSL"})
 
-
-@csrf_exempt            # OK for API-style login (see note below)
+@csrf_exempt
 @require_POST
 def login_view(request):
     try:
