@@ -28,17 +28,13 @@ export default function App() {
           Torensa
         </Link>
 
-        <div>
-          <Link to="/" style={{ marginRight: 20 }}>
-            Home
-          </Link>
-          <Link to="/contact" style={{ marginRight: 20 }}>
-            Contact
-          </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <Link to="/">Home</Link>
+          <Link to="/contact">Contact</Link>
 
           {!loading &&
             (user ? (
-              <span style={{ marginLeft: 20 }}>
+              <span>
                 Hi, <strong>{user.username}</strong>
                 <button
                   style={{
@@ -58,9 +54,7 @@ export default function App() {
                 </button>
               </span>
             ) : (
-              <Link to="/login" style={{ marginLeft: 20 }}>
-                Login
-              </Link>
+              <Link to="/login">Login</Link>
             ))}
         </div>
       </div>
