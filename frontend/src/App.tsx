@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import { useAuth } from "./auth";
 
 export default function App() {
-  const { user, loading } = useAuth();
+  const { user, loading, setUser } = useAuth();
   return (
     <div className="container">
       {/* NAV (always visible) */}
@@ -38,8 +38,24 @@ export default function App() {
 
           {!loading &&
             (user ? (
-              <span style={{ marginLeft: 20, fontWeight: 600 }}>
-                Hi, {user.username}
+              <span style={{ marginLeft: 20 }}>
+                Hi, <strong>{user.username}</strong>
+                <button
+                  style={{
+                    marginLeft: 12,
+                    padding: "4px 10px",
+                    cursor: "pointer",
+                  }}
+                  onClick={async () => {
+                    await fetch("/api/logout/", {
+                      method: "POST",
+                      credentials: "include",
+                    });
+                    setUser(null);
+                  }}
+                >
+                  Logout
+                </button>
               </span>
             ) : (
               <Link to="/login" style={{ marginLeft: 20 }}>

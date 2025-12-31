@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
@@ -62,3 +62,8 @@ def me(request):
             }
         })
     return JsonResponse({"user": None}, status=401)
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    return JsonResponse({"message": "Logged out"})
