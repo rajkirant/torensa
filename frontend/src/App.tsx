@@ -120,7 +120,7 @@ export default function App() {
                     <div className="card">
                       <h3>Backend APIs</h3>
                       <p>
-                        Secure and scalable APIs using Java, Spring Boot, and
+                        Secure and scalable APIs using Spring Boot, Java, and
                         REST or GraphQL.
                       </p>
                     </div>
