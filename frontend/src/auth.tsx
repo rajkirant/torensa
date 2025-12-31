@@ -6,7 +6,11 @@ import React, {
   useState,
 } from "react";
 
-type User = {
+/* =========================
+   Types
+   ========================= */
+
+export type User = {
   id: number;
   username: string;
   email: string;
@@ -18,27 +22,48 @@ type AuthContextType = {
   loading: boolean;
 };
 
+/* =========================
+   Context
+   ========================= */
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+/* =========================
+   Provider
+   ========================= */
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const fetched = useRef<boolean>(false);
+
+  // 🔒 Prevent duplicate calls (React StrictMode safe)
+  const fetchedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (fetched.current) return;
-    fetched.current = true;
+    if (fetchedRef.current) return;
+    fetchedRef.current = true;
 
-    fetch("/api/me/", { credentials: "include" })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        setUser(data?.user ?? null);
-        setLoading(false);
-      })
-      .catch(() => {
-        setUser(null);
-        setLoading(false);
-      });
+    // ⏳ Defer auth check so it doesn't block initial render
+    const run = () => {
+      fetch("/api/me/", { credentials: "include" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          setUser(data?.user ?? null);
+          setLoading(false);
+        })
+        .catch(() => {
+          setUser(null);
+          setLoading(false);
+        });
+    };
+
+    // Prefer idle time if available (best for performance)
+    if ("requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(run);
+    } else {
+      // Fallback for older browsers
+      setTimeout(run, 0);
+    }
   }, []);
 
   return (
@@ -47,6 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
+/* =========================
+   Hook
+   ========================= */
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
