@@ -57,75 +57,76 @@ export default function App() {
             ))}
         </div>
       </div>
+      <main id="main-content">
+        {/* ROUTES */}
+        <Routes>
+          {/* HOME PAGE */}
+          <Route
+            path="/"
+            element={
+              <>
+                {/* HERO */}
+                <header className="hero">
+                  <h1>Torensa</h1>
+                  <p className="subtitle">Freelance Software Developer</p>
+                  <p className="tagline">
+                    Building scalable, secure, and maintainable web
+                    applications.
+                  </p>
+                  <a href="#contact" className="cta">
+                    Contact Me
+                  </a>
+                </header>
 
-      {/* ROUTES */}
-      <Routes>
-        {/* HOME PAGE */}
-        <Route
-          path="/"
-          element={
-            <>
-              {/* HERO */}
-              <header className="hero">
-                <h1>Torensa</h1>
-                <p className="subtitle">Freelance Software Developer</p>
-                <p className="tagline">
-                  Building scalable, secure, and maintainable web applications.
-                </p>
-                <a href="#contact" className="cta">
-                  Contact Me
-                </a>
-              </header>
-
-              {/* SERVICES */}
-              <section>
-                <h2>Services</h2>
-                <div className="cards">
-                  <div className="card">
-                    <h3>Web Development</h3>
-                    <p>
-                      Responsive, high-performance web applications using React
-                      and modern frontend tooling.
-                    </p>
+                {/* SERVICES */}
+                <section>
+                  <h2>Services</h2>
+                  <div className="cards">
+                    <div className="card">
+                      <h3>Web Development</h3>
+                      <p>
+                        Responsive, high-performance web applications using
+                        React and modern frontend tooling.
+                      </p>
+                    </div>
+                    <div className="card">
+                      <h3>Backend APIs</h3>
+                      <p>
+                        Secure and scalable APIs using Java, Spring Boot, and
+                        REST or GraphQL.
+                      </p>
+                    </div>
+                    <div className="card">
+                      <h3>Deployment & DevOps</h3>
+                      <p>
+                        Dockerised applications, CI/CD pipelines, and cloud
+                        deployments.
+                      </p>
+                    </div>
                   </div>
-                  <div className="card">
-                    <h3>Backend APIs</h3>
-                    <p>
-                      Secure and scalable APIs using Java, Spring Boot, and REST
-                      or GraphQL.
-                    </p>
-                  </div>
-                  <div className="card">
-                    <h3>Deployment & DevOps</h3>
-                    <p>
-                      Dockerised applications, CI/CD pipelines, and cloud
-                      deployments.
-                    </p>
-                  </div>
-                </div>
-              </section>
+                </section>
 
-              {/* SKILLS */}
-              <section>
-                <h2>Skills</h2>
-                <ul className="skills">
-                  <li>React</li>
-                  <li>TypeScript</li>
-                  <li>Vite</li>
-                  <li>Java</li>
-                  <li>Spring Boot</li>
-                  <li>Docker</li>
-                </ul>
-              </section>
-            </>
-          }
-        />
+                {/* SKILLS */}
+                <section>
+                  <h2>Skills</h2>
+                  <ul className="skills">
+                    <li>React</li>
+                    <li>TypeScript</li>
+                    <li>Vite</li>
+                    <li>Java</li>
+                    <li>Spring Boot</li>
+                    <li>Docker</li>
+                  </ul>
+                </section>
+              </>
+            }
+          />
 
-        {/* CONTACT PAGE */}
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-
+          {/* CONTACT PAGE */}
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </main>
       <footer
         className="footer"
         style={{
