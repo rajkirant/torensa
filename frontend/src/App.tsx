@@ -1,8 +1,10 @@
 import { Routes, Route, Link } from "react-router-dom";
-import Contact from "./Contact";
-import Login from "./Login";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import { useAuth } from "./auth";
 
 export default function App() {
+  const { user, loading } = useAuth();
   return (
     <div className="container">
       {/* NAV (always visible) */}
@@ -33,7 +35,17 @@ export default function App() {
           <Link to="/contact" style={{ marginRight: 20 }}>
             Contact
           </Link>
-          <Link to="/login">Login</Link>
+
+          {!loading &&
+            (user ? (
+              <span style={{ marginLeft: 20, fontWeight: 600 }}>
+                Hi, {user.username}
+              </span>
+            ) : (
+              <Link to="/login" style={{ marginLeft: 20 }}>
+                Login
+              </Link>
+            ))}
         </div>
       </div>
 

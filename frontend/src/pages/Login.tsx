@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth";
 
 export default function Login() {
+  const { setUser } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ export default function Login() {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include", // IMPORTANT for Django session
+      credentials: "include",
       body: JSON.stringify({ username, password }),
     });
 
@@ -25,7 +27,13 @@ export default function Login() {
       return;
     }
 
-    // success
+    // ✅ READ login response
+    const data = await res.json();
+
+    // ✅ STORE user in auth state
+    setUser(data.user);
+
+    // ✅ NAVIGATE after state update
     navigate("/");
   }
 
