@@ -114,16 +114,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Enable Corepack (pnpm)
+        if: steps.detect_frontend.outputs.changed == 'true'
+        run: corepack enable
 
       - name: Install frontend dependencies
         if: steps.detect_frontend.outputs.changed == 'true'
         working-directory: frontend
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build frontend
         if: steps.detect_frontend.outputs.changed == 'true'
         working-directory: frontend
-        run: npm run build
+        run: pnpm run build
 
       - name: Upload entire dist folder to PythonAnywhere
         if: steps.detect_frontend.outputs.changed == 'true'
