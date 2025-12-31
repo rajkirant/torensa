@@ -2,6 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import { useAuth } from "./auth";
+import Button from "@mui/material/Button";
 
 export default function App() {
   const { user, loading, setUser } = useAuth();
@@ -36,12 +37,10 @@ export default function App() {
             (user ? (
               <span>
                 Hi, <strong>{user.username}</strong>
-                <button
-                  style={{
-                    marginLeft: 12,
-                    padding: "4px 10px",
-                    cursor: "pointer",
-                  }}
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ ml: 1.5 }}
                   onClick={async () => {
                     await fetch("/api/logout/", {
                       method: "POST",
@@ -51,7 +50,7 @@ export default function App() {
                   }}
                 >
                   Logout
-                </button>
+                </Button>
               </span>
             ) : (
               <Link to="/login">Login</Link>

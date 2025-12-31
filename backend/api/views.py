@@ -86,6 +86,7 @@ def me(request):
     return JsonResponse({"user": None}, status=401)
 
 @require_POST
+@csrf_exempt
 def logout_view(request):
     logout(request)
     return JsonResponse({"message": "Logged out"})
