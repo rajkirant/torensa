@@ -4,19 +4,29 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 import json
+from django.core.mail import EmailMessage
 
 def hello(request):
     return JsonResponse({"message": "Hello World sync missing and syntax"})
 
 def send_test_email(request):
-    send_mail(
+    email = EmailMessage(
         subject="Test email from Torensa",
-        message="Hello! This is a test email sent from now.",
-        from_email=None,
-        recipient_list=["admin@torensa.com"],
-        fail_silently=False,
+        body="Hello! This is a test email sent from now.",
+        from_email=None,  # Uses DEFAULT_FROM_EMAIL
+        to=["admin@torensa.com"],
     )
-    return JsonResponse({"status": "Email sent"})
+
+    # ✅ Attach a text file
+    email.attach(
+        filename="hello.txt",
+        content="This is a test attachment",
+        mimetype="text/plain",
+    )
+
+    email.send(fail_silently=False)
+
+    return JsonResponse({"status": "Email sent with attachment"})
 
 
 @csrf_exempt            # OK for API-style login (see note below)
