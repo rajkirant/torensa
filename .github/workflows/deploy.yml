@@ -110,24 +110,24 @@ jobs:
             -H "Authorization: Token $PA_TOKEN" $BASE_URL
 
       - name: Setup Node.js
-        if: steps.detect_frontend.outputs.changed == 'true'
+        #if: steps.detect_frontend.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
-          cache-dependency-path: frontend/pnpm-lock.yaml
 
-      - name: Enable Corepack (pnpm)
-        if: steps.detect_frontend.outputs.changed == 'true'
-        run: corepack enable
+      - name: Enable Corepack and pnpm
+        #if: steps.detect_frontend.outputs.changed == 'true'
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.0 --activate
 
       - name: Install frontend dependencies
-        if: steps.detect_frontend.outputs.changed == 'true'
+        #if: steps.detect_frontend.outputs.changed == 'true'
         working-directory: frontend
         run: pnpm install --frozen-lockfile
 
       - name: Build frontend
-        if: steps.detect_frontend.outputs.changed == 'true'
+        #if: steps.detect_frontend.outputs.changed == 'true'
         working-directory: frontend
         run: pnpm run build
 
