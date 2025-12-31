@@ -3,7 +3,8 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import { useAuth } from "./auth";
 import Button from "@mui/material/Button";
-
+import Stack from "@mui/material/Stack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 export default function App() {
   const { user, loading, setUser } = useAuth();
   return (
@@ -73,9 +74,36 @@ export default function App() {
                     Building scalable, secure, and maintainable web
                     applications.
                   </p>
-                  <a href="#contact" className="cta">
-                    Contact Me
-                  </a>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    justifyContent="center"
+                    sx={{ mt: 4 }}
+                  >
+                    <Button
+                      variant="contained"
+                      size="large"
+                      endIcon={<ArrowForwardIcon />}
+                      href="#/contact"
+                      sx={{
+                        px: 4,
+                        py: 1.5,
+                        fontSize: "1rem",
+                        fontWeight: 600,
+                        borderRadius: 3,
+                        textTransform: "none",
+                        background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+                        boxShadow: "0 10px 25px rgba(124, 58, 237, 0.35)",
+                        "&:hover": {
+                          background:
+                            "linear-gradient(135deg, #1e40af, #6d28d9)",
+                          boxShadow: "0 12px 28px rgba(124, 58, 237, 0.5)",
+                        },
+                      }}
+                    >
+                      Contact Me
+                    </Button>
+                  </Stack>
                 </header>
 
                 {/* SERVICES */}
