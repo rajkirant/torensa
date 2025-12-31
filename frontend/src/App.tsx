@@ -1,47 +1,143 @@
-import { Routes, Route, Link } from "react-router-dom";
+import React from "react";
+import { Routes, Route, NavLink, Link } from "react-router-dom";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import { useAuth } from "./auth";
+
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
+/* -------------------- Reusable style objects -------------------- */
+const headerStyle: React.CSSProperties = {
+  backgroundColor: "#0b0b0b",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "24px 32px",
+  marginBottom: 48,
+  borderBottom: "1px solid rgba(255,255,255,0.08)",
+};
+
+const brandLinkStyle: React.CSSProperties = {
+  fontSize: 22,
+  fontWeight: 800,
+  color: "#ffffff",
+  textDecoration: "none",
+  letterSpacing: 0.3,
+};
+
+const navLinkBase: React.CSSProperties = {
+  textDecoration: "none",
+  fontWeight: 500,
+  color: "#d1d5db",
+};
+
+/* Footer uses a different, complementary dark-blue/indigo tone so header and footer
+   are visually distinct while keeping a cohesive dark theme. */
+const footerStyle: React.CSSProperties = {
+  backgroundColor: "#0f172a", // different from header (#0b0b0b)
+  marginTop: 96,
+  padding: "48px 24px",
+  borderTop: "1px solid rgba(255,255,255,0.04)",
+};
+
+const footerInnerStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: 16,
+  textAlign: "center",
+};
+
 export default function App() {
   const { user, loading, setUser } = useAuth();
+
   return (
     <div className="container">
-      {/* NAV (always visible) */}
-      <div
+      {/* Skip link for keyboard users */}
+      <a
+        href="#main-content"
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 40,
+          position: "absolute",
+          left: -9999,
+          top: "auto",
+          width: 1,
+          height: 1,
+          overflow: "hidden",
+        }}
+        onFocus={(e) => {
+          const el = e.currentTarget;
+          el.style.left = "8px";
+          el.style.top = "8px";
+          el.style.width = "auto";
+          el.style.height = "auto";
+          el.style.padding = "8px 12px";
+          el.style.background = "#fff";
+          el.style.color = "#000";
+          el.style.zIndex = "9999";
+        }}
+        onBlur={(e) => {
+          const el = e.currentTarget;
+          el.style.left = "-9999px";
+          el.style.top = "auto";
+          el.style.width = "1px";
+          el.style.height = "1px";
+          el.style.padding = "";
+          el.style.background = "";
+          el.style.color = "";
+          el.style.zIndex = "";
         }}
       >
-        <Link
-          to="/"
-          style={{
-            fontSize: 20,
-            fontWeight: 700,
-            color: "var(--primary)",
-            textDecoration: "none",
-          }}
-        >
+        Skip to content
+      </a>
+
+      {/* ================= HEADER ================= */}
+      <header style={headerStyle}>
+        {/* BRAND */}
+        <Link to="/" style={brandLinkStyle} aria-label="Torensa home">
           Torensa
         </Link>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <Link to="/">Home</Link>
-          <Link to="/contact">Contact</Link>
+        {/* NAV */}
+        <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+          <NavLink
+            to="/"
+            end
+            style={({ isActive }) =>
+              isActive
+                ? { ...navLinkBase, color: "#fff", textDecoration: "underline" }
+                : navLinkBase
+            }
+            aria-current={({ isActive }) => (isActive ? "page" : undefined)}
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            to="/contact"
+            style={({ isActive }) =>
+              isActive
+                ? { ...navLinkBase, color: "#fff", textDecoration: "underline" }
+                : navLinkBase
+            }
+            aria-current={({ isActive }) => (isActive ? "page" : undefined)}
+          >
+            Contact
+          </NavLink>
 
           {!loading &&
             (user ? (
-              <span>
-                Hi, <strong>{user.username}</strong>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 14, color: "#d1d5db" }}>
+                  Hi, <strong>{user.username}</strong>
+                </span>
                 <Button
                   variant="outlined"
                   size="small"
-                  sx={{ ml: 1.5 }}
+                  sx={{ color: "#fff", borderColor: "#4b5563" }}
                   onClick={async () => {
                     await fetch("/api/logout/", {
                       method: "POST",
@@ -52,28 +148,39 @@ export default function App() {
                 >
                   Logout
                 </Button>
-              </span>
+              </div>
             ) : (
-              <Link to="/login">Login</Link>
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: "none",
+                  fontWeight: 500,
+                  color: "#fff",
+                }}
+              >
+                Login
+              </Link>
             ))}
-        </div>
-      </div>
-      <main id="main-content">
-        {/* ROUTES */}
+        </nav>
+      </header>
+
+      {/* ================= MAIN ================= */}
+      <main id="main-content" tabIndex={-1}>
         <Routes>
-          {/* HOME PAGE */}
+          {/* HOME */}
           <Route
             path="/"
             element={
               <>
                 {/* HERO */}
-                <header className="hero">
-                  <h1>Torensa</h1>
+                <header className="hero" aria-labelledby="hero-title">
+                  <h1 id="hero-title">Torensa</h1>
                   <p className="subtitle">Freelance Software Developer</p>
                   <p className="tagline">
                     Building scalable, secure, and maintainable web
                     applications.
                   </p>
+
                   <Stack
                     direction="row"
                     spacing={2}
@@ -150,90 +257,40 @@ export default function App() {
             }
           />
 
-          {/* CONTACT PAGE */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </main>
-      <footer
-        className="footer"
-        style={{
-          marginTop: 80,
-          paddingTop: 40,
-          borderTop: "1px solid #e5e7eb",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: 30,
-          }}
-        >
-          {/* BRAND */}
-          <div>
-            <h3 style={{ marginBottom: 10, color: "var(--primary)" }}>
-              Torensa
-            </h3>
-            <p>
-              Freelance software developer building scalable and maintainable
-              web applications.
-            </p>
+
+      {/* ================= FOOTER ================= */}
+      <footer style={footerStyle}>
+        <div style={footerInnerStyle}>
+          <strong style={{ fontSize: 18, color: "#ffffff" }}>Torensa</strong>
+
+          <p style={{ maxWidth: 520, color: "#9ca3af", fontSize: 15 }}>
+            Freelance software developer specialising in scalable, secure, and
+            maintainable web applications.
+          </p>
+
+          <a
+            href="https://www.linkedin.com/in/rajkirant/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+          >
+            <LinkedInIcon
+              sx={{
+                fontSize: 30,
+                color: "#0A66C2",
+                "&:hover": { color: "#004182", transform: "scale(1.1)" },
+                transition: "all 0.2s ease",
+              }}
+            />
+          </a>
+
+          <div style={{ fontSize: 13, color: "#6b7280", marginTop: 24 }}>
+            © {new Date().getFullYear()} Torensa. All rights reserved.
           </div>
-
-          {/* NAVIGATION */}
-          <div>
-            <h4>Navigation</h4>
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              <li>
-                <a href="#/" style={{ textDecoration: "none" }}>
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#/contact" style={{ textDecoration: "none" }}>
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* CONTACT */}
-          <div>
-            <h4>Contact</h4>
-
-            <p>
-              Email:
-              <br />
-              <a href="mailto:admin@torensa.com">admin@torensa.com</a>
-            </p>
-
-            <p style={{ marginTop: 10 }}>
-              LinkedIn:
-              <br />
-              <a
-                href="https://www.linkedin.com/in/rajkirant/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                linkedin.com/in/rajkirant
-              </a>
-            </p>
-
-            <p style={{ marginTop: 10 }}>Based in the UK · Remote friendly</p>
-          </div>
-        </div>
-
-        {/* COPYRIGHT */}
-        <div
-          style={{
-            marginTop: 40,
-            fontSize: 14,
-            color: "#6b7280",
-            textAlign: "center",
-          }}
-        >
-          © {new Date().getFullYear()} Torensa. All rights reserved.
         </div>
       </footer>
     </div>
