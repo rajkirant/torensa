@@ -2,39 +2,46 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth";
 
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+
 export default function Login() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const res = await fetch("/api/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ username, password }),
-    });
+    try {
+      const res = await fetch("/api/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (!res.ok) {
-      setError("Invalid username or password");
-      return;
+      if (!res.ok) {
+        setError("Invalid username or password");
+        return;
+      }
+
+      const data = await res.json();
+      setUser(data.user);
+      navigate("/");
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    // ✅ READ login response
-    const data = await res.json();
-
-    // ✅ STORE user in auth state
-    setUser(data.user);
-
-    // ✅ NAVIGATE after state update
-    navigate("/");
   }
 
   return (
@@ -66,11 +73,43 @@ export default function Login() {
           />
         </div>
 
-        {error && <p style={{ color: "red", marginBottom: 16 }}>{error}</p>}
+        {error && <p style={{ color: "#dc2626", marginBottom: 16 }}>{error}</p>}
 
-        <button type="submit" className="cta">
-          Login
-        </button>
+        <Button
+          type="submit"
+          fullWidth
+          size="large"
+          disabled={loading}
+          sx={{
+            mt: 1,
+            py: 1.5,
+            fontSize: "1.05rem",
+            fontWeight: 700,
+            letterSpacing: "0.03em",
+            borderRadius: 3,
+            textTransform: "none",
+            color: "#ffffff",
+            background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+            boxShadow: "0 10px 25px rgba(124, 58, 237, 0.35)",
+            "&:hover": {
+              background: "linear-gradient(135deg, #1e40af, #6d28d9)",
+              boxShadow: "0 12px 28px rgba(124, 58, 237, 0.5)",
+            },
+            "&.Mui-disabled": {
+              color: "#ffffff",
+              opacity: 0.8,
+            },
+          }}
+        >
+          {loading ? (
+            <>
+              <CircularProgress size={22} sx={{ color: "#ffffff", mr: 1 }} />
+              Logging in…
+            </>
+          ) : (
+            "Login"
+          )}
+        </Button>
       </form>
     </div>
   );
