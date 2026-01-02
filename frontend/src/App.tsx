@@ -6,103 +6,119 @@ import { useAuth } from "./auth";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { useTheme } from "@mui/material/styles";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
-/* -------------------- Reusable style objects -------------------- */
-const headerStyle: React.CSSProperties = {
-  backgroundColor: "#0b0b0b",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "24px 32px",
-  marginBottom: 48,
-  borderBottom: "1px solid rgba(255,255,255,0.08)",
+/* ===================== TYPES ===================== */
+
+type AppProps = {
+  themeName: "default" | "dark";
+  setThemeName: (name: "default" | "dark") => void;
 };
+
+/* ===================== STATIC STYLES ===================== */
 
 const brandLinkStyle: React.CSSProperties = {
   fontSize: 22,
-  fontWeight: 800,
+  fontWeight: 900,
   color: "#ffffff",
   textDecoration: "none",
-  letterSpacing: 0.3,
+  letterSpacing: 0.5,
 };
 
 const navLinkBase: React.CSSProperties = {
   textDecoration: "none",
   fontWeight: 500,
-  color: "#d1d5db",
+  color: "#e5e7eb",
 };
 
-/* Footer uses a different, complementary dark-blue/indigo tone so header and footer
-   are visually distinct while keeping a cohesive dark theme. */
-const footerStyle: React.CSSProperties = {
-  backgroundColor: "#0f172a", // different from header (#0b0b0b)
-  marginTop: 96,
-  padding: "48px 24px",
-  borderTop: "1px solid rgba(255,255,255,0.04)",
+const sectionBase: React.CSSProperties = {
+  padding: "80px 24px",
+  maxWidth: 1100,
+  margin: "0 auto",
 };
 
-const footerInnerStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: 16,
-  textAlign: "center",
+const gradientText: React.CSSProperties = {
+  background: "linear-gradient(135deg, #60a5fa, #a78bfa)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent",
 };
 
-export default function App() {
+/* ===================== APP ===================== */
+
+export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
+  const theme = useTheme();
+
+  /* ---------- THEME-DRIVEN STYLES ---------- */
+
+  const headerStyle: React.CSSProperties = {
+    background: `linear-gradient(
+      135deg,
+      ${theme.palette.info.main} 0%,
+      ${theme.palette.primary.main} 50%,
+      ${theme.palette.secondary.main} 100%
+    )`,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "24px 32px",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+  };
+
+  const sectionStyle: React.CSSProperties = {
+    ...sectionBase,
+    color: theme.palette.text.primary,
+  };
+
+  const surfaceStyle: React.CSSProperties = {
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: 24,
+    border: "1px solid rgba(255,255,255,0.08)",
+  };
+
+  const cardStyle: React.CSSProperties = {
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: 16,
+    padding: 24,
+    boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
+  };
+
+  const secondaryText: React.CSSProperties = {
+    color: theme.palette.text.secondary,
+  };
+
+  const footerStyle: React.CSSProperties = {
+    marginTop: 120,
+    padding: "96px 24px 48px",
+    backgroundColor: theme.palette.background.default,
+    borderTop: "1px solid rgba(255,255,255,0.08)",
+  };
+
+  const footerCard: React.CSSProperties = {
+    maxWidth: 900,
+    margin: "0 auto",
+    padding: "56px 32px",
+    borderRadius: 28,
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid rgba(255,255,255,0.1)",
+    textAlign: "center",
+  };
 
   return (
     <div className="container">
-      {/* Skip link for keyboard users */}
-      <a
-        href="#main-content"
-        style={{
-          position: "absolute",
-          left: -9999,
-          top: "auto",
-          width: 1,
-          height: 1,
-          overflow: "hidden",
-        }}
-        onFocus={(e) => {
-          const el = e.currentTarget;
-          el.style.left = "8px";
-          el.style.top = "8px";
-          el.style.width = "auto";
-          el.style.height = "auto";
-          el.style.padding = "8px 12px";
-          el.style.background = "#fff";
-          el.style.color = "#000";
-          el.style.zIndex = "9999";
-        }}
-        onBlur={(e) => {
-          const el = e.currentTarget;
-          el.style.left = "-9999px";
-          el.style.top = "auto";
-          el.style.width = "1px";
-          el.style.height = "1px";
-          el.style.padding = "";
-          el.style.background = "";
-          el.style.color = "";
-          el.style.zIndex = "";
-        }}
-      >
-        Skip to content
-      </a>
-
       {/* ================= HEADER ================= */}
       <header style={headerStyle}>
-        {/* BRAND */}
-        <Link to="/" style={brandLinkStyle} aria-label="Torensa home">
+        <Link to="/" style={brandLinkStyle}>
           Torensa
         </Link>
 
-        {/* NAV */}
-        <nav style={{ display: "flex", alignItems: "center", gap: 28 }}>
+        <nav style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <NavLink
             to="/"
             end
@@ -111,7 +127,6 @@ export default function App() {
                 ? { ...navLinkBase, color: "#fff", textDecoration: "underline" }
                 : navLinkBase
             }
-            aria-current={({ isActive }) => (isActive ? "page" : undefined)}
           >
             Home
           </NavLink>
@@ -123,41 +138,43 @@ export default function App() {
                 ? { ...navLinkBase, color: "#fff", textDecoration: "underline" }
                 : navLinkBase
             }
-            aria-current={({ isActive }) => (isActive ? "page" : undefined)}
           >
             Contact
           </NavLink>
 
+          <Select
+            size="small"
+            value={themeName}
+            onChange={(e) => setThemeName(e.target.value as "default" | "dark")}
+            sx={{
+              color: "#fff",
+              ".MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgba(255,255,255,0.4)",
+              },
+            }}
+          >
+            <MenuItem value="default">Default</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+          </Select>
+
           {!loading &&
             (user ? (
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ fontSize: 14, color: "#d1d5db" }}>
-                  Hi, <strong>{user.username}</strong>
-                </span>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  sx={{ color: "#fff", borderColor: "#4b5563" }}
-                  onClick={async () => {
-                    await fetch("/api/logout/", {
-                      method: "POST",
-                      credentials: "include",
-                    });
-                    setUser(null);
-                  }}
-                >
-                  Logout
-                </Button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                style={{
-                  textDecoration: "none",
-                  fontWeight: 500,
-                  color: "#fff",
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{ color: "#fff", borderColor: "#c7d2fe" }}
+                onClick={async () => {
+                  await fetch("/api/logout/", {
+                    method: "POST",
+                    credentials: "include",
+                  });
+                  setUser(null);
                 }}
               >
+                Logout
+              </Button>
+            ) : (
+              <Link to="/login" style={{ color: "#fff" }}>
                 Login
               </Link>
             ))}
@@ -165,93 +182,79 @@ export default function App() {
       </header>
 
       {/* ================= MAIN ================= */}
-      <main id="main-content" tabIndex={-1}>
+      <main>
         <Routes>
-          {/* HOME */}
           <Route
             path="/"
             element={
               <>
                 {/* HERO */}
-                <header className="hero" aria-labelledby="hero-title">
-                  <h1 id="hero-title">Torensa</h1>
-                  <p className="subtitle">Freelance Software Developer</p>
-                  <p className="tagline">
-                    Building scalable, secure, and maintainable web
-                    applications.
+                <header style={{ padding: "120px 24px", textAlign: "center" }}>
+                  <h1 style={{ fontSize: 56 }}>
+                    <span style={gradientText}>Torensa</span>
+                  </h1>
+
+                  <p style={{ fontSize: 22, ...secondaryText }}>
+                    Freelance Software Developer
                   </p>
 
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                    sx={{ mt: 4 }}
-                  >
+                  <Stack direction="row" spacing={2} justifyContent="center">
                     <Button
                       variant="contained"
                       size="large"
                       endIcon={<ArrowForwardIcon />}
                       href="#/contact"
-                      sx={{
-                        px: 4,
-                        py: 1.5,
-                        fontSize: "1rem",
-                        fontWeight: 600,
-                        borderRadius: 3,
-                        textTransform: "none",
-                        background: "linear-gradient(135deg, #2563eb, #7c3aed)",
-                        boxShadow: "0 10px 25px rgba(124, 58, 237, 0.35)",
-                        "&:hover": {
-                          background:
-                            "linear-gradient(135deg, #1e40af, #6d28d9)",
-                          boxShadow: "0 12px 28px rgba(124, 58, 237, 0.5)",
-                        },
-                      }}
                     >
-                      Contact Me
+                      Start a Project
                     </Button>
                   </Stack>
                 </header>
 
                 {/* SERVICES */}
-                <section>
-                  <h2>Services</h2>
-                  <div className="cards">
-                    <div className="card">
-                      <h3>Web Development</h3>
-                      <p>
-                        Responsive, high-performance web applications using
-                        React and modern frontend tooling.
+                <section style={sectionStyle}>
+                  <h2 style={{ textAlign: "center", marginBottom: 48 }}>
+                    Services
+                  </h2>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        "repeat(auto-fit, minmax(260px, 1fr))",
+                      gap: 32,
+                    }}
+                  >
+                    <div style={cardStyle}>
+                      <h3>Frontend Development</h3>
+                      <p style={secondaryText}>
+                        Modern, responsive React applications.
                       </p>
                     </div>
-                    <div className="card">
+
+                    <div style={cardStyle}>
                       <h3>Backend APIs</h3>
-                      <p>
-                        Secure and scalable APIs using Spring Boot, Java, and
-                        REST or GraphQL.
+                      <p style={secondaryText}>
+                        Secure and scalable Spring Boot APIs.
                       </p>
                     </div>
-                    <div className="card">
-                      <h3>Deployment & DevOps</h3>
-                      <p>
-                        Dockerised applications, CI/CD pipelines, and cloud
-                        deployments.
+
+                    <div style={cardStyle}>
+                      <h3>DevOps</h3>
+                      <p style={secondaryText}>
+                        Dockerised deployments and CI/CD pipelines.
                       </p>
                     </div>
                   </div>
                 </section>
 
-                {/* SKILLS */}
-                <section>
-                  <h2>Skills</h2>
-                  <ul className="skills">
-                    <li>React</li>
-                    <li>TypeScript</li>
-                    <li>Vite</li>
-                    <li>Java</li>
-                    <li>Spring Boot</li>
-                    <li>Docker</li>
-                  </ul>
+                {/* ABOUT */}
+                <section style={{ ...sectionStyle, ...surfaceStyle }}>
+                  <h2>About Me</h2>
+                  <p style={secondaryText}>
+                    I build scalable, secure applications with a strong focus on
+                    clean architecture, performance, and long-term
+                    maintainability.
+                  </p>
                 </section>
               </>
             }
@@ -264,31 +267,35 @@ export default function App() {
 
       {/* ================= FOOTER ================= */}
       <footer style={footerStyle}>
-        <div style={footerInnerStyle}>
-          <strong style={{ fontSize: 18, color: "#ffffff" }}>Torensa</strong>
+        <div style={footerCard}>
+          <strong>Torensa</strong>
 
-          <p style={{ maxWidth: 520, color: "#9ca3af", fontSize: 15 }}>
-            Freelance software developer specialising in scalable, secure, and
-            maintainable web applications.
+          <p style={{ marginTop: 12, ...secondaryText }}>
+            Freelance software developer specialising in scalable and secure web
+            applications.
           </p>
 
           <a
             href="https://www.linkedin.com/in/rajkirant/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
           >
             <LinkedInIcon
               sx={{
-                fontSize: 30,
-                color: "#0A66C2",
-                "&:hover": { color: "#004182", transform: "scale(1.1)" },
-                transition: "all 0.2s ease",
+                fontSize: 32,
+                color: theme.palette.primary.main,
+                marginTop: 16,
               }}
             />
           </a>
 
-          <div style={{ fontSize: 13, color: "#6b7280", marginTop: 24 }}>
+          <div
+            style={{
+              marginTop: 32,
+              fontSize: 13,
+              color: theme.palette.text.secondary,
+            }}
+          >
             © {new Date().getFullYear()} Torensa. All rights reserved.
           </div>
         </div>
