@@ -5,37 +5,51 @@ import { useAuth } from "../auth";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 
-export default function Login() {
+export default function Signup() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const res = await fetch("/api/login/", {
+      const res = await fetch("/api/signup/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
       });
 
       if (!res.ok) {
-        setError("Invalid username or password");
+        const data = await res.json().catch(() => null);
+        setError(data?.error || "Signup failed");
         return;
       }
 
       const data = await res.json();
-      setUser(data.user);
+      setUser(data.user); // auto login
       navigate("/");
     } catch {
       setError("Something went wrong. Please try again.");
@@ -45,8 +59,8 @@ export default function Login() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "80px auto" }}>
-      <h2>Login</h2>
+    <div style={{ maxWidth: 420, margin: "80px auto" }}>
+      <h2>Create Account</h2>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 16 }}>
@@ -62,12 +76,36 @@ export default function Login() {
         </div>
 
         <div style={{ marginBottom: 16 }}>
+          <label>Email</label>
+          <input
+            autoComplete="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%", padding: 8 }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
           <label>Password</label>
           <input
-            autoComplete="current-password"
+            autoComplete="new-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: "100%", padding: 8 }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label>Confirm Password</label>
+          <input
+            autoComplete="new-password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
             style={{ width: "100%", padding: 8 }}
           />
@@ -91,15 +129,8 @@ export default function Login() {
             color: "#ffffff",
             background: "linear-gradient(135deg, #059669, #2563eb)",
             boxShadow: "0 10px 25px rgba(37, 99, 235, 0.35)",
-            transition: "all 0.2s ease",
             "&:hover": {
               background: "linear-gradient(135deg, #047857, #1e40af)",
-              boxShadow: "0 12px 28px rgba(37, 99, 235, 0.5)",
-              transform: "translateY(-1px)",
-            },
-            "&:active": {
-              transform: "translateY(0)",
-              boxShadow: "0 8px 18px rgba(37, 99, 235, 0.4)",
             },
             "&.Mui-disabled": {
               color: "#ffffff",
@@ -110,10 +141,10 @@ export default function Login() {
           {loading ? (
             <>
               <CircularProgress size={22} sx={{ color: "#ffffff", mr: 1 }} />
-              Logging in…
+              Creating account…
             </>
           ) : (
-            "Login"
+            "Sign Up"
           )}
         </Button>
       </form>
