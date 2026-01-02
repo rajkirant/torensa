@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import Signup from "./pages/signup";
+import Signup from "./pages/Signup";
 
 /* ===================== TYPES ===================== */
 
