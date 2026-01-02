@@ -9,39 +9,7 @@ from django.core.mail import EmailMessage, get_connection
 from django.contrib.auth.models import User
 
 def hello(request):
-    return JsonResponse({"message": "Hello World sync missing and syntax"})
-
-
-def send_test_email(request):
-    # 🔐 Custom SMTP connection (Gmail SSL)
-    connection = get_connection(
-        host="smtp.gmail.com",
-        port=465,
-        username="rajkiran047@gmail.com",
-        password="pjxv ssso xrzw srgy",
-        use_ssl=True,
-        use_tls=False,
-    )
-
-    email = EmailMessage(
-        subject="Test email from Torensa",
-        body="Hello! This email uses Gmail SMTP with SSL.",
-        from_email="admin@torensa.com",
-        to=["admin@torensa.com"],
-        connection=connection,
-    )
-
-    # 📎 Optional attachment
-    email.attach(
-        filename="hello.txt",
-        content="This is a test attachment",
-        mimetype="text/plain",
-    )
-
-    email.send(fail_silently=False)
-
-    return JsonResponse({"status": "Email sent using Gmail SSL"})
-
+    return JsonResponse({"message": "Hello World"})
 
 @csrf_exempt
 @require_POST
