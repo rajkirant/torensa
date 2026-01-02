@@ -126,7 +126,20 @@ export default function App({ themeName, setThemeName }: AppProps) {
           >
             Contact
           </NavLink>
-
+          <NavLink
+            to="/bulk-email"
+            style={({ isActive }) =>
+              isActive
+                ? {
+                    ...navLinkBase,
+                    color: "#fff",
+                    textDecoration: "underline",
+                  }
+                : navLinkBase
+            }
+          >
+            Bulk Email
+          </NavLink>
           <Select
             size="small"
             value={themeName}
@@ -155,21 +168,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 >
                   Hi, {user.username}
                 </span>
-
-                <NavLink
-                  to="/bulk-email"
-                  style={({ isActive }) =>
-                    isActive
-                      ? {
-                          ...navLinkBase,
-                          color: "#fff",
-                          textDecoration: "underline",
-                        }
-                      : navLinkBase
-                  }
-                >
-                  Bulk Email
-                </NavLink>
 
                 <Button
                   variant="outlined"
