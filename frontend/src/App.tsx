@@ -28,7 +28,7 @@ const brandLinkStyle: React.CSSProperties = {
   fontWeight: 900,
   color: "#ffffff",
   textDecoration: "none",
-  letterSpacing: 0.5,
+  letterSpacing: 0.8,
 };
 
 const navLinkBase: React.CSSProperties = {
@@ -38,15 +38,9 @@ const navLinkBase: React.CSSProperties = {
 };
 
 const sectionBase: React.CSSProperties = {
-  padding: "80px 24px",
+  padding: "64px 24px",
   maxWidth: 1100,
   margin: "0 auto",
-};
-
-const gradientText: React.CSSProperties = {
-  background: "linear-gradient(135deg, #60a5fa, #a78bfa)",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
 };
 
 /* ===================== APP ===================== */
@@ -55,31 +49,21 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const theme = useTheme();
 
-  /* ---------- THEME-DRIVEN STYLES ---------- */
+  /* ---------- STYLES ---------- */
+
+  const headerGradient = "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)";
 
   const headerStyle: React.CSSProperties = {
-    background: `linear-gradient(
-      135deg,
-      ${theme.palette.info.main} 0%,
-      ${theme.palette.primary.main} 50%,
-      ${theme.palette.secondary.main} 100%
-    )`,
+    background: headerGradient,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "24px 32px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+    padding: "16px 40px",
+    boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
   };
 
-  const sectionStyle: React.CSSProperties = {
-    ...sectionBase,
-    color: theme.palette.text.primary,
-  };
-
-  const surfaceStyle: React.CSSProperties = {
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: 24,
-    border: "1px solid rgba(255,255,255,0.08)",
+  const secondaryText: React.CSSProperties = {
+    color: theme.palette.text.secondary,
   };
 
   const cardStyle: React.CSSProperties = {
@@ -87,28 +71,27 @@ export default function App({ themeName, setThemeName }: AppProps) {
     border: "1px solid rgba(255,255,255,0.1)",
     borderRadius: 16,
     padding: 24,
-    boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
+    boxShadow: "0 18px 36px rgba(0,0,0,0.3)",
   };
 
-  const secondaryText: React.CSSProperties = {
-    color: theme.palette.text.secondary,
-  };
+  /* ---------- FOOTER (UPDATED) ---------- */
 
   const footerStyle: React.CSSProperties = {
-    marginTop: 120,
-    padding: "96px 24px 48px",
-    backgroundColor: theme.palette.background.default,
-    borderTop: "1px solid rgba(255,255,255,0.08)",
+    marginTop: 80,
+    padding: "64px 24px 40px",
+    background: headerGradient,
+    borderTop: "1px solid rgba(255,255,255,0.12)",
   };
 
   const footerCard: React.CSSProperties = {
     maxWidth: 900,
     margin: "0 auto",
-    padding: "56px 32px",
-    borderRadius: 28,
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid rgba(255,255,255,0.1)",
+    padding: "48px 32px",
+    borderRadius: 24,
+    backgroundColor: "rgba(2,6,23,0.55)",
+    border: "1px solid rgba(255,255,255,0.15)",
     textAlign: "center",
+    backdropFilter: "blur(6px)",
   };
 
   return (
@@ -149,6 +132,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             onChange={(e) => setThemeName(e.target.value as "default" | "dark")}
             sx={{
               color: "#fff",
+              height: 32,
               ".MuiOutlinedInput-notchedOutline": {
                 borderColor: "rgba(255,255,255,0.4)",
               },
@@ -161,13 +145,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
           {!loading &&
             (user ? (
               <>
-                {/* Logged-in user */}
                 <span
                   style={{
                     color: "#ffffff",
                     fontWeight: 600,
                     fontSize: 14,
-                    opacity: 0.95,
                   }}
                 >
                   Hi, {user.username}
@@ -209,30 +191,65 @@ export default function App({ themeName, setThemeName }: AppProps) {
             element={
               <>
                 {/* HERO */}
-                <header style={{ padding: "120px 24px", textAlign: "center" }}>
-                  <h1 style={{ fontSize: 56 }}>
-                    <span style={gradientText}>Torensa</span>
+                <section
+                  style={{
+                    minHeight: "55vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <h1
+                    style={{
+                      fontSize: 64,
+                      fontWeight: 900,
+                      letterSpacing: 1,
+                      color: "#1e40af",
+                      textShadow:
+                        "0 0 8px rgba(59,130,246,0.6), 0 0 18px rgba(99,102,241,0.45)",
+                      marginBottom: 10,
+                    }}
+                  >
+                    Torensa
                   </h1>
 
-                  <p style={{ fontSize: 22, ...secondaryText }}>
+                  <p
+                    style={{
+                      fontSize: 20,
+                      ...secondaryText,
+                      marginBottom: 28,
+                    }}
+                  >
                     Freelance Software Developer
                   </p>
 
-                  <Stack direction="row" spacing={2} justifyContent="center">
-                    <Button
-                      variant="contained"
-                      size="large"
-                      endIcon={<ArrowForwardIcon />}
-                      href="#/contact"
-                    >
-                      Start a Project
-                    </Button>
-                  </Stack>
-                </header>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    endIcon={<ArrowForwardIcon />}
+                    href="#/contact"
+                    sx={{
+                      px: 4,
+                      py: 1.4,
+                      borderRadius: 3,
+                      textTransform: "none",
+                      fontWeight: 700,
+                      background: "linear-gradient(135deg, #2563eb, #1e40af)",
+                      boxShadow: "0 10px 30px rgba(37,99,235,0.45)",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
+                      },
+                    }}
+                  >
+                    Start a Project
+                  </Button>
+                </section>
 
                 {/* SERVICES */}
-                <section style={sectionStyle}>
-                  <h2 style={{ textAlign: "center", marginBottom: 48 }}>
+                <section style={sectionBase}>
+                  <h2 style={{ textAlign: "center", marginBottom: 40 }}>
                     Services
                   </h2>
 
@@ -241,7 +258,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                       display: "grid",
                       gridTemplateColumns:
                         "repeat(auto-fit, minmax(260px, 1fr))",
-                      gap: 32,
+                      gap: 28,
                     }}
                   >
                     <div style={cardStyle}>
@@ -268,7 +285,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 </section>
 
                 {/* ABOUT */}
-                <section style={{ ...sectionStyle, ...surfaceStyle }}>
+                <section style={{ ...sectionBase, paddingTop: 40 }}>
                   <h2>About Me</h2>
                   <p style={secondaryText}>
                     I build scalable, secure applications with a strong focus on
@@ -289,9 +306,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
       {/* ================= FOOTER ================= */}
       <footer style={footerStyle}>
         <div style={footerCard}>
-          <strong>Torensa</strong>
+          <strong style={{ color: "#ffffff" }}>Torensa</strong>
 
-          <p style={{ marginTop: 12, ...secondaryText }}>
+          <p style={{ marginTop: 10, color: "#e5e7eb" }}>
             Freelance software developer specialising in scalable and secure web
             applications.
           </p>
@@ -303,18 +320,18 @@ export default function App({ themeName, setThemeName }: AppProps) {
           >
             <LinkedInIcon
               sx={{
-                fontSize: 32,
-                color: theme.palette.primary.main,
-                marginTop: 16,
+                fontSize: 30,
+                color: "#e0e7ff",
+                marginTop: 14,
               }}
             />
           </a>
 
           <div
             style={{
-              marginTop: 32,
+              marginTop: 28,
               fontSize: 13,
-              color: theme.palette.text.secondary,
+              color: "#c7d2fe",
             }}
           >
             © {new Date().getFullYear()} Torensa. All rights reserved.
