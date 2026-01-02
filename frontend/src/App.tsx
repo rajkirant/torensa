@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import { useAuth } from "./auth";
 
 import Button from "@mui/material/Button";
@@ -159,24 +160,43 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
           {!loading &&
             (user ? (
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{ color: "#fff", borderColor: "#c7d2fe" }}
-                onClick={async () => {
-                  await fetch("/api/logout/", {
-                    method: "POST",
-                    credentials: "include",
-                  });
-                  setUser(null);
-                }}
-              >
-                Logout
-              </Button>
+              <>
+                {/* Logged-in user */}
+                <span
+                  style={{
+                    color: "#ffffff",
+                    fontWeight: 600,
+                    fontSize: 14,
+                    opacity: 0.95,
+                  }}
+                >
+                  Hi, {user.username}
+                </span>
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{ color: "#fff", borderColor: "#c7d2fe" }}
+                  onClick={async () => {
+                    await fetch("/api/logout/", {
+                      method: "POST",
+                      credentials: "include",
+                    });
+                    setUser(null);
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
-              <Link to="/login" style={{ color: "#fff" }}>
-                Login
-              </Link>
+              <>
+                <Link to="/login" style={{ color: "#fff" }}>
+                  Login
+                </Link>
+                <Link to="/signup" style={{ color: "#fff" }}>
+                  Sign up
+                </Link>
+              </>
             ))}
         </nav>
       </header>
@@ -262,6 +282,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </main>
 

@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 import json
 from django.core.mail import EmailMessage, get_connection
+from django.contrib.auth.models import User
 
 def hello(request):
     return JsonResponse({"message": "Hello World sync missing and syntax"})
@@ -40,6 +41,60 @@ def send_test_email(request):
     email.send(fail_silently=False)
 
     return JsonResponse({"status": "Email sent using Gmail SSL"})
+
+
+@csrf_exempt
+@require_POST
+def signup_view(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+
+    # ---------- Validation ----------
+    if not username or not email or not password:
+        return JsonResponse(
+            {"error": "Username, email, and password are required"},
+            status=400
+        )
+
+    if User.objects.filter(username=username).exists():
+        return JsonResponse(
+            {"error": "Username already exists"},
+            status=409
+        )
+
+    if User.objects.filter(email=email).exists():
+        return JsonResponse(
+            {"error": "Email already exists"},
+            status=409
+        )
+
+    # ---------- Create User ----------
+    user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password
+    )
+
+    # ---------- Auto login ----------
+    login(request, user)
+
+    return JsonResponse(
+        {
+            "message": "Signup successful",
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+            }
+        },
+        status=201
+    )
 
 @csrf_exempt
 @require_POST
