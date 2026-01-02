@@ -2,17 +2,18 @@ import React from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import { useAuth } from "./auth";
+import BulkEmail from "./pages/BulkEmail";
 
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import Signup from "./pages/signup";
 
 /* ===================== TYPES ===================== */
 
@@ -155,6 +156,21 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   Hi, {user.username}
                 </span>
 
+                <NavLink
+                  to="/bulk-email"
+                  style={({ isActive }) =>
+                    isActive
+                      ? {
+                          ...navLinkBase,
+                          color: "#fff",
+                          textDecoration: "underline",
+                        }
+                      : navLinkBase
+                  }
+                >
+                  Bulk Email
+                </NavLink>
+
                 <Button
                   variant="outlined"
                   size="small"
@@ -296,7 +312,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </>
             }
           />
-
+          <Route path="/bulk-email" element={<BulkEmail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
