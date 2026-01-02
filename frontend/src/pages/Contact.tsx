@@ -3,11 +3,6 @@ import { Link } from "react-router-dom";
 export default function Contact() {
   return (
     <>
-      {/* BACK LINK */}
-      <div style={{ marginBottom: 30 }}>
-        <Link to="/">← Back to Home</Link>
-      </div>
-
       <header style={{ marginBottom: 40 }}>
         <h1>Contact</h1>
         <p className="subtitle">Let’s discuss your project or idea.</p>
