@@ -23,10 +23,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const accordionBaseStyle = {
   borderRadius: "14px",
-  border: "1px solid rgba(255,255,255,0.15)",
+  border: "1px solid rgba(255,255,255,0.2)",
   background:
-    "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-  boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
+    "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+  boxShadow: "0 8px 22px rgba(0,0,0,0.3)",
   overflow: "hidden",
   mb: 2,
   "&:before": { display: "none" },
@@ -36,7 +36,7 @@ const inputStyle = (borderColor: string) => ({
   width: "100%",
   padding: 10,
   marginBottom: 12,
-  borderRadius: 8,
+  borderRadius: 10,
   border: `1px solid ${borderColor}`,
   background: "rgba(0,0,0,0.25)",
   color: "#e5e7eb",
@@ -46,6 +46,7 @@ const inputStyle = (borderColor: string) => ({
 /* ===================== COMPONENT ===================== */
 
 export default function BulkEmail() {
+  /* ---------- ACCORDION STATE ---------- */
   const [expanded, setExpanded] = useState({
     smtp: false,
     send: false,
@@ -66,6 +67,7 @@ export default function BulkEmail() {
   const [appPassword, setAppPassword] = useState("");
   const [smtpSaving, setSmtpSaving] = useState(false);
   const [smtpSavedMsg, setSmtpSavedMsg] = useState("");
+  const [smtpError, setSmtpError] = useState("");
 
   /* ---------- EMAIL ---------- */
   const [emails, setEmails] = useState("");
@@ -95,11 +97,9 @@ export default function BulkEmail() {
   }
 
   const didFetch = useRef(false);
-
   useEffect(() => {
     if (didFetch.current) return;
     didFetch.current = true;
-
     loadSmtpConfigs();
   }, []);
 
@@ -108,7 +108,21 @@ export default function BulkEmail() {
   async function handleSaveSmtp(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setSmtpError("");
     setSmtpSavedMsg("");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(smtpEmail)) {
+      setSmtpError("Please enter a valid Gmail address");
+      return;
+    }
+
+    if (appPassword.replace(/\s/g, "").length !== 16) {
+      setSmtpError("Gmail App Password must be exactly 16 characters");
+      return;
+    }
+
     setSmtpSaving(true);
 
     try {
@@ -124,7 +138,7 @@ export default function BulkEmail() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data?.error || "Failed to save SMTP settings");
+        setSmtpError(data?.error || "Failed to save SMTP settings");
         return;
       }
 
@@ -132,7 +146,7 @@ export default function BulkEmail() {
       setSmtpSavedMsg("SMTP credentials saved securely");
       loadSmtpConfigs();
     } catch {
-      setError("Unable to save SMTP credentials");
+      setSmtpError("Unable to save SMTP credentials");
     } finally {
       setSmtpSaving(false);
     }
@@ -153,7 +167,23 @@ export default function BulkEmail() {
       .map((e) => e.trim())
       .filter(Boolean);
 
+    if (emailList.length === 0) {
+      setError("Please enter at least one recipient email");
+      return;
+    }
+
+    if (subject.trim().length < 3) {
+      setError("Subject must be at least 3 characters long");
+      return;
+    }
+
+    if (body.trim().length < 10) {
+      setError("Message must be at least 10 characters long");
+      return;
+    }
+
     setLoading(true);
+
     try {
       const formData = new FormData();
       formData.append("smtp_config_id", String(selectedConfigId));
@@ -190,12 +220,14 @@ export default function BulkEmail() {
   /* ===================== RENDER ===================== */
 
   return (
-    <Card sx={{ maxWidth: 760, margin: "80px auto" }}>
+    <Card sx={{ maxWidth: 780, margin: "80px auto" }}>
       <CardContent>
         <Typography variant="h5" fontWeight={700} gutterBottom>
           Bulk Email
         </Typography>
+
         <Divider sx={{ mb: 3 }} />
+
         {/* ================= SMTP CONFIG ================= */}
         <Accordion
           expanded={expanded.smtp}
@@ -204,28 +236,54 @@ export default function BulkEmail() {
         >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
-              SMTP Configuration
+              Gmail SMTP Configuration
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
+            <Typography variant="body2" sx={{ color: "#9ca3af", mb: 2 }}>
+              Use a Gmail <strong>App Password</strong> (not your real
+              password).{" "}
+              <a
+                href="https://myaccount.google.com/apppasswords"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#60a5fa" }}
+              >
+                Create App Password
+              </a>
+            </Typography>
+
             <Box component="form" onSubmit={handleSaveSmtp}>
               <input
                 type="email"
-                placeholder="Gmail address"
+                placeholder="yourname@gmail.com"
                 value={smtpEmail}
                 onChange={(e) => setSmtpEmail(e.target.value)}
                 required
                 style={inputStyle("#60a5fa")}
               />
+
               <input
                 type="password"
-                placeholder="Gmail app password"
+                placeholder="16-character Gmail app password"
                 value={appPassword}
                 onChange={(e) => setAppPassword(e.target.value)}
                 required
                 style={inputStyle("#60a5fa")}
               />
-              {smtpSavedMsg && <Alert severity="success">{smtpSavedMsg}</Alert>}
+
+              {smtpError && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {smtpError}
+                </Alert>
+              )}
+
+              {smtpSavedMsg && (
+                <Alert severity="success" sx={{ mb: 2 }}>
+                  {smtpSavedMsg}
+                </Alert>
+              )}
+
               <Button type="submit" fullWidth disabled={smtpSaving}>
                 {smtpSaving ? (
                   <CircularProgress size={22} />
@@ -236,6 +294,7 @@ export default function BulkEmail() {
             </Box>
           </AccordionDetails>
         </Accordion>
+
         {/* ================= SEND EMAIL ================= */}
         <Accordion
           expanded={expanded.send}
@@ -247,29 +306,21 @@ export default function BulkEmail() {
               Send Bulk Email
             </Typography>
           </AccordionSummary>
-
           <AccordionDetails>
             <Box component="form" onSubmit={handleSendEmail}>
-              {/* SMTP DROPDOWN */}
               <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel id="smtp-select-label">
-                  Select SMTP Configuration
-                </InputLabel>
-
+                <InputLabel>Select SMTP Configuration</InputLabel>
                 <Select
-                  labelId="smtp-select-label"
-                  label="Select SMTP Configuration"
                   value={selectedConfigId}
+                  label="Select SMTP Configuration"
                   onChange={(e) =>
                     setSelectedConfigId(e.target.value as number)
                   }
                   required
                 >
-                  {/* Placeholder */}
                   <MenuItem value="">
-                    <em>Choose an email account</em>
+                    <em>Choose Gmail account</em>
                   </MenuItem>
-
                   {smtpConfigs.map((cfg) => (
                     <MenuItem key={cfg.id} value={cfg.id}>
                       {cfg.smtp_email} ({cfg.provider})
@@ -278,14 +329,8 @@ export default function BulkEmail() {
                 </Select>
               </FormControl>
 
-              {smtpConfigs.length === 0 && (
-                <Alert severity="warning" sx={{ mb: 2 }}>
-                  No SMTP configuration found. Please add one above.
-                </Alert>
-              )}
-
               <textarea
-                placeholder="Recipients (comma or new line separated)"
+                placeholder="email1@gmail.com, email2@gmail.com"
                 rows={4}
                 value={emails}
                 onChange={(e) => setEmails(e.target.value)}
@@ -294,7 +339,7 @@ export default function BulkEmail() {
               />
 
               <input
-                placeholder="Subject"
+                placeholder="Email subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 style={inputStyle("#c084fc")}
@@ -302,7 +347,7 @@ export default function BulkEmail() {
               />
 
               <textarea
-                placeholder="Message"
+                placeholder="Write your message here..."
                 rows={6}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
@@ -316,22 +361,13 @@ export default function BulkEmail() {
                 onChange={(e) => setFiles(e.target.files)}
               />
 
-              {error && (
-                <Alert severity="error" sx={{ mt: 2 }}>
-                  {error}
-                </Alert>
-              )}
-              {success && (
-                <Alert severity="success" sx={{ mt: 2 }}>
-                  {success}
-                </Alert>
-              )}
+              {error && <Alert severity="error">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
 
               <Button
                 type="submit"
                 fullWidth
                 disabled={loading || smtpConfigs.length === 0}
-                sx={{ mt: 2 }}
               >
                 {loading ? <CircularProgress size={22} /> : "Send Email"}
               </Button>
