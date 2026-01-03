@@ -3,7 +3,7 @@ import { Routes, Route, NavLink, Link } from "react-router-dom";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import { useAuth } from "./auth";
-import BulkEmail from "./pages/BulkEmail";
+import BulkEmail from "./pages/BulkEmail/BulkEmail";
 
 import Button from "@mui/material/Button";
 
