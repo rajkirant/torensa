@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMessage, get_connection
@@ -10,65 +11,69 @@ from ..models import UserSMTPConfig
 from django.conf import settings
 
 
+
 @csrf_exempt
 @require_POST
 @login_required
 def send_email(request):
-    # ---------- Read form fields ----------
     try:
         to_emails = json.loads(request.POST.get("to", "[]"))
     except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid recipients format"}, status=400)
+        return JsonResponse({"error": "Invalid recipients"}, status=400)
 
     subject = request.POST.get("subject")
     body = request.POST.get("body")
+    smtp_config_id = request.POST.get("smtp_config_id")
     attachments = request.FILES.getlist("attachments")
 
     # ---------- Validation ----------
-    if not to_emails or not subject or not body:
+    if not to_emails or not subject or not body or not smtp_config_id:
         return JsonResponse(
-            {"error": "to, subject, and body are required"},
-            status=400
+            {"error": "Recipients, subject, body and smtp_config_id are required"},
+            status=400,
         )
 
-    if isinstance(to_emails, str):
-        to_emails = [to_emails]
-
-    if not isinstance(to_emails, list):
-        return JsonResponse(
-            {"error": "'to' must be a list of emails"},
-            status=400
-        )
+    # ---------- Fetch SMTP config (SECURE) ----------
+    smtp_config = get_object_or_404(
+        UserSMTPConfig,
+        id=smtp_config_id,
+        user=request.user,
+        is_active=True,
+    )
 
     try:
+        # 🔐 Decrypt password
+        fernet = get_fernet()
+        decrypted_password = fernet.decrypt(
+            smtp_config.encrypted_app_password
+        ).decode()
+
+        # 🔐 Connect using USER'S Gmail
         connection = get_connection(
             host="smtp.gmail.com",
             port=465,
-            username=os.environ.get("EMAIL_USERNAME"),
-            password=os.environ.get("EMAIL_PASSWORD"),
+            username=smtp_config.smtp_email,
+            password=decrypted_password,
             use_ssl=True,
         )
 
         email = EmailMessage(
             subject=subject,
             body=body,
-            from_email="admin@torensa.com",
+            from_email=smtp_config.smtp_email,
             to=to_emails,
             connection=connection,
         )
 
-        # ---------- Attach uploaded files ----------
+        # Attach files
         for file in attachments:
-            email.attach(
-                file.name,
-                file.read(),
-                file.content_type,
-            )
+            email.attach(file.name, file.read(), file.content_type)
 
         email.send(fail_silently=False)
 
         return JsonResponse({
-            "status": "Emails sent successfully",
+            "status": "Email sent successfully",
+            "sender": smtp_config.smtp_email,
             "recipients": len(to_emails),
             "attachments": len(attachments),
         })
@@ -76,10 +81,8 @@ def send_email(request):
     except Exception as e:
         return JsonResponse(
             {"error": "Failed to send email", "details": str(e)},
-            status=500
+            status=500,
         )
-
-
 
 
 def get_fernet():
