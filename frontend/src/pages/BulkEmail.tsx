@@ -7,6 +7,7 @@ export default function BulkEmail() {
   const [emails, setEmails] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [files, setFiles] = useState<FileList | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,7 +18,6 @@ export default function BulkEmail() {
     setError("");
     setSuccess("");
 
-    // Parse emails: comma OR newline separated
     const emailList = emails
       .split(/[\n,]+/)
       .map((e) => e.trim())
@@ -28,20 +28,24 @@ export default function BulkEmail() {
       return;
     }
 
+    const formData = new FormData();
+    formData.append("to", JSON.stringify(emailList));
+    formData.append("subject", subject);
+    formData.append("body", body);
+
+    if (files) {
+      Array.from(files).forEach((file) => {
+        formData.append("attachments", file);
+      });
+    }
+
     setLoading(true);
 
     try {
       const res = await fetch("/api/send-email/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        body: JSON.stringify({
-          to: emailList,
-          subject,
-          body,
-        }),
+        body: formData,
       });
 
       const data = await res.json();
@@ -51,10 +55,16 @@ export default function BulkEmail() {
         return;
       }
 
-      setSuccess(`Email sent to ${emailList.length} recipients`);
+      setSuccess(
+        `Email sent to ${emailList.length} recipients${
+          files?.length ? ` with ${files.length} attachment(s)` : ""
+        }`
+      );
+
       setEmails("");
       setSubject("");
       setBody("");
+      setFiles(null);
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -102,6 +112,19 @@ export default function BulkEmail() {
             required
             style={{ width: "100%", padding: 8 }}
           />
+        </div>
+
+        {/* ✅ Attachments */}
+        <div style={{ marginBottom: 16 }}>
+          <label>Attachments</label>
+          <input
+            type="file"
+            multiple
+            onChange={(e) => setFiles(e.target.files)}
+          />
+          <small style={{ color: "#6b7280", display: "block", marginTop: 4 }}>
+            You can attach multiple files
+          </small>
         </div>
 
         {error && <p style={{ color: "#dc2626", marginBottom: 16 }}>{error}</p>}

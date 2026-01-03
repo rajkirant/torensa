@@ -9,14 +9,15 @@ import os
 @csrf_exempt
 @require_POST
 def send_email(request):
+    # ---------- Read form fields ----------
     try:
-        data = json.loads(request.body.decode("utf-8"))
+        to_emails = json.loads(request.POST.get("to", "[]"))
     except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
+        return JsonResponse({"error": "Invalid recipients format"}, status=400)
 
-    to_emails = data.get("to")
-    subject = data.get("subject")
-    body = data.get("body")
+    subject = request.POST.get("subject")
+    body = request.POST.get("body")
+    attachments = request.FILES.getlist("attachments")
 
     # ---------- Validation ----------
     if not to_emails or not subject or not body:
@@ -25,13 +26,12 @@ def send_email(request):
             status=400
         )
 
-    # Normalize to list
     if isinstance(to_emails, str):
         to_emails = [to_emails]
 
     if not isinstance(to_emails, list):
         return JsonResponse(
-            {"error": "'to' must be a string or a list of emails"},
+            {"error": "'to' must be a list of emails"},
             status=400
         )
 
@@ -42,27 +42,31 @@ def send_email(request):
             username=os.environ.get("EMAIL_USERNAME"),
             password=os.environ.get("EMAIL_PASSWORD"),
             use_ssl=True,
-            use_tls=False,
         )
 
-        sent = 0
-        for email_address in to_emails:
-            email = EmailMessage(
-                subject=subject,
-                body=body,
-                from_email="admin@torensa.com",
-                to=[email_address],
-                connection=connection,
+        email = EmailMessage(
+            subject=subject,
+            body=body,
+            from_email="admin@torensa.com",
+            to=to_emails,
+            connection=connection,
+        )
+
+        # ---------- Attach uploaded files ----------
+        for file in attachments:
+            email.attach(
+                file.name,
+                file.read(),
+                file.content_type,
             )
-            email.send(fail_silently=False)
-            sent += 1
 
-        return JsonResponse(
-            {
-                "status": "Emails sent successfully",
-                "sent_count": sent,
-            }
-        )
+        email.send(fail_silently=False)
+
+        return JsonResponse({
+            "status": "Emails sent successfully",
+            "recipients": len(to_emails),
+            "attachments": len(attachments),
+        })
 
     except Exception as e:
         return JsonResponse(
