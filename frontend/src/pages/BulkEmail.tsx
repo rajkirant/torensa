@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
 import {
   Accordion,
   AccordionSummary,
@@ -11,6 +12,10 @@ import {
   Divider,
   Alert,
   Box,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -24,14 +29,7 @@ const accordionBaseStyle = {
   boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
   overflow: "hidden",
   mb: 2,
-
-  "&:before": {
-    display: "none", // remove MUI default divider
-  },
-
-  "&.Mui-expanded": {
-    margin: "12px 0",
-  },
+  "&:before": { display: "none" },
 };
 
 const inputStyle = (borderColor: string) => ({
@@ -48,7 +46,6 @@ const inputStyle = (borderColor: string) => ({
 /* ===================== COMPONENT ===================== */
 
 export default function BulkEmail() {
-  // Allow both accordions to be closed
   const [expanded, setExpanded] = useState({
     smtp: false,
     send: false,
@@ -57,13 +54,20 @@ export default function BulkEmail() {
   const toggle = (key: "smtp" | "send") => (_: any, isExpanded: boolean) =>
     setExpanded((prev) => ({ ...prev, [key]: isExpanded }));
 
-  /* ---------- SMTP STATE ---------- */
+  /* ---------- SMTP CONFIG LIST ---------- */
+  const [smtpConfigs, setSmtpConfigs] = useState<
+    { id: number; smtp_email: string; provider: string }[]
+  >([]);
+  const [selectedConfigId, setSelectedConfigId] = useState<number | "">("");
+  const [loadingConfigs, setLoadingConfigs] = useState(false);
+
+  /* ---------- SMTP SAVE ---------- */
   const [smtpEmail, setSmtpEmail] = useState("");
   const [appPassword, setAppPassword] = useState("");
   const [smtpSaving, setSmtpSaving] = useState(false);
   const [smtpSavedMsg, setSmtpSavedMsg] = useState("");
 
-  /* ---------- EMAIL STATE ---------- */
+  /* ---------- EMAIL ---------- */
   const [emails, setEmails] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
@@ -72,6 +76,32 @@ export default function BulkEmail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  /* ===================== LOAD SMTP CONFIGS ===================== */
+
+  async function loadSmtpConfigs() {
+    setLoadingConfigs(true);
+    try {
+      const res = await fetch("/api/smtp/list/", {
+        credentials: "include",
+      });
+      if (!res.ok) return;
+
+      const data = await res.json();
+      setSmtpConfigs(data.configs || []);
+    } finally {
+      setLoadingConfigs(false);
+    }
+  }
+
+  const didFetch = useRef(false);
+
+  useEffect(() => {
+    if (didFetch.current) return;
+    didFetch.current = true;
+
+    loadSmtpConfigs();
+  }, []);
 
   /* ===================== HANDLERS ===================== */
 
@@ -100,6 +130,7 @@ export default function BulkEmail() {
 
       setAppPassword("");
       setSmtpSavedMsg("SMTP credentials saved securely");
+      loadSmtpConfigs();
     } catch {
       setError("Unable to save SMTP credentials");
     } finally {
@@ -112,6 +143,11 @@ export default function BulkEmail() {
     setError("");
     setSuccess("");
 
+    if (!selectedConfigId) {
+      setError("Please select an SMTP configuration");
+      return;
+    }
+
     const emailList = emails
       .split(/[\n,]+/)
       .map((e) => e.trim())
@@ -120,6 +156,7 @@ export default function BulkEmail() {
     setLoading(true);
     try {
       const formData = new FormData();
+      formData.append("smtp_config_id", String(selectedConfigId));
       formData.append("to", JSON.stringify(emailList));
       formData.append("subject", subject);
       formData.append("body", body);
@@ -159,40 +196,21 @@ export default function BulkEmail() {
           Bulk Email
         </Typography>
 
-        <Typography color="text.secondary" mb={3}>
-          Configure SMTP credentials and send bulk emails securely.
-        </Typography>
-
         <Divider sx={{ mb: 3 }} />
 
         {/* ================= SMTP CONFIG ================= */}
         <Accordion
           expanded={expanded.smtp}
           onChange={toggle("smtp")}
-          sx={{
-            ...accordionBaseStyle,
-            borderColor: "rgba(59,130,246,0.45)", // blue
-          }}
+          sx={accordionBaseStyle}
         >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: "#e5e7eb" }} />}
-            sx={{
-              px: 3,
-              py: 1.5,
-              "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
-            }}
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
               SMTP Configuration
             </Typography>
           </AccordionSummary>
-
           <AccordionDetails>
             <Box component="form" onSubmit={handleSaveSmtp}>
-              <Typography variant="body2" color="text.secondary" mb={1}>
-                Your Gmail app password is encrypted and stored securely.
-              </Typography>
-
               <input
                 type="email"
                 placeholder="Gmail address"
@@ -201,7 +219,6 @@ export default function BulkEmail() {
                 required
                 style={inputStyle("#60a5fa")}
               />
-
               <input
                 type="password"
                 placeholder="Gmail app password"
@@ -210,36 +227,10 @@ export default function BulkEmail() {
                 required
                 style={inputStyle("#60a5fa")}
               />
-
-              <Typography variant="caption" color="text.secondary">
-                Create one at{" "}
-                <a
-                  href="https://myaccount.google.com/apppasswords"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google App Passwords
-                </a>
-              </Typography>
-
-              {smtpSavedMsg && (
-                <Alert severity="success" sx={{ mt: 2 }}>
-                  {smtpSavedMsg}
-                </Alert>
-              )}
-
-              <Button
-                type="submit"
-                fullWidth
-                sx={{
-                  mt: 2,
-                  background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
-                }}
-                variant="contained"
-                disabled={smtpSaving}
-              >
+              {smtpSavedMsg && <Alert severity="success">{smtpSavedMsg}</Alert>}
+              <Button type="submit" fullWidth disabled={smtpSaving}>
                 {smtpSaving ? (
-                  <CircularProgress size={22} sx={{ color: "#fff" }} />
+                  <CircularProgress size={22} />
                 ) : (
                   "Save SMTP Settings"
                 )}
@@ -252,43 +243,54 @@ export default function BulkEmail() {
         <Accordion
           expanded={expanded.send}
           onChange={toggle("send")}
-          sx={{
-            ...accordionBaseStyle,
-            borderColor: "rgba(168,85,247,0.5)", // purple
-          }}
+          sx={accordionBaseStyle}
         >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: "#e5e7eb" }} />}
-            sx={{
-              px: 3,
-              py: 1.5,
-              "&:hover": { backgroundColor: "rgba(255,255,255,0.04)" },
-            }}
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography fontWeight={700} sx={{ color: "#c084fc" }}>
               Send Bulk Email
             </Typography>
           </AccordionSummary>
-
           <AccordionDetails>
             <Box component="form" onSubmit={handleSendEmail}>
+              {/* SMTP DROPDOWN */}
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Select SMTP Configuration</InputLabel>
+                <Select
+                  value={selectedConfigId}
+                  label="Select SMTP Configuration"
+                  onChange={(e) =>
+                    setSelectedConfigId(e.target.value as number)
+                  }
+                >
+                  {smtpConfigs.map((cfg) => (
+                    <MenuItem key={cfg.id} value={cfg.id}>
+                      {cfg.smtp_email} ({cfg.provider})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {smtpConfigs.length === 0 && (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                  No SMTP configuration found. Please add one above.
+                </Alert>
+              )}
+
               <textarea
-                placeholder="Recipients (comma or new line separated)"
+                placeholder="Recipients"
                 rows={4}
                 value={emails}
                 onChange={(e) => setEmails(e.target.value)}
                 style={inputStyle("#c084fc")}
               />
-
               <input
-                placeholder="Email subject"
+                placeholder="Subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 style={inputStyle("#c084fc")}
               />
-
               <textarea
-                placeholder="Email message"
+                placeholder="Message"
                 rows={6}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
@@ -299,35 +301,13 @@ export default function BulkEmail() {
                 type="file"
                 multiple
                 onChange={(e) => setFiles(e.target.files)}
-                style={{ marginTop: 8 }}
               />
 
-              {error && (
-                <Alert severity="error" sx={{ mt: 2 }}>
-                  {error}
-                </Alert>
-              )}
-              {success && (
-                <Alert severity="success" sx={{ mt: 2 }}>
-                  {success}
-                </Alert>
-              )}
+              {error && <Alert severity="error">{error}</Alert>}
+              {success && <Alert severity="success">{success}</Alert>}
 
-              <Button
-                type="submit"
-                fullWidth
-                sx={{
-                  mt: 2,
-                  background: "linear-gradient(135deg, #7c3aed, #6366f1)",
-                }}
-                variant="contained"
-                disabled={loading}
-              >
-                {loading ? (
-                  <CircularProgress size={22} sx={{ color: "#fff" }} />
-                ) : (
-                  "Send Email"
-                )}
+              <Button type="submit" fullWidth disabled={loading}>
+                {loading ? <CircularProgress size={22} /> : "Send Email"}
               </Button>
             </Box>
           </AccordionDetails>

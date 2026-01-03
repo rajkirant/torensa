@@ -1,14 +1,14 @@
 from django.http import JsonResponse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMessage, get_connection
 import json
 import os
 from django.contrib.auth.decorators import login_required
 from cryptography.fernet import Fernet
-import json
-import os
 from ..models import UserSMTPConfig
+from django.conf import settings
+
 
 @csrf_exempt
 @require_POST
@@ -82,6 +82,13 @@ def send_email(request):
 
 
 
+def get_fernet():
+    key = os.environ.get("EMAIL_ENCRYPTION_KEY")
+    if not key:
+        raise RuntimeError("EMAIL_ENCRYPTION_KEY is not configured")
+    return Fernet(key)
+
+
 @csrf_exempt
 @require_POST
 @login_required
@@ -100,23 +107,70 @@ def save_smtp_config(request):
             status=400,
         )
 
-    # Encrypt app password
-    fernet = Fernet(os.environ["EMAIL_ENCRYPTION_KEY"])
-    encrypted_password = fernet.encrypt(app_password.encode())
-
-    # Save or update SMTP config
-    UserSMTPConfig.objects.update_or_create(
+    # Prevent duplicates per user
+    if UserSMTPConfig.objects.filter(
         user=request.user,
-        defaults={
-            "smtp_email": smtp_email,
-            "encrypted_app_password": encrypted_password,
-            "provider": "gmail",
-            "is_active": True,
-            "disabled_reason": "",
-        },
+        smtp_email=smtp_email
+    ).exists():
+        return JsonResponse(
+            {"error": "SMTP configuration already exists"},
+            status=409,
+        )
+
+    try:
+        # 🔐 Encrypt at runtime (safe)
+        fernet = get_fernet()
+        encrypted_password = fernet.encrypt(app_password.encode())
+    except Exception as e:
+        return JsonResponse(
+            {"error": "Encryption failed", "details": str(e)},
+            status=500,
+        )
+
+    # ✅ CREATE (do NOT update)
+    UserSMTPConfig.objects.create(
+        user=request.user,
+        smtp_email=smtp_email,
+        encrypted_app_password=encrypted_password,
+        provider="gmail",
+        is_active=True,
     )
 
     return JsonResponse(
         {"status": "SMTP credentials saved securely"},
+        status=201,
+    )
+
+
+@csrf_exempt
+@require_GET
+@login_required
+def list_smtp_configs(request):
+    """
+    List all saved SMTP configurations for the logged-in user.
+    Safe to call multiple times (idempotent).
+    """
+
+    configs = UserSMTPConfig.objects.filter(
+        user=request.user,
+        is_active=True
+    ).order_by("-updated_at")
+
+    data = [
+        {
+            "id": cfg.id,
+            "smtp_email": cfg.smtp_email,
+            "provider": cfg.provider,
+            "created_at": cfg.created_at.isoformat(),
+            "updated_at": cfg.updated_at.isoformat(),
+        }
+        for cfg in configs
+    ]
+
+    return JsonResponse(
+        {
+            "configs": data,
+            "count": len(data),
+        },
         status=200,
     )
