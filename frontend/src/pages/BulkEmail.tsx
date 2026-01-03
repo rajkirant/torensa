@@ -195,9 +195,7 @@ export default function BulkEmail() {
         <Typography variant="h5" fontWeight={700} gutterBottom>
           Bulk Email
         </Typography>
-
         <Divider sx={{ mb: 3 }} />
-
         {/* ================= SMTP CONFIG ================= */}
         <Accordion
           expanded={expanded.smtp}
@@ -238,7 +236,6 @@ export default function BulkEmail() {
             </Box>
           </AccordionDetails>
         </Accordion>
-
         {/* ================= SEND EMAIL ================= */}
         <Accordion
           expanded={expanded.send}
@@ -250,18 +247,29 @@ export default function BulkEmail() {
               Send Bulk Email
             </Typography>
           </AccordionSummary>
+
           <AccordionDetails>
             <Box component="form" onSubmit={handleSendEmail}>
               {/* SMTP DROPDOWN */}
               <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel>Select SMTP Configuration</InputLabel>
+                <InputLabel id="smtp-select-label">
+                  Select SMTP Configuration
+                </InputLabel>
+
                 <Select
-                  value={selectedConfigId}
+                  labelId="smtp-select-label"
                   label="Select SMTP Configuration"
+                  value={selectedConfigId}
                   onChange={(e) =>
                     setSelectedConfigId(e.target.value as number)
                   }
+                  required
                 >
+                  {/* Placeholder */}
+                  <MenuItem value="">
+                    <em>Choose an email account</em>
+                  </MenuItem>
+
                   {smtpConfigs.map((cfg) => (
                     <MenuItem key={cfg.id} value={cfg.id}>
                       {cfg.smtp_email} ({cfg.provider})
@@ -277,24 +285,29 @@ export default function BulkEmail() {
               )}
 
               <textarea
-                placeholder="Recipients"
+                placeholder="Recipients (comma or new line separated)"
                 rows={4}
                 value={emails}
                 onChange={(e) => setEmails(e.target.value)}
                 style={inputStyle("#c084fc")}
+                required
               />
+
               <input
                 placeholder="Subject"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 style={inputStyle("#c084fc")}
+                required
               />
+
               <textarea
                 placeholder="Message"
                 rows={6}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
                 style={inputStyle("#c084fc")}
+                required
               />
 
               <input
@@ -303,10 +316,23 @@ export default function BulkEmail() {
                 onChange={(e) => setFiles(e.target.files)}
               />
 
-              {error && <Alert severity="error">{error}</Alert>}
-              {success && <Alert severity="success">{success}</Alert>}
+              {error && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {error}
+                </Alert>
+              )}
+              {success && (
+                <Alert severity="success" sx={{ mt: 2 }}>
+                  {success}
+                </Alert>
+              )}
 
-              <Button type="submit" fullWidth disabled={loading}>
+              <Button
+                type="submit"
+                fullWidth
+                disabled={loading || smtpConfigs.length === 0}
+                sx={{ mt: 2 }}
+              >
                 {loading ? <CircularProgress size={22} /> : "Send Email"}
               </Button>
             </Box>
