@@ -16,3 +16,7 @@ sqlite3 db.sqlite3 --> start sqlite3 session
 .tables --> show all tables
 .schema auth_user --> see the table structure
 .exit --> exit sqlite session
+
+
+
+pip install -r requirements.txt --> install all the dependencies in requirements.txt
