@@ -80,8 +80,6 @@ def send_email(request):
         )
 
 
-# Initialize encryption
-fernet = Fernet(os.environ["EMAIL_ENCRYPTION_KEY"])
 
 
 @csrf_exempt
@@ -103,6 +101,7 @@ def save_smtp_config(request):
         )
 
     # Encrypt app password
+    fernet = Fernet(os.environ["EMAIL_ENCRYPTION_KEY"])
     encrypted_password = fernet.encrypt(app_password.encode())
 
     # Save or update SMTP config
