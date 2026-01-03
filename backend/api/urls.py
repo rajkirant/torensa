@@ -1,6 +1,6 @@
 from django.urls import path
 from .views.auth_views import hello, logout_view,login_view, me, signup_view
-from .views.email_views import send_email, save_smtp_config
+from .views.email_views import list_smtp_configs, send_email, save_smtp_config
 
 urlpatterns = [
     path("hello/", hello),
@@ -10,4 +10,5 @@ urlpatterns = [
     path("logout/", logout_view),
     path("signup/", signup_view),
     path("smtp/save/", save_smtp_config),
+    path("smtp/list/", list_smtp_configs),
 ]
