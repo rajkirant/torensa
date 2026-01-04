@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-m$%ot^7akkrwr^!c@2h37$wlhnh+!tnj_%sikw7^hzv-4%i=m+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['torensa.pythonanywhere.com','127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['torensa.pythonanywhere.com','127.0.0.1', 'localhost','torensa.com']
 
 
 # Application definition
