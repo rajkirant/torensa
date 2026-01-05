@@ -5,7 +5,7 @@ Use below commend in deploy.yml to start a terminal in gitLab
       - name: Debug runner
         uses: mxschmitt/action-tmate@v3
 
-to activate environment locally --> C:/Users/rajki/Workspace/torensa/.venv/Scripts/Activate.ps1
+to activate environment locally --> .venv/Scripts/activate
 to run it locally --> python manage.py runserver
 
 
