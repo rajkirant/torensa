@@ -4,7 +4,7 @@ import { HashRouter } from "react-router-dom";
 
 import App from "./App";
 import { AuthProvider } from "./auth";
-import "./styles.css";
+import "./styles/styles.css";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
