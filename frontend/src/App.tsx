@@ -1,9 +1,13 @@
 import React from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
+import { Suspense, lazy } from "react";
+
+const Contact = lazy(() => import("./pages/Contact"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
+
 import { useAuth } from "./auth";
-import BulkEmail from "./pages/BulkEmail/BulkEmail";
 import {
   brandLinkStyle,
   navLinkBase,
@@ -20,7 +24,6 @@ import { useTheme } from "@mui/material/styles";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import Signup from "./pages/Signup";
 
 /* ===================== TYPES ===================== */
 
@@ -142,120 +145,123 @@ export default function App({ themeName, setThemeName }: AppProps) {
       {/* ================= CONTENT ================= */}
       <div className="container">
         <main>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  {/* HERO */}
-                  <section
-                    style={{
-                      minHeight: "55vh",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    <h1
+          <Suspense fallback={<div style={{ padding: 40 }}>Loading…</div>}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    {/* HERO */}
+                    <section
                       style={{
-                        fontSize: 64,
-                        fontWeight: 900,
-                        letterSpacing: 1,
-                        color: "#1e40af",
-                        textShadow:
-                          "0 0 8px rgba(59,130,246,0.6), 0 0 18px rgba(99,102,241,0.45)",
-                        marginBottom: 10,
+                        minHeight: "55vh",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
                       }}
                     >
-                      Torensa
-                    </h1>
+                      <h1
+                        style={{
+                          fontSize: 64,
+                          fontWeight: 900,
+                          letterSpacing: 1,
+                          color: "#1e40af",
+                          textShadow:
+                            "0 0 8px rgba(59,130,246,0.6), 0 0 18px rgba(99,102,241,0.45)",
+                          marginBottom: 10,
+                        }}
+                      >
+                        Torensa
+                      </h1>
 
-                    <p
-                      style={{
-                        fontSize: 20,
-                        ...secondaryText,
-                        marginBottom: 28,
-                      }}
-                    >
-                      Freelance Software Developer
-                    </p>
+                      <p
+                        style={{
+                          fontSize: 20,
+                          ...secondaryText,
+                          marginBottom: 28,
+                        }}
+                      >
+                        Freelance Software Developer
+                      </p>
 
-                    <Button
-                      variant="contained"
-                      size="large"
-                      endIcon={<ArrowForwardIcon />}
-                      href="#/contact"
-                      sx={{
-                        px: 4,
-                        py: 1.4,
-                        borderRadius: 3,
-                        textTransform: "none",
-                        fontWeight: 700,
-                        background: "linear-gradient(135deg, #2563eb, #1e40af)",
-                        boxShadow: "0 10px 30px rgba(37,99,235,0.45)",
-                      }}
-                    >
-                      Start a Project
-                    </Button>
-                  </section>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        endIcon={<ArrowForwardIcon />}
+                        href="#/contact"
+                        sx={{
+                          px: 4,
+                          py: 1.4,
+                          borderRadius: 3,
+                          textTransform: "none",
+                          fontWeight: 700,
+                          background:
+                            "linear-gradient(135deg, #2563eb, #1e40af)",
+                          boxShadow: "0 10px 30px rgba(37,99,235,0.45)",
+                        }}
+                      >
+                        Start a Project
+                      </Button>
+                    </section>
 
-                  {/* SERVICES */}
-                  <section style={sectionBase}>
-                    <h2 style={{ textAlign: "center", marginBottom: 40 }}>
-                      Services
-                    </h2>
+                    {/* SERVICES */}
+                    <section style={sectionBase}>
+                      <h2 style={{ textAlign: "center", marginBottom: 40 }}>
+                        Services
+                      </h2>
 
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns:
-                          "repeat(auto-fit, minmax(260px, 1fr))",
-                        gap: 28,
-                      }}
-                    >
-                      <div style={cardStyle}>
-                        <h3>Frontend Development</h3>
-                        <p style={secondaryText}>
-                          Modern, responsive React applications.
-                        </p>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns:
+                            "repeat(auto-fit, minmax(260px, 1fr))",
+                          gap: 28,
+                        }}
+                      >
+                        <div style={cardStyle}>
+                          <h3>Frontend Development</h3>
+                          <p style={secondaryText}>
+                            Modern, responsive React applications.
+                          </p>
+                        </div>
+
+                        <div style={cardStyle}>
+                          <h3>Backend APIs</h3>
+                          <p style={secondaryText}>
+                            Secure and scalable Spring Boot APIs.
+                          </p>
+                        </div>
+
+                        <div style={cardStyle}>
+                          <h3>DevOps</h3>
+                          <p style={secondaryText}>
+                            Dockerised deployments and CI/CD pipelines.
+                          </p>
+                        </div>
                       </div>
+                    </section>
 
-                      <div style={cardStyle}>
-                        <h3>Backend APIs</h3>
-                        <p style={secondaryText}>
-                          Secure and scalable Spring Boot APIs.
-                        </p>
-                      </div>
+                    {/* ABOUT */}
+                    <section style={{ ...sectionBase, paddingTop: 40 }}>
+                      <h2>About Me</h2>
+                      <p style={secondaryText}>
+                        I build scalable, secure applications with a strong
+                        focus on clean architecture, performance, and long-term
+                        maintainability.
+                      </p>
+                    </section>
+                  </>
+                }
+              />
 
-                      <div style={cardStyle}>
-                        <h3>DevOps</h3>
-                        <p style={secondaryText}>
-                          Dockerised deployments and CI/CD pipelines.
-                        </p>
-                      </div>
-                    </div>
-                  </section>
-
-                  {/* ABOUT */}
-                  <section style={{ ...sectionBase, paddingTop: 40 }}>
-                    <h2>About Me</h2>
-                    <p style={secondaryText}>
-                      I build scalable, secure applications with a strong focus
-                      on clean architecture, performance, and long-term
-                      maintainability.
-                    </p>
-                  </section>
-                </>
-              }
-            />
-
-            <Route path="/bulk-email" element={<BulkEmail />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Routes>
+              <Route path="/bulk-email" element={<BulkEmail />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Routes>
+          </Suspense>
         </main>
       </div>
 
@@ -271,7 +277,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               sx={{
                 fontSize: 30,
                 color: "#e0e7ff",
-                marginBottom: 12,
+                marginBottom: 2,
               }}
             />
           </a>
