@@ -6,7 +6,6 @@ import { useAuth } from "./auth";
 import BulkEmail from "./pages/BulkEmail/BulkEmail";
 
 import Button from "@mui/material/Button";
-
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
@@ -50,8 +49,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const theme = useTheme();
 
-  /* ---------- STYLES ---------- */
-
   const headerGradient = "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)";
 
   const headerStyle: React.CSSProperties = {
@@ -75,11 +72,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
     boxShadow: "0 18px 36px rgba(0,0,0,0.3)",
   };
 
-  /* ---------- FOOTER (UPDATED) ---------- */
-
   const footerStyle: React.CSSProperties = {
     marginTop: 80,
-    padding: "64px 24px 40px",
+    padding: "48px 24px",
     background: headerGradient,
     borderTop: "1px solid rgba(255,255,255,0.12)",
   };
@@ -87,16 +82,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const footerCard: React.CSSProperties = {
     maxWidth: 900,
     margin: "0 auto",
-    padding: "48px 32px",
-    borderRadius: 24,
-    backgroundColor: "rgba(2,6,23,0.55)",
-    border: "1px solid rgba(255,255,255,0.15)",
     textAlign: "center",
-    backdropFilter: "blur(6px)",
   };
 
   return (
-    <div className="container">
+    <>
       {/* ================= HEADER ================= */}
       <header style={headerStyle}>
         <Link to="/" style={brandLinkStyle}>
@@ -147,11 +137,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             (user ? (
               <>
                 <span
-                  style={{
-                    color: "#ffffff",
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
+                  style={{ color: "#ffffff", fontWeight: 600, fontSize: 14 }}
                 >
                   Hi, {user.username}
                 </span>
@@ -199,136 +185,129 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </nav>
       </header>
 
-      {/* ================= MAIN ================= */}
-      <main>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                {/* HERO */}
-                <section
-                  style={{
-                    minHeight: "55vh",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <h1
+      {/* ================= CONTENT ================= */}
+      <div className="container">
+        <main>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  {/* HERO */}
+                  <section
                     style={{
-                      fontSize: 64,
-                      fontWeight: 900,
-                      letterSpacing: 1,
-                      color: "#1e40af",
-                      textShadow:
-                        "0 0 8px rgba(59,130,246,0.6), 0 0 18px rgba(99,102,241,0.45)",
-                      marginBottom: 10,
+                      minHeight: "55vh",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
                     }}
                   >
-                    Torensa
-                  </h1>
+                    <h1
+                      style={{
+                        fontSize: 64,
+                        fontWeight: 900,
+                        letterSpacing: 1,
+                        color: "#1e40af",
+                        textShadow:
+                          "0 0 8px rgba(59,130,246,0.6), 0 0 18px rgba(99,102,241,0.45)",
+                        marginBottom: 10,
+                      }}
+                    >
+                      Torensa
+                    </h1>
 
-                  <p
-                    style={{
-                      fontSize: 20,
-                      ...secondaryText,
-                      marginBottom: 28,
-                    }}
-                  >
-                    Freelance Software Developer
-                  </p>
+                    <p
+                      style={{
+                        fontSize: 20,
+                        ...secondaryText,
+                        marginBottom: 28,
+                      }}
+                    >
+                      Freelance Software Developer
+                    </p>
 
-                  <Button
-                    variant="contained"
-                    size="large"
-                    endIcon={<ArrowForwardIcon />}
-                    href="#/contact"
-                    sx={{
-                      px: 4,
-                      py: 1.4,
-                      borderRadius: 3,
-                      textTransform: "none",
-                      fontWeight: 700,
-                      background: "linear-gradient(135deg, #2563eb, #1e40af)",
-                      boxShadow: "0 10px 30px rgba(37,99,235,0.45)",
-                      "&:hover": {
-                        background: "linear-gradient(135deg, #1e40af, #1e3a8a)",
-                      },
-                    }}
-                  >
-                    Start a Project
-                  </Button>
-                </section>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      endIcon={<ArrowForwardIcon />}
+                      href="#/contact"
+                      sx={{
+                        px: 4,
+                        py: 1.4,
+                        borderRadius: 3,
+                        textTransform: "none",
+                        fontWeight: 700,
+                        background: "linear-gradient(135deg, #2563eb, #1e40af)",
+                        boxShadow: "0 10px 30px rgba(37,99,235,0.45)",
+                      }}
+                    >
+                      Start a Project
+                    </Button>
+                  </section>
 
-                {/* SERVICES */}
-                <section style={sectionBase}>
-                  <h2 style={{ textAlign: "center", marginBottom: 40 }}>
-                    Services
-                  </h2>
+                  {/* SERVICES */}
+                  <section style={sectionBase}>
+                    <h2 style={{ textAlign: "center", marginBottom: 40 }}>
+                      Services
+                    </h2>
 
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, minmax(260px, 1fr))",
-                      gap: 28,
-                    }}
-                  >
-                    <div style={cardStyle}>
-                      <h3>Frontend Development</h3>
-                      <p style={secondaryText}>
-                        Modern, responsive React applications.
-                      </p>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, minmax(260px, 1fr))",
+                        gap: 28,
+                      }}
+                    >
+                      <div style={cardStyle}>
+                        <h3>Frontend Development</h3>
+                        <p style={secondaryText}>
+                          Modern, responsive React applications.
+                        </p>
+                      </div>
+
+                      <div style={cardStyle}>
+                        <h3>Backend APIs</h3>
+                        <p style={secondaryText}>
+                          Secure and scalable Spring Boot APIs.
+                        </p>
+                      </div>
+
+                      <div style={cardStyle}>
+                        <h3>DevOps</h3>
+                        <p style={secondaryText}>
+                          Dockerised deployments and CI/CD pipelines.
+                        </p>
+                      </div>
                     </div>
+                  </section>
 
-                    <div style={cardStyle}>
-                      <h3>Backend APIs</h3>
-                      <p style={secondaryText}>
-                        Secure and scalable Spring Boot APIs.
-                      </p>
-                    </div>
+                  {/* ABOUT */}
+                  <section style={{ ...sectionBase, paddingTop: 40 }}>
+                    <h2>About Me</h2>
+                    <p style={secondaryText}>
+                      I build scalable, secure applications with a strong focus
+                      on clean architecture, performance, and long-term
+                      maintainability.
+                    </p>
+                  </section>
+                </>
+              }
+            />
 
-                    <div style={cardStyle}>
-                      <h3>DevOps</h3>
-                      <p style={secondaryText}>
-                        Dockerised deployments and CI/CD pipelines.
-                      </p>
-                    </div>
-                  </div>
-                </section>
+            <Route path="/bulk-email" element={<BulkEmail />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </main>
+      </div>
 
-                {/* ABOUT */}
-                <section style={{ ...sectionBase, paddingTop: 40 }}>
-                  <h2>About Me</h2>
-                  <p style={secondaryText}>
-                    I build scalable, secure applications with a strong focus on
-                    clean architecture, performance, and long-term
-                    maintainability.
-                  </p>
-                </section>
-              </>
-            }
-          />
-          <Route path="/bulk-email" element={<BulkEmail />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-      </main>
-
-      {/* ================= FOOTER ================= */}
+      {/* ================= FOOTER (FULL WIDTH) ================= */}
       <footer style={footerStyle}>
         <div style={footerCard}>
-          <strong style={{ color: "#ffffff" }}>Torensa</strong>
-
-          <p style={{ marginTop: 10, color: "#e5e7eb" }}>
-            Freelance software developer specialising in scalable and secure web
-            applications.
-          </p>
-
           <a
             href="https://www.linkedin.com/in/rajkirant/"
             target="_blank"
@@ -338,22 +317,16 @@ export default function App({ themeName, setThemeName }: AppProps) {
               sx={{
                 fontSize: 30,
                 color: "#e0e7ff",
-                marginTop: 14,
+                marginBottom: 12,
               }}
             />
           </a>
 
-          <div
-            style={{
-              marginTop: 28,
-              fontSize: 13,
-              color: "#c7d2fe",
-            }}
-          >
-            © {new Date().getFullYear()} Torensa. All rights reserved.
+          <div style={{ fontSize: 13, color: "#c7d2fe" }}>
+            © 2026 Torensa. All rights reserved.
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
