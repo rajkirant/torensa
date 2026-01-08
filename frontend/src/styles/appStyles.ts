@@ -33,9 +33,12 @@ export const headerStyle = (theme: Theme): React.CSSProperties => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "16px 40px",
+  padding: "12px 16px",
   boxShadow: "0 8px 30px rgba(0,0,0,0.15)", // slightly softer for light theme too
   color: theme.header.text,
+  flexWrap: "wrap",
+  gap: 12,
+  overflow: "visible",
 });
 
 export const footerStyle = (theme: Theme): React.CSSProperties => ({
