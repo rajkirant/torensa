@@ -28,8 +28,8 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 /* ===================== TYPES ===================== */
 
 type AppProps = {
-  themeName: "default" | "dark";
-  setThemeName: (name: "default" | "dark") => void;
+  themeName: "light" | "dark";
+  setThemeName: (name: "light" | "dark") => void;
 };
 
 /* ===================== APP ===================== */
@@ -37,6 +37,7 @@ type AppProps = {
 export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const theme = useTheme();
+  const navBase = { ...navLinkBase, color: theme.header.textMuted };
 
   const secondaryText: React.CSSProperties = {
     color: theme.palette.text.secondary,
@@ -45,8 +46,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header style={headerStyle}>
-        <Link to="/" style={brandLinkStyle}>
+      <header style={headerStyle(theme)}>
+        <Link to="/" style={{ ...brandLinkStyle, color: theme.header.text }}>
           Torensa
         </Link>
 
@@ -56,8 +57,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
             end
             style={({ isActive }) =>
               isActive
-                ? { ...navLinkBase, color: "#fff", textDecoration: "underline" }
-                : navLinkBase
+                ? {
+                    ...navBase,
+                    color: theme.header.text,
+                    textDecoration: "underline",
+                  }
+                : navBase
             }
           >
             Home
@@ -67,8 +72,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
             to="/contact"
             style={({ isActive }) =>
               isActive
-                ? { ...navLinkBase, color: "#fff", textDecoration: "underline" }
-                : navLinkBase
+                ? {
+                    ...navBase,
+                    color: theme.header.text,
+                    textDecoration: "underline",
+                  }
+                : navBase
             }
           >
             Contact
@@ -77,16 +86,19 @@ export default function App({ themeName, setThemeName }: AppProps) {
           <Select
             size="small"
             value={themeName}
-            onChange={(e) => setThemeName(e.target.value as "default" | "dark")}
+            onChange={(e) => setThemeName(e.target.value as "light" | "dark")}
             sx={{
-              color: "#fff",
+              color: theme.header.text,
               height: 32,
               ".MuiOutlinedInput-notchedOutline": {
-                borderColor: "rgba(255,255,255,0.4)",
+                borderColor: theme.header.border,
+              },
+              "& .MuiSvgIcon-root": {
+                color: theme.header.text,
               },
             }}
           >
-            <MenuItem value="default">Default</MenuItem>
+            <MenuItem value="light">Light</MenuItem>
             <MenuItem value="dark">Dark</MenuItem>
           </Select>
 
@@ -104,11 +116,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   style={({ isActive }) =>
                     isActive
                       ? {
-                          ...navLinkBase,
-                          color: "#fff",
+                          ...navBase,
+                          color: theme.header.text,
                           textDecoration: "underline",
                         }
-                      : navLinkBase
+                      : navBase
                   }
                 >
                   Bulk Email
@@ -131,10 +143,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </>
             ) : (
               <>
-                <Link to="/login" style={{ color: "#fff" }}>
+                <Link to="/login" style={{ color: theme.header.text }}>
                   Login
                 </Link>
-                <Link to="/signup" style={{ color: "#fff" }}>
+                <Link to="/signup" style={{ color: theme.header.text }}>
                   Sign up
                 </Link>
               </>
@@ -266,7 +278,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
       </div>
 
       {/* ================= FOOTER (FULL WIDTH) ================= */}
-      <footer style={footerStyle}>
+      <footer style={footerStyle(theme)}>
         <div style={footerCard}>
           <a
             href="https://www.linkedin.com/in/rajkirant/"
@@ -274,15 +286,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
             rel="noopener noreferrer"
           >
             <LinkedInIcon
-              sx={{
-                fontSize: 30,
-                color: "#e0e7ff",
-                marginBottom: 2,
-              }}
+              sx={{ fontSize: 30, color: theme.header.text, marginBottom: 12 }}
             />
           </a>
 
-          <div style={{ fontSize: 13, color: "#c7d2fe" }}>
+          <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © 2026 Torensa. All rights reserved.
           </div>
         </div>

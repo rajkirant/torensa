@@ -8,17 +8,16 @@ import "./styles/styles.css";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
-import { appTheme } from "./theme/theme";
-import { darkTheme } from "./theme/darkTheme";
+import { darkTheme } from "./theme/dark";
+import { lightTheme } from "./theme/light";
 
 /* ================= ROOT ================= */
 
 function Root() {
-  const [themeName, setThemeName] = useState<"default" | "dark">("dark");
+  const [themeName, setThemeName] = useState<"light" | "dark">("dark");
 
   const theme = useMemo(
-    () => (themeName === "dark" ? darkTheme : appTheme),
+    () => (themeName === "dark" ? darkTheme : lightTheme),
     [themeName]
   );
 
