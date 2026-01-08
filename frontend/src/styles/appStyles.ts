@@ -1,7 +1,5 @@
 import React from "react";
-
-export const headerGradient =
-  "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)";
+import { Theme } from "@mui/material/styles";
 
 export const brandLinkStyle: React.CSSProperties = {
   fontSize: 22,
@@ -23,15 +21,6 @@ export const sectionBase: React.CSSProperties = {
   margin: "0 auto",
 };
 
-export const headerStyle: React.CSSProperties = {
-  background: headerGradient,
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "16px 40px",
-  boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
-};
-
 export const cardStyle: React.CSSProperties = {
   border: "1px solid rgba(255,255,255,0.1)",
   borderRadius: 16,
@@ -39,12 +28,23 @@ export const cardStyle: React.CSSProperties = {
   boxShadow: "0 18px 36px rgba(0,0,0,0.3)",
 };
 
-export const footerStyle: React.CSSProperties = {
+export const headerStyle = (theme: Theme): React.CSSProperties => ({
+  background: theme.gradients.header,
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "16px 40px",
+  boxShadow: "0 8px 30px rgba(0,0,0,0.15)", // slightly softer for light theme too
+  color: theme.header.text,
+});
+
+export const footerStyle = (theme: Theme): React.CSSProperties => ({
   marginTop: 80,
   padding: "48px 24px",
-  background: headerGradient,
-  borderTop: "1px solid rgba(255,255,255,0.12)",
-};
+  background: theme.gradients.footer,
+  borderTop: `1px solid ${theme.header.border}`, // ✅
+  color: theme.header.text,
+});
 
 export const footerCard: React.CSSProperties = {
   maxWidth: 900,

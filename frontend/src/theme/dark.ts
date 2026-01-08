@@ -24,6 +24,17 @@ export const darkTheme = createTheme({
     divider: "rgba(255,255,255,0.08)",
   },
 
+  gradients: {
+    header: "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)",
+    footer: "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)",
+  },
+
+  header: {
+    text: "#ffffff",
+    textMuted: "#e5e7eb",
+    border: "rgba(255,255,255,0.12)",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },
