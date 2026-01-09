@@ -21,17 +21,16 @@ const light = createTheme({
     divider: "rgba(15,23,42,0.12)",
   },
 
-  // ✅ Light header/footer background
+  /* 🌑 DARK GRADIENT HEADER & FOOTER */
   gradients: {
-    header: "linear-gradient(90deg, #ffffff, #eef2ff, #e0e7ff)",
-    footer: "linear-gradient(90deg, #ffffff, #eef2ff, #e0e7ff)",
+    header: "linear-gradient(90deg, #020617, #0f172a, #020617)",
+    footer: "linear-gradient(90deg, #020617, #0f172a, #020617)",
   },
 
-  // ✅ Accessible text colors for light header/footer
   header: {
-    text: "#0f172a", // dark text
-    textMuted: "#334155",
-    border: "rgba(15,23,42,0.14)",
+    text: "#ffffff",
+    textMuted: "#cbd5e1",
+    border: "rgba(255,255,255,0.14)",
   },
 
   typography: {
