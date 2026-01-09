@@ -2,11 +2,6 @@ import React from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-const Contact = lazy(() => import("./pages/Contact"));
-const Login = lazy(() => import("./pages/Login"));
-const Signup = lazy(() => import("./pages/Signup"));
-const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
-
 import { useAuth } from "./auth";
 import {
   brandLinkStyle,
@@ -20,23 +15,30 @@ import {
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { useTheme } from "@mui/material/styles";
+
+import { themes } from "./theme";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
+import type { ThemeName } from "./theme";
+const Contact = lazy(() => import("./pages/Contact"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
+
 /* ===================== TYPES ===================== */
 
 type AppProps = {
-  themeName: "light" | "dark";
-  setThemeName: (name: "light" | "dark") => void;
+  themeName: ThemeName;
+  setThemeName: (name: ThemeName) => void;
 };
 
 /* ===================== APP ===================== */
 
 export default function App({ themeName, setThemeName }: AppProps) {
+  const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
-  const theme = useTheme();
   const navBase = { ...navLinkBase, color: theme.header.textMuted };
 
   const secondaryText: React.CSSProperties = {
@@ -86,20 +88,14 @@ export default function App({ themeName, setThemeName }: AppProps) {
           <Select
             size="small"
             value={themeName}
-            onChange={(e) => setThemeName(e.target.value as "light" | "dark")}
-            sx={{
-              color: theme.header.text,
-              height: 32,
-              ".MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.header.border,
-              },
-              "& .MuiSvgIcon-root": {
-                color: theme.header.text,
-              },
-            }}
+            onChange={(e) => setThemeName(e.target.value as ThemeName)}
+            sx={{ color: theme.header.text }}
           >
-            <MenuItem value="light">Light</MenuItem>
-            <MenuItem value="dark">Dark</MenuItem>
+            {Object.keys(themes).map((name) => (
+              <MenuItem key={name} value={name}>
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </MenuItem>
+            ))}
           </Select>
 
           {!loading &&

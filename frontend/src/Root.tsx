@@ -1,29 +1,33 @@
-
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { HashRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "./auth";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { darkTheme } from "./theme/dark";
-import { lightTheme } from "./theme/light";
+
+import { themes } from "./theme";
+import type { ThemeName } from "./theme";
 
 export function Root() {
-    const [themeName, setThemeName] = useState<"light" | "dark">("dark");
+  const [themeName, setThemeName] = useState<ThemeName>(() => {
+    const saved = localStorage.getItem("themeName");
+    return (saved as ThemeName) || "dark";
+  });
 
-    const theme = useMemo(
-        () => (themeName === "dark" ? darkTheme : lightTheme),
-        [themeName]
-    );
+  useEffect(() => {
+    localStorage.setItem("themeName", themeName as string);
+  }, [themeName]);
 
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AuthProvider>
-                <HashRouter>
-                    <App themeName={themeName} setThemeName={setThemeName} />
-                </HashRouter>
-            </AuthProvider>
-        </ThemeProvider>
-    );
+  const theme = useMemo(() => themes[themeName], [themeName]);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <HashRouter>
+          <App themeName={themeName} setThemeName={setThemeName} />
+        </HashRouter>
+      </AuthProvider>
+    </ThemeProvider>
+  );
 }
