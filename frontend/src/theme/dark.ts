@@ -1,26 +1,19 @@
 import { createTheme } from "@mui/material/styles";
 
-export const darkTheme = createTheme({
+const dark = createTheme({
   palette: {
     mode: "dark",
-
-    /* BRAND / HEADER */
-    info: { main: "#020617" }, // deep navy
-    primary: { main: "#3b82f6" }, // blue-500 (slightly brighter)
-    secondary: { main: "#8b5cf6" }, // violet-500
-
-    /* PAGE */
+    info: { main: "#020617" },
+    primary: { main: "#3b82f6" },
+    secondary: { main: "#8b5cf6" },
     background: {
-      default: "#0f172a", // slate-900 (lighter than before)
-      paper: "#1e293b", // slate-800 (cards & sections)
+      default: "#0f172a",
+      paper: "#1e293b",
     },
-
-    /* TEXT */
     text: {
-      primary: "#f8fafc", // slate-50
-      secondary: "#cbd5e1", // slate-300
+      primary: "#f8fafc",
+      secondary: "#cbd5e1",
     },
-
     divider: "rgba(255,255,255,0.08)",
   },
 
@@ -51,3 +44,5 @@ export const darkTheme = createTheme({
     },
   },
 });
+
+export default dark;
