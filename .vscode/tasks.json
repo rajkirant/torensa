@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run Django Server",
+      "label": "backend",
       "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe manage.py runserver",
+      "command": ".\\.venv\\Scripts\\python.exe backend\\manage.py runserver",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -12,15 +12,15 @@
       "problemMatcher": []
     },
     {
-      "label": "Run Frontend Dev Server",
+      "label": "frontend",
       "type": "shell",
       "command": "pnpm run dev",
       "options": {
-        "cwd": "frontend"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": false
+        "cwd": "frontend",
+        "shell": {
+          "executable": "powershell.exe",
+          "args": ["-NoProfile"]
+        }
       },
       "problemMatcher": []
     }
