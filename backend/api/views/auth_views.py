@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 import json
 from django.core.mail import EmailMessage, get_connection
 from django.contrib.auth.models import User
+from django.conf import settings
 
 def hello(request):
     return JsonResponse({"message": "Hello World"})
@@ -108,8 +109,25 @@ def me(request):
         })
     return JsonResponse({"user": None}, status=401)
 
-@require_POST
+
 @csrf_exempt
+@require_POST
 def logout_view(request):
     logout(request)
-    return JsonResponse({"message": "Logged out"})
+
+    response = JsonResponse({"message": "Logged out"})
+
+    # Remove session cookie created at login
+    response.delete_cookie(
+        settings.SESSION_COOKIE_NAME,  # usually "sessionid"
+        path=settings.SESSION_COOKIE_PATH,
+        domain=settings.SESSION_COOKIE_DOMAIN,
+    )
+
+    response.delete_cookie(
+        settings.CSRF_COOKIE_NAME,
+        path=settings.CSRF_COOKIE_PATH,
+        domain=settings.CSRF_COOKIE_DOMAIN,
+    )
+
+    return response
