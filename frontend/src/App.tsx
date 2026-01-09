@@ -107,21 +107,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   Hi, {user.username}
                 </span>
 
-                <NavLink
-                  to="/bulk-email"
-                  style={({ isActive }) =>
-                    isActive
-                      ? {
-                          ...navBase,
-                          color: theme.header.text,
-                          textDecoration: "underline",
-                        }
-                      : navBase
-                  }
-                >
-                  Bulk Email
-                </NavLink>
-
                 <Button
                   variant="outlined"
                   size="small"
@@ -228,11 +213,36 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           gap: 28,
                         }}
                       >
-                        <div style={cardStyle}>
-                          <h3>Frontend Development</h3>
+                        <div
+                          style={{
+                            ...cardStyle,
+                            cursor: "pointer",
+                            textAlign: "center",
+                          }}
+                          onClick={() =>
+                            (window.location.hash = "#/bulk-email")
+                          }
+                        >
+                          <h3 style={{ marginBottom: 12 }}>Bulk Email</h3>
+
                           <p style={secondaryText}>
-                            Modern, responsive React applications.
+                            Send emails to multiple recipients quickly and
+                            securely.
                           </p>
+
+                          <Button
+                            variant="contained"
+                            size="small"
+                            sx={{
+                              mt: 2,
+                              textTransform: "none",
+                              fontWeight: 600,
+                              background:
+                                "linear-gradient(135deg, #2563eb, #1e40af)",
+                            }}
+                          >
+                            Open Bulk Email
+                          </Button>
                         </div>
 
                         <div style={cardStyle}>

@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Alert,
   Typography,
+  TextField,
 } from "@mui/material";
 
 type Props = {
@@ -80,47 +81,65 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
         </a>
       </Typography>
 
-      <input
+      <TextField
+        label="Gmail address"
         type="email"
-        placeholder="yourname@gmail.com"
         value={smtpEmail}
         onChange={(e) => setSmtpEmail(e.target.value)}
-        required
-        style={{
-          width: "100%",
-          padding: 10,
-          marginBottom: 12,
-          borderRadius: 8,
-        }}
+        autoComplete="email"
+        fullWidth
+        margin="normal"
       />
 
-      <input
+      <TextField
+        label="Gmail App Password"
         type="password"
-        placeholder="16-character Gmail app password"
         value={appPassword}
         onChange={(e) => setAppPassword(e.target.value)}
-        required
-        style={{
-          width: "100%",
-          padding: 10,
-          marginBottom: 12,
-          borderRadius: 8,
-        }}
+        autoComplete="current-password"
+        fullWidth
+        margin="normal"
       />
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert severity="error" sx={{ mt: 2 }}>
           {error}
         </Alert>
       )}
+
       {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
+        <Alert severity="success" sx={{ mt: 2 }}>
           {success}
         </Alert>
       )}
 
-      <Button type="submit" fullWidth disabled={saving}>
-        {saving ? <CircularProgress size={22} /> : "Save SMTP Settings"}
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        disabled={saving}
+        sx={{
+          mt: 3,
+          py: 1.2,
+          fontWeight: 700,
+          textTransform: "none",
+          borderRadius: 2,
+          background: "linear-gradient(135deg, #2563eb, #1e40af)",
+          boxShadow: "0 8px 24px rgba(37,99,235,0.35)",
+          "&:hover": {
+            background: "linear-gradient(135deg, #1d4ed8, #1e3a8a)",
+            boxShadow: "0 12px 32px rgba(37,99,235,0.45)",
+          },
+        }}
+      >
+        {saving ? (
+          <>
+            <CircularProgress size={20} sx={{ color: "#fff", mr: 1 }} />
+            Saving…
+          </>
+        ) : (
+          "Save SMTP Settings"
+        )}
       </Button>
     </Box>
   );

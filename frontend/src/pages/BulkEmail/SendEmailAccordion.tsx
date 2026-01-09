@@ -8,6 +8,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
+  Typography,
 } from "@mui/material";
 
 type SMTPConfig = {
@@ -104,9 +106,13 @@ export default function SendEmailAccordion({
 
   return (
     <Box component="form" onSubmit={handleSend}>
+      {/* SMTP selector */}
       <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Select SMTP Configuration</InputLabel>
+        <InputLabel id="smtp-select-label">
+          Select SMTP Configuration
+        </InputLabel>
         <Select
+          labelId="smtp-select-label"
           value={selectedConfigId}
           label="Select SMTP Configuration"
           onChange={(e) => setSelectedConfigId(e.target.value as number)}
@@ -123,49 +129,100 @@ export default function SendEmailAccordion({
         </Select>
       </FormControl>
 
-      <textarea
+      {/* Recipients */}
+      <TextField
+        label="Recipients"
         placeholder="email1@gmail.com, email2@gmail.com"
+        multiline
         rows={4}
         value={emails}
         onChange={(e) => setEmails(e.target.value)}
-        style={{ width: "100%", padding: 10, marginBottom: 12 }}
+        helperText="Separate multiple emails with commas or new lines"
+        fullWidth
+        margin="normal"
       />
 
-      <input
-        placeholder="Email subject"
+      {/* Subject */}
+      <TextField
+        label="Subject"
         value={subject}
         onChange={(e) => setSubject(e.target.value)}
-        style={{ width: "100%", padding: 10, marginBottom: 12 }}
+        fullWidth
+        margin="normal"
       />
 
-      <textarea
-        placeholder="Write your message here..."
+      {/* Message body */}
+      <TextField
+        label="Message"
+        multiline
         rows={6}
         value={body}
         onChange={(e) => setBody(e.target.value)}
-        style={{ width: "100%", padding: 10, marginBottom: 12 }}
+        fullWidth
+        margin="normal"
       />
 
-      <input type="file" multiple onChange={(e) => setFiles(e.target.files)} />
+      {/* Attachments */}
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="body2" sx={{ mb: 1 }}>
+          Attachments (optional)
+        </Typography>
+        <Button variant="outlined" component="label">
+          Choose files
+          <input
+            type="file"
+            hidden
+            multiple
+            onChange={(e) => setFiles(e.target.files)}
+          />
+        </Button>
+        {files && (
+          <Typography variant="caption" sx={{ ml: 2 }}>
+            {files.length} file(s) selected
+          </Typography>
+        )}
+      </Box>
 
+      {/* Alerts */}
       {error && (
-        <Alert severity="error" sx={{ mt: 2 }}>
+        <Alert severity="error" sx={{ mt: 3 }}>
           {error}
         </Alert>
       )}
       {success && (
-        <Alert severity="success" sx={{ mt: 2 }}>
+        <Alert severity="success" sx={{ mt: 3 }}>
           {success}
         </Alert>
       )}
 
+      {/* Submit button */}
       <Button
         type="submit"
+        variant="contained"
         fullWidth
         disabled={sending || smtpConfigs.length === 0}
-        sx={{ mt: 2 }}
+        sx={{
+          mt: 4,
+          py: 1.2,
+          fontWeight: 700,
+          textTransform: "none",
+          borderRadius: 2,
+          background: "linear-gradient(135deg, #2563eb, #1e40af)",
+          boxShadow: "0 8px 24px rgba(37,99,235,0.35)",
+          "&:hover": {
+            background: "linear-gradient(135deg, #1d4ed8, #1e3a8a)",
+            boxShadow: "0 12px 32px rgba(37,99,235,0.45)",
+          },
+        }}
       >
-        {sending ? <CircularProgress size={22} /> : "Send Email"}
+        {sending ? (
+          <>
+            <CircularProgress size={20} sx={{ color: "#fff", mr: 1 }} />
+            Sending…
+          </>
+        ) : (
+          "Send Email"
+        )}
       </Button>
     </Box>
   );
