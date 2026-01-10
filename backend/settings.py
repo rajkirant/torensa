@@ -27,6 +27,30 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['torensa.pythonanywhere.com','127.0.0.1', 'localhost','torensa.com','torensa-backend.onrender.com','api.torensa.com']
 
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://torensa.com",
+    "https://www.torensa.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://torensa.com",
+    "https://www.torensa.com",
+]
+
+SESSION_COOKIE_DOMAIN = ".torensa.com"
+CSRF_COOKIE_DOMAIN = ".torensa.com"
+
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 

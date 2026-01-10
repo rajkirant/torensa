@@ -3,7 +3,7 @@ import { getCsrfToken } from "./csrf";
 type FetchOptions = RequestInit & {
   csrf?: boolean;
 };
-
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 export async function apiFetch(url: string, options: FetchOptions = {}) {
   const { csrf = false, headers, ...rest } = options;
 
@@ -14,9 +14,8 @@ export async function apiFetch(url: string, options: FetchOptions = {}) {
 
   finalHeaders["X-CSRFToken"] = getCsrfToken();
 
-  return fetch(url, {
+  return fetch(`${API_BASE_URL}${url}`, {
     credentials: "include",
-    headers: finalHeaders,
-    ...rest,
+    ...options,
   });
 }
