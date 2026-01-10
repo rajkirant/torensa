@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
-
+import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./auth";
 import {
   brandLinkStyle,
@@ -15,13 +15,14 @@ import {
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-
 import { themes } from "./theme";
-
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-
 import type { ThemeName } from "./theme";
+import HomeIcon from "@mui/icons-material/Home";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -55,36 +56,22 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </Link>
 
         <nav style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <NavLink
+          <NavButton
+            component={NavLink}
             to="/"
             end
-            style={({ isActive }) =>
-              isActive
-                ? {
-                    ...navBase,
-                    color: theme.header.text,
-                    textDecoration: "underline",
-                  }
-                : navBase
-            }
+            icon={<HomeIcon />}
+            startIcon={<HomeIcon />} // required by MUI Button
           >
             Home
-          </NavLink>
-
-          <NavLink
+          </NavButton>
+          <NavButton
+            component={NavLink}
             to="/contact"
-            style={({ isActive }) =>
-              isActive
-                ? {
-                    ...navBase,
-                    color: theme.header.text,
-                    textDecoration: "underline",
-                  }
-                : navBase
-            }
+            startIcon={<ContactMailIcon />}
           >
             Contact
-          </NavLink>
+          </NavButton>
 
           <Select
             size="small"
@@ -98,7 +85,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </MenuItem>
             ))}
           </Select>
-
           {!loading &&
             (user ? (
               <>
@@ -125,12 +111,21 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </>
             ) : (
               <>
-                <Link to="/login" style={{ color: theme.header.text }}>
+                <NavButton
+                  component={NavLink}
+                  to="/login"
+                  startIcon={<LoginIcon />}
+                >
                   Login
-                </Link>
-                <Link to="/signup" style={{ color: theme.header.text }}>
+                </NavButton>
+
+                <NavButton
+                  component={NavLink}
+                  to="/signup"
+                  startIcon={<PersonAddIcon />}
+                >
                   Sign up
-                </Link>
+                </NavButton>
               </>
             ))}
         </nav>
@@ -231,19 +226,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
                             securely.
                           </p>
 
-                          <Button
-                            variant="contained"
-                            size="small"
-                            sx={{
-                              mt: 2,
-                              textTransform: "none",
-                              fontWeight: 600,
-                              background:
-                                "linear-gradient(135deg, #2563eb, #1e40af)",
-                            }}
-                          >
+                          <PrimaryButton size="small">
                             Open Bulk Email
-                          </Button>
+                          </PrimaryButton>
                         </div>
 
                         <div
@@ -263,19 +248,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
                             secure backend service.
                           </p>
 
-                          <Button
-                            variant="contained"
-                            size="small"
-                            sx={{
-                              mt: 2,
-                              textTransform: "none",
-                              fontWeight: 600,
-                              background:
-                                "linear-gradient(135deg, #2563eb, #1e40af)",
-                            }}
-                          >
+                          <PrimaryButton size="small">
                             Convert Excel
-                          </Button>
+                          </PrimaryButton>
                         </div>
 
                         <div style={cardStyle}>
