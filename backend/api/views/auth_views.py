@@ -110,7 +110,7 @@ def me(request):
     return JsonResponse({"user": None}, status=401)
 
 
-
+@csrf_exempt
 @require_POST
 def logout_view(request):
     logout(request)
