@@ -26,6 +26,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
+const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
 
 /* ===================== TYPES ===================== */
 
@@ -245,11 +246,36 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           </Button>
                         </div>
 
-                        <div style={cardStyle}>
-                          <h3>Backend APIs</h3>
+                        <div
+                          style={{
+                            ...cardStyle,
+                            cursor: "pointer",
+                            textAlign: "center",
+                          }}
+                          onClick={() =>
+                            (window.location.hash = "#/excel-to-csv")
+                          }
+                        >
+                          <h3 style={{ marginBottom: 12 }}>Excel to CSV</h3>
+
                           <p style={secondaryText}>
-                            Secure and scalable Spring Boot APIs.
+                            Upload Excel files and convert them to CSV using a
+                            secure backend service.
                           </p>
+
+                          <Button
+                            variant="contained"
+                            size="small"
+                            sx={{
+                              mt: 2,
+                              textTransform: "none",
+                              fontWeight: 600,
+                              background:
+                                "linear-gradient(135deg, #2563eb, #1e40af)",
+                            }}
+                          >
+                            Convert Excel
+                          </Button>
                         </div>
 
                         <div style={cardStyle}>
@@ -275,6 +301,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               />
 
               <Route path="/bulk-email" element={<BulkEmail />} />
+              <Route path="/excel-to-csv" element={<ExcelUploadToCsv />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />

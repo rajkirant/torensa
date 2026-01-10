@@ -72,9 +72,7 @@ export default function Login() {
             style={{ width: "100%", padding: 8 }}
           />
         </div>
-
         {error && <p style={{ color: "#dc2626", marginBottom: 16 }}>{error}</p>}
-
         <Button
           type="submit"
           fullWidth
