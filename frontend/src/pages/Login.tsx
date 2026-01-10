@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth";
-
+import { apiFetch } from "../utils/api";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -20,12 +20,11 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/login/", {
+      const res = await apiFetch("/api/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
 

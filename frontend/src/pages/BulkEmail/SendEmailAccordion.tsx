@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { apiFetch } from "../../utils/api";
 
 type SMTPConfig = {
   id: number;
@@ -79,7 +80,7 @@ export default function SendEmailAccordion({
       files &&
         Array.from(files).forEach((f) => formData.append("attachments", f));
 
-      const res = await fetch("/api/send-email/", {
+      const res = await apiFetch("/api/send-email/", {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -195,7 +196,6 @@ export default function SendEmailAccordion({
         </Alert>
       )}
 
-      {/* Submit button */}
       <Button
         type="submit"
         variant="contained"
@@ -203,21 +203,15 @@ export default function SendEmailAccordion({
         disabled={sending || smtpConfigs.length === 0}
         sx={{
           mt: 4,
-          py: 1.2,
+          py: 1.4,
           fontWeight: 700,
           textTransform: "none",
           borderRadius: 2,
-          background: "linear-gradient(135deg, #2563eb, #1e40af)",
-          boxShadow: "0 8px 24px rgba(37,99,235,0.35)",
-          "&:hover": {
-            background: "linear-gradient(135deg, #1d4ed8, #1e3a8a)",
-            boxShadow: "0 12px 32px rgba(37,99,235,0.45)",
-          },
         }}
       >
         {sending ? (
           <>
-            <CircularProgress size={20} sx={{ color: "#fff", mr: 1 }} />
+            <CircularProgress size={20} sx={{ color: "inherit", mr: 1 }} />
             Sending…
           </>
         ) : (

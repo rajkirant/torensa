@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth";
-
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import { apiFetch } from "../utils/api";
 
 export default function Signup() {
   const { setUser } = useAuth();
@@ -29,7 +29,7 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/signup/", {
+      const res = await apiFetch("/api/signup/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

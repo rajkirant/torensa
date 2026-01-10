@@ -10,7 +10,6 @@ import {
   Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import SmtpSettingsAccordion from "./SmtpSettingsAccordion";
 import SendEmailAccordion from "./SendEmailAccordion";
 

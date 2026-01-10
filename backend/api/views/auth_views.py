@@ -12,7 +12,7 @@ from django.conf import settings
 def hello(request):
     return JsonResponse({"message": "Hello World"})
 
-@csrf_exempt
+
 @require_POST
 def signup_view(request):
     try:
@@ -65,7 +65,7 @@ def signup_view(request):
         status=201
     )
 
-@csrf_exempt
+
 @require_POST
 def login_view(request):
     try:
@@ -110,7 +110,7 @@ def me(request):
     return JsonResponse({"user": None}, status=401)
 
 
-@csrf_exempt
+
 @require_POST
 def logout_view(request):
     logout(request)

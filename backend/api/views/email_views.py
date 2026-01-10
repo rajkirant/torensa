@@ -12,7 +12,6 @@ from django.conf import settings
 
 
 
-@csrf_exempt
 @require_POST
 @login_required
 def send_email(request):
@@ -92,7 +91,6 @@ def get_fernet():
     return Fernet(key)
 
 
-@csrf_exempt
 @require_POST
 @login_required
 def save_smtp_config(request):

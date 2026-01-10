@@ -7,6 +7,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import { apiFetch } from "../../utils/api";
 
 type Props = {
   onSaved: () => void;
@@ -40,9 +41,11 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
     setSaving(true);
 
     try {
-      const res = await fetch("/api/smtp/save/", {
+      const res = await apiFetch("/api/smtp/save/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
         body: JSON.stringify({
           smtp_email: smtpEmail,
@@ -69,13 +72,13 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
 
   return (
     <Box component="form" onSubmit={handleSave}>
-      <Typography variant="body2" sx={{ color: "#9ca3af", mb: 2 }}>
+      <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
         Use a Gmail <strong>App Password</strong> (not your real password).{" "}
         <a
           href="https://myaccount.google.com/apppasswords"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: "#60a5fa" }}
+          style={{ color: "inherit", textDecoration: "underline" }}
         >
           Create App Password
         </a>
@@ -120,21 +123,15 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
         disabled={saving}
         sx={{
           mt: 3,
-          py: 1.2,
+          py: 1.4,
           fontWeight: 700,
           textTransform: "none",
           borderRadius: 2,
-          background: "linear-gradient(135deg, #2563eb, #1e40af)",
-          boxShadow: "0 8px 24px rgba(37,99,235,0.35)",
-          "&:hover": {
-            background: "linear-gradient(135deg, #1d4ed8, #1e3a8a)",
-            boxShadow: "0 12px 32px rgba(37,99,235,0.45)",
-          },
         }}
       >
         {saving ? (
           <>
-            <CircularProgress size={20} sx={{ color: "#fff", mr: 1 }} />
+            <CircularProgress size={20} sx={{ color: "inherit", mr: 1 }} />
             Saving…
           </>
         ) : (
