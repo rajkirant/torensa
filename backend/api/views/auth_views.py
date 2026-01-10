@@ -99,6 +99,7 @@ def login_view(request):
         }
     })
 
+@csrf_exempt
 def me(request):
     if request.user.is_authenticated:
         return JsonResponse({
