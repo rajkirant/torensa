@@ -67,6 +67,7 @@ def signup_view(request):
 
 
 @require_POST
+@csrf_exempt
 def login_view(request):
     try:
         data = json.loads(request.body.decode("utf-8"))
