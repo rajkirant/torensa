@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-
+import { apiFetch } from "./utils/api";
 /* =========================
    Types
    ========================= */
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const run = () => {
-      fetch("/api/me/", {
+      apiFetch("/api/me/", {
         credentials: "include",
       })
         .then((res) => (res.ok ? res.json() : null))
