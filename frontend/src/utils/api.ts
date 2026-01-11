@@ -18,7 +18,7 @@ export async function apiFetch(url: string, options: FetchOptions = {}) {
     finalHeaders["X-CSRFToken"] = getCsrfToken();
   }
 
-  return fetch(`${API_BASE_URL}${url}`, {
+  return fetch(url, {
     credentials: "include",
     headers: finalHeaders,
     ...rest,
