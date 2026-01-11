@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-m$%ot^7akkrwr^!c@2h37$wlhnh+!tnj_%sikw7^hzv-4%i=m+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['torensa.pythonanywhere.com','127.0.0.1', 'localhost','torensa.com','torensa-backend.onrender.com','api.torensa.com']
+ALLOWED_HOSTS = ['www.torensa.pythonanywhere.com','torensa.pythonanywhere.com','127.0.0.1', 'localhost','torensa.com','torensa-backend.onrender.com','api.torensa.com']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -160,3 +160,9 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = True
