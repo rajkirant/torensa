@@ -45,15 +45,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.torensa.pythonanywhere.com",
 ]
 
-SESSION_COOKIE_DOMAIN = ".torensa.com"
-CSRF_COOKIE_DOMAIN = ".torensa.com"
-
-SESSION_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SAMESITE = "None"
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 # Application definition
 
 INSTALLED_APPS = [
