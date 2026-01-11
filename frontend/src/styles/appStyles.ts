@@ -34,7 +34,7 @@ export const headerStyle = (theme: Theme): React.CSSProperties => ({
   justifyContent: "space-between",
   alignItems: "center",
   padding: "12px 16px",
-  boxShadow: "0 8px 30px rgba(0,0,0,0.15)", // slightly softer for light theme too
+  boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
   color: theme.header.text,
   flexWrap: "wrap",
   gap: 12,
@@ -45,7 +45,7 @@ export const footerStyle = (theme: Theme): React.CSSProperties => ({
   marginTop: 80,
   padding: "48px 24px",
   background: theme.gradients.footer,
-  borderTop: `1px solid ${theme.header.border}`, // ✅
+  borderTop: `1px solid ${theme.header.border}`,
   color: theme.header.text,
 });
 
