@@ -23,6 +23,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LogoutIcon from "@mui/icons-material/Logout";
+/* ===================== LAZY LOAD PAGES ===================== */
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -94,10 +96,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   Hi, {user.username}
                 </span>
 
-                <Button
-                  variant="outlined"
-                  size="small"
-                  sx={{ color: "#fff", borderColor: "#c7d2fe" }}
+                <NavButton
+                  component={NavLink}
+                  to="#"
+                  startIcon={<LogoutIcon />}
                   onClick={async () => {
                     await fetch("/api/logout/", {
                       method: "POST",
@@ -107,7 +109,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   }}
                 >
                   Logout
-                </Button>
+                </NavButton>
               </>
             ) : (
               <>
