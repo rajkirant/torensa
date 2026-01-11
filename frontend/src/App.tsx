@@ -15,15 +15,21 @@ import {
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { themes } from "./theme";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import type { ThemeName } from "./theme";
 import HomeIcon from "@mui/icons-material/Home";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import type { ThemeName } from "./theme";
+
 /* ===================== LAZY LOAD PAGES ===================== */
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
@@ -32,22 +38,89 @@ const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
 
 /* ===================== TYPES ===================== */
-
 type AppProps = {
   themeName: ThemeName;
   setThemeName: (name: ThemeName) => void;
 };
 
 /* ===================== APP ===================== */
-
 export default function App({ themeName, setThemeName }: AppProps) {
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
-  const navBase = { ...navLinkBase, color: theme.header.textMuted };
+  const isMobile = useMediaQuery("(max-width:900px)");
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const secondaryText: React.CSSProperties = {
     color: theme.palette.text.secondary,
   };
+
+  const NavItems = ({ onClick }: { onClick?: () => void }) => (
+    <>
+      <NavButton
+        component={NavLink}
+        to="/"
+        end
+        startIcon={<HomeIcon />}
+        onClick={onClick}
+      >
+        Home
+      </NavButton>
+
+      <NavButton
+        component={NavLink}
+        to="/contact"
+        startIcon={<ContactMailIcon />}
+        onClick={onClick}
+      >
+        Contact
+      </NavButton>
+
+      {!loading &&
+        (user ? (
+          <>
+            <span style={{ color: "#ffffff", fontWeight: 600, fontSize: 14 }}>
+              Hi, {user.username}
+            </span>
+
+            <NavButton
+              component={NavLink}
+              to="#"
+              startIcon={<LogoutIcon />}
+              onClick={async () => {
+                await fetch("/api/logout/", {
+                  method: "POST",
+                  credentials: "include",
+                });
+                setUser(null);
+                onClick?.();
+              }}
+            >
+              Logout
+            </NavButton>
+          </>
+        ) : (
+          <>
+            <NavButton
+              component={NavLink}
+              to="/login"
+              startIcon={<LoginIcon />}
+              onClick={onClick}
+            >
+              Login
+            </NavButton>
+
+            <NavButton
+              component={NavLink}
+              to="/signup"
+              startIcon={<PersonAddIcon />}
+              onClick={onClick}
+            >
+              Sign up
+            </NavButton>
+          </>
+        ))}
+    </>
+  );
 
   return (
     <>
@@ -58,28 +131,56 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </Link>
 
         <nav style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <NavButton
-            component={NavLink}
-            to="/"
-            end
-            icon={<HomeIcon />}
-            startIcon={<HomeIcon />} // required by MUI Button
-          >
-            Home
-          </NavButton>
-          <NavButton
-            component={NavLink}
-            to="/contact"
-            startIcon={<ContactMailIcon />}
-          >
-            Contact
-          </NavButton>
+          {!isMobile && (
+            <>
+              <NavItems />
+              <Select
+                size="small"
+                value={themeName}
+                onChange={(e) => setThemeName(e.target.value as ThemeName)}
+                sx={{ color: theme.header.text }}
+              >
+                {Object.keys(themes).map((name) => (
+                  <MenuItem key={name} value={name}>
+                    {name.charAt(0).toUpperCase() + name.slice(1)}
+                  </MenuItem>
+                ))}
+              </Select>
+            </>
+          )}
+
+          {isMobile && (
+            <IconButton
+              onClick={() => setMobileOpen(true)}
+              sx={{ color: "#fff" }}
+            >
+              <MenuIcon fontSize="large" />
+            </IconButton>
+          )}
+        </nav>
+      </header>
+
+      {/* ================= MOBILE DRAWER ================= */}
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+      >
+        <Box
+          sx={{
+            width: 260,
+            padding: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <NavItems onClick={() => setMobileOpen(false)} />
 
           <Select
             size="small"
             value={themeName}
             onChange={(e) => setThemeName(e.target.value as ThemeName)}
-            sx={{ color: theme.header.text }}
           >
             {Object.keys(themes).map((name) => (
               <MenuItem key={name} value={name}>
@@ -87,51 +188,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </MenuItem>
             ))}
           </Select>
-          {!loading &&
-            (user ? (
-              <>
-                <span
-                  style={{ color: "#ffffff", fontWeight: 600, fontSize: 14 }}
-                >
-                  Hi, {user.username}
-                </span>
-
-                <NavButton
-                  component={NavLink}
-                  to="#"
-                  startIcon={<LogoutIcon />}
-                  onClick={async () => {
-                    await fetch("/api/logout/", {
-                      method: "POST",
-                      credentials: "include",
-                    });
-                    setUser(null);
-                  }}
-                >
-                  Logout
-                </NavButton>
-              </>
-            ) : (
-              <>
-                <NavButton
-                  component={NavLink}
-                  to="/login"
-                  startIcon={<LoginIcon />}
-                >
-                  Login
-                </NavButton>
-
-                <NavButton
-                  component={NavLink}
-                  to="/signup"
-                  startIcon={<PersonAddIcon />}
-                >
-                  Sign up
-                </NavButton>
-              </>
-            ))}
-        </nav>
-      </header>
+        </Box>
+      </Drawer>
 
       {/* ================= CONTENT ================= */}
       <div className="container">
@@ -142,7 +200,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 path="/"
                 element={
                   <>
-                    {/* HERO */}
                     <section
                       style={{
                         minHeight: "55vh",
@@ -197,7 +254,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                       </Button>
                     </section>
 
-                    {/* SERVICES */}
                     <section style={sectionBase}>
                       <h2 style={{ textAlign: "center", marginBottom: 40 }}>
                         Services
@@ -222,12 +278,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           }
                         >
                           <h3 style={{ marginBottom: 12 }}>Bulk Email</h3>
-
                           <p style={secondaryText}>
                             Send emails to multiple recipients quickly and
                             securely.
                           </p>
-
                           <PrimaryButton size="small">
                             Open Bulk Email
                           </PrimaryButton>
@@ -244,12 +298,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           }
                         >
                           <h3 style={{ marginBottom: 12 }}>Excel to CSV</h3>
-
                           <p style={secondaryText}>
                             Upload Excel files and convert them to CSV using a
                             secure backend service.
                           </p>
-
                           <PrimaryButton size="small">
                             Convert Excel
                           </PrimaryButton>
@@ -264,7 +316,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                       </div>
                     </section>
 
-                    {/* ABOUT */}
                     <section style={{ ...sectionBase, paddingTop: 40 }}>
                       <h2>About Me</h2>
                       <p style={secondaryText}>
@@ -287,7 +338,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </main>
       </div>
 
-      {/* ================= FOOTER (FULL WIDTH) ================= */}
+      {/* ================= FOOTER ================= */}
       <footer style={footerStyle(theme)}>
         <div style={footerCard}>
           <a
