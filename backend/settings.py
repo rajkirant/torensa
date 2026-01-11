@@ -34,6 +34,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://torensa.com",
     "https://www.torensa.com",
+    "https://www.torensa.pythonanywhere.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -41,6 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://torensa.com",
     "https://www.torensa.com",
+    "https://www.torensa.pythonanywhere.com",
 ]
 
 SESSION_COOKIE_DOMAIN = ".torensa.com"
