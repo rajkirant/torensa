@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material";
+import { apiFetch } from "../utils/api";
 
 const ExcelUploadToCsv: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -36,13 +37,10 @@ const ExcelUploadToCsv: React.FC = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("/api/excel-to-csv/", {
+      const response = await apiFetch("/api/excel-to-csv/", {
         method: "POST",
         body: formData,
         credentials: "include",
-        headers: {
-          "X-CSRFToken": getCsrfToken(),
-        },
       });
 
       if (!response.ok) {
