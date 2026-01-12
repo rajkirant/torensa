@@ -200,60 +200,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 path="/"
                 element={
                   <>
-                    <section
-                      style={{
-                        minHeight: "55vh",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                      }}
-                    >
-                      <h1
-                        style={{
-                          fontSize: 64,
-                          fontWeight: 900,
-                          letterSpacing: 1,
-                          color: "#1e40af",
-                          textShadow:
-                            "0 0 8px rgba(59,130,246,0.6), 0 0 18px rgba(99,102,241,0.45)",
-                          marginBottom: 10,
-                        }}
-                      >
-                        Torensa
-                      </h1>
-
-                      <p
-                        style={{
-                          fontSize: 20,
-                          ...secondaryText,
-                          marginBottom: 28,
-                        }}
-                      >
-                        Freelance Software Developer
-                      </p>
-
-                      <Button
-                        variant="contained"
-                        size="large"
-                        endIcon={<ArrowForwardIcon />}
-                        href="#/contact"
-                        sx={{
-                          px: 4,
-                          py: 1.4,
-                          borderRadius: 3,
-                          textTransform: "none",
-                          fontWeight: 700,
-                          background:
-                            "linear-gradient(135deg, #2563eb, #1e40af)",
-                          boxShadow: "0 10px 30px rgba(37,99,235,0.45)",
-                        }}
-                      >
-                        Start a Project
-                      </Button>
-                    </section>
-
                     <section style={sectionBase}>
                       <h2 style={{ textAlign: "center", marginBottom: 40 }}>
                         Services

@@ -20,7 +20,7 @@ export async function apiFetch(url: string, options: FetchOptions = {}) {
   if (CSRF_METHODS.includes(method.toUpperCase())) {
     finalHeaders["X-CSRFToken"] = getCsrfToken();
   }
-  console.log("API Fetching:", API_BASE_URL);
+
   return fetch(`${API_BASE_URL}${url}`, {
     method,
     credentials: "include",
