@@ -54,7 +54,22 @@ export default function App({ themeName, setThemeName }: AppProps) {
     color: theme.palette.text.secondary,
   };
 
-  const NavItems = ({ onClick }: { onClick?: () => void }) => (
+  /* ===== Drawer-specific NavButton style ===== */
+  const drawerNavButtonSx = {
+    justifyContent: "flex-start",
+    color: theme.palette.text.primary,
+    opacity: 1,
+    "& .MuiSvgIcon-root": {
+      color: theme.palette.text.primary,
+      opacity: 1,
+    },
+    "&.active": {
+      color: theme.palette.primary.main,
+      fontWeight: 600,
+    },
+  };
+
+  const NavItems = ({ onClick, sx }: { onClick?: () => void; sx?: any }) => (
     <>
       <NavButton
         component={NavLink}
@@ -62,6 +77,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         end
         startIcon={<HomeIcon />}
         onClick={onClick}
+        sx={sx}
       >
         Home
       </NavButton>
@@ -71,6 +87,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         to="/contact"
         startIcon={<ContactMailIcon />}
         onClick={onClick}
+        sx={sx}
       >
         Contact
       </NavButton>
@@ -78,7 +95,13 @@ export default function App({ themeName, setThemeName }: AppProps) {
       {!loading &&
         (user ? (
           <>
-            <span style={{ color: "#ffffff", fontWeight: 600, fontSize: 14 }}>
+            <span
+              style={{
+                color: theme.palette.text.primary,
+                fontWeight: 600,
+                fontSize: 14,
+              }}
+            >
               Hi, {user.username}
             </span>
 
@@ -94,6 +117,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 setUser(null);
                 onClick?.();
               }}
+              sx={sx}
             >
               Logout
             </NavButton>
@@ -105,6 +129,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               to="/login"
               startIcon={<LoginIcon />}
               onClick={onClick}
+              sx={sx}
             >
               Login
             </NavButton>
@@ -114,6 +139,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               to="/signup"
               startIcon={<PersonAddIcon />}
               onClick={onClick}
+              sx={sx}
             >
               Sign up
             </NavButton>
@@ -165,6 +191,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
+        PaperProps={{
+          sx: {
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+          },
+        }}
       >
         <Box
           sx={{
@@ -173,14 +205,25 @@ export default function App({ themeName, setThemeName }: AppProps) {
             display: "flex",
             flexDirection: "column",
             gap: 2,
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
           }}
         >
-          <NavItems onClick={() => setMobileOpen(false)} />
+          <NavItems
+            onClick={() => setMobileOpen(false)}
+            sx={drawerNavButtonSx}
+          />
 
           <Select
             size="small"
             value={themeName}
             onChange={(e) => setThemeName(e.target.value as ThemeName)}
+            sx={{
+              color: theme.palette.text.primary,
+              "& .MuiSvgIcon-root": {
+                color: theme.palette.text.primary,
+              },
+            }}
           >
             {Object.keys(themes).map((name) => (
               <MenuItem key={name} value={name}>
