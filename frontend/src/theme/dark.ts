@@ -1,6 +1,10 @@
 import { createTheme } from "@mui/material/styles";
 
 const dark = createTheme({
+  shape: {
+    borderRadius: 16, // ✅ global rounding
+  },
+
   palette: {
     mode: "dark",
     info: { main: "#020617" },
@@ -33,6 +37,14 @@ const dark = createTheme({
   },
 
   components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 16, // ✅ ensures Drawer / Card / Menu rounding
+        },
+      },
+    },
+
     MuiButton: {
       styleOverrides: {
         root: {

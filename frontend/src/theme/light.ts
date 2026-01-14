@@ -49,11 +49,11 @@ const light = createTheme({
       },
     },
 
-    /* OPTIONAL: nicer Select & Drawer contrast */
     MuiPaper: {
       styleOverrides: {
         root: {
           backgroundImage: "none",
+          borderRadius: 16,
         },
       },
     },
