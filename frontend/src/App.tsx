@@ -108,7 +108,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
             <NavButton
               component={NavLink}
-              to="#"
+              to="/"
               startIcon={<LogoutIcon />}
               onClick={async () => {
                 await apiFetch("/api/logout/", {
