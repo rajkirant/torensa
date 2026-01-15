@@ -29,6 +29,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import type { ThemeName } from "./theme";
+import { apiFetch } from "./utils/api";
 
 /* ===================== LAZY LOAD PAGES ===================== */
 const Contact = lazy(() => import("./pages/Contact"));
@@ -110,7 +111,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               to="#"
               startIcon={<LogoutIcon />}
               onClick={async () => {
-                await fetch("/api/logout/", {
+                await apiFetch("/api/logout/", {
                   method: "POST",
                   credentials: "include",
                 });

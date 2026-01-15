@@ -12,6 +12,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SmtpSettingsAccordion from "./SmtpSettingsAccordion";
 import SendEmailAccordion from "./SendEmailAccordion";
+import { apiFetch } from "../../utils/api";
 
 /* ===================== TYPES ===================== */
 
@@ -59,7 +60,7 @@ export default function BulkEmail() {
   async function loadSmtpConfigs() {
     setLoadingConfigs(true);
     try {
-      const res = await fetch("/api/smtp/list/", {
+      const res = await apiFetch("/api/smtp/list/", {
         credentials: "include",
       });
 
