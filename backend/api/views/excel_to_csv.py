@@ -8,7 +8,7 @@ import io
 
 
 @require_POST
-@login_required
+@csrf_exempt
 def excel_to_csv(request):
     """
     Accepts an Excel file (.xlsx/.xls),
