@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
-from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMessage, get_connection
 import json
 import os
@@ -11,7 +10,7 @@ from ..models import UserSMTPConfig
 from django.conf import settings
 
 
-@csrf_exempt
+
 @require_POST
 @login_required
 def send_email(request):
@@ -90,7 +89,7 @@ def get_fernet():
         raise RuntimeError("EMAIL_ENCRYPTION_KEY is not configured")
     return Fernet(key)
 
-@csrf_exempt
+
 @require_POST
 @login_required
 def save_smtp_config(request):
@@ -143,7 +142,7 @@ def save_smtp_config(request):
     )
 
 
-@csrf_exempt
+
 @require_GET
 @login_required
 def list_smtp_configs(request):

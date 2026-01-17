@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth";
 import { apiFetch } from "../utils/api";
+import { setCsrfToken } from "../utils/csrf";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -22,6 +23,7 @@ export default function Login() {
     try {
       const res = await apiFetch("/api/login/", {
         method: "POST",
+        csrf: false, // 🔴 login must NOT require CSRF
         headers: {
           "Content-Type": "application/json",
         },
@@ -34,6 +36,12 @@ export default function Login() {
       }
 
       const data = await res.json();
+
+      // Store masked CSRF token for future requests
+      if (data.csrfToken) {
+        setCsrfToken(data.csrfToken);
+      }
+
       setUser(data.user);
       navigate("/");
     } catch {
@@ -71,7 +79,9 @@ export default function Login() {
             style={{ width: "100%", padding: 8 }}
           />
         </div>
+
         {error && <p style={{ color: "#dc2626", marginBottom: 16 }}>{error}</p>}
+
         <Button
           type="submit"
           fullWidth

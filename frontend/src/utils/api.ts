@@ -9,21 +9,23 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 const CSRF_METHODS = ["POST", "PUT", "PATCH", "DELETE"];
 
 export async function apiFetch(url: string, options: FetchOptions = {}) {
-  const { headers, method = "GET", ...rest } = options;
+  const { headers = {}, method = "GET", csrf = true, ...rest } = options;
 
-  // Ensure headers are a plain object
   const finalHeaders: Record<string, string> = {
-    ...(headers as Record<string, string> | undefined),
+    ...(headers as Record<string, string>),
   };
 
-  // Add CSRF token only for non-safe methods
-  if (CSRF_METHODS.includes(method.toUpperCase())) {
-    finalHeaders["X-CSRFToken"] = getCsrfToken();
+  // Add CSRF token only when required
+  if (csrf && CSRF_METHODS.includes(method.toUpperCase())) {
+    const csrfToken = getCsrfToken();
+    if (csrfToken) {
+      finalHeaders["X-CSRFToken"] = csrfToken;
+    }
   }
 
   return fetch(`${API_BASE_URL}${url}`, {
     method,
-    credentials: "include",
+    credentials: "include", // 🔴 REQUIRED for Django
     headers: finalHeaders,
     ...rest,
   });
