@@ -34,6 +34,8 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
+const TextToQr = lazy(() => import("./pages/TextToQr"));
+
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
 
 /* ===================== TYPES ===================== */
@@ -277,6 +279,23 @@ export default function App({ themeName, setThemeName }: AppProps) {
                             Convert Excel
                           </PrimaryButton>
                         </div>
+
+                        <div
+                          style={{
+                            ...cardStyle,
+                            cursor: "pointer",
+                            textAlign: "center",
+                          }}
+                          onClick={() => navigate("/text-to-qr")}
+                        >
+                          <h3>Text to QR</h3>
+                          <p style={secondaryText}>
+                            Convert any text or URL into a scannable QR code.
+                          </p>
+                          <PrimaryButton size="small">
+                            Generate QR
+                          </PrimaryButton>
+                        </div>
                       </div>
                     </section>
                   </>
@@ -285,6 +304,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
               <Route path="/bulk-email" element={<BulkEmail />} />
               <Route path="/excel-to-csv" element={<ExcelUploadToCsv />} />
+              <Route path="/text-to-qr" element={<TextToQr />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
