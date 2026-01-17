@@ -1,21 +1,17 @@
 import React from "react";
-
 import { Routes, Route, NavLink, Link, useNavigate } from "react-router-dom";
-
 import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./auth";
 import { clearCsrfToken } from "./utils/csrf";
 import {
   brandLinkStyle,
-  navLinkBase,
   sectionBase,
   headerStyle,
   cardStyle,
   footerStyle,
   footerCard,
 } from "./styles/appStyles";
-import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
@@ -23,7 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { themes } from "./theme";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import HomeIcon from "@mui/icons-material/Home";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
@@ -50,7 +45,6 @@ type AppProps = {
 /* ===================== APP ===================== */
 export default function App({ themeName, setThemeName }: AppProps) {
   const navigate = useNavigate();
-
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
   const isMobile = useMediaQuery("(max-width:900px)");
@@ -64,10 +58,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const drawerNavButtonSx = {
     justifyContent: "flex-start",
     color: theme.palette.text.primary,
-    opacity: 1,
     "& .MuiSvgIcon-root": {
       color: theme.palette.text.primary,
-      opacity: 1,
     },
     "&.active": {
       color: theme.palette.primary.main,
@@ -75,6 +67,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
     },
   };
 
+  /* ===================== NAV ITEMS ===================== */
   const NavItems = ({ onClick, sx }: { onClick?: () => void; sx?: any }) => (
     <>
       <NavButton
@@ -98,6 +91,26 @@ export default function App({ themeName, setThemeName }: AppProps) {
         Contact
       </NavButton>
 
+      {/* ===== THEME SELECTOR (moved here) ===== */}
+      <Select
+        size="small"
+        value={themeName}
+        onChange={(e) => setThemeName(e.target.value as ThemeName)}
+        sx={{
+          minWidth: 120,
+          color: theme.palette.text.primary,
+          "& .MuiSvgIcon-root": {
+            color: theme.palette.text.primary,
+          },
+        }}
+      >
+        {Object.keys(themes).map((name) => (
+          <MenuItem key={name} value={name}>
+            {name.charAt(0).toUpperCase() + name.slice(1)}
+          </MenuItem>
+        ))}
+      </Select>
+
       {!loading &&
         (user ? (
           <>
@@ -119,10 +132,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 try {
                   await apiFetch("/api/logout/", {
                     method: "POST",
-                    csrf: true, // default, explicit for clarity
+                    csrf: true,
                   });
                 } finally {
-                  clearCsrfToken(); // ✅ remove frontend CSRF token
+                  clearCsrfToken();
                   setUser(null);
                   onClick?.();
                 }
@@ -167,23 +180,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </Link>
 
         <nav style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          {!isMobile && (
-            <>
-              <NavItems />
-              <Select
-                size="small"
-                value={themeName}
-                onChange={(e) => setThemeName(e.target.value as ThemeName)}
-                sx={{ color: theme.header.text }}
-              >
-                {Object.keys(themes).map((name) => (
-                  <MenuItem key={name} value={name}>
-                    {name.charAt(0).toUpperCase() + name.slice(1)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </>
-          )}
+          {!isMobile && <NavItems />}
 
           {isMobile && (
             <IconButton
@@ -215,32 +212,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            backgroundColor: theme.palette.background.paper,
-            color: theme.palette.text.primary,
           }}
         >
           <NavItems
             onClick={() => setMobileOpen(false)}
             sx={drawerNavButtonSx}
           />
-
-          <Select
-            size="small"
-            value={themeName}
-            onChange={(e) => setThemeName(e.target.value as ThemeName)}
-            sx={{
-              color: theme.palette.text.primary,
-              "& .MuiSvgIcon-root": {
-                color: theme.palette.text.primary,
-              },
-            }}
-          >
-            {Object.keys(themes).map((name) => (
-              <MenuItem key={name} value={name}>
-                {name.charAt(0).toUpperCase() + name.slice(1)}
-              </MenuItem>
-            ))}
-          </Select>
         </Box>
       </Drawer>
 
@@ -274,7 +251,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           }}
                           onClick={() => navigate("/bulk-email")}
                         >
-                          <h3 style={{ marginBottom: 12 }}>Bulk Email</h3>
+                          <h3>Bulk Email</h3>
                           <p style={secondaryText}>
                             Send emails to multiple recipients quickly and
                             securely.
@@ -292,32 +269,15 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           }}
                           onClick={() => navigate("/excel-to-csv")}
                         >
-                          <h3 style={{ marginBottom: 12 }}>Excel to CSV</h3>
+                          <h3>Excel to CSV</h3>
                           <p style={secondaryText}>
-                            Upload Excel files and convert them to CSV using a
-                            secure backend service.
+                            Upload Excel files and convert them to CSV.
                           </p>
                           <PrimaryButton size="small">
                             Convert Excel
                           </PrimaryButton>
                         </div>
-
-                        <div style={cardStyle}>
-                          <h3>DevOps</h3>
-                          <p style={secondaryText}>
-                            Dockerised deployments and CI/CD pipelines.
-                          </p>
-                        </div>
                       </div>
-                    </section>
-
-                    <section style={{ ...sectionBase, paddingTop: 40 }}>
-                      <h2>About Me</h2>
-                      <p style={secondaryText}>
-                        I build scalable, secure applications with a strong
-                        focus on clean architecture, performance, and long-term
-                        maintainability.
-                      </p>
                     </section>
                   </>
                 }
