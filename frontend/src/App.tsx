@@ -1,5 +1,7 @@
 import React from "react";
-import { Routes, Route, NavLink, Link } from "react-router-dom";
+
+import { Routes, Route, NavLink, Link, useNavigate } from "react-router-dom";
+
 import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./auth";
@@ -47,6 +49,8 @@ type AppProps = {
 
 /* ===================== APP ===================== */
 export default function App({ themeName, setThemeName }: AppProps) {
+  const navigate = useNavigate();
+
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
   const isMobile = useMediaQuery("(max-width:900px)");
@@ -268,9 +272,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                             cursor: "pointer",
                             textAlign: "center",
                           }}
-                          onClick={() =>
-                            (window.location.hash = "#/bulk-email")
-                          }
+                          onClick={() => navigate("/bulk-email")}
                         >
                           <h3 style={{ marginBottom: 12 }}>Bulk Email</h3>
                           <p style={secondaryText}>
@@ -288,9 +290,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                             cursor: "pointer",
                             textAlign: "center",
                           }}
-                          onClick={() =>
-                            (window.location.hash = "#/excel-to-csv")
-                          }
+                          onClick={() => navigate("/excel-to-csv")}
                         >
                           <h3 style={{ marginBottom: 12 }}>Excel to CSV</h3>
                           <p style={secondaryText}>
