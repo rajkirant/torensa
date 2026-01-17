@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "./auth";
 import { ThemeProvider } from "@mui/material/styles";
@@ -24,9 +24,9 @@ export function Root() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <HashRouter>
+        <BrowserRouter>
           <App themeName={themeName} setThemeName={setThemeName} />
-        </HashRouter>
+        </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   );
