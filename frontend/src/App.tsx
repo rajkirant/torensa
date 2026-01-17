@@ -3,6 +3,7 @@ import { Routes, Route, NavLink, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./auth";
+import { clearCsrfToken } from "./utils/csrf";
 import {
   brandLinkStyle,
   navLinkBase,
@@ -111,12 +112,16 @@ export default function App({ themeName, setThemeName }: AppProps) {
               to="/"
               startIcon={<LogoutIcon />}
               onClick={async () => {
-                await apiFetch("/api/logout/", {
-                  method: "POST",
-                  credentials: "include",
-                });
-                setUser(null);
-                onClick?.();
+                try {
+                  await apiFetch("/api/logout/", {
+                    method: "POST",
+                    csrf: true, // default, explicit for clarity
+                  });
+                } finally {
+                  clearCsrfToken(); // ✅ remove frontend CSRF token
+                  setUser(null);
+                  onClick?.();
+                }
               }}
               sx={sx}
             >

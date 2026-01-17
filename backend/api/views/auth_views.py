@@ -8,7 +8,6 @@ import json
 from django.core.mail import EmailMessage, get_connection
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.middleware.csrf import get_token
 
 def hello(request):
@@ -16,7 +15,6 @@ def hello(request):
 
 
 @require_POST
-@ensure_csrf_cookie
 @csrf_exempt
 def signup_view(request):
     try:
@@ -71,7 +69,6 @@ def signup_view(request):
 
 
 @require_POST
-@ensure_csrf_cookie
 @csrf_exempt
 def login_view(request):
     try:
@@ -107,7 +104,6 @@ def login_view(request):
     })
 
 @csrf_exempt
-@ensure_csrf_cookie
 def me(request):
     if request.user.is_authenticated:
         return JsonResponse({
