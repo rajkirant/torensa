@@ -118,7 +118,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           <>
             <span
               style={{
-                color: theme.palette.text.primary,
+                color: theme.header.text,
                 fontWeight: 600,
                 fontSize: 14,
               }}

@@ -15,7 +15,7 @@ const light = createTheme({
     },
 
     text: {
-      primary: "#0f172a", // slate-900
+      primary: "#0f172a", // slate-900 (pages)
       secondary: "#475569", // slate-600
     },
 
@@ -39,6 +39,7 @@ const light = createTheme({
   },
 
   components: {
+    /* ================= BUTTONS ================= */
     MuiButton: {
       styleOverrides: {
         root: {
@@ -49,11 +50,32 @@ const light = createTheme({
       },
     },
 
+    /* ================= CARDS / DRAWERS ================= */
     MuiPaper: {
       styleOverrides: {
         root: {
           backgroundImage: "none",
           borderRadius: 16,
+        },
+      },
+    },
+
+    /* ================= HEADER SELECT FIX (LIGHT ONLY) ================= */
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          color: "#ffffff", // selected value text
+        },
+        icon: {
+          color: "#ffffff", // dropdown arrow
+        },
+      },
+    },
+
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          borderColor: "rgba(255,255,255,0.35)",
         },
       },
     },

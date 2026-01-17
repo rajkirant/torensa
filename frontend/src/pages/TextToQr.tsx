@@ -78,6 +78,17 @@ const TextToQr: React.FC = () => {
             multiline
             minRows={3}
             fullWidth
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgba(15,23,42,0.3)", // slate-ish
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgba(15,23,42,0.6)",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "primary.main",
+              },
+            }}
           />
 
           {text.trim() && (
