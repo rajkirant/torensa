@@ -9,42 +9,128 @@ import {
   Stack,
   TextField,
   Alert,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 
 const QR_SIZE = 220;
 const EXPORT_SIZE = 300;
+const MAX_TEXT_LENGTH = 10;
+
+/* =======================
+   Shared render function
+   ======================= */
+const renderQrToCanvas = async (
+  canvas: HTMLCanvasElement,
+  text: string,
+  logo: HTMLImageElement | null,
+  size: number,
+  showLogoText: boolean,
+  logoText: string,
+) => {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  canvas.width = size;
+  canvas.height = size;
+
+  // Draw QR
+  await QRCode.toCanvas(canvas, text, {
+    width: size,
+    margin: 1,
+    errorCorrectionLevel: "H",
+    color: {
+      dark: "#000000",
+      light: "#ffffff",
+    },
+  });
+
+  if (!logo) return;
+
+  const cx = size / 2;
+
+  const logoSize = size * 0.18;
+  const padding = 6;
+  const extraMargin = 4;
+
+  const finalText =
+    showLogoText && logoText.trim()
+      ? logoText.trim().slice(0, MAX_TEXT_LENGTH)
+      : "";
+
+  const fontSize = Math.max(9, Math.round(size * 0.04));
+  ctx.font = `bold ${fontSize}px sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+
+  const textWidth = finalText ? ctx.measureText(finalText).width : 0;
+  const textHeight = finalText ? fontSize : 0;
+
+  const requiredWidth = Math.max(logoSize, textWidth) + padding * 2;
+
+  const requiredHeight =
+    logoSize + (finalText ? textHeight + padding : 0) + padding * 2;
+
+  const boxSize = Math.max(requiredWidth, requiredHeight) + extraMargin;
+
+  const boxX = cx - boxSize / 2;
+  const boxY = cx - boxSize / 2;
+
+  // Background box
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(boxX, boxY, boxSize, boxSize);
+
+  // Border
+  const borderWidth = Math.max(1, Math.round(size * 0.008));
+  ctx.strokeStyle = "#cccccc";
+  ctx.lineWidth = borderWidth;
+  ctx.strokeRect(boxX, boxY, boxSize, boxSize);
+
+  const contentHeight =
+    logoSize + (finalText ? fontSize + Math.round(padding / 1.5) : 0);
+
+  const contentStartY = boxY + (boxSize - contentHeight) / 2;
+
+  // Logo
+  const logoX = cx - logoSize / 2;
+  const logoY = contentStartY;
+  ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
+
+  // Optional text
+  if (finalText) {
+    ctx.fillStyle = "#000000";
+    ctx.fillText(finalText, cx, logoY + logoSize + Math.round(padding / 1.5));
+  }
+};
 
 const TextToQr: React.FC = () => {
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [logo, setLogo] = useState<HTMLImageElement | null>(null);
 
+  const [showLogoText, setShowLogoText] = useState(true);
+  const [logoText, setLogoText] = useState("Scan Me");
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   /* =======================
-     Render QR (Preview)
+     Render preview
      ======================= */
   useEffect(() => {
     if (!text.trim() || !canvasRef.current) return;
 
-    QRCode.toCanvas(
+    renderQrToCanvas(
       canvasRef.current,
       text,
-      {
-        width: QR_SIZE,
-        margin: 1,
-        errorCorrectionLevel: "H",
-        color: {
-          dark: "#000000",
-          light: "#ffffff",
-        },
-      },
-      () => {},
+      logo,
+      QR_SIZE,
+      showLogoText,
+      logoText,
     );
-  }, [text]);
+  }, [text, logo, showLogoText, logoText]);
 
   /* =======================
-     Logo Upload
+     Logo upload
      ======================= */
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,95 +142,45 @@ const TextToQr: React.FC = () => {
     img.src = URL.createObjectURL(file);
   };
 
-  const downloadQr = () => {
-    if (!canvasRef.current) return;
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const removeLogo = () => {
+    setLogo(null);
+    setShowLogoText(true);
+    setLogoText("Scan Me");
+
+    // Reset file input so same file can be uploaded again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  /* =======================
+     Download
+     ======================= */
+  const downloadQr = async () => {
     if (!text.trim()) {
       setError("Please enter some text or a URL");
       return;
     }
 
     const canvas = document.createElement("canvas");
-    canvas.width = QR_SIZE;
-    canvas.height = QR_SIZE;
+    await renderQrToCanvas(
+      canvas,
+      text,
+      logo,
+      EXPORT_SIZE,
+      showLogoText,
+      logoText,
+    );
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Draw the QR from preview canvas
-    ctx.drawImage(canvasRef.current, 0, 0, canvas.width, canvas.height);
-
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-
-    if (logo) {
-      // sizes tuned to match preview proportions
-      const logoSize = QR_SIZE * 0.18; // same visual scale as preview
-      const padding = 6; // increased padding to make box slightly bigger
-      const extraMargin = 4; // small extra margin so exported box matches preview
-
-      // text to render under the logo
-      const textValue = "Scan Me";
-
-      // set font scaled to canvas size and measure text
-      const fontSize = Math.max(9, Math.round(QR_SIZE * 0.04));
-      ctx.font = `bold ${fontSize}px sans-serif`;
-      const textMetrics = ctx.measureText(textValue);
-      const textWidth = textMetrics.width;
-      const textHeight = fontSize; // approximate
-
-      // compute required box width and height
-      const requiredWidth = Math.max(logoSize, textWidth) + padding * 2;
-      const requiredHeight = logoSize + textHeight + padding * 3;
-
-      // make the box square: choose the larger dimension and add extra margin
-      const boxSize = Math.max(requiredWidth, requiredHeight) + extraMargin;
-
-      // top-left of square box
-      const boxX = cx - boxSize / 2;
-      const boxY = cy - boxSize / 2;
-
-      // Draw white square box (sharp corners)
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(boxX, boxY, boxSize, boxSize);
-
-      // Draw thin border around the square using reverted color
-      const borderColor = "#cccccc"; // reverted to soft gray
-      const borderWidth = Math.max(1, Math.round(QR_SIZE * 0.008));
-      ctx.lineWidth = borderWidth;
-      ctx.strokeStyle = borderColor;
-
-      // Draw stroke crisply aligned to pixel grid
-      const halfStroke = borderWidth / 2;
-      ctx.strokeRect(
-        Math.round(boxX + halfStroke) - halfStroke,
-        Math.round(boxY + halfStroke) - halfStroke,
-        Math.round(boxSize - borderWidth),
-        Math.round(boxSize - borderWidth),
-      );
-
-      // Draw logo centered horizontally, positioned near top inside the square
-      const logoX = cx - logoSize / 2;
-      const logoY = boxY + padding;
-      ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
-
-      // Draw text centered horizontally, below the logo
-      ctx.fillStyle = "#000000";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      const textX = cx;
-      const textY = logoY + logoSize + Math.round(padding / 1.5);
-      ctx.fillText(textValue, textX, textY);
-    }
-
-    // Download
     const png = canvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = png;
     link.download = "qr-code-with-logo.png";
-    document.body.appendChild(link);
     link.click();
-    link.remove();
   };
+
   return (
     <Card sx={{ maxWidth: 480, mx: "auto", mt: 6 }}>
       <CardContent>
@@ -166,25 +202,61 @@ const TextToQr: React.FC = () => {
             fullWidth
           />
 
-          <Button
-            variant="outlined"
-            component="label"
-            sx={{ textTransform: "none" }}
-          >
-            Upload Logo (optional)
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              onChange={handleLogoUpload}
-            />
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant="outlined"
+              component="label"
+              sx={{ textTransform: "none" }}
+            >
+              Upload Logo
+              <input
+                ref={fileInputRef}
+                hidden
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+              />
+            </Button>
+
+            {logo && (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={removeLogo}
+                sx={{ textTransform: "none" }}
+              >
+                Remove Logo
+              </Button>
+            )}
+          </Stack>
+
+          {logo && (
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showLogoText}
+                    onChange={(e) => setShowLogoText(e.target.checked)}
+                  />
+                }
+                label="Show text under logo"
+              />
+
+              {showLogoText && (
+                <TextField
+                  label="Logo text"
+                  value={logoText}
+                  inputProps={{ maxLength: MAX_TEXT_LENGTH }}
+                  helperText={`${logoText.length}/${MAX_TEXT_LENGTH} characters`}
+                  onChange={(e) => setLogoText(e.target.value)}
+                />
+              )}
+            </>
+          )}
 
           {text.trim() && (
             <div
-              id="qr-wrapper"
               style={{
-                position: "relative",
                 display: "flex",
                 justifyContent: "center",
                 padding: 16,
@@ -198,53 +270,6 @@ const TextToQr: React.FC = () => {
                 height={QR_SIZE}
                 style={{ display: "block" }}
               />
-
-              {/* Preview logo */}
-              {logo && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: 64,
-                    minHeight: 64,
-                    background: "#ffffff",
-                    borderRadius: 0,
-                    padding: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 2,
-                    zIndex: 2,
-                    boxSizing: "border-box",
-                    border: "1px solid #cccccc", // thin soft gray border to match export
-                  }}
-                >
-                  <img
-                    src={logo.src}
-                    alt="logo preview"
-                    style={{
-                      width: 28,
-                      height: 28,
-                      objectFit: "contain",
-                    }}
-                  />
-
-                  <span
-                    style={{
-                      fontSize: 9,
-                      fontWeight: 600,
-                      color: "#000",
-                      textAlign: "center",
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    Scan Me
-                  </span>
-                </div>
-              )}
             </div>
           )}
 
