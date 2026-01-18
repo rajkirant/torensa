@@ -55,10 +55,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           setUser(data?.user ?? null);
-          setLoading(false);
         })
         .catch(() => {
           setUser(null);
+        })
+        .finally(() => {
           setLoading(false);
         });
     };

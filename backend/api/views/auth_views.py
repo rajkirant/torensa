@@ -113,7 +113,7 @@ def me(request):
                 "email": request.user.email,
             }
         })
-    return JsonResponse({"user": None}, status=401)
+    return JsonResponse({"user": None}, status=200)
 
 
 @csrf_exempt
