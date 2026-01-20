@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { apiFetch } from "./utils/api";
+import { apiFetch } from "./api";
 /* =========================
    Types
    ========================= */

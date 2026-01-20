@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth";
+import { useAuth } from "../utils/auth";
 import { apiFetch } from "../utils/api";
 import { setCsrfToken } from "../utils/csrf";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import { useSearchParams } from "react-router-dom";
 export default function Login() {
   const { setUser } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +14,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -43,7 +44,7 @@ export default function Login() {
       }
 
       setUser(data.user);
-      navigate("/");
+      navigate(redirectTo);
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {

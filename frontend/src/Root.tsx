@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { AuthProvider } from "./auth";
+import { AuthProvider } from "./utils/auth";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
