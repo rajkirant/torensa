@@ -29,8 +29,8 @@ const light = createTheme({
   },
 
   header: {
-    text: "#ffffff",
-    textMuted: "#cbd5e1",
+    text: "#0b0a0a",
+    textMuted: "#161718",
     border: "rgba(255,255,255,0.14)",
   },
 
@@ -64,18 +64,24 @@ const light = createTheme({
     MuiSelect: {
       styleOverrides: {
         select: {
-          color: "#ffffff", // selected value text
+          color: "#000000", // selected value text
         },
         icon: {
-          color: "#ffffff", // dropdown arrow
+          color: "#100c0c", // dropdown arrow
         },
       },
     },
 
     MuiOutlinedInput: {
       styleOverrides: {
-        notchedOutline: {
-          borderColor: "rgba(255,255,255,0.35)",
+        root: {
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(15,23,42,0.45)",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#2563eb",
+            borderWidth: 2,
+          },
         },
       },
     },
