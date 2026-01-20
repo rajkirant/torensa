@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, NavLink, Link, useNavigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
-import { useAuth } from "./auth";
+import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
 import {
   brandLinkStyle,
@@ -28,6 +28,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import type { ThemeName } from "./theme";
 import { apiFetch } from "./utils/api";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 /* ===================== LAZY LOAD PAGES ===================== */
 const Contact = lazy(() => import("./pages/Contact"));
@@ -303,7 +304,14 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 }
               />
 
-              <Route path="/bulk-email" element={<BulkEmail />} />
+              <Route
+                path="/bulk-email"
+                element={
+                  <ProtectedRoute>
+                    <BulkEmail />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/excel-to-csv" element={<ExcelUploadToCsv />} />
               <Route path="/text-to-qr" element={<TextToQr />} />
               <Route path="/contact" element={<Contact />} />
