@@ -13,6 +13,7 @@ import {
   footerStyle,
   footerCard,
   navStyle,
+  linkedInIconStyle,
 } from "./styles/appStyles";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -53,6 +54,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const isMobile = useMediaQuery("(max-width:900px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const headerTextColor = isMobile
+    ? theme.palette.text.primary
+    : theme.header.text;
 
   const secondaryText: React.CSSProperties = {
     color: theme.palette.text.secondary,
@@ -108,14 +112,14 @@ export default function App({ themeName, setThemeName }: AppProps) {
         sx={{
           minWidth: 120,
 
-          color: isMobile ? theme.palette.text.primary : theme.header.text,
+          color: headerTextColor,
 
           "& .MuiOutlinedInput-input": {
-            color: isMobile ? theme.palette.text.primary : theme.header.text,
+            color: headerTextColor,
           },
 
           "& .MuiSvgIcon-root": {
-            color: isMobile ? theme.palette.text.primary : theme.header.text,
+            color: headerTextColor,
           },
 
           "& .MuiOutlinedInput-notchedOutline": {
@@ -123,9 +127,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           },
 
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: isMobile
-              ? theme.palette.text.primary
-              : theme.header.text,
+            borderColor: headerTextColor,
           },
 
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -146,9 +148,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             <span
               style={{
                 marginLeft: 12,
-                color: isMobile
-                  ? theme.palette.text.primary
-                  : theme.header.text,
+                color: headerTextColor,
                 fontWeight: 600,
                 fontSize: 14,
               }}
@@ -338,9 +338,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <LinkedInIcon
-              sx={{ fontSize: 30, color: theme.header.text, marginBottom: 12 }}
-            />
+            <LinkedInIcon sx={linkedInIconStyle(theme)} />
           </a>
 
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
