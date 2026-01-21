@@ -63,9 +63,6 @@ const light = createTheme({
     /* ================= HEADER SELECT FIX (LIGHT ONLY) ================= */
     MuiSelect: {
       styleOverrides: {
-        select: {
-          color: "#000000", // selected value text
-        },
         icon: {
           color: "#100c0c", // dropdown arrow
         },
