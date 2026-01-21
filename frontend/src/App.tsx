@@ -146,7 +146,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
             <span
               style={{
                 marginLeft: 12,
-                color: theme.palette.text.primary,
+                color: isMobile
+                  ? theme.palette.text.primary
+                  : theme.header.text,
                 fontWeight: 600,
                 fontSize: 14,
               }}
