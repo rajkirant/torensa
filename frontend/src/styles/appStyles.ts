@@ -26,7 +26,23 @@ export const cardStyle: React.CSSProperties = {
   borderRadius: 16,
   padding: 24,
   boxShadow: "0 18px 36px rgba(0,0,0,0.3)",
+  cursor: "pointer",
+  textAlign: "center",
 };
+
+export const drawerNavButtonStyle = (theme: Theme) => ({
+  justifyContent: "flex-start",
+  color: theme.palette.text.primary,
+
+  "& .MuiSvgIcon-root": {
+    color: theme.palette.text.primary,
+  },
+
+  "&.active": {
+    color: theme.palette.primary.main,
+    fontWeight: 600,
+  },
+});
 
 export const headerStyle = (theme: Theme): React.CSSProperties => ({
   background: theme.gradients.header,

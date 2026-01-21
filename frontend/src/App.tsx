@@ -8,6 +8,7 @@ import {
   brandLinkStyle,
   sectionBase,
   headerStyle,
+  drawerNavButtonStyle,
   cardStyle,
   footerStyle,
   footerCard,
@@ -57,19 +58,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
     color: theme.palette.text.secondary,
   };
 
-  /* ===== Drawer-specific NavButton style ===== */
-  const drawerNavButtonSx = {
-    justifyContent: "flex-start",
-    color: theme.palette.text.primary,
-    "& .MuiSvgIcon-root": {
-      color: theme.palette.text.primary,
-    },
-    "&.active": {
-      color: theme.palette.primary.main,
-      fontWeight: 600,
-    },
-  };
-
   /* ===================== NAV ITEMS ===================== */
   const NavItems = ({ onClick, sx }: { onClick?: () => void; sx?: any }) => (
     <>
@@ -94,16 +82,24 @@ export default function App({ themeName, setThemeName }: AppProps) {
         Contact
       </NavButton>
 
-      {/* ===== THEME SELECTOR (moved here) ===== */}
       <Select
         size="small"
         value={themeName}
         onChange={(e) => setThemeName(e.target.value as ThemeName)}
         sx={{
           minWidth: 120,
-          color: theme.palette.text.primary,
+
+          // Text colour changes based on device
+          color: isMobile
+            ? theme.palette.primary.main // mobile
+            : theme.header.text, // desktop
+
           "& .MuiSvgIcon-root": {
-            color: theme.palette.text.primary,
+            color: isMobile ? theme.palette.primary.main : theme.header.text,
+          },
+
+          "& .MuiSelect-select": {
+            color: isMobile ? theme.palette.primary.main : theme.header.text,
           },
         }}
       >
@@ -120,7 +116,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             <span
               style={{
                 marginLeft: 12,
-                color: theme.header.text,
+                color: theme.palette.text.primary,
                 fontWeight: 600,
                 fontSize: 14,
               }}
@@ -202,10 +198,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        PaperProps={{
-          sx: {
-            backgroundColor: theme.palette.background.paper,
-            color: theme.palette.text.primary,
+        slotProps={{
+          paper: {
+            sx: {
+              backgroundColor: theme.palette.background.paper,
+              color: theme.palette.text.primary,
+            },
           },
         }}
       >
@@ -220,7 +218,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         >
           <NavItems
             onClick={() => setMobileOpen(false)}
-            sx={drawerNavButtonSx}
+            sx={drawerNavButtonStyle(theme)}
           />
         </Box>
       </Drawer>
@@ -248,11 +246,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                         }}
                       >
                         <div
-                          style={{
-                            ...cardStyle,
-                            cursor: "pointer",
-                            textAlign: "center",
-                          }}
+                          style={cardStyle}
                           onClick={() => navigate("/bulk-email")}
                         >
                           <h3>Bulk Email</h3>
@@ -266,11 +260,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                         </div>
 
                         <div
-                          style={{
-                            ...cardStyle,
-                            cursor: "pointer",
-                            textAlign: "center",
-                          }}
+                          style={cardStyle}
                           onClick={() => navigate("/excel-to-csv")}
                         >
                           <h3>Excel to CSV</h3>
@@ -283,11 +273,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                         </div>
 
                         <div
-                          style={{
-                            ...cardStyle,
-                            cursor: "pointer",
-                            textAlign: "center",
-                          }}
+                          style={cardStyle}
                           onClick={() => navigate("/text-to-qr")}
                         >
                           <h3>Text to QR</h3>

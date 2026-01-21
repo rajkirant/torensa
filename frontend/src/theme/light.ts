@@ -29,8 +29,8 @@ const light = createTheme({
   },
 
   header: {
-    text: "#0b0a0a",
-    textMuted: "#161718",
+    text: "#ffffff",
+    textMuted: "#6392cb",
     border: "rgba(255,255,255,0.14)",
   },
 
