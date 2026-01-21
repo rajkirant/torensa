@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth";
+import { useAuth } from "../utils/auth";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { apiFetch } from "../utils/api";
