@@ -89,17 +89,28 @@ export default function App({ themeName, setThemeName }: AppProps) {
         sx={{
           minWidth: 120,
 
-          // Text colour changes based on device
-          color: isMobile
-            ? theme.palette.primary.main // mobile
-            : theme.header.text, // desktop
+          color: isMobile ? theme.palette.text.primary : theme.header.text,
 
-          "& .MuiSvgIcon-root": {
-            color: isMobile ? theme.palette.primary.main : theme.header.text,
+          "& .MuiOutlinedInput-input": {
+            color: isMobile ? theme.palette.text.primary : theme.header.text,
           },
 
-          "& .MuiSelect-select": {
-            color: isMobile ? theme.palette.primary.main : theme.header.text,
+          "& .MuiSvgIcon-root": {
+            color: isMobile ? theme.palette.text.primary : theme.header.text,
+          },
+
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: isMobile ? theme.palette.divider : theme.header.border,
+          },
+
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: isMobile
+              ? theme.palette.text.primary
+              : theme.header.text,
+          },
+
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.primary.main,
           },
         }}
       >
