@@ -12,6 +12,7 @@ import {
   cardStyle,
   footerStyle,
   footerCard,
+  navStyle,
 } from "./styles/appStyles";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -37,7 +38,6 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
 const TextToQr = lazy(() => import("./pages/TextToQr"));
-
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
 
 /* ===================== TYPES ===================== */
@@ -200,7 +200,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           Torensa
         </Link>
 
-        <nav style={{ display: "flex", alignItems: "center", gap: 20 }}>
+        <nav style={navStyle}>
           {!isMobile && <NavItems onLogout={handleLogout} />}
 
           {isMobile && (
@@ -344,7 +344,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           </a>
 
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
-            © 2026 Torensa. All rights reserved.
+            © {new Date().getFullYear()} Torensa. All rights reserved.
           </div>
         </div>
       </footer>

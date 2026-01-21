@@ -15,6 +15,12 @@ export const navLinkBase: React.CSSProperties = {
   color: "#e5e7eb",
 };
 
+export const navStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: 20,
+};
+
 export const sectionBase: React.CSSProperties = {
   padding: "64px 24px",
   maxWidth: 1100,
