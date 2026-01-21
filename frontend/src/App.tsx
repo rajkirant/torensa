@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Routes, Route, NavLink, Link, useNavigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
@@ -58,8 +58,27 @@ export default function App({ themeName, setThemeName }: AppProps) {
     color: theme.palette.text.secondary,
   };
 
+  const handleLogout = useCallback(async () => {
+    try {
+      await apiFetch("/api/logout/", {
+        method: "POST",
+        csrf: true,
+      });
+    } finally {
+      clearCsrfToken();
+      setUser(null);
+      setMobileOpen(false);
+    }
+  }, [setUser]);
+
   /* ===================== NAV ITEMS ===================== */
-  const NavItems = ({ onClick, sx }: { onClick?: () => void; sx?: any }) => (
+  type NavItemsProps = {
+    onClick?: () => void;
+    onLogout: () => void;
+    sx?: any;
+  };
+
+  const NavItems = ({ onClick, onLogout, sx }: NavItemsProps) => (
     <>
       <NavButton
         component={NavLink}
@@ -139,18 +158,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               component={NavLink}
               to="/"
               startIcon={<LogoutIcon />}
-              onClick={async () => {
-                try {
-                  await apiFetch("/api/logout/", {
-                    method: "POST",
-                    csrf: true,
-                  });
-                } finally {
-                  clearCsrfToken();
-                  setUser(null);
-                  onClick?.();
-                }
-              }}
+              onClick={onLogout}
               sx={sx}
             >
               Logout
@@ -191,7 +199,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </Link>
 
         <nav style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          {!isMobile && <NavItems />}
+          {!isMobile && <NavItems onLogout={handleLogout} />}
 
           {isMobile && (
             <IconButton
@@ -229,6 +237,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         >
           <NavItems
             onClick={() => setMobileOpen(false)}
+            onLogout={handleLogout}
             sx={drawerNavButtonStyle(theme)}
           />
         </Box>
