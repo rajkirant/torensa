@@ -36,6 +36,12 @@ export const cardStyle: React.CSSProperties = {
   textAlign: "center",
 };
 
+export const linkedInIconStyle = (theme: Theme): React.CSSProperties => ({
+  fontSize: 30,
+  color: theme.header.text,
+  marginBottom: 12,
+});
+
 export const drawerNavButtonStyle = (theme: Theme) => ({
   justifyContent: "flex-start",
   color: theme.palette.text.primary,
