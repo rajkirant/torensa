@@ -15,6 +15,7 @@ import {
   footerCard,
   navStyle,
   linkedInIconStyle,
+  themeSelectSx,
 } from "./styles/appStyles";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -120,31 +121,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         size="small"
         value={themeName}
         onChange={(e) => setThemeName(e.target.value as ThemeName)}
-        sx={{
-          minWidth: 120,
-
-          color: headerTextColor,
-
-          "& .MuiOutlinedInput-input": {
-            color: headerTextColor,
-          },
-
-          "& .MuiSvgIcon-root": {
-            color: headerTextColor,
-          },
-
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: isMobile ? theme.palette.divider : theme.header.border,
-          },
-
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: headerTextColor,
-          },
-
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.palette.primary.main,
-          },
-        }}
+        sx={themeSelectSx(theme, isMobile, headerTextColor)}
       >
         {Object.keys(themes).map((name) => (
           <MenuItem key={name} value={name}>
