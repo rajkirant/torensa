@@ -1,0 +1,23 @@
+[
+  {
+    "id": "bulk-email",
+    "title": "Bulk Email",
+    "description": "Send emails to multiple recipients quickly and securely.",
+    "path": "/bulk-email",
+    "ctaLabel": "Open Bulk Email"
+  },
+  {
+    "id": "excel-to-csv",
+    "title": "Excel to CSV",
+    "description": "Upload Excel files and convert them to CSV.",
+    "path": "/excel-to-csv",
+    "ctaLabel": "Convert Excel"
+  },
+  {
+    "id": "text-to-qr",
+    "title": "Text to QR",
+    "description": "Convert any text or URL into a scannable QR code.",
+    "path": "/text-to-qr",
+    "ctaLabel": "Generate QR"
+  }
+]
