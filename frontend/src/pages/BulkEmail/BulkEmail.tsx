@@ -40,7 +40,7 @@ const accordionStyle = {
 export default function BulkEmail() {
   /* ---------- Accordion state ---------- */
   const [expanded, setExpanded] = useState({
-    smtp: true,
+    smtp: false,
     send: false,
   });
 

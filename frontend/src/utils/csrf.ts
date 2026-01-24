@@ -19,9 +19,9 @@ export function setCsrfToken(token: string) {
   document.cookie = [
     `${CSRF_COOKIE_NAME}=${encodeURIComponent(token)}`,
     "Path=/",
-    "SameSite=Lax", // frontend-only, same-site
-    "Secure", // HTTPS only
-    `Max-Age=${60 * 60 * 2}`, // 2 hours (adjust if needed)
+    "SameSite=Lax",
+    "Secure",
+    `Max-Age=${31536000}`, // 1 year
   ].join("; ");
 }
 
