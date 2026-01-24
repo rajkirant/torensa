@@ -42,6 +42,35 @@ export const linkedInIconStyle = (theme: Theme): React.CSSProperties => ({
   marginBottom: 12,
 });
 
+export const themeSelectSx = (
+  theme: Theme,
+  isMobile: boolean,
+  headerTextColor: string,
+) => ({
+  minWidth: 120,
+  color: headerTextColor,
+
+  "& .MuiOutlinedInput-input": {
+    color: headerTextColor,
+  },
+
+  "& .MuiSvgIcon-root": {
+    color: headerTextColor,
+  },
+
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: isMobile ? theme.palette.divider : theme.header.border,
+  },
+
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: headerTextColor,
+  },
+
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: theme.palette.primary.main,
+  },
+});
+
 export const drawerNavButtonStyle = (theme: Theme) => ({
   justifyContent: "flex-start",
   color: theme.palette.text.primary,
