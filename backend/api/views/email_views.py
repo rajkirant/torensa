@@ -55,24 +55,27 @@ def send_email(request):
             use_ssl=True,
         )
 
-        email = EmailMessage(
-            subject=subject,
-            body=body,
-            from_email=smtp_config.smtp_email,
-            to=to_emails,
-            connection=connection,
-        )
+        success_count = 0
 
-        # Attach files
-        for file in attachments:
-            email.attach(file.name, file.read(), file.content_type)
+        for recipient in to_emails:
+            email = EmailMessage(
+                subject=subject,
+                body=body,
+                from_email=smtp_config.smtp_email,
+                to=[recipient],  # <-- single email
+                connection=connection,
+            )
 
-        email.send(fail_silently=False)
+            for file in attachments:
+                email.attach(file.name, file.read(), file.content_type)
+
+            email.send(fail_silently=False)
+            success_count += 1
 
         return JsonResponse({
-            "status": "Email sent successfully",
+            "status": "Emails sent successfully",
             "sender": smtp_config.smtp_email,
-            "recipients": len(to_emails),
+            "recipients": success_count,
             "attachments": len(attachments),
         })
 
