@@ -12,6 +12,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SmtpSettingsAccordion from "./SmtpSettingsAccordion";
 import SendEmailAccordion from "./SendEmailAccordion";
+import ContactGroupsAccordion from "./ContactGroupsAccordion";
 import { apiFetch } from "../../utils/api";
 
 /* ===================== TYPES ===================== */
@@ -20,6 +21,12 @@ type SMTPConfig = {
   id: number;
   smtp_email: string;
   provider: string;
+};
+
+type ContactGroup = {
+  id: number;
+  group_name: string;
+  contact_count: number;
 };
 
 /* ===================== STYLES ===================== */
@@ -41,16 +48,22 @@ export default function BulkEmail() {
   /* ---------- Accordion state ---------- */
   const [expanded, setExpanded] = useState({
     smtp: false,
+    contacts: false,
     send: false,
   });
 
-  const toggle = (key: "smtp" | "send") => (_: any, isExpanded: boolean) =>
-    setExpanded((prev) => ({ ...prev, [key]: isExpanded }));
+  const toggle =
+    (key: "smtp" | "contacts" | "send") => (_: any, isExpanded: boolean) =>
+      setExpanded((prev) => ({ ...prev, [key]: isExpanded }));
 
   /* ---------- SMTP Config State ---------- */
   const [smtpConfigs, setSmtpConfigs] = useState<SMTPConfig[]>([]);
   const [selectedConfigId, setSelectedConfigId] = useState<number | "">("");
   const [loadingConfigs, setLoadingConfigs] = useState(false);
+
+  /* ---------- Contact Groups State ---------- */
+  const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
+  const [loadingGroups, setLoadingGroups] = useState(false);
 
   /* ---------- Prevent double fetch ---------- */
   const didFetch = useRef(false);
@@ -78,10 +91,29 @@ export default function BulkEmail() {
     }
   }
 
+  /* ===================== LOAD CONTACT GROUPS ===================== */
+
+  async function loadContactGroups() {
+    setLoadingGroups(true);
+    try {
+      const res = await apiFetch("/api/contact-groups/list/", {
+        credentials: "include",
+      });
+
+      if (!res.ok) return;
+
+      const data = await res.json();
+      setContactGroups(data.groups || []);
+    } finally {
+      setLoadingGroups(false);
+    }
+  }
+
   useEffect(() => {
     if (didFetch.current) return;
     didFetch.current = true;
     loadSmtpConfigs();
+    loadContactGroups();
   }, []);
 
   /* ===================== RENDER ===================== */
@@ -117,9 +149,66 @@ export default function BulkEmail() {
               <SmtpSettingsAccordion
                 onSaved={() => {
                   loadSmtpConfigs();
-                  setExpanded({ smtp: false, send: true });
+                  setExpanded({ smtp: false, contacts: true, send: false });
                 }}
               />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* ================= CONTACT GROUPS ================= */}
+        <Accordion
+          expanded={expanded.contacts}
+          onChange={toggle("contacts")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#34d399" }}>
+              Contact Groups
+            </Typography>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <Box>
+              <ContactGroupsAccordion
+                onSaved={() => {
+                  loadContactGroups();
+                  setExpanded({ smtp: false, contacts: false, send: true });
+                }}
+              />
+
+              {loadingGroups ? (
+                <Typography
+                  sx={{ mt: 2 }}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  Loading groups…
+                </Typography>
+              ) : contactGroups.length ? (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Saved groups
+                  </Typography>
+                  {contactGroups.map((g) => (
+                    <Typography
+                      key={g.id}
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      • {g.group_name} ({g.contact_count} contacts)
+                    </Typography>
+                  ))}
+                </Box>
+              ) : (
+                <Typography
+                  sx={{ mt: 2 }}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  No groups yet. Create your first contact group above.
+                </Typography>
+              )}
             </Box>
           </AccordionDetails>
         </Accordion>
