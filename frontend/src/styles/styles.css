@@ -5,8 +5,14 @@
 body {
   margin: 0;
   min-width: 320px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Ubuntu, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Ubuntu,
+    sans-serif;
 }
 
 /* =========================
@@ -48,4 +54,10 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.loader-container {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
 }

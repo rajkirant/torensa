@@ -42,6 +42,13 @@ export const linkedInIconStyle = (theme: Theme): React.CSSProperties => ({
   marginBottom: 12,
 });
 
+export const userGreetingStyle = (headerTextColor: string) => ({
+  marginLeft: 12,
+  color: headerTextColor,
+  fontWeight: 600,
+  fontSize: 14,
+});
+
 export const themeSelectSx = (
   theme: Theme,
   isMobile: boolean,

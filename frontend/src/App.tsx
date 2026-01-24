@@ -16,6 +16,7 @@ import {
   navStyle,
   linkedInIconStyle,
   themeSelectSx,
+  userGreetingStyle,
 } from "./styles/appStyles";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -34,6 +35,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import type { ThemeName } from "./theme";
 import { apiFetch } from "./utils/api";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import CircularProgress from "@mui/material/CircularProgress";
 
 /* ===================== LAZY LOAD PAGES ===================== */
 const Contact = lazy(() => import("./pages/Contact"));
@@ -133,14 +135,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
       {!loading &&
         (user ? (
           <>
-            <span
-              style={{
-                marginLeft: 12,
-                color: headerTextColor,
-                fontWeight: 600,
-                fontSize: 14,
-              }}
-            >
+            <span style={userGreetingStyle(headerTextColor)}>
               Hi, {user.username}
             </span>
 
@@ -236,7 +231,13 @@ export default function App({ themeName, setThemeName }: AppProps) {
       {/* ================= CONTENT ================= */}
       <div className="container">
         <main>
-          <Suspense fallback={<div style={{ padding: 40 }}>Loading…</div>}>
+          <Suspense
+            fallback={
+              <div className="loader-container">
+                <CircularProgress />
+              </div>
+            }
+          >
             <Routes>
               <Route
                 path="/"
@@ -302,7 +303,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
           >
             <LinkedInIcon sx={linkedInIconStyle(theme)} />
           </a>
-
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © {new Date().getFullYear()} Torensa. All rights reserved.
           </div>
