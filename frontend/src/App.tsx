@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
+import serviceCards from "./metadata/serviceCards.json";
 import {
   brandLinkStyle,
   sectionBase,
@@ -46,6 +47,16 @@ type AppProps = {
   themeName: ThemeName;
   setThemeName: (name: ThemeName) => void;
 };
+
+type ServiceCardConfig = {
+  id: string;
+  title: string;
+  description: string;
+  path: string;
+  ctaLabel: string;
+};
+
+const typedServiceCards = serviceCards as ServiceCardConfig[];
 
 /* ===================== APP ===================== */
 export default function App({ themeName, setThemeName }: AppProps) {
@@ -267,45 +278,19 @@ export default function App({ themeName, setThemeName }: AppProps) {
                           gap: 28,
                         }}
                       >
-                        <div
-                          style={cardStyle}
-                          onClick={() => navigate("/bulk-email")}
-                        >
-                          <h3>Bulk Email</h3>
-                          <p style={secondaryText}>
-                            Send emails to multiple recipients quickly and
-                            securely.
-                          </p>
-                          <PrimaryButton size="small">
-                            Open Bulk Email
-                          </PrimaryButton>
-                        </div>
-
-                        <div
-                          style={cardStyle}
-                          onClick={() => navigate("/excel-to-csv")}
-                        >
-                          <h3>Excel to CSV</h3>
-                          <p style={secondaryText}>
-                            Upload Excel files and convert them to CSV.
-                          </p>
-                          <PrimaryButton size="small">
-                            Convert Excel
-                          </PrimaryButton>
-                        </div>
-
-                        <div
-                          style={cardStyle}
-                          onClick={() => navigate("/text-to-qr")}
-                        >
-                          <h3>Text to QR</h3>
-                          <p style={secondaryText}>
-                            Convert any text or URL into a scannable QR code.
-                          </p>
-                          <PrimaryButton size="small">
-                            Generate QR
-                          </PrimaryButton>
-                        </div>
+                        {serviceCards.map((card) => (
+                          <div
+                            key={card.id}
+                            style={cardStyle}
+                            onClick={() => navigate(card.path)}
+                          >
+                            <h3>{card.title}</h3>
+                            <p style={secondaryText}>{card.description}</p>
+                            <PrimaryButton size="small">
+                              {card.ctaLabel}
+                            </PrimaryButton>
+                          </div>
+                        ))}
                       </div>
                     </section>
                   </>

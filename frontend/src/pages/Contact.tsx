@@ -14,8 +14,8 @@ export default function Contact() {
           <h3>Email</h3>
           <p>You can reach me directly at:</p>
           <p>
-            <a href="mailto:rajkirant@live.com" style={{ fontWeight: 600 }}>
-              rajkirant@live.com
+            <a href="mailto:admin@torensa.com" style={{ fontWeight: 600 }}>
+              admin@torensa.com
             </a>
           </p>
         </div>
