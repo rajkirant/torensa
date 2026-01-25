@@ -37,12 +37,12 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-
+import Home from "./pages/Home";
 import { apiFetch } from "./utils/api";
 import ProtectedRoute from "./utils/ProtectedRoute";
 
 /* ===================== LAZY LOAD PAGES ===================== */
-const Home = lazy(() => import("./pages/Home"));
+
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
