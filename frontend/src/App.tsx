@@ -119,7 +119,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
         value={themeName}
         onChange={(e) => setThemeName(e.target.value as ThemeName)}
         sx={themeSelectSx(theme, isMobile, headerTextColor)}
-        aria-label="Theme selection"
+        displayEmpty
+        inputProps={{ "aria-label": "Theme selection" }}
       >
         {Object.keys(themes).map((name) => (
           <MenuItem key={name} value={name}>
