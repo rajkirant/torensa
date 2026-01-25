@@ -9,7 +9,12 @@ from cryptography.fernet import Fernet
 from ..models import UserSMTPConfig
 from django.conf import settings
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 
+from ..models import UserSMTPConfig, ContactGroup, ContactGroupContact
 
 @require_POST
 @login_required
@@ -177,3 +182,66 @@ def list_smtp_configs(request):
         },
         status=200,
     )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def save_contact_group(request):
+    group_name = request.data.get("group_name", "").strip()
+    contacts = request.data.get("contacts", [])
+
+    if not group_name:
+        return Response({"error": "Group name is required"}, status=400)
+
+    if not contacts:
+        return Response({"error": "At least one contact is required"}, status=400)
+
+    group, _ = ContactGroup.objects.update_or_create(
+        user=request.user,
+        group_name=group_name,
+        defaults={},
+    )
+
+    group.contacts.all().delete()  # simple “replace all” strategy
+
+    objs = [
+        ContactGroupContact(group=group, name=c["name"].strip(), email=c["email"].strip())
+        for c in contacts
+    ]
+    ContactGroupContact.objects.bulk_create(objs)
+
+    return Response({"success": True}, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def list_contact_groups(request):
+    """
+    List all contact groups for the authenticated user,
+    including their contacts.
+    """
+    groups = (
+        ContactGroup.objects
+        .filter(user=request.user)
+        .order_by("-created_at")
+    )
+
+    data = [
+        {
+            "id": g.id,
+            "group_name": g.group_name,
+            "created_at": g.created_at.isoformat(),
+            "updated_at": g.updated_at.isoformat(),
+            "contacts": [
+                {
+                    "id": c.id,
+                    "name": c.name,
+                    "email": c.email,
+                }
+                for c in g.contacts.all().order_by("name")
+            ],
+        }
+        for g in groups
+    ]
+
+    return Response({"groups": data}, status=status.HTTP_200_OK)
