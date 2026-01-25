@@ -1,26 +1,41 @@
-from django.db import connection
-from django.http import JsonResponse
-from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import send_mail
-from django.views.decorators.http import require_POST
 import json
-from django.core.mail import EmailMessage, get_connection
+
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.conf import settings
 from django.middleware.csrf import get_token
+from django.conf import settings
 
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
+from rest_framework import status
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    """
+    SessionAuthentication that skips CSRF checks.
+    This keeps behaviour similar to your previous @csrf_exempt views.
+    """
+    def enforce_csrf(self, request):
+        return  # Bypass CSRF
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
 def hello(request):
-    return JsonResponse({"message": "Hello World"})
+    return Response({"message": "Hello World"}, status=status.HTTP_200_OK)
 
 
-@require_POST
-@csrf_exempt
+@api_view(["POST"])
+@authentication_classes([CsrfExemptSessionAuthentication])
+@permission_classes([AllowAny])
 def signup_view(request):
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    data = request.data
 
     username = data.get("username")
     email = data.get("email")
@@ -28,100 +43,110 @@ def signup_view(request):
 
     # ---------- Validation ----------
     if not username or not email or not password:
-        return JsonResponse(
+        return Response(
             {"error": "Username, email, and password are required"},
-            status=400
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     if User.objects.filter(username=username).exists():
-        return JsonResponse(
+        return Response(
             {"error": "Username already exists"},
-            status=409
+            status=status.HTTP_409_CONFLICT,
         )
 
     if User.objects.filter(email=email).exists():
-        return JsonResponse(
+        return Response(
             {"error": "Email already exists"},
-            status=409
+            status=status.HTTP_409_CONFLICT,
         )
 
     # ---------- Create User ----------
     user = User.objects.create_user(
         username=username,
         email=email,
-        password=password
+        password=password,
     )
 
     # ---------- Auto login ----------
     login(request, user)
 
-    return JsonResponse(
+    return Response(
         {
             "message": "Signup successful",
             "user": {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
-            }
+            },
         },
-        status=201
+        status=status.HTTP_201_CREATED,
     )
 
 
-@require_POST
-@csrf_exempt
+@api_view(["POST"])
+@authentication_classes([CsrfExemptSessionAuthentication])
+@permission_classes([AllowAny])
 def login_view(request):
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    data = request.data
 
     username = data.get("username")
     password = data.get("password")
 
     if not username or not password:
-        return JsonResponse(
+        return Response(
             {"error": "Username and password are required"},
-            status=400
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     user = authenticate(request, username=username, password=password)
 
     if user is None:
-        return JsonResponse({"error": "Invalid credentials"}, status=401)
+        return Response(
+            {"error": "Invalid credentials"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
 
     login(request, user)
 
-    return JsonResponse({
-        "message": "Login successful",
-        "csrfToken": get_token(request),
-        "user": {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email,
-            
-        }
-    })
+    return Response(
+        {
+            "message": "Login successful",
+            "csrfToken": get_token(request),
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+            },
+        },
+        status=status.HTTP_200_OK,
+    )
 
-@csrf_exempt
+
+@api_view(["GET"])
+@authentication_classes([CsrfExemptSessionAuthentication])
+@permission_classes([AllowAny])
 def me(request):
     if request.user.is_authenticated:
-        return JsonResponse({
-            "user": {
-                "id": request.user.id,
-                "username": request.user.username,
-                "email": request.user.email,
-            }
-        })
-    return JsonResponse({"user": None}, status=200)
+        return Response(
+            {
+                "user": {
+                    "id": request.user.id,
+                    "username": request.user.username,
+                    "email": request.user.email,
+                }
+            },
+            status=status.HTTP_200_OK,
+        )
+    return Response({"user": None}, status=status.HTTP_200_OK)
 
 
-@csrf_exempt
-@require_POST
+@api_view(["POST"])
+@authentication_classes([CsrfExemptSessionAuthentication])
+@permission_classes([AllowAny])
 def logout_view(request):
     logout(request)
 
-    response = JsonResponse({"message": "Logged out"})
+    response = Response({"message": "Logged out"}, status=status.HTTP_200_OK)
 
     # Remove session cookie created at login
     response.delete_cookie(
