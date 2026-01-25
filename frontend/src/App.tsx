@@ -25,7 +25,7 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { themes } from "./theme";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 import HomeIcon from "@mui/icons-material/Home";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import LoginIcon from "@mui/icons-material/Login";
@@ -44,6 +44,7 @@ const Signup = lazy(() => import("./pages/Signup"));
 const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
 const TextToQr = lazy(() => import("./pages/TextToQr"));
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
+const LinkedInIcon = React.lazy(() => import("@mui/icons-material/LinkedIn"));
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -188,6 +189,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
           {isMobile && (
             <IconButton
+              aria-label="Open navigation menu"
+              aria-controls="mobile-menu-drawer"
+              aria-expanded={mobileOpen}
               onClick={() => setMobileOpen(true)}
               sx={{ color: "#fff" }}
             >
@@ -199,6 +203,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
       {/* ================= MOBILE DRAWER ================= */}
       <Drawer
+        id="mobile-menu-drawer"
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
@@ -300,8 +305,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
             href="https://www.linkedin.com/in/rajkirant/"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Visit Rajkiran on LinkedIn"
           >
-            <LinkedInIcon sx={linkedInIconStyle(theme)} />
+            <Suspense fallback={null}>
+              <LinkedInIcon sx={linkedInIconStyle(theme)} />
+            </Suspense>
           </a>
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © {new Date().getFullYear()} Torensa. All rights reserved.
