@@ -4,7 +4,7 @@ import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
-import serviceCards from "./metadata/serviceCards.json";
+
 import {
   brandLinkStyle,
   sectionBase,
@@ -18,13 +18,17 @@ import {
   themeSelectSx,
   userGreetingStyle,
 } from "./styles/appStyles";
+
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { themes } from "./theme";
+import type { ThemeName } from "./theme";
 
 import HomeIcon from "@mui/icons-material/Home";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
@@ -32,35 +36,25 @@ import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import type { ThemeName } from "./theme";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 import { apiFetch } from "./utils/api";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import CircularProgress from "@mui/material/CircularProgress";
 
 /* ===================== LAZY LOAD PAGES ===================== */
+const Home = lazy(() => import("./pages/Home"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
 const TextToQr = lazy(() => import("./pages/TextToQr"));
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
-const LinkedInIcon = React.lazy(() => import("@mui/icons-material/LinkedIn"));
 
 /* ===================== TYPES ===================== */
 type AppProps = {
   themeName: ThemeName;
   setThemeName: (name: ThemeName) => void;
 };
-
-type ServiceCardConfig = {
-  id: string;
-  title: string;
-  description: string;
-  path: string;
-  ctaLabel: string;
-};
-
-const typedServiceCards = serviceCards as ServiceCardConfig[];
 
 /* ===================== APP ===================== */
 export default function App({ themeName, setThemeName }: AppProps) {
@@ -69,13 +63,13 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const isMobile = useMediaQuery("(max-width:900px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
   const headerTextColor = isMobile
     ? theme.palette.text.primary
     : theme.header.text;
 
-  const secondaryText: React.CSSProperties = {
-    color: theme.palette.text.secondary,
-  };
+  // just the color we’ll pass down to Home
+  const secondaryTextColor = theme.palette.text.secondary;
 
   const handleLogout = useCallback(async () => {
     try {
@@ -247,36 +241,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
               <Route
                 path="/"
                 element={
-                  <>
-                    <section style={sectionBase}>
-                      <h2 style={{ textAlign: "center", marginBottom: 40 }}>
-                        Services
-                      </h2>
-
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns:
-                            "repeat(auto-fit, minmax(260px, 1fr))",
-                          gap: 28,
-                        }}
-                      >
-                        {serviceCards.map((card) => (
-                          <div
-                            key={card.id}
-                            style={cardStyle}
-                            onClick={() => navigate(card.path)}
-                          >
-                            <h3>{card.title}</h3>
-                            <p style={secondaryText}>{card.description}</p>
-                            <PrimaryButton size="small">
-                              {card.ctaLabel}
-                            </PrimaryButton>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  </>
+                  <Home
+                    secondaryTextColor={secondaryTextColor}
+                    sectionBase={sectionBase}
+                    cardStyle={cardStyle}
+                  />
                 }
               />
 
@@ -307,9 +276,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             rel="noopener noreferrer"
             aria-label="Visit Rajkiran on LinkedIn"
           >
-            <Suspense fallback={null}>
-              <LinkedInIcon sx={linkedInIconStyle(theme)} />
-            </Suspense>
+            <LinkedInIcon sx={linkedInIconStyle(theme)} />
           </a>
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © {new Date().getFullYear()} Torensa. All rights reserved.
