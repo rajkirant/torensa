@@ -276,17 +276,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             rel="noopener noreferrer"
             aria-label="Visit Rajkiran on LinkedIn"
           >
-            <div
-              style={{
-                width: 24,
-                height: 24,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <LinkedInIcon sx={{ fontSize: 24 }} />
-            </div>
+            <LinkedInIcon sx={{ fontSize: 24 }} />
           </a>
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © {new Date().getFullYear()} Torensa. All rights reserved.
