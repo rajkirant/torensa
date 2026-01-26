@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Routes, Route, NavLink, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, NavLink, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { NavButton, PrimaryButton } from "./components/Buttons";
 import { useAuth } from "./utils/auth";
@@ -14,7 +14,6 @@ import {
   footerStyle,
   footerCard,
   navStyle,
-  linkedInIconStyle,
   themeSelectSx,
   userGreetingStyle,
 } from "./styles/appStyles";
@@ -37,12 +36,12 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import Home from "./pages/Home";
 import { apiFetch } from "./utils/api";
 import ProtectedRoute from "./utils/ProtectedRoute";
 
 /* ===================== LAZY LOAD PAGES ===================== */
 
+const Home = lazy(() => import("./pages/Home"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -58,7 +57,6 @@ type AppProps = {
 
 /* ===================== APP ===================== */
 export default function App({ themeName, setThemeName }: AppProps) {
-  const navigate = useNavigate();
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
   const isMobile = useMediaQuery("(max-width:900px)");

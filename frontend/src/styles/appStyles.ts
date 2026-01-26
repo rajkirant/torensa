@@ -36,12 +36,6 @@ export const cardStyle: React.CSSProperties = {
   textAlign: "center",
 };
 
-export const linkedInIconStyle = (theme: Theme): React.CSSProperties => ({
-  fontSize: 30,
-  color: theme.header.text,
-  marginBottom: 12,
-});
-
 export const userGreetingStyle = (headerTextColor: string) => ({
   marginLeft: 12,
   color: headerTextColor,
