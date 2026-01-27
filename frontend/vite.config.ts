@@ -35,21 +35,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // 💡 Only allow offline fallback for /text-to-qr
         navigateFallback: "/index.html",
         navigateFallbackAllowlist: [/^\/text-to-qr$/],
-
-        // (optional) any extra runtime caching, e.g. APIs or images
-        // runtimeCaching: [
-        //   {
-        //     urlPattern: /\/text-to-qr$/,
-        //     handler: "NetworkFirst",
-        //     options: {
-        //       cacheName: "text-to-qr-page-cache",
-        //       cacheableResponse: { statuses: [0, 200] },
-        //     },
-        //   },
-        // ],
+        // critical: disallow fallback for homepage
+        navigateFallbackDenylist: [/^\/$/],
       },
     }),
   ],
