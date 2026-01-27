@@ -36,9 +36,9 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: "/index.html",
+        // ✅ Only /text-to-qr gets SPA fallback when offline
         navigateFallbackAllowlist: [/^\/text-to-qr$/],
-        // critical: disallow fallback for homepage
-        navigateFallbackDenylist: [/^\/$/],
+        cleanupOutdatedCaches: true,
       },
     }),
   ],
