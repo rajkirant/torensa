@@ -35,20 +35,21 @@ export default defineConfig({
         ],
       },
       workbox: {
-        runtimeCaching: [
-          {
-            // 🔥 Cache this page URL: http://localhost:5173/text-to-qr
-            // (in production it will match https://your-domain/text-to-qr)
-            urlPattern: /\/text-to-qr$/,
-            handler: "NetworkFirst", // try network, fall back to cache
-            options: {
-              cacheName: "text-to-qr-page-cache",
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-        ],
+        // 💡 Only allow offline fallback for /text-to-qr
+        navigateFallback: "/index.html",
+        navigateFallbackAllowlist: [/^\/text-to-qr$/],
+
+        // (optional) any extra runtime caching, e.g. APIs or images
+        // runtimeCaching: [
+        //   {
+        //     urlPattern: /\/text-to-qr$/,
+        //     handler: "NetworkFirst",
+        //     options: {
+        //       cacheName: "text-to-qr-page-cache",
+        //       cacheableResponse: { statuses: [0, 200] },
+        //     },
+        //   },
+        // ],
       },
     }),
   ],
@@ -64,18 +65,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // everything in node_modules goes into vendor-ish chunks
           if (id.includes("node_modules")) {
-            if (id.includes("react")) {
-              return "react-vendor";
-            }
+            if (id.includes("react")) return "react-vendor";
             if (
               id.includes("@mui/material") ||
               id.includes("@mui/icons-material")
             ) {
               return "mui-vendor";
             }
-            // fallback: other vendor libs
             return "vendor";
           }
         },
