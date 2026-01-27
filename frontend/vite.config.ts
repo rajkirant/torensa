@@ -7,13 +7,16 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // 🔁 auto-update SW when a new version is available
       registerType: "autoUpdate",
+
       includeAssets: [
         "favicon.ico",
         "favicon.svg",
         "robots.txt",
         "apple-touch-icon.png",
       ],
+
       manifest: {
         name: "My App",
         short_name: "MyApp",
@@ -34,14 +37,22 @@ export default defineConfig({
           },
         ],
       },
+
+      // Workbox / offline behavior
       workbox: {
+        // SPA fallback HTML
         navigateFallback: "/index.html",
-        // ✅ Only /text-to-qr gets SPA fallback when offline
+
+        // ✅ Only /text-to-qr will use the SPA fallback when offline
+        // so only that route is "officially" offline-enabled
         navigateFallbackAllowlist: [/^\/text-to-qr$/],
+
+        // clean up old precaches when you deploy new versions
         cleanupOutdatedCaches: true,
       },
     }),
   ],
+
   server: {
     proxy: {
       "/api": {
@@ -50,6 +61,7 @@ export default defineConfig({
       },
     },
   },
+
   build: {
     rollupOptions: {
       output: {
