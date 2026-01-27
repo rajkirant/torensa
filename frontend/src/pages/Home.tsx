@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 
 import { PrimaryButton } from "../components/Buttons";
 import serviceCards from "../metadata/serviceCards.json";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 
 /* types for your cards */
 type ServiceCardConfig = {
@@ -29,11 +30,31 @@ export default function Home({
   cardStyle,
 }: HomeProps) {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
 
   const secondaryText: CSSProperties = {
     color: secondaryTextColor,
   };
 
+  // 🔥 When offline, show "homepage not available" instead of services
+  if (!isOnline) {
+    return (
+      <section style={{ ...sectionBase, textAlign: "center" }}>
+        <h2 style={{ marginBottom: 16 }}>Homepage not available offline</h2>
+        <p style={{ ...secondaryText, maxWidth: 480, margin: "0 auto" }}>
+          You&apos;re currently offline. The Torensa home page requires an
+          internet connection.
+        </p>
+        <p style={{ ...secondaryText, maxWidth: 480, margin: "12px auto 0" }}>
+          You can still use specific tools like <strong>Text to QR</strong> if
+          they&apos;re cached, but the main service list isn&apos;t available in
+          offline mode.
+        </p>
+      </section>
+    );
+  }
+
+  // ✅ Normal homepage when online
   return (
     <section style={sectionBase}>
       <h2 style={{ textAlign: "center", marginBottom: 40 }}>Services</h2>
