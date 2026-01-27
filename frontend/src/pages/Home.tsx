@@ -13,6 +13,7 @@ type ServiceCardConfig = {
   description: string;
   path: string;
   ctaLabel: string;
+  offlineEnabled: boolean;
 };
 
 const typedServiceCards = serviceCards as ServiceCardConfig[];
@@ -36,25 +37,63 @@ export default function Home({
     color: secondaryTextColor,
   };
 
-  // 🔥 When offline, show "homepage not available" instead of services
+  const offlineCards = typedServiceCards.filter((card) => card.offlineEnabled);
+
+  // 🔥 OFFLINE: show message + only offlineEnabled tools (e.g. Text to QR)
   if (!isOnline) {
     return (
-      <section style={{ ...sectionBase, textAlign: "center" }}>
-        <h2 style={{ marginBottom: 16 }}>Homepage not available offline</h2>
-        <p style={{ ...secondaryText, maxWidth: 480, margin: "0 auto" }}>
-          You&apos;re currently offline. The Torensa home page requires an
-          internet connection.
+      <section style={sectionBase}>
+        <h2 style={{ textAlign: "center", marginBottom: 16 }}>
+          Limited offline mode
+        </h2>
+        <p
+          style={{
+            ...secondaryText,
+            textAlign: "center",
+            maxWidth: 480,
+            margin: "0 auto 32px",
+          }}
+        >
+          You&apos;re offline. Only tools that support offline usage are
+          available right now.
         </p>
-        <p style={{ ...secondaryText, maxWidth: 480, margin: "12px auto 0" }}>
-          You can still use specific tools like <strong>Text to QR</strong> if
-          they&apos;re cached, but the main service list isn&apos;t available in
-          offline mode.
-        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: 28,
+          }}
+        >
+          {offlineCards.map((card) => (
+            <div
+              key={card.id}
+              style={cardStyle}
+              onClick={() => navigate(card.path)}
+            >
+              <h3>{card.title}</h3>
+              <p style={secondaryText}>{card.description}</p>
+              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+            </div>
+          ))}
+
+          {offlineCards.length === 0 && (
+            <p
+              style={{
+                ...secondaryText,
+                textAlign: "center",
+                gridColumn: "1 / -1",
+              }}
+            >
+              No tools are available offline yet.
+            </p>
+          )}
+        </div>
       </section>
     );
   }
 
-  // ✅ Normal homepage when online
+  // ✅ ONLINE: show all services as usual
   return (
     <section style={sectionBase}>
       <h2 style={{ textAlign: "center", marginBottom: 40 }}>Services</h2>

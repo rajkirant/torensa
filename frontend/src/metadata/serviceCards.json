@@ -4,20 +4,23 @@
     "title": "Bulk Email",
     "description": "Send emails to multiple recipients quickly and securely.",
     "path": "/bulk-email",
-    "ctaLabel": "Open Bulk Email"
+    "ctaLabel": "Open Bulk Email",
+    "offlineEnabled": false
   },
   {
     "id": "excel-to-csv",
     "title": "Excel to CSV",
     "description": "Upload Excel files and convert them to CSV.",
     "path": "/excel-to-csv",
-    "ctaLabel": "Convert Excel"
+    "ctaLabel": "Convert Excel",
+    "offlineEnabled": false
   },
   {
     "id": "text-to-qr",
     "title": "Text to QR",
     "description": "Convert any text or URL into a scannable QR code.",
     "path": "/text-to-qr",
-    "ctaLabel": "Generate QR"
+    "ctaLabel": "Generate QR",
+    "offlineEnabled": true
   }
 ]
