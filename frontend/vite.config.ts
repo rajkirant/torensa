@@ -38,16 +38,16 @@ export default defineConfig({
         ],
       },
 
-      // Workbox / offline behavior
       workbox: {
         // SPA fallback HTML
         navigateFallback: "/index.html",
 
-        // ✅ Only /text-to-qr will use the SPA fallback when offline
-        // so only that route is "officially" offline-enabled
-        navigateFallbackAllowlist: [/^\/text-to-qr$/],
+        // ✅ Allow offline SPA fallback for BOTH:
+        // - homepage:        /
+        // - QR page:         /text-to-qr
+        navigateFallbackAllowlist: [/^\/$/, /^\/text-to-qr$/],
 
-        // clean up old precaches when you deploy new versions
+        // clean up old precaches on new deploys
         cleanupOutdatedCaches: true,
       },
     }),
