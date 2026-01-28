@@ -3,31 +3,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// Import your cards JSON so we can derive offline routes
-import serviceCards from "./src/metadata/serviceCards.json";
-
-// Match the shape of your JSON
-type ServiceCardConfig = {
-  id: string;
-  title: string;
-  description: string;
-  path: string;
-  ctaLabel: string;
-  offlineEnabled?: boolean;
-};
-
-const typedServiceCards = serviceCards as ServiceCardConfig[];
-
-// Build regex list for all offline-enabled card paths
-const offlineEnabledRoutePatterns = typedServiceCards
-  .filter((card) => card.offlineEnabled)
-  .map((card) => {
-    // escape special regex chars in the path, just in case
-    const escapedPath = card.path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    // e.g. "/text-to-qr" -> /^\/text-to-qr$/
-    return new RegExp(`^${escapedPath}$`);
-  });
-
 export default defineConfig({
   plugins: [
     react(),
@@ -67,12 +42,12 @@ export default defineConfig({
         // SPA fallback HTML
         navigateFallback: "/index.html",
 
-        // ✅ Homepage ("/") + any card with offlineEnabled: true
-        navigateFallbackAllowlist: [
-          /^\/$/, // always allow the homepage
-          ...offlineEnabledRoutePatterns,
-        ],
+        // ✅ Allow offline SPA fallback for BOTH:
+        // - homepage:        /
+        // - QR page:         /text-to-qr
+        navigateFallbackAllowlist: [/^\/$/, /^\/text-to-qr$/],
 
+        // clean up old precaches on new deploys
         cleanupOutdatedCaches: true,
       },
     }),
