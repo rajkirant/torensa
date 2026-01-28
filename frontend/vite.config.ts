@@ -2,6 +2,29 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import serviceCards from "./src/metadata/serviceCards.json";
+
+type ServiceCardConfig = {
+  id: string;
+  title: string;
+  description: string;
+  path: string;
+  ctaLabel: string;
+  offlineEnabled?: boolean;
+};
+
+const typedServiceCards = serviceCards as ServiceCardConfig[];
+
+// Generate regex for each offline-enabled route
+const offlineRouteRegexes = typedServiceCards
+  .filter((card) => card.offlineEnabled)
+  .map(
+    (card) =>
+      new RegExp(`^${card.path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
+  );
+
+// Always allow homepage as fallback
+offlineRouteRegexes.unshift(/^\/$/);
 
 export default defineConfig({
   plugins: [
@@ -45,7 +68,7 @@ export default defineConfig({
         // ✅ Allow offline SPA fallback for BOTH:
         // - homepage:        /
         // - QR page:         /text-to-qr
-        navigateFallbackAllowlist: [/^\/$/, /^\/text-to-qr$/],
+        navigateFallbackAllowlist: offlineRouteRegexes,
 
         // clean up old precaches on new deploys
         cleanupOutdatedCaches: true,
