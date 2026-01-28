@@ -41,8 +41,8 @@ export default defineConfig({
       ],
 
       manifest: {
-        name: "My App",
-        short_name: "MyApp",
+        name: "Torensa Toolbox",
+        short_name: "Torensa",
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",
