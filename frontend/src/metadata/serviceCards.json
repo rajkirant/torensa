@@ -22,5 +22,13 @@
     "path": "/text-to-qr",
     "ctaLabel": "Generate QR",
     "offlineEnabled": true
+  },
+  {
+    "id": "image-compressor",
+    "title": "Image Compressor",
+    "description": "Compress and resize images locally in your browser — no uploads.",
+    "path": "/image-compressor",
+    "ctaLabel": "Compress Images",
+    "offlineEnabled": true
   }
 ]
