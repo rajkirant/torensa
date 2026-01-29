@@ -36,7 +36,7 @@ const accordionStyle = {
   borderRadius: "16px",
   border: "1px solid rgba(255,255,255,0.18)",
   background:
-      "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
+    "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
   boxShadow: "0 10px 28px rgba(0,0,0,0.35)",
   overflow: "hidden",
   mb: 2,
@@ -55,9 +55,9 @@ export default function BulkEmail() {
   });
 
   const toggle =
-      (key: "smtp" | "contacts" | "excel" | "send") =>
-          (_: any, isExpanded: boolean) =>
-              setExpanded((prev) => ({ ...prev, [key]: isExpanded }));
+    (key: "smtp" | "contacts" | "excel" | "send") =>
+    (_: any, isExpanded: boolean) =>
+      setExpanded((prev) => ({ ...prev, [key]: isExpanded }));
 
   /* ---------- SMTP Config State ---------- */
   const [smtpConfigs, setSmtpConfigs] = useState<SMTPConfig[]>([]);
@@ -90,8 +90,8 @@ export default function BulkEmail() {
       if (!contentType.includes("application/json")) {
         const text = await res.text();
         console.warn(
-            "SMTP list returned non-JSON response; skipping parse. First 200 chars:",
-            text.slice(0, 200)
+          "SMTP list returned non-JSON response; skipping parse. First 200 chars:",
+          text.slice(0, 200),
         );
         return;
       }
@@ -128,8 +128,8 @@ export default function BulkEmail() {
       if (!contentType.includes("application/json")) {
         const text = await res.text();
         console.warn(
-            "Contact groups returned non-JSON response; skipping parse. First 200 chars:",
-            text.slice(0, 200)
+          "Contact groups returned non-JSON response; skipping parse. First 200 chars:",
+          text.slice(0, 200),
         );
         return;
       }
@@ -153,157 +153,156 @@ export default function BulkEmail() {
   /* ===================== RENDER ===================== */
 
   return (
-      <Card sx={{ maxWidth: 820, margin: "80px auto" }}>
-        <CardContent>
-          <Typography variant="h5" fontWeight={800} gutterBottom>
-            Bulk Email Management
-          </Typography>
+    <Card sx={{ maxWidth: 820, margin: "80px auto" }}>
+      <CardContent>
+        <Typography variant="h5" fontWeight={800} gutterBottom>
+          Bulk Email Management
+        </Typography>
 
-          <Typography variant="body2" sx={{ color: "#9ca3af", mb: 2 }}>
-            Securely store Gmail App Passwords and send emails using your own SMTP
-            credentials.
-          </Typography>
+        <Typography variant="body2" sx={{ color: "#9ca3af", mb: 2 }}>
+          Securely store Gmail App Passwords and send emails using your own SMTP
+          credentials.
+        </Typography>
 
-          <Divider sx={{ mb: 3 }} />
+        <Divider sx={{ mb: 3 }} />
 
-          {/* ================= SMTP SETTINGS ================= */}
-          <Accordion
-              expanded={expanded.smtp}
-              onChange={toggle("smtp")}
-              sx={accordionStyle}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
-                Gmail SMTP Settings
-              </Typography>
-            </AccordionSummary>
+        {/* ================= SMTP SETTINGS ================= */}
+        <Accordion
+          expanded={expanded.smtp}
+          onChange={toggle("smtp")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
+              Gmail SMTP Settings
+            </Typography>
+          </AccordionSummary>
 
-            <AccordionDetails>
-              <Box>
-                <SmtpSettingsAccordion
-                    onSaved={() => {
-                      loadSmtpConfigs();
-                      setExpanded({
-                        smtp: false,
-                        contacts: true,
-                        excel: false,
-                        send: false,
-                      });
-                    }}
-                />
-              </Box>
-            </AccordionDetails>
-          </Accordion>
+          <AccordionDetails>
+            <Box>
+              <SmtpSettingsAccordion
+                onSaved={() => {
+                  loadSmtpConfigs();
+                  setExpanded({
+                    smtp: false,
+                    contacts: true,
+                    excel: false,
+                    send: false,
+                  });
+                }}
+              />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
 
-          {/* ================= CONTACT GROUPS ================= */}
-          <Accordion
-              expanded={expanded.contacts}
-              onChange={toggle("contacts")}
-              sx={accordionStyle}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography fontWeight={700} sx={{ color: "#34d399" }}>
-                Contact Groups
-              </Typography>
-            </AccordionSummary>
+        {/* ================= CONTACT GROUPS ================= */}
+        <Accordion
+          expanded={expanded.contacts}
+          onChange={toggle("contacts")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#34d399" }}>
+              Contact Groups
+            </Typography>
+          </AccordionSummary>
 
-            <AccordionDetails>
-              <Box>
-                <ContactGroupsAccordion
-                    onSaved={() => {
-                      loadContactGroups();
-                      setExpanded({
-                        smtp: false,
-                        contacts: false,
-                        excel: true,
-                        send: false,
-                      });
-                    }}
-                />
+          <AccordionDetails>
+            <Box>
+              <ContactGroupsAccordion
+                onSaved={() => {
+                  loadContactGroups();
+                  setExpanded({
+                    smtp: false,
+                    contacts: false,
+                    excel: true,
+                    send: false,
+                  });
+                }}
+              />
 
-                {loadingGroups ? (
+              {loadingGroups ? (
+                <Typography
+                  sx={{ mt: 2 }}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  Loading groups…
+                </Typography>
+              ) : contactGroups.length ? (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Saved groups
+                  </Typography>
+                  {contactGroups.map((g) => (
                     <Typography
-                        sx={{ mt: 2 }}
-                        variant="body2"
-                        color="text.secondary"
+                      key={g.id}
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
                     >
-                      Loading groups…
+                      • {g.group_name} ({g.contact_count} contacts)
                     </Typography>
-                ) : contactGroups.length ? (
-                    <Box sx={{ mt: 3 }}>
-                      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                        Saved groups
-                      </Typography>
-                      {contactGroups.map((g) => (
-                          <Typography
-                              key={g.id}
-                              variant="body2"
-                              sx={{ color: "text.secondary" }}
-                          >
-                            • {g.group_name} ({g.contact_count} contacts)
-                          </Typography>
-                      ))}
-                    </Box>
-                ) : (
-                    <Typography
-                        sx={{ mt: 2 }}
-                        variant="body2"
-                        color="text.secondary"
-                    >
-                      No groups yet. Create your first contact group above.
-                    </Typography>
-                )}
-              </Box>
-            </AccordionDetails>
-          </Accordion>
+                  ))}
+                </Box>
+              ) : (
+                <Typography
+                  sx={{ mt: 2 }}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  No groups yet. Create your first contact group above.
+                </Typography>
+              )}
+            </Box>
+          </AccordionDetails>
+        </Accordion>
 
-          {/* ================= IMPORT FROM EXCEL ================= */}
-          <Accordion
-              expanded={expanded.excel}
-              onChange={toggle("excel")}
-              sx={accordionStyle}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography fontWeight={700} sx={{ color: "#fbbf24" }}>
-                Import from Excel
-              </Typography>
-            </AccordionSummary>
+        {/* ================= IMPORT FROM EXCEL ================= */}
+        <Accordion
+          expanded={expanded.excel}
+          onChange={toggle("excel")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#fbbf24" }}>
+              Excel to Bulk Email
+            </Typography>
+          </AccordionSummary>
 
-            <AccordionDetails>
-              <Box>
-                <ImportFromExcelAccordion
-                    smtpConfigs={smtpConfigs}
-                    selectedConfigId={selectedConfigId}
-                    setSelectedConfigId={setSelectedConfigId}
-                />
+          <AccordionDetails>
+            <Box>
+              <ImportFromExcelAccordion
+                smtpConfigs={smtpConfigs}
+                selectedConfigId={selectedConfigId}
+                setSelectedConfigId={setSelectedConfigId}
+              />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
 
-              </Box>
-            </AccordionDetails>
-          </Accordion>
+        {/* ================= SEND EMAIL ================= */}
+        <Accordion
+          expanded={expanded.send}
+          onChange={toggle("send")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#c084fc" }}>
+              Send Bulk Email
+            </Typography>
+          </AccordionSummary>
 
-          {/* ================= SEND EMAIL ================= */}
-          <Accordion
-              expanded={expanded.send}
-              onChange={toggle("send")}
-              sx={accordionStyle}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography fontWeight={700} sx={{ color: "#c084fc" }}>
-                Send Bulk Email
-              </Typography>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              <Box>
-                <SendEmailAccordion
-                    smtpConfigs={smtpConfigs}
-                    selectedConfigId={selectedConfigId}
-                    setSelectedConfigId={setSelectedConfigId}
-                />
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-        </CardContent>
-      </Card>
+          <AccordionDetails>
+            <Box>
+              <SendEmailAccordion
+                smtpConfigs={smtpConfigs}
+                selectedConfigId={selectedConfigId}
+                setSelectedConfigId={setSelectedConfigId}
+              />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </CardContent>
+    </Card>
   );
 }
