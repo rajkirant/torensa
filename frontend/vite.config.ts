@@ -64,10 +64,6 @@ export default defineConfig({
       workbox: {
         // SPA fallback HTML
         navigateFallback: "/index.html",
-
-        // ✅ Allow offline SPA fallback for BOTH:
-        // - homepage:        /
-        // - QR page:         /text-to-qr
         navigateFallbackAllowlist: offlineRouteRegexes,
 
         // clean up old precaches on new deploys
