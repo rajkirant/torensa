@@ -49,6 +49,7 @@ const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
 const TextToQr = lazy(() => import("./pages/TextToQr"));
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
 const ImageCompressor = lazy(() => import("./pages/ImageCompressor"));
+const PdfMerger = lazy(() => import("./pages/imagePdfToPdf"));
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -264,6 +265,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/image-compressor" element={<ImageCompressor />} />
+                <Route path="/image-pdf-to-pdf" element={<PdfMerger />} />
+
             </Routes>
           </Suspense>
         </main>

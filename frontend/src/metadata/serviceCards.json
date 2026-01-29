@@ -30,5 +30,13 @@
     "path": "/image-compressor",
     "ctaLabel": "Compress Images",
     "offlineEnabled": true
+  },
+  {
+    "id": "image-pdf-to-pdf",
+    "title": "Image / PDF Merger",
+    "description": "Merge images and PDF files into a single PDF — processed entirely offline.",
+    "path": "/image-pdf-to-pdf",
+    "ctaLabel": "Create PDF",
+    "offlineEnabled": true
   }
 ]
