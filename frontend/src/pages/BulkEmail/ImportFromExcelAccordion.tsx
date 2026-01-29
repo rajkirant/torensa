@@ -335,7 +335,7 @@ export default function SendEmailAccordion({
       {/* 1) Excel Upload */}
       <Box sx={{ mb: 2 }}>
         <Button variant="outlined" component="label" type="button">
-          Import from Excel
+          Excel to Bulk Email
           <input
             type="file"
             hidden
