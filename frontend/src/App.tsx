@@ -50,6 +50,7 @@ const TextToQr = lazy(() => import("./pages/TextToQr"));
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
 const ImageCompressor = lazy(() => import("./pages/ImageCompressor"));
 const PdfMerger = lazy(() => import("./pages/imagePdfToPdf"));
+const InvoiceGenerator = lazy(() => import("./pages/InvoiceGenerator"));
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -266,6 +267,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
               <Route path="/signup" element={<Signup />} />
               <Route path="/image-compressor" element={<ImageCompressor />} />
                 <Route path="/image-pdf-to-pdf" element={<PdfMerger />} />
+                <Route path="/invoice-generator" element={<InvoiceGenerator />} />
+
 
             </Routes>
           </Suspense>

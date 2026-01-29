@@ -38,5 +38,14 @@
     "path": "/image-pdf-to-pdf",
     "ctaLabel": "Create PDF",
     "offlineEnabled": true
+  },
+  {
+    "id": "invoice-generator",
+    "title": "Invoice / Receipt Generator",
+    "description": "Create professional invoices and receipts directly in your browser — no uploads, fully offline after first load.",
+    "path": "/invoice-generator",
+    "ctaLabel": "Create Invoice",
+    "offlineEnabled": true
   }
+
 ]
