@@ -28,6 +28,8 @@ import RotateRightIcon from "@mui/icons-material/RotateRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ImageIcon from "@mui/icons-material/Image";
 import DownloadIcon from "@mui/icons-material/Download";
+import OfflineChip from "../components/chips/OfflineChip";
+import BusyChip from "../components/chips/BusyChips";
 
 type ItemKind = "image" | "pdf";
 
@@ -475,12 +477,8 @@ const ImagePdfToPdf: React.FC = () => {
                 label={`${totalCount} file${totalCount === 1 ? "" : "s"}`}
                 variant="outlined"
               />
-              <Chip
-                size="small"
-                label={busy ? "Building..." : "Offline-ready"}
-                color={busy ? "default" : "success"}
-                variant="outlined"
-              />
+              <OfflineChip />
+              {busy && <BusyChip />}
             </Stack>
           </Stack>
 

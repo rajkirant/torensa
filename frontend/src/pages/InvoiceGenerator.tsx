@@ -20,6 +20,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { pageContainer } from "../styles/toolStyles";
+import OfflineChip from "../components/chips/OfflineChip";
 
 /* ===================== TYPES ===================== */
 
@@ -480,12 +481,7 @@ export default function InvoiceGenerator() {
               Invoice / Receipt Generator
             </Typography>
 
-            <Chip
-              size="small"
-              color="success"
-              label="Offline-ready"
-              variant="outlined"
-            />
+            <OfflineChip />
           </Stack>
 
           <Typography variant="body2" color="text.secondary">

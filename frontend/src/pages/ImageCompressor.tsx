@@ -33,6 +33,7 @@ import CompressIcon from "@mui/icons-material/Compress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
+import OfflineChip from "../components/chips/OfflineChip";
 
 type OutputFormat = "image/jpeg" | "image/webp" | "image/png";
 
@@ -489,12 +490,7 @@ export default function ImageCompressor() {
                   alignItems="center"
                   sx={{ ml: { sm: "auto" } }}
                 >
-                  <Chip
-                    size="small"
-                    label="Offline-friendly"
-                    color="success"
-                    variant="outlined"
-                  />
+                  <OfflineChip />
                 </Stack>
               </Stack>
             </Stack>
