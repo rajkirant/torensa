@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import JSZip from "jszip";
-
+import { pageContainer } from "../styles/toolStyles";
 import {
   Alert,
   Box,
@@ -444,15 +444,7 @@ export default function ImageCompressor() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        maxWidth: 1100,
-        mx: "auto",
-        px: { xs: 0, sm: 2 },
-        py: { xs: 0, sm: 3 },
-        mt: { xs: 2, sm: 0 },
-      }}
-    >
+    <Box sx={pageContainer}>
       {/* ONE BOX ONLY */}
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
         <CardContent>
