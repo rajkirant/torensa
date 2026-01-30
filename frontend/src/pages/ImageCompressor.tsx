@@ -444,7 +444,15 @@ export default function ImageCompressor() {
   }, []);
 
   return (
-    <Box sx={{ maxWidth: 1100, mx: "auto", px: 2, py: 3 }}>
+    <Box
+      sx={{
+        maxWidth: 1100,
+        mx: "auto",
+        px: { xs: 0, sm: 2 },
+        py: { xs: 0, sm: 3 },
+        mt: { xs: 2, sm: 0 },
+      }}
+    >
       {/* ONE BOX ONLY */}
       <Card variant="outlined" sx={{ borderRadius: 3 }}>
         <CardContent>
