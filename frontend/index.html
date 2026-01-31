@@ -10,6 +10,18 @@
     <link rel="canonical" href="https://torensa.com/" />
     <title>Torensa | Smart Online Tools for Work & Productivity</title>
     <link rel="icon" href="/favicon.ico" />
+
+    <!-- Non-blocking global CSS (requires public/styles.css) -->
+    <link
+      rel="preload"
+      href="/styles.css"
+      as="style"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
+    />
+    <noscript><link rel="stylesheet" href="/styles.css" /></noscript>
   </head>
   <body>
     <div id="root"></div>
