@@ -25,7 +25,7 @@ export async function apiFetch(url: string, options: FetchOptions = {}) {
 
   return fetch(`${API_BASE_URL}${url}`, {
     method,
-    credentials: "include", // 🔴 REQUIRED for Django
+    credentials: "include",
     headers: finalHeaders,
     ...rest,
   });
