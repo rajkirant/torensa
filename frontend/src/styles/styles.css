@@ -2,14 +2,28 @@
    GLOBAL BASE
    ========================= */
 
-/* Global body styles are now inlined directly in index.html for faster
-   first paint. Keeping this section commented as documentation. */
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Ubuntu,
+    sans-serif;
+}
 
 /* =========================
    LAYOUT
    ========================= */
 
-/* The .container layout rules live in index.html and are excluded here. */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 50px 20px;
+}
 
 /* =========================
    GRID HELPERS
@@ -38,5 +52,12 @@
    MISC
    ========================= */
 
-/* Link and loader styles have been moved to inline critical CSS. Remaining
-   miscellaneous styles can be added here as needed. */
+a {
+  text-decoration: none;
+}
+
+.loader-container {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
