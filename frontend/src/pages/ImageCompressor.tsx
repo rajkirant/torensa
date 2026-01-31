@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import JSZip from "jszip";
 import { pageContainer } from "../styles/toolStyles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   Alert,
   Box,
@@ -289,6 +291,7 @@ function presetToSpec(preset: PresetId, current: CompressSpec): CompressSpec {
 }
 
 export default function ImageCompressor() {
+  const isMobile = useMediaQuery("(max-width:900px)");
   const [files, setFiles] = useState<File[]>([]);
   const [results, setResults] = useState<ResultItem[]>([]);
   const [busy, setBusy] = useState(false);
@@ -565,29 +568,45 @@ export default function ImageCompressor() {
                 <Typography variant="caption" color="text.secondary">
                   Presets (recommended)
                 </Typography>
-                <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-                  <Button
-                    variant={preset === "balanced" ? "contained" : "outlined"}
-                    onClick={() => applyPreset("balanced")}
-                    disabled={busy}
-                  >
-                    Balanced
-                  </Button>
-                  <Button
-                    variant={preset === "smallest" ? "contained" : "outlined"}
-                    onClick={() => applyPreset("smallest")}
-                    disabled={busy}
-                  >
-                    Smallest
-                  </Button>
-                  <Button
-                    variant={preset === "best" ? "contained" : "outlined"}
-                    onClick={() => applyPreset("best")}
-                    disabled={busy}
-                  >
-                    Best quality
-                  </Button>
-                </Stack>
+
+                {isMobile ? (
+                  <FormControl fullWidth size="small" disabled={busy}>
+                    <InputLabel>Preset</InputLabel>
+                    <Select
+                      label="Preset"
+                      value={preset}
+                      onChange={(e) => applyPreset(e.target.value as PresetId)}
+                    >
+                      <MenuItem value="balanced">Balanced</MenuItem>
+                      <MenuItem value="smallest">Smallest</MenuItem>
+                      <MenuItem value="best">Best quality</MenuItem>
+                    </Select>
+                  </FormControl>
+                ) : (
+                  <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+                    <Button
+                      variant={preset === "balanced" ? "contained" : "outlined"}
+                      onClick={() => applyPreset("balanced")}
+                      disabled={busy}
+                    >
+                      Balanced
+                    </Button>
+                    <Button
+                      variant={preset === "smallest" ? "contained" : "outlined"}
+                      onClick={() => applyPreset("smallest")}
+                      disabled={busy}
+                    >
+                      Smallest
+                    </Button>
+                    <Button
+                      variant={preset === "best" ? "contained" : "outlined"}
+                      onClick={() => applyPreset("best")}
+                      disabled={busy}
+                    >
+                      Best quality
+                    </Button>
+                  </Stack>
+                )}
               </Stack>
 
               <Divider />
