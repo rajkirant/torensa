@@ -42,12 +42,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
 
-    // ✅ If no cookies at all, skip /me call
-    if (document.cookie.length === 0) {
-      setLoading(false);
-      return;
-    }
-
     const run = () => {
       apiFetch("/api/me/", {
         credentials: "include",
@@ -77,10 +71,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
-
-/* =========================
-   Hook
-   ========================= */
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
