@@ -6,7 +6,7 @@ import { PrimaryButton } from "../components/Buttons";
 import serviceCards from "../metadata/serviceCards.json";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 
-/* types for your cards */
+/* ===================== TYPES ===================== */
 type ServiceCardConfig = {
   id: string;
   title: string;
@@ -14,17 +14,20 @@ type ServiceCardConfig = {
   path: string;
   ctaLabel: string;
   offlineEnabled: boolean;
+  authRequired?: boolean;
+  pageId?: string;
 };
 
-const typedServiceCards = serviceCards as ServiceCardConfig[];
-
-/* props we expect from App */
 type HomeProps = {
   secondaryTextColor: string;
   sectionBase: React.CSSProperties;
   cardStyle: React.CSSProperties;
 };
 
+/* ===================== DATA (JSON) ===================== */
+const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
+
+/* ===================== COMPONENT ===================== */
 export default function Home({
   secondaryTextColor,
   sectionBase,
@@ -37,15 +40,18 @@ export default function Home({
     color: secondaryTextColor,
   };
 
-  const offlineCards = typedServiceCards.filter((card) => card.offlineEnabled);
+  // Safety guard (never crash)
+  const cards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
+  const offlineCards = cards.filter((card) => card.offlineEnabled);
 
-  // 🔥 OFFLINE: show message + only offlineEnabled tools (e.g. Text to QR)
+  // 🔥 OFFLINE: show message + only offlineEnabled tools
   if (!isOnline) {
     return (
       <section style={sectionBase}>
         <h2 style={{ textAlign: "center", marginBottom: 16 }}>
           Limited offline mode
         </h2>
+
         <p
           style={{
             ...secondaryText,
@@ -70,6 +76,11 @@ export default function Home({
               key={card.id}
               style={cardStyle}
               onClick={() => navigate(card.path)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") navigate(card.path);
+              }}
             >
               <h3>{card.title}</h3>
               <p style={secondaryText}>{card.description}</p>
@@ -93,7 +104,7 @@ export default function Home({
     );
   }
 
-  // ✅ ONLINE: show all services as usual
+  // ✅ ONLINE: show all services
   return (
     <section style={sectionBase}>
       <h2 style={{ textAlign: "center", marginBottom: 40 }}>Services</h2>
@@ -105,17 +116,35 @@ export default function Home({
           gap: 28,
         }}
       >
-        {typedServiceCards.map((card) => (
+        {cards.map((card) => (
           <div
             key={card.id}
             style={cardStyle}
             onClick={() => navigate(card.path)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") navigate(card.path);
+            }}
           >
             <h3>{card.title}</h3>
             <p style={secondaryText}>{card.description}</p>
             <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
           </div>
         ))}
+
+        {cards.length === 0 && (
+          <p
+            style={{
+              ...secondaryText,
+              textAlign: "center",
+              gridColumn: "1 / -1",
+            }}
+          >
+            No services found. Add entries to{" "}
+            <code>metadata/serviceCards.json</code>.
+          </p>
+        )}
       </div>
     </section>
   );

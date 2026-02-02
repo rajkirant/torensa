@@ -1,106 +1,151 @@
-import React, { useState } from "react";
-import { getCsrfToken } from "../utils/csrf";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import type { CSSProperties } from "react";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
-import { apiFetch } from "../utils/api";
+import { PrimaryButton } from "../components/Buttons";
+import serviceCards from "../metadata/serviceCards.json";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 
-const ExcelUploadToCsv: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
-      setError(null);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!file) {
-      setError("Please select an Excel file");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await apiFetch("/api/excel-to-csv/", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Conversion failed");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = file.name.replace(/\.[^/.]+$/, ".csv");
-      document.body.appendChild(link);
-      link.click();
-
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      setError("Failed to upload or convert file");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Card sx={{ maxWidth: 480, mx: "auto", mt: 6 }}>
-      <CardContent>
-        <Stack spacing={3}>
-          <Typography variant="h5" fontWeight={700}>
-            Excel to CSV
-          </Typography>
-
-          <Button variant="outlined" component="label">
-            {file ? file.name : "Choose Excel File"}
-            <input
-              type="file"
-              accept=".xlsx,.xls"
-              hidden
-              onChange={handleFileChange}
-            />
-          </Button>
-
-          <Button
-            variant="contained"
-            onClick={handleUpload}
-            disabled={loading}
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            {loading ? (
-              <CircularProgress size={24} sx={{ color: "#fff" }} />
-            ) : (
-              "Upload & Download CSV"
-            )}
-          </Button>
-
-          {error && <Alert severity="error">{error}</Alert>}
-        </Stack>
-      </CardContent>
-    </Card>
-  );
+/* ===================== TYPES ===================== */
+type ServiceCardConfig = {
+  id: string;
+  title: string;
+  description: string;
+  path: string;
+  ctaLabel: string;
+  offlineEnabled: boolean;
+  authRequired?: boolean;
+  pageId?: string;
 };
 
-export default ExcelUploadToCsv;
+type HomeProps = {
+  secondaryTextColor: string;
+  sectionBase: React.CSSProperties;
+  cardStyle: React.CSSProperties;
+};
+
+/* ===================== DATA (JSON) ===================== */
+const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
+
+/* ===================== COMPONENT ===================== */
+export default function Home({
+  secondaryTextColor,
+  sectionBase,
+  cardStyle,
+}: HomeProps) {
+  const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
+
+  const secondaryText: CSSProperties = {
+    color: secondaryTextColor,
+  };
+
+  // Safety guard (never crash)
+  const cards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
+  const offlineCards = cards.filter((card) => card.offlineEnabled);
+
+  // 🔥 OFFLINE: show message + only offlineEnabled tools
+  if (!isOnline) {
+    return (
+      <section style={sectionBase}>
+        <h2 style={{ textAlign: "center", marginBottom: 16 }}>
+          Limited offline mode
+        </h2>
+
+        <p
+          style={{
+            ...secondaryText,
+            textAlign: "center",
+            maxWidth: 480,
+            margin: "0 auto 32px",
+          }}
+        >
+          You&apos;re offline. Only tools that support offline usage are
+          available right now.
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: 28,
+          }}
+        >
+          {offlineCards.map((card) => (
+            <div
+              key={card.id}
+              style={cardStyle}
+              onClick={() => navigate(card.path)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") navigate(card.path);
+              }}
+            >
+              <h3>{card.title}</h3>
+              <p style={secondaryText}>{card.description}</p>
+              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+            </div>
+          ))}
+
+          {offlineCards.length === 0 && (
+            <p
+              style={{
+                ...secondaryText,
+                textAlign: "center",
+                gridColumn: "1 / -1",
+              }}
+            >
+              No tools are available offline yet.
+            </p>
+          )}
+        </div>
+      </section>
+    );
+  }
+
+  // ✅ ONLINE: show all services
+  return (
+    <section style={sectionBase}>
+      <h2 style={{ textAlign: "center", marginBottom: 40 }}>Services</h2>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: 28,
+        }}
+      >
+        {cards.map((card) => (
+          <div
+            key={card.id}
+            style={cardStyle}
+            onClick={() => navigate(card.path)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") navigate(card.path);
+            }}
+          >
+            <h3>{card.title}</h3>
+            <p style={secondaryText}>{card.description}</p>
+            <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+          </div>
+        ))}
+
+        {cards.length === 0 && (
+          <p
+            style={{
+              ...secondaryText,
+              textAlign: "center",
+              gridColumn: "1 / -1",
+            }}
+          >
+            No services found. Add entries to{" "}
+            <code>metadata/serviceCards.json</code>.
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}

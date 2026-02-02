@@ -1,51 +1,62 @@
 [
   {
     "id": "bulk-email",
+    "pageId": "bulk-email",
     "title": "Bulk Email",
     "description": "Send emails to multiple recipients quickly and securely.",
     "path": "/bulk-email",
     "ctaLabel": "Open Bulk Email",
-    "offlineEnabled": false
+    "offlineEnabled": false,
+    "authRequired": true
   },
   {
     "id": "excel-to-csv",
+    "pageId": "excel-upload-to-csv",
     "title": "Excel to CSV",
     "description": "Upload Excel files and convert them to CSV.",
     "path": "/excel-to-csv",
     "ctaLabel": "Convert Excel",
-    "offlineEnabled": false
+    "offlineEnabled": false,
+    "authRequired": false
   },
   {
     "id": "text-to-qr",
+    "pageId": "text-to-qr",
     "title": "Text to QR",
     "description": "Convert any text or URL into a scannable QR code.",
     "path": "/text-to-qr",
     "ctaLabel": "Generate QR",
-    "offlineEnabled": true
+    "offlineEnabled": true,
+    "authRequired": false
   },
   {
     "id": "image-compressor",
+    "pageId": "image-compressor",
     "title": "Image Compressor",
     "description": "Compress and resize images locally in your browser — no uploads.",
     "path": "/image-compressor",
     "ctaLabel": "Compress Images",
-    "offlineEnabled": true
+    "offlineEnabled": true,
+    "authRequired": false
   },
   {
     "id": "image-pdf-to-pdf",
+    "pageId": "image-pdf-to-pdf",
     "title": "Image / PDF Merger",
     "description": "Merge images and PDF files into a single PDF — processed entirely offline.",
     "path": "/image-pdf-to-pdf",
     "ctaLabel": "Create PDF",
-    "offlineEnabled": true
+    "offlineEnabled": true,
+    "authRequired": false
   },
   {
     "id": "invoice-generator",
+    "pageId": "invoice-generator",
     "title": "Invoice / Receipt Generator",
     "description": "Create professional invoices and receipts directly in your browser — no uploads, fully offline after first load.",
     "path": "/invoice-generator",
     "ctaLabel": "Create Invoice",
-    "offlineEnabled": true
+    "offlineEnabled": true,
+    "authRequired": false
   }
-
 ]

@@ -1,9 +1,28 @@
 import React, { useCallback } from "react";
 import { Routes, Route, NavLink, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import { NavButton, PrimaryButton } from "./components/Buttons";
+
+import { NavButton } from "./components/Buttons";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
+import { apiFetch } from "./utils/api";
+import ProtectedRoute from "./utils/ProtectedRoute";
+
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import CircularProgress from "@mui/material/CircularProgress";
+
+import HomeIcon from "@mui/icons-material/Home";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 import {
   brandLinkStyle,
@@ -18,33 +37,19 @@ import {
   userGreetingStyle,
 } from "./styles/appStyles";
 
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import CircularProgress from "@mui/material/CircularProgress";
-
 import { themes } from "./theme";
 import type { ThemeName } from "./theme";
 
-import HomeIcon from "@mui/icons-material/Home";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import LogoutIcon from "@mui/icons-material/Logout";
-import MenuIcon from "@mui/icons-material/Menu";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import { apiFetch } from "./utils/api";
-import ProtectedRoute from "./utils/ProtectedRoute";
+// ✅ same JSON Home uses (routes come from here)
+import serviceCards from "./metadata/serviceCards.json";
 
 /* ===================== LAZY LOAD PAGES ===================== */
-
 const Home = lazy(() => import("./pages/Home"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
+
+// Tool pages (lazy)
 const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
 const TextToQr = lazy(() => import("./pages/TextToQr"));
 const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
@@ -58,7 +63,30 @@ type AppProps = {
   setThemeName: (name: ThemeName) => void;
 };
 
-/* ===================== APP ===================== */
+type ServiceCardConfig = {
+  id: string;
+  title: string;
+  description: string;
+  path: string;
+  ctaLabel: string;
+  offlineEnabled: boolean;
+  authRequired?: boolean; // optional for ProtectedRoute
+  pageId?: string; // optional if you want different key than id
+};
+
+/**
+ * Map JSON ids/pageIds -> actual page components
+ * ✅ This is the “bridging” piece between JSON and real code.
+ */
+const toolComponentMap: Record<string, React.LazyExoticComponent<any>> = {
+  "bulk-email": BulkEmail,
+  "excel-to-csv": ExcelUploadToCsv,
+  "text-to-qr": TextToQr,
+  "image-compressor": ImageCompressor,
+  "image-pdf-to-pdf": PdfMerger,
+  "invoice-generator": InvoiceGenerator,
+};
+
 export default function App({ themeName, setThemeName }: AppProps) {
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
@@ -69,15 +97,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
     ? theme.palette.text.primary
     : theme.header.text;
 
-  // just the color we’ll pass down to Home
   const secondaryTextColor = theme.palette.text.secondary;
 
   const handleLogout = useCallback(async () => {
     try {
-      await apiFetch("/api/logout/", {
-        method: "POST",
-        csrf: true,
-      });
+      await apiFetch("/api/logout/", { method: "POST", csrf: true });
     } finally {
       clearCsrfToken();
       setUser(null);
@@ -120,8 +144,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
         value={themeName}
         onChange={(e) => setThemeName(e.target.value as ThemeName)}
         sx={themeSelectSx(theme, isMobile, headerTextColor)}
-        displayEmpty
-        inputProps={{ "aria-label": "Theme selection" }}
       >
         {Object.keys(themes).map((name) => (
           <MenuItem key={name} value={name}>
@@ -173,9 +195,33 @@ export default function App({ themeName, setThemeName }: AppProps) {
     </>
   );
 
+  /* ===================== TOOL ROUTES (from JSON) ===================== */
+  const tools = serviceCards as ServiceCardConfig[];
+
+  const toolRoutes = tools.map((tool) => {
+    const key = (tool.pageId ?? tool.id).toLowerCase();
+    const Page = toolComponentMap[key];
+
+    if (!Page) {
+      console.warn(
+        `No component mapped for tool key "${key}" (path: ${tool.path})`,
+      );
+      return null;
+    }
+
+    const element = tool.authRequired ? (
+      <ProtectedRoute>
+        <Page />
+      </ProtectedRoute>
+    ) : (
+      <Page />
+    );
+
+    return <Route key={tool.id} path={tool.path} element={element} />;
+  });
+
   return (
     <>
-      {/* ================= HEADER ================= */}
       <header style={headerStyle(theme)}>
         <Link to="/" style={{ ...brandLinkStyle, color: theme.header.text }}>
           Torensa
@@ -186,9 +232,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
           {isMobile && (
             <IconButton
-              aria-label="Open navigation menu"
-              aria-controls="mobile-menu-drawer"
-              aria-expanded={mobileOpen}
               onClick={() => setMobileOpen(true)}
               sx={{ color: "#fff" }}
             >
@@ -198,20 +241,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </nav>
       </header>
 
-      {/* ================= MOBILE DRAWER ================= */}
       <Drawer
-        id="mobile-menu-drawer"
         anchor="right"
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
-        slotProps={{
-          paper: {
-            sx: {
-              backgroundColor: theme.palette.background.paper,
-              color: theme.palette.text.primary,
-            },
-          },
-        }}
       >
         <Box
           sx={{
@@ -230,7 +263,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </Box>
       </Drawer>
 
-      {/* ================= CONTENT ================= */}
       <div className="container">
         <main>
           <Suspense
@@ -252,37 +284,23 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 }
               />
 
-              <Route
-                path="/bulk-email"
-                element={
-                  <ProtectedRoute>
-                    <BulkEmail />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/excel-to-csv" element={<ExcelUploadToCsv />} />
-              <Route path="/text-to-qr" element={<TextToQr />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/image-compressor" element={<ImageCompressor />} />
-                <Route path="/image-pdf-to-pdf" element={<PdfMerger />} />
-                <Route path="/invoice-generator" element={<InvoiceGenerator />} />
 
-
+              {/* ✅ Auto tool routes */}
+              {toolRoutes}
             </Routes>
           </Suspense>
         </main>
       </div>
 
-      {/* ================= FOOTER ================= */}
       <footer style={footerStyle(theme)}>
         <div style={footerCard}>
           <a
-            href="https://www.linkedin.com/in/rajkirant/"
+            href="https://www.linkedin.com/in/rajkiran/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Visit Rajkiran on LinkedIn"
           >
             <LinkedInIcon sx={{ fontSize: 24 }} />
           </a>
