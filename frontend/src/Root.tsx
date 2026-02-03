@@ -30,7 +30,6 @@ type ServiceCardConfig = {
   ctaLabel: string;
   offlineEnabled: boolean;
   authRequired?: boolean;
-  pageId?: string;
 };
 
 export function Root() {
@@ -67,7 +66,7 @@ export function Root() {
 
                 {/* ✅ Auto tool routes */}
                 {tools.map((tool) => {
-                  const key = (tool.pageId ?? tool.id).toLowerCase();
+                  const key = tool.id.toLowerCase();
                   const Page = toolComponentMap[key];
 
                   if (!Page) return null;

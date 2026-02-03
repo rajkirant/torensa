@@ -3,7 +3,6 @@ import serviceCards from "../metadata/serviceCards.json";
 
 type ServiceCardConfig = {
   id: string;
-  pageId?: string;
   component: string; // ✅ required now
 };
 
@@ -36,7 +35,7 @@ function lazyFrom(component: string): React.LazyExoticComponent<any> {
 
 /**
  * Build map:
- * key = (pageId ?? id).toLowerCase()
+ * key = (id ?? id).toLowerCase()
  * value = lazy component resolved from tool.component
  */
 export const toolComponentMap: Record<
@@ -44,7 +43,7 @@ export const toolComponentMap: Record<
   React.LazyExoticComponent<any>
 > = tools.reduce(
   (acc, tool) => {
-    const key = (tool.pageId ?? tool.id).toLowerCase();
+    const key = tool.id.toLowerCase();
     acc[key] = lazyFrom(tool.component);
     return acc;
   },

@@ -16,7 +16,6 @@ type ServiceCardConfig = {
   ctaLabel: string;
   offlineEnabled: boolean;
   authRequired?: boolean;
-  pageId?: string;
 };
 
 /* ===================== DATA (JSON) ===================== */
