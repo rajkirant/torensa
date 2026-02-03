@@ -2,6 +2,7 @@
   {
     "id": "bulk-email",
     "pageId": "bulk-email",
+    "component": "BulkEmail/BulkEmail",
     "title": "Bulk Email",
     "description": "Send emails to multiple recipients quickly and securely.",
     "path": "/bulk-email",
@@ -12,6 +13,7 @@
   {
     "id": "excel-to-csv",
     "pageId": "excel-upload-to-csv",
+    "component": "ExcelUploadToCsv",
     "title": "Excel to CSV",
     "description": "Upload Excel files and convert them to CSV.",
     "path": "/excel-to-csv",
@@ -22,6 +24,7 @@
   {
     "id": "text-to-qr",
     "pageId": "text-to-qr",
+    "component": "TextToQr",
     "title": "Text to QR",
     "description": "Convert any text or URL into a scannable QR code.",
     "path": "/text-to-qr",
@@ -32,6 +35,7 @@
   {
     "id": "image-compressor",
     "pageId": "image-compressor",
+    "component": "ImageCompressor",
     "title": "Image Compressor",
     "description": "Compress and resize images locally in your browser — no uploads.",
     "path": "/image-compressor",
@@ -42,6 +46,7 @@
   {
     "id": "image-pdf-to-pdf",
     "pageId": "image-pdf-to-pdf",
+    "component": "imagePdfToPdf",
     "title": "Image / PDF Merger",
     "description": "Merge images and PDF files into a single PDF — processed entirely offline.",
     "path": "/image-pdf-to-pdf",
@@ -52,6 +57,7 @@
   {
     "id": "invoice-generator",
     "pageId": "invoice-generator",
+    "component": "InvoiceGenerator",
     "title": "Invoice / Receipt Generator",
     "description": "Create professional invoices and receipts directly in your browser — no uploads, fully offline after first load.",
     "path": "/invoice-generator",
