@@ -9,7 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { themes } from "./theme";
 import type { ThemeName } from "./theme";
 
-import ProtectedRoute from "./utils/ProtectedRoute";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 // JSON config
 import serviceCards from "./metadata/serviceCards.json";
