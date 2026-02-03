@@ -15,12 +15,14 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import serviceCards from "./metadata/serviceCards.json";
 
 /* ===================== LAZY PAGES ===================== */
-const Home = lazy(() => import("./pages/Home"));
-const Contact = lazy(() => import("./pages/Contact"));
-const Login = lazy(() => import("./pages/Login"));
-const Signup = lazy(() => import("./pages/Signup"));
-
-import { toolComponentMap } from "./utils/routes";
+import {
+  Home,
+  Contact,
+  Login,
+  Signup,
+  toolComponentMap,
+  NotFound,
+} from "./utils/routes";
 
 type ServiceCardConfig = {
   id: string;
@@ -88,6 +90,7 @@ export function Root() {
                   );
                 })}
               </Route>
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

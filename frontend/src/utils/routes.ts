@@ -1,9 +1,17 @@
-import React from "react";
+import React, { lazy } from "react";
 import serviceCards from "../metadata/serviceCards.json";
 
+/* ===================== APP PAGES ===================== */
+export const Home = lazy(() => import("../pages/Home"));
+export const Contact = lazy(() => import("../pages/Contact"));
+export const Login = lazy(() => import("../pages/Login"));
+export const Signup = lazy(() => import("../pages/Signup"));
+export const NotFound = lazy(() => import("../pages/NotFound"));
+
+/* ===================== TOOL CONFIG ===================== */
 type ServiceCardConfig = {
   id: string;
-  component: string; // ✅ required now
+  component: string;
 };
 
 const tools = serviceCards as ServiceCardConfig[];
@@ -12,7 +20,6 @@ const tools = serviceCards as ServiceCardConfig[];
 const pageModules = import.meta.glob("../pages/**/*.tsx");
 
 function toModuleKey(component: string) {
-  // component like "ExcelUploadToCsv" or "BulkEmail/BulkEmail"
   return `../pages/${component}.tsx`;
 }
 
@@ -21,10 +28,9 @@ function lazyFrom(component: string): React.LazyExoticComponent<any> {
   const importer = pageModules[moduleKey];
 
   if (!importer) {
-    // Fail with a helpful message if JSON points to a non-existent file
     return React.lazy(async () => {
       throw new Error(
-        `toolPages: Cannot find module "${moduleKey}". ` +
+        `routes.ts: Cannot find module "${moduleKey}". ` +
           `Check serviceCards.json component="${component}" and file casing.`,
       );
     });
@@ -33,18 +39,13 @@ function lazyFrom(component: string): React.LazyExoticComponent<any> {
   return React.lazy(importer as any);
 }
 
-/**
- * Build map:
- * key = (id ?? id).toLowerCase()
- * value = lazy component resolved from tool.component
- */
+/* ===================== TOOL ROUTES ===================== */
 export const toolComponentMap: Record<
   string,
   React.LazyExoticComponent<any>
 > = tools.reduce(
   (acc, tool) => {
-    const key = tool.id.toLowerCase();
-    acc[key] = lazyFrom(tool.component);
+    acc[tool.id.toLowerCase()] = lazyFrom(tool.component);
     return acc;
   },
   {} as Record<string, React.LazyExoticComponent<any>>,
