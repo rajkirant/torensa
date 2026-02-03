@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
-import { useAuth } from "./auth";
+import { useAuth } from "../utils/auth";
 import { JSX } from "@emotion/react/jsx-dev-runtime";
 
 export default function ProtectedRoute({

@@ -1,6 +1,5 @@
 import { styled, keyframes } from "@mui/material/styles";
 import Button, { type ButtonProps } from "@mui/material/Button";
-import { NavLink } from "react-router-dom";
 import type { ReactNode } from "react";
 
 /* =========================
@@ -62,8 +61,7 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
    ========================= */
 
 export interface NavButtonProps extends ButtonProps {
-  to: string;
-  icon?: ReactNode;
+  to?: string;
   end?: boolean;
 }
 
