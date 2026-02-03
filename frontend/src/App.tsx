@@ -1,12 +1,11 @@
 import React, { useCallback } from "react";
-import { Routes, Route, NavLink, Link } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { NavLink, Link, Outlet } from "react-router-dom";
+import { Suspense } from "react";
 
 import { NavButton } from "./components/Buttons";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
 import { apiFetch } from "./utils/api";
-import ProtectedRoute from "./utils/ProtectedRoute";
 
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -40,51 +39,20 @@ import {
 import { themes } from "./theme";
 import type { ThemeName } from "./theme";
 
-// ✅ same JSON Home uses (routes come from here)
-import serviceCards from "./metadata/serviceCards.json";
-
-/* ===================== LAZY LOAD PAGES ===================== */
-const Home = lazy(() => import("./pages/Home"));
-const Contact = lazy(() => import("./pages/Contact"));
-const Login = lazy(() => import("./pages/Login"));
-const Signup = lazy(() => import("./pages/Signup"));
-
-// Tool pages (lazy)
-const BulkEmail = lazy(() => import("./pages/BulkEmail/BulkEmail"));
-const TextToQr = lazy(() => import("./pages/TextToQr"));
-const ExcelUploadToCsv = lazy(() => import("./pages/ExcelUploadToCsv"));
-const ImageCompressor = lazy(() => import("./pages/ImageCompressor"));
-const PdfMerger = lazy(() => import("./pages/imagePdfToPdf"));
-const InvoiceGenerator = lazy(() => import("./pages/InvoiceGenerator"));
-
 /* ===================== TYPES ===================== */
 type AppProps = {
   themeName: ThemeName;
   setThemeName: (name: ThemeName) => void;
 };
 
-type ServiceCardConfig = {
-  id: string;
-  title: string;
-  description: string;
-  path: string;
-  ctaLabel: string;
-  offlineEnabled: boolean;
-  authRequired?: boolean; // optional for ProtectedRoute
-  pageId?: string; // optional if you want different key than id
-};
-
 /**
- * Map JSON ids/pageIds -> actual page components
- * ✅ This is the “bridging” piece between JSON and real code.
+ * Outlet context provided to pages (e.g. Home)
+ * so Root.tsx can keep routes simple: <Home />
  */
-const toolComponentMap: Record<string, React.LazyExoticComponent<any>> = {
-  "bulk-email": BulkEmail,
-  "excel-to-csv": ExcelUploadToCsv,
-  "text-to-qr": TextToQr,
-  "image-compressor": ImageCompressor,
-  "image-pdf-to-pdf": PdfMerger,
-  "invoice-generator": InvoiceGenerator,
+export type AppOutletContext = {
+  secondaryTextColor: string;
+  sectionBase: typeof sectionBase;
+  cardStyle: typeof cardStyle;
 };
 
 export default function App({ themeName, setThemeName }: AppProps) {
@@ -195,31 +163,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
     </>
   );
 
-  /* ===================== TOOL ROUTES (from JSON) ===================== */
-  const tools = serviceCards as ServiceCardConfig[];
-
-  const toolRoutes = tools.map((tool) => {
-    const key = (tool.pageId ?? tool.id).toLowerCase();
-    const Page = toolComponentMap[key];
-
-    if (!Page) {
-      console.warn(
-        `No component mapped for tool key "${key}" (path: ${tool.path})`,
-      );
-      return null;
-    }
-
-    const element = tool.authRequired ? (
-      <ProtectedRoute>
-        <Page />
-      </ProtectedRoute>
-    ) : (
-      <Page />
-    );
-
-    return <Route key={tool.id} path={tool.path} element={element} />;
-  });
-
   return (
     <>
       <header style={headerStyle(theme)}>
@@ -272,25 +215,15 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </div>
             }
           >
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Home
-                    secondaryTextColor={secondaryTextColor}
-                    sectionBase={sectionBase}
-                    cardStyle={cardStyle}
-                  />
-                }
-              />
-
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-
-              {/* ✅ Auto tool routes */}
-              {toolRoutes}
-            </Routes>
+            <Outlet
+              context={
+                {
+                  secondaryTextColor,
+                  sectionBase,
+                  cardStyle,
+                } satisfies AppOutletContext
+              }
+            />
           </Suspense>
         </main>
       </div>
