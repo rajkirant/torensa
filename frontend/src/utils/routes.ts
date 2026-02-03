@@ -3,64 +3,49 @@ import serviceCards from "../metadata/serviceCards.json";
 
 type ServiceCardConfig = {
   id: string;
-  path: string;
-  authRequired?: boolean;
   pageId?: string;
-  component?: string; // e.g. "BulkEmail/BulkEmail" or "TextToQr"
+  component: string; // ✅ required now
 };
 
-// 1) Build-time discovered modules (Vite style).
-// This collects *all* .tsx files under /pages and allows dynamic lookup.
+const tools = serviceCards as ServiceCardConfig[];
+
+// Grab all TSX pages under /pages at build time
 const pageModules = import.meta.glob("../pages/**/*.tsx");
 
-// 2) Helper: convert "TextToQr" -> "../pages/TextToQr.tsx"
-//            convert "BulkEmail/BulkEmail" -> "../pages/BulkEmail/BulkEmail.tsx"
-function toPageKey(component: string) {
+function toModuleKey(component: string) {
+  // component like "ExcelUploadToCsv" or "BulkEmail/BulkEmail"
   return `../pages/${component}.tsx`;
 }
 
-// 3) Create a lazy component from a module key
-function lazyFromKey(moduleKey: string): React.LazyExoticComponent<any> {
+function lazyFrom(component: string): React.LazyExoticComponent<any> {
+  const moduleKey = toModuleKey(component);
   const importer = pageModules[moduleKey];
+
   if (!importer) {
-    // Fail fast with a helpful message
+    // Fail with a helpful message if JSON points to a non-existent file
     return React.lazy(async () => {
       throw new Error(
-        `No page module found for "${moduleKey}". ` +
-          `Make sure the file exists under src/pages and ends with .tsx.`,
+        `toolPages: Cannot find module "${moduleKey}". ` +
+          `Check serviceCards.json component="${component}" and file casing.`,
       );
     });
   }
+
   return React.lazy(importer as any);
 }
 
-// 4) Build the map from JSON
-const tools = (serviceCards as ServiceCardConfig[]) ?? [];
-
+/**
+ * Build map:
+ * key = (pageId ?? id).toLowerCase()
+ * value = lazy component resolved from tool.component
+ */
 export const toolComponentMap: Record<
   string,
   React.LazyExoticComponent<any>
 > = tools.reduce(
   (acc, tool) => {
     const key = (tool.pageId ?? tool.id).toLowerCase();
-
-    // Prefer explicit JSON mapping (recommended)
-    if (tool.component) {
-      const moduleKey = toPageKey(tool.component);
-      acc[key] = lazyFromKey(moduleKey);
-      return acc;
-    }
-
-    // Optional fallback: if you want, try to infer from id -> PascalCase file name.
-    // Example "text-to-qr" -> "TextToQr" -> "../pages/TextToQr.tsx"
-    // If you don’t want inference, delete this block.
-    const inferred = tool.id
-      .split("-")
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join("");
-    const inferredKey = toPageKey(inferred);
-
-    acc[key] = lazyFromKey(inferredKey);
+    acc[key] = lazyFrom(tool.component);
     return acc;
   },
   {} as Record<string, React.LazyExoticComponent<any>>,
