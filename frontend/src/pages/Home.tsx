@@ -1,10 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import type { CSSProperties } from "react";
 
 import { PrimaryButton } from "../components/Buttons";
 import serviceCards from "../metadata/serviceCards.json";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
+import type { AppOutletContext } from "../App";
 
 /* ===================== TYPES ===================== */
 type ServiceCardConfig = {
@@ -18,21 +19,15 @@ type ServiceCardConfig = {
   pageId?: string;
 };
 
-type HomeProps = {
-  secondaryTextColor: string;
-  sectionBase: React.CSSProperties;
-  cardStyle: React.CSSProperties;
-};
-
 /* ===================== DATA (JSON) ===================== */
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 
 /* ===================== COMPONENT ===================== */
-export default function Home({
-  secondaryTextColor,
-  sectionBase,
-  cardStyle,
-}: HomeProps) {
+export default function Home() {
+  // ✅ now coming from App.tsx <Outlet context={...} />
+  const { secondaryTextColor, sectionBase, cardStyle } =
+    useOutletContext<AppOutletContext>();
+
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
 
