@@ -30,6 +30,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import DownloadIcon from "@mui/icons-material/Download";
 import OfflineChip from "../components/chips/OfflineChip";
 import BusyChip from "../components/chips/BusyChips";
+import PageContainer from "../components/PageContainer";
 
 type ItemKind = "image" | "pdf";
 
@@ -419,358 +420,352 @@ const ImagePdfToPdf: React.FC = () => {
   };
 
   return (
-    <Card sx={pageContainer}>
-      <CardContent>
-        <Stack spacing={2.5}>
-          <Stack spacing={0.5}>
-            <Typography variant="h5" fontWeight={800}>
-              Image / PDF to PDF
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {offlineHint}
-            </Typography>
-          </Stack>
+    <PageContainer maxWidth={920}>
+      <Stack spacing={2.5}>
+        <Stack spacing={0.5}>
+          <Typography variant="h5" fontWeight={800}>
+            Image / PDF to PDF
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {offlineHint}
+          </Typography>
+        </Stack>
 
-          <Divider />
+        <Divider />
 
-          {/* Upload */}
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={1.5}
-            alignItems={{ sm: "center" }}
+        {/* Upload */}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1.5}
+          alignItems={{ sm: "center" }}
+        >
+          <Button
+            variant="outlined"
+            startIcon={<UploadFileIcon />}
+            component="label"
+            sx={{ textTransform: "none" }}
           >
-            <Button
+            Add images / PDFs
+            <input
+              ref={fileInputRef}
+              hidden
+              type="file"
+              accept="application/pdf,image/*"
+              multiple
+              onChange={(e) => onPickFiles(e.target.files)}
+            />
+          </Button>
+
+          <Button
+            variant="text"
+            color="inherit"
+            onClick={clearAll}
+            disabled={items.length === 0 || busy}
+            sx={{ textTransform: "none" }}
+          >
+            Clear
+          </Button>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            sx={{ ml: "auto" }}
+          >
+            <Chip
+              size="small"
+              label={`${totalCount} file${totalCount === 1 ? "" : "s"}`}
               variant="outlined"
-              startIcon={<UploadFileIcon />}
-              component="label"
-              sx={{ textTransform: "none" }}
-            >
-              Add images / PDFs
-              <input
-                ref={fileInputRef}
-                hidden
-                type="file"
-                accept="application/pdf,image/*"
-                multiple
-                onChange={(e) => onPickFiles(e.target.files)}
-              />
-            </Button>
-
-            <Button
-              variant="text"
-              color="inherit"
-              onClick={clearAll}
-              disabled={items.length === 0 || busy}
-              sx={{ textTransform: "none" }}
-            >
-              Clear
-            </Button>
-
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ ml: "auto" }}
-            >
-              <Chip
-                size="small"
-                label={`${totalCount} file${totalCount === 1 ? "" : "s"}`}
-                variant="outlined"
-              />
-              <OfflineChip />
-              {busy && <BusyChip />}
-            </Stack>
+            />
+            <OfflineChip />
+            {busy && <BusyChip />}
           </Stack>
+        </Stack>
 
-          {/* Queue */}
-          {items.length > 0 && (
-            <Stack spacing={1.25}>
-              <Typography variant="subtitle1" fontWeight={700}>
-                Queue (reorder before export)
-              </Typography>
+        {/* Queue */}
+        {items.length > 0 && (
+          <Stack spacing={1.25}>
+            <Typography variant="subtitle1" fontWeight={700}>
+              Queue (reorder before export)
+            </Typography>
 
-              <Stack spacing={1}>
-                {items.map((it, idx) => (
-                  <Card
-                    key={it.id}
-                    variant="outlined"
-                    sx={{
-                      borderRadius: 2,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <CardContent sx={{ py: 1.5 }}>
-                      <Stack direction="row" spacing={1.5} alignItems="center">
-                        {/* Thumb */}
-                        <div
-                          style={{
-                            width: 56,
-                            height: 56,
-                            borderRadius: 12,
-                            border: "1px solid rgba(0,0,0,0.08)",
-                            display: "grid",
-                            placeItems: "center",
-                            overflow: "hidden",
-                            background: "#fff",
-                            flex: "0 0 auto",
-                          }}
-                        >
-                          {it.kind === "image" && it.previewUrl ? (
-                            <img
-                              src={it.previewUrl}
-                              alt={it.name}
-                              style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          ) : it.kind === "pdf" ? (
-                            <PictureAsPdfIcon />
-                          ) : (
-                            <ImageIcon />
-                          )}
-                        </div>
+            <Stack spacing={1}>
+              {items.map((it, idx) => (
+                <Card
+                  key={it.id}
+                  variant="outlined"
+                  sx={{
+                    borderRadius: 2,
+                    overflow: "hidden",
+                  }}
+                >
+                  <CardContent sx={{ py: 1.5 }}>
+                    <Stack direction="row" spacing={1.5} alignItems="center">
+                      {/* Thumb */}
+                      <div
+                        style={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 12,
+                          border: "1px solid rgba(0,0,0,0.08)",
+                          display: "grid",
+                          placeItems: "center",
+                          overflow: "hidden",
+                          background: "#fff",
+                          flex: "0 0 auto",
+                        }}
+                      >
+                        {it.kind === "image" && it.previewUrl ? (
+                          <img
+                            src={it.previewUrl}
+                            alt={it.name}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : it.kind === "pdf" ? (
+                          <PictureAsPdfIcon />
+                        ) : (
+                          <ImageIcon />
+                        )}
+                      </div>
 
-                        {/* Info */}
-                        <Stack spacing={0.25} sx={{ minWidth: 0, flex: 1 }}>
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
+                      {/* Info */}
+                      <Stack spacing={0.25} sx={{ minWidth: 0, flex: 1 }}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography
+                            variant="subtitle2"
+                            fontWeight={700}
+                            noWrap
+                            title={it.name}
+                            sx={{ maxWidth: "100%" }}
                           >
-                            <Typography
-                              variant="subtitle2"
-                              fontWeight={700}
-                              noWrap
-                              title={it.name}
-                              sx={{ maxWidth: "100%" }}
-                            >
-                              {idx + 1}. {it.name}
-                            </Typography>
-
-                            <Chip
-                              size="small"
-                              label={it.kind.toUpperCase()}
-                              variant="outlined"
-                              icon={
-                                it.kind === "pdf" ? (
-                                  <PictureAsPdfIcon />
-                                ) : (
-                                  <ImageIcon />
-                                )
-                              }
-                            />
-                          </Stack>
-
-                          <Typography variant="caption" color="text.secondary">
-                            {it.kind === "pdf"
-                              ? it.pdfPageCount
-                                ? `${it.pdfPageCount} page${it.pdfPageCount === 1 ? "" : "s"}`
-                                : "PDF (page count loading…) "
-                              : `Image • Rotation: ${it.imageRotation}°`}
+                            {idx + 1}. {it.name}
                           </Typography>
+
+                          <Chip
+                            size="small"
+                            label={it.kind.toUpperCase()}
+                            variant="outlined"
+                            icon={
+                              it.kind === "pdf" ? (
+                                <PictureAsPdfIcon />
+                              ) : (
+                                <ImageIcon />
+                              )
+                            }
+                          />
                         </Stack>
 
-                        {/* Actions */}
-                        <Stack direction="row" spacing={0.5}>
-                          <IconButton
-                            aria-label="move up"
-                            onClick={() => moveItem(it.id, -1)}
-                            disabled={idx === 0 || busy}
-                            size="small"
-                          >
-                            <ArrowUpwardIcon fontSize="small" />
-                          </IconButton>
+                        <Typography variant="caption" color="text.secondary">
+                          {it.kind === "pdf"
+                            ? it.pdfPageCount
+                              ? `${it.pdfPageCount} page${it.pdfPageCount === 1 ? "" : "s"}`
+                              : "PDF (page count loading…) "
+                            : `Image • Rotation: ${it.imageRotation}°`}
+                        </Typography>
+                      </Stack>
 
-                          <IconButton
-                            aria-label="move down"
-                            onClick={() => moveItem(it.id, 1)}
-                            disabled={idx === items.length - 1 || busy}
-                            size="small"
-                          >
-                            <ArrowDownwardIcon fontSize="small" />
-                          </IconButton>
+                      {/* Actions */}
+                      <Stack direction="row" spacing={0.5}>
+                        <IconButton
+                          aria-label="move up"
+                          onClick={() => moveItem(it.id, -1)}
+                          disabled={idx === 0 || busy}
+                          size="small"
+                        >
+                          <ArrowUpwardIcon fontSize="small" />
+                        </IconButton>
 
-                          {it.kind === "image" && (
-                            <IconButton
-                              aria-label="rotate"
-                              onClick={() => rotateImage(it.id)}
-                              disabled={busy}
-                              size="small"
-                            >
-                              <RotateRightIcon fontSize="small" />
-                            </IconButton>
-                          )}
+                        <IconButton
+                          aria-label="move down"
+                          onClick={() => moveItem(it.id, 1)}
+                          disabled={idx === items.length - 1 || busy}
+                          size="small"
+                        >
+                          <ArrowDownwardIcon fontSize="small" />
+                        </IconButton>
 
+                        {it.kind === "image" && (
                           <IconButton
-                            aria-label="remove"
-                            onClick={() => removeItem(it.id)}
+                            aria-label="rotate"
+                            onClick={() => rotateImage(it.id)}
                             disabled={busy}
                             size="small"
-                            color="error"
                           >
-                            <DeleteOutlineIcon fontSize="small" />
+                            <RotateRightIcon fontSize="small" />
                           </IconButton>
-                        </Stack>
+                        )}
+
+                        <IconButton
+                          aria-label="remove"
+                          onClick={() => removeItem(it.id)}
+                          disabled={busy}
+                          size="small"
+                          color="error"
+                        >
+                          <DeleteOutlineIcon fontSize="small" />
+                        </IconButton>
                       </Stack>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Stack>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              ))}
             </Stack>
-          )}
+          </Stack>
+        )}
 
-          <Divider />
+        <Divider />
 
-          {/* Options */}
-          <Stack spacing={2}>
-            <Typography variant="subtitle1" fontWeight={800}>
-              Export options
-            </Typography>
+        {/* Options */}
+        <Stack spacing={2}>
+          <Typography variant="subtitle1" fontWeight={800}>
+            Export options
+          </Typography>
 
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
-              <FormControl fullWidth>
-                <InputLabel id="page-size-label">Page size</InputLabel>
-                <Select
-                  labelId="page-size-label"
-                  value={pageSize}
-                  label="Page size"
-                  onChange={(e) => setPageSize(e.target.value as PageSizeKey)}
-                  disabled={busy}
-                >
-                  <MenuItem value="auto">Auto (best effort)</MenuItem>
-                  <MenuItem value="a4">A4</MenuItem>
-                  <MenuItem value="letter">Letter</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel id="fit-mode-label">Image fit</InputLabel>
-                <Select
-                  labelId="fit-mode-label"
-                  value={fitMode}
-                  label="Image fit"
-                  onChange={(e) => setFitMode(e.target.value as FitMode)}
-                  disabled={busy}
-                >
-                  <MenuItem value="contain">Contain (no crop)</MenuItem>
-                  <MenuItem value="cover">Cover (may crop)</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField
-                label="Margin (pt)"
-                type="number"
-                value={margin}
-                onChange={(e) => setMargin(Number(e.target.value))}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+            <FormControl fullWidth>
+              <InputLabel id="page-size-label">Page size</InputLabel>
+              <Select
+                labelId="page-size-label"
+                value={pageSize}
+                label="Page size"
+                onChange={(e) => setPageSize(e.target.value as PageSizeKey)}
                 disabled={busy}
-                fullWidth
-                inputProps={{ min: 0, max: 200, step: 1 }}
-                helperText="18pt ≈ 0.25 inch"
-              />
-            </Stack>
+              >
+                <MenuItem value="auto">Auto (best effort)</MenuItem>
+                <MenuItem value="a4">A4</MenuItem>
+                <MenuItem value="letter">Letter</MenuItem>
+              </Select>
+            </FormControl>
 
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={1.5}
-              alignItems="center"
-            >
-              <TextField
-                label="Output filename"
-                value={filename}
-                onChange={(e) => setFilename(e.target.value)}
+            <FormControl fullWidth>
+              <InputLabel id="fit-mode-label">Image fit</InputLabel>
+              <Select
+                labelId="fit-mode-label"
+                value={fitMode}
+                label="Image fit"
+                onChange={(e) => setFitMode(e.target.value as FitMode)}
                 disabled={busy}
-                fullWidth
-                helperText="“.pdf” is added automatically if missing"
-              />
+              >
+                <MenuItem value="contain">Contain (no crop)</MenuItem>
+                <MenuItem value="cover">Cover (may crop)</MenuItem>
+              </Select>
+            </FormControl>
 
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={keepPdfPagesAsIs}
-                    onChange={(e) => setKeepPdfPagesAsIs(e.target.checked)}
-                    disabled={busy}
-                  />
-                }
-                label="Keep PDF pages as-is (fast)"
-              />
-            </Stack>
-
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={1.5}
-              alignItems={{ sm: "center" }}
-            >
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={pageNumbers}
-                    onChange={(e) => setPageNumbers(e.target.checked)}
-                    disabled={busy}
-                  />
-                }
-                label="Add page numbers"
-              />
-
-              {pageNumbers && (
-                <>
-                  <TextField
-                    label="Start"
-                    type="number"
-                    value={pageNumberStart}
-                    onChange={(e) => setPageNumberStart(Number(e.target.value))}
-                    disabled={busy}
-                    sx={{ width: { xs: "100%", sm: 120 } }}
-                    inputProps={{ min: 1, step: 1 }}
-                  />
-                  <TextField
-                    label="Size"
-                    type="number"
-                    value={pageNumberSize}
-                    onChange={(e) => setPageNumberSize(Number(e.target.value))}
-                    disabled={busy}
-                    sx={{ width: { xs: "100%", sm: 120 } }}
-                    inputProps={{ min: 6, max: 48, step: 1 }}
-                  />
-                </>
-              )}
-            </Stack>
-
-            <Alert severity="info">
-              Tip: For mixed inputs, you can reorder the queue. Images become
-              pages; PDFs are appended page-by-page. Everything is processed
-              locally.
-            </Alert>
+            <TextField
+              label="Margin (pt)"
+              type="number"
+              value={margin}
+              onChange={(e) => setMargin(Number(e.target.value))}
+              disabled={busy}
+              fullWidth
+              inputProps={{ min: 0, max: 200, step: 1 }}
+              helperText="18pt ≈ 0.25 inch"
+            />
           </Stack>
 
-          {/* Build */}
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={1.5}
             alignItems="center"
           >
-            <Button
-              variant="contained"
-              startIcon={<DownloadIcon />}
-              onClick={buildPdf}
-              disabled={!canBuild}
-              sx={{ textTransform: "none", fontWeight: 700 }}
-            >
-              Build & Download PDF
-            </Button>
+            <TextField
+              label="Output filename"
+              value={filename}
+              onChange={(e) => setFilename(e.target.value)}
+              disabled={busy}
+              fullWidth
+              helperText="“.pdf” is added automatically if missing"
+            />
 
-            {busy && (
-              <Typography variant="body2" color="text.secondary">
-                Building PDF… (large PDFs can take a moment)
-              </Typography>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={keepPdfPagesAsIs}
+                  onChange={(e) => setKeepPdfPagesAsIs(e.target.checked)}
+                  disabled={busy}
+                />
+              }
+              label="Keep PDF pages as-is (fast)"
+            />
+          </Stack>
+
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={1.5}
+            alignItems={{ sm: "center" }}
+          >
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={pageNumbers}
+                  onChange={(e) => setPageNumbers(e.target.checked)}
+                  disabled={busy}
+                />
+              }
+              label="Add page numbers"
+            />
+
+            {pageNumbers && (
+              <>
+                <TextField
+                  label="Start"
+                  type="number"
+                  value={pageNumberStart}
+                  onChange={(e) => setPageNumberStart(Number(e.target.value))}
+                  disabled={busy}
+                  sx={{ width: { xs: "100%", sm: 120 } }}
+                  inputProps={{ min: 1, step: 1 }}
+                />
+                <TextField
+                  label="Size"
+                  type="number"
+                  value={pageNumberSize}
+                  onChange={(e) => setPageNumberSize(Number(e.target.value))}
+                  disabled={busy}
+                  sx={{ width: { xs: "100%", sm: 120 } }}
+                  inputProps={{ min: 6, max: 48, step: 1 }}
+                />
+              </>
             )}
           </Stack>
 
-          {error && <Alert severity="error">{error}</Alert>}
+          <Alert severity="info">
+            Tip: For mixed inputs, you can reorder the queue. Images become
+            pages; PDFs are appended page-by-page. Everything is processed
+            locally.
+          </Alert>
         </Stack>
-      </CardContent>
-    </Card>
+
+        {/* Build */}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1.5}
+          alignItems="center"
+        >
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={buildPdf}
+            disabled={!canBuild}
+            sx={{ textTransform: "none", fontWeight: 700 }}
+          >
+            Build & Download PDF
+          </Button>
+
+          {busy && (
+            <Typography variant="body2" color="text.secondary">
+              Building PDF… (large PDFs can take a moment)
+            </Typography>
+          )}
+        </Stack>
+
+        {error && <Alert severity="error">{error}</Alert>}
+      </Stack>
+    </PageContainer>
   );
 };
 
