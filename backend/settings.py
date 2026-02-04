@@ -35,6 +35,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://torensa.com",
     "https://www.torensa.com",
     "https://www.torensa.pythonanywhere.com",
+    "https://dph88mmllcgzw.cloudfront.net"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -43,6 +44,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://torensa.com",
     "https://www.torensa.com",
     "https://www.torensa.pythonanywhere.com",
+    "https://dph88mmllcgzw.cloudfront.net"
 ]
 
 # Application definition
