@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
+import PageContainer from "../components/PageContainer";
 
 const QR_SIZE = 220;
 const EXPORT_SIZE = 300;
@@ -182,120 +183,118 @@ const TextToQr: React.FC = () => {
   };
 
   return (
-    <Card sx={{ maxWidth: 480, mx: "auto", mt: 6 }}>
-      <CardContent>
-        <Stack spacing={3}>
-          <Typography variant="h5" fontWeight={700}>
-            Text to QR Code
-          </Typography>
+    <PageContainer maxWidth={480}>
+      <Stack spacing={3}>
+        <Typography variant="h5" fontWeight={700}>
+          Text to QR Code
+        </Typography>
 
-          {/* New description about offline usage & benefits */}
-          <Typography variant="body2" color="text.secondary">
-            This tool works offline after you&apos;ve opened it once while
-            connected. Just bookmark <strong>torensa.com/text-to-qr</strong> in
-            your browser and you can generate QR codes even without an internet
-            connection. Using it offline also means fewer repeated network calls
-            over time, which can save a bit of data, reduce server load, and
-            slightly lower your overall carbon footprint when you generate QR
-            codes frequently.
-          </Typography>
+        {/* New description about offline usage & benefits */}
+        <Typography variant="body2" color="text.secondary">
+          This tool works offline after you&apos;ve opened it once while
+          connected. Just bookmark <strong>torensa.com/text-to-qr</strong> in
+          your browser and you can generate QR codes even without an internet
+          connection. Using it offline also means fewer repeated network calls
+          over time, which can save a bit of data, reduce server load, and
+          slightly lower your overall carbon footprint when you generate QR
+          codes frequently.
+        </Typography>
 
-          <TextField
-            label="Text or URL"
-            placeholder="https://torensa.com"
-            value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-              setError(null);
-            }}
-            multiline
-            minRows={3}
-            fullWidth
-          />
+        <TextField
+          label="Text or URL"
+          placeholder="https://torensa.com"
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+            setError(null);
+          }}
+          multiline
+          minRows={3}
+          fullWidth
+        />
 
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="outlined"
-              component="label"
-              sx={{ textTransform: "none" }}
-            >
-              Upload Logo
-              <input
-                ref={fileInputRef}
-                hidden
-                type="file"
-                accept="image/*"
-                onChange={handleLogoUpload}
-              />
-            </Button>
-
-            {logo && (
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={removeLogo}
-                sx={{ textTransform: "none" }}
-              >
-                Remove Logo
-              </Button>
-            )}
-          </Stack>
-
-          {logo && (
-            <>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={showLogoText}
-                    onChange={(e) => setShowLogoText(e.target.checked)}
-                  />
-                }
-                label="Show text under logo"
-              />
-
-              {showLogoText && (
-                <TextField
-                  label="Logo text"
-                  value={logoText}
-                  inputProps={{ maxLength: MAX_TEXT_LENGTH }}
-                  helperText={`${logoText.length}/${MAX_TEXT_LENGTH} characters`}
-                  onChange={(e) => setLogoText(e.target.value)}
-                />
-              )}
-            </>
-          )}
-
-          {text.trim() && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: 16,
-                background: "#ffffff",
-                borderRadius: 8,
-              }}
-            >
-              <canvas
-                ref={canvasRef}
-                width={QR_SIZE}
-                height={QR_SIZE}
-                style={{ display: "block" }}
-              />
-            </div>
-          )}
-
+        <Stack direction="row" spacing={2}>
           <Button
-            variant="contained"
-            onClick={downloadQr}
-            sx={{ textTransform: "none", fontWeight: 600 }}
+            variant="outlined"
+            component="label"
+            sx={{ textTransform: "none" }}
           >
-            Generate & Download QR
+            Upload Logo
+            <input
+              ref={fileInputRef}
+              hidden
+              type="file"
+              accept="image/*"
+              onChange={handleLogoUpload}
+            />
           </Button>
 
-          {error && <Alert severity="error">{error}</Alert>}
+          {logo && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={removeLogo}
+              sx={{ textTransform: "none" }}
+            >
+              Remove Logo
+            </Button>
+          )}
         </Stack>
-      </CardContent>
-    </Card>
+
+        {logo && (
+          <>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showLogoText}
+                  onChange={(e) => setShowLogoText(e.target.checked)}
+                />
+              }
+              label="Show text under logo"
+            />
+
+            {showLogoText && (
+              <TextField
+                label="Logo text"
+                value={logoText}
+                inputProps={{ maxLength: MAX_TEXT_LENGTH }}
+                helperText={`${logoText.length}/${MAX_TEXT_LENGTH} characters`}
+                onChange={(e) => setLogoText(e.target.value)}
+              />
+            )}
+          </>
+        )}
+
+        {text.trim() && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: 16,
+              background: "#ffffff",
+              borderRadius: 8,
+            }}
+          >
+            <canvas
+              ref={canvasRef}
+              width={QR_SIZE}
+              height={QR_SIZE}
+              style={{ display: "block" }}
+            />
+          </div>
+        )}
+
+        <Button
+          variant="contained"
+          onClick={downloadQr}
+          sx={{ textTransform: "none", fontWeight: 600 }}
+        >
+          Generate & Download QR
+        </Button>
+
+        {error && <Alert severity="error">{error}</Alert>}
+      </Stack>
+    </PageContainer>
   );
 };
 

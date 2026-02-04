@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { getCsrfToken } from "../utils/csrf";
 
 import {
   Button,
-  Card,
-  CardContent,
   Typography,
   Stack,
   CircularProgress,
   Alert,
 } from "@mui/material";
 import { apiFetch } from "../utils/api";
+import PageContainer from "../components/PageContainer";
 
 const ExcelUploadToCsv: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -43,9 +41,7 @@ const ExcelUploadToCsv: React.FC = () => {
         credentials: "include",
       });
 
-      if (!response.ok) {
-        throw new Error("Conversion failed");
-      }
+      if (!response.ok) throw new Error("Conversion failed");
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -58,7 +54,7 @@ const ExcelUploadToCsv: React.FC = () => {
 
       link.remove();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       setError("Failed to upload or convert file");
     } finally {
       setLoading(false);
@@ -66,40 +62,38 @@ const ExcelUploadToCsv: React.FC = () => {
   };
 
   return (
-    <Card sx={{ maxWidth: 480, mx: "auto", mt: 6 }}>
-      <CardContent>
-        <Stack spacing={3}>
-          <Typography variant="h5" fontWeight={700}>
-            Excel to CSV
-          </Typography>
+    <PageContainer maxWidth={480}>
+      <Stack spacing={3}>
+        <Typography variant="h5" fontWeight={700}>
+          Excel to CSV
+        </Typography>
 
-          <Button variant="outlined" component="label">
-            {file ? file.name : "Choose Excel File"}
-            <input
-              type="file"
-              accept=".xlsx,.xls"
-              hidden
-              onChange={handleFileChange}
-            />
-          </Button>
+        <Button variant="outlined" component="label">
+          {file ? file.name : "Choose Excel File"}
+          <input
+            type="file"
+            accept=".xlsx,.xls"
+            hidden
+            onChange={handleFileChange}
+          />
+        </Button>
 
-          <Button
-            variant="contained"
-            onClick={handleUpload}
-            disabled={loading}
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            {loading ? (
-              <CircularProgress size={24} sx={{ color: "#fff" }} />
-            ) : (
-              "Upload & Download CSV"
-            )}
-          </Button>
+        <Button
+          variant="contained"
+          onClick={handleUpload}
+          disabled={loading}
+          sx={{ textTransform: "none", fontWeight: 600 }}
+        >
+          {loading ? (
+            <CircularProgress size={24} sx={{ color: "#fff" }} />
+          ) : (
+            "Upload & Download CSV"
+          )}
+        </Button>
 
-          {error && <Alert severity="error">{error}</Alert>}
-        </Stack>
-      </CardContent>
-    </Card>
+        {error && <Alert severity="error">{error}</Alert>}
+      </Stack>
+    </PageContainer>
   );
 };
 
