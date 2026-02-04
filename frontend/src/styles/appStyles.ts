@@ -22,7 +22,7 @@ export const navStyle = {
 };
 
 export const sectionBase: React.CSSProperties = {
-  padding: "64px 24px",
+  padding: "28px 24px",
   maxWidth: 1100,
   margin: "0 auto",
 };
@@ -100,15 +100,18 @@ export const headerStyle = (theme: Theme): React.CSSProperties => ({
 });
 
 export const footerStyle = (theme: Theme): React.CSSProperties => ({
-  marginTop: 80,
-  padding: "48px 24px",
+  width: "100%",           // ✅ stretch across screen
+  marginTop: 60,
+  padding: "70px 0",       // ✅ taller footer
   background: theme.gradients.footer,
   borderTop: `1px solid ${theme.header.border}`,
   color: theme.header.text,
 });
 
-export const footerCard: React.CSSProperties = {
-  maxWidth: 900,
+
+export const footerInner: React.CSSProperties = {
+  maxWidth: 1100,
   margin: "0 auto",
+  padding: "0 20px",
   textAlign: "center",
 };

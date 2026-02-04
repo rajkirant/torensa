@@ -24,16 +24,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 import {
-  brandLinkStyle,
-  sectionBase,
-  headerStyle,
-  drawerNavButtonStyle,
-  cardStyle,
-  footerStyle,
-  footerCard,
-  navStyle,
-  themeSelectSx,
-  userGreetingStyle,
+    brandLinkStyle,
+    sectionBase,
+    headerStyle,
+    drawerNavButtonStyle,
+    cardStyle,
+    footerStyle,
+    navStyle,
+    themeSelectSx,
+    userGreetingStyle, footerInner,
 } from "./styles/appStyles";
 
 import { themes } from "./theme";
@@ -229,7 +228,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
       </div>
 
       <footer style={footerStyle(theme)}>
-        <div style={footerCard}>
+        <div style={footerInner}>
           <a
             href="https://www.linkedin.com/in/rajkiran/"
             target="_blank"
