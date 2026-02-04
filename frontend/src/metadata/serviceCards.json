@@ -78,6 +78,17 @@
     "ctaLabel": "Open JWT Tool",
     "offlineEnabled": true,
     "authRequired": false
+  },
+  {
+    "id": "uuid-generator",
+    "component": "UuidGenerator",
+    "title": "UUID Generator",
+    "description": "Generate UUID v4 values locally in your browser — no uploads.",
+    "path": "/uuid",
+    "ctaLabel": "Generate UUID",
+    "offlineEnabled": true,
+    "authRequired": false
   }
+
 
 ]
