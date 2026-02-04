@@ -68,5 +68,16 @@
     "ctaLabel": "Compare Text",
     "offlineEnabled": true,
     "authRequired": false
+  },
+  {
+    "id": "jwt-encoder-decoder",
+    "component": "JwtTool",
+    "title": "JWT Encoder / Decoder",
+    "description": "Decode JWTs and generate HS256 tokens locally in your browser — no uploads.",
+    "path": "/jwt",
+    "ctaLabel": "Open JWT Tool",
+    "offlineEnabled": true,
+    "authRequired": false
   }
+
 ]
