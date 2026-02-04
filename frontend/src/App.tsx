@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { NavLink, Link, Outlet } from "react-router-dom";
 import { Suspense } from "react";
 
-import { NavButton } from "./components/Buttons";
+import { NavButton } from "./components/buttons/NavButton";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
 import { apiFetch } from "./utils/api";

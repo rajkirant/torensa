@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import type { CSSProperties } from "react";
 
-import { PrimaryButton } from "../components/Buttons";
+import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import serviceCards from "../metadata/serviceCards.json";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import type { AppOutletContext } from "../App";
