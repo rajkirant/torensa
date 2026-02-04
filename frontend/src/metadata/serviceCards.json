@@ -58,5 +58,15 @@
     "ctaLabel": "Create Invoice",
     "offlineEnabled": true,
     "authRequired": false
+  },
+  {
+    "id": "text-diff-checker",
+    "component": "TextDiffChecker",
+    "title": "Text Difference Checker",
+    "description": "Compare two versions of text and highlight changes — fully in-browser, no uploads.",
+    "path": "/text-diff",
+    "ctaLabel": "Compare Text",
+    "offlineEnabled": true,
+    "authRequired": false
   }
 ]
