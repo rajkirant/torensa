@@ -451,12 +451,9 @@ export default function ImageCompressor() {
   return (
 
       <PageContainer>
-        <Stack spacing={2.25}>
+
           {/* Header */}
           <Stack spacing={0.75}>
-            <Typography variant="h4" sx={{ fontWeight: 800 }}>
-              Image Compressor
-            </Typography>
             <Typography variant="body1" color="text.secondary">
               Beginner-friendly controls first. Advanced options are tucked
               away. Everything runs locally in your browser.
@@ -486,14 +483,7 @@ export default function ImageCompressor() {
                 />
               </Stack>
 
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                sx={{ ml: { sm: "auto" } }}
-              >
-                <OfflineChip />
-              </Stack>
+
             </Stack>
           </Stack>
 
@@ -1140,7 +1130,7 @@ export default function ImageCompressor() {
               be added later using WASM codecs (still no backend).
             </Typography>
           </Stack>
-        </Stack>
+
       </PageContainer>
   );
 }

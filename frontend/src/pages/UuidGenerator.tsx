@@ -55,10 +55,8 @@ const UuidGenerator: React.FC = () => {
 
     return (
         <PageContainer maxWidth={720}>
-                <Stack spacing={3}>
-                    <Typography variant="h5" fontWeight={700}>
-                        UUID Generator
-                    </Typography>
+
+
 
                     <Typography variant="body2" color="text.secondary">
                         Generate UUID v4 values locally in your browser — nothing is uploaded.
@@ -147,7 +145,7 @@ const UuidGenerator: React.FC = () => {
                             </Stack>
                         </>
                     )}
-                </Stack>
+
             </PageContainer>
     );
 };

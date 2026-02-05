@@ -421,11 +421,8 @@ const ImagePdfToPdf: React.FC = () => {
 
   return (
     <PageContainer maxWidth={920}>
-      <Stack spacing={2.5}>
+
         <Stack spacing={0.5}>
-          <Typography variant="h5" fontWeight={800}>
-            Image / PDF to PDF
-          </Typography>
           <Typography variant="body2" color="text.secondary">
             {offlineHint}
           </Typography>
@@ -477,7 +474,6 @@ const ImagePdfToPdf: React.FC = () => {
               label={`${totalCount} file${totalCount === 1 ? "" : "s"}`}
               variant="outlined"
             />
-            <OfflineChip />
             {busy && <BusyChip />}
           </Stack>
         </Stack>
@@ -764,7 +760,7 @@ const ImagePdfToPdf: React.FC = () => {
         </Stack>
 
         {error && <Alert severity="error">{error}</Alert>}
-      </Stack>
+
     </PageContainer>
   );
 };

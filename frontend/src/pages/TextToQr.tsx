@@ -184,11 +184,6 @@ const TextToQr: React.FC = () => {
 
   return (
     <PageContainer maxWidth={480}>
-      <Stack spacing={3}>
-        <Typography variant="h5" fontWeight={700}>
-          Text to QR Code
-        </Typography>
-
         {/* New description about offline usage & benefits */}
         <Typography variant="body2" color="text.secondary">
           This tool works offline after you&apos;ve opened it once while
@@ -293,7 +288,6 @@ const TextToQr: React.FC = () => {
         </Button>
 
         {error && <Alert severity="error">{error}</Alert>}
-      </Stack>
     </PageContainer>
   );
 };

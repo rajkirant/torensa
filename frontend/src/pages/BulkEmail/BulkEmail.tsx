@@ -15,6 +15,7 @@ import SendEmailAccordion from "./SendEmailAccordion";
 import ContactGroupsAccordion from "./ContactGroupsAccordion";
 import ImportFromExcelAccordion from "./ImportFromExcelAccordion"; // ✅ NEW
 import { apiFetch } from "../../utils/api";
+import PageContainer from "../../components/PageContainer";
 
 /* ===================== TYPES ===================== */
 
@@ -153,12 +154,8 @@ export default function BulkEmail() {
   /* ===================== RENDER ===================== */
 
   return (
-    <Card sx={{ maxWidth: 820, margin: "80px auto" }}>
-      <CardContent>
-        <Typography variant="h5" fontWeight={800} gutterBottom>
-          Bulk Email Management
-        </Typography>
 
+    <PageContainer maxWidth={ 820}>
         <Typography variant="body2" sx={{ color: "#9ca3af", mb: 2 }}>
           Securely store Gmail App Passwords and send emails using your own SMTP
           credentials.
@@ -302,7 +299,6 @@ export default function BulkEmail() {
             </Box>
           </AccordionDetails>
         </Accordion>
-      </CardContent>
-    </Card>
+      </PageContainer>
   );
 }
