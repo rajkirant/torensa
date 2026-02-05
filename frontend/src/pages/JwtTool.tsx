@@ -286,13 +286,6 @@ const JwtTool: React.FC = () => {
     return (
         <PageContainer maxWidth={980}>
 
-
-
-                    <Typography variant="body2" color="text.secondary">
-                        Works in your browser — nothing is uploaded. Decode JWTs and generate HS256/HS512 tokens
-                        from your header/payload/secret.
-                    </Typography>
-
                     <Stack direction={{ xs: "column", md: "row" }} spacing={1} alignItems="center">
                         <Button variant="outlined" onClick={handleClear} sx={{ textTransform: "none" }}>
                             Clear

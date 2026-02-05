@@ -9,6 +9,7 @@ type ServiceCard = {
     component: string;
     title: string;
     description: string;
+    detailedDescription: string;
     path: string;
     ctaLabel: string;
     offlineEnabled: boolean;
@@ -31,7 +32,7 @@ export default function PageContainer({
         (item) => item.path === currentPath,
     );
 
-    const titleToShow = meta?.title ?? id ?? currentPath;
+    const title = meta?.title;
 
     return (
         <Card
@@ -55,20 +56,18 @@ export default function PageContainer({
                         sx={{
                             display: "flex",
                             alignItems: "center",
-                            width: "100%", // ✅ important
+                            width: "100%",
                         }}
                     >
-                        {titleToShow}
+                        {title}
 
                         {meta?.offlineEnabled && (
                             <OfflineChip sx={{ ml: "auto" }} />
                         )}
                     </Typography>
-
-
-
-
-
+                    <Typography variant="body2" color="text.secondary">
+                        {meta?.detailedDescription}
+                    </Typography>
                     {children}
                 </Stack>
             </CardContent>

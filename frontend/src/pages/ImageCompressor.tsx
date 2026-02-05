@@ -439,28 +439,12 @@ export default function ImageCompressor() {
   const savingsPct =
     totalBefore > 0 ? ((totalBefore - totalAfter) / totalBefore) * 100 : 0;
 
-  const offlineHint = useMemo(() => {
-    return (
-      <>
-        Runs <strong>fully in your browser</strong>. After you’ve opened it
-        once, it’s offline-friendly (no uploads).
-      </>
-    );
-  }, []);
-
   return (
 
       <PageContainer>
 
           {/* Header */}
           <Stack spacing={0.75}>
-            <Typography variant="body1" color="text.secondary">
-              Beginner-friendly controls first. Advanced options are tucked
-              away. Everything runs locally in your browser.
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {offlineHint}
-            </Typography>
 
             <Stack
               direction={{ xs: "column", sm: "row" }}

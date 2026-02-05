@@ -56,12 +56,6 @@ const UuidGenerator: React.FC = () => {
     return (
         <PageContainer maxWidth={720}>
 
-
-
-                    <Typography variant="body2" color="text.secondary">
-                        Generate UUID v4 values locally in your browser — nothing is uploaded.
-                    </Typography>
-
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                         <TextField
                             label="Count"
