@@ -470,19 +470,6 @@ export default function InvoiceGenerator() {
 
   return (
     <PageContainer>
-      <Stack spacing={3}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          gap={2}
-        >
-          <Typography variant="h5" fontWeight={700}>
-            Invoice / Receipt Generator
-          </Typography>
-
-          <OfflineChip />
-        </Stack>
 
         <Typography variant="body2" color="text.secondary">
           This tool works offline after you&apos;ve opened it once while
@@ -798,7 +785,7 @@ export default function InvoiceGenerator() {
         </Stack>
 
         {error && <Alert severity="error">{error}</Alert>}
-      </Stack>
+
     </PageContainer>
   );
 }

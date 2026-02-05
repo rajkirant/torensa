@@ -285,10 +285,8 @@ const JwtTool: React.FC = () => {
 
     return (
         <PageContainer maxWidth={980}>
-                <Stack spacing={3}>
-                    <Typography variant="h5" fontWeight={700}>
-                        JWT Encoder / Decoder
-                    </Typography>
+
+
 
                     <Typography variant="body2" color="text.secondary">
                         Works in your browser — nothing is uploaded. Decode JWTs and generate HS256/HS512 tokens
@@ -599,7 +597,7 @@ const JwtTool: React.FC = () => {
                             </Button>
                         </Stack>
                     </Stack>
-                </Stack>
+
             </PageContainer>
     );
 };

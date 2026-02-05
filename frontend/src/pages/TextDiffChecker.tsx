@@ -363,10 +363,7 @@ const TextDiffChecker: React.FC = () => {
     return (
         <PageContainer maxWidth={1250}>
 
-                <Stack spacing={3}>
-                    <Typography variant="h5" fontWeight={700}>
-                        Text Difference Checker
-                    </Typography>
+
 
                     <Typography variant="body2" color="text.secondary">
                         Works offline after you&apos;ve opened it once while connected. Compare two versions of text in your
@@ -582,7 +579,7 @@ const TextDiffChecker: React.FC = () => {
                             </Typography>
                         </>
                     )}
-                </Stack>
+
             </PageContainer>
     );
 };

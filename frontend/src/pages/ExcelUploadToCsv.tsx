@@ -63,10 +63,6 @@ const ExcelUploadToCsv: React.FC = () => {
 
   return (
     <PageContainer maxWidth={480}>
-      <Stack spacing={3}>
-        <Typography variant="h5" fontWeight={700}>
-          Excel to CSV
-        </Typography>
 
         <Button variant="outlined" component="label">
           {file ? file.name : "Choose Excel File"}
@@ -92,7 +88,7 @@ const ExcelUploadToCsv: React.FC = () => {
         </Button>
 
         {error && <Alert severity="error">{error}</Alert>}
-      </Stack>
+
     </PageContainer>
   );
 };
