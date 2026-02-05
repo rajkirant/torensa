@@ -471,15 +471,6 @@ export default function InvoiceGenerator() {
   return (
     <PageContainer>
 
-        <Typography variant="body2" color="text.secondary">
-          This tool works offline after you&apos;ve opened it once while
-          connected. Just bookmark{" "}
-          <strong>torensa.com/invoice-generator</strong> in your browser and you
-          can create invoices/receipts even without an internet connection.
-          Using it offline also means fewer repeated network calls over time,
-          which can save a bit of data and reduce server load.
-        </Typography>
-
         {/* Doc meta */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <TextField

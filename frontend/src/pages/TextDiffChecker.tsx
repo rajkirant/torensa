@@ -363,13 +363,6 @@ const TextDiffChecker: React.FC = () => {
     return (
         <PageContainer maxWidth={1250}>
 
-
-
-                    <Typography variant="body2" color="text.secondary">
-                        Works offline after you&apos;ve opened it once while connected. Compare two versions of text in your
-                        browser — nothing is uploaded.
-                    </Typography>
-
                     <Stack direction={{ xs: "column", md: "row" }} spacing={1} alignItems="center">
                         <Button variant="outlined" onClick={handleSwap} sx={{ textTransform: "none" }}>
                             Swap

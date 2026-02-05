@@ -7,7 +7,8 @@
     "path": "/bulk-email",
     "ctaLabel": "Open Bulk Email",
     "offlineEnabled": false,
-    "authRequired": true
+    "authRequired": true,
+    "detailedDescription": "Allows users to send personalised emails to many recipients from a single interface.  It supports creating and managing contact groups, importing recipient lists from Excel spreadsheets, and storing Gmail SMTP credentials securely.  The interface is organised as accordions for SMTP settings, contact group management and the email composer.  Users can attach files, customise the subject and body, and send bulk messages using the configured SMTP server.  Everything runs in‑browser; credentials are stored securely and emails are sent via the user’s own SMTP configuration."
   },
   {
     "id": "excel-to-csv",
@@ -17,7 +18,8 @@
     "path": "/excel-to-csv",
     "ctaLabel": "Convert Excel",
     "offlineEnabled": false,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Converts uploaded Excel files into CSV format entirely on the client side.  Users select an `.xlsx` or `.xls` file, the tool calls an API to process the file and presents a download link for the resulting CSV.  It handles large spreadsheets gracefully and displays progress and error messages to guide the user.  Once converted, the CSV can be downloaded for offline use."
   },
   {
     "id": "text-to-qr",
@@ -27,7 +29,8 @@
     "path": "/text-to-qr",
     "ctaLabel": "Generate QR",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Generates QR codes from arbitrary text or URLs in the browser.  Users type or paste text, optionally upload a logo, and choose whether to show a short label underneath the logo.  The preview updates instantly and the finished QR code can be downloaded as a PNG.  The tool uses the QRCode library with high error‑correction and draws onto a Canvas, allowing custom colours and sizes.  It works offline once loaded, reducing network calls and enabling QR code generation without an internet connection."
   },
   {
     "id": "image-compressor",
@@ -37,7 +40,8 @@
     "path": "/image-compressor",
     "ctaLabel": "Compress Images",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "A full‑featured client‑side image compression and resizing tool.  Users drag‑and‑drop multiple images, then adjust quality and resolution, choose output format (JPEG/PNG/WebP), set maximum dimensions, and optionally specify a target file size.  Advanced options allow cropping, rotation, background colour for JPEG, and iterative compression to meet a target size.  The tool provides presets (balanced, smallest, best) and displays before/after file sizes and compression ratios.  Compressed images can be downloaded individually or as a ZIP.  All processing happens in the browser, so no images are uploaded."
   },
   {
     "id": "image-pdf-to-pdf",
@@ -47,7 +51,8 @@
     "path": "/image-pdf-to-pdf",
     "ctaLabel": "Create PDF",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Combines multiple images and PDF documents into a single PDF directly in the browser.  Users can upload images and PDFs, reorder or remove pages, rotate individual images, choose the final page size (Auto, A4 or Letter) and margins, and select fit modes (contain or cover).  It also supports adding page numbers (custom start number and size) and optionally preserving original PDF pages instead of converting them.  The tool uses `pdf-lib` to assemble the final document and runs fully offline after the initial load."
   },
   {
     "id": "invoice-generator",
@@ -57,7 +62,8 @@
     "path": "/invoice-generator",
     "ctaLabel": "Create Invoice",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Lets users compose detailed invoices or receipts offline.  The form collects seller and buyer details, invoice number, issue and due dates, currency (USD, GBP, EUR, etc.), and allows adding many line items with quantity, unit price and description.  Users can specify tax rates, shipping costs, discounts and notes.  The tool calculates subtotals and totals automatically, stores data in local storage, and generates a polished PDF using `pdf-lib`.  It includes options to reset the form or load saved data and works without sending any data to a server."
   },
   {
     "id": "text-diff-checker",
@@ -67,7 +73,8 @@
     "path": "/text-diff",
     "ctaLabel": "Compare Text",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Provides an interactive side‑by‑side diff viewer for comparing text documents.  Users paste or type two pieces of text, then click compare to see a line‑by‑line diff with additions (green), deletions (red) and changes (yellow) highlighted.  Buttons allow swapping texts, clearing fields and toggling whether only changed lines are shown.  Clicking a diff line scrolls to the corresponding line in edit mode.  A statistics summary shows how many characters were added, removed and changed.  The comparison runs entirely in the browser, so no data is uploaded."
   },
   {
     "id": "jwt-encoder-decoder",
@@ -77,7 +84,8 @@
     "path": "/jwt",
     "ctaLabel": "Open JWT Tool",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Decodes existing JSON Web Tokens and lets users create new HS256 or HS512 tokens directly in the browser.  When a JWT is pasted, its protected header and payload are parsed and shown in formatted JSON; hovering over exp/iat/nbf fields reveals human‑readable timestamps.  Users can load decoded values into the encoder, edit the header and payload, choose the algorithm (HS256 or HS512), automatically set the issued‑at time, specify an expiry via a date‑time picker, enter a secret key and generate a new JWT.  Copy buttons are provided for both input and output tokens, and informative success or error messages guide the user.  All operations occur locally; nothing is sent to a server."
   },
   {
     "id": "uuid-generator",
@@ -87,8 +95,7 @@
     "path": "/uuid-generator",
     "ctaLabel": "Generate UUID",
     "offlineEnabled": true,
-    "authRequired": false
+    "authRequired": false,
+    "detailedDescription": "Generates random UUID version 4 identifiers within the browser.  Users specify how many UUIDs to generate (1–1000) and can choose to output uppercase strings or remove hyphens.  Clicking Generate produces the requested number of UUIDs, which are displayed in a monospaced text area.  Buttons allow copying all UUIDs to the clipboard or clearing the list.  The generation happens entirely on the client, so no data is sent to a server."
   }
-
-
 ]

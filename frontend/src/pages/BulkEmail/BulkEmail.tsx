@@ -156,11 +156,6 @@ export default function BulkEmail() {
   return (
 
     <PageContainer maxWidth={ 820}>
-        <Typography variant="body2" sx={{ color: "#9ca3af", mb: 2 }}>
-          Securely store Gmail App Passwords and send emails using your own SMTP
-          credentials.
-        </Typography>
-
         <Divider sx={{ mb: 3 }} />
 
         {/* ================= SMTP SETTINGS ================= */}

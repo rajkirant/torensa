@@ -184,16 +184,6 @@ const TextToQr: React.FC = () => {
 
   return (
     <PageContainer maxWidth={480}>
-        {/* New description about offline usage & benefits */}
-        <Typography variant="body2" color="text.secondary">
-          This tool works offline after you&apos;ve opened it once while
-          connected. Just bookmark <strong>torensa.com/text-to-qr</strong> in
-          your browser and you can generate QR codes even without an internet
-          connection. Using it offline also means fewer repeated network calls
-          over time, which can save a bit of data, reduce server load, and
-          slightly lower your overall carbon footprint when you generate QR
-          codes frequently.
-        </Typography>
 
         <TextField
           label="Text or URL"

@@ -260,17 +260,7 @@ const ImagePdfToPdf: React.FC = () => {
     [items.length, busy],
   );
 
-  const offlineHint = useMemo(() => {
-    // Keep it similar to your QR copy
-    return (
-      <>
-        This tool runs <strong>fully in your browser</strong>. Once you’ve
-        opened it at least once while connected, you can use it offline (great
-        for privacy + fewer network calls). Bookmark{" "}
-        <strong>torensa.com/image-pdf-to-pdf</strong>.
-      </>
-    );
-  }, []);
+
 
   const buildPdf = async () => {
     setError(null);
@@ -422,11 +412,6 @@ const ImagePdfToPdf: React.FC = () => {
   return (
     <PageContainer maxWidth={920}>
 
-        <Stack spacing={0.5}>
-          <Typography variant="body2" color="text.secondary">
-            {offlineHint}
-          </Typography>
-        </Stack>
 
         <Divider />
 
