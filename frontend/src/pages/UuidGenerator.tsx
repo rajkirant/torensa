@@ -11,6 +11,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import PageContainer from "../components/PageContainer";
 
 const generateUuid = () => crypto.randomUUID();
 
@@ -53,8 +54,7 @@ const UuidGenerator: React.FC = () => {
     };
 
     return (
-        <Card sx={{ maxWidth: 720, mx: "auto", mt: 6 }}>
-            <CardContent>
+        <PageContainer maxWidth={720}>
                 <Stack spacing={3}>
                     <Typography variant="h5" fontWeight={700}>
                         UUID Generator
@@ -148,8 +148,7 @@ const UuidGenerator: React.FC = () => {
                         </>
                     )}
                 </Stack>
-            </CardContent>
-        </Card>
+            </PageContainer>
     );
 };
 
