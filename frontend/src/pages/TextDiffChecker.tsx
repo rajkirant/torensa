@@ -14,6 +14,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import PageContainer from "../components/PageContainer";
 
 type LinePart = {
     value: string;
@@ -360,8 +361,8 @@ const TextDiffChecker: React.FC = () => {
        ========================= */
 
     return (
-        <Card sx={{ maxWidth: 1100, mx: "auto", mt: 6 }}>
-            <CardContent>
+        <PageContainer maxWidth={1250}>
+
                 <Stack spacing={3}>
                     <Typography variant="h5" fontWeight={700}>
                         Text Difference Checker
@@ -582,8 +583,7 @@ const TextDiffChecker: React.FC = () => {
                         </>
                     )}
                 </Stack>
-            </CardContent>
-        </Card>
+            </PageContainer>
     );
 };
 

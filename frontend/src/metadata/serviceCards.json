@@ -84,7 +84,7 @@
     "component": "UuidGenerator",
     "title": "UUID Generator",
     "description": "Generate UUID v4 values locally in your browser — no uploads.",
-    "path": "/uuid",
+    "path": "/uuid-generator",
     "ctaLabel": "Generate UUID",
     "offlineEnabled": true,
     "authRequired": false

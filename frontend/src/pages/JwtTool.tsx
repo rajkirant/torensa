@@ -15,6 +15,7 @@ import {
     Typography,
 } from "@mui/material";
 import { SignJWT, decodeProtectedHeader, decodeJwt } from "jose";
+import PageContainer from "../components/PageContainer";
 
 /* =========================
    Helpers
@@ -283,8 +284,7 @@ const JwtTool: React.FC = () => {
     };
 
     return (
-        <Card sx={{ maxWidth: 980, mx: "auto", mt: 6 }}>
-            <CardContent>
+        <PageContainer maxWidth={980}>
                 <Stack spacing={3}>
                     <Typography variant="h5" fontWeight={700}>
                         JWT Encoder / Decoder
@@ -600,8 +600,7 @@ const JwtTool: React.FC = () => {
                         </Stack>
                     </Stack>
                 </Stack>
-            </CardContent>
-        </Card>
+            </PageContainer>
     );
 };
 

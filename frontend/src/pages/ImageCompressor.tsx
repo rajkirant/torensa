@@ -449,8 +449,7 @@ export default function ImageCompressor() {
   }, []);
 
   return (
-    <Box sx={pageContainer}>
-      {/* ONE BOX ONLY */}
+
       <PageContainer>
         <Stack spacing={2.25}>
           {/* Header */}
@@ -1143,6 +1142,5 @@ export default function ImageCompressor() {
           </Stack>
         </Stack>
       </PageContainer>
-    </Box>
   );
 }
