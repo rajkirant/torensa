@@ -23,7 +23,6 @@ const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
-  // ✅ now coming from App.tsx <Outlet context={...} />
   const { secondaryTextColor, sectionBase, cardStyle } =
     useOutletContext<AppOutletContext>();
 
