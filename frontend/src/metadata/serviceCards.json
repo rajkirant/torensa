@@ -41,7 +41,7 @@
     "ctaLabel": "Compress Images",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "A full‑featured client‑side image compression and resizing tool.  Users drag‑and‑drop multiple images, then adjust quality and resolution, choose output format (JPEG/PNG/WebP), set maximum dimensions, and optionally specify a target file size.  Advanced options allow cropping, rotation, background colour for JPEG, and iterative compression to meet a target size.  The tool provides presets (balanced, smallest, best) and displays before/after file sizes and compression ratios.  Compressed images can be downloaded individually or as a ZIP.  All processing happens in the browser, so no images are uploaded."
+    "detailedDescription": "A lightweight client-side image compression and resizing tool. Users can drag-and-drop multiple images, adjust output quality, and optionally resize images by selecting maximum width and height. By default, images are exported in their original format, with an optional advanced setting to choose a different output format (JPEG/PNG/WebP). Users may also enable a target file size mode, which automatically adjusts compression quality to approximate a desired size for JPEG/WebP outputs. The tool displays before/after file sizes, dimensions, and savings percentage, and allows downloading compressed images individually or as a ZIP archive. All processing happens entirely in the browser, so no images are uploaded to a server."
   },
   {
     "id": "image-pdf-to-pdf",

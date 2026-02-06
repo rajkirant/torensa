@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
 import JSZip from "jszip";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import {
   Alert,
@@ -42,21 +41,21 @@ type ResizeOptions = {
   enabled: boolean;
   maxWidth: number;
   maxHeight: number;
-  // removed: withoutEnlargement toggle from UI; behavior is always "do not enlarge"
 };
 
 type TargetSizeOptions = {
   enabled: boolean;
   targetKB: number;
-  minQuality: number; // 0..1
-  maxQuality: number; // 0..1
   iterations: number;
 };
 
 type CompressSpec = {
-  format: OutputFormat;
+  chooseFormat: {
+    enabled: boolean;
+    format: OutputFormat;
+  };
   quality: number; // 0..1 (jpeg/webp only)
-  background: string; // used for transparent -> jpeg
+  background: string; // fixed to white
   resize: ResizeOptions;
   target: TargetSizeOptions;
 };
@@ -70,7 +69,19 @@ type ResultItem = {
   usedQuality?: number;
   width: number;
   height: number;
+  outputMime: OutputFormat;
 };
+
+const MAX_TARGET_ITERATIONS = 12;
+
+// Fixed bounds for target-size search
+const TARGET_MIN_QUALITY = 0.2;
+const TARGET_MAX_QUALITY = 0.95;
+
+const RESIZE_DIMENSIONS = [
+  128, 160, 240, 256, 320, 480, 640, 800, 1024, 1600, 1920, 2560, 3840,
+];
+
 
 function formatBytes(bytes: number) {
   const units = ["B", "KB", "MB", "GB"];
@@ -87,12 +98,6 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-function mimeToExt(mime: OutputFormat) {
-  if (mime === "image/jpeg") return "jpg";
-  if (mime === "image/webp") return "webp";
-  return "png";
-}
-
 function safeBaseName(name: string) {
   return name.replace(/\.[^.]+$/, "").replace(/[^\w\-]+/g, "_");
 }
@@ -104,6 +109,18 @@ function supportsMime(mime: string) {
   } catch {
     return false;
   }
+}
+
+function normalizeOutputFormat(mime: string): OutputFormat {
+  if (mime === "image/jpeg" || mime === "image/jpg") return "image/jpeg";
+  if (mime === "image/webp") return "image/webp";
+  return "image/png";
+}
+
+function outputExtFor(mime: OutputFormat) {
+  if (mime === "image/jpeg") return "jpg";
+  if (mime === "image/webp") return "webp";
+  return "png";
 }
 
 async function loadBitmap(file: File): Promise<ImageBitmap> {
@@ -142,6 +159,7 @@ async function canvasToBlob(
 async function encodeWithSpec(
     file: File,
     spec: CompressSpec,
+    outputMime: OutputFormat,
 ): Promise<{
   blob: Blob;
   width: number;
@@ -170,30 +188,27 @@ async function encodeWithSpec(
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("No 2D context");
 
-  if (spec.format === "image/jpeg") {
-    ctx.fillStyle = spec.background;
+  if (outputMime === "image/jpeg") {
+    ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
 
-  // PNG ignores quality; "true PNG compression" needs quantization libraries.
-  if (spec.format === "image/png") {
+  if (outputMime === "image/png") {
     const blob = await canvasToBlob(canvas, "image/png");
     return { blob, width: canvas.width, height: canvas.height };
   }
 
-  // Simple quality mode
   if (!spec.target.enabled) {
     const q = clamp(spec.quality, 0.01, 1);
-    const blob = await canvasToBlob(canvas, spec.format, q);
+    const blob = await canvasToBlob(canvas, outputMime, q);
     return { blob, width: canvas.width, height: canvas.height, usedQuality: q };
   }
 
-  // Target-size mode (jpeg/webp): binary search quality
   const targetBytes = Math.max(1, Math.round(spec.target.targetKB * 1024));
-  let lo = clamp(spec.target.minQuality, 0.01, 1);
-  let hi = clamp(spec.target.maxQuality, 0.01, 1);
+  let lo = clamp(TARGET_MIN_QUALITY, 0.01, 1);
+  let hi = clamp(TARGET_MAX_QUALITY, 0.01, 1);
   if (lo > hi) [lo, hi] = [hi, lo];
 
   let bestBlob: Blob | null = null;
@@ -201,7 +216,7 @@ async function encodeWithSpec(
 
   for (let i = 0; i < spec.target.iterations; i++) {
     const q = (lo + hi) / 2;
-    const blob = await canvasToBlob(canvas, spec.format, q);
+    const blob = await canvasToBlob(canvas, outputMime, q);
 
     if (blob.size <= targetBytes) {
       bestBlob = blob;
@@ -220,7 +235,7 @@ async function encodeWithSpec(
       usedQuality: bestQ,
     };
 
-  const blob = await canvasToBlob(canvas, spec.format, lo);
+  const blob = await canvasToBlob(canvas, outputMime, lo);
   return { blob, width: canvas.width, height: canvas.height, usedQuality: lo };
 }
 
@@ -236,7 +251,6 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 export default function ImageCompressor() {
-  const isMobile = useMediaQuery("(max-width:900px)");
   const [files, setFiles] = useState<File[]>([]);
   const [results, setResults] = useState<ResultItem[]>([]);
   const [busy, setBusy] = useState(false);
@@ -249,7 +263,10 @@ export default function ImageCompressor() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [spec, setSpec] = useState<CompressSpec>(() => ({
-    format: "image/webp",
+    chooseFormat: {
+      enabled: false,
+      format: "image/webp",
+    },
     quality: 0.78,
     background: "#ffffff",
     resize: {
@@ -260,9 +277,7 @@ export default function ImageCompressor() {
     target: {
       enabled: false,
       targetKB: 250,
-      minQuality: 0.2,
-      maxQuality: 0.95,
-      iterations: 8,
+      iterations: MAX_TARGET_ITERATIONS,
     },
   }));
 
@@ -278,12 +293,13 @@ export default function ImageCompressor() {
       () => files.reduce((s, f) => s + f.size, 0),
       [files],
   );
+
   const totalAfter = useMemo(
       () => results.reduce((s, r) => s + r.outputBlob.size, 0),
       [results],
   );
 
-  const disableQualitySlider = spec.format === "image/png" || spec.target.enabled;
+  const disableQualitySlider = spec.target.enabled;
 
   function clearOldUrls() {
     for (const r of results) URL.revokeObjectURL(r.outputUrl);
@@ -313,18 +329,34 @@ export default function ImageCompressor() {
     setResults([]);
 
     try {
-      if (files.length === 0) throw new Error("Please select at least one image.");
+      if (files.length === 0)
+        throw new Error("Please select at least one image.");
       if (files.length > 50)
         throw new Error(
             "Please compress 50 images or fewer at a time (browser memory safety).",
         );
 
       const out: ResultItem[] = [];
-      const ext = mimeToExt(spec.format);
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const { blob, width, height, usedQuality } = await encodeWithSpec(file, spec);
+
+        const outputMime: OutputFormat = spec.chooseFormat.enabled
+            ? spec.chooseFormat.format
+            : normalizeOutputFormat(file.type);
+
+        const effectiveSpec: CompressSpec =
+            outputMime === "image/png"
+                ? { ...spec, target: { ...spec.target, enabled: false } }
+                : spec;
+
+        const { blob, width, height, usedQuality } = await encodeWithSpec(
+            file,
+            effectiveSpec,
+            outputMime,
+        );
+
+        const ext = outputExtFor(outputMime);
         const outputName = `${safeBaseName(file.name)}.${ext}`;
         const outputUrl = URL.createObjectURL(blob);
 
@@ -337,6 +369,7 @@ export default function ImageCompressor() {
           usedQuality,
           width,
           height,
+          outputMime,
         });
 
         setProgress({ done: i + 1, total: files.length });
@@ -389,9 +422,9 @@ export default function ImageCompressor() {
                   color={savingsPct > 0 ? "success" : "default"}
                   label={
                     totalBefore > 0
-                        ? `Saved: ${formatBytes(Math.max(0, totalBefore - totalAfter))} (${savingsPct.toFixed(
-                            1,
-                        )}%)`
+                        ? `Saved: ${formatBytes(
+                            Math.max(0, totalBefore - totalAfter),
+                        )} (${savingsPct.toFixed(1)}%)`
                         : "Saved: —"
                   }
               />
@@ -431,8 +464,7 @@ export default function ImageCompressor() {
                 onChange={(e) => {
                   onPickFiles(e.target.files);
                   e.currentTarget.value = "";
-                }
-            }
+                }}
             />
           </Stack>
 
@@ -468,53 +500,22 @@ export default function ImageCompressor() {
             2) Choose output
           </Typography>
 
-          {/* Format */}
-          <Stack spacing={1}>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              Format
-            </Typography>
-            <FormControl fullWidth size="small">
-              <InputLabel>Format</InputLabel>
-              <Select
-                  label="Format"
-                  value={spec.format}
-                  onChange={(e) =>
-                      setSpec((s) => ({
-                        ...s,
-                        format: e.target.value as OutputFormat,
-                      }))
-                  }
-                  disabled={busy}
-              >
-                <MenuItem value="image/webp" disabled={!supports.webp}>
-                  WebP {!supports.webp ? "(not supported)" : ""}
-                </MenuItem>
-                <MenuItem value="image/jpeg" disabled={!supports.jpeg}>
-                  JPEG {!supports.jpeg ? "(not supported)" : ""}
-                </MenuItem>
-                <MenuItem value="image/png" disabled={!supports.png}>
-                  PNG {!supports.png ? "(not supported)" : ""}
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
-
-          <Divider />
-
           {/* Quality */}
           <Stack spacing={1}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+            >
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 Quality
               </Typography>
               <Chip
                   size="small"
                   label={
-                    spec.format === "image/png"
-                        ? "PNG ignores quality"
-                        : spec.target.enabled
-                            ? "Disabled (Target size)"
-                            : `${Math.round(spec.quality * 100)}`
+                    spec.target.enabled
+                        ? "Disabled (Target size)"
+                        : `${Math.round(spec.quality * 100)}`
                   }
               />
             </Stack>
@@ -531,155 +532,12 @@ export default function ImageCompressor() {
                     }))
                 }
             />
-          </Stack>
 
-          <Divider />
-
-          {/* Resize */}
-          <Stack spacing={1}>
-            <FormControlLabel
-                control={
-                  <Switch
-                      checked={spec.resize.enabled}
-                      onChange={(e) =>
-                          setSpec((s) => ({
-                            ...s,
-                            resize: { ...s.resize, enabled: e.target.checked },
-                          }))
-                      }
-                      disabled={busy}
-                  />
-                }
-                label="Resize (recommended)"
-            />
-
-            <Stack spacing={1} sx={{ opacity: spec.resize.enabled ? 1 : 0.5 }}>
-              <FormControl fullWidth size="small" disabled={!spec.resize.enabled || busy}>
-                <InputLabel>Max width</InputLabel>
-                <Select
-                    label="Max width"
-                    value={spec.resize.maxWidth}
-                    onChange={(e) =>
-                        setSpec((s) => ({
-                          ...s,
-                          resize: {
-                            ...s.resize,
-                            maxWidth: Number(e.target.value),
-                          },
-                        }))
-                    }
-                >
-                  {[1024, 1600, 1920, 2560, 3840].map((n) => (
-                      <MenuItem key={n} value={n}>
-                        {n}px
-                      </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth size="small" disabled={!spec.resize.enabled || busy}>
-                <InputLabel>Max height</InputLabel>
-                <Select
-                    label="Max height"
-                    value={spec.resize.maxHeight}
-                    onChange={(e) =>
-                        setSpec((s) => ({
-                          ...s,
-                          resize: {
-                            ...s.resize,
-                            maxHeight: Number(e.target.value),
-                          },
-                        }))
-                    }
-                >
-                  {[1024, 1600, 1920, 2560, 3840].map((n) => (
-                      <MenuItem key={n} value={n}>
-                        {n}px
-                      </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <Typography variant="caption" color="text.secondary">
-                Smaller images will not be enlarged.
-              </Typography>
-            </Stack>
-          </Stack>
-
-          <Divider />
-
-          {/* Target Size */}
-          <Stack spacing={1}>
-            <FormControlLabel
-                control={
-                  <Switch
-                      checked={spec.target.enabled}
-                      onChange={(e) =>
-                          setSpec((s) => ({
-                            ...s,
-                            target: { ...s.target, enabled: e.target.checked },
-                          }))
-                      }
-                      disabled={busy || spec.format === "image/png"}
-                  />
-                }
-                label="Target size (KB)"
-            />
-
-            {spec.format === "image/png" && (
+            {!spec.chooseFormat.enabled && (
                 <Typography variant="caption" color="text.secondary">
-                  Target size is for JPEG/WebP only.
+                  Output format defaults to the original file type (e.g., JPG stays
+                  JPG). Note: PNG ignores quality.
                 </Typography>
-            )}
-
-            {spec.target.enabled && spec.format !== "image/png" && (
-                <Stack spacing={1}>
-                  <FormControl fullWidth size="small" disabled={busy}>
-                    <InputLabel>Target</InputLabel>
-                    <Select
-                        label="Target"
-                        value={spec.target.targetKB}
-                        onChange={(e) =>
-                            setSpec((s) => ({
-                              ...s,
-                              target: {
-                                ...s.target,
-                                targetKB: Number(e.target.value),
-                              },
-                            }))
-                        }
-                    >
-                      {[100, 150, 200, 250, 350, 500, 800, 1200].map((n) => (
-                          <MenuItem key={n} value={n}>
-                            {n} KB
-                          </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl fullWidth size="small" disabled={busy}>
-                    <InputLabel>Tries</InputLabel>
-                    <Select
-                        label="Tries"
-                        value={spec.target.iterations}
-                        onChange={(e) =>
-                            setSpec((s) => ({
-                              ...s,
-                              target: {
-                                ...s.target,
-                                iterations: Number(e.target.value),
-                              },
-                            }))
-                        }
-                    >
-                      {[6, 7, 8, 9, 10, 12].map((n) => (
-                          <MenuItem key={n} value={n}>
-                            {n}
-                          </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Stack>
             )}
           </Stack>
 
@@ -690,92 +548,219 @@ export default function ImageCompressor() {
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography sx={{ fontWeight: 650 }}>Advanced options</Typography>
             </AccordionSummary>
+
             <AccordionDetails>
-              {spec.format === "image/jpeg" && (
-                  <Stack spacing={1}>
-                    <Typography variant="body2" color="text.secondary">
-                      Transparent PNGs converted to JPEG need a background.
-                    </Typography>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        Background
+              <Stack spacing={2}>
+                {/* Format */}
+                <Stack spacing={1}>
+                  <FormControlLabel
+                      control={
+                        <Switch
+                            checked={spec.chooseFormat.enabled}
+                            onChange={(e) =>
+                                setSpec((s) => ({
+                                  ...s,
+                                  chooseFormat: {
+                                    ...s.chooseFormat,
+                                    enabled: e.target.checked,
+                                  },
+                                }))
+                            }
+                            disabled={busy}
+                        />
+                      }
+                      label="Choose output format"
+                  />
+
+                  <FormControl
+                      fullWidth
+                      size="small"
+                      disabled={!spec.chooseFormat.enabled || busy}
+                  >
+                    <InputLabel>Format</InputLabel>
+                    <Select
+                        label="Format"
+                        value={spec.chooseFormat.format}
+                        onChange={(e) =>
+                            setSpec((s) => ({
+                              ...s,
+                              chooseFormat: {
+                                ...s.chooseFormat,
+                                format: e.target.value as OutputFormat,
+                              },
+                            }))
+                        }
+                    >
+                      <MenuItem value="image/webp" disabled={!supports.webp}>
+                        WebP {!supports.webp ? "(not supported)" : ""}
+                      </MenuItem>
+                      <MenuItem value="image/jpeg" disabled={!supports.jpeg}>
+                        JPEG {!supports.jpeg ? "(not supported)" : ""}
+                      </MenuItem>
+                      <MenuItem value="image/png" disabled={!supports.png}>
+                        PNG {!supports.png ? "(not supported)" : ""}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  {!spec.chooseFormat.enabled && (
+                      <Typography variant="caption" color="text.secondary">
+                        Disabled = keep each image&apos;s original format.
                       </Typography>
-                      <input
-                          type="color"
-                          value={spec.background}
+                  )}
+                </Stack>
+
+                <Divider />
+
+                {/* Resize */}
+                <Stack spacing={1}>
+                  <FormControlLabel
+                      control={
+                        <Switch
+                            checked={spec.resize.enabled}
+                            onChange={(e) =>
+                                setSpec((s) => ({
+                                  ...s,
+                                  resize: { ...s.resize, enabled: e.target.checked },
+                                }))
+                            }
+                            disabled={busy}
+                        />
+                      }
+                      label="Resize (recommended)"
+                  />
+
+                  <Stack
+                      spacing={1}
+                      sx={{ opacity: spec.resize.enabled ? 1 : 0.5 }}
+                  >
+                    <FormControl
+                        fullWidth
+                        size="small"
+                        disabled={!spec.resize.enabled || busy}
+                    >
+                      <InputLabel>Max width</InputLabel>
+                      <Select
+                          label="Max width"
+                          value={spec.resize.maxWidth}
                           onChange={(e) =>
                               setSpec((s) => ({
                                 ...s,
-                                background: e.target.value,
+                                resize: {
+                                  ...s.resize,
+                                  maxWidth: Number(e.target.value),
+                                },
                               }))
                           }
-                          style={{
-                            width: 56,
-                            height: 36,
-                            border: "none",
-                            background: "transparent",
-                            padding: 0,
-                          }}
-                      />
-                      <Chip size="small" label={spec.background.toUpperCase()} />
-                    </Stack>
+                      >
+                        {RESIZE_DIMENSIONS.map((n) => (
+                            <MenuItem key={n} value={n}>
+                              {n}px
+                            </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
 
-                    <Divider />
+                    <FormControl
+                        fullWidth
+                        size="small"
+                        disabled={!spec.resize.enabled || busy}
+                    >
+                      <InputLabel>Max height</InputLabel>
+                      <Select
+                          label="Max height"
+                          value={spec.resize.maxHeight}
+                          onChange={(e) =>
+                              setSpec((s) => ({
+                                ...s,
+                                resize: {
+                                  ...s.resize,
+                                  maxHeight: Number(e.target.value),
+                                },
+                              }))
+                          }
+                      >
+                        {RESIZE_DIMENSIONS.map((n) => (
+                            <MenuItem key={n} value={n}>
+                              {n}px
+                            </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
 
-                    <Typography variant="body2" sx={{ fontWeight: 650 }}>
-                      Target-size quality bounds
+                    <Typography variant="caption" color="text.secondary">
+                      Smaller images will not be enlarged.
                     </Typography>
-                    <Grid container spacing={1}>
-                      <Grid item xs={12}>
-                        <Typography variant="caption" color="text.secondary">
-                          Min quality
-                        </Typography>
-                        <Slider
-                            value={Math.round(spec.target.minQuality * 100)}
-                            min={1}
-                            max={99}
-                            onChange={(_, v) =>
-                                setSpec((s) => ({
-                                  ...s,
-                                  target: {
-                                    ...s.target,
-                                    minQuality: clamp((v as number) / 100, 0.01, 0.99),
-                                  },
-                                }))
-                            }
-                            disabled={busy}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography variant="caption" color="text.secondary">
-                          Max quality
-                        </Typography>
-                        <Slider
-                            value={Math.round(spec.target.maxQuality * 100)}
-                            min={1}
-                            max={100}
-                            onChange={(_, v) =>
-                                setSpec((s) => ({
-                                  ...s,
-                                  target: {
-                                    ...s.target,
-                                    maxQuality: clamp((v as number) / 100, 0.01, 1),
-                                  },
-                                }))
-                            }
-                            disabled={busy}
-                        />
-                      </Grid>
-                    </Grid>
                   </Stack>
-              )}
+                </Stack>
 
-              {spec.format !== "image/jpeg" && (
-                  <Typography variant="body2" color="text.secondary">
-                    Advanced options will expand as you add WASM codecs (AVIF / PNG
-                    quantization).
-                  </Typography>
-              )}
+                <Divider />
+
+                {/* Target Size */}
+                <Stack spacing={1}>
+                  <FormControlLabel
+                      control={
+                        <Switch
+                            checked={spec.target.enabled}
+                            onChange={(e) =>
+                                setSpec((s) => ({
+                                  ...s,
+                                  target: {
+                                    ...s.target,
+                                    enabled: e.target.checked,
+                                    iterations: MAX_TARGET_ITERATIONS,
+                                  },
+                                }))
+                            }
+                            disabled={
+                                busy ||
+                                (spec.chooseFormat.enabled &&
+                                    spec.chooseFormat.format === "image/png")
+                            }
+                        />
+                      }
+                      label="Target size (KB)"
+                  />
+
+                  {spec.chooseFormat.enabled &&
+                      spec.chooseFormat.format === "image/png" && (
+                          <Typography variant="caption" color="text.secondary">
+                            Target size is for JPEG/WebP only.
+                          </Typography>
+                      )}
+
+                  {spec.target.enabled && (
+                      <Stack spacing={1}>
+                        <FormControl fullWidth size="small" disabled={busy}>
+                          <InputLabel>Target</InputLabel>
+                          <Select
+                              label="Target"
+                              value={spec.target.targetKB}
+                              onChange={(e) =>
+                                  setSpec((s) => ({
+                                    ...s,
+                                    target: {
+                                      ...s.target,
+                                      targetKB: Number(e.target.value),
+                                    },
+                                  }))
+                              }
+                          >
+                            {[100, 150, 200, 250, 350, 500, 800, 1200].map((n) => (
+                                <MenuItem key={n} value={n}>
+                                  {n} KB
+                                </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+
+                        <Typography variant="caption" color="text.secondary">
+                          Uses maximum accuracy automatically.
+                        </Typography>
+                      </Stack>
+                  )}
+                </Stack>
+              </Stack>
             </AccordionDetails>
           </Accordion>
         </Stack>
@@ -839,7 +824,9 @@ export default function ImageCompressor() {
 
           {results.length === 0 ? (
               <Box sx={{ py: 4, textAlign: "center", color: "text.secondary" }}>
-                <Typography sx={{ fontWeight: 650 }}>No compressed images yet.</Typography>
+                <Typography sx={{ fontWeight: 650 }}>
+                  No compressed images yet.
+                </Typography>
                 <Typography variant="body2" sx={{ mt: 1 }}>
                   Upload images above, then press <b>Compress</b>.
                 </Typography>
@@ -882,8 +869,15 @@ export default function ImageCompressor() {
                               {r.file.name}
                             </Typography>
 
-                            <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap" }}>
-                              <Chip size="small" label={`Before ${formatBytes(r.file.size)}`} />
+                            <Stack
+                                direction="row"
+                                spacing={1}
+                                sx={{ mt: 1, flexWrap: "wrap" }}
+                            >
+                              <Chip
+                                  size="small"
+                                  label={`Before ${formatBytes(r.file.size)}`}
+                              />
                               <Chip
                                   size="small"
                                   label={`After ${formatBytes(r.outputBlob.size)}`}
@@ -894,6 +888,16 @@ export default function ImageCompressor() {
                                   color={pct > 0 ? "success" : "default"}
                                   label={`Saved ${pct.toFixed(1)}%`}
                               />
+                              <Chip
+                                  size="small"
+                                  label={
+                                    r.outputMime === "image/jpeg"
+                                        ? "JPG"
+                                        : r.outputMime === "image/webp"
+                                            ? "WEBP"
+                                            : "PNG"
+                                  }
+                              />
                             </Stack>
 
                             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
@@ -901,7 +905,9 @@ export default function ImageCompressor() {
                                   fullWidth
                                   variant="contained"
                                   startIcon={<DownloadIcon />}
-                                  onClick={() => downloadBlob(r.outputBlob, r.outputName)}
+                                  onClick={() =>
+                                      downloadBlob(r.outputBlob, r.outputName)
+                                  }
                               >
                                 Download
                               </Button>
@@ -937,9 +943,9 @@ export default function ImageCompressor() {
           )}
 
           <Typography variant="caption" color="text.secondary">
-            Note: This client-only version uses Canvas encoding. PNG “true compression”
-            (palette/quantization) and universal AVIF export can be added later using WASM
-            codecs (still no backend).
+            Note: This client-only version uses Canvas encoding. PNG “true
+            compression” (palette/quantization) and universal AVIF export can be
+            added later using WASM codecs (still no backend).
           </Typography>
         </Stack>
       </PageContainer>
