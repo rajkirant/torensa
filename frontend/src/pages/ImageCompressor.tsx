@@ -82,6 +82,16 @@ const RESIZE_DIMENSIONS = [
   128, 160, 240, 256, 320, 480, 640, 800, 1024, 1600, 1920, 2560, 3840,
 ];
 
+const accordionStyle = {
+  borderRadius: "16px",
+  border: "1px solid rgba(255,255,255,0.18)",
+  background:
+    "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
+  boxShadow: "0 10px 28px rgba(0,0,0,0.35)",
+  overflow: "hidden",
+  "&:before": { display: "none" },
+};
+
 function formatBytes(bytes: number) {
   const units = ["B", "KB", "MB", "GB"];
   let v = bytes;
@@ -561,7 +571,7 @@ export default function ImageCompressor() {
         <Divider />
 
         {/* Advanced */}
-        <Accordion disableGutters>
+        <Accordion disableGutters sx={accordionStyle}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography sx={{ fontWeight: 650 }}>Advanced options</Typography>
           </AccordionSummary>
@@ -826,7 +836,7 @@ export default function ImageCompressor() {
             onClick={downloadAllZip}
             disabled={busy || results.length === 0}
           >
-            Download ZIP
+            ZIP
           </Button>
         </Box>
 
