@@ -43,6 +43,28 @@ jobs:
             echo "Frontend folder NOT changed"
           fi
 
+      - name: Detect lambda changes
+        id: detect_lambda
+        shell: bash
+        env:
+          TARGET_DIR: lambda
+        run: |
+          echo "Before SHA: ${{ github.event.before }}"
+          echo "Current SHA: ${{ github.sha }}"
+          echo "Checking changes in: $TARGET_DIR/"
+
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          if echo "$CHANGED_FILES" | grep -q "^${TARGET_DIR}/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Lambda folder changed"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Lambda folder NOT changed"
+          fi
+
       - name: Backend files sync to PythonAnywhere
         env:
           PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
@@ -104,6 +126,30 @@ jobs:
 
             done || true
 
+      # ----------- AWS deploy ASAP (early in workflow) -----------
+      - name: Configure AWS credentials (OIDC)
+        if: steps.detect_frontend.outputs.changed == 'true' || steps.detect_lambda.outputs.changed == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # ---------- Lambda deploy (zip) ----------
+      - name: Package Lambda (zip)
+        if: steps.detect_lambda.outputs.changed == 'true'
+        working-directory: lambda
+        run: |
+          rm -f function.zip
+          zip -r function.zip . -x "*.pyc" -x "__pycache__/*" -x ".DS_Store"
+
+      - name: Deploy Lambda (zip)
+        if: steps.detect_lambda.outputs.changed == 'true'
+        working-directory: lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --zip-file fileb://function.zip
+
       # ---------- Frontend ----------
       - name: Setup Node.js
         if: steps.detect_frontend.outputs.changed == 'true'
@@ -133,14 +179,6 @@ jobs:
         if: steps.detect_frontend.outputs.changed == 'true'
         working-directory: frontend
         run: pnpm run build
-
-      # ----------- AWS deploy ASAP (after build, before PythonAnywhere frontend steps) -----------
-      - name: Configure AWS credentials (OIDC)
-        if: steps.detect_frontend.outputs.changed == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy dist to S3
         if: steps.detect_frontend.outputs.changed == 'true'
