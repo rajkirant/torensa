@@ -82,7 +82,6 @@ const RESIZE_DIMENSIONS = [
   128, 160, 240, 256, 320, 480, 640, 800, 1024, 1600, 1920, 2560, 3840,
 ];
 
-
 function formatBytes(bytes: number) {
   const units = ["B", "KB", "MB", "GB"];
   let v = bytes;
@@ -128,11 +127,11 @@ async function loadBitmap(file: File): Promise<ImageBitmap> {
 }
 
 function fitInside(
-    srcW: number,
-    srcH: number,
-    maxW: number,
-    maxH: number,
-    withoutEnlargement: boolean,
+  srcW: number,
+  srcH: number,
+  maxW: number,
+  maxH: number,
+  withoutEnlargement: boolean,
 ) {
   const scale = Math.min(maxW / srcW, maxH / srcH);
   const s = withoutEnlargement ? Math.min(1, scale) : scale;
@@ -143,23 +142,23 @@ function fitInside(
 }
 
 async function canvasToBlob(
-    canvas: HTMLCanvasElement,
-    type: string,
-    quality?: number,
+  canvas: HTMLCanvasElement,
+  type: string,
+  quality?: number,
 ) {
   return await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(
-        (b) => (b ? resolve(b) : reject(new Error("canvas.toBlob failed"))),
-        type,
-        quality,
+      (b) => (b ? resolve(b) : reject(new Error("canvas.toBlob failed"))),
+      type,
+      quality,
     );
   });
 }
 
 async function encodeWithSpec(
-    file: File,
-    spec: CompressSpec,
-    outputMime: OutputFormat,
+  file: File,
+  spec: CompressSpec,
+  outputMime: OutputFormat,
 ): Promise<{
   blob: Blob;
   width: number;
@@ -172,14 +171,14 @@ async function encodeWithSpec(
   const srcH = bitmap.height;
 
   const targetSize = spec.resize.enabled
-      ? fitInside(
-          srcW,
-          srcH,
-          spec.resize.maxWidth,
-          spec.resize.maxHeight,
-          true, // ALWAYS do not enlarge smaller images
+    ? fitInside(
+        srcW,
+        srcH,
+        spec.resize.maxWidth,
+        spec.resize.maxHeight,
+        true, // ALWAYS do not enlarge smaller images
       )
-      : { width: srcW, height: srcH };
+    : { width: srcW, height: srcH };
 
   const canvas = document.createElement("canvas");
   canvas.width = targetSize.width;
@@ -290,13 +289,13 @@ export default function ImageCompressor() {
   }, []);
 
   const totalBefore = useMemo(
-      () => files.reduce((s, f) => s + f.size, 0),
-      [files],
+    () => files.reduce((s, f) => s + f.size, 0),
+    [files],
   );
 
   const totalAfter = useMemo(
-      () => results.reduce((s, r) => s + r.outputBlob.size, 0),
-      [results],
+    () => results.reduce((s, r) => s + r.outputBlob.size, 0),
+    [results],
   );
 
   const disableQualitySlider = spec.target.enabled;
@@ -333,7 +332,7 @@ export default function ImageCompressor() {
         throw new Error("Please select at least one image.");
       if (files.length > 50)
         throw new Error(
-            "Please compress 50 images or fewer at a time (browser memory safety).",
+          "Please compress 50 images or fewer at a time (browser memory safety).",
         );
 
       const out: ResultItem[] = [];
@@ -342,18 +341,18 @@ export default function ImageCompressor() {
         const file = files[i];
 
         const outputMime: OutputFormat = spec.chooseFormat.enabled
-            ? spec.chooseFormat.format
-            : normalizeOutputFormat(file.type);
+          ? spec.chooseFormat.format
+          : normalizeOutputFormat(file.type);
 
         const effectiveSpec: CompressSpec =
-            outputMime === "image/png"
-                ? { ...spec, target: { ...spec.target, enabled: false } }
-                : spec;
+          outputMime === "image/png"
+            ? { ...spec, target: { ...spec.target, enabled: false } }
+            : spec;
 
         const { blob, width, height, usedQuality } = await encodeWithSpec(
-            file,
-            effectiveSpec,
-            outputMime,
+          file,
+          effectiveSpec,
+          outputMime,
         );
 
         const ext = outputExtFor(outputMime);
@@ -403,551 +402,580 @@ export default function ImageCompressor() {
   }
 
   const savingsPct =
-      totalBefore > 0 ? ((totalBefore - totalAfter) / totalBefore) * 100 : 0;
+    totalBefore > 0 ? ((totalBefore - totalAfter) / totalBefore) * 100 : 0;
 
   return (
-      <PageContainer>
-        {/* Header */}
-        <Stack spacing={0.75}>
-          <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={1}
-              alignItems={{ sm: "center" }}
-          >
-            <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-              <Chip label={`${files.length} selected`} />
-              <Chip label={`Total: ${formatBytes(totalBefore)}`} />
-              <Chip label={`After: ${formatBytes(totalAfter)}`} />
-              <Chip
-                  color={savingsPct > 0 ? "success" : "default"}
-                  label={
-                    totalBefore > 0
-                        ? `Saved: ${formatBytes(
-                            Math.max(0, totalBefore - totalAfter),
-                        )} (${savingsPct.toFixed(1)}%)`
-                        : "Saved: —"
-                  }
-              />
-            </Stack>
-          </Stack>
-        </Stack>
-
-        <Divider />
-
-        {/* 1) Upload */}
-        <Stack spacing={1.5}>
-          <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              spacing={2}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              1) Upload
-            </Typography>
-
-            <Button
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-                onClick={() => inputRef.current?.click()}
-                disabled={busy}
-            >
-              Choose images
-            </Button>
-
-            <input
-                ref={inputRef}
-                type="file"
-                accept="image/*"
-                multiple
-                hidden
-                onChange={(e) => {
-                  onPickFiles(e.target.files);
-                  e.currentTarget.value = "";
-                }}
-            />
-          </Stack>
-
+    <PageContainer>
+      {/* Header */}
+      <Stack spacing={0.75}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1}
+          alignItems={{ sm: "center" }}
+        >
           <Box
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onPickFiles(e.dataTransfer.files);
-              }}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                border: "2px dashed",
-                borderColor: "divider",
-                bgcolor: "background.default",
-                textAlign: "center",
-                color: "text.secondary",
-              }}
+            sx={{
+              display: { xs: "grid", sm: "flex" },
+              gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))" },
+              gap: 1,
+              flexWrap: { sm: "wrap" },
+              alignItems: "center",
+            }}
           >
-            Drag & drop images here
+            <Chip
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+              label={`${files.length} selected`}
+            />
+            <Chip
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+              label={`Total: ${formatBytes(totalBefore)}`}
+            />
+            <Chip
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+              label={`After: ${formatBytes(totalAfter)}`}
+            />
+            <Chip
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+              color={savingsPct > 0 ? "success" : "default"}
+              label={
+                totalBefore > 0
+                  ? `Saved: ${formatBytes(
+                      Math.max(0, totalBefore - totalAfter),
+                    )} (${savingsPct.toFixed(1)}%)`
+                  : "Saved: —"
+              }
+            />
           </Box>
         </Stack>
+      </Stack>
+
+      <Divider />
+
+      {/* 1) Upload */}
+      <Stack spacing={1.5}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            1) Upload
+          </Typography>
+
+          <Button
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+            onClick={() => inputRef.current?.click()}
+            disabled={busy}
+          >
+            Choose images
+          </Button>
+
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            onChange={(e) => {
+              onPickFiles(e.target.files);
+              e.currentTarget.value = "";
+            }}
+          />
+        </Stack>
+
+        <Box
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onPickFiles(e.dataTransfer.files);
+          }}
+          sx={{
+            p: 2,
+            borderRadius: 2,
+            border: "2px dashed",
+            borderColor: "divider",
+            bgcolor: "background.default",
+            textAlign: "center",
+            color: "text.secondary",
+          }}
+        >
+          Drag & drop images here
+        </Box>
+      </Stack>
+
+      <Divider />
+
+      {/* 2) Choose output */}
+      <Stack spacing={1.75}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          2) Choose output
+        </Typography>
+
+        {/* Quality */}
+        <Stack spacing={1}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              Quality
+            </Typography>
+            <Chip
+              size="small"
+              label={
+                spec.target.enabled
+                  ? "Disabled (Target size)"
+                  : `${Math.round(spec.quality * 100)}`
+              }
+            />
+          </Stack>
+
+          <Slider
+            value={Math.round(spec.quality * 100)}
+            min={1}
+            max={100}
+            disabled={disableQualitySlider || busy}
+            onChange={(_, v) =>
+              setSpec((s) => ({
+                ...s,
+                quality: clamp((v as number) / 100, 0.01, 1),
+              }))
+            }
+          />
+
+          {!spec.chooseFormat.enabled && (
+            <Typography variant="caption" color="text.secondary">
+              Output format defaults to the original file type (e.g., JPG stays
+              JPG). Note: PNG ignores quality.
+            </Typography>
+          )}
+        </Stack>
 
         <Divider />
 
-        {/* 2) Choose output */}
-        <Stack spacing={1.75}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            2) Choose output
-          </Typography>
+        {/* Advanced */}
+        <Accordion disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography sx={{ fontWeight: 650 }}>Advanced options</Typography>
+          </AccordionSummary>
 
-          {/* Quality */}
-          <Stack spacing={1}>
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            >
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Quality
-              </Typography>
-              <Chip
-                  size="small"
-                  label={
-                    spec.target.enabled
-                        ? "Disabled (Target size)"
-                        : `${Math.round(spec.quality * 100)}`
-                  }
-              />
-            </Stack>
-
-            <Slider
-                value={Math.round(spec.quality * 100)}
-                min={1}
-                max={100}
-                disabled={disableQualitySlider || busy}
-                onChange={(_, v) =>
-                    setSpec((s) => ({
-                      ...s,
-                      quality: clamp((v as number) / 100, 0.01, 1),
-                    }))
-                }
-            />
-
-            {!spec.chooseFormat.enabled && (
-                <Typography variant="caption" color="text.secondary">
-                  Output format defaults to the original file type (e.g., JPG stays
-                  JPG). Note: PNG ignores quality.
-                </Typography>
-            )}
-          </Stack>
-
-          <Divider />
-
-          {/* Advanced */}
-          <Accordion disableGutters>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography sx={{ fontWeight: 650 }}>Advanced options</Typography>
-            </AccordionSummary>
-
-            <AccordionDetails>
-              <Stack spacing={2}>
-                {/* Format */}
-                <Stack spacing={1}>
-                  <FormControlLabel
-                      control={
-                        <Switch
-                            checked={spec.chooseFormat.enabled}
-                            onChange={(e) =>
-                                setSpec((s) => ({
-                                  ...s,
-                                  chooseFormat: {
-                                    ...s.chooseFormat,
-                                    enabled: e.target.checked,
-                                  },
-                                }))
-                            }
-                            disabled={busy}
-                        />
+          <AccordionDetails>
+            <Stack spacing={2}>
+              {/* Format */}
+              <Stack spacing={1}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={spec.chooseFormat.enabled}
+                      onChange={(e) =>
+                        setSpec((s) => ({
+                          ...s,
+                          chooseFormat: {
+                            ...s.chooseFormat,
+                            enabled: e.target.checked,
+                          },
+                        }))
                       }
-                      label="Choose output format"
-                  />
+                      disabled={busy}
+                    />
+                  }
+                  label="Choose output format"
+                />
 
-                  <FormControl
-                      fullWidth
-                      size="small"
-                      disabled={!spec.chooseFormat.enabled || busy}
+                <FormControl
+                  fullWidth
+                  size="small"
+                  disabled={!spec.chooseFormat.enabled || busy}
+                >
+                  <InputLabel>Format</InputLabel>
+                  <Select
+                    label="Format"
+                    value={spec.chooseFormat.format}
+                    onChange={(e) =>
+                      setSpec((s) => ({
+                        ...s,
+                        chooseFormat: {
+                          ...s.chooseFormat,
+                          format: e.target.value as OutputFormat,
+                        },
+                      }))
+                    }
                   >
-                    <InputLabel>Format</InputLabel>
+                    <MenuItem value="image/webp" disabled={!supports.webp}>
+                      WebP {!supports.webp ? "(not supported)" : ""}
+                    </MenuItem>
+                    <MenuItem value="image/jpeg" disabled={!supports.jpeg}>
+                      JPEG {!supports.jpeg ? "(not supported)" : ""}
+                    </MenuItem>
+                    <MenuItem value="image/png" disabled={!supports.png}>
+                      PNG {!supports.png ? "(not supported)" : ""}
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+
+                {!spec.chooseFormat.enabled && (
+                  <Typography variant="caption" color="text.secondary">
+                    Disabled = keep each image&apos;s original format.
+                  </Typography>
+                )}
+              </Stack>
+
+              <Divider />
+
+              {/* Resize */}
+              <Stack spacing={1}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={spec.resize.enabled}
+                      onChange={(e) =>
+                        setSpec((s) => ({
+                          ...s,
+                          resize: { ...s.resize, enabled: e.target.checked },
+                        }))
+                      }
+                      disabled={busy}
+                    />
+                  }
+                  label="Resize (recommended)"
+                />
+
+                <Stack
+                  spacing={1}
+                  sx={{ opacity: spec.resize.enabled ? 1 : 0.5 }}
+                >
+                  <FormControl
+                    fullWidth
+                    size="small"
+                    disabled={!spec.resize.enabled || busy}
+                  >
+                    <InputLabel>Max width</InputLabel>
                     <Select
-                        label="Format"
-                        value={spec.chooseFormat.format}
-                        onChange={(e) =>
-                            setSpec((s) => ({
-                              ...s,
-                              chooseFormat: {
-                                ...s.chooseFormat,
-                                format: e.target.value as OutputFormat,
-                              },
-                            }))
-                        }
+                      label="Max width"
+                      value={spec.resize.maxWidth}
+                      onChange={(e) =>
+                        setSpec((s) => ({
+                          ...s,
+                          resize: {
+                            ...s.resize,
+                            maxWidth: Number(e.target.value),
+                          },
+                        }))
+                      }
                     >
-                      <MenuItem value="image/webp" disabled={!supports.webp}>
-                        WebP {!supports.webp ? "(not supported)" : ""}
-                      </MenuItem>
-                      <MenuItem value="image/jpeg" disabled={!supports.jpeg}>
-                        JPEG {!supports.jpeg ? "(not supported)" : ""}
-                      </MenuItem>
-                      <MenuItem value="image/png" disabled={!supports.png}>
-                        PNG {!supports.png ? "(not supported)" : ""}
-                      </MenuItem>
+                      {RESIZE_DIMENSIONS.map((n) => (
+                        <MenuItem key={n} value={n}>
+                          {n}px
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
 
-                  {!spec.chooseFormat.enabled && (
-                      <Typography variant="caption" color="text.secondary">
-                        Disabled = keep each image&apos;s original format.
-                      </Typography>
-                  )}
-                </Stack>
-
-                <Divider />
-
-                {/* Resize */}
-                <Stack spacing={1}>
-                  <FormControlLabel
-                      control={
-                        <Switch
-                            checked={spec.resize.enabled}
-                            onChange={(e) =>
-                                setSpec((s) => ({
-                                  ...s,
-                                  resize: { ...s.resize, enabled: e.target.checked },
-                                }))
-                            }
-                            disabled={busy}
-                        />
-                      }
-                      label="Resize (recommended)"
-                  />
-
-                  <Stack
-                      spacing={1}
-                      sx={{ opacity: spec.resize.enabled ? 1 : 0.5 }}
+                  <FormControl
+                    fullWidth
+                    size="small"
+                    disabled={!spec.resize.enabled || busy}
                   >
-                    <FormControl
-                        fullWidth
-                        size="small"
-                        disabled={!spec.resize.enabled || busy}
+                    <InputLabel>Max height</InputLabel>
+                    <Select
+                      label="Max height"
+                      value={spec.resize.maxHeight}
+                      onChange={(e) =>
+                        setSpec((s) => ({
+                          ...s,
+                          resize: {
+                            ...s.resize,
+                            maxHeight: Number(e.target.value),
+                          },
+                        }))
+                      }
                     >
-                      <InputLabel>Max width</InputLabel>
-                      <Select
-                          label="Max width"
-                          value={spec.resize.maxWidth}
-                          onChange={(e) =>
-                              setSpec((s) => ({
-                                ...s,
-                                resize: {
-                                  ...s.resize,
-                                  maxWidth: Number(e.target.value),
-                                },
-                              }))
-                          }
-                      >
-                        {RESIZE_DIMENSIONS.map((n) => (
-                            <MenuItem key={n} value={n}>
-                              {n}px
-                            </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                      {RESIZE_DIMENSIONS.map((n) => (
+                        <MenuItem key={n} value={n}>
+                          {n}px
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
-                    <FormControl
-                        fullWidth
-                        size="small"
-                        disabled={!spec.resize.enabled || busy}
-                    >
-                      <InputLabel>Max height</InputLabel>
+                  <Typography variant="caption" color="text.secondary">
+                    Smaller images will not be enlarged.
+                  </Typography>
+                </Stack>
+              </Stack>
+
+              <Divider />
+
+              {/* Target Size */}
+              <Stack spacing={1}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={spec.target.enabled}
+                      onChange={(e) =>
+                        setSpec((s) => ({
+                          ...s,
+                          target: {
+                            ...s.target,
+                            enabled: e.target.checked,
+                            iterations: MAX_TARGET_ITERATIONS,
+                          },
+                        }))
+                      }
+                      disabled={
+                        busy ||
+                        (spec.chooseFormat.enabled &&
+                          spec.chooseFormat.format === "image/png")
+                      }
+                    />
+                  }
+                  label="Target size (KB)"
+                />
+
+                {spec.chooseFormat.enabled &&
+                  spec.chooseFormat.format === "image/png" && (
+                    <Typography variant="caption" color="text.secondary">
+                      Target size is for JPEG/WebP only.
+                    </Typography>
+                  )}
+
+                {spec.target.enabled && (
+                  <Stack spacing={1}>
+                    <FormControl fullWidth size="small" disabled={busy}>
+                      <InputLabel>Target</InputLabel>
                       <Select
-                          label="Max height"
-                          value={spec.resize.maxHeight}
-                          onChange={(e) =>
-                              setSpec((s) => ({
-                                ...s,
-                                resize: {
-                                  ...s.resize,
-                                  maxHeight: Number(e.target.value),
-                                },
-                              }))
-                          }
+                        label="Target"
+                        value={spec.target.targetKB}
+                        onChange={(e) =>
+                          setSpec((s) => ({
+                            ...s,
+                            target: {
+                              ...s.target,
+                              targetKB: Number(e.target.value),
+                            },
+                          }))
+                        }
                       >
-                        {RESIZE_DIMENSIONS.map((n) => (
-                            <MenuItem key={n} value={n}>
-                              {n}px
-                            </MenuItem>
+                        {[100, 150, 200, 250, 350, 500, 800, 1200].map((n) => (
+                          <MenuItem key={n} value={n}>
+                            {n} KB
+                          </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
 
                     <Typography variant="caption" color="text.secondary">
-                      Smaller images will not be enlarged.
+                      Uses maximum accuracy automatically.
                     </Typography>
                   </Stack>
-                </Stack>
-
-                <Divider />
-
-                {/* Target Size */}
-                <Stack spacing={1}>
-                  <FormControlLabel
-                      control={
-                        <Switch
-                            checked={spec.target.enabled}
-                            onChange={(e) =>
-                                setSpec((s) => ({
-                                  ...s,
-                                  target: {
-                                    ...s.target,
-                                    enabled: e.target.checked,
-                                    iterations: MAX_TARGET_ITERATIONS,
-                                  },
-                                }))
-                            }
-                            disabled={
-                                busy ||
-                                (spec.chooseFormat.enabled &&
-                                    spec.chooseFormat.format === "image/png")
-                            }
-                        />
-                      }
-                      label="Target size (KB)"
-                  />
-
-                  {spec.chooseFormat.enabled &&
-                      spec.chooseFormat.format === "image/png" && (
-                          <Typography variant="caption" color="text.secondary">
-                            Target size is for JPEG/WebP only.
-                          </Typography>
-                      )}
-
-                  {spec.target.enabled && (
-                      <Stack spacing={1}>
-                        <FormControl fullWidth size="small" disabled={busy}>
-                          <InputLabel>Target</InputLabel>
-                          <Select
-                              label="Target"
-                              value={spec.target.targetKB}
-                              onChange={(e) =>
-                                  setSpec((s) => ({
-                                    ...s,
-                                    target: {
-                                      ...s.target,
-                                      targetKB: Number(e.target.value),
-                                    },
-                                  }))
-                              }
-                          >
-                            {[100, 150, 200, 250, 350, 500, 800, 1200].map((n) => (
-                                <MenuItem key={n} value={n}>
-                                  {n} KB
-                                </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-
-                        <Typography variant="caption" color="text.secondary">
-                          Uses maximum accuracy automatically.
-                        </Typography>
-                      </Stack>
-                  )}
-                </Stack>
+                )}
               </Stack>
-            </AccordionDetails>
-          </Accordion>
-        </Stack>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+      </Stack>
 
-        <Divider />
+      <Divider />
 
-        {/* 3) Compress & download */}
-        <Stack spacing={1.5}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            3) Compress & download
-          </Typography>
+      {/* 3) Compress & download */}
+      <Stack spacing={1.5}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          3) Compress & download
+        </Typography>
 
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            <Button
-                variant="contained"
-                startIcon={<CompressIcon />}
-                onClick={compressAll}
-                disabled={busy || files.length === 0}
-            >
-              {busy ? "Compressing..." : "Compress"}
-            </Button>
+        <Box
+          sx={{
+            display: { xs: "grid", sm: "flex" },
+            gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))" },
+            gap: 1,
+            flexWrap: { sm: "wrap" },
+            alignItems: "center",
+          }}
+        >
+          <Button
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+            variant="contained"
+            startIcon={<CompressIcon />}
+            onClick={compressAll}
+            disabled={busy || files.length === 0}
+          >
+            {busy ? "Compressing..." : "Compress"}
+          </Button>
 
-            <Button
-                variant="outlined"
-                startIcon={<DeleteIcon />}
-                onClick={clearAll}
-                disabled={busy || (files.length === 0 && results.length === 0)}
-            >
-              Clear
-            </Button>
+          <Button
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+            onClick={clearAll}
+            disabled={busy || (files.length === 0 && results.length === 0)}
+          >
+            Clear
+          </Button>
 
-            <Button
-                variant="outlined"
-                startIcon={<FolderZipIcon />}
-                onClick={downloadAllZip}
-                disabled={busy || results.length === 0}
-            >
-              Download ZIP
-            </Button>
-          </Stack>
+          <Button
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+            variant="outlined"
+            startIcon={<FolderZipIcon />}
+            onClick={downloadAllZip}
+            disabled={busy || results.length === 0}
+          >
+            Download ZIP
+          </Button>
+        </Box>
 
-          {busy && (
-              <Box>
-                <LinearProgress />
-                <Typography variant="caption" color="text.secondary">
-                  {progress.total > 0 ? `${progress.done}/${progress.total}` : ""}
-                </Typography>
-              </Box>
-          )}
+        {busy && (
+          <Box>
+            <LinearProgress />
+            <Typography variant="caption" color="text.secondary">
+              {progress.total > 0 ? `${progress.done}/${progress.total}` : ""}
+            </Typography>
+          </Box>
+        )}
 
-          {error && <Alert severity="error">{error}</Alert>}
-        </Stack>
+        {error && <Alert severity="error">{error}</Alert>}
+      </Stack>
 
-        <Divider />
+      <Divider />
 
-        {/* Results */}
-        <Stack spacing={1.5}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            Results
-          </Typography>
+      {/* Results */}
+      <Stack spacing={1.5}>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          Results
+        </Typography>
 
-          {results.length === 0 ? (
-              <Box sx={{ py: 4, textAlign: "center", color: "text.secondary" }}>
-                <Typography sx={{ fontWeight: 650 }}>
-                  No compressed images yet.
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  Upload images above, then press <b>Compress</b>.
-                </Typography>
-              </Box>
-          ) : (
-              <Grid container spacing={2}>
-                {results.map((r) => {
-                  const saved = Math.max(0, r.file.size - r.outputBlob.size);
-                  const pct = r.file.size > 0 ? (saved / r.file.size) * 100 : 0;
+        {results.length === 0 ? (
+          <Box sx={{ py: 4, textAlign: "center", color: "text.secondary" }}>
+            <Typography sx={{ fontWeight: 650 }}>
+              No compressed images yet.
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Upload images above, then press <b>Compress</b>.
+            </Typography>
+          </Box>
+        ) : (
+          <Grid container spacing={2}>
+            {results.map((r) => {
+              const saved = Math.max(0, r.file.size - r.outputBlob.size);
+              const pct = r.file.size > 0 ? (saved / r.file.size) * 100 : 0;
 
-                  return (
-                      <Grid item xs={12} sm={6} key={r.id}>
-                        <Card variant="outlined" sx={{ borderRadius: 3 }}>
-                          <Box
-                              component="img"
-                              src={r.outputUrl}
-                              alt={r.outputName}
-                              loading="lazy"
-                              sx={{
-                                width: "100%",
-                                height: 160,
-                                objectFit: "cover",
-                                borderTopLeftRadius: 12,
-                                borderTopRightRadius: 12,
-                                bgcolor: "background.default",
-                              }}
-                          />
+              return (
+                <Grid item xs={12} sm={6} key={r.id}>
+                  <Card variant="outlined" sx={{ borderRadius: 3 }}>
+                    <Box
+                      component="img"
+                      src={r.outputUrl}
+                      alt={r.outputName}
+                      loading="lazy"
+                      sx={{
+                        width: "100%",
+                        height: 160,
+                        objectFit: "cover",
+                        borderTopLeftRadius: 12,
+                        borderTopRightRadius: 12,
+                        bgcolor: "background.default",
+                      }}
+                    />
 
-                          <CardContent>
-                            <Typography
-                                variant="subtitle2"
-                                sx={{
-                                  fontWeight: 700,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                                title={r.file.name}
-                            >
-                              {r.file.name}
-                            </Typography>
+                    <CardContent>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: 700,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={r.file.name}
+                      >
+                        {r.file.name}
+                      </Typography>
 
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                sx={{ mt: 1, flexWrap: "wrap" }}
-                            >
-                              <Chip
-                                  size="small"
-                                  label={`Before ${formatBytes(r.file.size)}`}
-                              />
-                              <Chip
-                                  size="small"
-                                  label={`After ${formatBytes(r.outputBlob.size)}`}
-                              />
-                              <Chip size="small" label={`${r.width}×${r.height}`} />
-                              <Chip
-                                  size="small"
-                                  color={pct > 0 ? "success" : "default"}
-                                  label={`Saved ${pct.toFixed(1)}%`}
-                              />
-                              <Chip
-                                  size="small"
-                                  label={
-                                    r.outputMime === "image/jpeg"
-                                        ? "JPG"
-                                        : r.outputMime === "image/webp"
-                                            ? "WEBP"
-                                            : "PNG"
-                                  }
-                              />
-                            </Stack>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        sx={{ mt: 1, flexWrap: "wrap" }}
+                      >
+                        <Chip
+                          size="small"
+                          label={`Before ${formatBytes(r.file.size)}`}
+                        />
+                        <Chip
+                          size="small"
+                          label={`After ${formatBytes(r.outputBlob.size)}`}
+                        />
+                        <Chip size="small" label={`${r.width}×${r.height}`} />
+                        <Chip
+                          size="small"
+                          color={pct > 0 ? "success" : "default"}
+                          label={`Saved ${pct.toFixed(1)}%`}
+                        />
+                        <Chip
+                          size="small"
+                          label={
+                            r.outputMime === "image/jpeg"
+                              ? "JPG"
+                              : r.outputMime === "image/webp"
+                                ? "WEBP"
+                                : "PNG"
+                          }
+                        />
+                      </Stack>
 
-                            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                              <Button
-                                  fullWidth
-                                  variant="contained"
-                                  startIcon={<DownloadIcon />}
-                                  onClick={() =>
-                                      downloadBlob(r.outputBlob, r.outputName)
-                                  }
-                              >
-                                Download
-                              </Button>
+                      <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          startIcon={<DownloadIcon />}
+                          onClick={() =>
+                            downloadBlob(r.outputBlob, r.outputName)
+                          }
+                        >
+                          Download
+                        </Button>
 
-                              <Tooltip title="Open file in a new tab">
-                                <IconButton
-                                    component="a"
-                                    href={r.outputUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    aria-label="Open"
-                                >
-                                  ↗
-                                </IconButton>
-                              </Tooltip>
-                            </Stack>
+                        <Tooltip title="Open file in a new tab">
+                          <IconButton
+                            component="a"
+                            href={r.outputUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="Open"
+                          >
+                            ↗
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
 
-                            {typeof r.usedQuality === "number" && (
-                                <Typography
-                                    variant="caption"
-                                    color="text.secondary"
-                                    sx={{ display: "block", mt: 1 }}
-                                >
-                                  Used quality: {Math.round(r.usedQuality * 100)}
-                                </Typography>
-                            )}
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                  );
-                })}
-              </Grid>
-          )}
+                      {typeof r.usedQuality === "number" && (
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ display: "block", mt: 1 }}
+                        >
+                          Used quality: {Math.round(r.usedQuality * 100)}
+                        </Typography>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        )}
 
-          <Typography variant="caption" color="text.secondary">
-            Note: This client-only version uses Canvas encoding. PNG “true
-            compression” (palette/quantization) and universal AVIF export can be
-            added later using WASM codecs (still no backend).
-          </Typography>
-        </Stack>
-      </PageContainer>
+        <Typography variant="caption" color="text.secondary">
+          Note: This client-only version uses Canvas encoding. PNG “true
+          compression” (palette/quantization) and universal AVIF export can be
+          added later using WASM codecs (still no backend).
+        </Typography>
+      </Stack>
+    </PageContainer>
   );
 }
