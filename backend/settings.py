@@ -11,19 +11,26 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+
+def _env_bool(name, default=False):
+    return os.getenv(name, str(default)).strip().lower() in ("1", "true", "yes", "on")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-m$%ot^7akkrwr^!c@2h37$wlhnh+!tnj_%sikw7^hzv-4%i=m+"
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-only-change-me")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = _env_bool("DEBUG", True)
 
 ALLOWED_HOSTS = ['xi5o41nmf3.execute-api.us-east-1.amazonaws.com','www.torensa.pythonanywhere.com','torensa.pythonanywhere.com','127.0.0.1', 'localhost','torensa.com','torensa-backend.onrender.com','api.torensa.com']
 
@@ -106,13 +113,29 @@ WSGI_APPLICATION = "wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+PGBOUNCER_TRANSACTION_MODE = _env_bool("PGBOUNCER_TRANSACTION_MODE", True)
+DB_SSL_REQUIRE = _env_bool("DB_SSL_REQUIRE", True)
+DB_CONN_MAX_AGE = int(os.getenv("DB_CONN_MAX_AGE", "0" if PGBOUNCER_TRANSACTION_MODE else "60"))
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=DB_CONN_MAX_AGE,
+            ssl_require=DB_SSL_REQUIRE,
+        )
     }
-}
+    # PgBouncer transaction pooling is incompatible with server-side cursors.
+    if PGBOUNCER_TRANSACTION_MODE:
+        DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
@@ -169,10 +192,10 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# 32-byte urlsafe base64-encoded Fernet key.
+# Example generator (run once): python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+EMAIL_ENCRYPTION_KEY = os.getenv("EMAIL_ENCRYPTION_KEY", "")
 
 CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True

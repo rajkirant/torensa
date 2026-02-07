@@ -12,7 +12,21 @@ to run it locally --> python manage.py runserver
 Database add tables --> go to backend/api/models.py and make table definitions there
 python manage.py makemigrations --> create migration file
 python manage.py migrate --> execute in the db
-sqlite3 db.sqlite3 --> start sqlite3 session(from the root)
+
+Postgres setup (backend/settings.py now supports DATABASE_URL):
+PowerShell (current terminal/session):
+$env:DATABASE_URL="postgresql://<USER>:<PASSWORD>@<HOST>:<PORT>/<DBNAME>"
+
+Supabase transaction pooler URI can be used:
+- keep PGBOUNCER_TRANSACTION_MODE=true (default)
+- DB_CONN_MAX_AGE defaults to 0 for pooler mode
+
+Optional env vars:
+$env:PGBOUNCER_TRANSACTION_MODE="true"   # true for transaction pooler, false for direct connection
+$env:DB_SSL_REQUIRE="true"
+$env:DB_CONN_MAX_AGE="0"
+
+sqlite3 db.sqlite3 --> start sqlite3 session(from the root, only if using sqlite fallback)
 .tables --> show all tables
 .schema auth_user --> see the table structure
 .exit --> exit sqlite session

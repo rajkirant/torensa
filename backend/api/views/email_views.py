@@ -1,9 +1,9 @@
 import json
-import os
 import re
 
 from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMessage, get_connection
+from django.conf import settings
 from cryptography.fernet import Fernet
 
 from rest_framework.decorators import api_view, permission_classes
@@ -15,7 +15,7 @@ from ..models import UserSMTPConfig, ContactGroup, ContactGroupContact
 
 
 def get_fernet():
-    key = os.environ.get("EMAIL_ENCRYPTION_KEY")
+    key = getattr(settings, "EMAIL_ENCRYPTION_KEY", "")
     if not key:
         raise RuntimeError("EMAIL_ENCRYPTION_KEY is not configured")
     return Fernet(key)
