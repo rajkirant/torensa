@@ -17,9 +17,9 @@
     "description": "Upload Excel files and convert them to CSV.",
     "path": "/excel-to-csv",
     "ctaLabel": "Convert Excel",
-    "offlineEnabled": false,
+    "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Converts uploaded Excel files into CSV format entirely on the client side.  Users select an `.xlsx` or `.xls` file, the tool calls an API to process the file and presents a download link for the resulting CSV.  It handles large spreadsheets gracefully and displays progress and error messages to guide the user.  Once converted, the CSV can be downloaded for offline use."
+    "detailedDescription": "Converts uploaded Excel files into CSV format entirely on the client side.  Users select an `.xlsx` or `.xls` file, the browser parses the workbook and generates a CSV download instantly without backend processing.  It handles large spreadsheets gracefully and displays progress and error messages to guide the user.  Once converted, the CSV can be downloaded for offline use."
   },
   {
     "id": "text-to-qr",

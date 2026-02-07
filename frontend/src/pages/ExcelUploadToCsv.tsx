@@ -1,13 +1,11 @@
 import React, { useState } from "react";
+import * as XLSX from "xlsx";
 
 import {
   Button,
-  Typography,
-  Stack,
   CircularProgress,
   Alert,
 } from "@mui/material";
-import { apiFetch } from "../utils/api";
 import PageContainer from "../components/PageContainer";
 
 const ExcelUploadToCsv: React.FC = () => {
@@ -31,19 +29,21 @@ const ExcelUploadToCsv: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
-      const response = await apiFetch("/api/excel-to-csv/", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const firstSheetName = workbook.SheetNames[0];
+
+      if (!firstSheetName) {
+        throw new Error("No worksheets found");
+      }
+
+      const firstSheet = workbook.Sheets[firstSheetName];
+      const csv = XLSX.utils.sheet_to_csv(firstSheet, {
+        blankrows: false,
       });
 
-      if (!response.ok) throw new Error("Conversion failed");
-
-      const blob = await response.blob();
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const url = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
@@ -55,7 +55,7 @@ const ExcelUploadToCsv: React.FC = () => {
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch {
-      setError("Failed to upload or convert file");
+      setError("Failed to convert file");
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ const ExcelUploadToCsv: React.FC = () => {
           {loading ? (
             <CircularProgress size={24} sx={{ color: "#fff" }} />
           ) : (
-            "Upload & Download CSV"
+            "Convert & Download CSV"
           )}
         </Button>
 
