@@ -2,7 +2,6 @@ import os
 import sys
 
 from mangum import Mangum
-from django.core.asgi import get_asgi_application
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -31,6 +30,8 @@ def _health_response():
 def _get_handler():
     global _handler
     if _handler is None:
+        from django.core.asgi import get_asgi_application
+
         app = get_asgi_application()
         _handler = Mangum(app, lifespan="off")
     return _handler
