@@ -13,7 +13,7 @@ if BACKEND_DIR not in sys.path:
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 _app = get_asgi_application()
-_handler = Mangum(_app)
+_handler = Mangum(_app, lifespan="off")
 
 
 def lambda_handler(event, context):
