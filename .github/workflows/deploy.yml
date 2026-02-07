@@ -137,7 +137,7 @@ jobs:
         if: steps.detect_lambda.outputs.changed == 'true'
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.14"
 
       - name: Package Lambda (zip)
         if: steps.detect_lambda.outputs.changed == 'true'
