@@ -16,5 +16,20 @@ _app = get_asgi_application()
 _handler = Mangum(_app, lifespan="off")
 
 
+def _is_health_check(event):
+    path = event.get("rawPath") or event.get("path") or ""
+    return path == "/health"
+
+
+def _health_response():
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": "{\"ok\": true}",
+    }
+
+
 def lambda_handler(event, context):
+    if _is_health_check(event):
+        return _health_response()
     return _handler(event, context)
