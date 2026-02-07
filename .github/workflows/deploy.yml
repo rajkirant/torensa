@@ -46,23 +46,21 @@ jobs:
       - name: Detect lambda changes
         id: detect_lambda
         shell: bash
-        env:
-          TARGET_DIR: lambda
         run: |
           echo "Before SHA: ${{ github.event.before }}"
           echo "Current SHA: ${{ github.sha }}"
-          echo "Checking changes in: $TARGET_DIR/"
+          echo "Checking changes in: lambda/ or backend/"
 
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          if echo "$CHANGED_FILES" | grep -q "^${TARGET_DIR}/"; then
+          if echo "$CHANGED_FILES" | grep -Eq "^(lambda|backend)/"; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Lambda folder changed"
+            echo "Lambda or backend folder changed"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Lambda folder NOT changed"
+            echo "Lambda or backend folder NOT changed"
           fi
 
       - name: Backend files sync to PythonAnywhere
@@ -135,16 +133,26 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       # ---------- Lambda deploy (zip) ----------
+      - name: Setup Python for Lambda packaging
+        if: steps.detect_lambda.outputs.changed == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Package Lambda (zip)
         if: steps.detect_lambda.outputs.changed == 'true'
-        working-directory: lambda
         run: |
-          rm -f function.zip
-          zip -r function.zip . -x "*.pyc" -x "__pycache__/*" -x ".DS_Store"
+          rm -rf lambda_package function.zip
+          mkdir -p lambda_package
+          python -m pip install -r backend/requirements.txt -t lambda_package
+          python -m pip install -r lambda/requirements.txt -t lambda_package
+          cp -r backend lambda_package/backend
+          cp -r lambda lambda_package/lambda
+          cd lambda_package
+          zip -r ../function.zip . -x "*.pyc" -x "__pycache__/*" -x ".DS_Store"
 
       - name: Deploy Lambda (zip)
         if: steps.detect_lambda.outputs.changed == 'true'
-        working-directory: lambda
         run: |
           aws lambda update-function-code \
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
