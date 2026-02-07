@@ -12,8 +12,7 @@ if BACKEND_DIR not in sys.path:
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
-_app = get_asgi_application()
-_handler = Mangum(_app, lifespan="off")
+_handler = None
 
 
 def _is_health_check(event):
@@ -29,7 +28,15 @@ def _health_response():
     }
 
 
+def _get_handler():
+    global _handler
+    if _handler is None:
+        app = get_asgi_application()
+        _handler = Mangum(app, lifespan="off")
+    return _handler
+
+
 def lambda_handler(event, context):
     if _is_health_check(event):
         return _health_response()
-    return _handler(event, context)
+    return _get_handler()(event, context)
