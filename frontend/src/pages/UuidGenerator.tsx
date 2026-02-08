@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-    Alert,
     Box,
     Button,
     Card,
@@ -12,6 +11,7 @@ import {
     Typography,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
+import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 
 const generateUuid = () => crypto.randomUUID();
 
@@ -100,8 +100,7 @@ const UuidGenerator: React.FC = () => {
                         </Button>
                     </Stack>
 
-                    {error && <Alert severity="error">{error}</Alert>}
-                    {info && <Alert severity="success">{info}</Alert>}
+                    <ToolStatusAlerts error={error} success={info} />
 
                     {uuids.length > 0 && (
                         <>

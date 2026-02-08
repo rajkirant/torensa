@@ -3,11 +3,11 @@ import {
   Box,
   Button,
   CircularProgress,
-  Alert,
   Typography,
   TextField,
 } from "@mui/material";
 import { apiFetch } from "../../utils/api";
+import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 
 type Props = {
   onSaved: () => void;
@@ -104,17 +104,7 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
         margin="normal"
       />
 
-      {error && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {error}
-        </Alert>
-      )}
-
-      {success && (
-        <Alert severity="success" sx={{ mt: 2 }}>
-          {success}
-        </Alert>
-      )}
+      <ToolStatusAlerts error={error} success={success} />
 
       <Button
         type="submit"

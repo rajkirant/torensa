@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  Alert,
   FormControl,
   InputLabel,
   MenuItem,
@@ -13,6 +12,7 @@ import {
 } from "@mui/material";
 import { apiFetch } from "../../utils/api";
 import FilePickerButton from "../../components/inputs/FilePickerButton";
+import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 
 type SMTPConfig = {
   id: number;
@@ -183,16 +183,7 @@ export default function SendEmailAccordion({
       </Box>
 
       {/* Alerts */}
-      {error && (
-        <Alert severity="error" sx={{ mt: 3 }}>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert severity="success" sx={{ mt: 3 }}>
-          {success}
-        </Alert>
-      )}
+      <ToolStatusAlerts error={error} success={success} />
 
       <Button
         type="submit"

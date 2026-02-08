@@ -4,10 +4,10 @@ import * as XLSX from "xlsx";
 import {
   Button,
   CircularProgress,
-  Alert,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
+import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 
 const ExcelUploadToCsv: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -85,7 +85,7 @@ const ExcelUploadToCsv: React.FC = () => {
           )}
         </Button>
 
-        {error && <Alert severity="error">{error}</Alert>}
+        <ToolStatusAlerts error={error} />
 
     </PageContainer>
   );

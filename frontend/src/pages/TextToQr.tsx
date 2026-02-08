@@ -8,12 +8,12 @@ import {
   Typography,
   Stack,
   TextField,
-  Alert,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
+import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 
 const QR_SIZE = 220;
 const EXPORT_SIZE = 300;
@@ -272,7 +272,7 @@ const TextToQr: React.FC = () => {
           Generate & Download QR
         </Button>
 
-        {error && <Alert severity="error">{error}</Alert>}
+        <ToolStatusAlerts error={error} />
     </PageContainer>
   );
 };
