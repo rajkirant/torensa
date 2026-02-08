@@ -2,7 +2,7 @@
   {
     "id": "bulk-email",
     "component": "BulkEmail/BulkEmail",
-    "title": "Bulk Email",
+    "title": "Bulk Email Sender",
     "description": "Send emails to multiple recipients quickly and securely.",
     "path": "/bulk-email",
     "ctaLabel": "Open Bulk Email",
