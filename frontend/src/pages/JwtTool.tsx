@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { SignJWT, decodeProtectedHeader, decodeJwt } from "jose";
 import PageContainer from "../components/PageContainer";
+import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 
 /* =========================
    Helpers
@@ -310,8 +311,7 @@ const JwtTool: React.FC = () => {
         </Button>
       </Stack>
 
-      {error && <Alert severity="error">{error}</Alert>}
-      {info && <Alert severity="success">{info}</Alert>}
+      <ToolStatusAlerts error={error} success={info} />
 
       {/* Decode */}
       <Stack spacing={1.5}>
