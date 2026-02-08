@@ -13,6 +13,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
+import FilePickerButton from "../components/inputs/FilePickerButton";
 
 const QR_SIZE = 220;
 const EXPORT_SIZE = 300;
@@ -133,8 +134,8 @@ const TextToQr: React.FC = () => {
   /* =======================
      Logo upload
      ======================= */
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleLogoUpload = (files: FileList | null) => {
+    const file = files?.[0];
     if (!file) return;
 
     const img = new Image();
@@ -199,20 +200,14 @@ const TextToQr: React.FC = () => {
         />
 
         <Stack direction="row" spacing={2}>
-          <Button
+          <FilePickerButton
             variant="outlined"
-            component="label"
             sx={{ textTransform: "none" }}
-          >
-            Upload Logo
-            <input
-              ref={fileInputRef}
-              hidden
-              type="file"
-              accept="image/*"
-              onChange={handleLogoUpload}
-            />
-          </Button>
+            label="Upload Logo"
+            accept="image/*"
+            inputRef={fileInputRef}
+            onFilesSelected={handleLogoUpload}
+          />
 
           {logo && (
             <Button

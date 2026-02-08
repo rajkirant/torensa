@@ -7,15 +7,16 @@ import {
   Alert,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
+import FilePickerButton from "../components/inputs/FilePickerButton";
 
 const ExcelUploadToCsv: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+  const handleFileChange = (files: FileList | null) => {
+    if (files && files.length > 0) {
+      setFile(files[0]);
       setError(null);
     }
   };
@@ -64,15 +65,12 @@ const ExcelUploadToCsv: React.FC = () => {
   return (
     <PageContainer maxWidth={480}>
 
-        <Button variant="outlined" component="label">
-          {file ? file.name : "Choose Excel File"}
-          <input
-            type="file"
-            accept=".xlsx,.xls"
-            hidden
-            onChange={handleFileChange}
-          />
-        </Button>
+        <FilePickerButton
+          variant="outlined"
+          label={file ? file.name : "Choose Excel File"}
+          accept=".xlsx,.xls"
+          onFilesSelected={handleFileChange}
+        />
 
         <Button
           variant="contained"

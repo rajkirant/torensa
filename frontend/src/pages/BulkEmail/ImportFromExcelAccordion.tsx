@@ -24,6 +24,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
 import * as XLSX from "xlsx";
 import { apiFetch } from "../../utils/api";
+import FilePickerButton from "../../components/inputs/FilePickerButton";
 
 type SMTPConfig = {
   id: number;
@@ -137,8 +138,8 @@ export default function SendEmailAccordion({
 
   const hasExcel = !!fileName && headers.length > 0 && rows.length > 0;
 
-  async function handleExcelChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  async function handleExcelChange(files: FileList | null) {
+    const file = files?.[0];
     if (!file) return;
 
     setError("");
@@ -172,8 +173,6 @@ export default function SendEmailAccordion({
       setRows([]);
       setEmailColumn("");
       setError("Failed to read Excel file");
-    } finally {
-      e.target.value = "";
     }
   }
 
@@ -334,15 +333,14 @@ export default function SendEmailAccordion({
     <Box component="form" onSubmit={handleSend}>
       {/* 1) Excel Upload */}
       <Box sx={{ mb: 2 }}>
-        <Button variant="outlined" component="label" type="button">
-          Excel to Bulk Email
-          <input
-            type="file"
-            hidden
-            accept=".xlsx,.xls"
-            onChange={handleExcelChange}
-          />
-        </Button>
+        <FilePickerButton
+          variant="outlined"
+          type="button"
+          label="Excel to Bulk Email"
+          accept=".xlsx,.xls"
+          onFilesSelected={handleExcelChange}
+          resetAfterSelect
+        />
         {fileName && (
           <Typography variant="caption" sx={{ display: "block", mt: 1 }}>
             Selected file: {fileName}
@@ -468,15 +466,12 @@ export default function SendEmailAccordion({
           <Typography variant="body2" sx={{ mb: 1 }}>
             Attachments (optional)
           </Typography>
-          <Button variant="outlined" component="label">
-            Choose files
-            <input
-              type="file"
-              hidden
-              multiple
-              onChange={(e) => setFiles(e.target.files)}
-            />
-          </Button>
+          <FilePickerButton
+            variant="outlined"
+            label="Choose files"
+            multiple
+            onFilesSelected={setFiles}
+          />
           {files && (
             <Typography variant="caption" sx={{ ml: 2 }}>
               {files.length} file(s) selected
