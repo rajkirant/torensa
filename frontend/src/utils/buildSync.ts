@@ -1,6 +1,3 @@
-type UpdateServiceWorkerFn = (reloadPage?: boolean) => Promise<void>;
-
-let updateServiceWorker: UpdateServiceWorkerFn | null = null;
 let refreshInFlight: Promise<void> | null = null;
 
 const LAST_BUILD_NUMBER_KEY = "torensa:last-build-number";
@@ -11,10 +8,6 @@ export type BuildInfo = {
   buildNumber?: string | number | null;
   buildTimestamp?: string | null;
 } | null;
-
-export function setServiceWorkerUpdater(fn: UpdateServiceWorkerFn) {
-  updateServiceWorker = fn;
-}
 
 function normalizeBuildNumber(value: unknown): string | null {
   if (value === null || value === undefined) return null;
@@ -33,14 +26,11 @@ async function refreshServiceWorkerAndReload() {
 
   refreshInFlight = (async () => {
     try {
-      if (updateServiceWorker) {
-        await updateServiceWorker(true);
-        return;
-      }
-
       if ("serviceWorker" in navigator) {
         const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map((reg) => reg.update()));
+        await Promise.allSettled(
+          registrations.map((registration) => registration.unregister()),
+        );
       }
     } catch {
       // Fallback below performs a hard reload.
