@@ -44,6 +44,9 @@ const TextDiffChecker: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [onlyChanges, setOnlyChanges] = useState(false);
     const [mode, setMode] = useState<"edit" | "compare">("edit");
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    const compareRootRef = useRef<HTMLDivElement | null>(null);
 
     // Sync height between the two textareas
     const leftRootRef = useRef<HTMLDivElement | null>(null);
@@ -150,6 +153,18 @@ const TextDiffChecker: React.FC = () => {
             setPendingJump(null);
         });
     }, [mode, pendingJump, leftText, rightText]);
+
+    useEffect(() => {
+        const onFullscreenChange = () => {
+            const compareRoot = compareRootRef.current;
+            setIsFullscreen(
+                Boolean(compareRoot && document.fullscreenElement === compareRoot),
+            );
+        };
+
+        document.addEventListener("fullscreenchange", onFullscreenChange);
+        return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
+    }, []);
 
     /* =========================
        Height sync (grows with content)
@@ -313,6 +328,40 @@ const TextDiffChecker: React.FC = () => {
         setMode("compare");
     };
 
+    const handleFullscreenCompare = () => {
+        if (!leftText.trim() && !rightText.trim()) {
+            setError("Please paste text in at least one side to compare.");
+            return;
+        }
+
+        setError(null);
+
+        const requestFullscreen = async () => {
+            const el = compareRootRef.current;
+            if (!el || !el.requestFullscreen) return;
+
+            try {
+                if (document.fullscreenElement === el) {
+                    await document.exitFullscreen();
+                    return;
+                }
+                await el.requestFullscreen();
+            } catch {
+                setError("Fullscreen request was blocked by the browser.");
+            }
+        };
+
+        if (mode !== "compare") {
+            setMode("compare");
+            requestAnimationFrame(() => {
+                void requestFullscreen();
+            });
+            return;
+        }
+
+        void requestFullscreen();
+    };
+
     /* =========================
        Styles
        ========================= */
@@ -388,6 +437,9 @@ const TextDiffChecker: React.FC = () => {
                         <Button variant="contained" onClick={handleCompare} sx={{ textTransform: "none", fontWeight: 600 }}>
                             Compare
                         </Button>
+                        <Button variant="outlined" onClick={handleFullscreenCompare} sx={{ textTransform: "none" }}>
+                            {isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
+                        </Button>
                     </Stack>
 
                     {error && <Alert severity="error">{error}</Alert>}
@@ -454,7 +506,24 @@ const TextDiffChecker: React.FC = () => {
                             </Box>
                         </Stack>
                     ) : (
-                        <>
+                        <Box
+                            ref={compareRootRef}
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1.5,
+                                "&:fullscreen": {
+                                    p: 2,
+                                    bgcolor: "background.default",
+                                    overflow: "auto",
+                                },
+                                "&:-webkit-full-screen": {
+                                    p: 2,
+                                    bgcolor: "background.default",
+                                    overflow: "auto",
+                                },
+                            }}
+                        >
                             <Divider />
 
                             <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems={{ xs: "flex-start", sm: "center" }}>
@@ -470,6 +539,9 @@ const TextDiffChecker: React.FC = () => {
 
                                 <Button variant="outlined" onClick={() => setMode("edit")} sx={{ textTransform: "none" }}>
                                     Edit
+                                </Button>
+                                <Button variant="outlined" onClick={handleFullscreenCompare} sx={{ textTransform: "none" }}>
+                                    {isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
                                 </Button>
                             </Stack>
 
@@ -570,7 +642,7 @@ const TextDiffChecker: React.FC = () => {
                                 Click a line on the left or right to jump into the editor at that line. Green = added, Red = removed,
                                 Yellow = modified block.
                             </Typography>
-                        </>
+                        </Box>
                     )}
 
             </PageContainer>
