@@ -1,4 +1,4 @@
-import json
+import os
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -23,6 +23,19 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
     """
     def enforce_csrf(self, request):
         return  # Bypass CSRF
+
+
+def _get_build_metadata():
+    return {
+        "frontend": {
+            "buildNumber": os.getenv("FRONTEND_BUILD_NUMBER"),
+            "buildTimestamp": os.getenv("FRONTEND_BUILD_TIMESTAMP"),
+        },
+        "backend": {
+            "buildNumber": os.getenv("BACKEND_BUILD_NUMBER"),
+            "buildTimestamp": os.getenv("BACKEND_BUILD_TIMESTAMP"),
+        },
+    }
 
 
 @api_view(["GET"])
@@ -126,6 +139,7 @@ def login_view(request):
 @authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def me(request):
+    build = _get_build_metadata()
     if request.user.is_authenticated:
         return Response(
             {
@@ -133,11 +147,12 @@ def me(request):
                     "id": request.user.id,
                     "username": request.user.username,
                     "email": request.user.email,
-                }
+                },
+                "build": build,
             },
             status=status.HTTP_200_OK,
         )
-    return Response({"user": None}, status=status.HTTP_200_OK)
+    return Response({"user": None, "build": build}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
