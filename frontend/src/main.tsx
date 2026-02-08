@@ -5,14 +5,19 @@ import { Root } from "./Root";
 import { registerSW } from "virtual:pwa-register";
 import { syncBuildFromStaticFile } from "./utils/buildSync";
 
-void syncBuildFromStaticFile();
+async function bootstrap() {
+  const isReloading = await syncBuildFromStaticFile();
+  if (isReloading) return;
 
-registerSW({
-  immediate: true, // auto-update SW when online
-});
+  registerSW({
+    immediate: true, // auto-update SW when online
+  });
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <Root />
-  </React.StrictMode>,
-);
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <Root />
+    </React.StrictMode>,
+  );
+}
+
+void bootstrap();
