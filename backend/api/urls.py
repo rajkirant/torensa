@@ -19,7 +19,6 @@ urlpatterns = [
     path("smtp/save/", save_smtp_config),
     path("smtp/list/", list_smtp_configs),
     path("send-email-bulk/", send_email),
-    
     # Contact groups (DRF)
     path("contact-groups/save/", save_contact_group, name="save_contact_group"),
     path("contact-groups/", list_contact_groups, name="list_contact_groups"),
