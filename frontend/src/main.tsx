@@ -3,6 +3,9 @@ import ReactDOM from "react-dom/client";
 import { Root } from "./Root";
 
 import { registerSW } from "virtual:pwa-register";
+import { syncBuildFromStaticFile } from "./utils/buildSync";
+
+void syncBuildFromStaticFile();
 
 registerSW({
   immediate: true, // auto-update SW when online
