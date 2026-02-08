@@ -166,7 +166,14 @@ export default function App({ themeName, setThemeName }: AppProps) {
     <>
       <header style={headerStyle(theme)}>
         <Link to="/" style={{ ...brandLinkStyle, color: theme.header.text }}>
-          Torensa.com
+          <img
+            src="/favicon.svg"
+            alt="Torensa"
+            width={26}
+            height={26}
+            style={{ display: "block" }}
+          />
+          <span>Torensa.com</span>
         </Link>
 
         <nav style={navStyle}>

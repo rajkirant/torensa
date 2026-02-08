@@ -2,6 +2,9 @@ import React from "react";
 import { Theme } from "@mui/material/styles";
 
 export const brandLinkStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 8,
   fontSize: 22,
   fontWeight: 900,
   color: "#ffffff",
