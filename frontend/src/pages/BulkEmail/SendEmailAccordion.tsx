@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { apiFetch } from "../../utils/api";
+import FilePickerButton from "../../components/inputs/FilePickerButton";
 
 type SMTPConfig = {
   id: number;
@@ -168,15 +169,12 @@ export default function SendEmailAccordion({
         <Typography variant="body2" sx={{ mb: 1 }}>
           Attachments (optional)
         </Typography>
-        <Button variant="outlined" component="label">
-          Choose files
-          <input
-            type="file"
-            hidden
-            multiple
-            onChange={(e) => setFiles(e.target.files)}
-          />
-        </Button>
+        <FilePickerButton
+          variant="outlined"
+          label="Choose files"
+          multiple
+          onFilesSelected={setFiles}
+        />
         {files && (
           <Typography variant="caption" sx={{ ml: 2 }}>
             {files.length} file(s) selected

@@ -31,6 +31,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import OfflineChip from "../components/chips/OfflineChip";
 import BusyChip from "../components/chips/BusyChips";
 import PageContainer from "../components/PageContainer";
+import FilePickerButton from "../components/inputs/FilePickerButton";
 
 type ItemKind = "image" | "pdf";
 
@@ -421,22 +422,16 @@ const ImagePdfToPdf: React.FC = () => {
           spacing={1.5}
           alignItems={{ sm: "center" }}
         >
-          <Button
+          <FilePickerButton
             variant="outlined"
             startIcon={<UploadFileIcon />}
-            component="label"
             sx={{ textTransform: "none" }}
-          >
-            Add images / PDFs
-            <input
-              ref={fileInputRef}
-              hidden
-              type="file"
-              accept="application/pdf,image/*"
-              multiple
-              onChange={(e) => onPickFiles(e.target.files)}
-            />
-          </Button>
+            label="Add images / PDFs"
+            accept="application/pdf,image/*"
+            multiple
+            inputRef={fileInputRef}
+            onFilesSelected={onPickFiles}
+          />
 
           <Button
             variant="text"
