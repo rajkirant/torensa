@@ -1,4 +1,6 @@
 // vite.config.ts
+import { readdirSync, statSync } from "node:fs";
+import { extname, join, resolve } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -6,6 +8,7 @@ import serviceCards from "./src/metadata/serviceCards.json";
 
 type ServiceCardConfig = {
   id: string;
+  component?: string;
   title: string;
   description: string;
   path: string;
@@ -25,6 +28,88 @@ const offlineRouteRegexes = typedServiceCards
 
 // Always allow homepage as fallback
 offlineRouteRegexes.unshift(/^\/$/);
+
+function componentChunkBase(component?: string) {
+  if (!component) return null;
+  const parts = component.split("/");
+  return parts[parts.length - 1] || null;
+}
+
+function collectPageChunkBases(dirPath: string): string[] {
+  const chunkBases: string[] = [];
+  for (const entry of readdirSync(dirPath)) {
+    const fullPath = join(dirPath, entry);
+    const stat = statSync(fullPath);
+    if (stat.isDirectory()) {
+      chunkBases.push(...collectPageChunkBases(fullPath));
+      continue;
+    }
+    if (stat.isFile() && extname(entry) === ".tsx") {
+      chunkBases.push(entry.slice(0, -4));
+    }
+  }
+  return chunkBases;
+}
+
+const pageChunkBases = collectPageChunkBases(resolve(process.cwd(), "src/pages"));
+
+const offlineToolChunkBases = typedServiceCards
+  .filter((card) => card.offlineEnabled)
+  .map((card) => componentChunkBase(card.component))
+  .filter((name): name is string => Boolean(name));
+
+const knownRouteChunkBases = new Set(pageChunkBases);
+
+const allowedRouteChunkBases = new Set(["Home", ...offlineToolChunkBases]);
+
+const excludedRouteChunkBases = Array.from(knownRouteChunkBases).filter(
+  (base) => !allowedRouteChunkBases.has(base),
+);
+
+const workboxGlobIgnores = excludedRouteChunkBases.flatMap((base) => [
+  `**/assets/${base}-*.js`,
+  `**/assets/${base}-*.css`,
+]);
+
+const requiredSharedChunkBases = [
+  // Required for app bootstrap and routing
+  "index",
+  "rolldown-runtime",
+  "react-core",
+  "react-router",
+  "vendor",
+  // UI libraries required by most offline tools
+  "mui-core",
+  "mui-icons",
+  "emotion",
+  // Layout chunk used across route pages
+  "PageContainer",
+  // PWA register helper chunk
+  "workbox-window.prod.es5",
+];
+
+function matchesChunkBase(url: string, base: string) {
+  return (
+    url.startsWith(`assets/${base}-`) &&
+    (url.endsWith(".js") || url.endsWith(".css"))
+  );
+}
+
+function shouldKeepPrecacheUrl(url: string) {
+  if (!url.startsWith("assets/")) return true;
+
+  for (const base of knownRouteChunkBases) {
+    if (!matchesChunkBase(url, base)) continue;
+    return allowedRouteChunkBases.has(base);
+  }
+
+  for (const base of requiredSharedChunkBases) {
+    if (matchesChunkBase(url, base)) return true;
+  }
+
+  // Keep unknown chunks by default to avoid breaking runtime.
+  return true;
+}
 
 function isInNodeModules(id: string) {
   return id.includes("/node_modules/");
@@ -71,6 +156,13 @@ export default defineConfig({
       workbox: {
         navigateFallback: "/index.html",
         navigateFallbackAllowlist: offlineRouteRegexes,
+        globIgnores: workboxGlobIgnores,
+        manifestTransforms: [
+          async (entries) => ({
+            manifest: entries.filter((entry) => shouldKeepPrecacheUrl(entry.url)),
+            warnings: [],
+          }),
+        ],
         cleanupOutdatedCaches: true,
       },
     }),
