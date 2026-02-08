@@ -29,6 +29,8 @@ import {
     headerStyle,
     drawerNavButtonStyle,
     cardStyle,
+    appShellStyle,
+    contentShellStyle,
     footerStyle,
     navStyle,
     themeSelectSx,
@@ -163,7 +165,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
   );
 
   return (
-    <>
+    <div style={appShellStyle}>
       <header style={headerStyle(theme)}>
         <Link to="/" style={{ ...brandLinkStyle, color: theme.header.text }}>
           <img
@@ -212,7 +214,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         </Box>
       </Drawer>
 
-      <div className="container">
+      <div className="container" style={contentShellStyle}>
         <main>
           <Suspense
             fallback={
@@ -248,6 +250,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
