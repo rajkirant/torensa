@@ -97,6 +97,48 @@ jobs:
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
             --zip-file fileb://function.zip
 
+      - name: Wait for Lambda code update
+        if: steps.detect_lambda.outputs.changed == 'true'
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }}
+
+      - name: Prepare backend build metadata
+        id: backend_build_meta
+        if: steps.detect_lambda.outputs.changed == 'true'
+        shell: bash
+        run: |
+          BACKEND_BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "build_number=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          echo "build_timestamp=$BACKEND_BUILD_TIMESTAMP" >> "$GITHUB_OUTPUT"
+
+      - name: Persist backend build metadata on Lambda
+        if: steps.detect_lambda.outputs.changed == 'true'
+        shell: bash
+        run: |
+          EXISTING_VARS_JSON=$(aws lambda get-function-configuration \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --query 'Environment.Variables' \
+            --output json)
+
+          if [ -z "$EXISTING_VARS_JSON" ] || [ "$EXISTING_VARS_JSON" = "null" ]; then
+            EXISTING_VARS_JSON="{}"
+          fi
+
+          echo "$EXISTING_VARS_JSON" | jq \
+            --arg build_number "${{ steps.backend_build_meta.outputs.build_number }}" \
+            --arg build_timestamp "${{ steps.backend_build_meta.outputs.build_timestamp }}" \
+            '.BACKEND_BUILD_NUMBER = $build_number | .BACKEND_BUILD_TIMESTAMP = $build_timestamp' > lambda_vars.json
+
+          jq -c '{Variables: .}' lambda_vars.json > lambda_env.json
+
+          aws lambda update-function-configuration \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --environment file://lambda_env.json
+
+          aws lambda wait function-updated \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }}
+
       # ---------- Frontend ----------
       - name: Setup Node.js
         if: steps.detect_frontend.outputs.changed == 'true'
@@ -127,13 +169,72 @@ jobs:
         working-directory: frontend
         run: pnpm run build
 
-      - name: Deploy dist to S3
+      - name: Check if S3 deploy has changes
+        id: s3_changes
         if: steps.detect_frontend.outputs.changed == 'true'
+        shell: bash
+        run: |
+          DRYRUN_OUTPUT=$(aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete --dryrun)
+          echo "$DRYRUN_OUTPUT"
+
+          if [ -n "$DRYRUN_OUTPUT" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "S3 deploy changes detected"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No S3 deploy changes detected; skipping S3 deploy"
+          fi
+
+      - name: Create build metadata JSON
+        id: build_meta
+        if: steps.s3_changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          mkdir -p frontend/dist/metadata
+          BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          cat > frontend/dist/metadata/build.json <<EOF
+          {
+            "buildNumber": "${{ github.run_number }}",
+            "buildTimestamp": "$BUILD_TIMESTAMP"
+          }
+          EOF
+          echo "build_number=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          echo "build_timestamp=$BUILD_TIMESTAMP" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy dist to S3
+        if: steps.s3_changes.outputs.changed == 'true'
         run: |
           aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete
 
+      - name: Persist frontend build metadata on Lambda
+        if: steps.s3_changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          EXISTING_VARS_JSON=$(aws lambda get-function-configuration \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --query 'Environment.Variables' \
+            --output json)
+
+          if [ -z "$EXISTING_VARS_JSON" ] || [ "$EXISTING_VARS_JSON" = "null" ]; then
+            EXISTING_VARS_JSON="{}"
+          fi
+
+          echo "$EXISTING_VARS_JSON" | jq \
+            --arg build_number "${{ steps.build_meta.outputs.build_number }}" \
+            --arg build_timestamp "${{ steps.build_meta.outputs.build_timestamp }}" \
+            '.FRONTEND_BUILD_NUMBER = $build_number | .FRONTEND_BUILD_TIMESTAMP = $build_timestamp' > lambda_vars.json
+
+          jq -c '{Variables: .}' lambda_vars.json > lambda_env.json
+
+          aws lambda update-function-configuration \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --environment file://lambda_env.json
+
+          aws lambda wait function-updated \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }}
+
       - name: Invalidate CloudFront cache
-        if: steps.detect_frontend.outputs.changed == 'true'
+        if: steps.s3_changes.outputs.changed == 'true'
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
