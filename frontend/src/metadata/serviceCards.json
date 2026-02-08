@@ -13,7 +13,7 @@
   {
     "id": "excel-to-csv",
     "component": "ExcelUploadToCsv",
-    "title": "Excel to CSV",
+    "title": "Excel to CSV Converter",
     "description": "Upload Excel files and convert them to CSV.",
     "path": "/excel-to-csv",
     "ctaLabel": "Convert Excel",
