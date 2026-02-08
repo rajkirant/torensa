@@ -1,4 +1,8 @@
+import json
 import os
+import time
+from urllib.error import HTTPError, URLError
+from urllib.request import urlopen
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -25,17 +29,68 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
         return  # Bypass CSRF
 
 
-def _get_build_metadata():
+_BUILD_INFO_CACHE = {
+    "expires_at": 0.0,
+    "value": {"buildNumber": None, "buildTimestamp": None},
+}
+
+
+def _empty_build_metadata():
+    return {"buildNumber": None, "buildTimestamp": None}
+
+
+def _normalize_build_metadata(payload):
+    if not isinstance(payload, dict):
+        return _empty_build_metadata()
     return {
-        "frontend": {
-            "buildNumber": os.getenv("FRONTEND_BUILD_NUMBER"),
-            "buildTimestamp": os.getenv("FRONTEND_BUILD_TIMESTAMP"),
-        },
-        "backend": {
-            "buildNumber": os.getenv("BACKEND_BUILD_NUMBER"),
-            "buildTimestamp": os.getenv("BACKEND_BUILD_TIMESTAMP"),
-        },
+        "buildNumber": payload.get("buildNumber"),
+        "buildTimestamp": payload.get("buildTimestamp"),
     }
+
+
+def _frontend_build_info_urls():
+    urls = []
+
+    explicit_build_info_url = os.getenv("FRONTEND_BUILD_INFO_URL", "").strip()
+    if explicit_build_info_url:
+        urls.append(explicit_build_info_url)
+
+    frontend_site_url = os.getenv("FRONTEND_SITE_URL", "").strip().rstrip("/")
+    if frontend_site_url:
+        urls.append(f"{frontend_site_url}/metadata/build-info.json")
+
+    for fallback in (
+        "https://torensa.com/metadata/build-info.json",
+        "https://www.torensa.com/metadata/build-info.json",
+        "https://dph88mmllcgzw.cloudfront.net/metadata/build-info.json",
+    ):
+        if fallback not in urls:
+            urls.append(fallback)
+
+    return urls
+
+
+def _get_build_metadata():
+    now = time.time()
+    if _BUILD_INFO_CACHE["expires_at"] > now:
+        return _BUILD_INFO_CACHE["value"]
+
+    resolved = _empty_build_metadata()
+    for url in _frontend_build_info_urls():
+        try:
+            with urlopen(url, timeout=1.5) as response:
+                if response.status != 200:
+                    continue
+                payload = json.loads(response.read().decode("utf-8"))
+                resolved = _normalize_build_metadata(payload)
+                break
+        except (URLError, HTTPError, TimeoutError, json.JSONDecodeError):
+            continue
+
+    cache_ttl_seconds = int(os.getenv("FRONTEND_BUILD_CACHE_TTL_SECONDS", "60"))
+    _BUILD_INFO_CACHE["value"] = resolved
+    _BUILD_INFO_CACHE["expires_at"] = now + max(cache_ttl_seconds, 0)
+    return resolved
 
 
 @api_view(["GET"])
