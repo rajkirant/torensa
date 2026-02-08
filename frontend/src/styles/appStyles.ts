@@ -102,15 +102,28 @@ export const headerStyle = (theme: Theme): React.CSSProperties => ({
   overflow: "visible",
 });
 
+export const appShellStyle: React.CSSProperties = {
+  minHeight: "100dvh",
+  display: "flex",
+  flexDirection: "column",
+};
+
+export const contentShellStyle: React.CSSProperties = {
+  flex: 1,
+  width: "100%",
+  paddingBottom: 60,
+};
+
 export const footerStyle = (theme: Theme): React.CSSProperties => ({
-  width: "100%",           // ✅ stretch across screen
-  marginTop: 60,
-  padding: "70px 0",       // ✅ taller footer
+  width: "100%",
+  padding: "70px 0",
   background: theme.gradients.footer,
   borderTop: `1px solid ${theme.header.border}`,
   color: theme.header.text,
+  flexShrink: 0,
+  minHeight: 181,
+  contain: "layout paint",
 });
-
 
 export const footerInner: React.CSSProperties = {
   maxWidth: 1100,
@@ -118,3 +131,4 @@ export const footerInner: React.CSSProperties = {
   padding: "0 20px",
   textAlign: "center",
 };
+
