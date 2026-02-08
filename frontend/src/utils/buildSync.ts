@@ -3,6 +3,7 @@ let refreshInFlight: Promise<void> | null = null;
 const LAST_BUILD_NUMBER_KEY = "torensa:last-build-number";
 const LAST_BUILD_TIMESTAMP_KEY = "torensa:last-build-timestamp";
 const RELOAD_GUARD_KEY = "torensa:reload-target-build";
+const BUILD_INFO_URL = "/metadata/build-info.json";
 
 export type BuildInfo = {
   buildNumber?: string | number | null;
@@ -79,4 +80,19 @@ export function syncBuildAndMaybeReload(build: BuildInfo) {
   }
 
   void refreshServiceWorkerAndReload();
+}
+
+export async function syncBuildFromStaticFile() {
+  try {
+    // Query param avoids stale precache matches from older service workers.
+    const response = await fetch(`${BUILD_INFO_URL}?v=${Date.now()}`, {
+      cache: "no-store",
+      credentials: "omit",
+    });
+    if (!response.ok) return;
+    const build = (await response.json()) as BuildInfo;
+    syncBuildAndMaybeReload(build);
+  } catch {
+    // Ignore and continue app bootstrap.
+  }
 }
