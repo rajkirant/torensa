@@ -45,11 +45,11 @@ async function refreshServiceWorkerAndReload() {
   return refreshInFlight;
 }
 
-export function syncBuildAndMaybeReload(build: BuildInfo) {
+export function syncBuildAndMaybeReload(build: BuildInfo): boolean {
   const incomingBuildNumber = normalizeBuildNumber(build?.buildNumber);
   const incomingBuildTimestamp = normalizeBuildTimestamp(build?.buildTimestamp);
 
-  if (!incomingBuildNumber) return;
+  if (!incomingBuildNumber) return false;
 
   let previousBuildNumber: string | null = null;
   try {
@@ -59,7 +59,7 @@ export function syncBuildAndMaybeReload(build: BuildInfo) {
       localStorage.setItem(LAST_BUILD_TIMESTAMP_KEY, incomingBuildTimestamp);
     }
   } catch {
-    return;
+    return false;
   }
 
   if (!previousBuildNumber || previousBuildNumber === incomingBuildNumber) {
@@ -68,7 +68,7 @@ export function syncBuildAndMaybeReload(build: BuildInfo) {
     } catch {
       // Ignore storage failures.
     }
-    return;
+    return false;
   }
 
   try {
@@ -80,19 +80,21 @@ export function syncBuildAndMaybeReload(build: BuildInfo) {
   }
 
   void refreshServiceWorkerAndReload();
+  return true;
 }
 
-export async function syncBuildFromStaticFile() {
+export async function syncBuildFromStaticFile(): Promise<boolean> {
   try {
     // Query param avoids stale precache matches from older service workers.
     const response = await fetch(`${BUILD_INFO_URL}?v=${Date.now()}`, {
       cache: "no-store",
       credentials: "omit",
     });
-    if (!response.ok) return;
+    if (!response.ok) return false;
     const build = (await response.json()) as BuildInfo;
-    syncBuildAndMaybeReload(build);
+    return syncBuildAndMaybeReload(build);
   } catch {
     // Ignore and continue app bootstrap.
+    return false;
   }
 }
