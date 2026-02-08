@@ -14,7 +14,7 @@
     "id": "excel-to-csv",
     "component": "ExcelUploadToCsv",
     "title": "Excel to CSV Converter",
-    "description": "Upload Excel files and convert them to CSV.",
+    "description": "Upload Excel files and convert them to CSV files.",
     "path": "/excel-to-csv",
     "ctaLabel": "Convert Excel",
     "offlineEnabled": true,
