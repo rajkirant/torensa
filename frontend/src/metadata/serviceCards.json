@@ -24,7 +24,7 @@
   {
     "id": "text-to-qr",
     "component": "TextToQr",
-    "title": "Text to QR",
+    "title": "Text to QR Builder",
     "description": "Convert any text or URL into a scannable QR code.",
     "path": "/text-to-qr",
     "ctaLabel": "Generate QR",
