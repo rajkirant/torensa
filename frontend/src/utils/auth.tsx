@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { apiFetch } from "./api";
+import { syncBuildAndMaybeReload, type BuildInfo } from "./buildSync";
 /* =========================
    Types
    ========================= */
@@ -14,6 +15,11 @@ export type User = {
   id: number;
   username: string;
   email: string;
+};
+
+type MeResponse = {
+  user?: User | null;
+  build?: BuildInfo;
 };
 
 type AuthContextType = {
@@ -46,8 +52,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       apiFetch("/api/me/", {
         credentials: "include",
       })
-        .then((res) => (res.ok ? res.json() : null))
+        .then((res) => (res.ok ? (res.json() as Promise<MeResponse>) : null))
         .then((data) => {
+          syncBuildAndMaybeReload(data?.build ?? null);
           setUser(data?.user ?? null);
         })
         .catch(() => {
