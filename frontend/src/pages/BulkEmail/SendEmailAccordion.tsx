@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { apiFetch } from "../../utils/api";
+import { formatApiError } from "../../utils/apiError";
 import FilePickerButton from "../../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 
@@ -18,6 +19,7 @@ type SMTPConfig = {
   id: number;
   smtp_email: string;
   provider: string;
+  auth_type?: "app_password" | "oauth_refresh_token";
 };
 
 type Props = {
@@ -90,7 +92,7 @@ export default function SendEmailAccordion({
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data?.error || "Failed to send email");
+        setError(formatApiError(data, "Failed to send email"));
         return;
       }
 
@@ -125,7 +127,7 @@ export default function SendEmailAccordion({
           </MenuItem>
           {smtpConfigs.map((cfg) => (
             <MenuItem key={cfg.id} value={cfg.id}>
-              {cfg.smtp_email} ({cfg.provider})
+              {cfg.smtp_email} ({cfg.auth_type === "oauth_refresh_token" ? "OAuth" : "App Password"})
             </MenuItem>
           ))}
         </Select>

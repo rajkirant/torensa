@@ -197,6 +197,11 @@ EMAIL_USE_TLS = False
 # Example generator (run once): python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 EMAIL_ENCRYPTION_KEY = os.getenv("EMAIL_ENCRYPTION_KEY", "")
 
+GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "")
+GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "")
+GOOGLE_OAUTH_REDIRECT_URI = os.getenv("GOOGLE_OAUTH_REDIRECT_URI", "")
+GOOGLE_OAUTH_FRONTEND_REDIRECT_URI = os.getenv("GOOGLE_OAUTH_FRONTEND_REDIRECT_URI", "")
+
 CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
 
