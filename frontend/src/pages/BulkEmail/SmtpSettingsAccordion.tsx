@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Typography,
   TextField,
+  Divider,
 } from "@mui/material";
 import { apiFetch } from "../../utils/api";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
@@ -13,20 +14,54 @@ type Props = {
   onSaved: () => void;
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function SmtpSettingsAccordion({ onSaved }: Props) {
   const [smtpEmail, setSmtpEmail] = useState("");
-  const [appPassword, setAppPassword] = useState("");
+  const [oauthLoading, setOauthLoading] = useState(false);
 
-  const [saving, setSaving] = useState(false);
+  const [appPassword, setAppPassword] = useState("");
+  const [savingLegacy, setSavingLegacy] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  async function handleSave(e: React.FormEvent) {
+  async function handleConnectGmail(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(smtpEmail)) {
+      setError("Please enter a valid Gmail address");
+      return;
+    }
+
+    setOauthLoading(true);
+
+    try {
+      const query = new URLSearchParams({ smtp_email: smtpEmail.trim() });
+      const res = await apiFetch(`/api/auth/google/start/?${query.toString()}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data?.auth_url) {
+        setError(data?.error || "Failed to start Gmail connection");
+        return;
+      }
+
+      window.location.assign(data.auth_url);
+    } catch {
+      setError("Unable to connect Gmail right now");
+    } finally {
+      setOauthLoading(false);
+    }
+  }
+
+  async function handleSaveLegacy() {
+    setError("");
+    setSuccess("");
 
     if (!emailRegex.test(smtpEmail)) {
       setError("Please enter a valid Gmail address");
@@ -38,7 +73,7 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
       return;
     }
 
-    setSaving(true);
+    setSavingLegacy(true);
 
     try {
       const res = await apiFetch("/api/smtp/save/", {
@@ -66,22 +101,14 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
     } catch {
       setError("Unable to save SMTP credentials");
     } finally {
-      setSaving(false);
+      setSavingLegacy(false);
     }
   }
 
   return (
-    <Box component="form" onSubmit={handleSave}>
+    <Box component="form" onSubmit={handleConnectGmail}>
       <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-        Use a Gmail <strong>App Password</strong> (not your real password).{" "}
-        <a
-          href="https://myaccount.google.com/apppasswords"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "inherit", textDecoration: "underline" }}
-        >
-          Create App Password
-        </a>
+        Connect Gmail with OAuth to send safely without storing app passwords.
       </Typography>
 
       <TextField
@@ -94,6 +121,37 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
         margin="normal"
       />
 
+      <ToolStatusAlerts error={error} success={success} sx={{ mt: 2 }} />
+
+      <Button
+        type="submit"
+        variant="contained"
+        fullWidth
+        disabled={oauthLoading}
+        sx={{
+          mt: 2,
+          py: 1.4,
+          fontWeight: 700,
+          textTransform: "none",
+          borderRadius: 2,
+        }}
+      >
+        {oauthLoading ? (
+          <>
+            <CircularProgress size={20} sx={{ color: "inherit", mr: 1 }} />
+            Redirecting...
+          </>
+        ) : (
+          "Connect Gmail"
+        )}
+      </Button>
+
+      <Divider sx={{ my: 3 }} />
+
+      <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+        Legacy fallback: use Gmail app password if OAuth is unavailable.
+      </Typography>
+
       <TextField
         label="Gmail App Password"
         type="password"
@@ -104,28 +162,27 @@ export default function SmtpSettingsAccordion({ onSaved }: Props) {
         margin="normal"
       />
 
-      <ToolStatusAlerts error={error} success={success} />
-
       <Button
-        type="submit"
-        variant="contained"
+        type="button"
+        variant="outlined"
         fullWidth
-        disabled={saving}
+        disabled={savingLegacy}
+        onClick={() => void handleSaveLegacy()}
         sx={{
-          mt: 3,
-          py: 1.4,
+          mt: 2,
+          py: 1.2,
           fontWeight: 700,
           textTransform: "none",
           borderRadius: 2,
         }}
       >
-        {saving ? (
+        {savingLegacy ? (
           <>
             <CircularProgress size={20} sx={{ color: "inherit", mr: 1 }} />
-            Saving…
+            Saving...
           </>
         ) : (
-          "Save SMTP Settings"
+          "Save App Password (Legacy)"
         )}
       </Button>
     </Box>

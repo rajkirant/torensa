@@ -6,6 +6,10 @@ class UserSMTPConfig(models.Model):
     PROVIDER_CHOICES = (
         ("gmail", "Gmail"),
     )
+    AUTH_TYPE_CHOICES = (
+        ("app_password", "App Password"),
+        ("oauth_refresh_token", "OAuth Refresh Token"),
+    )
 
     user = models.ForeignKey(
         User,
@@ -14,7 +18,13 @@ class UserSMTPConfig(models.Model):
     )
 
     smtp_email = models.EmailField()
-    encrypted_app_password = models.BinaryField()
+    encrypted_app_password = models.BinaryField(null=True, blank=True)
+    encrypted_refresh_token = models.BinaryField(null=True, blank=True)
+    auth_type = models.CharField(
+        max_length=30,
+        choices=AUTH_TYPE_CHOICES,
+        default="app_password",
+    )
 
     provider = models.CharField(
         max_length=20,
