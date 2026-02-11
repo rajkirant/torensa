@@ -87,8 +87,8 @@ jobs:
           python -m pip install -r lambda/requirements.txt -t lambda_package
           cp -r backend lambda_package/backend
           cp -r lambda lambda_package/lambda
-          mkdir -p lambda_package/frontend/src
-          cp -r frontend/src/metadata lambda_package/frontend/src/metadata
+          mkdir -p lambda_package/backend/metadata
+          cp -r frontend/src/metadata/. lambda_package/backend/metadata/
 
           cd lambda_package
           zip -r ../function.zip . -x "*.pyc" -x "__pycache__/*" -x ".DS_Store"
