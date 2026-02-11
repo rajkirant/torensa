@@ -2,6 +2,7 @@ import base64
 import json
 import mimetypes
 import re
+from email.utils import parseaddr
 from email.message import EmailMessage as PythonEmailMessage
 from urllib.error import HTTPError
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
@@ -10,7 +11,9 @@ from urllib.request import Request, urlopen
 from cryptography.fernet import Fernet
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core import signing
+from django.core.validators import validate_email
 from django.core.mail import EmailMessage, get_connection
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status
@@ -481,6 +484,29 @@ def render_dollar_template(template: str, vars_map: dict) -> str:
     return text.replace(esc, "$")
 
 
+def _normalize_recipient_email(value: str) -> str:
+    if not isinstance(value, str):
+        raise ValueError("Invalid recipient email")
+
+    candidate = value.strip()
+    if not candidate:
+        raise ValueError("Recipient email is empty")
+
+    # In bulk payload each item must be one address only.
+    if any(sep in candidate for sep in [",", ";", "\n", "\r"]):
+        raise ValueError(
+            f"Invalid recipient '{candidate}'. Use one email per recipient entry."
+        )
+
+    _display_name, addr = parseaddr(candidate)
+    normalized = (addr or candidate).strip()
+    try:
+        validate_email(normalized)
+    except ValidationError as exc:
+        raise ValueError(f"Invalid recipient email: {candidate}") from exc
+    return normalized
+
+
 def _build_sender_backend(smtp_config: UserSMTPConfig):
     if smtp_config.auth_type == "oauth_refresh_token":
         if not smtp_config.encrypted_refresh_token:
@@ -534,10 +560,12 @@ def _send_one_email(
     attachments_payload: list[dict],
     sender_backend: dict,
 ):
+    normalized_recipient = _normalize_recipient_email(recipient)
+
     if sender_backend["mode"] == "gmail_api":
         _send_with_gmail_api(
             from_email=sender,
-            to_email=recipient,
+            to_email=normalized_recipient,
             subject=subject,
             body=body,
             attachments_payload=attachments_payload,
@@ -549,7 +577,7 @@ def _send_one_email(
         subject=subject,
         body=body,
         from_email=sender,
-        to=[recipient],
+        to=[normalized_recipient],
         connection=sender_backend["connection"],
     )
     for item in attachments_payload:

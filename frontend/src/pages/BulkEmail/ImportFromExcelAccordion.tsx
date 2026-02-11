@@ -204,8 +204,9 @@ export default function SendEmailAccordion({
     if (emailIndex === -1) return [];
 
     return rows.slice(1).flatMap((row) => {
-      const to = row?.[emailIndex];
-      if (typeof to !== "string" || !to.trim()) return [];
+      const rawTo = row?.[emailIndex];
+      const toValue = rawTo == null ? "" : String(rawTo).trim();
+      if (!toValue) return [];
 
       const fullVars = buildRowVars(headers, row);
 
@@ -216,7 +217,12 @@ export default function SendEmailAccordion({
           : "";
       }
 
-      return [{ to: to.trim(), vars: selectedVars }];
+      const recipients = toValue
+        .split(/[,\n;]+/)
+        .map((email) => email.trim())
+        .filter(Boolean);
+
+      return recipients.map((email) => ({ to: email, vars: { ...selectedVars } }));
     });
   }, [hasExcel, emailColumn, headers, rows, placeholderKeys]);
 
