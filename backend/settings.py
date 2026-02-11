@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,12 +28,14 @@ def _env_bool(name, default=False):
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-only-change-me")
+SECRET_KEY = os.getenv("SECRET_KEY", "").strip()
+if not SECRET_KEY:
+    raise ImproperlyConfigured("SECRET_KEY environment variable is required.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _env_bool("DEBUG", True)
+DEBUG = _env_bool("DEBUG", False)
 
-ALLOWED_HOSTS = ['xi5o41nmf3.execute-api.us-east-1.amazonaws.com','www.torensa.pythonanywhere.com','torensa.pythonanywhere.com','127.0.0.1', 'localhost','torensa.com','torensa-backend.onrender.com','api.torensa.com']
+ALLOWED_HOSTS = ['xi5o41nmf3.execute-api.us-east-1.amazonaws.com','127.0.0.1', 'localhost','torensa.com','api.torensa.com']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -41,7 +44,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://torensa.com",
     "https://www.torensa.com",
-    "https://www.torensa.pythonanywhere.com",
     "https://dph88mmllcgzw.cloudfront.net"
 ]
 
@@ -76,6 +78,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 REST_FRAMEWORK = {
