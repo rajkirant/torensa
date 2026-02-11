@@ -1,18 +1,34 @@
 [
   {
     "id": "communication",
-    "label": "Communication"
+    "label": "Communication",
+    "description": "Messaging and outreach tools",
+    "icon": "chat",
+    "sortOrder": 10,
+    "enabled": true
   },
   {
     "id": "utilities",
-    "label": "Utilities"
+    "label": "Utilities",
+    "description": "General-purpose helpers",
+    "icon": "build",
+    "sortOrder": 20,
+    "enabled": true
   },
   {
     "id": "business",
-    "label": "Business"
+    "label": "Business",
+    "description": "Invoices and business workflows",
+    "icon": "work",
+    "sortOrder": 30,
+    "enabled": true
   },
   {
     "id": "developer",
-    "label": "Developer"
+    "label": "Developer",
+    "description": "Developer-focused tools",
+    "icon": "code",
+    "sortOrder": 40,
+    "enabled": true
   }
 ]

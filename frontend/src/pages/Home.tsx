@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import type { CSSProperties } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import serviceCards from "../metadata/serviceCards.json";
@@ -29,9 +30,18 @@ export default function Home() {
 
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
+  const isMobile = useMediaQuery("(max-width:700px)");
+  const isTablet = useMediaQuery("(max-width:1050px)");
+  const columns = isMobile ? 1 : isTablet ? 2 : 3;
 
   const secondaryText: CSSProperties = {
     color: secondaryTextColor,
+  };
+  const cardsGridStyle: CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: `repeat(${columns}, minmax(260px, 320px))`,
+    justifyContent: "center",
+    gap: 28,
   };
 
   // Safety guard (never crash)
@@ -63,11 +73,7 @@ export default function Home() {
         </p>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: 28,
-          }}
+          style={cardsGridStyle}
         >
           {offlineCards.map((card) => (
             <div
@@ -108,11 +114,7 @@ export default function Home() {
       <h2 style={{ textAlign: "center", marginBottom: 40 }}>Services</h2>
 
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: 28,
-        }}
+        style={cardsGridStyle}
       >
         {cards.map((card) => (
           <div
