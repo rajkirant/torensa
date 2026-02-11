@@ -91,7 +91,12 @@ def _tokens(value: str):
     return TOOL_WORD_RE.findall((value or "").lower())
 
 
-def _score_tool(tool: dict, query: str, current_tool_id: str | None):
+def _score_tool(
+    tool: dict,
+    query: str,
+    current_tool_id: str | None,
+    explicit_tool_ids: set[str],
+):
     score = 0.0
     q = (query or "").lower()
     current = (current_tool_id or "").strip().lower()
@@ -102,8 +107,13 @@ def _score_tool(tool: dict, query: str, current_tool_id: str | None):
     path = (tool.get("path") or "").strip().lower()
     text_blob = " ".join([tool_id, title, description, detailed, path])
 
-    if current and tool_id == current:
-        score += 7
+    if tool_id and tool_id in explicit_tool_ids:
+        score += 10
+
+    # Page-context bias helps when query is ambiguous, but should not override
+    # explicit requests for another tool.
+    if current and tool_id == current and (not explicit_tool_ids or current in explicit_tool_ids):
+        score += 3
 
     if tool_id and tool_id in q:
         score += 6
@@ -170,10 +180,38 @@ def _fallback_answer(tool: dict | None):
     ).strip()
 
 
+def _explicit_tool_ids(query: str, cards: list[dict]) -> set[str]:
+    q = (query or "").strip().lower()
+    if not q:
+        return set()
+
+    explicit = set()
+    for tool in cards:
+        if not isinstance(tool, dict):
+            continue
+        tool_id = (tool.get("id") or "").strip().lower()
+        title = (tool.get("title") or "").strip().lower()
+        path = (tool.get("path") or "").strip().lower()
+        if not tool_id:
+            continue
+
+        if tool_id in q:
+            explicit.add(tool_id)
+            continue
+        if path and path in q:
+            explicit.add(tool_id)
+            continue
+        if title and title in q:
+            explicit.add(tool_id)
+            continue
+    return explicit
+
+
 def _build_context(*, cards: list[dict], category_map: dict, query: str, current_tool_id: str | None):
+    explicit_ids = _explicit_tool_ids(query, cards)
     scored = sorted(
         (
-            (_score_tool(tool, query, current_tool_id), tool)
+            (_score_tool(tool, query, current_tool_id, explicit_ids), tool)
             for tool in cards
             if isinstance(tool, dict)
         ),
