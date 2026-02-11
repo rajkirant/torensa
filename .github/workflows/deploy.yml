@@ -49,18 +49,18 @@ jobs:
         run: |
           echo "Before SHA: ${{ github.event.before }}"
           echo "Current SHA: ${{ github.sha }}"
-          echo "Checking changes in: lambda/ or backend/"
+          echo "Checking changes in: lambda/, backend/, or frontend/src/metadata/"
 
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          if echo "$CHANGED_FILES" | grep -Eq "^(lambda|backend)/"; then
+          if echo "$CHANGED_FILES" | grep -Eq "^(lambda|backend)/|^frontend/src/metadata/"; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Lambda or backend folder changed"
+            echo "Lambda/backend/metadata changed"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Lambda or backend folder NOT changed"
+            echo "Lambda/backend/metadata NOT changed"
           fi
 
       # ----------- AWS deploy ASAP (early in workflow) -----------
@@ -87,6 +87,8 @@ jobs:
           python -m pip install -r lambda/requirements.txt -t lambda_package
           cp -r backend lambda_package/backend
           cp -r lambda lambda_package/lambda
+          mkdir -p lambda_package/frontend/src
+          cp -r frontend/src/metadata lambda_package/frontend/src/metadata
 
           cd lambda_package
           zip -r ../function.zip . -x "*.pyc" -x "__pycache__/*" -x ".DS_Store"
