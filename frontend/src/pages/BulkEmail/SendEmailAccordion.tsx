@@ -1,9 +1,11 @@
 import { useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   CircularProgress,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -21,18 +23,31 @@ type SMTPConfig = {
   provider: string;
 };
 
+type ContactGroup = {
+  id: number;
+  group_name: string;
+  contacts: Array<{
+    id: number;
+    name: string;
+    email: string;
+  }>;
+};
+
 type Props = {
   smtpConfigs: SMTPConfig[];
+  contactGroups: ContactGroup[];
   selectedConfigId: number | "";
   setSelectedConfigId: (id: number | "") => void;
 };
 
 export default function SendEmailAccordion({
   smtpConfigs,
+  contactGroups,
   selectedConfigId,
   setSelectedConfigId,
 }: Props) {
   const [emails, setEmails] = useState("");
+  const [selectedGroupId, setSelectedGroupId] = useState<number | "">("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [files, setFiles] = useState<FileList | null>(null);
@@ -40,6 +55,47 @@ export default function SendEmailAccordion({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  function addGroupRecipients() {
+    setError("");
+    setSuccess("");
+
+    if (!selectedGroupId) {
+      setError("Please select a contact group first");
+      return;
+    }
+
+    const selectedGroup = contactGroups.find((g) => g.id === selectedGroupId);
+    if (!selectedGroup) {
+      setError("Selected contact group was not found");
+      return;
+    }
+
+    const groupEmails = selectedGroup.contacts
+      .map((c) => (c.email || "").trim())
+      .filter(Boolean);
+
+    if (groupEmails.length === 0) {
+      setError("Selected group has no valid email addresses");
+      return;
+    }
+
+    const existingEmails = emails
+      .split(/[\n,;]+/)
+      .map((e) => e.trim())
+      .filter(Boolean);
+
+    const mergedEmails = Array.from(
+      new Set(
+        [...existingEmails, ...groupEmails].map((e) => e.toLowerCase()),
+      ),
+    );
+
+    setEmails(mergedEmails.join(", "));
+    setSuccess(
+      `${groupEmails.length} recipient(s) added from "${selectedGroup.group_name}"`,
+    );
+  }
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
@@ -133,6 +189,46 @@ export default function SendEmailAccordion({
       </FormControl>
 
       {/* Recipients */}
+      <FormControl fullWidth sx={{ mb: 1 }}>
+        <InputLabel id="contact-group-select-label">
+          Select Contact Group (optional)
+        </InputLabel>
+        <Select
+          labelId="contact-group-select-label"
+          value={selectedGroupId}
+          label="Select Contact Group (optional)"
+          onChange={(e) => setSelectedGroupId(e.target.value as number)}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {contactGroups.map((group) => (
+            <MenuItem key={group.id} value={group.id}>
+              {group.group_name} ({group.contacts?.length || 0})
+            </MenuItem>
+          ))}
+        </Select>
+        <FormHelperText>
+          Choose a saved group and add its recipients to the list below.
+        </FormHelperText>
+      </FormControl>
+
+      <Button
+        type="button"
+        variant="outlined"
+        disabled={!contactGroups.length}
+        onClick={addGroupRecipients}
+        sx={{ mb: 2, textTransform: "none", fontWeight: 700 }}
+      >
+        Add Group Recipients
+      </Button>
+
+      {!contactGroups.length && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          No contact groups available yet. Create one in the Contact Groups section.
+        </Alert>
+      )}
+
       <TextField
         label="Recipients"
         placeholder="email1@gmail.com, email2@gmail.com; email3@gmail.com"

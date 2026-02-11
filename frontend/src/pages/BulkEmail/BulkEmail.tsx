@@ -26,7 +26,11 @@ type SMTPConfig = {
 type ContactGroup = {
   id: number;
   group_name: string;
-  contact_count: number;
+  contacts: Array<{
+    id: number;
+    name: string;
+    email: string;
+  }>;
 };
 
 const accordionStyle = {
@@ -338,7 +342,7 @@ export default function BulkEmail() {
                 </Typography>
                 {contactGroups.map((g) => (
                   <Typography key={g.id} variant="body2" sx={{ color: "text.secondary" }}>
-                    - {g.group_name} ({g.contact_count} contacts)
+                    - {g.group_name} ({g.contacts?.length || 0} contacts)
                   </Typography>
                 ))}
               </Box>
@@ -388,6 +392,7 @@ export default function BulkEmail() {
           <Box>
             <SendEmailAccordion
               smtpConfigs={smtpConfigs}
+              contactGroups={contactGroups}
               selectedConfigId={selectedConfigId}
               setSelectedConfigId={setSelectedConfigId}
             />
