@@ -53,7 +53,7 @@ export default function SendEmailAccordion({
     }
 
     const emailList = emails
-      .split(/[\n,]+/)
+      .split(/[\n,;]+/)
       .map((e) => e.trim())
       .filter(Boolean);
 
@@ -136,12 +136,12 @@ export default function SendEmailAccordion({
       {/* Recipients */}
       <TextField
         label="Recipients"
-        placeholder="email1@gmail.com, email2@gmail.com"
+        placeholder="email1@gmail.com, email2@gmail.com; email3@gmail.com"
         multiline
         rows={4}
         value={emails}
         onChange={(e) => setEmails(e.target.value)}
-        helperText="Separate multiple emails with commas or new lines"
+        helperText="Separate multiple emails with commas, semicolons, or new lines"
         fullWidth
         margin="normal"
       />
