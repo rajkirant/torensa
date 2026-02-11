@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { apiFetch } from "./api";
+import { setCsrfToken } from "./csrf";
 /* =========================
    Types
    ========================= */
@@ -17,6 +18,7 @@ export type User = {
 };
 
 type MeResponse = {
+  csrfToken?: string;
   user?: User | null;
 };
 
@@ -52,6 +54,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
         .then((res) => (res.ok ? (res.json() as Promise<MeResponse>) : null))
         .then((data) => {
+          if (data?.csrfToken) {
+            setCsrfToken(data.csrfToken);
+          }
           setUser(data?.user ?? null);
         })
         .catch(() => {

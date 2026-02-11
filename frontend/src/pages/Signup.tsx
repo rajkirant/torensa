@@ -4,6 +4,7 @@ import { useAuth } from "../utils/auth";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { apiFetch } from "../utils/api";
+import { setCsrfToken } from "../utils/csrf";
 
 export default function Signup() {
   const { setUser } = useAuth();
@@ -49,6 +50,9 @@ export default function Signup() {
       }
 
       const data = await res.json();
+      if (data?.csrfToken) {
+        setCsrfToken(data.csrfToken);
+      }
       setUser(data.user); // auto login
       navigate("/");
     } catch {
