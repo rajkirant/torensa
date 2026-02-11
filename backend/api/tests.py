@@ -111,3 +111,69 @@ class AuthCsrfTests(TestCase):
             HTTP_X_CSRFTOKEN=logout_token,
         )
         self.assertEqual(logout_response.status_code, 200)
+
+
+class EmailFlowSmokeTests(TestCase):
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=True)
+        self.username = "mailer"
+        self.password = "StrongMailerPass123!"
+        self.email = "mailer@example.com"
+        User.objects.create_user(
+            username=self.username,
+            email=self.email,
+            password=self.password,
+        )
+
+    def _get_csrf_token(self):
+        response = self.client.get("/api/me/")
+        self.assertEqual(response.status_code, 200)
+        token = response.json().get("csrfToken")
+        self.assertTrue(token)
+        return token
+
+    def _login(self):
+        token = self._get_csrf_token()
+        response = self.client.post(
+            "/api/login/",
+            data=json.dumps(
+                {
+                    "username": self.username,
+                    "password": self.password,
+                }
+            ),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_email_endpoints_require_authentication(self):
+        start_response = self.client.get("/api/auth/google/start/")
+        self.assertEqual(start_response.status_code, 403)
+
+        send_response = self.client.post(
+            "/api/send-email/",
+            data=json.dumps({}),
+            content_type="application/json",
+        )
+        self.assertEqual(send_response.status_code, 403)
+
+    def test_authenticated_email_endpoints_smoke(self):
+        self._login()
+
+        list_response = self.client.get("/api/smtp/list/")
+        self.assertEqual(list_response.status_code, 200)
+        self.assertIn("configs", list_response.json())
+
+        oauth_start_response = self.client.get("/api/auth/google/start/")
+        self.assertEqual(oauth_start_response.status_code, 400)
+        self.assertIn("error", oauth_start_response.json())
+
+        disconnect_response = self.client.post(
+            "/api/smtp/disconnect/",
+            data=json.dumps({}),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=self._get_csrf_token(),
+        )
+        self.assertEqual(disconnect_response.status_code, 400)
+        self.assertIn("error", disconnect_response.json())
