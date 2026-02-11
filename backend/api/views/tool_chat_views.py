@@ -31,21 +31,28 @@ def _metadata_paths():
             )
         )
 
-    # Local repo layout (project root/frontend/src/metadata).
+    # Backend-owned metadata (works well for Lambda package layout).
     for parent in current.parents:
         candidates.append(
             (
-                parent / "frontend" / "src" / "metadata" / "serviceCards.json",
-                parent / "frontend" / "src" / "metadata" / "categories.json",
+                parent / "backend" / "metadata" / "serviceCards.json",
+                parent / "backend" / "metadata" / "categories.json",
             )
         )
-
-    # If metadata is copied near backend package for Lambda zip.
     for parent in current.parents:
         candidates.append(
             (
                 parent / "metadata" / "serviceCards.json",
                 parent / "metadata" / "categories.json",
+            )
+        )
+
+    # Local repo frontend metadata fallback.
+    for parent in current.parents:
+        candidates.append(
+            (
+                parent / "frontend" / "src" / "metadata" / "serviceCards.json",
+                parent / "frontend" / "src" / "metadata" / "categories.json",
             )
         )
 
