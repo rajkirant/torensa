@@ -132,3 +132,18 @@ export const footerInner: React.CSSProperties = {
   textAlign: "center",
 };
 
+export const footerLinksRow: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 14,
+  marginBottom: 8,
+};
+
+export const footerLinkStyle = (theme: Theme): React.CSSProperties => ({
+  color: theme.header.text,
+  textDecoration: "none",
+  display: "inline-flex",
+  alignItems: "center",
+});
+

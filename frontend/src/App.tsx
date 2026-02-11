@@ -22,6 +22,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 import {
     brandLinkStyle,
@@ -34,7 +35,10 @@ import {
     footerStyle,
     navStyle,
     themeSelectSx,
-    userGreetingStyle, footerInner,
+    userGreetingStyle,
+    footerInner,
+    footerLinksRow,
+    footerLinkStyle,
 } from "./styles/appStyles";
 
 import { themes } from "./theme";
@@ -67,7 +71,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
     : theme.header.text;
 
   const secondaryTextColor = theme.palette.text.secondary;
-
   const handleLogout = useCallback(async () => {
     try {
       await apiFetch("/api/logout/", { method: "POST", csrf: true });
@@ -238,13 +241,26 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
       <footer style={footerStyle(theme)}>
         <div style={footerInner}>
-          <a
-            href="https://www.linkedin.com/in/rajkiran/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <LinkedInIcon sx={{ fontSize: 24 }} />
-          </a>
+          <div style={footerLinksRow}>
+            <a
+              href="https://github.com/rajkirant/torensa"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={footerLinkStyle(theme)}
+              aria-label="Torensa GitHub"
+            >
+              <GitHubIcon sx={{ fontSize: 24, color: "inherit" }} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/rajkiran/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={footerLinkStyle(theme)}
+              aria-label="Raj Kiran LinkedIn"
+            >
+              <LinkedInIcon sx={{ fontSize: 24, color: "inherit" }} />
+            </a>
+          </div>
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © {new Date().getFullYear()} Torensa. All rights reserved.
           </div>
