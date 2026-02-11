@@ -24,6 +24,31 @@ def _env_bool(name, default=False):
     return os.getenv(name, str(default)).strip().lower() in ("1", "true", "yes", "on")
 
 
+def _env_int(name, default):
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    raw = raw.strip()
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError as exc:
+        raise ImproperlyConfigured(f"{name} must be an integer.") from exc
+
+
+def _is_weak_secret_key(value: str) -> bool:
+    return (
+        len(value) < 50
+        or len(set(value)) < 5
+        or value.startswith("django-insecure-")
+    )
+
+
+DJANGO_ENV = os.getenv("DJANGO_ENV", "development").strip().lower()
+IS_PRODUCTION = DJANGO_ENV in ("production", "prod", "staging")
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -34,6 +59,13 @@ if not SECRET_KEY:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _env_bool("DEBUG", False)
+if IS_PRODUCTION and DEBUG:
+    raise ImproperlyConfigured("DEBUG must be False when DJANGO_ENV is production.")
+
+if IS_PRODUCTION and _is_weak_secret_key(SECRET_KEY):
+    raise ImproperlyConfigured(
+        "SECRET_KEY is too weak for production. Use a long random key (50+ chars)."
+    )
 
 ALLOWED_HOSTS = ['xi5o41nmf3.execute-api.us-east-1.amazonaws.com','127.0.0.1', 'localhost','torensa.com','api.torensa.com']
 
@@ -55,6 +87,16 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.torensa.pythonanywhere.com",
     "https://dph88mmllcgzw.cloudfront.net"
 ]
+
+# Deployment hardening defaults (override with env vars if needed).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = _env_bool("SECURE_SSL_REDIRECT", IS_PRODUCTION)
+SECURE_HSTS_SECONDS = _env_int("SECURE_HSTS_SECONDS", 31536000 if IS_PRODUCTION else 0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = _env_bool(
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS",
+    SECURE_HSTS_SECONDS > 0,
+)
+SECURE_HSTS_PRELOAD = _env_bool("SECURE_HSTS_PRELOAD", SECURE_HSTS_SECONDS > 0)
 
 # Application definition
 
