@@ -6,21 +6,20 @@ from django.conf import settings
 from rest_framework.decorators import (
     api_view,
     permission_classes,
-    authentication_classes,
 )
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import CSRFCheck
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
 
 
-class CsrfExemptSessionAuthentication(SessionAuthentication):
-    """
-    SessionAuthentication that skips CSRF checks.
-    This keeps behaviour similar to your previous @csrf_exempt views.
-    """
-    def enforce_csrf(self, request):
-        return  # Bypass CSRF
+def _enforce_csrf(request):
+    check = CSRFCheck(lambda _request: None)
+    check.process_request(request)
+    reason = check.process_view(request, None, (), {})
+    if reason:
+        raise PermissionDenied("CSRF token missing or incorrect.")
 
 
 @api_view(["GET"])
@@ -30,9 +29,9 @@ def hello(request):
 
 
 @api_view(["POST"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def signup_view(request):
+    _enforce_csrf(request)
     data = request.data
 
     username = data.get("username")
@@ -83,9 +82,9 @@ def signup_view(request):
 
 
 @api_view(["POST"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def login_view(request):
+    _enforce_csrf(request)
     data = request.data
 
     username = data.get("username")
@@ -122,7 +121,6 @@ def login_view(request):
 
 
 @api_view(["GET"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def me(request):
     csrf_token = get_token(request)
@@ -142,9 +140,9 @@ def me(request):
 
 
 @api_view(["POST"])
-@authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def logout_view(request):
+    _enforce_csrf(request)
     logout(request)
 
     response = Response({"message": "Logged out"}, status=status.HTTP_200_OK)

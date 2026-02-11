@@ -24,7 +24,6 @@ export default function Login() {
     try {
       const res = await apiFetch("/api/login/", {
         method: "POST",
-        csrf: false, // 🔴 login must NOT require CSRF
         headers: {
           "Content-Type": "application/json",
         },
