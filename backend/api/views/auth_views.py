@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.models import User
 from django.middleware.csrf import get_token
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from rest_framework.decorators import (
     api_view,
@@ -55,6 +57,19 @@ def signup_view(request):
         return Response(
             {"error": "Email already exists"},
             status=status.HTTP_409_CONFLICT,
+        )
+
+    candidate_user = User(username=username, email=email)
+    try:
+        validate_password(password, user=candidate_user)
+    except ValidationError as exc:
+        messages = exc.messages or ["Password does not meet policy requirements"]
+        return Response(
+            {
+                "error": messages[0],
+                "password_errors": messages,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     # ---------- Create User ----------

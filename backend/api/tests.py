@@ -66,6 +66,26 @@ class AuthCsrfTests(TestCase):
         )
         self.assertEqual(response.status_code, 403)
 
+    def test_signup_rejects_weak_password(self):
+        token = self._get_csrf_token()
+        response = self.client.post(
+            "/api/signup/",
+            data=json.dumps(
+                {
+                    "username": "bob",
+                    "email": "bob@example.com",
+                    "password": "12345",
+                }
+            ),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, 400)
+        payload = response.json()
+        self.assertIn("error", payload)
+        self.assertIn("password_errors", payload)
+        self.assertGreater(len(payload["password_errors"]), 0)
+
     def test_logout_requires_csrf_token(self):
         login_token = self._get_csrf_token()
         login_response = self.client.post(
