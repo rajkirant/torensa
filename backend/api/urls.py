@@ -6,7 +6,6 @@ from .views.email_views import (
     gmail_oauth_start,
     list_smtp_configs,
     send_email,
-    save_smtp_config,
     save_contact_group,
     list_contact_groups,
 )
@@ -18,7 +17,6 @@ urlpatterns = [
     path("me/", me),
     path("logout/", logout_view),
     path("signup/", signup_view),
-    path("smtp/save/", save_smtp_config),
     path("smtp/list/", list_smtp_configs),
     path("gmail/oauth/start/", gmail_oauth_start),
     path("gmail/oauth/start", gmail_oauth_start),
