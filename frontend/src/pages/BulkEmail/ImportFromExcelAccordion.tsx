@@ -22,7 +22,7 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
-import * as XLSX from "xlsx";
+import readXlsxFile, { type CellValue, type Schema } from "read-excel-file";
 import { apiFetch } from "../../utils/api";
 import { formatApiError } from "../../utils/apiError";
 import FilePickerButton from "../../components/inputs/FilePickerButton";
@@ -39,9 +39,52 @@ type Props = {
   setSelectedConfigId: (id: number | "") => void;
 };
 
+type ExcelRecord = Record<string, string>;
+type SpreadsheetRows = string[][];
+
 // "First Name" -> "First_Name"
 function headerToKey(header: string) {
   return header.trim().replace(/\s+/g, "_");
+}
+
+function ensureSupportedSpreadsheet(file: File) {
+  if (!/\.xlsx$/i.test(file.name)) {
+    throw new Error("Only .xlsx files are supported. Convert .xls to .xlsx first.");
+  }
+}
+
+function parseSpreadsheetCell(value: CellValue): string {
+  if (value instanceof Date) return value.toISOString();
+  return String(value);
+}
+
+function buildSchema(headers: string[]): Schema<ExcelRecord> {
+  const schema: Schema<ExcelRecord> = {};
+  for (const header of headers) {
+    schema[header] = {
+      column: header,
+      type: parseSpreadsheetCell,
+    };
+  }
+  return schema;
+}
+
+function validateHeaders(headers: string[]) {
+  if (!headers.length || headers.every((h) => !h)) {
+    throw new Error("Header row is empty.");
+  }
+  if (headers.some((h) => !h)) {
+    throw new Error("Column headers must not be empty.");
+  }
+
+  const seen = new Set<string>();
+  for (const header of headers) {
+    const normalized = header.toLowerCase();
+    if (seen.has(normalized)) {
+      throw new Error(`Duplicate column header found: "${header}"`);
+    }
+    seen.add(normalized);
+  }
 }
 
 function applyDollarTemplate(template: string, vars: Record<string, string>) {
@@ -68,7 +111,7 @@ function extractPlaceholderKeys(subject: string, body: string) {
   return Array.from(keys);
 }
 
-function buildRowVars(headers: string[], row: any[]) {
+function buildRowVars(headers: string[], row: string[]) {
   const vars: Record<string, string> = {};
   headers.forEach((h, i) => {
     if (!h) return;
@@ -115,7 +158,7 @@ export default function SendEmailAccordion({
   // Excel state
   const [fileName, setFileName] = useState<string | null>(null);
   const [headers, setHeaders] = useState<string[]>([]);
-  const [rows, setRows] = useState<any[][]>([]);
+  const [rows, setRows] = useState<SpreadsheetRows>([]);
   const [emailColumn, setEmailColumn] = useState<string>("");
 
   // Email compose state
@@ -147,15 +190,37 @@ export default function SendEmailAccordion({
     setSuccess("");
 
     try {
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: "array" });
-      const firstSheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[firstSheetName];
+      ensureSupportedSpreadsheet(file);
 
-      const sheetRows = XLSX.utils.sheet_to_json<any[]>(sheet, { header: 1 });
+      const parsedRows = await readXlsxFile(file, { trim: false });
+      const headerRow = parsedRows[0] || [];
+      const cleanHeaders = headerRow.map((h) => (h == null ? "" : String(h).trim()));
 
-      const headerRow = (sheetRows[0] || []) as (string | number | null)[];
-      const cleanHeaders = headerRow.map((h) => (h == null ? "" : String(h)));
+      validateHeaders(cleanHeaders);
+
+      const { rows: schemaRows, errors } = await readXlsxFile<ExcelRecord>(file, {
+        schema: buildSchema(cleanHeaders),
+        trim: false,
+        schemaPropertyValueForMissingValue: "",
+      });
+
+      if (errors.length > 0) {
+        const firstError = errors[0];
+        throw new Error(
+          `Invalid value at row ${firstError.row}, column "${firstError.column}".`,
+        );
+      }
+
+      const sheetRows: SpreadsheetRows = [
+        cleanHeaders,
+        ...schemaRows.map((record) =>
+          cleanHeaders.map((header) => record[header] ?? ""),
+        ),
+      ];
+
+      if (sheetRows.length <= 1) {
+        throw new Error("No data rows found below the header row.");
+      }
 
       setFileName(file.name);
       setHeaders(cleanHeaders);
@@ -173,7 +238,9 @@ export default function SendEmailAccordion({
       setHeaders([]);
       setRows([]);
       setEmailColumn("");
-      setError("Failed to read Excel file");
+      setError(
+        err instanceof Error ? err.message : "Failed to read Excel file",
+      );
     }
   }
 
@@ -344,7 +411,7 @@ export default function SendEmailAccordion({
           variant="outlined"
           type="button"
           label="Excel to Bulk Email"
-          accept=".xlsx,.xls"
+          accept=".xlsx"
           onFilesSelected={handleExcelChange}
           resetAfterSelect
         />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as XLSX from "xlsx";
+import readXlsxFile, { type CellValue, type Schema } from "read-excel-file";
 
 import {
   Button,
@@ -8,6 +8,63 @@ import {
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+
+type CsvRecord = Record<string, string>;
+
+function ensureSupportedSpreadsheet(file: File) {
+  if (!/\.xlsx$/i.test(file.name)) {
+    throw new Error("Only .xlsx files are supported. Convert .xls to .xlsx first.");
+  }
+}
+
+function parseSpreadsheetCell(value: CellValue): string {
+  if (value instanceof Date) return value.toISOString();
+  return String(value);
+}
+
+function buildSchema(headers: string[]): Schema<CsvRecord> {
+  const schema: Schema<CsvRecord> = {};
+  for (const header of headers) {
+    schema[header] = {
+      column: header,
+      type: parseSpreadsheetCell,
+    };
+  }
+  return schema;
+}
+
+function validateHeaders(headers: string[]) {
+  if (!headers.length || headers.every((h) => !h)) {
+    throw new Error("Header row is empty.");
+  }
+  if (headers.some((h) => !h)) {
+    throw new Error("Column headers must not be empty.");
+  }
+
+  const seen = new Set<string>();
+  for (const header of headers) {
+    const normalized = header.toLowerCase();
+    if (seen.has(normalized)) {
+      throw new Error(`Duplicate column header found: "${header}"`);
+    }
+    seen.add(normalized);
+  }
+}
+
+function escapeCsvValue(value: string): string {
+  const normalized = value.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  if (/[",\n]/.test(normalized)) {
+    return `"${normalized.replace(/"/g, '""')}"`;
+  }
+  return normalized;
+}
+
+function toCsv(rows: string[][]): string {
+  return rows
+    .filter((row) => row.some((cell) => cell.trim() !== ""))
+    .map((row) => row.map((cell) => escapeCsvValue(cell)).join(","))
+    .join("\r\n");
+}
 
 const ExcelUploadToCsv: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -31,18 +88,36 @@ const ExcelUploadToCsv: React.FC = () => {
     setError(null);
 
     try {
-      const arrayBuffer = await file.arrayBuffer();
-      const workbook = XLSX.read(arrayBuffer, { type: "array" });
-      const firstSheetName = workbook.SheetNames[0];
+      ensureSupportedSpreadsheet(file);
 
-      if (!firstSheetName) {
-        throw new Error("No worksheets found");
+      const parsedRows = await readXlsxFile(file, { trim: false });
+      const headerRow = parsedRows[0] || [];
+      const headers = headerRow.map((cell) => (cell == null ? "" : String(cell).trim()));
+
+      validateHeaders(headers);
+
+      const { rows: schemaRows, errors } = await readXlsxFile<CsvRecord>(file, {
+        schema: buildSchema(headers),
+        trim: false,
+        schemaPropertyValueForMissingValue: "",
+      });
+
+      if (errors.length > 0) {
+        const firstError = errors[0];
+        throw new Error(
+          `Invalid value at row ${firstError.row}, column "${firstError.column}".`,
+        );
       }
 
-      const firstSheet = workbook.Sheets[firstSheetName];
-      const csv = XLSX.utils.sheet_to_csv(firstSheet, {
-        blankrows: false,
-      });
+      if (!schemaRows.length) {
+        throw new Error("No data rows found below the header row.");
+      }
+
+      const csvRows = [
+        headers,
+        ...schemaRows.map((record) => headers.map((header) => record[header] ?? "")),
+      ];
+      const csv = toCsv(csvRows);
 
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const url = window.URL.createObjectURL(blob);
@@ -55,8 +130,10 @@ const ExcelUploadToCsv: React.FC = () => {
 
       link.remove();
       window.URL.revokeObjectURL(url);
-    } catch {
-      setError("Failed to convert file");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to convert file",
+      );
     } finally {
       setLoading(false);
     }
@@ -68,7 +145,7 @@ const ExcelUploadToCsv: React.FC = () => {
         <FilePickerButton
           variant="outlined"
           label={file ? file.name : "Choose Excel File"}
-          accept=".xlsx,.xls"
+          accept=".xlsx"
           onFilesSelected={handleFileChange}
         />
 
