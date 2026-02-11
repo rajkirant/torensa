@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views.auth_views import hello, logout_view, login_view, me, signup_view
 from .views.email_views import (
+    disconnect_smtp_config,
     gmail_oauth_callback,
     gmail_oauth_start,
     list_smtp_configs,
@@ -18,6 +19,8 @@ urlpatterns = [
     path("logout/", logout_view),
     path("signup/", signup_view),
     path("smtp/list/", list_smtp_configs),
+    path("smtp/disconnect/", disconnect_smtp_config),
+    path("smtp/disconnect", disconnect_smtp_config),
     path("gmail/oauth/start/", gmail_oauth_start),
     path("gmail/oauth/start", gmail_oauth_start),
     path("gmail/oauth/callback/", gmail_oauth_callback),

@@ -15,6 +15,7 @@ import ImportFromExcelAccordion from "./ImportFromExcelAccordion";
 import { apiFetch } from "../../utils/api";
 import PageContainer from "../../components/PageContainer";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
+import { useAuth } from "../../utils/auth";
 
 type SMTPConfig = {
   id: number;
@@ -39,7 +40,18 @@ const accordionStyle = {
   "&:before": { display: "none" },
 };
 
+const LAST_SMTP_EMAIL_KEY_PREFIX = "bulk_email:last_smtp_email";
+
+function normalizeEmail(value: unknown) {
+  return typeof value === "string" ? value.trim().toLowerCase() : "";
+}
+
+function lastSmtpEmailStorageKey(userId?: number) {
+  return `${LAST_SMTP_EMAIL_KEY_PREFIX}:${userId ?? "guest"}`;
+}
+
 export default function BulkEmail() {
+  const { user } = useAuth();
   const [expanded, setExpanded] = useState({
     smtp: false,
     contacts: false,
@@ -54,6 +66,7 @@ export default function BulkEmail() {
 
   const [smtpConfigs, setSmtpConfigs] = useState<SMTPConfig[]>([]);
   const [selectedConfigId, setSelectedConfigId] = useState<number | "">("");
+  const [preferredSmtpEmail, setPreferredSmtpEmail] = useState("");
   const [loadingGroups, setLoadingGroups] = useState(false);
   const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
 
@@ -61,6 +74,33 @@ export default function BulkEmail() {
   const [oauthSuccess, setOauthSuccess] = useState("");
 
   const didFetch = useRef(false);
+
+  function rememberSmtpEmail(rawEmail: string) {
+    const email = normalizeEmail(rawEmail);
+    if (!email) return;
+
+    setPreferredSmtpEmail(email);
+
+    if (!user?.id) return;
+    try {
+      localStorage.setItem(lastSmtpEmailStorageKey(user.id), email);
+    } catch {
+      // Ignore storage failures in restricted browsers.
+    }
+  }
+
+  function setStoredPreferredSmtpEmail(value: string) {
+    if (!user?.id) return;
+    try {
+      if (value) {
+        localStorage.setItem(lastSmtpEmailStorageKey(user.id), value);
+      } else {
+        localStorage.removeItem(lastSmtpEmailStorageKey(user.id));
+      }
+    } catch {
+      // Ignore storage failures in restricted browsers.
+    }
+  }
 
   async function loadSmtpConfigs() {
     try {
@@ -86,10 +126,6 @@ export default function BulkEmail() {
       const data = await res.json();
       const configs = data.configs || [];
       setSmtpConfigs(configs);
-
-      if (!selectedConfigId && configs.length) {
-        setSelectedConfigId(configs[0].id);
-      }
     } catch (err) {
       console.error("Failed to load SMTP configs:", err);
     }
@@ -134,12 +170,69 @@ export default function BulkEmail() {
   }, []);
 
   useEffect(() => {
+    const accountEmail = normalizeEmail(user?.email);
+    let remembered = "";
+
+    if (user?.id) {
+      try {
+        remembered = normalizeEmail(
+          localStorage.getItem(lastSmtpEmailStorageKey(user.id)),
+        );
+      } catch {
+        remembered = "";
+      }
+    }
+
+    setPreferredSmtpEmail(remembered || accountEmail);
+  }, [user?.email, user?.id]);
+
+  useEffect(() => {
+    if (!smtpConfigs.length) {
+      if (selectedConfigId !== "") {
+        setSelectedConfigId("");
+      }
+      return;
+    }
+
+    if (
+      selectedConfigId &&
+      smtpConfigs.some((cfg) => cfg.id === selectedConfigId)
+    ) {
+      return;
+    }
+
+    const preferredMatch = preferredSmtpEmail
+      ? smtpConfigs.find(
+          (cfg) => normalizeEmail(cfg.smtp_email) === preferredSmtpEmail,
+        )
+      : undefined;
+
+    const accountEmail = normalizeEmail(user?.email);
+    const accountMatch = accountEmail
+      ? smtpConfigs.find((cfg) => normalizeEmail(cfg.smtp_email) === accountEmail)
+      : undefined;
+
+    setSelectedConfigId(preferredMatch?.id ?? accountMatch?.id ?? smtpConfigs[0].id);
+  }, [preferredSmtpEmail, selectedConfigId, smtpConfigs, user?.email]);
+
+  useEffect(() => {
+    if (!selectedConfigId) return;
+    const selected = smtpConfigs.find((cfg) => cfg.id === selectedConfigId);
+    if (selected?.smtp_email) {
+      rememberSmtpEmail(selected.smtp_email);
+    }
+  }, [selectedConfigId, smtpConfigs, user?.id]);
+
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const oauthState = params.get("gmail_oauth");
     if (!oauthState) return;
 
     if (oauthState === "success") {
       const connectedEmail = params.get("smtp_email");
+      if (connectedEmail) {
+        rememberSmtpEmail(connectedEmail);
+      }
       setOauthSuccess(
         connectedEmail
           ? `Gmail connected: ${connectedEmail}`
@@ -178,6 +271,23 @@ export default function BulkEmail() {
         <AccordionDetails>
           <Box>
             <SmtpSettingsAccordion
+              smtpConfigs={smtpConfigs}
+              defaultSmtpEmail={preferredSmtpEmail}
+              onSmtpEmailRemember={rememberSmtpEmail}
+              onDisconnected={(disconnectedEmail) => {
+                const removedEmail = normalizeEmail(disconnectedEmail);
+                const accountEmail = normalizeEmail(user?.email);
+                const nextPreferred =
+                  preferredSmtpEmail && preferredSmtpEmail === removedEmail
+                    ? accountEmail
+                    : preferredSmtpEmail;
+
+                setPreferredSmtpEmail(nextPreferred);
+                setStoredPreferredSmtpEmail(nextPreferred);
+                setOauthSuccess(`Gmail disconnected: ${removedEmail}`);
+                setOauthError("");
+                loadSmtpConfigs();
+              }}
               onConnected={() => {
                 loadSmtpConfigs();
                 setExpanded({

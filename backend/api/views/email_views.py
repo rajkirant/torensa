@@ -244,6 +244,21 @@ def _append_query_params(url: str, params: dict):
     return urlunparse(parsed._replace(query=new_query))
 
 
+def _resolve_existing_refresh_token(*, user, emails: list[str]):
+    for email in emails:
+        normalized = (email or "").strip().lower()
+        if not normalized:
+            continue
+        existing = (
+            UserSMTPConfig.objects.filter(user=user, smtp_email=normalized)
+            .order_by("-updated_at")
+            .first()
+        )
+        if existing and existing.encrypted_refresh_token:
+            return existing.encrypted_refresh_token
+    return None
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def gmail_oauth_start(request):
@@ -358,17 +373,6 @@ def gmail_oauth_callback(request):
         access_token = token_data.get("access_token")
         granted_scopes = set((token_data.get("scope") or "").split())
 
-        if not refresh_token:
-            return Response(
-                {
-                    "error": (
-                        "Google did not return a refresh_token. "
-                        "Retry with consent and ensure this is a fresh approval."
-                    )
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         if not access_token:
             return Response(
                 {"error": "Google token exchange failed: missing access_token"},
@@ -394,8 +398,25 @@ def gmail_oauth_callback(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        fernet = get_fernet()
-        encrypted_refresh_token = fernet.encrypt(refresh_token.encode())
+        encrypted_refresh_token = None
+        if refresh_token:
+            fernet = get_fernet()
+            encrypted_refresh_token = fernet.encrypt(refresh_token.encode())
+        else:
+            encrypted_refresh_token = _resolve_existing_refresh_token(
+                user=target_user,
+                emails=[smtp_email, desired_email],
+            )
+            if not encrypted_refresh_token:
+                return Response(
+                    {
+                        "error": (
+                            "Google did not return a refresh_token for this account. "
+                            "Please remove the app in Google Account permissions and reconnect."
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         UserSMTPConfig.objects.update_or_create(
             user=target_user,
@@ -759,6 +780,46 @@ def list_smtp_configs(request):
         {
             "configs": data,
             "count": len(data),
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def disconnect_smtp_config(request):
+    smtp_config_id = (
+        request.data.get("smtp_config_id")
+        or request.POST.get("smtp_config_id")
+    )
+
+    if not smtp_config_id:
+        return Response(
+            {"error": "smtp_config_id is required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    smtp_config = UserSMTPConfig.objects.filter(
+        id=smtp_config_id,
+        user=request.user,
+        is_active=True,
+    ).first()
+    if not smtp_config:
+        return Response(
+            {"error": "SMTP connection not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    smtp_email = smtp_config.smtp_email
+    smtp_config.encrypted_refresh_token = None
+    smtp_config.is_active = False
+    smtp_config.disabled_reason = "Disconnected by user"
+    smtp_config.save()
+
+    return Response(
+        {
+            "status": "disconnected",
+            "smtp_email": smtp_email,
         },
         status=status.HTTP_200_OK,
     )
