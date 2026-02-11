@@ -71,6 +71,7 @@ def signup_view(request):
     return Response(
         {
             "message": "Signup successful",
+            "csrfToken": get_token(request),
             "user": {
                 "id": user.id,
                 "username": user.username,
@@ -124,9 +125,11 @@ def login_view(request):
 @authentication_classes([CsrfExemptSessionAuthentication])
 @permission_classes([AllowAny])
 def me(request):
+    csrf_token = get_token(request)
     if request.user.is_authenticated:
         return Response(
             {
+                "csrfToken": csrf_token,
                 "user": {
                     "id": request.user.id,
                     "username": request.user.username,
@@ -135,7 +138,7 @@ def me(request):
             },
             status=status.HTTP_200_OK,
         )
-    return Response({"user": None}, status=status.HTTP_200_OK)
+    return Response({"csrfToken": csrf_token, "user": None}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
