@@ -10,6 +10,7 @@ from .views.email_views import (
     save_contact_group,
     list_contact_groups,
 )
+from .views.tool_chat_views import tool_chat_view
 
 urlpatterns = [
     path("hello/", hello),
@@ -30,6 +31,7 @@ urlpatterns = [
     path("auth/google/callback/", gmail_oauth_callback),
     path("auth/google/callback", gmail_oauth_callback),
     path("send-email-bulk/", send_email),
+    path("tool-chat/", tool_chat_view),
     # Contact groups (DRF)
     path("contact-groups/save/", save_contact_group, name="save_contact_group"),
     path("contact-groups/", list_contact_groups, name="list_contact_groups"),
