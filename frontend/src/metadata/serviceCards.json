@@ -77,6 +77,17 @@
     "detailedDescription": "Provides an interactive side‑by‑side diff viewer for comparing text documents.  Users paste or type two pieces of text, then click compare to see a line‑by‑line diff with additions (green), deletions (red) and changes (yellow) highlighted.  Buttons allow swapping texts, clearing fields and toggling whether only changed lines are shown.  Clicking a diff line scrolls to the corresponding line in edit mode.  A statistics summary shows how many characters were added, removed and changed.  The comparison runs entirely in the browser, so no data is uploaded."
   },
   {
+    "id": "json-formatter-validator",
+    "component": "JsonFormatterDiff",
+    "title": "JSON Formatter + Validator",
+    "description": "Validate, format, and minify JSON in your browser.",
+    "path": "/json-tool",
+    "ctaLabel": "Open JSON Tool",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Developer-focused JSON utility for validating JSON syntax, formatting with indentation, and minifying payloads. It works entirely client-side, keeps data local, and supports offline usage after the first load."
+  },
+  {
     "id": "jwt-encoder-decoder",
     "component": "JwtTool",
     "title": "JWT Encoder / Decoder",
