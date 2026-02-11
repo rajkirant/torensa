@@ -16,10 +16,53 @@ MAX_HISTORY_CHARS = 450
 
 
 def _metadata_paths():
-    project_root = Path(__file__).resolve().parents[3]
-    service_cards = project_root / "frontend" / "src" / "metadata" / "serviceCards.json"
-    categories = project_root / "frontend" / "src" / "metadata" / "categories.json"
-    return service_cards, categories
+    current = Path(__file__).resolve()
+
+    candidates = []
+
+    # Optional explicit override for Lambda/container deployments.
+    metadata_dir = (os.getenv("TOOL_METADATA_DIR") or "").strip()
+    if metadata_dir:
+        base = Path(metadata_dir)
+        candidates.append(
+            (
+                base / "serviceCards.json",
+                base / "categories.json",
+            )
+        )
+
+    # Local repo layout (project root/frontend/src/metadata).
+    for parent in current.parents:
+        candidates.append(
+            (
+                parent / "frontend" / "src" / "metadata" / "serviceCards.json",
+                parent / "frontend" / "src" / "metadata" / "categories.json",
+            )
+        )
+
+    # If metadata is copied near backend package for Lambda zip.
+    for parent in current.parents:
+        candidates.append(
+            (
+                parent / "metadata" / "serviceCards.json",
+                parent / "metadata" / "categories.json",
+            )
+        )
+
+    seen = set()
+    for service_cards, categories in candidates:
+        key = (str(service_cards), str(categories))
+        if key in seen:
+            continue
+        seen.add(key)
+        if service_cards.exists() and categories.exists():
+            return service_cards, categories
+
+    searched = "\n".join(f"- {pair[0]} | {pair[1]}" for pair in candidates[:12])
+    raise FileNotFoundError(
+        "Could not locate tool metadata files. Searched common locations:\n"
+        f"{searched}"
+    )
 
 
 def _load_tool_metadata():
@@ -201,9 +244,13 @@ def tool_chat_view(request):
 
     try:
         cards, category_map = _load_tool_metadata()
-    except Exception:
+    except Exception as exc:
+        payload = {"error": "Tool metadata is unavailable."}
+        if settings.DEBUG:
+            payload["details"] = str(exc)
+            payload["exceptionType"] = exc.__class__.__name__
         return Response(
-            {"error": "Tool metadata is unavailable."},
+            payload,
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
