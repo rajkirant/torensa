@@ -1,4 +1,5 @@
 import json
+import os
 
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
@@ -197,3 +198,31 @@ class EmailFlowSmokeTests(TestCase):
         )
         self.assertEqual(disconnect_response.status_code, 400)
         self.assertIn("error", disconnect_response.json())
+
+
+class ToolChatEndpointTests(TestCase):
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=True)
+
+    def test_tool_chat_requires_message(self):
+        response = self.client.post(
+            "/api/tool-chat/",
+            data=json.dumps({}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())
+
+    def test_tool_chat_returns_503_when_api_key_missing(self):
+        existing = os.environ.pop("OPENAI_API_KEY", None)
+        try:
+            response = self.client.post(
+                "/api/tool-chat/",
+                data=json.dumps({"message": "What does invoice tool do?"}),
+                content_type="application/json",
+            )
+            self.assertEqual(response.status_code, 503)
+            self.assertIn("error", response.json())
+        finally:
+            if existing is not None:
+                os.environ["OPENAI_API_KEY"] = existing
