@@ -43,6 +43,7 @@ import {
 
 import { themes } from "./theme";
 import type { ThemeName } from "./theme";
+import categories from "./metadata/categories.json";
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -58,6 +59,12 @@ export type AppOutletContext = {
   secondaryTextColor: string;
   sectionBase: typeof sectionBase;
   cardStyle: typeof cardStyle;
+  selectedCategoryId: string;
+};
+
+type CategoryConfig = {
+  id: string;
+  label: string;
 };
 
 export default function App({ themeName, setThemeName }: AppProps) {
@@ -65,6 +72,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const isMobile = useMediaQuery("(max-width:900px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = React.useState("all");
+  const categoryOptions = categories as CategoryConfig[];
 
   const headerTextColor = isMobile
     ? theme.palette.text.primary
@@ -120,6 +129,23 @@ export default function App({ themeName, setThemeName }: AppProps) {
         {Object.keys(themes).map((name) => (
           <MenuItem key={name} value={name}>
             {name.charAt(0).toUpperCase() + name.slice(1)}
+          </MenuItem>
+        ))}
+      </Select>
+
+      <Select
+        size="small"
+        value={selectedCategoryId}
+        onChange={(e) => setSelectedCategoryId(e.target.value)}
+        sx={{
+          ...themeSelectSx(theme, isMobile, headerTextColor),
+          minWidth: 170,
+        }}
+      >
+        <MenuItem value="all">All Categories</MenuItem>
+        {categoryOptions.map((category) => (
+          <MenuItem key={category.id} value={category.id}>
+            {category.label}
           </MenuItem>
         ))}
       </Select>
@@ -232,6 +258,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   secondaryTextColor,
                   sectionBase,
                   cardStyle,
+                  selectedCategoryId,
                 } satisfies AppOutletContext
               }
             />

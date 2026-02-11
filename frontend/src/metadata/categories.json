@@ -1,0 +1,18 @@
+[
+  {
+    "id": "communication",
+    "label": "Communication"
+  },
+  {
+    "id": "utilities",
+    "label": "Utilities"
+  },
+  {
+    "id": "business",
+    "label": "Business"
+  },
+  {
+    "id": "developer",
+    "label": "Developer"
+  }
+]

@@ -8,7 +8,8 @@
     "ctaLabel": "Open Bulk Email",
     "offlineEnabled": false,
     "authRequired": true,
-    "detailedDescription": "Allows users to send personalised emails to many recipients from a single interface.  It supports creating and managing contact groups, importing recipient lists from Excel spreadsheets, and storing Gmail SMTP credentials securely.  The interface is organised as accordions for SMTP settings, contact group management and the email composer.  Users can attach files, customise the subject and body, and send bulk messages using the configured SMTP server.  Everything runs in‑browser; credentials are stored securely and emails are sent via the user’s own SMTP configuration."
+    "detailedDescription": "Allows users to send personalised emails to many recipients from a single interface.  It supports creating and managing contact groups, importing recipient lists from Excel spreadsheets, and storing Gmail SMTP credentials securely.  The interface is organised as accordions for SMTP settings, contact group management and the email composer.  Users can attach files, customise the subject and body, and send bulk messages using the configured SMTP server.  Everything runs in‑browser; credentials are stored securely and emails are sent via the user’s own SMTP configuration.",
+    "categoryId": "communication"
   },
   {
     "id": "excel-to-csv",
@@ -19,7 +20,8 @@
     "ctaLabel": "Convert Excel",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Converts uploaded Excel files into CSV format entirely on the client side.  Users select an `.xlsx` file, the browser parses the workbook and generates a CSV download instantly without backend processing.  It handles large spreadsheets gracefully and displays progress and error messages to guide the user.  Once converted, the CSV can be downloaded for offline use."
+    "detailedDescription": "Converts uploaded Excel files into CSV format entirely on the client side.  Users select an `.xlsx` file, the browser parses the workbook and generates a CSV download instantly without backend processing.  It handles large spreadsheets gracefully and displays progress and error messages to guide the user.  Once converted, the CSV can be downloaded for offline use.",
+    "categoryId": "utilities"
   },
   {
     "id": "text-to-qr",
@@ -30,7 +32,8 @@
     "ctaLabel": "Generate QR",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Generates QR codes from arbitrary text or URLs in the browser.  Users type or paste text, optionally upload a logo, and choose whether to show a short label underneath the logo.  The preview updates instantly and the finished QR code can be downloaded as a PNG.  The tool uses the QRCode library with high error‑correction and draws onto a Canvas, allowing custom colours and sizes.  It works offline once loaded, reducing network calls and enabling QR code generation without an internet connection."
+    "detailedDescription": "Generates QR codes from arbitrary text or URLs in the browser.  Users type or paste text, optionally upload a logo, and choose whether to show a short label underneath the logo.  The preview updates instantly and the finished QR code can be downloaded as a PNG.  The tool uses the QRCode library with high error‑correction and draws onto a Canvas, allowing custom colours and sizes.  It works offline once loaded, reducing network calls and enabling QR code generation without an internet connection.",
+    "categoryId": "business"
   },
   {
     "id": "image-compressor",
@@ -41,7 +44,8 @@
     "ctaLabel": "Compress Images",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "A lightweight client-side image compression and resizing tool. Users can drag-and-drop multiple images, adjust output quality, and optionally resize images by selecting maximum width and height. By default, images are exported in their original format, with an optional advanced setting to choose a different output format (JPEG/PNG/WebP). Users may also enable a target file size mode, which automatically adjusts compression quality to approximate a desired size for JPEG/WebP outputs. The tool displays before/after file sizes, dimensions, and savings percentage, and allows downloading compressed images individually or as a ZIP archive. All processing happens entirely in the browser, so no images are uploaded to a server."
+    "detailedDescription": "A lightweight client-side image compression and resizing tool. Users can drag-and-drop multiple images, adjust output quality, and optionally resize images by selecting maximum width and height. By default, images are exported in their original format, with an optional advanced setting to choose a different output format (JPEG/PNG/WebP). Users may also enable a target file size mode, which automatically adjusts compression quality to approximate a desired size for JPEG/WebP outputs. The tool displays before/after file sizes, dimensions, and savings percentage, and allows downloading compressed images individually or as a ZIP archive. All processing happens entirely in the browser, so no images are uploaded to a server.",
+    "categoryId": "utilities"
   },
   {
     "id": "image-pdf-to-pdf",
@@ -52,7 +56,8 @@
     "ctaLabel": "Create PDF",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Combines multiple images and PDF documents into a single PDF directly in the browser.  Users can upload images and PDFs, reorder or remove pages, rotate individual images, choose the final page size (Auto, A4 or Letter) and margins, and select fit modes (contain or cover).  It also supports adding page numbers (custom start number and size) and optionally preserving original PDF pages instead of converting them.  The tool uses `pdf-lib` to assemble the final document and runs fully offline after the initial load."
+    "detailedDescription": "Combines multiple images and PDF documents into a single PDF directly in the browser.  Users can upload images and PDFs, reorder or remove pages, rotate individual images, choose the final page size (Auto, A4 or Letter) and margins, and select fit modes (contain or cover).  It also supports adding page numbers (custom start number and size) and optionally preserving original PDF pages instead of converting them.  The tool uses `pdf-lib` to assemble the final document and runs fully offline after the initial load.",
+    "categoryId": "utilities"
   },
   {
     "id": "invoice-generator",
@@ -63,7 +68,8 @@
     "ctaLabel": "Create Invoice",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Lets users compose detailed invoices or receipts offline.  The form collects seller and buyer details, invoice number, issue and due dates, currency (USD, GBP, EUR, etc.), and allows adding many line items with quantity, unit price and description.  Users can specify tax rates, shipping costs, discounts and notes.  The tool calculates subtotals and totals automatically, stores data in local storage, and generates a polished PDF using `pdf-lib`.  It includes options to reset the form or load saved data and works without sending any data to a server."
+    "detailedDescription": "Lets users compose detailed invoices or receipts offline.  The form collects seller and buyer details, invoice number, issue and due dates, currency (USD, GBP, EUR, etc.), and allows adding many line items with quantity, unit price and description.  Users can specify tax rates, shipping costs, discounts and notes.  The tool calculates subtotals and totals automatically, stores data in local storage, and generates a polished PDF using `pdf-lib`.  It includes options to reset the form or load saved data and works without sending any data to a server.",
+    "categoryId": "business"
   },
   {
     "id": "text-diff-checker",
@@ -74,7 +80,8 @@
     "ctaLabel": "Compare Text",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Provides an interactive side‑by‑side diff viewer for comparing text documents.  Users paste or type two pieces of text, then click compare to see a line‑by‑line diff with additions (green), deletions (red) and changes (yellow) highlighted.  Buttons allow swapping texts, clearing fields and toggling whether only changed lines are shown.  Clicking a diff line scrolls to the corresponding line in edit mode.  A statistics summary shows how many characters were added, removed and changed.  The comparison runs entirely in the browser, so no data is uploaded."
+    "detailedDescription": "Provides an interactive side‑by‑side diff viewer for comparing text documents.  Users paste or type two pieces of text, then click compare to see a line‑by‑line diff with additions (green), deletions (red) and changes (yellow) highlighted.  Buttons allow swapping texts, clearing fields and toggling whether only changed lines are shown.  Clicking a diff line scrolls to the corresponding line in edit mode.  A statistics summary shows how many characters were added, removed and changed.  The comparison runs entirely in the browser, so no data is uploaded.",
+    "categoryId": "developer"
   },
   {
     "id": "json-formatter-validator",
@@ -85,7 +92,8 @@
     "ctaLabel": "Open JSON Tool",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Developer-focused JSON utility for validating JSON syntax, formatting with indentation, and minifying payloads. It works entirely client-side, keeps data local, and supports offline usage after the first load."
+    "detailedDescription": "Developer-focused JSON utility for validating JSON syntax, formatting with indentation, and minifying payloads. It works entirely client-side, keeps data local, and supports offline usage after the first load.",
+    "categoryId": "developer"
   },
   {
     "id": "jwt-encoder-decoder",
@@ -96,7 +104,8 @@
     "ctaLabel": "Open JWT Tool",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Decodes existing JSON Web Tokens and lets users create new HS256 or HS512 tokens directly in the browser.  When a JWT is pasted, its protected header and payload are parsed and shown in formatted JSON; hovering over exp/iat/nbf fields reveals human‑readable timestamps.  Users can load decoded values into the encoder, edit the header and payload, choose the algorithm (HS256 or HS512), automatically set the issued‑at time, specify an expiry via a date‑time picker, enter a secret key and generate a new JWT.  Copy buttons are provided for both input and output tokens, and informative success or error messages guide the user.  All operations occur locally; nothing is sent to a server."
+    "detailedDescription": "Decodes existing JSON Web Tokens and lets users create new HS256 or HS512 tokens directly in the browser.  When a JWT is pasted, its protected header and payload are parsed and shown in formatted JSON; hovering over exp/iat/nbf fields reveals human‑readable timestamps.  Users can load decoded values into the encoder, edit the header and payload, choose the algorithm (HS256 or HS512), automatically set the issued‑at time, specify an expiry via a date‑time picker, enter a secret key and generate a new JWT.  Copy buttons are provided for both input and output tokens, and informative success or error messages guide the user.  All operations occur locally; nothing is sent to a server.",
+    "categoryId": "developer"
   },
   {
     "id": "uuid-generator",
@@ -107,6 +116,7 @@
     "ctaLabel": "Generate UUID",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Generates random UUID version 4 identifiers within the browser.  Users specify how many UUIDs to generate (1–1000) and can choose to output uppercase strings or remove hyphens.  Clicking Generate produces the requested number of UUIDs, which are displayed in a monospaced text area.  Buttons allow copying all UUIDs to the clipboard or clearing the list.  The generation happens entirely on the client, so no data is sent to a server."
+    "detailedDescription": "Generates random UUID version 4 identifiers within the browser.  Users specify how many UUIDs to generate (1–1000) and can choose to output uppercase strings or remove hyphens.  Clicking Generate produces the requested number of UUIDs, which are displayed in a monospaced text area.  Buttons allow copying all UUIDs to the clipboard or clearing the list.  The generation happens entirely on the client, so no data is sent to a server.",
+    "categoryId": "developer"
   }
 ]

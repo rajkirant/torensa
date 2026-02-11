@@ -15,6 +15,7 @@ type ServiceCardConfig = {
   path: string;
   ctaLabel: string;
   offlineEnabled: boolean;
+  categoryId: string;
   authRequired?: boolean;
 };
 
@@ -23,7 +24,7 @@ const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
-  const { secondaryTextColor, sectionBase, cardStyle } =
+  const { secondaryTextColor, sectionBase, cardStyle, selectedCategoryId } =
     useOutletContext<AppOutletContext>();
 
   const navigate = useNavigate();
@@ -34,7 +35,11 @@ export default function Home() {
   };
 
   // Safety guard (never crash)
-  const cards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
+  const allCards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
+  const cards =
+    selectedCategoryId === "all"
+      ? allCards
+      : allCards.filter((card) => card.categoryId === selectedCategoryId);
   const offlineCards = cards.filter((card) => card.offlineEnabled);
 
   // 🔥 OFFLINE: show message + only offlineEnabled tools
