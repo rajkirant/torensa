@@ -19,7 +19,6 @@ type SMTPConfig = {
   id: number;
   smtp_email: string;
   provider: string;
-  auth_type?: "app_password" | "oauth_refresh_token";
 };
 
 type Props = {
@@ -127,7 +126,7 @@ export default function SendEmailAccordion({
           </MenuItem>
           {smtpConfigs.map((cfg) => (
             <MenuItem key={cfg.id} value={cfg.id}>
-              {cfg.smtp_email} ({cfg.auth_type === "oauth_refresh_token" ? "OAuth" : "App Password"})
+              {cfg.smtp_email} (OAuth)
             </MenuItem>
           ))}
         </Select>

@@ -14,7 +14,6 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core import signing
 from django.core.validators import validate_email
-from django.core.mail import EmailMessage, get_connection
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -403,9 +402,7 @@ def gmail_oauth_callback(request):
             smtp_email=smtp_email,
             defaults={
                 "encrypted_refresh_token": encrypted_refresh_token,
-                "encrypted_app_password": None,
                 "provider": "gmail",
-                "auth_type": "oauth_refresh_token",
                 "is_active": True,
                 "disabled_reason": "",
             },
@@ -414,7 +411,6 @@ def gmail_oauth_callback(request):
         payload = {
             "status": "gmail_connected",
             "smtp_email": smtp_email,
-            "auth_type": "oauth_refresh_token",
         }
         frontend_redirect_uri = oauth_settings["frontend_redirect_uri"]
         if frontend_redirect_uri:
@@ -508,47 +504,31 @@ def _normalize_recipient_email(value: str) -> str:
 
 
 def _build_sender_backend(smtp_config: UserSMTPConfig):
-    if smtp_config.auth_type == "oauth_refresh_token":
-        if not smtp_config.encrypted_refresh_token:
-            raise ValueError("Saved OAuth token is missing. Reconnect Gmail account.")
-
-        fernet = get_fernet()
-        refresh_token_blob = _coerce_binary_token(smtp_config.encrypted_refresh_token)
-        try:
-            refresh_token = fernet.decrypt(refresh_token_blob).decode()
-        except Exception as exc:
-            raise ValueError(
-                "Saved Gmail token is no longer readable. Please reconnect Gmail."
-            ) from exc
-
-        try:
-            access_token = _get_access_token_from_refresh_token(refresh_token)
-        except Exception as exc:
-            msg = str(exc).lower()
-            if "invalid_grant" in msg or "expired or revoked" in msg:
-                raise ValueError(
-                    "Your Gmail connection expired or was revoked. Please reconnect Gmail."
-                ) from exc
-            raise
-        if not access_token:
-            raise ValueError("Unable to refresh Gmail access token. Reconnect Gmail account.")
-
-        return {"mode": "gmail_api", "access_token": access_token, "connection": None}
-
-    if not smtp_config.encrypted_app_password:
-        raise ValueError("Saved app password is missing. Please update SMTP settings.")
+    if not smtp_config.encrypted_refresh_token:
+        raise ValueError("Saved OAuth token is missing. Reconnect Gmail account.")
 
     fernet = get_fernet()
-    app_password_blob = _coerce_binary_token(smtp_config.encrypted_app_password)
-    decrypted_password = fernet.decrypt(app_password_blob).decode()
-    connection = get_connection(
-        host="smtp.gmail.com",
-        port=465,
-        username=smtp_config.smtp_email,
-        password=decrypted_password,
-        use_ssl=True,
-    )
-    return {"mode": "smtp", "access_token": None, "connection": connection}
+    refresh_token_blob = _coerce_binary_token(smtp_config.encrypted_refresh_token)
+    try:
+        refresh_token = fernet.decrypt(refresh_token_blob).decode()
+    except Exception as exc:
+        raise ValueError(
+            "Saved Gmail token is no longer readable. Please reconnect Gmail."
+        ) from exc
+
+    try:
+        access_token = _get_access_token_from_refresh_token(refresh_token)
+    except Exception as exc:
+        msg = str(exc).lower()
+        if "invalid_grant" in msg or "expired or revoked" in msg:
+            raise ValueError(
+                "Your Gmail connection expired or was revoked. Please reconnect Gmail."
+            ) from exc
+        raise
+    if not access_token:
+        raise ValueError("Unable to refresh Gmail access token. Reconnect Gmail account.")
+
+    return access_token
 
 
 def _send_one_email(
@@ -558,31 +538,17 @@ def _send_one_email(
     subject: str,
     body: str,
     attachments_payload: list[dict],
-    sender_backend: dict,
+    access_token: str,
 ):
     normalized_recipient = _normalize_recipient_email(recipient)
-
-    if sender_backend["mode"] == "gmail_api":
-        _send_with_gmail_api(
-            from_email=sender,
-            to_email=normalized_recipient,
-            subject=subject,
-            body=body,
-            attachments_payload=attachments_payload,
-            access_token=sender_backend["access_token"],
-        )
-        return
-
-    email = EmailMessage(
+    _send_with_gmail_api(
+        from_email=sender,
+        to_email=normalized_recipient,
         subject=subject,
         body=body,
-        from_email=sender,
-        to=[normalized_recipient],
-        connection=sender_backend["connection"],
+        attachments_payload=attachments_payload,
+        access_token=access_token,
     )
-    for item in attachments_payload:
-        email.attach(item["name"], item["content"], item["mime_type"])
-    email.send(fail_silently=False)
 
 
 @api_view(["POST"])
@@ -632,7 +598,7 @@ def send_email(request):
     )
 
     try:
-        sender_backend = _build_sender_backend(smtp_config)
+        access_token = _build_sender_backend(smtp_config)
 
         if is_new_mode:
             recipients = _parse_json_maybe(recipients_raw, default=[])
@@ -675,7 +641,7 @@ def send_email(request):
                         subject=rendered_subject,
                         body=rendered_body,
                         attachments_payload=attachments_payload,
-                        sender_backend=sender_backend,
+                        access_token=access_token,
                     )
                     success_count += 1
                 except Exception as exc:
@@ -742,7 +708,7 @@ def send_email(request):
                 subject=subject,
                 body=body,
                 attachments_payload=attachments_payload,
-                sender_backend=sender_backend,
+                access_token=access_token,
             )
             success_count += 1
 
@@ -767,61 +733,6 @@ def send_email(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def save_smtp_config(request):
-    """
-    Save a new SMTP configuration for the authenticated user.
-    Expects JSON:
-      - smtp_email
-      - app_password
-    """
-    data = request.data
-
-    smtp_email = data.get("smtp_email")
-    app_password = data.get("app_password")
-
-    if not smtp_email or not app_password:
-        return Response(
-            {"error": "smtp_email and app_password are required"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    if UserSMTPConfig.objects.filter(
-        user=request.user,
-        smtp_email=smtp_email,
-    ).exists():
-        return Response(
-            {"error": "SMTP configuration already exists"},
-            status=status.HTTP_409_CONFLICT,
-        )
-
-    try:
-        fernet = get_fernet()
-        encrypted_password = fernet.encrypt(app_password.encode())
-    except Exception as exc:
-        return Response(
-            {"error": "Encryption failed", "details": str(exc)},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-    UserSMTPConfig.objects.create(
-        user=request.user,
-        smtp_email=smtp_email,
-        encrypted_app_password=encrypted_password,
-        encrypted_refresh_token=None,
-        provider="gmail",
-        auth_type="app_password",
-        is_active=True,
-    )
-
-    return Response(
-        {"status": "SMTP credentials saved securely"},
-        status=status.HTTP_201_CREATED,
-    )
-
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_smtp_configs(request):
@@ -838,7 +749,6 @@ def list_smtp_configs(request):
             "id": cfg.id,
             "smtp_email": cfg.smtp_email,
             "provider": cfg.provider,
-            "auth_type": cfg.auth_type,
             "created_at": cfg.created_at.isoformat(),
             "updated_at": cfg.updated_at.isoformat(),
         }

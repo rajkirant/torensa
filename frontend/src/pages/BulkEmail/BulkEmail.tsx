@@ -20,7 +20,6 @@ type SMTPConfig = {
   id: number;
   smtp_email: string;
   provider: string;
-  auth_type?: "app_password" | "oauth_refresh_token";
 };
 
 type ContactGroup = {
@@ -179,7 +178,7 @@ export default function BulkEmail() {
         <AccordionDetails>
           <Box>
             <SmtpSettingsAccordion
-              onSaved={() => {
+              onConnected={() => {
                 loadSmtpConfigs();
                 setExpanded({
                   smtp: false,
