@@ -96,6 +96,18 @@
     "categoryId": "developer"
   },
   {
+    "id": "cron-expression-builder",
+    "component": "CronExpressionBuilder",
+    "title": "Cron Expression Builder + Validator",
+    "description": "Build, validate, and preview cron schedules in plain language.",
+    "path": "/cron-builder",
+    "ctaLabel": "Open Cron Tool",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Create cron expressions with a guided editor or direct input, validate syntax instantly, and preview upcoming execution times. Includes human-readable interpretation for each field to reduce scheduling mistakes.",
+    "categoryId": "developer"
+  },
+  {
     "id": "jwt-encoder-decoder",
     "component": "JwtTool",
     "title": "JWT Encoder / Decoder",
