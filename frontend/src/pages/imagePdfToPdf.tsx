@@ -131,6 +131,11 @@ async function embedImage(doc: PDFDocument, bytes: Uint8Array, mime: string) {
   }
 }
 
+// Ensures Blob gets a real ArrayBuffer (not ArrayBufferLike / SharedArrayBuffer).
+const toArrayBuffer = (u8: Uint8Array): ArrayBuffer => {
+  return u8.slice().buffer as ArrayBuffer;
+};
+
 const ImagePdfToPdf: React.FC = () => {
   const [items, setItems] = useState<QueueItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -383,7 +388,7 @@ const ImagePdfToPdf: React.FC = () => {
 
       const pdfBytes = await out.save();
 
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const blob = new Blob([toArrayBuffer(pdfBytes)], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
