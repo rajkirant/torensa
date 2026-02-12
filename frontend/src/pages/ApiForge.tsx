@@ -239,7 +239,7 @@ function ParamEditor({
   );
 }
 
-const OpenApiSwaggerTester: React.FC = () => {
+const ApiForge: React.FC = () => {
   const [method, setMethod] = useState<HttpMethod>("GET");
   const [requestUrl, setRequestUrl] = useState("");
   const [pathRows, setPathRows] = useState<KeyValueRow[]>([createRow()]);
@@ -782,4 +782,4 @@ const OpenApiSwaggerTester: React.FC = () => {
   );
 };
 
-export default OpenApiSwaggerTester;
+export default ApiForge;
