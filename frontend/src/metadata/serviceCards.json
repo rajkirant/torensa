@@ -120,11 +120,11 @@
     "categoryId": "developer"
   },
   {
-    "id": "openapi-swagger-tester",
-    "component": "OpenApiSwaggerTester",
+    "id": "api-forge",
+    "component": "ApiForge",
     "title": "Torensa API Forge",
     "description": "Forge and test API requests with method, URL, headers, query params, JWT auth, and request body.",
-    "path": "/openapi-swagger-tester",
+    "path": "/api-forge",
     "ctaLabel": "Open API Forge",
     "offlineEnabled": false,
     "authRequired": false,
