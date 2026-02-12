@@ -1,6 +1,24 @@
-import { Link } from "react-router-dom";
+import missionData from "../metadata/mission.json";
+import contactData from "../metadata/contact.json";
+
+type MissionData = {
+  subtitle: string;
+  mission: string;
+};
+
+type ContactData = {
+  email: {
+    address: string;
+    intro: string;
+  };
+  openSource: string;
+  responseTime: string;
+};
 
 export default function Contact() {
+  const mission = missionData as MissionData;
+  const contact = contactData as ContactData;
+
   return (
     <>
       <header style={{ marginBottom: 40 }}>
@@ -21,19 +39,10 @@ export default function Contact() {
 
         <h1>About & Contact</h1>
 
-        <p className="subtitle">
-          Hi, I’m Raj Kiran - a full-stack software developer building simple,
-          useful, and open-source online tools for developers and learners.
-        </p>
+        <p className="subtitle">{mission.subtitle}</p>
 
         <p style={{ maxWidth: 700, margin: "0 auto", marginTop: 15 }}>
-          <strong>Mission:</strong> To create a growing collection of
-          lightweight, privacy-friendly web utilities that help people solve
-          everyday technical problems - freely and transparently through
-          open-source software. Most tools on this website are designed to be
-          offline-ready whenever possible, reducing unnecessary data usage,
-          protecting user privacy, and supporting a more environmentally
-          friendly web.
+          <strong>Mission:</strong> {mission.mission}
         </p>
       </header>
 
@@ -41,38 +50,29 @@ export default function Contact() {
         {/* EMAIL CARD */}
         <div className="card">
           <h3>Email</h3>
-          <p>
-            Feel free to reach out if you'd like to share feedback, collaborate,
-            or discuss good ideas around open-source tools.
-          </p>
+          <p>{contact.email.intro}</p>
 
           <p>
             <a
-              href="mailto:admin@torensa.com"
+              href={`mailto:${contact.email.address}`}
               style={{
                 fontWeight: 600,
                 color: "#4fd1c5", // accessible teal
                 textDecoration: "underline",
               }}
             >
-              admin@torensa.com
+              {contact.email.address}
             </a>
           </p>
         </div>
 
-        {/* OPEN SOURCE CARD */}
         <div className="card">
           <h3>Open Source</h3>
-          <p>
-            This website is maintained as an open-source project, with the goal
-            of sharing helpful tools and clean engineering practices.
-          </p>
+          <p>{contact.openSource}</p>
         </div>
-
-        {/* RESPONSE TIME CARD */}
         <div className="card">
           <h3>Response Time</h3>
-          <p>I usually reply within 24 hours on weekdays.</p>
+          <p>{contact.responseTime}</p>
         </div>
       </div>
     </>
