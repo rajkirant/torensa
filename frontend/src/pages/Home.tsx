@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext, useLocation } from "react-router-dom";
 import type { CSSProperties } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -25,10 +25,16 @@ const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
-  const { secondaryTextColor, sectionBase, cardStyle, selectedCategoryId } =
-    useOutletContext<AppOutletContext>();
+  const {
+    secondaryTextColor,
+    sectionBase,
+    cardStyle,
+    selectedCategoryId,
+    selectedCategoryLabel,
+  } = useOutletContext<AppOutletContext>();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const isOnline = useOnlineStatus();
   const isMobile = useMediaQuery("(max-width:700px)");
   const isTablet = useMediaQuery("(max-width:1050px)");
@@ -51,6 +57,31 @@ export default function Home() {
       ? allCards
       : allCards.filter((card) => card.categoryId === selectedCategoryId);
   const offlineCards = cards.filter((card) => card.offlineEnabled);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (selectedCategoryId === "all") {
+      params.delete("categories");
+    } else {
+      params.set("categories", selectedCategoryId);
+    }
+
+    const nextSearch = params.toString();
+    const currentSearch = location.search.startsWith("?")
+      ? location.search.slice(1)
+      : location.search;
+
+    if (nextSearch !== currentSearch) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: nextSearch ? `?${nextSearch}` : "",
+        },
+        { replace: true },
+      );
+    }
+  }, [selectedCategoryId, location.pathname, location.search, navigate]);
 
   // 🔥 OFFLINE: show message + only offlineEnabled tools
   if (!isOnline) {
@@ -111,7 +142,9 @@ export default function Home() {
   // ✅ ONLINE: show all services
   return (
     <section style={sectionBase}>
-      <h2 style={{ textAlign: "center", marginBottom: 40 }}>Services</h2>
+      <h2 style={{ textAlign: "center", marginBottom: 40 }}>
+        {selectedCategoryLabel}
+      </h2>
 
       <div
         style={cardsGridStyle}
