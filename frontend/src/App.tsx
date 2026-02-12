@@ -280,7 +280,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               <GitHubIcon sx={{ fontSize: 24, color: "inherit" }} />
             </a>
             <a
-              href="https://www.linkedin.com/in/rajkiran/"
+              href="https://www.linkedin.com/in/rajkirant/"
               target="_blank"
               rel="noopener noreferrer"
               style={footerLinkStyle(theme)}
