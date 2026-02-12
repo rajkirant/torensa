@@ -19,9 +19,9 @@ import {
 
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { pageContainer } from "../styles/toolStyles";
-import OfflineChip from "../components/chips/OfflineChip";
+
 import PageContainer from "../components/PageContainer";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 /* ===================== TYPES ===================== */
 
@@ -658,14 +658,12 @@ export default function InvoiceGenerator() {
             </Stack>
           ))}
 
-          <Button
-            variant="outlined"
+          <TransparentButton
+            label="Add item"
             startIcon={<AddIcon />}
             onClick={addItem}
-            sx={{ textTransform: "none", width: "fit-content" }}
-          >
-            Add item
-          </Button>
+            sx={{ width: "fit-content" }}
+          />
         </Stack>
 
         <Divider />
@@ -765,14 +763,7 @@ export default function InvoiceGenerator() {
             {busy ? "Generating..." : "Generate & Download PDF"}
           </Button>
 
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={reset}
-            sx={{ textTransform: "none" }}
-          >
-            Reset
-          </Button>
+          <TransparentButton label="Reset" color="error" onClick={reset} />
         </Stack>
 
         {error && <Alert severity="error">{error}</Alert>}

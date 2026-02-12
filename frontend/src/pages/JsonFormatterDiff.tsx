@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import { Box, Stack, TextField } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 type ParseResult =
   | { ok: true; value: unknown }
@@ -166,45 +167,12 @@ export default function JsonFormatterDiff() {
         <ToolStatusAlerts error={error} success={success} info={info} />
 
         <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-          <Button
-            variant="outlined"
-            onClick={handleValidate}
-            sx={{ textTransform: "none" }}
-          >
-            Validate
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleFormat}
-            sx={{ textTransform: "none" }}
-          >
-            Format
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleMinify}
-            sx={{ textTransform: "none" }}
-          >
-            Minify
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleSample}
-            sx={{ textTransform: "none" }}
-          >
-            Load Sample
-          </Button>
-          <Button variant="text" onClick={handleCopy} sx={{ textTransform: "none" }}>
-            Copy
-          </Button>
-          <Button
-            variant="text"
-            color="inherit"
-            onClick={handleClear}
-            sx={{ textTransform: "none" }}
-          >
-            Clear
-          </Button>
+          <TransparentButton label="Validate" onClick={handleValidate} />
+          <TransparentButton label="Format" onClick={handleFormat} />
+          <TransparentButton label="Minify" onClick={handleMinify} />
+          <TransparentButton label="Load Sample" onClick={handleSample} />
+          <TransparentButton label="Copy" onClick={handleCopy} />
+          <TransparentButton label="Clear" onClick={handleClear} />
         </Box>
 
         <TextField

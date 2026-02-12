@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 type LinePart = {
   value: string;
@@ -532,20 +533,8 @@ const TextDiffChecker: React.FC = () => {
           spacing={1}
           alignItems="center"
         >
-          <Button
-            variant="outlined"
-            onClick={handleSwap}
-            sx={{ textTransform: "none" }}
-          >
-            Swap
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleClear}
-            sx={{ textTransform: "none" }}
-          >
-            Clear
-          </Button>
+          <TransparentButton label="Swap" onClick={handleSwap} />
+          <TransparentButton label="Clear" onClick={handleClear} />
 
           <FormControlLabel
             sx={{ ml: { xs: 0, md: 1 } }}
@@ -568,13 +557,10 @@ const TextDiffChecker: React.FC = () => {
           >
             Compare
           </Button>
-          <Button
-            variant="outlined"
+          <TransparentButton
+            label={isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
             onClick={handleFullscreenCompare}
-            sx={{ textTransform: "none" }}
-          >
-            {isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
-          </Button>
+          />
         </Stack>
 
         {error && <Alert severity="error">{error}</Alert>}
@@ -660,20 +646,11 @@ const TextDiffChecker: React.FC = () => {
 
               <Box sx={{ flex: 1 }} />
 
-              <Button
-                variant="outlined"
-                onClick={() => setMode("edit")}
-                sx={{ textTransform: "none" }}
-              >
-                Edit
-              </Button>
-              <Button
-                variant="outlined"
+              <TransparentButton label="Edit" onClick={() => setMode("edit")} />
+              <TransparentButton
+                label={isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
                 onClick={handleFullscreenCompare}
-                sx={{ textTransform: "none" }}
-              >
-                {isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
-              </Button>
+              />
             </Stack>
 
             {/* Diff panel - click a line to jump to that line in edit mode */}

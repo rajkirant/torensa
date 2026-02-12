@@ -26,6 +26,7 @@ import readXlsxFile, { type CellValue, type Schema } from "read-excel-file";
 import { apiFetch } from "../../utils/api";
 import { formatApiError } from "../../utils/apiError";
 import FilePickerButton from "../../components/inputs/FilePickerButton";
+import { TransparentButton } from "../../components/buttons/TransparentButton";
 
 type SMTPConfig = {
   id: number;
@@ -569,21 +570,18 @@ export default function SendEmailAccordion({
       {/* Actions: Preview + Send */}
       {hasExcel && (
         <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
-          <Button
+          <TransparentButton
+            label="Preview"
             type="button"
-            variant="outlined"
             fullWidth
             disabled={sending || smtpConfigs.length === 0}
             onClick={openPreview}
             sx={{
               py: 1.2,
               fontWeight: 700,
-              textTransform: "none",
               borderRadius: 2,
             }}
-          >
-            Preview
-          </Button>
+          />
 
           <Button
             type="submit"

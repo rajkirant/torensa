@@ -16,6 +16,7 @@ import { apiFetch } from "../../utils/api";
 import { formatApiError } from "../../utils/apiError";
 import FilePickerButton from "../../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
+import { TransparentButton } from "../../components/buttons/TransparentButton";
 
 type SMTPConfig = {
   id: number;
@@ -213,15 +214,13 @@ export default function SendEmailAccordion({
         </FormHelperText>
       </FormControl>
 
-      <Button
+      <TransparentButton
+        label="Add Group Recipients"
         type="button"
-        variant="outlined"
         disabled={!contactGroups.length}
         onClick={addGroupRecipients}
-        sx={{ mb: 2, textTransform: "none", fontWeight: 700 }}
-      >
-        Add Group Recipients
-      </Button>
+        sx={{ mb: 2, fontWeight: 700 }}
+      />
 
       {!contactGroups.length && (
         <Alert severity="info" sx={{ mb: 2 }}>

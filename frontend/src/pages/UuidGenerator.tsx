@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 const generateUuid = () => crypto.randomUUID();
 
@@ -120,21 +121,8 @@ const UuidGenerator: React.FC = () => {
                             />
 
                             <Stack direction="row" spacing={1}>
-                                <Button
-                                    variant="outlined"
-                                    onClick={copyAll}
-                                    sx={{ textTransform: "none" }}
-                                >
-                                    Copy all
-                                </Button>
-
-                                <Button
-                                    variant="outlined"
-                                    onClick={() => setUuids([])}
-                                    sx={{ textTransform: "none" }}
-                                >
-                                    Clear
-                                </Button>
+                                <TransparentButton label="Copy all" onClick={copyAll} />
+                                <TransparentButton label="Clear" onClick={() => setUuids([])} />
                             </Stack>
                         </>
                     )}
