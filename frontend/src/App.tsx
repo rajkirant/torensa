@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
 import { Suspense } from "react";
 
 import { NavButton } from "./components/buttons/NavButton";
@@ -61,6 +61,7 @@ export type AppOutletContext = {
   sectionBase: typeof sectionBase;
   cardStyle: typeof cardStyle;
   selectedCategoryId: string;
+  selectedCategoryLabel: string;
 };
 
 type CategoryConfig = {
@@ -71,10 +72,24 @@ type CategoryConfig = {
 export default function App({ themeName, setThemeName }: AppProps) {
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width:900px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = React.useState("all");
   const categoryOptions = categories as CategoryConfig[];
+  const categoryIds = new Set(categoryOptions.map((category) => category.id));
+  const [selectedCategoryId, setSelectedCategoryId] = React.useState(() => {
+    const categoryFromUrl = new URLSearchParams(window.location.search).get(
+      "categories",
+    );
+    return categoryFromUrl && categoryIds.has(categoryFromUrl)
+      ? categoryFromUrl
+      : "all";
+  });
+  const selectedCategoryLabel =
+    selectedCategoryId === "all"
+      ? "All Categories"
+      : categoryOptions.find((category) => category.id === selectedCategoryId)
+          ?.label ?? "All Categories";
 
   const headerTextColor = isMobile
     ? theme.palette.text.primary
@@ -98,28 +113,56 @@ export default function App({ themeName, setThemeName }: AppProps) {
     sx?: any;
   };
 
-  const NavItems = ({ onClick, onLogout, sx }: NavItemsProps) => (
-    <>
-      <NavButton
-        component={NavLink}
-        to="/"
-        end
-        startIcon={<HomeIcon />}
-        onClick={onClick}
-        sx={sx}
-      >
-        Home
-      </NavButton>
+  const NavItems = ({ onClick, onLogout, sx }: NavItemsProps) => {
+    const handleHomeClick = () => {
+      setSelectedCategoryId("all");
+      onClick?.();
+    };
 
-      <NavButton
-        component={NavLink}
-        to="/contact"
-        startIcon={<ContactMailIcon />}
-        onClick={onClick}
-        sx={sx}
-      >
-        Contact
-      </NavButton>
+    const navigateToCategoryListing = (categoryId: string) => {
+      onClick?.();
+      navigate({
+        pathname: "/",
+        search:
+          categoryId === "all"
+            ? ""
+            : `?categories=${encodeURIComponent(categoryId)}`,
+      });
+    };
+
+    const handleCategoryChange = (nextCategoryId: string) => {
+      setSelectedCategoryId(nextCategoryId);
+      navigateToCategoryListing(nextCategoryId);
+    };
+
+    const handleCategoryOptionClick = (categoryId: string) => {
+      if (categoryId === selectedCategoryId) {
+        navigateToCategoryListing(categoryId);
+      }
+    };
+
+    return (
+      <>
+        <NavButton
+          component={NavLink}
+          to="/"
+          end
+          startIcon={<HomeIcon />}
+          onClick={handleHomeClick}
+          sx={sx}
+        >
+          Home
+        </NavButton>
+
+        <NavButton
+          component={NavLink}
+          to="/contact"
+          startIcon={<ContactMailIcon />}
+          onClick={onClick}
+          sx={sx}
+        >
+          Contact
+        </NavButton>
 
       <Select
         size="small"
@@ -134,18 +177,24 @@ export default function App({ themeName, setThemeName }: AppProps) {
         ))}
       </Select>
 
-      <Select
-        size="small"
-        value={selectedCategoryId}
-        onChange={(e) => setSelectedCategoryId(e.target.value)}
-        sx={{
-          ...themeSelectSx(theme, isMobile, headerTextColor),
-          minWidth: 170,
+        <Select
+          size="small"
+          value={selectedCategoryId}
+          onChange={(e) => handleCategoryChange(e.target.value)}
+          sx={{
+            ...themeSelectSx(theme, isMobile, headerTextColor),
+            minWidth: 170,
         }}
       >
-        <MenuItem value="all">All Categories</MenuItem>
+        <MenuItem value="all" onClick={() => handleCategoryOptionClick("all")}>
+          All Categories
+        </MenuItem>
         {categoryOptions.map((category) => (
-          <MenuItem key={category.id} value={category.id}>
+          <MenuItem
+            key={category.id}
+            value={category.id}
+            onClick={() => handleCategoryOptionClick(category.id)}
+          >
             {category.label}
           </MenuItem>
         ))}
@@ -191,8 +240,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
             </NavButton>
           </>
         ))}
-    </>
-  );
+      </>
+    );
+  };
 
   return (
     <div style={appShellStyle}>
@@ -260,6 +310,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   sectionBase,
                   cardStyle,
                   selectedCategoryId,
+                  selectedCategoryLabel,
                 } satisfies AppOutletContext
               }
             />
