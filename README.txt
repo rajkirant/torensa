@@ -26,11 +26,4 @@ $env:PGBOUNCER_TRANSACTION_MODE="true"   # true for transaction pooler, false fo
 $env:DB_SSL_REQUIRE="true"
 $env:DB_CONN_MAX_AGE="0"
 
-sqlite3 db.sqlite3 --> start sqlite3 session(from the root, only if using sqlite fallback)
-.tables --> show all tables
-.schema auth_user --> see the table structure
-.exit --> exit sqlite session
-
-
-
 pip install -r requirements.txt --> install all the dependencies in requirements.txt
