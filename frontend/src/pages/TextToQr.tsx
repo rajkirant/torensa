@@ -14,6 +14,7 @@ import {
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 const QR_SIZE = 220;
 const EXPORT_SIZE = 300;
@@ -210,14 +211,11 @@ const TextToQr: React.FC = () => {
           />
 
           {logo && (
-            <Button
-              variant="outlined"
+            <TransparentButton
+              label="Remove Logo"
               color="error"
               onClick={removeLogo}
-              sx={{ textTransform: "none" }}
-            >
-              Remove Logo
-            </Button>
+            />
           )}
         </Stack>
 

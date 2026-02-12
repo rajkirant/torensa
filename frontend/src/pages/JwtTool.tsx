@@ -17,6 +17,7 @@ import {
 import { SignJWT, decodeProtectedHeader, decodeJwt } from "jose";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 /* =========================
    Helpers
@@ -294,13 +295,7 @@ const JwtTool: React.FC = () => {
         spacing={1}
         alignItems="center"
       >
-        <Button
-          variant="outlined"
-          onClick={handleClear}
-          sx={{ textTransform: "none" }}
-        >
-          Clear
-        </Button>
+        <TransparentButton label="Clear" onClick={handleClear} />
         <Box sx={{ flex: 1 }} />
         <Button
           variant="contained"
@@ -334,9 +329,8 @@ const JwtTool: React.FC = () => {
         />
 
         <Stack direction="row" spacing={1} flexWrap="wrap">
-          <Button
-            variant="outlined"
-            sx={{ textTransform: "none" }}
+          <TransparentButton
+            label="Copy JWT"
             disabled={!jwtInput.trim()}
             onClick={async () => {
               try {
@@ -346,18 +340,13 @@ const JwtTool: React.FC = () => {
                 setError("Unable to copy to clipboard.");
               }
             }}
-          >
-            Copy JWT
-          </Button>
+          />
 
-          <Button
-            variant="outlined"
-            sx={{ textTransform: "none" }}
+          <TransparentButton
+            label="Use decoded values in encoder"
             disabled={!decoded}
             onClick={handleDecodeToInputs}
-          >
-            Use decoded values in encoder
-          </Button>
+          />
         </Stack>
 
         {/* FIX: Use a responsive grid so payload doesn't collapse to a thin column */}
@@ -579,9 +568,8 @@ const JwtTool: React.FC = () => {
         />
 
         <Stack direction="row" spacing={1} flexWrap="wrap">
-          <Button
-            variant="outlined"
-            sx={{ textTransform: "none" }}
+          <TransparentButton
+            label="Copy Generated JWT"
             disabled={!jwtOutput.trim()}
             onClick={async () => {
               try {
@@ -591,22 +579,17 @@ const JwtTool: React.FC = () => {
                 setError("Unable to copy to clipboard.");
               }
             }}
-          >
-            Copy Generated JWT
-          </Button>
+          />
 
-          <Button
-            variant="outlined"
-            sx={{ textTransform: "none" }}
+          <TransparentButton
+            label="Decode Generated JWT"
             disabled={!jwtOutput.trim()}
             onClick={() => {
               setJwtInput(jwtOutput.trim());
               setInfo("Moved generated JWT into decoder.");
               setError(null);
             }}
-          >
-            Decode Generated JWT
-          </Button>
+          />
         </Stack>
       </Stack>
     </PageContainer>
