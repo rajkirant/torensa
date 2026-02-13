@@ -60,6 +60,18 @@
     "categoryId": "utilities"
   },
   {
+    "id": "image-crop-tool",
+    "component": "ImageCropTool",
+    "title": "Image Crop Tool",
+    "description": "Crop images locally with live preview and export options.",
+    "path": "/image-crop",
+    "ctaLabel": "Crop Image",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Select a crop area with pixel-level controls, preview the selected region, and export as PNG, JPEG, or WebP. Everything runs entirely in your browser, so images never leave your device.",
+    "categoryId": "utilities"
+  },
+  {
     "id": "invoice-generator",
     "component": "InvoiceGenerator",
     "title": "Invoice / Receipt Generator",
