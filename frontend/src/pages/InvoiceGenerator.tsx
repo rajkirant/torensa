@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -753,7 +754,7 @@ export default function InvoiceGenerator() {
           </Stack>
         </Stack>
 
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           <Button
             variant="contained"
             onClick={download}
@@ -764,7 +765,7 @@ export default function InvoiceGenerator() {
           </Button>
 
           <TransparentButton label="Reset" color="error" onClick={reset} />
-        </Stack>
+        </Box>
 
         {error && <Alert severity="error">{error}</Alert>}
 

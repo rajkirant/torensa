@@ -528,16 +528,23 @@ const TextDiffChecker: React.FC = () => {
           },
         }}
       >
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={1}
-          alignItems="center"
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
         >
           <TransparentButton label="Swap" onClick={handleSwap} />
           <TransparentButton label="Clear" onClick={handleClear} />
 
           <FormControlLabel
-            sx={{ ml: { xs: 0, md: 1 } }}
+            sx={{
+              ml: 0,
+              mr: { xs: 0, md: "auto" },
+              width: { xs: "100%", md: "auto" },
+            }}
             control={
               <Checkbox
                 checked={onlyChanges}
@@ -547,8 +554,6 @@ const TextDiffChecker: React.FC = () => {
             }
             label="Show only changed lines"
           />
-
-          <Box sx={{ flex: 1 }} />
 
           <Button
             variant="contained"
@@ -561,7 +566,7 @@ const TextDiffChecker: React.FC = () => {
             label={isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
             onClick={handleFullscreenCompare}
           />
-        </Stack>
+        </Box>
 
         {error && <Alert severity="error">{error}</Alert>}
 
