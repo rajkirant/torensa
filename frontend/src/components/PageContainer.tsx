@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Stack } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import serviceCards from "../metadata/serviceCards.json";
 import OfflineChip from "./chips/OfflineChip";
+import BackButton from "./buttons/BackButton";
 
 type ServiceCard = {
     id: string;
@@ -35,42 +36,47 @@ export default function PageContainer({
     const title = meta?.title;
 
     return (
-        <Card
-            sx={{
-                maxWidth,
-                mx: "auto",
-                mt: 6,
-                borderRadius: 2,
-                backgroundColor: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
-                transition: "all 0.2s ease-in-out",
-            }}
-        >
-            <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-                <Stack spacing={3}>
+        <>
+            <Card
+                sx={{
+                    maxWidth,
+                    mx: "auto",
+                    mt: 6,
+                    borderRadius: 2,
+                    backgroundColor: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
+                    transition: "all 0.2s ease-in-out",
+                }}
+            >
+                <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+                    <Stack spacing={3}>
 
-                    <Typography
-                        variant="h5"
-                        fontWeight={700}
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            width: "100%",
-                        }}
-                    >
-                        {title}
+                        <Typography
+                            variant="h5"
+                            fontWeight={700}
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                width: "100%",
+                            }}
+                        >
+                            {title}
 
-                        {meta?.offlineEnabled && (
-                            <OfflineChip sx={{ ml: "auto" }} />
-                        )}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {meta?.detailedDescription}
-                    </Typography>
-                    {children}
-                </Stack>
-            </CardContent>
-        </Card>
+                            {meta?.offlineEnabled && (
+                                <OfflineChip sx={{ ml: "auto" }} />
+                            )}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            {meta?.detailedDescription}
+                        </Typography>
+                        {children}
+                        <Stack direction="row" justifyContent="flex-end">
+                            <BackButton />
+                        </Stack>
+                    </Stack>
+                </CardContent>
+            </Card>
+        </>
     );
 }
