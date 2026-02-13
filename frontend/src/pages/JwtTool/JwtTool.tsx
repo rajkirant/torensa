@@ -83,8 +83,8 @@ export default function JwtToolPage() {
   const [info, setInfo] = useState<string | null>(null);
   const [hoverTip, setHoverTip] = useState<HoverTip>(null);
   const [expanded, setExpanded] = useState({
-    decode: true,
-    encode: true,
+    decode: false,
+    encode: false,
   });
 
   const decoded = useMemo(() => {
