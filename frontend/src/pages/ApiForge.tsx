@@ -536,7 +536,7 @@ const ApiForge: React.FC = () => {
               placeholder="eyJhbGciOi..."
             />
 
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
               <TransparentButton
                 label="Clear Request"
                 onClick={() => {

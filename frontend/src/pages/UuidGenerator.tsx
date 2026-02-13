@@ -120,7 +120,7 @@ const UuidGenerator: React.FC = () => {
                                 }}
                             />
 
-                            <Stack direction="row" spacing={1}>
+                            <Stack direction="row" spacing={1} flexWrap="wrap">
                                 <TransparentButton label="Copy all" onClick={copyAll} />
                                 <TransparentButton label="Clear" onClick={() => setUuids([])} />
                             </Stack>

@@ -3,6 +3,7 @@ import { PDFDocument, StandardFonts, degrees } from "pdf-lib";
 
 import {
   Alert,
+  Box,
   Button,
   Card,
   CardContent,
@@ -422,10 +423,13 @@ const ImagePdfToPdf: React.FC = () => {
         <Divider />
 
         {/* Upload */}
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={1.5}
-          alignItems={{ sm: "center" }}
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
         >
           <FilePickerButton
             variant="outlined"
@@ -452,7 +456,7 @@ const ImagePdfToPdf: React.FC = () => {
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ ml: "auto" }}
+            sx={{ ml: { xs: 0, sm: "auto" } }}
           >
             <Chip
               size="small"
@@ -461,7 +465,7 @@ const ImagePdfToPdf: React.FC = () => {
             />
             {busy && <BusyChip />}
           </Stack>
-        </Stack>
+        </Box>
 
         {/* Queue */}
         {items.length > 0 && (

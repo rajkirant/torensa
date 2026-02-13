@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -200,7 +201,7 @@ const TextToQr: React.FC = () => {
           fullWidth
         />
 
-        <Stack direction="row" spacing={2}>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           <FilePickerButton
             variant="outlined"
             sx={{ textTransform: "none" }}
@@ -217,7 +218,7 @@ const TextToQr: React.FC = () => {
               onClick={removeLogo}
             />
           )}
-        </Stack>
+        </Box>
 
         {logo && (
           <>
