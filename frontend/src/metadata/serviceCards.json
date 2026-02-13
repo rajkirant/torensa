@@ -39,12 +39,12 @@
     "id": "image-compressor",
     "component": "ImageCompressor",
     "title": "Image Compressor",
-    "description": "Compress and resize images locally with no uploads.",
+    "description": "Compress images locally with instant selected-image preview.",
     "path": "/image-compressor",
     "ctaLabel": "Compress Images",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Reduce image file size directly in your browser. Adjust quality, resize dimensions, choose output format (JPEG/PNG/WebP), preview results, and download files individually or as a ZIP archive. Ideal for web optimization while keeping images private.",
+    "detailedDescription": "Reduce image file size directly in your browser with no uploads. Preview selected images immediately, tune compression quality, then compress and download files individually or as a ZIP archive. Ideal for fast web optimization while keeping images private.",
     "categoryId": "utilities"
   },
   {
