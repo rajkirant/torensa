@@ -9,26 +9,20 @@ import {
   CardContent,
   Chip,
   Divider,
-  FormControl,
   FormControlLabel,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   Switch,
-  TextField,
   Typography,
 } from "@mui/material";
 
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ImageIcon from "@mui/icons-material/Image";
 import DownloadIcon from "@mui/icons-material/Download";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 import BusyChip from "../components/chips/BusyChips";
 import PageContainer from "../components/PageContainer";
@@ -41,25 +35,11 @@ type QueueItem = {
   file: File;
   kind: ItemKind;
   name: string;
-
-  // preview for images only
-  previewUrl?: string;
-
-  // pdf metadata (lazy)
+  previewUrl: string;
+  pdfPageNumber?: number;
   pdfPageCount?: number;
-
-  // per-item options
   imageRotation: 0 | 90 | 180 | 270;
 };
-
-const PAGE_SIZES = {
-  auto: null as null | { w: number; h: number },
-  a4: { w: 595.28, h: 841.89 }, // points
-  letter: { w: 612, h: 792 },
-} as const;
-
-type PageSizeKey = keyof typeof PAGE_SIZES;
-type FitMode = "contain" | "cover";
 
 const uid = () => crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
 
@@ -77,10 +57,20 @@ function isImage(file: File) {
   return file.type.startsWith("image/");
 }
 
+function fileKey(file: File) {
+  return `${file.name}-${file.size}-${file.lastModified}`;
+}
+
 /**
  * Compute placement for an image of (iw, ih) into a box (bw, bh) with fit mode.
  */
-function fitRect(iw: number, ih: number, bw: number, bh: number, fit: FitMode) {
+function fitRect(
+  iw: number,
+  ih: number,
+  bw: number,
+  bh: number,
+  fit: "contain" | "cover",
+) {
   const iRatio = iw / ih;
   const bRatio = bw / bh;
 
@@ -96,7 +86,6 @@ function fitRect(iw: number, ih: number, bw: number, bh: number, fit: FitMode) {
       w = bh * iRatio;
     }
   } else {
-    // cover
     if (iRatio > bRatio) {
       h = bh;
       w = bh * iRatio;
@@ -121,10 +110,10 @@ async function readAsArrayBuffer(file: File): Promise<ArrayBuffer> {
  */
 async function embedImage(doc: PDFDocument, bytes: Uint8Array, mime: string) {
   if (mime.includes("png")) return await doc.embedPng(bytes);
-  if (mime.includes("jpeg") || mime.includes("jpg"))
+  if (mime.includes("jpeg") || mime.includes("jpg")) {
     return await doc.embedJpg(bytes);
+  }
 
-  // fallback: try both
   try {
     return await doc.embedPng(bytes);
   } catch {
@@ -132,7 +121,6 @@ async function embedImage(doc: PDFDocument, bytes: Uint8Array, mime: string) {
   }
 }
 
-// Ensures Blob gets a real ArrayBuffer (not ArrayBufferLike / SharedArrayBuffer).
 const toArrayBuffer = (u8: Uint8Array): ArrayBuffer => {
   return u8.slice().buffer as ArrayBuffer;
 };
@@ -142,33 +130,26 @@ const ImagePdfToPdf: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // Output options
-  const [pageSize, setPageSize] = useState<PageSizeKey>("auto");
-  const [fitMode, setFitMode] = useState<FitMode>("contain");
-  const [margin, setMargin] = useState(18); // points (~0.25 inch)
-  const [filename, setFilename] = useState("merged.pdf");
-
-  // Page numbering
   const [pageNumbers, setPageNumbers] = useState(true);
-  const [pageNumberStart, setPageNumberStart] = useState(1);
-  const [pageNumberSize, setPageNumberSize] = useState(10);
 
-  // PDF handling option (keep PDF pages as-is)
-  const [keepPdfPagesAsIs, setKeepPdfPagesAsIs] = useState(true);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const itemsRef = useRef<QueueItem[]>([]);
 
-  const totalCount = items.length;
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
 
-  // cleanup blob URLs
   useEffect(() => {
     return () => {
-      for (const it of items) {
-        if (it.previewUrl) URL.revokeObjectURL(it.previewUrl);
-      }
+      const urls = new Set(itemsRef.current.map((it) => it.previewUrl));
+      urls.forEach((url) => URL.revokeObjectURL(url));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const totalCount = items.length;
 
   const onPickFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -176,71 +157,86 @@ const ImagePdfToPdf: React.FC = () => {
     setError(null);
 
     const next: QueueItem[] = [];
+    const failed: string[] = [];
+
     for (const file of Array.from(files)) {
       if (!isPdf(file) && !isImage(file)) continue;
 
-      const kind: ItemKind = isPdf(file) ? "pdf" : "image";
-      const item: QueueItem = {
-        id: uid(),
-        file,
-        kind,
-        name: file.name,
-        imageRotation: 0,
-      };
-
-      if (kind === "image") {
-        item.previewUrl = URL.createObjectURL(file);
-      } else {
-        // lazy load page count (nice UX)
-        // do it async but don’t block adding
-        (async () => {
-          try {
-            const ab = await readAsArrayBuffer(file);
-            const pdf = await PDFDocument.load(ab);
-            setItems((prev) =>
-              prev.map((p) =>
-                p.id === item.id
-                  ? { ...p, pdfPageCount: pdf.getPageCount() }
-                  : p,
-              ),
-            );
-          } catch {
-            // ignore metadata failures
-          }
-        })();
+      if (isImage(file)) {
+        next.push({
+          id: uid(),
+          file,
+          kind: "image",
+          name: file.name,
+          previewUrl: URL.createObjectURL(file),
+          imageRotation: 0,
+        });
+        continue;
       }
 
-      next.push(item);
+      try {
+        const ab = await readAsArrayBuffer(file);
+        const pdf = await PDFDocument.load(ab);
+        const pageCount = pdf.getPageCount();
+        const previewUrl = URL.createObjectURL(file);
+
+        for (let page = 1; page <= pageCount; page += 1) {
+          next.push({
+            id: uid(),
+            file,
+            kind: "pdf",
+            name: file.name,
+            previewUrl,
+            pdfPageNumber: page,
+            pdfPageCount: pageCount,
+            imageRotation: 0,
+          });
+        }
+      } catch {
+        failed.push(file.name);
+      }
     }
 
     if (next.length === 0) {
       setError("No supported files selected. Please choose images or PDFs.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
 
     setItems((prev) => [...prev, ...next]);
 
-    // reset input so selecting same files again works
+    if (failed.length > 0) {
+      setError(`Skipped ${failed.length} PDF(s) that could not be read.`);
+    }
+
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const removeItem = (id: string) => {
     setItems((prev) => {
       const target = prev.find((p) => p.id === id);
-      if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
-      return prev.filter((p) => p.id !== id);
+      if (!target) return prev;
+
+      const next = prev.filter((p) => p.id !== id);
+      const stillUsed = next.some((p) => p.previewUrl === target.previewUrl);
+      if (!stillUsed) {
+        URL.revokeObjectURL(target.previewUrl);
+      }
+      return next;
     });
   };
 
-  const moveItem = (id: string, dir: -1 | 1) => {
+  const reorderItems = (fromId: string, toId: string) => {
+    if (fromId === toId) return;
+
     setItems((prev) => {
-      const idx = prev.findIndex((p) => p.id === id);
-      if (idx < 0) return prev;
-      const nextIdx = idx + dir;
-      if (nextIdx < 0 || nextIdx >= prev.length) return prev;
+      const fromIdx = prev.findIndex((p) => p.id === fromId);
+      const toIdx = prev.findIndex((p) => p.id === toId);
+      if (fromIdx < 0 || toIdx < 0) return prev;
+
       const copy = [...prev];
-      const [spliced] = copy.splice(idx, 1);
-      copy.splice(nextIdx, 0, spliced);
+      const [moved] = copy.splice(fromIdx, 1);
+      copy.splice(toIdx, 0, moved);
       return copy;
     });
   };
@@ -248,7 +244,7 @@ const ImagePdfToPdf: React.FC = () => {
   const rotateImage = (id: string) => {
     setItems((prev) =>
       prev.map((p) =>
-        p.id === id
+        p.id === id && p.kind === "image"
           ? {
               ...p,
               imageRotation: ((p.imageRotation + 90) % 360) as
@@ -262,12 +258,41 @@ const ImagePdfToPdf: React.FC = () => {
     );
   };
 
+  const onDragStart =
+    (id: string) => (e: React.DragEvent<HTMLDivElement>) => {
+      if (busy) return;
+      setDraggingId(id);
+      setDragOverId(id);
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", id);
+    };
+
+  const onDragOver = (id: string) => (e: React.DragEvent<HTMLDivElement>) => {
+    if (!draggingId || draggingId === id) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverId(id);
+  };
+
+  const onDrop = (id: string) => (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const fromId = draggingId ?? e.dataTransfer.getData("text/plain");
+    if (fromId) {
+      reorderItems(fromId, id);
+    }
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
+  const onDragEnd = () => {
+    setDraggingId(null);
+    setDragOverId(null);
+  };
+
   const canBuild = useMemo(
     () => items.length > 0 && !busy,
     [items.length, busy],
   );
-
-
 
   const buildPdf = async () => {
     setError(null);
@@ -280,55 +305,40 @@ const ImagePdfToPdf: React.FC = () => {
     setBusy(true);
     try {
       const out = await PDFDocument.create();
-      const marginPts = clamp(Number(margin) || 0, 0, 200);
-      const fixedSize = PAGE_SIZES[pageSize]; // null = auto
+      const marginPts = 0; // fixed: no margins
 
-      // For page numbers
       const font = pageNumbers
         ? await out.embedFont(StandardFonts.Helvetica)
         : null;
 
+      const pdfCache = new Map<string, PDFDocument>();
+
       for (const item of items) {
         if (item.kind === "pdf") {
-          const ab = await readAsArrayBuffer(item.file);
-          const src = await PDFDocument.load(ab);
-
-          if (keepPdfPagesAsIs) {
-            const copied = await out.copyPages(src, src.getPageIndices());
-            for (const p of copied) out.addPage(p);
-          } else {
-            // (Optional path) normalize PDF pages into fixed size using page-as-image is complex.
-            // Here we still copy pages, but you can extend later if you want.
-            const copied = await out.copyPages(src, src.getPageIndices());
-            for (const p of copied) out.addPage(p);
+          const key = fileKey(item.file);
+          let src = pdfCache.get(key);
+          if (!src) {
+            const ab = await readAsArrayBuffer(item.file);
+            src = await PDFDocument.load(ab);
+            pdfCache.set(key, src);
           }
+
+          const pageIndex = Math.max(0, (item.pdfPageNumber ?? 1) - 1);
+          const [copied] = await out.copyPages(src, [pageIndex]);
+          out.addPage(copied);
           continue;
         }
 
-        // Images
         const ab = await readAsArrayBuffer(item.file);
         const bytes = new Uint8Array(ab);
         const img = await embedImage(out, bytes, item.file.type);
 
-        // Determine page size
-        let pageW: number;
-        let pageH: number;
-
-        if (fixedSize) {
-          pageW = fixedSize.w;
-          pageH = fixedSize.h;
-        } else {
-          // Auto page size: match image aspect at a sensible base width
-          // (If you prefer 1:1 pixels->points, you can do that too.)
-          const iw = img.width;
-          const ih = img.height;
-          const base = 595.28; // approx A4 width
-          const scale = base / iw;
-          pageW = base;
-          pageH = ih * scale;
-          // clamp to prevent extreme pages
-          pageH = clamp(pageH, 200, 2000);
-        }
+        const iw = img.width;
+        const ih = img.height;
+        const base = 595.28; // approx A4 width
+        const scale = base / iw;
+        const pageW = base;
+        const pageH = clamp(ih * scale, 200, 2000);
 
         const page = out.addPage([pageW, pageH]);
 
@@ -336,44 +346,31 @@ const ImagePdfToPdf: React.FC = () => {
         const drawableW = pageW - marginPts * 2;
         const drawableH = pageH - marginPts * 2;
 
-        // If rotated 90/270, swap effective dimensions for fitting
         const imgW = rot === 90 || rot === 270 ? img.height : img.width;
         const imgH = rot === 90 || rot === 270 ? img.width : img.height;
 
-        const fit = fitRect(imgW, imgH, drawableW, drawableH, fitMode);
+        const fit = fitRect(imgW, imgH, drawableW, drawableH, "contain");
 
         const x = marginPts + fit.x;
         const y = marginPts + fit.y;
 
-        // drawImage supports rotate around origin; we translate to place properly.
-        // We’ll rotate around the center of the drawn box for simplicity.
-        const centerX = x + fit.w / 2;
-        const centerY = y + fit.h / 2;
-
         page.drawImage(img, {
-          x: x,
-          y: y,
+          x,
+          y,
           width: fit.w,
           height: fit.h,
           rotate: degrees(rot),
-          // When rotating, pdf-lib rotates around lower-left of the image.
-          // For “good enough” UX, this works; for perfect centering you can do matrix transforms.
-          // Most users are fine with this if fitMode is contain.
         });
-
-        // If you want truly correct rotation alignment, I can give you the matrix version.
-        // Keeping it simple and stable for Vite/offline.
       }
 
-      // Add page numbers (after all pages exist)
       if (pageNumbers && font) {
         const pages = out.getPages();
-        const start = clamp(Number(pageNumberStart) || 1, 1, 1000000);
-        const size = clamp(Number(pageNumberSize) || 10, 6, 48);
+        const start = 1;
+        const size = 10;
 
         pages.forEach((p, i) => {
           const label = String(start + i);
-          const { width, height } = p.getSize();
+          const { width } = p.getSize();
           const pad = 18;
           const textWidth = font.widthOfTextAtSize(label, size);
 
@@ -389,13 +386,13 @@ const ImagePdfToPdf: React.FC = () => {
 
       const pdfBytes = await out.save();
 
-      const blob = new Blob([toArrayBuffer(pdfBytes)], { type: "application/pdf" });
+      const blob = new Blob([toArrayBuffer(pdfBytes)], {
+        type: "application/pdf",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = (filename.trim() || "merged").toLowerCase().endsWith(".pdf")
-        ? filename.trim()
-        : `${filename.trim()}.pdf`;
+      a.download = "merged.pdf";
       a.click();
       URL.revokeObjectURL(url);
     } catch (e: any) {
@@ -409,347 +406,249 @@ const ImagePdfToPdf: React.FC = () => {
   };
 
   const clearAll = () => {
-    for (const it of items) {
-      if (it.previewUrl) URL.revokeObjectURL(it.previewUrl);
-    }
-    setItems([]);
+    setItems((prev) => {
+      const urls = new Set(prev.map((it) => it.previewUrl));
+      urls.forEach((url) => URL.revokeObjectURL(url));
+      return [];
+    });
     setError(null);
   };
 
   return (
     <PageContainer maxWidth={920}>
+      <Divider />
 
+      {/* Upload */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1.5,
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
+        <FilePickerButton
+          variant="outlined"
+          startIcon={<UploadFileIcon />}
+          sx={{ textTransform: "none" }}
+          label="Add images / PDFs"
+          accept="application/pdf,image/*"
+          multiple
+          inputRef={fileInputRef}
+          onFilesSelected={onPickFiles}
+        />
 
-        <Divider />
-
-        {/* Upload */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1.5,
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
+        <Button
+          variant="text"
+          color="inherit"
+          onClick={clearAll}
+          disabled={items.length === 0 || busy}
+          sx={{ textTransform: "none" }}
         >
-          <FilePickerButton
+          Clear
+        </Button>
+
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          sx={{ ml: { xs: 0, sm: "auto" } }}
+        >
+          <Chip
+            size="small"
+            label={`${totalCount} page${totalCount === 1 ? "" : "s"}`}
             variant="outlined"
-            startIcon={<UploadFileIcon />}
-            sx={{ textTransform: "none" }}
-            label="Add images / PDFs"
-            accept="application/pdf,image/*"
-            multiple
-            inputRef={fileInputRef}
-            onFilesSelected={onPickFiles}
           />
+          {busy && <BusyChip />}
+        </Stack>
+      </Box>
 
-          <Button
-            variant="text"
-            color="inherit"
-            onClick={clearAll}
-            disabled={items.length === 0 || busy}
-            sx={{ textTransform: "none" }}
-          >
-            Clear
-          </Button>
-
-          <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-            sx={{ ml: { xs: 0, sm: "auto" } }}
-          >
-            <Chip
-              size="small"
-              label={`${totalCount} file${totalCount === 1 ? "" : "s"}`}
-              variant="outlined"
-            />
-            {busy && <BusyChip />}
-          </Stack>
-        </Box>
-
-        {/* Queue */}
-        {items.length > 0 && (
-          <Stack spacing={1.25}>
-            <Typography variant="subtitle1" fontWeight={700}>
-              Queue (reorder before export)
-            </Typography>
-
-            <Stack spacing={1}>
-              {items.map((it, idx) => (
-                <Card
-                  key={it.id}
-                  variant="outlined"
-                  sx={{
-                    borderRadius: 2,
-                    overflow: "hidden",
-                  }}
-                >
-                  <CardContent sx={{ py: 1.5 }}>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
-                      {/* Thumb */}
-                      <div
-                        style={{
-                          width: 56,
-                          height: 56,
-                          borderRadius: 12,
-                          border: "1px solid rgba(0,0,0,0.08)",
-                          display: "grid",
-                          placeItems: "center",
-                          overflow: "hidden",
-                          background: "#fff",
-                          flex: "0 0 auto",
-                        }}
-                      >
-                        {it.kind === "image" && it.previewUrl ? (
-                          <img
-                            src={it.previewUrl}
-                            alt={it.name}
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                            }}
-                          />
-                        ) : it.kind === "pdf" ? (
-                          <PictureAsPdfIcon />
-                        ) : (
-                          <ImageIcon />
-                        )}
-                      </div>
-
-                      {/* Info */}
-                      <Stack spacing={0.25} sx={{ minWidth: 0, flex: 1 }}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography
-                            variant="subtitle2"
-                            fontWeight={700}
-                            noWrap
-                            title={it.name}
-                            sx={{ maxWidth: "100%" }}
-                          >
-                            {idx + 1}. {it.name}
-                          </Typography>
-
-                          <Chip
-                            size="small"
-                            label={it.kind.toUpperCase()}
-                            variant="outlined"
-                            icon={
-                              it.kind === "pdf" ? (
-                                <PictureAsPdfIcon />
-                              ) : (
-                                <ImageIcon />
-                              )
-                            }
-                          />
-                        </Stack>
-
-                        <Typography variant="caption" color="text.secondary">
-                          {it.kind === "pdf"
-                            ? it.pdfPageCount
-                              ? `${it.pdfPageCount} page${it.pdfPageCount === 1 ? "" : "s"}`
-                              : "PDF (page count loading…) "
-                            : `Image • Rotation: ${it.imageRotation}°`}
-                        </Typography>
-                      </Stack>
-
-                      {/* Actions */}
-                      <Stack direction="row" spacing={0.5}>
-                        <IconButton
-                          aria-label="move up"
-                          onClick={() => moveItem(it.id, -1)}
-                          disabled={idx === 0 || busy}
-                          size="small"
-                        >
-                          <ArrowUpwardIcon fontSize="small" />
-                        </IconButton>
-
-                        <IconButton
-                          aria-label="move down"
-                          onClick={() => moveItem(it.id, 1)}
-                          disabled={idx === items.length - 1 || busy}
-                          size="small"
-                        >
-                          <ArrowDownwardIcon fontSize="small" />
-                        </IconButton>
-
-                        {it.kind === "image" && (
-                          <IconButton
-                            aria-label="rotate"
-                            onClick={() => rotateImage(it.id)}
-                            disabled={busy}
-                            size="small"
-                          >
-                            <RotateRightIcon fontSize="small" />
-                          </IconButton>
-                        )}
-
-                        <IconButton
-                          aria-label="remove"
-                          onClick={() => removeItem(it.id)}
-                          disabled={busy}
-                          size="small"
-                          color="error"
-                        >
-                          <DeleteOutlineIcon fontSize="small" />
-                        </IconButton>
-                      </Stack>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              ))}
-            </Stack>
-          </Stack>
-        )}
-
-        <Divider />
-
-        {/* Options */}
-        <Stack spacing={2}>
-          <Typography variant="subtitle1" fontWeight={800}>
-            Export options
+      {/* Queue */}
+      {items.length > 0 && (
+        <Stack spacing={1.25}>
+          <Typography variant="subtitle1" fontWeight={700}>
+            Pages (drag and drop to reorder)
           </Typography>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
-            <FormControl fullWidth>
-              <InputLabel id="page-size-label">Page size</InputLabel>
-              <Select
-                labelId="page-size-label"
-                value={pageSize}
-                label="Page size"
-                onChange={(e) => setPageSize(e.target.value as PageSizeKey)}
-                disabled={busy}
+          <Stack spacing={1}>
+            {items.map((it, idx) => (
+              <Card
+                key={it.id}
+                variant="outlined"
+                draggable={!busy}
+                onDragStart={onDragStart(it.id)}
+                onDragOver={onDragOver(it.id)}
+                onDrop={onDrop(it.id)}
+                onDragEnd={onDragEnd}
+                sx={{
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  opacity: draggingId === it.id ? 0.65 : 1,
+                  borderColor: dragOverId === it.id ? "primary.main" : undefined,
+                }}
               >
-                <MenuItem value="auto">Auto (best effort)</MenuItem>
-                <MenuItem value="a4">A4</MenuItem>
-                <MenuItem value="letter">Letter</MenuItem>
-              </Select>
-            </FormControl>
+                <CardContent sx={{ py: 1.5 }}>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    {/* Thumb */}
+                    <div
+                      style={{
+                        width: 74,
+                        height: 74,
+                        borderRadius: 12,
+                        border: "1px solid rgba(0,0,0,0.08)",
+                        display: "grid",
+                        placeItems: "center",
+                        overflow: "hidden",
+                        background: "#fff",
+                        flex: "0 0 auto",
+                      }}
+                    >
+                      {it.kind === "image" ? (
+                        <img
+                          src={it.previewUrl}
+                          alt={it.name}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <iframe
+                          title={`${it.name}-page-${it.pdfPageNumber ?? 1}`}
+                          src={`${it.previewUrl}#page=${it.pdfPageNumber ?? 1}&view=Fit`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: 0,
+                            pointerEvents: "none",
+                          }}
+                        />
+                      )}
+                    </div>
 
-            <FormControl fullWidth>
-              <InputLabel id="fit-mode-label">Image fit</InputLabel>
-              <Select
-                labelId="fit-mode-label"
-                value={fitMode}
-                label="Image fit"
-                onChange={(e) => setFitMode(e.target.value as FitMode)}
-                disabled={busy}
-              >
-                <MenuItem value="contain">Contain (no crop)</MenuItem>
-                <MenuItem value="cover">Cover (may crop)</MenuItem>
-              </Select>
-            </FormControl>
+                    {/* Info */}
+                    <Stack spacing={0.25} sx={{ minWidth: 0, flex: 1 }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography
+                          variant="subtitle2"
+                          fontWeight={700}
+                          noWrap
+                          title={it.name}
+                          sx={{ maxWidth: "100%" }}
+                        >
+                          {idx + 1}. {it.name}
+                          {it.kind === "pdf" ? ` (page ${it.pdfPageNumber})` : ""}
+                        </Typography>
 
-            <TextField
-              label="Margin (pt)"
-              type="number"
-              value={margin}
-              onChange={(e) => setMargin(Number(e.target.value))}
-              disabled={busy}
-              fullWidth
-              inputProps={{ min: 0, max: 200, step: 1 }}
-              helperText="18pt ≈ 0.25 inch"
-            />
+                        <Chip
+                          size="small"
+                          label={it.kind === "pdf" ? "PDF PAGE" : "IMAGE"}
+                          variant="outlined"
+                          icon={
+                            it.kind === "pdf" ? (
+                              <PictureAsPdfIcon />
+                            ) : (
+                              <ImageIcon />
+                            )
+                          }
+                        />
+                      </Stack>
+
+                      <Typography variant="caption" color="text.secondary">
+                        {it.kind === "pdf"
+                          ? `Page ${it.pdfPageNumber} of ${it.pdfPageCount}`
+                          : `Rotation: ${it.imageRotation} deg`}
+                      </Typography>
+                    </Stack>
+
+                    {/* Actions */}
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                      <DragIndicatorIcon
+                        fontSize="small"
+                        color="action"
+                        sx={{ cursor: busy ? "default" : "grab" }}
+                      />
+
+                      {it.kind === "image" && (
+                        <IconButton
+                          aria-label="rotate"
+                          onClick={() => rotateImage(it.id)}
+                          disabled={busy}
+                          size="small"
+                        >
+                          <RotateRightIcon fontSize="small" />
+                        </IconButton>
+                      )}
+
+                      <IconButton
+                        aria-label="remove"
+                        onClick={() => removeItem(it.id)}
+                        disabled={busy}
+                        size="small"
+                        color="error"
+                      >
+                        <DeleteOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </Stack>
+                  </Stack>
+                </CardContent>
+              </Card>
+            ))}
           </Stack>
-
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={1.5}
-            alignItems="center"
-          >
-            <TextField
-              label="Output filename"
-              value={filename}
-              onChange={(e) => setFilename(e.target.value)}
-              disabled={busy}
-              fullWidth
-              helperText="“.pdf” is added automatically if missing"
-            />
-
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={keepPdfPagesAsIs}
-                  onChange={(e) => setKeepPdfPagesAsIs(e.target.checked)}
-                  disabled={busy}
-                />
-              }
-              label="Keep PDF pages as-is (fast)"
-            />
-          </Stack>
-
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={1.5}
-            alignItems={{ sm: "center" }}
-          >
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={pageNumbers}
-                  onChange={(e) => setPageNumbers(e.target.checked)}
-                  disabled={busy}
-                />
-              }
-              label="Add page numbers"
-            />
-
-            {pageNumbers && (
-              <>
-                <TextField
-                  label="Start"
-                  type="number"
-                  value={pageNumberStart}
-                  onChange={(e) => setPageNumberStart(Number(e.target.value))}
-                  disabled={busy}
-                  sx={{ width: { xs: "100%", sm: 120 } }}
-                  inputProps={{ min: 1, step: 1 }}
-                />
-                <TextField
-                  label="Size"
-                  type="number"
-                  value={pageNumberSize}
-                  onChange={(e) => setPageNumberSize(Number(e.target.value))}
-                  disabled={busy}
-                  sx={{ width: { xs: "100%", sm: 120 } }}
-                  inputProps={{ min: 6, max: 48, step: 1 }}
-                />
-              </>
-            )}
-          </Stack>
-
-          <Alert severity="info">
-            Tip: For mixed inputs, you can reorder the queue. Images become
-            pages; PDFs are appended page-by-page. Everything is processed
-            locally.
-          </Alert>
         </Stack>
+      )}
 
-        {/* Build */}
+      <Divider />
+
+      {/* Options */}
+      <Stack spacing={2}>
+        <Typography variant="subtitle1" fontWeight={800}>
+          Export options
+        </Typography>
+
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={1.5}
-          alignItems="center"
+          alignItems={{ sm: "center" }}
         >
-          <Button
-            variant="contained"
-            startIcon={<DownloadIcon />}
-            onClick={buildPdf}
-            disabled={!canBuild}
-            sx={{ textTransform: "none", fontWeight: 700 }}
-          >
-            Build & Download PDF
-          </Button>
-
-          {busy && (
-            <Typography variant="body2" color="text.secondary">
-              Building PDF… (large PDFs can take a moment)
-            </Typography>
-          )}
+          <FormControlLabel
+            control={
+              <Switch
+                checked={pageNumbers}
+                onChange={(e) => setPageNumbers(e.target.checked)}
+                disabled={busy}
+              />
+            }
+            label="Add page numbers"
+          />
         </Stack>
+      </Stack>
 
-        {error && <Alert severity="error">{error}</Alert>}
+      {/* Build */}
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={1.5}
+        alignItems="center"
+      >
+        <Button
+          variant="contained"
+          startIcon={<DownloadIcon />}
+          onClick={buildPdf}
+          disabled={!canBuild}
+          sx={{ textTransform: "none", fontWeight: 700 }}
+        >
+          Build & Download PDF
+        </Button>
 
+        {busy && (
+          <Typography variant="body2" color="text.secondary">
+            Building PDF... (large PDFs can take a moment)
+          </Typography>
+        )}
+      </Stack>
+
+      {error && <Alert severity="error">{error}</Alert>}
     </PageContainer>
   );
 };
