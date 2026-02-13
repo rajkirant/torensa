@@ -24,6 +24,11 @@ type Size = {
   height: number;
 };
 
+type Point = {
+  x: number;
+  y: number;
+};
+
 type CropRect = {
   x: number;
   y: number;
@@ -46,6 +51,7 @@ const clamp = (n: number, min: number, max: number) =>
   Math.max(min, Math.min(max, n));
 
 const MIN_CROP_SIZE = 20;
+const DEFAULT_EXPORT_QUALITY = 0.9;
 
 const formatBytes = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`;
@@ -155,7 +161,6 @@ async function cropToBlob(
   sourceUrl: string,
   crop: CropRect,
   format: OutputFormat,
-  quality: number,
 ): Promise<Blob> {
   const img = await new Promise<HTMLImageElement>((resolve, reject) => {
     const el = new Image();
@@ -192,7 +197,7 @@ async function cropToBlob(
       (blob) =>
         blob ? resolve(blob) : reject(new Error("Crop export failed")),
       format,
-      format === "image/png" ? undefined : clamp(quality, 0.01, 1),
+      format === "image/png" ? undefined : DEFAULT_EXPORT_QUALITY,
     );
   });
 }
@@ -211,9 +216,9 @@ export default function ImageCropTool() {
   const [sourceUrl, setSourceUrl] = useState<string | null>(null);
   const [sourceSize, setSourceSize] = useState<Size | null>(null);
   const [renderedSize, setRenderedSize] = useState<Size | null>(null);
+  const [renderedOffset, setRenderedOffset] = useState<Point>({ x: 0, y: 0 });
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [outputFormat, setOutputFormat] = useState<OutputFormat>("image/png");
-  const [qualityPct, setQualityPct] = useState(90);
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
@@ -258,9 +263,14 @@ export default function ImageCropTool() {
   useEffect(() => {
     return () => {
       if (sourceUrl) URL.revokeObjectURL(sourceUrl);
+    };
+  }, [sourceUrl]);
+
+  useEffect(() => {
+    return () => {
       if (resultUrl) URL.revokeObjectURL(resultUrl);
     };
-  }, [sourceUrl, resultUrl]);
+  }, [resultUrl]);
 
   useEffect(() => {
     const node = previewRef.current;
@@ -270,6 +280,10 @@ export default function ImageCropTool() {
       setRenderedSize({
         width: Math.max(1, Math.round(node.clientWidth)),
         height: Math.max(1, Math.round(node.clientHeight)),
+      });
+      setRenderedOffset({
+        x: Math.max(0, Math.round(node.offsetLeft)),
+        y: Math.max(0, Math.round(node.offsetTop)),
       });
     };
 
@@ -283,28 +297,6 @@ export default function ImageCropTool() {
   const updateCrop = (partial: Partial<CropRect>) => {
     if (!crop || !sourceSize) return;
     setCrop(normalizeCrop({ ...crop, ...partial }, sourceSize));
-  };
-
-  const setSquareCrop = () => {
-    if (!sourceSize) return;
-    const side = Math.min(sourceSize.width, sourceSize.height);
-    const next = {
-      x: Math.round((sourceSize.width - side) / 2),
-      y: Math.round((sourceSize.height - side) / 2),
-      width: side,
-      height: side,
-    };
-    setCrop(next);
-  };
-
-  const setFullCrop = () => {
-    if (!sourceSize) return;
-    setCrop({
-      x: 0,
-      y: 0,
-      width: sourceSize.width,
-      height: sourceSize.height,
-    });
   };
 
   const beginMove = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -445,7 +437,6 @@ export default function ImageCropTool() {
         sourceUrl,
         normalizedCrop,
         outputFormat,
-        qualityPct / 100,
       );
 
       setResultBlob(blob);
@@ -472,12 +463,12 @@ export default function ImageCropTool() {
     const scaleX = renderedSize.width / sourceSize.width;
     const scaleY = renderedSize.height / sourceSize.height;
     return {
-      left: crop.x * scaleX,
-      top: crop.y * scaleY,
+      left: renderedOffset.x + crop.x * scaleX,
+      top: renderedOffset.y + crop.y * scaleY,
       width: crop.width * scaleX,
       height: crop.height * scaleY,
     };
-  }, [sourceSize, renderedSize, crop]);
+  }, [sourceSize, renderedSize, renderedOffset, crop]);
 
   const maxX = sourceSize && crop ? Math.max(0, sourceSize.width - crop.width) : 0;
   const maxY =
@@ -567,13 +558,18 @@ export default function ImageCropTool() {
                   width: Math.max(1, Math.round(node.clientWidth)),
                   height: Math.max(1, Math.round(node.clientHeight)),
                 });
+                setRenderedOffset({
+                  x: Math.max(0, Math.round(node.offsetLeft)),
+                  y: Math.max(0, Math.round(node.offsetTop)),
+                });
               }}
               sx={{
                 display: "block",
-                width: "100%",
+                width: "auto",
+                maxWidth: "100%",
                 height: "auto",
                 maxHeight: 460,
-                objectFit: "contain",
+                mx: "auto",
               }}
             />
 
@@ -676,6 +672,14 @@ export default function ImageCropTool() {
             )}
           </Box>
 
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 0.5 }}>
+            <Chip
+              size="small"
+              variant="outlined"
+              label={`Selected: ${crop.width} x ${crop.height}px`}
+            />
+          </Box>
+
           <Stack spacing={1.25}>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
               Left (X): {crop.x}px
@@ -722,14 +726,6 @@ export default function ImageCropTool() {
             />
           </Stack>
 
-          <Stack direction="row" spacing={1}>
-            <Button variant="outlined" onClick={setSquareCrop} disabled={busy}>
-              Center square
-            </Button>
-            <Button variant="outlined" onClick={setFullCrop} disabled={busy}>
-              Full image
-            </Button>
-          </Stack>
         </Stack>
       )}
 
@@ -745,21 +741,6 @@ export default function ImageCropTool() {
           spacing={1.5}
           alignItems={{ sm: "center" }}
         >
-          {outputFormat !== "image/png" && (
-            <Box sx={{ minWidth: 220, width: { xs: "100%", sm: 260 } }}>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Quality: {qualityPct}
-              </Typography>
-              <Slider
-                value={qualityPct}
-                min={1}
-                max={100}
-                onChange={(_, value) => setQualityPct(value as number)}
-                disabled={busy}
-              />
-            </Box>
-          )}
-
           <Button
             variant="contained"
             startIcon={<CropIcon />}
@@ -789,8 +770,13 @@ export default function ImageCropTool() {
               src={resultUrl}
               alt="Cropped preview"
               sx={{
+                display: "block",
+                width: "auto !important",
+                height: "auto !important",
                 maxWidth: "100%",
                 maxHeight: 360,
+                objectFit: "contain",
+                mx: "auto",
                 borderRadius: 0,
                 border: "1px solid",
                 borderColor: "divider",
