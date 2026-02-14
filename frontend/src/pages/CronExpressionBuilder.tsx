@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Stack, TextField, Typography } from "@mui/material";
-import type { Theme } from "@mui/material/styles";
+import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -132,37 +132,6 @@ const PREVIEW_FORMATTER_WITH_SECONDS = new Intl.DateTimeFormat(undefined, {
   hour12: false,
   timeZoneName: "short",
 });
-
-const getCreativeInfoBannerSx = (theme: Theme) => {
-  const config = theme.banners.cronInfo;
-  return {
-    borderRadius: 3,
-    border: `1px solid ${config.border}`,
-    background: config.background,
-    color: config.text,
-    boxShadow: config.shadow,
-    position: "relative",
-    overflow: "hidden",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      left: 0,
-      top: 0,
-      bottom: 0,
-      width: 5,
-      background: config.accent,
-    },
-    "& .MuiAlert-icon": {
-      color: config.icon,
-      opacity: 1,
-      mt: "2px",
-    },
-    "& .MuiAlert-message": {
-      fontWeight: 500,
-      letterSpacing: "0.01em",
-    },
-  } as const;
-};
 
 function normalizeDayOfWeekValue(value: number): number {
   return value === 7 ? 0 : value;
@@ -597,7 +566,8 @@ export default function CronExpressionBuilder() {
           error={statusMessage.error ?? ""}
           success={statusMessage.success ?? ""}
           info={statusMessage.info ?? ""}
-          slotSx={{ info: (theme) => getCreativeInfoBannerSx(theme) }}
+          slotColor={{ info: "success" }}
+          slotIcon={{ info: <ErrorOutlineRoundedIcon fontSize="inherit" /> }}
         />
 
         <TextField
