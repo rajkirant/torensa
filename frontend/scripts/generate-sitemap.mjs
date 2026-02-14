@@ -7,9 +7,15 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
 const metadataPath = path.join(projectRoot, "src", "metadata", "serviceCards.json");
 const sitemapPath = path.join(projectRoot, "public", "sitemap.xml");
+const pagesDir = path.join(projectRoot, "src", "pages");
 
 const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(/\/+$/, "");
-const staticRoutes = ["/", "/contact"];
+const staticRouteComponents = {
+  "/": "Home",
+  "/contact": "Contact",
+  "/login": "Login",
+  "/signup": "Signup",
+};
 
 function xmlEscape(value) {
   return value
@@ -27,7 +33,7 @@ function normalizePath(routePath) {
   return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
 }
 
-function buildSitemapXml(routes, lastmod) {
+function buildSitemapXml(routeEntries) {
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
@@ -36,11 +42,11 @@ function buildSitemapXml(routes, lastmod) {
     '                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">',
   ];
 
-  for (const route of routes) {
-    const loc = new URL(route, `${siteUrl}/`).toString();
+  for (const entry of routeEntries) {
+    const loc = new URL(entry.route, `${siteUrl}/`).toString();
     lines.push("  <url>");
     lines.push(`    <loc>${xmlEscape(loc)}</loc>`);
-    lines.push(`    <lastmod>${lastmod}</lastmod>`);
+    lines.push(`    <lastmod>${entry.lastmod}</lastmod>`);
     lines.push("  </url>");
   }
 
@@ -48,10 +54,57 @@ function buildSitemapXml(routes, lastmod) {
   return `${lines.join("\n")}\n`;
 }
 
+function toDateString(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function getComponentCandidates(component) {
+  if (!component || typeof component !== "string") return [];
+  const trimmed = component.trim();
+  if (!trimmed) return [];
+
+  const withExtension = /\.[a-z0-9]+$/i.test(trimmed);
+  if (withExtension) {
+    return [path.join(pagesDir, trimmed)];
+  }
+
+  return [
+    path.join(pagesDir, `${trimmed}.tsx`),
+    path.join(pagesDir, `${trimmed}.ts`),
+    path.join(pagesDir, `${trimmed}.jsx`),
+    path.join(pagesDir, `${trimmed}.js`),
+    path.join(pagesDir, trimmed, "index.tsx"),
+    path.join(pagesDir, trimmed, "index.ts"),
+    path.join(pagesDir, trimmed, "index.jsx"),
+    path.join(pagesDir, trimmed, "index.js"),
+  ];
+}
+
+async function resolveLastmod(route, component, fallbackLastmod) {
+  for (const candidate of getComponentCandidates(component)) {
+    try {
+      const fileStat = await stat(candidate);
+      return toDateString(fileStat.mtime);
+    } catch {
+      // Keep trying candidates until one exists.
+    }
+  }
+
+  if (component) {
+    console.warn(
+      `Unable to resolve component file for route "${route}" from component "${component}". Falling back to metadata date.`,
+    );
+  } else {
+    console.warn(`No component mapped for route "${route}". Falling back to metadata date.`);
+  }
+
+  return fallbackLastmod;
+}
+
 async function main() {
   const metadataRaw = await readFile(metadataPath, "utf-8");
   const metadata = JSON.parse(metadataRaw);
-  const routes = new Set(staticRoutes);
+  const routeToComponent = new Map(Object.entries(staticRouteComponents));
 
   if (Array.isArray(metadata)) {
     for (const item of metadata) {
@@ -59,22 +112,30 @@ async function main() {
       if (item.authRequired === true) continue;
 
       const normalized = normalizePath(item.path);
-      if (normalized) routes.add(normalized);
+      if (normalized) routeToComponent.set(normalized, item.component);
     }
   }
 
-  const sortedRoutes = [...routes].sort((a, b) => {
+  const sortedRoutes = [...routeToComponent.keys()].sort((a, b) => {
     if (a === "/") return -1;
     if (b === "/") return 1;
     return a.localeCompare(b);
   });
 
   const metadataStat = await stat(metadataPath);
-  const lastmod = metadataStat.mtime.toISOString().slice(0, 10);
-  const xml = buildSitemapXml(sortedRoutes, lastmod);
+  const fallbackLastmod = toDateString(metadataStat.mtime);
+
+  const routeEntries = await Promise.all(
+    sortedRoutes.map(async (route) => ({
+      route,
+      lastmod: await resolveLastmod(route, routeToComponent.get(route), fallbackLastmod),
+    })),
+  );
+
+  const xml = buildSitemapXml(routeEntries);
 
   await writeFile(sitemapPath, xml, "utf-8");
-  console.log(`Generated sitemap with ${sortedRoutes.length} URLs at ${sitemapPath}`);
+  console.log(`Generated sitemap with ${routeEntries.length} URLs at ${sitemapPath}`);
 }
 
 main().catch((error) => {
