@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import CropIcon from "@mui/icons-material/Crop";
 import DownloadIcon from "@mui/icons-material/Download";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
@@ -223,10 +222,12 @@ export default function ImageCropTool() {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [busy, setBusy] = useState(false);
+  const [isRenderingPreview, setIsRenderingPreview] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLImageElement | null>(null);
+  const previewJobRef = useRef(0);
 
   const formatSupport = useMemo(
     () => ({
@@ -293,6 +294,42 @@ export default function ImageCropTool() {
 
     return () => observer.disconnect();
   }, [sourceUrl]);
+
+  useEffect(() => {
+    if (!sourceUrl || !sourceSize || !crop || !file) {
+      setIsRenderingPreview(false);
+      return;
+    }
+
+    const jobId = ++previewJobRef.current;
+    const normalizedCrop = normalizeCrop(crop, sourceSize);
+
+    setIsRenderingPreview(true);
+
+    const timer = window.setTimeout(() => {
+      void cropToBlob(sourceUrl, normalizedCrop, outputFormat)
+        .then((blob) => {
+          if (previewJobRef.current !== jobId) return;
+          setResultBlob(blob);
+          setResultUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return URL.createObjectURL(blob);
+          });
+        })
+        .catch((e: any) => {
+          if (previewJobRef.current !== jobId) return;
+          setError(e?.message ?? "Unable to crop image.");
+        })
+        .finally(() => {
+          if (previewJobRef.current !== jobId) return;
+          setIsRenderingPreview(false);
+        });
+    }, 90);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [sourceUrl, sourceSize, crop, outputFormat, file]);
 
   const updateCrop = (partial: Partial<CropRect>) => {
     if (!crop || !sourceSize) return;
@@ -420,35 +457,6 @@ export default function ImageCropTool() {
     }
 
     if (inputRef.current) inputRef.current.value = "";
-  };
-
-  const exportCrop = async () => {
-    if (!sourceUrl || !sourceSize || !crop || !file) {
-      setError("Please choose an image first.");
-      return;
-    }
-
-    setBusy(true);
-    setError(null);
-
-    try {
-      const normalizedCrop = normalizeCrop(crop, sourceSize);
-      const blob = await cropToBlob(
-        sourceUrl,
-        normalizedCrop,
-        outputFormat,
-      );
-
-      setResultBlob(blob);
-      setResultUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
-        return URL.createObjectURL(blob);
-      });
-    } catch (e: any) {
-      setError(e?.message ?? "Unable to crop image.");
-    } finally {
-      setBusy(false);
-    }
   };
 
   const downloadResult = () => {
@@ -741,20 +749,15 @@ export default function ImageCropTool() {
           spacing={1.5}
           alignItems={{ sm: "center" }}
         >
-          <Button
-            variant="contained"
-            startIcon={<CropIcon />}
-            onClick={exportCrop}
-            disabled={!sourceUrl || !crop || busy}
-          >
-            {busy ? "Cropping..." : "Crop Preview"}
-          </Button>
+          <Typography variant="body2" color="text.secondary">
+            Preview updates automatically while you move or resize the crop.
+          </Typography>
 
           <Button
             variant="outlined"
             startIcon={<DownloadIcon />}
             onClick={downloadResult}
-            disabled={!resultBlob || busy}
+            disabled={!resultBlob || busy || isRenderingPreview}
           >
             Download
           </Button>
@@ -792,7 +795,9 @@ export default function ImageCropTool() {
           </Stack>
         ) : (
           <Typography variant="body2" color="text.secondary">
-            Run crop preview to generate output.
+            {isRenderingPreview
+              ? "Updating preview..."
+              : "Preview appears automatically after you select an image."}
           </Typography>
         )}
       </Stack>
