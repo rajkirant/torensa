@@ -528,23 +528,33 @@ const TextDiffChecker: React.FC = () => {
           },
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
-          <TransparentButton label="Swap" onClick={handleSwap} />
-          <TransparentButton label="Clear" onClick={handleClear} />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            <TransparentButton label="Swap" onClick={handleSwap} />
+            <TransparentButton label="Clear" onClick={handleClear} />
+            <Box sx={{ flex: 1 }} />
+            <Button
+              variant="contained"
+              onClick={handleCompare}
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              Compare
+            </Button>
+            <TransparentButton
+              label={isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
+              onClick={handleFullscreenCompare}
+            />
+          </Box>
 
           <FormControlLabel
-            sx={{
-              ml: 0,
-              mr: { xs: 0, md: "auto" },
-              width: { xs: "100%", md: "auto" },
-            }}
+            sx={{ ml: 0 }}
             control={
               <Checkbox
                 checked={onlyChanges}
@@ -553,18 +563,6 @@ const TextDiffChecker: React.FC = () => {
               />
             }
             label="Show only changed lines"
-          />
-
-          <Button
-            variant="contained"
-            onClick={handleCompare}
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            Compare
-          </Button>
-          <TransparentButton
-            label={isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
-            onClick={handleFullscreenCompare}
           />
         </Box>
 

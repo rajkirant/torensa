@@ -79,9 +79,7 @@ export default function JsonFormatterDiff() {
   const [jsonText, setJsonText] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [info, setInfo] = useState(
-    "Validate, format, and minify JSON locally in your browser.",
-  );
+  const [info, setInfo] = useState("");
 
   const clearAlerts = () => {
     setError("");

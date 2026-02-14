@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Checkbox,
-    FormControlLabel,
-    Stack,
-    TextField,
-    Typography,
+  Box,
+  Button,
+  Checkbox,
+  Chip,
+  FormControlLabel,
+  Stack,
+  TextField,
+  Typography,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -17,118 +16,194 @@ import { TransparentButton } from "../components/buttons/TransparentButton";
 const generateUuid = () => crypto.randomUUID();
 
 const UuidGenerator: React.FC = () => {
-    const [count, setCount] = useState(1);
-    const [uppercase, setUppercase] = useState(false);
-    const [noHyphens, setNoHyphens] = useState(false);
-    const [uuids, setUuids] = useState<string[]>([]);
-    const [info, setInfo] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+  const [count, setCount] = useState(1);
+  const [uppercase, setUppercase] = useState(false);
+  const [noHyphens, setNoHyphens] = useState(false);
+  const [uuids, setUuids] = useState<string[]>([]);
+  const [info, setInfo] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    const format = (uuid: string) => {
-        let v = uuid;
-        if (noHyphens) v = v.replace(/-/g, "");
-        if (uppercase) v = v.toUpperCase();
-        return v;
-    };
+  const format = (uuid: string) => {
+    let value = uuid;
+    if (noHyphens) value = value.replace(/-/g, "");
+    if (uppercase) value = value.toUpperCase();
+    return value;
+  };
 
-    const generate = () => {
-        setError(null);
-        setInfo(null);
+  const generate = () => {
+    setError(null);
+    setInfo(null);
 
-        if (!Number.isInteger(count) || count < 1 || count > 1000) {
-            setError("Count must be between 1 and 1000.");
-            return;
-        }
+    if (!Number.isInteger(count) || count < 1 || count > 1000) {
+      setError("Count must be between 1 and 1000.");
+      return;
+    }
 
-        const list = Array.from({ length: count }, () => format(generateUuid()));
-        setUuids(list);
-        setInfo(`Generated ${list.length} UUID${list.length > 1 ? "s" : ""}.`);
-    };
+    const list = Array.from({ length: count }, () => format(generateUuid()));
+    setUuids(list);
+    setInfo(`Generated ${list.length} UUID${list.length > 1 ? "s" : ""}.`);
+  };
 
-    const copyAll = async () => {
-        try {
-            await navigator.clipboard.writeText(uuids.join("\n"));
-            setInfo("Copied all UUIDs.");
-        } catch {
-            setError("Failed to copy to clipboard.");
-        }
-    };
+  const copyAll = async () => {
+    try {
+      await navigator.clipboard.writeText(uuids.join("\n"));
+      setError(null);
+      setInfo("Copied all UUIDs.");
+    } catch {
+      setError("Failed to copy to clipboard.");
+    }
+  };
 
-    return (
-        <PageContainer maxWidth={720}>
+  const clearResults = () => {
+    setUuids([]);
+    setError(null);
+    setInfo("Cleared results.");
+  };
 
-                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                        <TextField
-                            label="Count"
-                            type="number"
-                            value={count}
-                            onChange={(e) => setCount(Number(e.target.value))}
-                            inputProps={{ min: 1, max: 1000 }}
-                            sx={{ maxWidth: 160 }}
-                            helperText="1 – 1000"
-                        />
+  return (
+    <PageContainer maxWidth={860}>
+      <Stack spacing={2}>
+        <Box
+          sx={{
+            p: { xs: 1.5, sm: 2 },
+            borderRadius: 2,
+            border: "1px solid rgba(59,130,246,0.35)",
+            background:
+              "linear-gradient(140deg, rgba(59,130,246,0.17) 0%, rgba(15,23,42,0.12) 55%, rgba(14,165,233,0.12) 100%)",
+          }}
+        >
+          <Stack spacing={2}>
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              spacing={2}
+              alignItems={{ xs: "stretch", md: "flex-start" }}
+            >
+              <TextField
+                label="Count"
+                type="number"
+                value={count}
+                onChange={(e) => setCount(Number(e.target.value))}
+                inputProps={{ min: 1, max: 1000 }}
+                sx={{ width: { xs: "100%", sm: 180 } }}
+                helperText="1 - 1000"
+              />
 
-                        <Stack spacing={1}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={uppercase}
-                                        onChange={(e) => setUppercase(e.target.checked)}
-                                    />
-                                }
-                                label="Uppercase"
-                            />
+              <Stack spacing={0.5}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={uppercase}
+                      onChange={(e) => setUppercase(e.target.checked)}
+                    />
+                  }
+                  label="Uppercase"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={noHyphens}
+                      onChange={(e) => setNoHyphens(e.target.checked)}
+                    />
+                  }
+                  label="Remove hyphens"
+                />
+              </Stack>
 
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={noHyphens}
-                                        onChange={(e) => setNoHyphens(e.target.checked)}
-                                    />
-                                }
-                                label="Remove hyphens"
-                            />
-                        </Stack>
+              <Box sx={{ flex: 1 }} />
 
-                        <Box sx={{ flex: 1 }} />
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Button
+                  variant="contained"
+                  onClick={generate}
+                  sx={{ textTransform: "none", fontWeight: 600 }}
+                >
+                  Generate UUIDs
+                </Button>
+                <TransparentButton
+                  label="Copy all"
+                  onClick={() => void copyAll()}
+                  disabled={uuids.length === 0}
+                />
+                <TransparentButton
+                  label="Clear"
+                  onClick={clearResults}
+                  disabled={uuids.length === 0}
+                />
+              </Stack>
+            </Stack>
+          </Stack>
+        </Box>
 
-                        <Button
-                            variant="contained"
-                            onClick={generate}
-                            sx={{ textTransform: "none", fontWeight: 600 }}
-                        >
-                            Generate
-                        </Button>
-                    </Stack>
+        <ToolStatusAlerts error={error} success={info} />
 
-                    <ToolStatusAlerts error={error} success={info} />
+        {uuids.length > 0 && (
+          <Box
+            sx={{
+              borderRadius: 2,
+              border: "1px solid rgba(148,163,184,0.25)",
+              bgcolor: "rgba(2,6,23,0.28)",
+              overflow: "hidden",
+            }}
+          >
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={1}
+              alignItems={{ xs: "flex-start", sm: "center" }}
+              sx={{
+                px: 1.5,
+                py: 1.2,
+                borderBottom: "1px solid rgba(148,163,184,0.2)",
+              }}
+            >
+              <Typography variant="subtitle2" fontWeight={700}>
+                Generated UUIDs
+              </Typography>
+              <Chip
+                size="small"
+                label={`${uuids.length} item${uuids.length === 1 ? "" : "s"}`}
+                sx={{
+                  bgcolor: "rgba(59,130,246,0.2)",
+                  border: "1px solid rgba(59,130,246,0.45)",
+                }}
+              />
+            </Stack>
 
-                    {uuids.length > 0 && (
-                        <>
-                            <TextField
-                                label="Generated UUIDs"
-                                value={uuids.join("\n")}
-                                multiline
-                                minRows={Math.min(10, uuids.length)}
-                                fullWidth
-                                InputProps={{
-                                    readOnly: true,
-                                    sx: {
-                                        fontFamily:
-                                            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                    },
-                                }}
-                            />
-
-                            <Stack direction="row" spacing={1} flexWrap="wrap">
-                                <TransparentButton label="Copy all" onClick={copyAll} />
-                                <TransparentButton label="Clear" onClick={() => setUuids([])} />
-                            </Stack>
-                        </>
-                    )}
-
-            </PageContainer>
-    );
+            <Box sx={{ maxHeight: 360, overflow: "auto", px: 1.2, py: 0.6 }}>
+              {uuids.map((id, index) => (
+                <Box
+                  key={`${id}-${index}`}
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "50px 1fr",
+                    gap: 1,
+                    px: 1,
+                    py: 0.9,
+                    borderRadius: 1,
+                    "&:nth-of-type(odd)": { bgcolor: "rgba(148,163,184,0.06)" },
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    #{index + 1}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily:
+                        'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                      fontSize: 13,
+                      lineHeight: 1.45,
+                      wordBreak: "break-all",
+                    }}
+                  >
+                    {id}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+      </Stack>
+    </PageContainer>
+  );
 };
 
 export default UuidGenerator;

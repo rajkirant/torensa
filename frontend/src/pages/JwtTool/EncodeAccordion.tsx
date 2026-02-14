@@ -55,9 +55,9 @@ export default function EncodeAccordion({
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
-        alignItems="center"
+        alignItems={{ xs: "stretch", md: "flex-end" }}
       >
-        <Box sx={{ minWidth: 200 }}>
+        <Box sx={{ minWidth: { xs: "100%", md: 220 }, maxWidth: { md: 260 } }}>
           <Typography variant="caption" color="text.secondary">
             Algorithm
           </Typography>
@@ -74,50 +74,50 @@ export default function EncodeAccordion({
             <MenuItem value="HS512">HS512</MenuItem>
           </Select>
         </Box>
-
-        <Box sx={{ flex: 1 }} />
-
-        <FormControlLabel
-          control={
-            <Switch
-              checked={autoIat}
+        {useExpiry && (
+          <Box sx={{ width: { xs: "100%", md: 280 } }}>
+            <TextField
+              label="Expiry (local date/time)"
+              type="datetime-local"
+              value={expiryDateLocal}
               onChange={(e) => {
-                setAutoIat(e.target.checked);
+                setExpiryDateLocal(e.target.value);
                 clearStatus();
               }}
+              fullWidth
+              size="small"
+              InputLabelProps={{ shrink: true }}
             />
-          }
-          label="Auto-set iat"
-        />
+          </Box>
+        )}
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={autoIat}
+                onChange={(e) => {
+                  setAutoIat(e.target.checked);
+                  clearStatus();
+                }}
+              />
+            }
+            label="Auto-set iat"
+          />
 
-        <FormControlLabel
-          control={
-            <Switch
-              checked={useExpiry}
-              onChange={(e) => {
-                setUseExpiry(e.target.checked);
-                clearStatus();
-              }}
-            />
-          }
-          label="Set exp"
-        />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={useExpiry}
+                onChange={(e) => {
+                  setUseExpiry(e.target.checked);
+                  clearStatus();
+                }}
+              />
+            }
+            label="Set exp"
+          />
+        </Box>
       </Stack>
-
-      {useExpiry && (
-        <TextField
-          label="Expiry (local date/time)"
-          type="datetime-local"
-          value={expiryDateLocal}
-          onChange={(e) => {
-            setExpiryDateLocal(e.target.value);
-            clearStatus();
-          }}
-          fullWidth
-          helperText="Sets exp as a UNIX timestamp (seconds)."
-          InputLabelProps={{ shrink: true }}
-        />
-      )}
 
       <Box
         sx={{
@@ -159,7 +159,7 @@ export default function EncodeAccordion({
         InputProps={{ readOnly: true }}
       />
 
-      <Stack direction="row" spacing={1} flexWrap="wrap">
+      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
         <Button
           variant="contained"
           onClick={onGenerate}
@@ -177,7 +177,7 @@ export default function EncodeAccordion({
           disabled={!jwtOutput.trim()}
           onClick={onDecodeGenerated}
         />
-      </Stack>
+      </Box>
     </Stack>
   );
 }
