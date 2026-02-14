@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Alert, Box, TextField, Typography, Stack } from "@mui/material";
 import { TransparentButton } from "../../components/buttons/TransparentButton";
+import FlexWrapRow from "../../components/layout/FlexWrapRow";
 
 type HoverTip = { x: number; y: number; text: string } | null;
 
@@ -159,7 +160,7 @@ export default function DecodeAccordion({
         minRows={3}
       />
 
-      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+      <FlexWrapRow>
         <TransparentButton label="Clear" onClick={onClear} />
         <TransparentButton
           label="Copy JWT"
@@ -171,7 +172,7 @@ export default function DecodeAccordion({
           disabled={!decoded}
           onClick={onDecodeToInputs}
         />
-      </Box>
+      </FlexWrapRow>
 
       {decoded ? (
         <Box

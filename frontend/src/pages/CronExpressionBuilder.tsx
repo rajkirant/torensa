@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
+import FlexWrapRow from "../components/layout/FlexWrapRow";
 
 type FieldKey = "minute" | "hour" | "dayOfMonth" | "month" | "dayOfWeek";
 
@@ -493,11 +494,11 @@ export default function CronExpressionBuilder() {
           helperText="Format: minute hour day-of-month month day-of-week"
         />
 
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+        <FlexWrapRow>
           <TransparentButton label="Validate" onClick={handleValidate} />
           <TransparentButton label="Explain" onClick={handleExplain} />
           <TransparentButton label="Next Run Preview" onClick={handlePreview} />
-        </Box>
+        </FlexWrapRow>
 
         {explanation && (
           <Stack spacing={1}>

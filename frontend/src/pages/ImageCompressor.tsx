@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import PageContainer from "../components/PageContainer";
+import FlexWrapRow from "../components/layout/FlexWrapRow";
 
 type OutputFormat = "image/jpeg" | "image/webp" | "image/png";
 
@@ -457,7 +458,7 @@ export default function ImageCompressor() {
             1) Upload
           </Typography>
 
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <FlexWrapRow>
             <Button
               variant="contained"
               startIcon={<CloudUploadIcon />}
@@ -487,7 +488,7 @@ export default function ImageCompressor() {
                 e.currentTarget.value = "";
               }}
             />
-          </Box>
+          </FlexWrapRow>
         </Stack>
 
         <Box

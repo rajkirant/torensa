@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Box, Stack, TextField } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
+import FlexWrapRow from "../components/layout/FlexWrapRow";
 
 type ParseResult =
   | { ok: true; value: unknown }
@@ -164,14 +165,14 @@ export default function JsonFormatterDiff() {
       <Stack spacing={2}>
         <ToolStatusAlerts error={error} success={success} info={info} />
 
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+        <FlexWrapRow>
           <TransparentButton label="Validate" onClick={handleValidate} />
           <TransparentButton label="Format" onClick={handleFormat} />
           <TransparentButton label="Minify" onClick={handleMinify} />
           <TransparentButton label="Load Sample" onClick={handleSample} />
           <TransparentButton label="Copy" onClick={handleCopy} />
           <TransparentButton label="Clear" onClick={handleClear} />
-        </Box>
+        </FlexWrapRow>
 
         <TextField
           value={jsonText}
