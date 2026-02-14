@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   Alert,
   Box,
@@ -24,42 +24,9 @@ type HttpMethod =
   | "HEAD"
   | "OPTIONS"
   | "TRACE";
-type SpecMethod = Lowercase<HttpMethod>;
 type BodyMode = "json" | "raw";
-type ParamLocation = "path" | "query" | "header" | "cookie";
 
 type KeyValueRow = { id: string; key: string; value: string };
-type OpenApiParameter = {
-  name: string;
-  in: ParamLocation;
-  required?: boolean;
-  description?: string;
-  example?: unknown;
-};
-type OpenApiOperation = {
-  summary?: string;
-  description?: string;
-  parameters?: OpenApiParameter[];
-  requestBody?: {
-    content?: Record<string, { example?: unknown }>;
-  };
-};
-type OpenApiPathItem = {
-  parameters?: OpenApiParameter[];
-} & Partial<Record<SpecMethod, OpenApiOperation>>;
-type OpenApiSpec = {
-  info?: { title?: string; version?: string };
-  servers?: Array<{ url?: string }>;
-  paths?: Record<string, OpenApiPathItem>;
-};
-type Endpoint = {
-  id: string;
-  method: SpecMethod;
-  path: string;
-  summary: string;
-  parameters: OpenApiParameter[];
-  requestBody?: OpenApiOperation["requestBody"];
-};
 type ApiResponse = {
   method: string;
   url: string;
@@ -80,26 +47,12 @@ const HTTP_METHODS: HttpMethod[] = [
   "OPTIONS",
   "TRACE",
 ];
-const SPEC_METHODS: SpecMethod[] = [
-  "get",
-  "post",
-  "put",
-  "patch",
-  "delete",
-  "head",
-  "options",
-  "trace",
-];
 
 function createRow(key = "", value = ""): KeyValueRow {
   const id = globalThis.crypto?.randomUUID
     ? globalThis.crypto.randomUUID()
     : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   return { id, key, value };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
 }
 
 function methodColor(method: string) {
@@ -118,44 +71,6 @@ function statusColor(status: number) {
   if (status >= 400 && status < 500) return "warning";
   if (status >= 500) return "error";
   return "default";
-}
-
-function normalizeParams(value: unknown): OpenApiParameter[] {
-  if (!Array.isArray(value)) return [];
-  return value.filter((item): item is OpenApiParameter => {
-    if (!isRecord(item)) return false;
-    return typeof item.name === "string" && typeof item.in === "string";
-  });
-}
-
-function mergeParams(
-  pathParams: OpenApiParameter[],
-  opParams: OpenApiParameter[],
-) {
-  const map = new Map<string, OpenApiParameter>();
-  for (const param of pathParams) map.set(`${param.in}:${param.name}`, param);
-  for (const param of opParams) map.set(`${param.in}:${param.name}`, param);
-  return Array.from(map.values());
-}
-
-function formatUnknown(value: unknown) {
-  if (value == null) return "";
-  if (typeof value === "string") return value;
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch {
-    return String(value);
-  }
-}
-
-function bodyExample(endpoint: Endpoint) {
-  const content = endpoint.requestBody?.content;
-  if (!content || !isRecord(content)) return "";
-  const jsonContent =
-    content["application/json"] ??
-    Object.entries(content).find(([key]) => key.toLowerCase().includes("json"))
-      ?.[1];
-  return formatUnknown(jsonContent?.example);
 }
 
 function isAbsoluteUrl(value: string) {
@@ -252,131 +167,7 @@ const ApiForge: React.FC = () => {
   const [running, setRunning] = useState(false);
   const [response, setResponse] = useState<ApiResponse | null>(null);
 
-  const [specUrl, setSpecUrl] = useState("");
-  const [specText, setSpecText] = useState("");
-  const [specError, setSpecError] = useState("");
-  const [parsedSpec, setParsedSpec] = useState<OpenApiSpec | null>(null);
-  const [loadingSpec, setLoadingSpec] = useState(false);
-  const [specServerUrl, setSpecServerUrl] = useState("");
-  const [endpointSearch, setEndpointSearch] = useState("");
-
   const canHaveBody = method !== "GET" && method !== "HEAD";
-
-  const endpoints = useMemo<Endpoint[]>(() => {
-    if (!parsedSpec?.paths) return [];
-    const items: Endpoint[] = [];
-
-    for (const [path, pathItemRaw] of Object.entries(parsedSpec.paths)) {
-      if (!isRecord(pathItemRaw)) continue;
-      const pathItem = pathItemRaw as OpenApiPathItem;
-      const pathLevelParams = normalizeParams(pathItem.parameters);
-
-      for (const methodName of SPEC_METHODS) {
-        const operation = pathItem[methodName];
-        if (!isRecord(operation)) continue;
-        const params = mergeParams(
-          pathLevelParams,
-          normalizeParams(operation.parameters),
-        );
-        items.push({
-          id: `${methodName}:${path}`,
-          method: methodName,
-          path,
-          summary: operation.summary || "No summary",
-          parameters: params,
-          requestBody: operation.requestBody,
-        });
-      }
-    }
-    return items.sort((a, b) =>
-      a.path === b.path
-        ? a.method.localeCompare(b.method)
-        : a.path.localeCompare(b.path),
-    );
-  }, [parsedSpec]);
-
-  const filteredEndpoints = useMemo(() => {
-    const query = endpointSearch.trim().toLowerCase();
-    if (!query) return endpoints;
-    return endpoints.filter((item) =>
-      [item.method, item.path, item.summary].join(" ").toLowerCase().includes(query),
-    );
-  }, [endpointSearch, endpoints]);
-
-  const parseSpec = (raw: string) => {
-    const input = raw.trim();
-    if (!input) {
-      setSpecError("Paste an OpenAPI/Swagger JSON document first.");
-      setParsedSpec(null);
-      return;
-    }
-    let parsed: OpenApiSpec;
-    try {
-      parsed = JSON.parse(input) as OpenApiSpec;
-    } catch {
-      setSpecError("Invalid JSON. YAML is not supported yet.");
-      setParsedSpec(null);
-      return;
-    }
-    if (!parsed.paths || !isRecord(parsed.paths)) {
-      setSpecError("Spec must contain a valid `paths` object.");
-      setParsedSpec(null);
-      return;
-    }
-    setParsedSpec(parsed);
-    setSpecError("");
-    const firstServer = parsed.servers?.[0]?.url || "";
-    if (!specServerUrl.trim() && firstServer) setSpecServerUrl(firstServer);
-  };
-
-  const loadSpecFromUrl = async () => {
-    const targetUrl = specUrl.trim();
-    if (!targetUrl) {
-      setSpecError("Enter a spec URL first.");
-      return;
-    }
-    setLoadingSpec(true);
-    setSpecError("");
-    try {
-      const result = await fetch(targetUrl);
-      if (!result.ok) {
-        setSpecError(`Failed to load spec (${result.status} ${result.statusText}).`);
-        return;
-      }
-      const text = await result.text();
-      setSpecText(text);
-      parseSpec(text);
-    } catch {
-      setSpecError("Could not fetch spec URL. CORS may block this request.");
-    } finally {
-      setLoadingSpec(false);
-    }
-  };
-
-  const useEndpoint = (endpoint: Endpoint) => {
-    const root = specServerUrl.trim().replace(/\/+$/, "");
-    const path = endpoint.path.startsWith("/") ? endpoint.path : `/${endpoint.path}`;
-    setMethod(endpoint.method.toUpperCase() as HttpMethod);
-    setRequestUrl(root ? `${root}${path}` : path);
-    setPathRows(
-      endpoint.parameters
-        .filter((p) => p.in === "path")
-        .map((p) => createRow(p.name, formatUnknown(p.example))) || [createRow()],
-    );
-    setQueryRows(
-      endpoint.parameters
-        .filter((p) => p.in === "query")
-        .map((p) => createRow(p.name, formatUnknown(p.example))) || [createRow()],
-    );
-    const headers = endpoint.parameters
-      .filter((p) => p.in === "header")
-      .map((p) => createRow(p.name, formatUnknown(p.example)));
-    setHeaderRows(headers.length ? headers : [createRow()]);
-    setBodyMode("json");
-    setRequestBody(bodyExample(endpoint));
-    setRunError("");
-    setResponse(null);
-  };
 
   const sendRequest = async () => {
     const rawUrl = requestUrl.trim();
@@ -493,11 +284,6 @@ const ApiForge: React.FC = () => {
   return (
     <PageContainer maxWidth={1320}>
       <Stack spacing={2}>
-        <Alert severity="info">
-          Postman-style tester first. OpenAPI import is optional for quickly filling
-          endpoint details.
-        </Alert>
-
         <Paper variant="outlined" sx={{ borderColor: "divider", p: 2 }}>
           <Stack spacing={2}>
             <Typography variant="h6">API Tester</Typography>
@@ -677,106 +463,6 @@ const ApiForge: React.FC = () => {
           </Stack>
         </Paper>
 
-        <Paper variant="outlined" sx={{ borderColor: "divider", p: 2 }}>
-          <Stack spacing={1.5}>
-            <Typography variant="h6">OpenAPI Assistant (Optional)</Typography>
-            <Stack direction={{ xs: "column", md: "row" }} spacing={1}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Spec URL"
-                value={specUrl}
-                onChange={(event) => setSpecUrl(event.target.value)}
-                placeholder="https://example.com/openapi.json"
-              />
-              <Button variant="outlined" onClick={loadSpecFromUrl} disabled={loadingSpec}>
-                {loadingSpec ? "Loading..." : "Load URL"}
-              </Button>
-              <Button variant="contained" onClick={() => parseSpec(specText)}>
-                Parse Spec
-              </Button>
-            </Stack>
-            <TextField
-              fullWidth
-              multiline
-              minRows={6}
-              label="OpenAPI / Swagger JSON"
-              value={specText}
-              onChange={(event) => setSpecText(event.target.value)}
-            />
-            {specError && <Alert severity="error">{specError}</Alert>}
-            {parsedSpec && (
-              <Alert severity="success">
-                Loaded {parsedSpec.info?.title || "API"}{" "}
-                {parsedSpec.info?.version ? `(v${parsedSpec.info.version})` : ""} with{" "}
-                {endpoints.length} endpoint{endpoints.length === 1 ? "" : "s"}.
-              </Alert>
-            )}
-            {parsedSpec && (
-              <>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Server URL for imported endpoints (optional)"
-                  value={specServerUrl}
-                  onChange={(event) => setSpecServerUrl(event.target.value)}
-                />
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Search endpoints"
-                  value={endpointSearch}
-                  onChange={(event) => setEndpointSearch(event.target.value)}
-                />
-                <Paper variant="outlined" sx={{ borderColor: "divider", maxHeight: 360, overflow: "auto" }}>
-                  {!filteredEndpoints.length ? (
-                    <Typography sx={{ p: 2 }} color="text.secondary">
-                      No endpoints found.
-                    </Typography>
-                  ) : (
-                    filteredEndpoints.map((endpoint) => (
-                      <Box
-                        key={endpoint.id}
-                        sx={{
-                          display: "grid",
-                          gap: 1,
-                          gridTemplateColumns: { xs: "1fr", md: "1fr auto" },
-                          px: 1.25,
-                          py: 1,
-                          borderBottom: "1px solid",
-                          borderColor: "divider",
-                        }}
-                      >
-                        <Box>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Chip
-                              size="small"
-                              label={endpoint.method.toUpperCase()}
-                              color={methodColor(endpoint.method)}
-                            />
-                            <Typography variant="body2">{endpoint.path}</Typography>
-                          </Stack>
-                          <Typography variant="caption" color="text.secondary">
-                            {endpoint.summary}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={() => useEndpoint(endpoint)}
-                          >
-                            Use In Tester
-                          </Button>
-                        </Box>
-                      </Box>
-                    ))
-                  )}
-                </Paper>
-              </>
-            )}
-          </Stack>
-        </Paper>
       </Stack>
     </PageContainer>
   );

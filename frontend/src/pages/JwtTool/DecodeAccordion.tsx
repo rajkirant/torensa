@@ -1,11 +1,5 @@
 import { Fragment } from "react";
-import {
-  Alert,
-  Box,
-  TextField,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Alert, Box, TextField, Typography, Stack } from "@mui/material";
 import { TransparentButton } from "../../components/buttons/TransparentButton";
 
 type HoverTip = { x: number; y: number; text: string } | null;
@@ -127,7 +121,10 @@ function JsonWithTimeTooltips({
 type DecodeAccordionProps = {
   jwtInput: string;
   setJwtInput: (value: string) => void;
-  decoded: { header: Record<string, unknown>; payload: Record<string, unknown> } | null;
+  decoded: {
+    header: Record<string, unknown>;
+    payload: Record<string, unknown>;
+  } | null;
   onDecodeToInputs: () => void;
   onCopyJwt: () => Promise<void>;
   onClear: () => void;
@@ -162,7 +159,7 @@ export default function DecodeAccordion({
         minRows={3}
       />
 
-      <Stack direction="row" spacing={1} flexWrap="wrap">
+      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
         <TransparentButton label="Clear" onClick={onClear} />
         <TransparentButton
           label="Copy JWT"
@@ -174,7 +171,7 @@ export default function DecodeAccordion({
           disabled={!decoded}
           onClick={onDecodeToInputs}
         />
-      </Stack>
+      </Box>
 
       {decoded ? (
         <Box
@@ -220,7 +217,10 @@ export default function DecodeAccordion({
                 overflow: "auto",
               }}
             >
-              <JsonWithTimeTooltips obj={decoded.payload} onHover={setHoverTip} />
+              <JsonWithTimeTooltips
+                obj={decoded.payload}
+                onHover={setHoverTip}
+              />
             </Box>
           </Box>
 

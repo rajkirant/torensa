@@ -121,7 +121,7 @@
   },
   {
     "id": "jwt-encoder-decoder",
-    "component": "JwtTool",
+    "component": "JwtTool/JwtTool",
     "title": "JWT Encoder / Decoder",
     "description": "Decode JWTs and generate signed HS256/HS512 tokens.",
     "path": "/jwt",
@@ -152,7 +152,7 @@
     "ctaLabel": "Open API Forge",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Torensa API Forge lets you send API requests like a lightweight Postman directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body. Optionally load an OpenAPI/Swagger spec to auto-fill endpoint details.",
+    "detailedDescription": "Torensa API Forge lets you send API requests directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body.",
     "categoryId": "developer"
   }
 ]
