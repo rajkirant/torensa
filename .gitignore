@@ -3,9 +3,8 @@ __pycache__/
 *.pyc
 .env
 venv/
-*.sqlite3
-*.sqlite3-wal
-*.sqlite3-shm
+*.sitemap.xml
+frontend/public/sitemap.xml
 
 # Django uploads
 media/
