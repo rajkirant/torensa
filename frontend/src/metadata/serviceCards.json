@@ -108,6 +108,18 @@
     "categoryId": "developer"
   },
   {
+    "id": "spring-boot-log-analyzer",
+    "component": "SpringBootLogAnalyzer",
+    "title": "Spring Boot Log Analyzer",
+    "description": "Parse Spring Boot logs and detect likely root-cause errors.",
+    "path": "/spring-boot-log-analyzer",
+    "ctaLabel": "Analyze Logs",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload or paste Spring Boot logs to identify likely first-failure events, exception chains, stack-frame locations, and correlation-id clusters. Export a structured JSON incident report for sharing and follow-up debugging.",
+    "categoryId": "developer"
+  },
+  {
     "id": "cron-expression-builder",
     "component": "CronExpressionBuilder",
     "title": "Cron Expression Builder + Validator",
