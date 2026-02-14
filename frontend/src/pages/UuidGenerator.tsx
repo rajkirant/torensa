@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
   Checkbox,
   Chip,
   FormControlLabel,
@@ -10,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import useToolStatus from "../hooks/useToolStatus";
@@ -111,13 +111,9 @@ const UuidGenerator: React.FC = () => {
               <Box sx={{ flex: 1 }} />
 
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                <Button
-                  variant="contained"
-                  onClick={generate}
-                  sx={{ textTransform: "none", fontWeight: 600 }}
-                >
+                <ActionButton onClick={generate}>
                   Generate UUIDs
-                </Button>
+                </ActionButton>
                 <TransparentButton
                   label="Copy all"
                   onClick={() => void copyAll()}

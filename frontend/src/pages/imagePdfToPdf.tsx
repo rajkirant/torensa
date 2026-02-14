@@ -26,6 +26,7 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 import BusyChip from "../components/chips/BusyChips";
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 
 type ItemKind = "image" | "pdf";
@@ -631,15 +632,15 @@ const ImagePdfToPdf: React.FC = () => {
         spacing={1.5}
         alignItems="center"
       >
-        <Button
-          variant="contained"
+        <ActionButton
           startIcon={<DownloadIcon />}
           onClick={buildPdf}
           disabled={!canBuild}
-          sx={{ textTransform: "none", fontWeight: 700 }}
+          loading={busy}
+          sx={{ fontWeight: 700 }}
         >
           Build & Download PDF
-        </Button>
+        </ActionButton>
 
         {busy && (
           <Typography variant="body2" color="text.secondary">

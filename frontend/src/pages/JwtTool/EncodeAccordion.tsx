@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   MenuItem,
   Select,
   Stack,
@@ -9,6 +8,7 @@ import {
   Typography,
   FormControlLabel,
 } from "@mui/material";
+import { ActionButton } from "../../components/buttons/ActionButton";
 import { TransparentButton } from "../../components/buttons/TransparentButton";
 import FlexWrapRow from "../../components/layout/FlexWrapRow";
 
@@ -161,13 +161,9 @@ export default function EncodeAccordion({
       />
 
       <FlexWrapRow>
-        <Button
-          variant="contained"
-          onClick={onGenerate}
-          sx={{ textTransform: "none", fontWeight: 600 }}
-        >
+        <ActionButton onClick={onGenerate}>
           Generate JWT
-        </Button>
+        </ActionButton>
         <TransparentButton
           label="Copy Generated JWT"
           disabled={!jwtOutput.trim()}

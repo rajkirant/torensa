@@ -3,7 +3,6 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Typography,
@@ -22,6 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 
 /* ===================== TYPES ===================== */
@@ -755,14 +755,9 @@ export default function InvoiceGenerator() {
         </Stack>
 
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          <Button
-            variant="contained"
-            onClick={download}
-            disabled={busy}
-            sx={{ textTransform: "none", fontWeight: 600 }}
-          >
-            {busy ? "Generating..." : "Generate & Download PDF"}
-          </Button>
+          <ActionButton onClick={download} loading={busy}>
+            Generate & Download PDF
+          </ActionButton>
 
           <TransparentButton label="Reset" color="error" onClick={reset} />
         </Box>
