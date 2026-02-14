@@ -26,6 +26,19 @@ const dark = createTheme({
     footer: "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)",
   },
 
+  banners: {
+    cronInfo: {
+      background:
+        "linear-gradient(110deg, rgba(12, 20, 38, 0.95) 0%, rgba(18, 33, 64, 0.9) 55%, rgba(16, 57, 87, 0.85) 100%)",
+      border: "rgba(103, 232, 249, 0.35)",
+      accent:
+        "linear-gradient(180deg, rgba(103, 232, 249, 0.95) 0%, rgba(56, 189, 248, 0.65) 100%)",
+      icon: "#67e8f9",
+      text: "#e6f8ff",
+      shadow: "0 10px 26px rgba(5, 22, 49, 0.45)",
+    },
+  },
+
   header: {
     text: "#ffffff",
     textMuted: "#e5e7eb",

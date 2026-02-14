@@ -378,7 +378,10 @@ export default function ImageCropTool() {
 
     if (dragState.mode === "move") {
       const maxX = Math.max(0, sourceSize.width - dragState.cropAtStart.width);
-      const maxY = Math.max(0, sourceSize.height - dragState.cropAtStart.height);
+      const maxY = Math.max(
+        0,
+        sourceSize.height - dragState.cropAtStart.height,
+      );
 
       const nextX = clamp(dragState.cropAtStart.x + dx, 0, maxX);
       const nextY = clamp(dragState.cropAtStart.y + dy, 0, maxY);
@@ -421,7 +424,9 @@ export default function ImageCropTool() {
 
     const sourceFormat = normalizeInputFormat(picked.type);
     if (!sourceFormat) {
-      setError("Only PNG, JPEG, and WebP are supported for same-format export.");
+      setError(
+        "Only PNG, JPEG, and WebP are supported for same-format export.",
+      );
       return;
     }
 
@@ -462,7 +467,9 @@ export default function ImageCropTool() {
 
   const downloadResult = () => {
     if (!resultBlob || !file) return;
-    const baseName = file.name.replace(/\.[^.]+$/, "").replace(/[^\w.-]+/g, "_");
+    const baseName = file.name
+      .replace(/\.[^.]+$/, "")
+      .replace(/[^\w.-]+/g, "_");
     const ext = getOutputExtension(outputFormat);
     triggerDownload(resultBlob, `${baseName}-cropped.${ext}`);
   };
@@ -479,7 +486,8 @@ export default function ImageCropTool() {
     };
   }, [sourceSize, renderedSize, renderedOffset, crop]);
 
-  const maxX = sourceSize && crop ? Math.max(0, sourceSize.width - crop.width) : 0;
+  const maxX =
+    sourceSize && crop ? Math.max(0, sourceSize.width - crop.width) : 0;
   const maxY =
     sourceSize && crop ? Math.max(0, sourceSize.height - crop.height) : 0;
 
@@ -734,7 +742,6 @@ export default function ImageCropTool() {
               disabled={busy}
             />
           </Stack>
-
         </Stack>
       )}
 
@@ -744,25 +751,6 @@ export default function ImageCropTool() {
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           2) Export
         </Typography>
-
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={1.5}
-          alignItems={{ sm: "center" }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            Preview updates automatically while you move or resize the crop.
-          </Typography>
-
-          <ActionButton
-            startIcon={<DownloadIcon />}
-            onClick={downloadResult}
-            disabled={!resultBlob || busy || isRenderingPreview}
-            loading={busy || isRenderingPreview}
-          >
-            Download
-          </ActionButton>
-        </Stack>
 
         {resultUrl ? (
           <Stack spacing={1}>
@@ -790,7 +778,9 @@ export default function ImageCropTool() {
             <Chip
               size="small"
               variant="outlined"
-              label={resultBlob ? `Output size: ${formatBytes(resultBlob.size)}` : ""}
+              label={
+                resultBlob ? `Output size: ${formatBytes(resultBlob.size)}` : ""
+              }
               sx={{ alignSelf: "flex-start" }}
             />
           </Stack>
@@ -801,6 +791,20 @@ export default function ImageCropTool() {
               : "Preview appears automatically after you select an image."}
           </Typography>
         )}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1.5}
+          alignItems={{ sm: "center" }}
+        >
+          <ActionButton
+            startIcon={<DownloadIcon />}
+            onClick={downloadResult}
+            disabled={!resultBlob || busy || isRenderingPreview}
+            loading={busy || isRenderingPreview}
+          >
+            Download
+          </ActionButton>
+        </Stack>
       </Stack>
     </PageContainer>
   );

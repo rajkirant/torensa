@@ -30,6 +30,19 @@ const rainbow = createTheme({
       "linear-gradient(90deg, #8f00ff, #4b0082, #0000ff, #00ff00, #ffff00, #ff7f00, #ff0000)",
   },
 
+  banners: {
+    cronInfo: {
+      background:
+        "linear-gradient(110deg, rgba(62, 24, 94, 0.9) 0%, rgba(30, 58, 138, 0.85) 38%, rgba(13, 148, 136, 0.82) 70%, rgba(101, 163, 13, 0.8) 100%)",
+      border: "rgba(255, 255, 255, 0.35)",
+      accent:
+        "linear-gradient(180deg, #ff007f 0%, #7c3aed 34%, #06b6d4 67%, #84cc16 100%)",
+      icon: "#f0abfc",
+      text: "#f8fafc",
+      shadow: "0 12px 28px rgba(20, 14, 44, 0.45)",
+    },
+  },
+
   header: {
     text: "#ffffff",
     textMuted: "rgba(255,255,255,0.8)",
