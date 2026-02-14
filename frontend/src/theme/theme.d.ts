@@ -6,6 +6,16 @@ declare module "@mui/material/styles" {
       header: string;
       footer: string;
     };
+    banners: {
+      cronInfo: {
+        background: string;
+        border: string;
+        accent: string;
+        icon: string;
+        text: string;
+        shadow: string;
+      };
+    };
     header: {
       text: string;
       textMuted: string;
@@ -17,6 +27,16 @@ declare module "@mui/material/styles" {
     gradients?: {
       header?: string;
       footer?: string;
+    };
+    banners?: {
+      cronInfo?: {
+        background?: string;
+        border?: string;
+        accent?: string;
+        icon?: string;
+        text?: string;
+        shadow?: string;
+      };
     };
     header?: {
       text?: string;

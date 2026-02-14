@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Stack, TextField, Typography } from "@mui/material";
+import type { Theme } from "@mui/material/styles";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 
-type FieldKey = "minute" | "hour" | "dayOfMonth" | "month" | "dayOfWeek";
+type FieldKey = "second" | "minute" | "hour" | "dayOfMonth" | "month" | "dayOfWeek";
 
 type FieldConfig = {
   key: FieldKey;
@@ -23,11 +24,13 @@ type ParsedField = {
 };
 
 type ParsedCron = {
+  second: ParsedField;
   minute: ParsedField;
   hour: ParsedField;
   dayOfMonth: ParsedField;
   month: ParsedField;
   dayOfWeek: ParsedField;
+  hasSeconds: boolean;
   raw: Record<FieldKey, string>;
 };
 
@@ -52,6 +55,15 @@ const MONTH_NAMES = [
 ];
 
 const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const SECOND_FIELD_CONFIG: FieldConfig = {
+  key: "second",
+  label: "Second",
+  min: 0,
+  max: 59,
+  unitSingular: "second",
+  unitPlural: "seconds",
+};
 
 const FIELD_CONFIGS: FieldConfig[] = [
   {
@@ -108,6 +120,49 @@ const PREVIEW_FORMATTER = new Intl.DateTimeFormat(undefined, {
   hour12: false,
   timeZoneName: "short",
 });
+
+const PREVIEW_FORMATTER_WITH_SECONDS = new Intl.DateTimeFormat(undefined, {
+  weekday: "short",
+  month: "short",
+  day: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
+  timeZoneName: "short",
+});
+
+const getCreativeInfoBannerSx = (theme: Theme) => {
+  const config = theme.banners.cronInfo;
+  return {
+    borderRadius: 3,
+    border: `1px solid ${config.border}`,
+    background: config.background,
+    color: config.text,
+    boxShadow: config.shadow,
+    position: "relative",
+    overflow: "hidden",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 5,
+      background: config.accent,
+    },
+    "& .MuiAlert-icon": {
+      color: config.icon,
+      opacity: 1,
+      mt: "2px",
+    },
+    "& .MuiAlert-message": {
+      fontWeight: 500,
+      letterSpacing: "0.01em",
+    },
+  } as const;
+};
 
 function normalizeDayOfWeekValue(value: number): number {
   return value === 7 ? 0 : value;
@@ -272,13 +327,24 @@ function describeField(config: FieldConfig, parsed: ParsedField): string {
   return `${config.label.toLowerCase()} in [${listed}]`;
 }
 
-function describeTime(minute: ParsedField, hour: ParsedField): string {
+function describeTime(
+  second: ParsedField,
+  minute: ParsedField,
+  hour: ParsedField,
+  hasSeconds: boolean,
+): string {
+  const seconds = Array.from(second.values).sort((a, b) => a - b);
   const minutes = Array.from(minute.values).sort((a, b) => a - b);
   const hours = Array.from(hour.values).sort((a, b) => a - b);
   const allMinutes = minutes.length === 60;
   const allHours = hours.length === 24;
 
-  if (allMinutes && allHours) return "every minute";
+  if (allMinutes && allHours) {
+    if (!hasSeconds) return "every minute";
+    if (seconds.length === 60) return "every second";
+    if (seconds.length === 1) return `at second ${seconds[0]} of every minute`;
+    return `${describeField(SECOND_FIELD_CONFIG, second)} of every minute`;
+  }
   if (allHours && minutes.length === 1) {
     return `at minute ${minutes[0]} of every hour`;
   }
@@ -286,9 +352,19 @@ function describeTime(minute: ParsedField, hour: ParsedField): string {
     return `every minute during ${String(hours[0]).padStart(2, "0")}:00 hour`;
   }
   if (minutes.length === 1 && hours.length === 1) {
-    return `at ${String(hours[0]).padStart(2, "0")}:${String(minutes[0]).padStart(2, "0")}`;
+    const baseTime = `${String(hours[0]).padStart(2, "0")}:${String(minutes[0]).padStart(2, "0")}`;
+    if (!hasSeconds) return `at ${baseTime}`;
+    if (seconds.length === 1) {
+      return `at ${baseTime}:${String(seconds[0]).padStart(2, "0")}`;
+    }
+    return `${describeField(SECOND_FIELD_CONFIG, second)} at ${baseTime}`;
   }
-  return `${describeField(FIELD_CONFIGS[0], minute)} and ${describeField(FIELD_CONFIGS[1], hour)}`;
+  const minuteHourDescription = `${describeField(FIELD_CONFIGS[0], minute)} and ${describeField(FIELD_CONFIGS[1], hour)}`;
+  if (!hasSeconds) return minuteHourDescription;
+  if (seconds.length === 1) {
+    return `at second ${seconds[0]}, ${minuteHourDescription}`;
+  }
+  return `${describeField(SECOND_FIELD_CONFIG, second)}, ${minuteHourDescription}`;
 }
 
 function describeDayOfMonth(parsed: ParsedField): string {
@@ -322,7 +398,7 @@ function describeDayOfWeek(parsed: ParsedField): string {
 }
 
 function buildSentenceSummary(parsed: ParsedCron): string {
-  const timePart = describeTime(parsed.minute, parsed.hour);
+  const timePart = describeTime(parsed.second, parsed.minute, parsed.hour, parsed.hasSeconds);
   const dayOfMonthPart = describeDayOfMonth(parsed.dayOfMonth);
   const monthPart = describeMonth(parsed.month);
   const dayOfWeekPart = describeDayOfWeek(parsed.dayOfWeek);
@@ -342,7 +418,7 @@ function buildSentenceSummary(parsed: ParsedCron): string {
   return `It runs ${timePart}, ${dayOfMonthPart} and ${dayOfWeekPart}, ${monthPart}.`;
 }
 
-function matchesCron(date: Date, cron: ParsedCron): boolean {
+function matchesCronWithoutSecond(date: Date, cron: ParsedCron): boolean {
   const minute = date.getMinutes();
   const hour = date.getHours();
   const dayOfMonth = date.getDate();
@@ -368,17 +444,48 @@ function matchesCron(date: Date, cron: ParsedCron): boolean {
 
 function computeNextRuns(cron: ParsedCron, count = 5): Date[] {
   const nextRuns: Date[] = [];
-  const cursor = new Date();
-  cursor.setSeconds(0, 0);
-  cursor.setMinutes(cursor.getMinutes() + 1);
 
-  // 3 years search cap (minute resolution).
+  if (!cron.hasSeconds) {
+    const cursor = new Date();
+    cursor.setSeconds(0, 0);
+    cursor.setMinutes(cursor.getMinutes() + 1);
+
+    // 3 years search cap (minute resolution).
+    const maxIterations = 1_576_800;
+    let checked = 0;
+    while (nextRuns.length < count && checked < maxIterations) {
+      if (matchesCronWithoutSecond(cursor, cron)) {
+        nextRuns.push(new Date(cursor));
+      }
+      cursor.setMinutes(cursor.getMinutes() + 1);
+      checked += 1;
+    }
+
+    return nextRuns;
+  }
+
+  const secondValues = Array.from(cron.second.values).sort((a, b) => a - b);
+  const startTime = new Date();
+  startTime.setMilliseconds(0);
+  startTime.setSeconds(startTime.getSeconds() + 1);
+
+  const cursor = new Date(startTime);
+
+  // 3 years search cap (minute resolution with second expansion).
   const maxIterations = 1_576_800;
   let checked = 0;
   while (nextRuns.length < count && checked < maxIterations) {
-    if (matchesCron(cursor, cron)) {
-      nextRuns.push(new Date(cursor));
+    if (matchesCronWithoutSecond(cursor, cron)) {
+      for (const second of secondValues) {
+        const candidate = new Date(cursor);
+        candidate.setSeconds(second, 0);
+        if (candidate < startTime) continue;
+        nextRuns.push(candidate);
+        if (nextRuns.length >= count) break;
+      }
     }
+
+    cursor.setSeconds(0, 0);
     cursor.setMinutes(cursor.getMinutes() + 1);
     checked += 1;
   }
@@ -388,26 +495,34 @@ function computeNextRuns(cron: ParsedCron, count = 5): Date[] {
 
 function validateCron(expression: string): ValidationResult {
   const parts = parseExpressionParts(expression);
-  if (parts.length !== 5) {
+  if (parts.length !== 5 && parts.length !== 6) {
     return {
       ok: false,
-      error: `Cron must have exactly 5 fields. Received ${parts.length}.`,
+      error: `Cron must have 5 or 6 fields. Received ${parts.length}.`,
     };
   }
 
+  const hasSeconds = parts.length === 6;
+
   try {
+    const secondRaw = hasSeconds ? parts[0] : "0";
+    const minuteIndex = hasSeconds ? 1 : 0;
+
     const parsed: ParsedCron = {
-      minute: parseField(parts[0], FIELD_CONFIGS[0]),
-      hour: parseField(parts[1], FIELD_CONFIGS[1]),
-      dayOfMonth: parseField(parts[2], FIELD_CONFIGS[2]),
-      month: parseField(parts[3], FIELD_CONFIGS[3]),
-      dayOfWeek: parseField(parts[4], FIELD_CONFIGS[4]),
+      second: parseField(secondRaw, SECOND_FIELD_CONFIG),
+      minute: parseField(parts[minuteIndex], FIELD_CONFIGS[0]),
+      hour: parseField(parts[minuteIndex + 1], FIELD_CONFIGS[1]),
+      dayOfMonth: parseField(parts[minuteIndex + 2], FIELD_CONFIGS[2]),
+      month: parseField(parts[minuteIndex + 3], FIELD_CONFIGS[3]),
+      dayOfWeek: parseField(parts[minuteIndex + 4], FIELD_CONFIGS[4]),
+      hasSeconds,
       raw: {
-        minute: parts[0],
-        hour: parts[1],
-        dayOfMonth: parts[2],
-        month: parts[3],
-        dayOfWeek: parts[4],
+        second: secondRaw,
+        minute: parts[minuteIndex],
+        hour: parts[minuteIndex + 1],
+        dayOfMonth: parts[minuteIndex + 2],
+        month: parts[minuteIndex + 3],
+        dayOfWeek: parts[minuteIndex + 4],
       },
     };
 
@@ -432,6 +547,7 @@ export default function CronExpressionBuilder() {
   }>({ info: "Enter a cron expression and choose an action." });
   const [explanation, setExplanation] = useState("");
   const [previewRuns, setPreviewRuns] = useState<Date[]>([]);
+  const [previewIncludesSeconds, setPreviewIncludesSeconds] = useState(false);
 
   const runValidation = () => validateCron(expression);
 
@@ -439,6 +555,7 @@ export default function CronExpressionBuilder() {
     const result = runValidation();
     setExplanation("");
     setPreviewRuns([]);
+    setPreviewIncludesSeconds(false);
     if (!result.ok) {
       setStatusMessage({ error: result.error });
       return;
@@ -449,6 +566,7 @@ export default function CronExpressionBuilder() {
   const handleExplain = () => {
     const result = runValidation();
     setPreviewRuns([]);
+    setPreviewIncludesSeconds(false);
     if (!result.ok) {
       setExplanation("");
       setStatusMessage({ error: result.error });
@@ -463,10 +581,12 @@ export default function CronExpressionBuilder() {
     setExplanation("");
     if (!result.ok) {
       setPreviewRuns([]);
+      setPreviewIncludesSeconds(false);
       setStatusMessage({ error: result.error });
       return;
     }
     setPreviewRuns(result.nextRuns);
+    setPreviewIncludesSeconds(result.parsed.hasSeconds);
     setStatusMessage({ success: "Next run preview generated." });
   };
 
@@ -477,13 +597,14 @@ export default function CronExpressionBuilder() {
           error={statusMessage.error ?? ""}
           success={statusMessage.success ?? ""}
           info={statusMessage.info ?? ""}
+          slotSx={{ info: (theme) => getCreativeInfoBannerSx(theme) }}
         />
 
         <TextField
           label="Cron expression"
           value={expression}
           onChange={(event) => setExpression(event.target.value)}
-          placeholder="*/5 * * * *"
+          placeholder="*/5 * * * * or 0 */5 * * * *"
           fullWidth
           InputProps={{
             sx: {
@@ -491,7 +612,7 @@ export default function CronExpressionBuilder() {
                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
             },
           }}
-          helperText="Format: minute hour day-of-month month day-of-week"
+          helperText="Formats: minute hour day-of-month month day-of-week OR second minute hour day-of-month month day-of-week"
         />
 
         <FlexWrapRow>
@@ -519,7 +640,10 @@ export default function CronExpressionBuilder() {
             <Stack spacing={0.5}>
               {previewRuns.map((runAt, index) => (
                 <Typography key={`${runAt.toISOString()}-${index}`} variant="body2">
-                  {index + 1}. {PREVIEW_FORMATTER.format(runAt)}
+                  {index + 1}.{" "}
+                  {previewIncludesSeconds
+                    ? PREVIEW_FORMATTER_WITH_SECONDS.format(runAt)
+                    : PREVIEW_FORMATTER.format(runAt)}
                 </Typography>
               ))}
             </Stack>
@@ -530,3 +654,5 @@ export default function CronExpressionBuilder() {
     </PageContainer>
   );
 }
+
+

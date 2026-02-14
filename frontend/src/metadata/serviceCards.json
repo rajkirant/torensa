@@ -123,12 +123,12 @@
     "id": "cron-expression-builder",
     "component": "CronExpressionBuilder",
     "title": "Cron Expression Builder + Validator",
-    "description": "Build, validate, and preview cron schedules in plain language.",
+    "description": "Build, validate, and preview 5-field and 6-field cron schedules.",
     "path": "/cron-expression-builder",
     "ctaLabel": "Open Cron Tool",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Create cron expressions with a guided editor or direct input, validate syntax instantly, and preview upcoming execution times. Includes human-readable interpretation for each field to reduce scheduling mistakes.",
+    "detailedDescription": "Create cron expressions with direct input, validate syntax instantly, and preview upcoming execution times. Supports both 5-field (minute hour day-of-month month day-of-week) and 6-field (second minute hour day-of-month month day-of-week) formats, with human-readable interpretation to reduce scheduling mistakes.",
     "categoryId": "developer"
   },
   {
