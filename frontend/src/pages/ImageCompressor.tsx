@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 
 type OutputFormat = "image/jpeg" | "image/webp" | "image/png";
@@ -655,15 +656,14 @@ export default function ImageCompressor() {
             {busy ? "Compressing..." : "Compress"}
           </Button>
 
-          <Button
+          <ActionButton
             sx={{ width: { xs: "100%", sm: "auto" } }}
-            variant="outlined"
             startIcon={<FolderZipIcon />}
             onClick={downloadAllZip}
             disabled={busy || results.length === 0}
           >
             ZIP
-          </Button>
+          </ActionButton>
         </Box>
 
         {busy && (
@@ -765,16 +765,15 @@ export default function ImageCompressor() {
                       </Stack>
 
                       <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                        <Button
+                        <ActionButton
                           fullWidth
-                          variant="contained"
                           startIcon={<DownloadIcon />}
                           onClick={() =>
                             downloadBlob(r.outputBlob, r.outputName)
                           }
                         >
                           Download
-                        </Button>
+                        </ActionButton>
 
                         <Tooltip title="Open file in a new tab">
                           <IconButton

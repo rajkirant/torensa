@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import readXlsxFile, { type CellValue, type Schema } from "read-excel-file";
 
-import {
-  Button,
-  CircularProgress,
-} from "@mui/material";
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import { ActionButton } from "../components/buttons/ActionButton";
 
 type CsvRecord = Record<string, string>;
 
@@ -149,18 +146,9 @@ const ExcelUploadToCsv: React.FC = () => {
           onFilesSelected={handleFileChange}
         />
 
-        <Button
-          variant="contained"
-          onClick={handleUpload}
-          disabled={loading}
-          sx={{ textTransform: "none", fontWeight: 600 }}
-        >
-          {loading ? (
-            <CircularProgress size={24} sx={{ color: "#fff" }} />
-          ) : (
-            "Convert & Download CSV"
-          )}
-        </Button>
+        <ActionButton onClick={handleUpload} loading={loading}>
+          Convert & Download CSV
+        </ActionButton>
 
         <ToolStatusAlerts error={error} />
 

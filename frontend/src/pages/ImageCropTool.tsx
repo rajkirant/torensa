@@ -14,6 +14,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
@@ -753,14 +754,14 @@ export default function ImageCropTool() {
             Preview updates automatically while you move or resize the crop.
           </Typography>
 
-          <Button
-            variant="outlined"
+          <ActionButton
             startIcon={<DownloadIcon />}
             onClick={downloadResult}
             disabled={!resultBlob || busy || isRenderingPreview}
+            loading={busy || isRenderingPreview}
           >
             Download
-          </Button>
+          </ActionButton>
         </Stack>
 
         {resultUrl ? (

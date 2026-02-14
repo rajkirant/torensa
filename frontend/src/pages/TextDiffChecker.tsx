@@ -4,7 +4,6 @@ import { diffLines } from "diff";
 import {
   Alert,
   Box,
-  Button,
   Card,
   CardContent,
   Divider,
@@ -15,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 
 type LinePart = {
@@ -540,13 +540,9 @@ const TextDiffChecker: React.FC = () => {
             <TransparentButton label="Swap" onClick={handleSwap} />
             <TransparentButton label="Clear" onClick={handleClear} />
             <Box sx={{ flex: 1 }} />
-            <Button
-              variant="contained"
-              onClick={handleCompare}
-              sx={{ textTransform: "none", fontWeight: 600 }}
-            >
+            <ActionButton onClick={handleCompare}>
               Compare
-            </Button>
+            </ActionButton>
             <TransparentButton
               label={isFullscreen ? "Exit Fullscreen" : "Fullscreen Compare"}
               onClick={handleFullscreenCompare}

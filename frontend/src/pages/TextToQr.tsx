@@ -3,7 +3,6 @@ import QRCode from "qrcode";
 
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Typography,
@@ -15,6 +14,7 @@ import {
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 
 const QR_SIZE = 220;
@@ -263,13 +263,9 @@ const TextToQr: React.FC = () => {
           </div>
         )}
 
-        <Button
-          variant="contained"
-          onClick={downloadQr}
-          sx={{ textTransform: "none", fontWeight: 600 }}
-        >
+        <ActionButton onClick={downloadQr}>
           Generate & Download QR
-        </Button>
+        </ActionButton>
 
         <ToolStatusAlerts error={error} />
     </PageContainer>
