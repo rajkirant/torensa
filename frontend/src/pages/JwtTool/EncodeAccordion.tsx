@@ -10,6 +10,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { TransparentButton } from "../../components/buttons/TransparentButton";
+import FlexWrapRow from "../../components/layout/FlexWrapRow";
 
 type EncodeAccordionProps = {
   alg: "HS256" | "HS512";
@@ -90,7 +91,7 @@ export default function EncodeAccordion({
             />
           </Box>
         )}
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+        <FlexWrapRow>
           <FormControlLabel
             control={
               <Switch
@@ -116,7 +117,7 @@ export default function EncodeAccordion({
             }
             label="Set exp"
           />
-        </Box>
+        </FlexWrapRow>
       </Stack>
 
       <Box
@@ -159,7 +160,7 @@ export default function EncodeAccordion({
         InputProps={{ readOnly: true }}
       />
 
-      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+      <FlexWrapRow>
         <Button
           variant="contained"
           onClick={onGenerate}
@@ -177,7 +178,7 @@ export default function EncodeAccordion({
           disabled={!jwtOutput.trim()}
           onClick={onDecodeGenerated}
         />
-      </Box>
+      </FlexWrapRow>
     </Stack>
   );
 }
