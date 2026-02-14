@@ -526,12 +526,6 @@ export default function CronExpressionBuilder() {
           </Stack>
         )}
 
-        <Typography variant="body2" color="text.secondary">
-          Supported tokens: <code>*</code>, <code>*/n</code>, <code>a</code>,{" "}
-          <code>a-b</code>, <code>a-b/n</code>, and comma lists. Day-of-week
-          accepts <code>0-7</code> where <code>0</code> and <code>7</code> mean
-          Sunday.
-        </Typography>
       </Stack>
     </PageContainer>
   );

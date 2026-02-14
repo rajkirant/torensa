@@ -4,6 +4,7 @@ import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
+import useToolStatus from "../hooks/useToolStatus";
 
 type ParseResult =
   | { ok: true; value: unknown }
@@ -78,13 +79,11 @@ const SAMPLE_JSON = JSON.stringify(
 
 export default function JsonFormatterDiff() {
   const [jsonText, setJsonText] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [info, setInfo] = useState("");
+  const { error, success, info, setError, setSuccess, setInfo } = useToolStatus();
 
   const clearAlerts = () => {
-    setError("");
-    setSuccess("");
+    setError();
+    setSuccess();
   };
 
   const handleValidate = () => {

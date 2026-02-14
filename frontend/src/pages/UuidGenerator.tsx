@@ -12,6 +12,7 @@ import {
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
+import useToolStatus from "../hooks/useToolStatus";
 
 const generateUuid = () => crypto.randomUUID();
 
@@ -20,8 +21,7 @@ const UuidGenerator: React.FC = () => {
   const [uppercase, setUppercase] = useState(false);
   const [noHyphens, setNoHyphens] = useState(false);
   const [uuids, setUuids] = useState<string[]>([]);
-  const [info, setInfo] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { error, success, setError, setSuccess, clear } = useToolStatus();
 
   const format = (uuid: string) => {
     let value = uuid;
@@ -31,8 +31,7 @@ const UuidGenerator: React.FC = () => {
   };
 
   const generate = () => {
-    setError(null);
-    setInfo(null);
+    clear();
 
     if (!Number.isInteger(count) || count < 1 || count > 1000) {
       setError("Count must be between 1 and 1000.");
@@ -41,14 +40,14 @@ const UuidGenerator: React.FC = () => {
 
     const list = Array.from({ length: count }, () => format(generateUuid()));
     setUuids(list);
-    setInfo(`Generated ${list.length} UUID${list.length > 1 ? "s" : ""}.`);
+    setSuccess(`Generated ${list.length} UUID${list.length > 1 ? "s" : ""}.`);
   };
 
   const copyAll = async () => {
     try {
       await navigator.clipboard.writeText(uuids.join("\n"));
-      setError(null);
-      setInfo("Copied all UUIDs.");
+      setError();
+      setSuccess("Copied all UUIDs.");
     } catch {
       setError("Failed to copy to clipboard.");
     }
@@ -56,8 +55,8 @@ const UuidGenerator: React.FC = () => {
 
   const clearResults = () => {
     setUuids([]);
-    setError(null);
-    setInfo("Cleared results.");
+    setError();
+    setSuccess("Cleared results.");
   };
 
   return (
@@ -134,7 +133,7 @@ const UuidGenerator: React.FC = () => {
           </Stack>
         </Box>
 
-        <ToolStatusAlerts error={error} success={info} />
+        <ToolStatusAlerts error={error} success={success} />
 
         {uuids.length > 0 && (
           <Box
