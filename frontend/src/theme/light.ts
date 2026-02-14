@@ -28,19 +28,6 @@ const light = createTheme({
     footer: "linear-gradient(90deg, #020617, #0f172a, #020617)",
   },
 
-  banners: {
-    cronInfo: {
-      background:
-        "linear-gradient(110deg, rgba(239, 246, 255, 0.98) 0%, rgba(219, 234, 254, 0.95) 55%, rgba(186, 230, 253, 0.9) 100%)",
-      border: "rgba(14, 116, 144, 0.35)",
-      accent:
-        "linear-gradient(180deg, rgba(6, 182, 212, 0.95) 0%, rgba(14, 116, 144, 0.75) 100%)",
-      icon: "#0e7490",
-      text: "#0f172a",
-      shadow: "0 10px 22px rgba(14, 116, 144, 0.18)",
-    },
-  },
-
   header: {
     text: "#ffffff",
     textMuted: "#6392cb",

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Alert from "@mui/material/Alert";
 import type { SxProps, Theme } from "@mui/material/styles";
+import type { AlertColor } from "@mui/material/Alert";
 
 type ToolStatusSeverity = "error" | "success" | "info" | "warning";
 
@@ -11,6 +12,8 @@ type ToolStatusAlertsProps = {
   warning?: ReactNode;
   sx?: SxProps<Theme>;
   slotSx?: Partial<Record<ToolStatusSeverity, SxProps<Theme>>>;
+  slotIcon?: Partial<Record<ToolStatusSeverity, ReactNode>>;
+  slotColor?: Partial<Record<ToolStatusSeverity, AlertColor>>;
   order?: ToolStatusSeverity[];
 };
 
@@ -24,6 +27,8 @@ export default function ToolStatusAlerts({
   warning,
   sx,
   slotSx,
+  slotIcon,
+  slotColor,
   order = ["error", "success", "info", "warning"],
 }: ToolStatusAlertsProps) {
   const messages: Record<ToolStatusSeverity, ReactNode | undefined> = {
@@ -43,6 +48,8 @@ export default function ToolStatusAlerts({
           <Alert
             key={severity}
             severity={severity}
+            color={slotColor?.[severity]}
+            icon={slotIcon?.[severity]}
             sx={[sx, slotSx?.[severity]]}
           >
             {message}
