@@ -14,6 +14,7 @@ import PageContainer from "../../components/PageContainer";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 import DecodeAccordion from "./DecodeAccordion";
 import EncodeAccordion from "./EncodeAccordion";
+import useToolStatus from "../../hooks/useToolStatus";
 
 type HoverTip = { x: number; y: number; text: string } | null;
 
@@ -79,8 +80,7 @@ export default function JwtToolPage() {
   });
 
   const [jwtOutput, setJwtOutput] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
+  const { error, success, setError, setSuccess, clear } = useToolStatus();
   const [hoverTip, setHoverTip] = useState<HoverTip>(null);
   const [expanded, setExpanded] = useState({
     decode: false,
@@ -100,10 +100,7 @@ export default function JwtToolPage() {
     }
   }, [jwtInput]);
 
-  const clearStatus = () => {
-    setError(null);
-    setInfo(null);
-  };
+  const clearStatus = () => clear();
 
   const handleDecodeToInputs = () => {
     if (!decoded) return;
@@ -112,8 +109,8 @@ export default function JwtToolPage() {
     if (tokenAlg === "HS256" || tokenAlg === "HS512") setAlg(tokenAlg);
 
     setPayloadText(prettyJson(decoded.payload));
-    setInfo("Loaded decoded payload into encoder fields.");
-    setError(null);
+    setSuccess("Loaded decoded payload into encoder fields.");
+    setError();
 
     const exp = (decoded.payload as any)?.exp;
     if (isFiniteNumber(exp)) {
@@ -125,8 +122,7 @@ export default function JwtToolPage() {
   };
 
   const handleEncode = async () => {
-    setError(null);
-    setInfo(null);
+    clear();
 
     try {
       const payloadObj = safeParseJson(payloadText) as any;
@@ -154,7 +150,7 @@ export default function JwtToolPage() {
         .sign(new TextEncoder().encode(secret));
 
       setJwtOutput(token);
-      setInfo(`JWT generated successfully (${alg}).`);
+      setSuccess(`JWT generated successfully (${alg}).`);
     } catch (e: any) {
       setError(
         e?.message ?? "Failed to generate JWT. Check your JSON and secret.",
@@ -166,15 +162,14 @@ export default function JwtToolPage() {
     setJwtInput("");
     setJwtOutput("");
     setHoverTip(null);
-    setError(null);
-    setInfo(null);
+    clear();
   };
 
   return (
     <>
       <PageContainer maxWidth={980}>
         <Stack spacing={1.5} sx={{ pb: "112px" }}>
-          <ToolStatusAlerts error={error} success={info} />
+          <ToolStatusAlerts error={error} success={success} />
 
           <Accordion
             expanded={expanded.decode}
@@ -198,8 +193,8 @@ export default function JwtToolPage() {
                 onCopyJwt={async () => {
                   try {
                     await copyToClipboard(jwtInput.trim());
-                    setInfo("Copied JWT input.");
-                    setError(null);
+                    setSuccess("Copied JWT input.");
+                    setError();
                   } catch {
                     setError("Unable to copy to clipboard.");
                   }
@@ -242,16 +237,16 @@ export default function JwtToolPage() {
                 onCopyGenerated={async () => {
                   try {
                     await copyToClipboard(jwtOutput.trim());
-                    setInfo("Copied generated JWT.");
-                    setError(null);
+                    setSuccess("Copied generated JWT.");
+                    setError();
                   } catch {
                     setError("Unable to copy to clipboard.");
                   }
                 }}
                 onDecodeGenerated={() => {
                   setJwtInput(jwtOutput.trim());
-                  setInfo("Moved generated JWT into decoder.");
-                  setError(null);
+                  setSuccess("Moved generated JWT into decoder.");
+                  setError();
                   setExpanded({ decode: true, encode: false });
                 }}
                 clearStatus={clearStatus}
