@@ -1,6 +1,8 @@
 import { readFile, stat, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { promisify } from "node:util";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -8,6 +10,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const metadataPath = path.join(projectRoot, "src", "metadata", "serviceCards.json");
 const sitemapPath = path.join(projectRoot, "public", "sitemap.xml");
 const pagesDir = path.join(projectRoot, "src", "pages");
+const execFileAsync = promisify(execFile);
 
 const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(/\/+$/, "");
 const staticRouteComponents = {
@@ -61,6 +64,34 @@ function toDateString(date) {
   return `${year}-${month}-${day}`;
 }
 
+function toRepoRelativePath(filePath) {
+  return path.relative(projectRoot, filePath).split(path.sep).join("/");
+}
+
+async function getGitLastmodForFile(filePath) {
+  try {
+    const relativePath = toRepoRelativePath(filePath);
+    const { stdout } = await execFileAsync(
+      "git",
+      ["-C", projectRoot, "log", "-1", "--format=%cs", "--", relativePath],
+      { timeout: 10000 },
+    );
+    const date = stdout.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+  } catch {
+    // Fall back to filesystem mtime when git is unavailable or path is untracked.
+  }
+  return null;
+}
+
+async function getPreferredLastmodForFile(filePath) {
+  const gitLastmod = await getGitLastmodForFile(filePath);
+  if (gitLastmod) return gitLastmod;
+
+  const fileStat = await stat(filePath);
+  return toDateString(fileStat.mtime);
+}
+
 function getComponentCandidates(component) {
   if (!component || typeof component !== "string") return [];
   const trimmed = component.trim();
@@ -86,8 +117,7 @@ function getComponentCandidates(component) {
 async function resolveLastmod(route, component, fallbackLastmod) {
   for (const candidate of getComponentCandidates(component)) {
     try {
-      const fileStat = await stat(candidate);
-      return toDateString(fileStat.mtime);
+      return await getPreferredLastmodForFile(candidate);
     } catch {
       // Keep trying candidates until one exists.
     }
@@ -125,8 +155,7 @@ async function main() {
     return a.localeCompare(b);
   });
 
-  const metadataStat = await stat(metadataPath);
-  const fallbackLastmod = toDateString(metadataStat.mtime);
+  const fallbackLastmod = await getPreferredLastmodForFile(metadataPath);
 
   const routeEntries = await Promise.all(
     sortedRoutes.map(async (route) => ({
