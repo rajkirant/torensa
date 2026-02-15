@@ -3,6 +3,7 @@ import os
 
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
+from .views.tool_chat_views import _build_context
 
 
 class AuthCsrfTests(TestCase):
@@ -226,3 +227,85 @@ class ToolChatEndpointTests(TestCase):
         finally:
             if existing is not None:
                 os.environ["OPENAI_API_KEY"] = existing
+
+
+class ToolChatContextSelectionTests(TestCase):
+    def test_list_query_includes_all_related_tools(self):
+        cards = [
+            {
+                "id": "image-compressor",
+                "title": "Image Compressor",
+                "description": "Compress images locally.",
+                "detailedDescription": "Reduce image file size.",
+                "path": "/image-compressor",
+                "categoryId": "utilities",
+            },
+            {
+                "id": "image-crop-tool",
+                "title": "Image Crop Tool",
+                "description": "Crop images locally.",
+                "detailedDescription": "Crop and export in multiple formats.",
+                "path": "/image-crop-tool",
+                "categoryId": "utilities",
+            },
+            {
+                "id": "invoice-generator",
+                "title": "Invoice / Receipt Generator",
+                "description": "Create invoices.",
+                "detailedDescription": "Create professional invoice PDFs.",
+                "path": "/invoice-generator",
+                "categoryId": "business",
+            },
+            {
+                "id": "text-to-qr",
+                "title": "Text to QR Builder",
+                "description": "Generate QR codes from text.",
+                "detailedDescription": "Download the final image as PNG.",
+                "path": "/qr-code-generator",
+                "categoryId": "business",
+            },
+        ]
+        category_map = {"utilities": "Utilities", "business": "Business"}
+
+        context, _ = _build_context(
+            cards=cards,
+            category_map=category_map,
+            query="what are the names of tools related to image",
+            current_tool_id=None,
+        )
+
+        self.assertIn("Image Compressor", context)
+        self.assertIn("Image Crop Tool", context)
+        self.assertNotIn("Invoice / Receipt Generator", context)
+        self.assertNotIn("Text to QR Builder", context)
+
+    def test_list_all_tools_includes_every_tool(self):
+        cards = [
+            {
+                "id": "image-compressor",
+                "title": "Image Compressor",
+                "description": "Compress images locally.",
+                "detailedDescription": "Reduce image file size.",
+                "path": "/image-compressor",
+                "categoryId": "utilities",
+            },
+            {
+                "id": "invoice-generator",
+                "title": "Invoice / Receipt Generator",
+                "description": "Create invoices.",
+                "detailedDescription": "Create professional invoice PDFs.",
+                "path": "/invoice-generator",
+                "categoryId": "business",
+            },
+        ]
+        category_map = {"utilities": "Utilities", "business": "Business"}
+
+        context, _ = _build_context(
+            cards=cards,
+            category_map=category_map,
+            query="list all tools",
+            current_tool_id=None,
+        )
+
+        self.assertIn("Image Compressor", context)
+        self.assertIn("Invoice / Receipt Generator", context)
