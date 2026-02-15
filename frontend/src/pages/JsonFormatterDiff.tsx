@@ -79,7 +79,8 @@ const SAMPLE_JSON = JSON.stringify(
 
 export default function JsonFormatterDiff() {
   const [jsonText, setJsonText] = useState("");
-  const { error, success, info, setError, setSuccess, setInfo } = useToolStatus();
+  const { error, success, info, setError, setSuccess, setInfo } =
+    useToolStatus();
 
   const clearAlerts = () => {
     setError();

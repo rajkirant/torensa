@@ -13,14 +13,14 @@
   },
   {
     "id": "excel-to-csv",
-    "component": "ExcelUploadToCsv",
-    "title": "Excel to CSV Converter",
-    "description": "Convert Excel (.xlsx) files to CSV quickly in your browser.",
-    "path": "/excel-to-csv-converter",
-    "ctaLabel": "Convert Excel",
+    "component": "DataFormatConverter",
+    "title": "Data files Converter",
+    "description": "Convert between Excel (.xlsx), CSV, and JSON files directly in your browser.",
+    "path": "/data-format-converter",
+    "ctaLabel": "Convert Files",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Upload an Excel file and instantly export it as CSV without server-side processing. This tool runs fully on the client, keeps your data local, and works smoothly for day-to-day spreadsheet conversion workflows.",
+    "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
     "categoryId": "utilities"
   },
   {
