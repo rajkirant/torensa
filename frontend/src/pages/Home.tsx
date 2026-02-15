@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate, useOutletContext, useLocation } from "react-router-dom";
 import type { CSSProperties } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Button from "@mui/material/Button";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import serviceCards from "../metadata/serviceCards.json";
@@ -22,6 +24,8 @@ type ServiceCardConfig = {
 
 /* ===================== DATA (JSON) ===================== */
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
+const INITIAL_VISIBLE_CARDS = 9;
+const LOAD_MORE_STEP = 6;
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
@@ -49,6 +53,22 @@ export default function Home() {
     justifyContent: "center",
     gap: 28,
   };
+  const cardsMaxWidth = columns * 320 + (columns - 1) * 28;
+  const loadMoreWrapperStyle: CSSProperties = {
+    width: `min(100%, ${cardsMaxWidth}px)`,
+    margin: "18px auto 0",
+  };
+  const loadMoreButtonStyle: CSSProperties = {
+    width: "100%",
+    padding: "10px 14px",
+    borderRadius: 10,
+    border: `1px solid ${secondaryTextColor}`,
+    backgroundColor: "rgba(255, 255, 255, 0.02)",
+    color: secondaryTextColor,
+    fontSize: 14,
+    fontWeight: 600,
+    textTransform: "none",
+  };
 
   // Safety guard (never crash)
   const allCards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
@@ -57,6 +77,19 @@ export default function Home() {
       ? allCards
       : allCards.filter((card) => card.categoryId === selectedCategoryId);
   const offlineCards = cards.filter((card) => card.offlineEnabled);
+  const [visibleCount, setVisibleCount] = React.useState(INITIAL_VISIBLE_CARDS);
+  const visibleCards = cards.slice(0, visibleCount);
+  const visibleOfflineCards = offlineCards.slice(0, visibleCount);
+  const canLoadMoreCards = visibleCount < cards.length;
+  const canLoadMoreOfflineCards = visibleCount < offlineCards.length;
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + LOAD_MORE_STEP);
+  };
+
+  React.useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE_CARDS);
+  }, [selectedCategoryId, isOnline]);
 
   React.useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -106,7 +139,7 @@ export default function Home() {
         <div
           style={cardsGridStyle}
         >
-          {offlineCards.map((card) => (
+          {visibleOfflineCards.map((card) => (
             <div
               key={card.id}
               style={cardStyle}
@@ -135,6 +168,19 @@ export default function Home() {
             </p>
           )}
         </div>
+
+        {canLoadMoreOfflineCards && (
+          <div style={loadMoreWrapperStyle}>
+            <Button
+              type="button"
+              style={loadMoreButtonStyle}
+              onClick={handleLoadMore}
+              endIcon={<KeyboardArrowDownRoundedIcon />}
+            >
+              Load more
+            </Button>
+          </div>
+        )}
       </section>
     );
   }
@@ -149,7 +195,7 @@ export default function Home() {
       <div
         style={cardsGridStyle}
       >
-        {cards.map((card) => (
+        {visibleCards.map((card) => (
           <div
             key={card.id}
             style={cardStyle}
@@ -179,6 +225,19 @@ export default function Home() {
           </p>
         )}
       </div>
+
+      {canLoadMoreCards && (
+        <div style={loadMoreWrapperStyle}>
+          <Button
+            type="button"
+            style={loadMoreButtonStyle}
+            onClick={handleLoadMore}
+            endIcon={<KeyboardArrowDownRoundedIcon />}
+          >
+            Load more
+          </Button>
+        </div>
+      )}
     </section>
   );
 }
