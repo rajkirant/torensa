@@ -48,6 +48,18 @@
     "categoryId": "utilities"
   },
   {
+    "id": "image-format-converter",
+    "component": "ImageFormatConverter",
+    "title": "Image Format Converter",
+    "description": "Convert PNG, JPG, WEBP, and BMP images fully in your browser.",
+    "path": "/image-format-converter",
+    "ctaLabel": "Convert Image",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Convert a single image between PNG, JPG, WEBP, and BMP formats in your browser. Pick source and target formats, then export instantly with no uploads or backend processing.",
+    "categoryId": "utilities"
+  },
+  {
     "id": "image-pdf-to-pdf",
     "component": "imagePdfToPdf",
     "title": "Image / PDF Merger",
