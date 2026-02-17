@@ -309,3 +309,60 @@ class ToolChatContextSelectionTests(TestCase):
 
         self.assertIn("Image Compressor", context)
         self.assertIn("Invoice / Receipt Generator", context)
+
+    def test_offline_tools_query_includes_all_offline_enabled_tools(self):
+        cards = [
+            {
+                "id": "image-compressor",
+                "title": "Image Compressor",
+                "description": "Compress images locally.",
+                "detailedDescription": "Reduce image file size.",
+                "path": "/image-compressor",
+                "categoryId": "utilities",
+                "offlineEnabled": True,
+            },
+            {
+                "id": "json-formatter-validator",
+                "title": "JSON Formatter + Validator",
+                "description": "Validate and format JSON.",
+                "detailedDescription": "Format, minify, and validate JSON text.",
+                "path": "/json-formatter-validator",
+                "categoryId": "developer",
+                "offlineEnabled": True,
+            },
+            {
+                "id": "bulk-email",
+                "title": "Bulk Email Sender",
+                "description": "Send personalized bulk emails.",
+                "detailedDescription": "Connect Gmail and send campaigns.",
+                "path": "/bulk-email",
+                "categoryId": "communication",
+                "offlineEnabled": False,
+            },
+            {
+                "id": "api-forge",
+                "title": "Torensa API Forge",
+                "description": "Build and send API requests.",
+                "detailedDescription": "Test APIs in the browser.",
+                "path": "/api-request-builder",
+                "categoryId": "developer",
+                "offlineEnabled": False,
+            },
+        ]
+        category_map = {
+            "utilities": "Utilities",
+            "developer": "Developer",
+            "communication": "Communication",
+        }
+
+        context, _ = _build_context(
+            cards=cards,
+            category_map=category_map,
+            query="which tools work offline?",
+            current_tool_id=None,
+        )
+
+        self.assertIn("Image Compressor", context)
+        self.assertIn("JSON Formatter + Validator", context)
+        self.assertNotIn("Bulk Email Sender", context)
+        self.assertNotIn("Torensa API Forge", context)
