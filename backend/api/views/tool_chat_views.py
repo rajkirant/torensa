@@ -39,6 +39,7 @@ from .tool_chat_static import (
     NONE_TOOL_ID_TEXT,
     OFFLINE_DISABLED_TEXT,
     OFFLINE_ENABLED_TEXT,
+    OFFLINE_QUERY_PHRASES,
     OPENAI_ROLE_SYSTEM,
     OPENAI_ROLE_USER,
     ROOT_METADATA_PATH_PARTS,
@@ -273,6 +274,13 @@ def _is_multi_tool_request(query: str):
     return has_tool_word and has_list_intent
 
 
+def _is_offline_list_request(query: str):
+    q = (query or "").strip().lower()
+    if not q or not _is_multi_tool_request(q):
+        return False
+    return any(phrase in q for phrase in OFFLINE_QUERY_PHRASES)
+
+
 def _select_related_tools_for_list(
     *,
     cards: list[dict],
@@ -288,6 +296,12 @@ def _select_related_tools_for_list(
 
     if ALL_TOOLS_QUERY_PHRASE in q:
         return valid_cards
+
+    if _is_offline_list_request(q):
+        offline_tools = [
+            tool for tool in valid_cards if bool(tool.get("offlineEnabled"))
+        ]
+        return offline_tools if offline_tools else valid_cards[:5]
 
     focus_tokens = {
         token

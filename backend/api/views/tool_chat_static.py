@@ -53,6 +53,12 @@ MULTI_TOOL_QUERY_PHRASES = (
     "what are the tools",
 )
 ALL_TOOLS_QUERY_PHRASE = "all tools"
+OFFLINE_QUERY_PHRASES = (
+    "offline",
+    "off line",
+    "without internet",
+    "no internet",
+)
 
 ENV_TOOL_METADATA_DIR = "TOOL_METADATA_DIR"
 ENV_OPENAI_API_KEY = "OPENAI_API_KEY"
