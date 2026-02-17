@@ -56,7 +56,8 @@ export default function ToolChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "Hi, I can explain Torensa tools in simple terms. Ask me anything.",
+      content:
+        "Hi, I can explain Torensa tools in simple terms. Ask me anything.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -112,7 +113,7 @@ export default function ToolChatWidget() {
           sx={{
             position: "fixed",
             right: 20,
-            bottom: 92,
+            bottom: 24,
             width: { xs: "calc(100vw - 24px)", sm: 360 },
             maxHeight: { xs: "74vh", sm: "70vh" },
             zIndex: 1300,
@@ -179,12 +180,18 @@ export default function ToolChatWidget() {
             }}
           >
             <Stack direction="row" spacing={1} alignItems="center">
-              <AutoAwesomeIcon sx={{ color: "rgba(255,255,255,0.95)", fontSize: 18 }} />
+              <AutoAwesomeIcon
+                sx={{ color: "rgba(255,255,255,0.95)", fontSize: 18 }}
+              />
               <Box>
                 <Typography
                   variant="subtitle2"
                   fontWeight={800}
-                  sx={{ color: "rgba(255,255,255,0.98)", lineHeight: 1.1, letterSpacing: 0.3 }}
+                  sx={{
+                    color: "rgba(255,255,255,0.98)",
+                    lineHeight: 1.1,
+                    letterSpacing: 0.3,
+                  }}
                 >
                   Tool Assistant
                 </Typography>
@@ -224,7 +231,10 @@ export default function ToolChatWidget() {
               "&::-webkit-scrollbar": { width: 8 },
               "&::-webkit-scrollbar-thumb": {
                 borderRadius: "8px",
-                background: alpha(theme.palette.primary.main, isDark ? 0.55 : 0.32),
+                background: alpha(
+                  theme.palette.primary.main,
+                  isDark ? 0.55 : 0.32,
+                ),
               },
             }}
           >
@@ -248,7 +258,10 @@ export default function ToolChatWidget() {
                       : isDark
                         ? "linear-gradient(130deg, rgba(51,65,85,0.92) 0%, rgba(30,41,59,0.92) 100%)"
                         : "linear-gradient(130deg, rgba(255,255,255,0.96) 0%, rgba(241,245,249,0.95) 100%)",
-                  color: message.role === "user" ? "#f8fafc" : theme.palette.text.primary,
+                  color:
+                    message.role === "user"
+                      ? "#f8fafc"
+                      : theme.palette.text.primary,
                   border:
                     message.role === "assistant"
                       ? `1px solid ${alpha(theme.palette.common.white, isDark ? 0.14 : 0.75)}`
@@ -324,13 +337,18 @@ export default function ToolChatWidget() {
                       border: `1px solid ${alpha(theme.palette.primary.main, isDark ? 0.35 : 0.25)}`,
                       display: "grid",
                       placeItems: "center",
-                      animation: "robotFloat 1.8s ease-in-out infinite, robotGlow 2s ease-in-out infinite",
+                      animation:
+                        "robotFloat 1.8s ease-in-out infinite, robotGlow 2s ease-in-out infinite",
                     }}
                   >
-                    <SmartToyOutlinedIcon sx={{ fontSize: 18, color: theme.palette.primary.light }} />
+                    <SmartToyOutlinedIcon
+                      sx={{ fontSize: 18, color: theme.palette.primary.light }}
+                    />
                   </Box>
                   <Stack direction="row" alignItems="center" spacing={0.8}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.45 }}>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.45 }}
+                    >
                       {[0, 1, 2].map((dot) => (
                         <Box
                           key={dot}
@@ -338,23 +356,16 @@ export default function ToolChatWidget() {
                             width: 6.5,
                             height: 6.5,
                             borderRadius: "50%",
-                            bgcolor: alpha(theme.palette.primary.main, isDark ? 0.9 : 0.75),
+                            bgcolor: alpha(
+                              theme.palette.primary.main,
+                              isDark ? 0.9 : 0.75,
+                            ),
                             animation: "dotBounce 1s ease-in-out infinite",
                             animationDelay: `${dot * 0.14}s`,
                           }}
                         />
                       ))}
                     </Box>
-                    <Typography
-                      sx={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        letterSpacing: 0.2,
-                        color: theme.palette.text.secondary,
-                      }}
-                    >
-                      Typing...
-                    </Typography>
                   </Stack>
                 </Stack>
               </Box>
@@ -438,7 +449,10 @@ export default function ToolChatWidget() {
                       ? "rgba(15,23,42,0.65)"
                       : "rgba(255,255,255,0.9)",
                     "& fieldset": {
-                      borderColor: alpha(theme.palette.primary.main, isDark ? 0.45 : 0.26),
+                      borderColor: alpha(
+                        theme.palette.primary.main,
+                        isDark ? 0.45 : 0.26,
+                      ),
                     },
                     "&:hover fieldset": {
                       borderColor: alpha(theme.palette.primary.main, 0.75),
@@ -474,7 +488,10 @@ export default function ToolChatWidget() {
                   },
                   "&.Mui-disabled": {
                     color: alpha(theme.palette.common.white, 0.7),
-                    background: alpha(theme.palette.text.secondary, isDark ? 0.22 : 0.2),
+                    background: alpha(
+                      theme.palette.text.secondary,
+                      isDark ? 0.22 : 0.2,
+                    ),
                     boxShadow: "none",
                   },
                 }}
@@ -490,41 +507,43 @@ export default function ToolChatWidget() {
         </Paper>
       )}
 
-      <IconButton
-        onClick={() => setIsOpen((value) => !value)}
-        sx={{
-          position: "fixed",
-          right: 20,
-          bottom: 24,
-          zIndex: 1300,
-          bgcolor: "transparent",
-          color: "#f8fafc",
-          background: isDark
-            ? "linear-gradient(135deg, #0f766e 0%, #0369a1 65%, #1d4ed8 100%)"
-            : "linear-gradient(135deg, #0ea5e9 0%, #22c55e 65%, #f59e0b 100%)",
-          border: `1px solid ${alpha(theme.palette.common.white, 0.52)}`,
-          boxShadow: isDark
-            ? "0 14px 30px rgba(2,6,23,0.5)"
-            : "0 14px 28px rgba(30,64,175,0.22)",
-          "&:hover": {
-            transform: "translateY(-2px) scale(1.02)",
-            filter: "saturate(1.08)",
-          },
-          width: 56,
-          height: 56,
-          borderRadius: "18px",
-          transition: "all 180ms ease",
-          animation: isOpen ? "none" : "launcherPulse 2.5s ease-in-out infinite",
-          "@keyframes launcherPulse": {
-            "0%": { boxShadow: "0 0 0 0 rgba(14,165,233,0.35)" },
-            "70%": { boxShadow: "0 0 0 14px rgba(14,165,233,0)" },
-            "100%": { boxShadow: "0 0 0 0 rgba(14,165,233,0)" },
-          },
-        }}
-        aria-label="Open tool assistant"
-      >
-        {isOpen ? <CloseIcon /> : <ChatBubbleOutlineIcon />}
-      </IconButton>
+      {!isOpen && (
+        <IconButton
+          onClick={() => setIsOpen(true)}
+          sx={{
+            position: "fixed",
+            right: 20,
+            bottom: 24,
+            zIndex: 1300,
+            bgcolor: "transparent",
+            color: "#f8fafc",
+            background: isDark
+              ? "linear-gradient(135deg, #0f766e 0%, #0369a1 65%, #1d4ed8 100%)"
+              : "linear-gradient(135deg, #0ea5e9 0%, #22c55e 65%, #f59e0b 100%)",
+            border: `1px solid ${alpha(theme.palette.common.white, 0.52)}`,
+            boxShadow: isDark
+              ? "0 14px 30px rgba(2,6,23,0.5)"
+              : "0 14px 28px rgba(30,64,175,0.22)",
+            "&:hover": {
+              transform: "translateY(-2px) scale(1.02)",
+              filter: "saturate(1.08)",
+            },
+            width: 56,
+            height: 56,
+            borderRadius: "18px",
+            transition: "all 180ms ease",
+            animation: "launcherPulse 2.5s ease-in-out infinite",
+            "@keyframes launcherPulse": {
+              "0%": { boxShadow: "0 0 0 0 rgba(14,165,233,0.35)" },
+              "70%": { boxShadow: "0 0 0 14px rgba(14,165,233,0)" },
+              "100%": { boxShadow: "0 0 0 0 rgba(14,165,233,0)" },
+            },
+          }}
+          aria-label="Open tool assistant"
+        >
+          <ChatBubbleOutlineIcon />
+        </IconButton>
+      )}
     </>
   );
 }
