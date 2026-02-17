@@ -115,6 +115,7 @@ export default function ToolChatWidget() {
             right: 20,
             bottom: 24,
             width: { xs: "calc(100vw - 24px)", sm: 360 },
+            minHeight: { xs: 360, sm: 420 },
             maxHeight: { xs: "74vh", sm: "70vh" },
             zIndex: 1300,
             borderRadius: "16px",
@@ -193,7 +194,7 @@ export default function ToolChatWidget() {
                     letterSpacing: 0.3,
                   }}
                 >
-                  Tool Assistant
+                  AI Tool Assistant
                 </Typography>
                 <Typography
                   sx={{
@@ -223,6 +224,8 @@ export default function ToolChatWidget() {
           <Box
             sx={{
               p: 1.4,
+              flex: 1,
+              minHeight: 0,
               overflow: "auto",
               display: "grid",
               gap: 1,
