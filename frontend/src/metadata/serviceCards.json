@@ -72,6 +72,18 @@
     "categoryId": "utilities"
   },
   {
+    "id": "pdf-splitter",
+    "component": "PdfSplitter",
+    "title": "PDF Splitter",
+    "description": "Extract page ranges or split a PDF into multiple files.",
+    "path": "/pdf-splitter",
+    "ctaLabel": "Split PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, split by chunk size into multiple PDFs, or generate one PDF per page. Downloads are generated on-device for privacy and offline use.",
+    "categoryId": "utilities"
+  },
+  {
     "id": "image-crop-tool",
     "component": "ImageCropTool",
     "title": "Image Crop Tool",
