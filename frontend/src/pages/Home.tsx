@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import { useTheme } from "@mui/material/styles";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -44,10 +45,15 @@ export default function Home() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
   const isOnline = useOnlineStatus();
   const isMobile = useMediaQuery("(max-width:700px)");
   const isTablet = useMediaQuery("(max-width:1050px)");
   const columns = isMobile ? 1 : isTablet ? 2 : 3;
+  const outlinedBorderColor =
+    theme.palette.mode === "dark"
+      ? "rgba(255,255,255,0.23)"
+      : "rgba(0,0,0,0.23)";
 
   const secondaryText: CSSProperties = {
     color: secondaryTextColor,
@@ -71,7 +77,7 @@ export default function Home() {
     width: "100%",
     padding: "10px 14px",
     borderRadius: 10,
-    border: `1px solid ${secondaryTextColor}`,
+    border: `1px solid ${outlinedBorderColor}`,
     backgroundColor: "rgba(255, 255, 255, 0.02)",
     color: secondaryTextColor,
     fontSize: 14,
