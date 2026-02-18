@@ -220,6 +220,31 @@ export default defineConfig({
             return "emotion";
           }
 
+          // ---- Heavy feature libs (split to reduce giant vendor chunk) ----
+          if (fromPkg(id, "pdf-lib")) {
+            return "pdf-lib";
+          }
+
+          if (fromPkg(id, "jszip")) {
+            return "jszip";
+          }
+
+          if (fromPkg(id, "read-excel-file")) {
+            return "read-excel-file";
+          }
+
+          if (fromPkg(id, "qrcode")) {
+            return "qrcode";
+          }
+
+          if (fromPkg(id, "jose")) {
+            return "jose";
+          }
+
+          if (fromPkg(id, "diff")) {
+            return "diff";
+          }
+
           // ---- Everything else ----
           return "vendor";
         },
