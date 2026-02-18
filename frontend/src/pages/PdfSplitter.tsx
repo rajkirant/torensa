@@ -6,7 +6,6 @@ import {
   Button,
   Chip,
   Divider,
-  LinearProgress,
   Stack,
   TextField,
   Typography,
@@ -20,6 +19,7 @@ import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
+import ProgressStatusBlock from "../components/tools/ProgressStatusBlock";
 import downloadBlob from "../utils/downloadBlob";
 
 type ProgressState = {
@@ -405,21 +405,11 @@ export default function PdfSplitter() {
       </Stack>
 
       {busy && (
-        <Stack spacing={0.75}>
-          <LinearProgress
-            variant={progress ? "determinate" : "indeterminate"}
-            value={
-              progress && progress.total > 0
-                ? (progress.done / progress.total) * 100
-                : undefined
-            }
-          />
-          {progress && (
-            <Typography variant="caption" color="text.secondary">
-              {progress.label}
-            </Typography>
-          )}
-        </Stack>
+        <ProgressStatusBlock
+          done={progress?.done}
+          total={progress?.total}
+          label={progress?.label}
+        />
       )}
 
       <ToolStatusAlerts error={error} success={success} />

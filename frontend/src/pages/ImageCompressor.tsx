@@ -11,7 +11,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  LinearProgress,
   Slider,
   Stack,
   Tooltip,
@@ -26,6 +25,7 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
+import ProgressStatusBlock from "../components/tools/ProgressStatusBlock";
 import downloadBlob from "../utils/downloadBlob";
 import supportsCanvasMime from "../utils/supportsCanvasMime";
 
@@ -660,12 +660,7 @@ export default function ImageCompressor() {
         </Box>
 
         {busy && (
-          <Box>
-            <LinearProgress />
-            <Typography variant="caption" color="text.secondary">
-              {progress.total > 0 ? `${progress.done}/${progress.total}` : ""}
-            </Typography>
-          </Box>
+          <ProgressStatusBlock done={progress.done} total={progress.total} />
         )}
 
         {error && <Alert severity="error">{error}</Alert>}
