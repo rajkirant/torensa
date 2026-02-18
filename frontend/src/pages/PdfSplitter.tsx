@@ -20,6 +20,7 @@ import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
+import downloadBlob from "../utils/downloadBlob";
 
 type ProgressState = {
   done: number;
@@ -119,17 +120,6 @@ function parsePageRanges(input: string, pageCount: number): number[] {
   }
 
   return orderedPages;
-}
-
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
 }
 
 function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {

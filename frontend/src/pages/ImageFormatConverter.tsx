@@ -9,6 +9,7 @@ import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
+import downloadBlob from "../utils/downloadBlob";
 
 type Format = "png" | "jpg" | "webp" | "bmp";
 
@@ -172,17 +173,6 @@ async function convertImage(file: File, sourceFormat: Format, targetFormat: Form
   }
 
   return canvasToBlob(canvas, targetMime);
-}
-
-function downloadBlob(blob: Blob, fileName: string) {
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.URL.revokeObjectURL(url);
 }
 
 export default function ImageFormatConverter() {

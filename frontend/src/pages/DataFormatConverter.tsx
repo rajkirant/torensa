@@ -11,6 +11,7 @@ import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
+import downloadBlob from "../utils/downloadBlob";
 
 type Format = "xlsx" | "csv" | "json";
 type JsonRecord = Record<string, string>;
@@ -324,17 +325,6 @@ async function parseInputFile(file: File, sourceFormat: Format): Promise<{ heade
       return normalized;
     }),
   };
-}
-
-function downloadBlob(blob: Blob, fileName: string) {
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.URL.revokeObjectURL(url);
 }
 
 const formatLabel: Record<Format, string> = {
