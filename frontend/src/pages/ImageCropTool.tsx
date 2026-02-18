@@ -16,6 +16,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FilePickerButton from "../components/inputs/FilePickerButton";
+import supportsCanvasMime from "../utils/supportsCanvasMime";
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
 
@@ -71,15 +72,6 @@ function normalizeInputFormat(mime: string): OutputFormat | null {
   if (mime === "image/png") return "image/png";
   if (mime === "image/webp") return "image/webp";
   return null;
-}
-
-function supportsMime(mime: OutputFormat) {
-  const canvas = document.createElement("canvas");
-  try {
-    return canvas.toDataURL(mime).startsWith(`data:${mime}`);
-  } catch {
-    return false;
-  }
 }
 
 function createInitialCrop(size: Size): CropRect {
@@ -232,9 +224,9 @@ export default function ImageCropTool() {
 
   const formatSupport = useMemo(
     () => ({
-      png: supportsMime("image/png"),
-      jpeg: supportsMime("image/jpeg"),
-      webp: supportsMime("image/webp"),
+      png: supportsCanvasMime("image/png"),
+      jpeg: supportsCanvasMime("image/jpeg"),
+      webp: supportsCanvasMime("image/webp"),
     }),
     [],
   );

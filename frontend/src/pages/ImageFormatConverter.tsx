@@ -10,6 +10,7 @@ import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import downloadBlob from "../utils/downloadBlob";
+import supportsCanvasMime from "../utils/supportsCanvasMime";
 
 type Format = "png" | "jpg" | "webp" | "bmp";
 
@@ -58,15 +59,6 @@ function ensureFormatMatchesSource(file: File, sourceFormat: Format) {
     throw new Error(
       `Selected source format is ${formatLabel[sourceFormat]}, but file type looks like ${formatLabel[byMime]}.`,
     );
-  }
-}
-
-function supportsCanvasMime(mime: string): boolean {
-  const canvas = document.createElement("canvas");
-  try {
-    return canvas.toDataURL(mime).startsWith(`data:${mime}`);
-  } catch {
-    return false;
   }
 }
 
