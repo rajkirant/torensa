@@ -26,6 +26,7 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
+import downloadBlob from "../utils/downloadBlob";
 
 type OutputFormat = "image/jpeg" | "image/webp" | "image/png";
 
@@ -226,17 +227,6 @@ async function encodeWithSpec(
 
   const blob = await canvasToBlob(canvas, outputMime, lo);
   return { blob, width: canvas.width, height: canvas.height, usedQuality: lo };
-}
-
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
 }
 
 export default function ImageCompressor() {
