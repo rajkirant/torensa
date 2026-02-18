@@ -19,11 +19,18 @@ import PageContainer from "../components/PageContainer";
 
 const MAX_INPUT_BYTES = 200 * 1024 * 1024;
 const EXEC_TIMEOUT_MS = 12 * 60 * 1000;
+const baseURL = import.meta.env.BASE_URL || "/";
+
+function withBaseUrl(path: string) {
+  const normalizedBase = baseURL.endsWith("/") ? baseURL : `${baseURL}/`;
+  const normalizedPath = path.startsWith("/") ? path.slice(1) : path;
+  return `${normalizedBase}${normalizedPath}`;
+}
 
 const LOCAL_CORE_SOURCE = {
   label: "local",
-  coreURL: "/vendor/ffmpeg/ffmpeg-core.esm.js",
-  wasmURL: "/vendor/ffmpeg/ffmpeg-core.wasm",
+  coreURL: withBaseUrl("vendor/ffmpeg/ffmpeg-core.esm.js"),
+  wasmURL: withBaseUrl("vendor/ffmpeg/ffmpeg-core.wasm"),
   useBlobURL: true,
 } as const;
 
