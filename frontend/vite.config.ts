@@ -70,6 +70,7 @@ const workboxGlobIgnores = excludedRouteChunkBases.flatMap((base) => [
   `**/assets/${base}-*.js`,
   `**/assets/${base}-*.css`,
 ]);
+workboxGlobIgnores.push("**/vendor/ffmpeg/*");
 
 const requiredSharedChunkBases = [
   // Required for app bootstrap and routing
@@ -175,6 +176,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  optimizeDeps: {
+    exclude: ["@ffmpeg/ffmpeg", "@ffmpeg/util"],
   },
 
   build: {
