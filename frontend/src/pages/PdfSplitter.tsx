@@ -142,7 +142,6 @@ export default function PdfSplitter() {
   const [pageCount, setPageCount] = useState(0);
 
   const [rangeInput, setRangeInput] = useState("1");
-  const [chunkSizeInput, setChunkSizeInput] = useState("1");
 
   const [busy, setBusy] = useState(false);
   const [activeAction, setActiveAction] = useState<ActiveAction>(null);
@@ -160,7 +159,6 @@ export default function PdfSplitter() {
     setPdfBytes(null);
     setPageCount(0);
     setRangeInput("1");
-    setChunkSizeInput("1");
     setActiveAction(null);
     setProgress(null);
     setError(null);
@@ -193,7 +191,6 @@ export default function PdfSplitter() {
       setPdfBytes(new Uint8Array(arrayBuffer));
       setPageCount(count);
       setRangeInput(`1-${count}`);
-      setChunkSizeInput("1");
       setSuccess(
         `Loaded "${pickedFile.name}" (${count} ${plural(count, "page")}).`,
       );
@@ -202,7 +199,6 @@ export default function PdfSplitter() {
       setPdfBytes(null);
       setPageCount(0);
       setRangeInput("1");
-      setChunkSizeInput("1");
       setError(
         toErrorMessage(
           err,
@@ -261,40 +257,25 @@ export default function PdfSplitter() {
     }
   }
 
-  async function splitIntoZip(chunkSize: number) {
+  async function splitIntoZipPerPage() {
     setError(null);
     setSuccess(null);
 
     try {
       const state = requirePdfState();
 
-      if (!Number.isInteger(chunkSize) || chunkSize < 1) {
-        throw new Error("Pages per file must be a whole number greater than 0.");
-      }
-
-      if (chunkSize > state.pageCount) {
-        throw new Error(
-          `Pages per file cannot exceed total pages (${state.pageCount}).`,
-        );
-      }
-
       setBusy(true);
       setActiveAction("split");
 
       const sourcePdf = await PDFDocument.load(state.pdfBytes);
       const zip = new JSZip();
-      const totalParts = Math.ceil(state.pageCount / chunkSize);
+      const totalParts = state.pageCount;
 
       setProgress({ done: 0, total: totalParts, label: "Preparing files..." });
 
       for (let partIndex = 0; partIndex < totalParts; partIndex += 1) {
-        const startPage = partIndex * chunkSize + 1;
-        const endPage = Math.min(state.pageCount, startPage + chunkSize - 1);
-        const indices: number[] = [];
-
-        for (let page = startPage; page <= endPage; page += 1) {
-          indices.push(page - 1);
-        }
+        const pageNumber = partIndex + 1;
+        const indices = [pageNumber - 1];
 
         const partPdf = await PDFDocument.create();
         const copiedPages = await partPdf.copyPages(sourcePdf, indices);
@@ -304,7 +285,7 @@ export default function PdfSplitter() {
         const partName = `${baseName}-part-${String(partIndex + 1).padStart(
           2,
           "0",
-        )}-pages-${startPage}-${endPage}.pdf`;
+        )}-page-${pageNumber}.pdf`;
         zip.file(partName, partBytes);
 
         setProgress({
@@ -318,7 +299,7 @@ export default function PdfSplitter() {
       downloadBlob(zipBlob, `${baseName}-split.zip`);
 
       setSuccess(
-        `Created ${totalParts} split ${plural(totalParts, "file")} in one ZIP download.`,
+        `Created ${totalParts} ${plural(totalParts, "file")} (one page per PDF) in a ZIP download.`,
       );
     } catch (err) {
       setError(toErrorMessage(err, "Failed to split this PDF."));
@@ -409,57 +390,26 @@ export default function PdfSplitter() {
             helperText={`Use 1-${Math.max(1, pageCount)}. Example: 1-3,5,8-10`}
             fullWidth
           />
-          <ActionButton
-            startIcon={<DownloadIcon />}
-            onClick={extractSelectedPages}
-            disabled={!canRunActions}
-            loading={busy && activeAction === "extract"}
-            sx={{ alignSelf: "flex-start" }}
-          >
-            Extract Selected Pages
-          </ActionButton>
-        </Stack>
-
-        <Divider />
-
-        <Stack spacing={1}>
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-            Split into multiple PDFs (ZIP)
-          </Typography>
-
-          <TextField
-            size="small"
-            label="Pages per file"
-            type="number"
-            value={chunkSizeInput}
-            onChange={(event) => setChunkSizeInput(event.target.value)}
-            disabled={busy}
-            inputProps={{ min: 1, step: 1 }}
-            fullWidth
-          />
-
           <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
             <ActionButton
-              startIcon={<FolderZipIcon />}
-              onClick={() => {
-                const parsed = Number(chunkSizeInput);
-                void splitIntoZip(parsed);
-              }}
+              startIcon={<DownloadIcon />}
+              onClick={extractSelectedPages}
               disabled={!canRunActions}
-              loading={busy && activeAction === "split"}
+              loading={busy && activeAction === "extract"}
+              sx={{ alignSelf: "flex-start" }}
             >
-              Split By Chunk
+              Extract Selected Pages
             </ActionButton>
 
-            <Button
-              variant="outlined"
+            <ActionButton
               startIcon={<FolderZipIcon />}
-              onClick={() => void splitIntoZip(1)}
-              disabled={!canRunActions || busy}
-              sx={{ textTransform: "none", fontWeight: 600 }}
+              onClick={() => void splitIntoZipPerPage()}
+              disabled={!canRunActions}
+              loading={busy && activeAction === "split"}
+              sx={{ alignSelf: "flex-start" }}
             >
-              One PDF Per Page
-            </Button>
+              One PDF Per Page (ZIP)
+            </ActionButton>
           </Stack>
         </Stack>
       </Stack>
