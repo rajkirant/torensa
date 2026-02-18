@@ -80,7 +80,7 @@
     "ctaLabel": "Split PDF",
     "offlineEnabled": true,
     "authRequired": false,
-    "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, split by chunk size into multiple PDFs, or generate one PDF per page. Downloads are generated on-device for privacy and offline use.",
+    "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download. All processing runs on-device for privacy and offline use.",
     "categoryId": "utilities"
   },
   {
