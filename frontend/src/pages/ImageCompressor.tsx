@@ -541,7 +541,7 @@ export default function ImageCompressor() {
                 if (!previewUrl) return null;
 
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={id}>
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={id}>
                     <Card variant="outlined" sx={{ borderRadius: 3 }}>
                       <Box
                         component="img"
@@ -710,7 +710,7 @@ export default function ImageCompressor() {
               const pct = r.file.size > 0 ? (saved / r.file.size) * 100 : 0;
 
               return (
-                <Grid item xs={12} sm={6} key={r.id}>
+                <Grid size={{ xs: 12, sm: 6 }} key={r.id}>
                   <Card variant="outlined" sx={{ borderRadius: 3 }}>
                     <Box
                       component="img"
