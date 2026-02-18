@@ -3,7 +3,12 @@ import { useNavigate, useOutletContext, useLocation } from "react-router-dom";
 import type { CSSProperties } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import serviceCards from "../metadata/serviceCards.json";
@@ -58,6 +63,10 @@ export default function Home() {
     width: `min(100%, ${cardsMaxWidth}px)`,
     margin: "18px auto 0",
   };
+  const searchWrapperStyle: CSSProperties = {
+    width: `min(100%, ${cardsMaxWidth}px)`,
+    margin: "0 auto 24px",
+  };
   const loadMoreButtonStyle: CSSProperties = {
     width: "100%",
     padding: "10px 14px",
@@ -72,16 +81,30 @@ export default function Home() {
 
   // Safety guard (never crash)
   const allCards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
   const cards =
     selectedCategoryId === "all"
       ? allCards
       : allCards.filter((card) => card.categoryId === selectedCategoryId);
   const offlineCards = cards.filter((card) => card.offlineEnabled);
+  const filteredCards = cards.filter((card) => {
+    if (!normalizedSearchTerm) return true;
+    const searchableText =
+      `${card.title} ${card.description} ${card.ctaLabel}`.toLowerCase();
+    return searchableText.includes(normalizedSearchTerm);
+  });
+  const filteredOfflineCards = offlineCards.filter((card) => {
+    if (!normalizedSearchTerm) return true;
+    const searchableText =
+      `${card.title} ${card.description} ${card.ctaLabel}`.toLowerCase();
+    return searchableText.includes(normalizedSearchTerm);
+  });
   const [visibleCount, setVisibleCount] = React.useState(INITIAL_VISIBLE_CARDS);
-  const visibleCards = cards.slice(0, visibleCount);
-  const visibleOfflineCards = offlineCards.slice(0, visibleCount);
-  const canLoadMoreCards = visibleCount < cards.length;
-  const canLoadMoreOfflineCards = visibleCount < offlineCards.length;
+  const visibleCards = filteredCards.slice(0, visibleCount);
+  const visibleOfflineCards = filteredOfflineCards.slice(0, visibleCount);
+  const canLoadMoreCards = visibleCount < filteredCards.length;
+  const canLoadMoreOfflineCards = visibleCount < filteredOfflineCards.length;
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + LOAD_MORE_STEP);
@@ -89,7 +112,7 @@ export default function Home() {
 
   React.useEffect(() => {
     setVisibleCount(INITIAL_VISIBLE_CARDS);
-  }, [selectedCategoryId, isOnline]);
+  }, [selectedCategoryId, isOnline, searchTerm]);
 
   React.useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -116,6 +139,37 @@ export default function Home() {
     }
   }, [selectedCategoryId, location.pathname, location.search, navigate]);
 
+  const searchInput = (
+    <div style={searchWrapperStyle}>
+      <TextField
+        fullWidth
+        size="small"
+        value={searchTerm}
+        onChange={(event) => setSearchTerm(event.target.value)}
+        placeholder="Search tools by name or description"
+        aria-label="Search tools"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchRoundedIcon fontSize="small" />
+            </InputAdornment>
+          ),
+          endAdornment: searchTerm ? (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="Clear search"
+                size="small"
+                onClick={() => setSearchTerm("")}
+              >
+                <CloseRoundedIcon fontSize="small" />
+              </IconButton>
+            </InputAdornment>
+          ) : undefined,
+        }}
+      />
+    </div>
+  );
+
   // 🔥 OFFLINE: show message + only offlineEnabled tools
   if (!isOnline) {
     return (
@@ -135,6 +189,8 @@ export default function Home() {
           You&apos;re offline. Only tools that support offline usage are
           available right now.
         </p>
+
+        {searchInput}
 
         <div
           style={cardsGridStyle}
@@ -156,7 +212,7 @@ export default function Home() {
             </div>
           ))}
 
-          {offlineCards.length === 0 && (
+          {filteredOfflineCards.length === 0 && (
             <p
               style={{
                 ...secondaryText,
@@ -164,7 +220,9 @@ export default function Home() {
                 gridColumn: "1 / -1",
               }}
             >
-              No tools are available offline yet.
+              {normalizedSearchTerm
+                ? "No offline tools match your search."
+                : "No tools are available offline yet."}
             </p>
           )}
         </div>
@@ -192,6 +250,8 @@ export default function Home() {
         {selectedCategoryLabel}
       </h2>
 
+      {searchInput}
+
       <div
         style={cardsGridStyle}
       >
@@ -212,7 +272,7 @@ export default function Home() {
           </div>
         ))}
 
-        {cards.length === 0 && (
+        {filteredCards.length === 0 && (
           <p
             style={{
               ...secondaryText,
@@ -220,8 +280,14 @@ export default function Home() {
               gridColumn: "1 / -1",
             }}
           >
-            No services found. Add entries to{" "}
-            <code>metadata/serviceCards.json</code>.
+            {normalizedSearchTerm ? (
+              "No tools match your search in this category."
+            ) : (
+              <>
+                No services found. Add entries to{" "}
+                <code>metadata/serviceCards.json</code>.
+              </>
+            )}
           </p>
         )}
       </div>
