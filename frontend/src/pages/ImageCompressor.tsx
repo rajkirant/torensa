@@ -27,6 +27,7 @@ import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 import downloadBlob from "../utils/downloadBlob";
+import supportsCanvasMime from "../utils/supportsCanvasMime";
 
 type OutputFormat = "image/jpeg" | "image/webp" | "image/png";
 
@@ -90,15 +91,6 @@ function safeBaseName(name: string) {
 
 function fileId(file: File) {
   return `${file.name}-${file.size}-${file.lastModified}`;
-}
-
-function supportsMime(mime: string) {
-  const canvas = document.createElement("canvas");
-  try {
-    return canvas.toDataURL(mime).startsWith(`data:${mime}`);
-  } catch {
-    return false;
-  }
 }
 
 function normalizeOutputFormat(mime: string): OutputFormat {
@@ -329,6 +321,9 @@ export default function ImageCompressor() {
         const outputMime: OutputFormat = spec.chooseFormat.enabled
           ? spec.chooseFormat.format
           : normalizeOutputFormat(file.type);
+        if (!supportsCanvasMime(outputMime)) {
+          throw new Error(`${outputMime} export is not supported by this browser.`);
+        }
 
         const effectiveSpec: CompressSpec =
           outputMime === "image/png"
