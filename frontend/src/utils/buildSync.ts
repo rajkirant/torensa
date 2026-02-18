@@ -73,7 +73,7 @@ export function syncBuildAndMaybeReload(build: BuildInfo): boolean {
 
   try {
     const guard = sessionStorage.getItem(RELOAD_GUARD_KEY);
-    if (guard === incomingBuildNumber) return;
+    if (guard === incomingBuildNumber) return false;
     sessionStorage.setItem(RELOAD_GUARD_KEY, incomingBuildNumber);
   } catch {
     // If sessionStorage fails, continue and attempt one best-effort refresh.

@@ -1,7 +1,12 @@
 import type { ChangeEvent, ReactNode, Ref } from "react";
 import Button, { type ButtonProps } from "@mui/material/Button";
 
-type FilePickerButtonProps = Omit<ButtonProps, "children" | "component"> & {
+type LabelButtonProps = ButtonProps<
+  "label",
+  { type?: "button" | "submit" | "reset" }
+>;
+
+type FilePickerButtonProps = Omit<LabelButtonProps, "children" | "component"> & {
   label: ReactNode;
   accept?: string;
   multiple?: boolean;

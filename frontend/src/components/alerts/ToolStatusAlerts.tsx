@@ -43,6 +43,8 @@ export default function ToolStatusAlerts({
       {order.map((severity) => {
         const message = messages[severity];
         if (!hasMessage(message)) return null;
+        const severitySx = slotSx?.[severity];
+        const resolvedSx: SxProps<Theme> | undefined = severitySx ?? sx;
 
         return (
           <Alert
@@ -50,7 +52,7 @@ export default function ToolStatusAlerts({
             severity={severity}
             color={slotColor?.[severity]}
             icon={slotIcon?.[severity]}
-            sx={[sx, slotSx?.[severity]]}
+            sx={resolvedSx}
           >
             {message}
           </Alert>
