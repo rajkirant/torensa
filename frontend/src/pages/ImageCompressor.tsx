@@ -450,16 +450,24 @@ export default function ImageCompressor() {
       {/* 1) Upload */}
       <Stack spacing={1.5}>
         <Stack
-          direction="row"
+          direction={{ xs: "column", sm: "row" }}
           justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          spacing={{ xs: 1, sm: 2 }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 700, whiteSpace: "nowrap" }}
+          >
             1) Upload
           </Typography>
 
-          <FlexWrapRow>
+          <FlexWrapRow
+            sx={{
+              width: { xs: "100%", sm: "auto" },
+              justifyContent: { xs: "flex-start", sm: "flex-end" },
+            }}
+          >
             <Button
               variant="contained"
               startIcon={<CloudUploadIcon />}
