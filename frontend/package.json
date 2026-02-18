@@ -4,15 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "ffmpeg:core:sync": "node scripts/sync-ffmpeg-core.mjs",
+    "dev": "npm run ffmpeg:core:sync && vite",
     "sitemap:generate": "node scripts/generate-sitemap.mjs",
-    "build": "npm run sitemap:generate && vite build",
+    "build": "npm run ffmpeg:core:sync && npm run sitemap:generate && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "npm run ffmpeg:core:sync"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@ffmpeg/core": "^0.12.10",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "diff": "^8.0.3",

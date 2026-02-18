@@ -5,6 +5,7 @@ __pycache__/
 venv/
 *.sitemap.xml
 frontend/public/sitemap.xml
+frontend/public/vendor/ffmpeg/
 
 # Django uploads
 media/

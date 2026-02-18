@@ -60,6 +60,18 @@
     "categoryId": "utilities"
   },
   {
+    "id": "video-to-gif",
+    "component": "VideoToGifConverter",
+    "title": "Video To GIF Converter",
+    "description": "Convert selected video segments to GIF in your browser with FPS, width, and color controls.",
+    "path": "/video-to-gif-converter",
+    "ctaLabel": "Convert To GIF",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload a video and convert only the part you need using Start (sec) and Duration (sec). Tune GIF FPS, output width, and max colors to balance quality and file size. FFmpeg core is loaded on first run, and conversion is performed client-side in your browser.",
+    "categoryId": "utilities"
+  },
+  {
     "id": "image-pdf-to-pdf",
     "component": "imagePdfToPdf",
     "title": "Image / PDF Merger",
