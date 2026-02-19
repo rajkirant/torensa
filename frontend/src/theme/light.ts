@@ -28,6 +28,14 @@ const light = createTheme({
     footer: "linear-gradient(90deg, #020617, #0f172a, #020617)",
   },
 
+  home: {
+    card: {
+      background: "#f8fafc",
+      border: undefined,
+      boxShadow: undefined,
+    },
+  },
+
   header: {
     text: "#ffffff",
     textMuted: "#6392cb",
