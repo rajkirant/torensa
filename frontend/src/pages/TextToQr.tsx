@@ -16,6 +16,7 @@ import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
+import downloadBlob from "../utils/downloadBlob";
 
 const QR_SIZE = 220;
 const EXPORT_SIZE = 300;
@@ -177,12 +178,13 @@ const TextToQr: React.FC = () => {
       showLogoText,
       logoText,
     );
-
-    const png = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = png;
-    link.download = "qr-code-with-logo.png";
-    link.click();
+    const pngBlob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("Failed to export QR image."));
+      }, "image/png");
+    });
+    downloadBlob(pngBlob, "qr-code-with-logo.png");
   };
 
   return (

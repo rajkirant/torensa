@@ -17,6 +17,7 @@ import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import supportsCanvasMime from "../utils/supportsCanvasMime";
+import downloadBlob from "../utils/downloadBlob";
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
 
@@ -192,15 +193,6 @@ async function cropToBlob(
       format === "image/png" ? undefined : DEFAULT_EXPORT_QUALITY,
     );
   });
-}
-
-function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 export default function ImageCropTool() {
@@ -463,7 +455,7 @@ export default function ImageCropTool() {
       .replace(/\.[^.]+$/, "")
       .replace(/[^\w.-]+/g, "_");
     const ext = getOutputExtension(outputFormat);
-    triggerDownload(resultBlob, `${baseName}-cropped.${ext}`);
+    downloadBlob(resultBlob, `${baseName}-cropped.${ext}`);
   };
 
   const overlayStyle = useMemo(() => {
