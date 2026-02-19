@@ -207,12 +207,12 @@
     "id": "string-encryptor",
     "component": "StringEncryptor",
     "title": "String Encryptor / Decryptor",
-    "description": "Encrypt and decrypt text with a secret key using AES.",
+    "description": "Encrypt and decrypt text with a secret key using AES, including Jasypt-style workflows.",
     "path": "/string-encryptor",
     "ctaLabel": "Open Encryptor",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Encrypt plain text into ciphertext and decrypt ciphertext back into readable text using a secret key with AES (crypto-js). Useful for quick local testing and payload protection demos.",
+    "detailedDescription": "Encrypt plain text into ciphertext and decrypt ciphertext back into readable text using a secret key with AES (crypto-js). Includes a server mode with PBKDF2-HMAC-SHA512 + AES-256 for Jasypt-style workflows and interoperability scenarios.",
     "categoryId": "developer",
     "keywords": [
       "encrypt",
@@ -221,7 +221,8 @@
       "secret key",
       "cipher",
       "crypto",
-      "string"
+      "string",
+      "jasypt"
     ]
   },
   {
