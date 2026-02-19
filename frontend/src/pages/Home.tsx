@@ -23,6 +23,7 @@ type ServiceCardConfig = {
   description: string;
   path: string;
   ctaLabel: string;
+  keywords?: string[];
   offlineEnabled: boolean;
   categoryId: string;
   authRequired?: boolean;
@@ -94,17 +95,18 @@ export default function Home() {
       ? allCards
       : allCards.filter((card) => card.categoryId === selectedCategoryId);
   const offlineCards = cards.filter((card) => card.offlineEnabled);
-  const filteredCards = cards.filter((card) => {
+  const matchesSearch = (card: ServiceCardConfig) => {
     if (!normalizedSearchTerm) return true;
+    const keywordText = (card.keywords ?? []).join(" ");
     const searchableText =
-      `${card.title} ${card.description} ${card.ctaLabel}`.toLowerCase();
+      `${card.title} ${card.description} ${card.ctaLabel} ${keywordText}`.toLowerCase();
     return searchableText.includes(normalizedSearchTerm);
+  };
+  const filteredCards = cards.filter((card) => {
+    return matchesSearch(card);
   });
   const filteredOfflineCards = offlineCards.filter((card) => {
-    if (!normalizedSearchTerm) return true;
-    const searchableText =
-      `${card.title} ${card.description} ${card.ctaLabel}`.toLowerCase();
-    return searchableText.includes(normalizedSearchTerm);
+    return matchesSearch(card);
   });
   const [visibleCount, setVisibleCount] = React.useState(INITIAL_VISIBLE_CARDS);
   const visibleCards = filteredCards.slice(0, visibleCount);
@@ -152,7 +154,7 @@ export default function Home() {
         size="small"
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
-        placeholder="Search tools by name or description"
+        placeholder="Search tools by name, description, or keyword"
         aria-label="Search tools"
         InputProps={{
           startAdornment: (
