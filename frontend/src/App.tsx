@@ -96,6 +96,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
     : theme.header.text;
 
   const secondaryTextColor = theme.palette.text.secondary;
+  const themedCardStyle: typeof cardStyle = {
+    ...cardStyle,
+    background: theme.home?.card?.background ?? cardStyle.background,
+    border: theme.home?.card?.border ?? cardStyle.border,
+    boxShadow: theme.home?.card?.boxShadow ?? cardStyle.boxShadow,
+  };
   const handleLogout = useCallback(async () => {
     try {
       await apiFetch("/api/logout/", { method: "POST", csrf: true });
@@ -308,7 +314,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 {
                   secondaryTextColor,
                   sectionBase,
-                  cardStyle,
+                  cardStyle: themedCardStyle,
                   selectedCategoryId,
                   selectedCategoryLabel,
                 } satisfies AppOutletContext

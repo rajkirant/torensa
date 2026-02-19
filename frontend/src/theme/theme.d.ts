@@ -6,6 +6,13 @@ declare module "@mui/material/styles" {
       header: string;
       footer: string;
     };
+    home: {
+      card: {
+        background?: string;
+        border?: string;
+        boxShadow?: string;
+      };
+    };
     header: {
       text: string;
       textMuted: string;
@@ -17,6 +24,13 @@ declare module "@mui/material/styles" {
     gradients?: {
       header?: string;
       footer?: string;
+    };
+    home?: {
+      card?: {
+        background?: string;
+        border?: string;
+        boxShadow?: string;
+      };
     };
     header?: {
       text?: string;

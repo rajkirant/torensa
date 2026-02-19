@@ -30,6 +30,16 @@ const rainbow = createTheme({
       "linear-gradient(90deg, #8f00ff, #4b0082, #0000ff, #00ff00, #ffff00, #ff7f00, #ff0000)",
   },
 
+  home: {
+    card: {
+      background:
+        "linear-gradient(160deg, rgba(37, 26, 92, 0.86) 0%, rgba(18, 75, 114, 0.82) 48%, rgba(18, 110, 88, 0.82) 100%)",
+      border: "1px solid rgba(255,255,255,0.26)",
+      boxShadow:
+        "0 18px 36px rgba(2,6,23,0.42), 0 0 0 1px rgba(255,0,127,0.12), 0 0 0 2px rgba(0,180,216,0.08), inset 0 1px 0 rgba(255,255,255,0.08)",
+    },
+  },
+
   header: {
     text: "#ffffff",
     textMuted: "rgba(255,255,255,0.8)",

@@ -26,6 +26,16 @@ const dark = createTheme({
     footer: "linear-gradient(90deg, #020617, #0b3aa4, #3b0ca3)",
   },
 
+  home: {
+    card: {
+      background:
+        "linear-gradient(160deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%)",
+      border: "1px solid rgba(148,163,184,0.24)",
+      boxShadow:
+        "0 18px 36px rgba(2,6,23,0.45), inset 0 1px 0 rgba(255,255,255,0.04)",
+    },
+  },
+
   header: {
     text: "#ffffff",
     textMuted: "#e5e7eb",
