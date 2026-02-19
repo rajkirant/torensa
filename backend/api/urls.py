@@ -11,6 +11,7 @@ from .views.email_views import (
     list_contact_groups,
 )
 from .views.tool_chat_views import tool_chat_view
+from .views.string_crypto_views import string_crypto_view
 
 urlpatterns = [
     path("hello/", hello),
@@ -36,4 +37,5 @@ urlpatterns = [
     path("contact-groups/save/", save_contact_group, name="save_contact_group"),
     path("contact-groups/", list_contact_groups, name="list_contact_groups"),
     path("contact-groups/list/", list_contact_groups, name="list_contact_groups_legacy"),
+    path("string-crypto/", string_crypto_view),
 ]
