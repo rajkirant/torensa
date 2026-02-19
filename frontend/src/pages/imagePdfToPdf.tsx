@@ -28,6 +28,7 @@ import BusyChip from "../components/chips/BusyChips";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FilePickerButton from "../components/inputs/FilePickerButton";
+import downloadBlob from "../utils/downloadBlob";
 
 type ItemKind = "image" | "pdf";
 
@@ -390,12 +391,7 @@ const ImagePdfToPdf: React.FC = () => {
       const blob = new Blob([toArrayBuffer(pdfBytes)], {
         type: "application/pdf",
       });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "merged.pdf";
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadBlob(blob, "merged.pdf");
     } catch (e: any) {
       setError(
         e?.message ||

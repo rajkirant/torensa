@@ -23,6 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
+import downloadBlob from "../utils/downloadBlob";
 
 /* ===================== TYPES ===================== */
 
@@ -447,17 +448,10 @@ export default function InvoiceGenerator() {
       const blob = new Blob([toArrayBuffer(bytes)], {
         type: "application/pdf",
       });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
 
       const prefix = form.docType === "invoice" ? "invoice" : "receipt";
       const safeNum = (form.docNumber || "").trim().replace(/[^\w\-]+/g, "_");
-      a.download = `${prefix}_${safeNum || "document"}.pdf`;
-
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      downloadBlob(blob, `${prefix}_${safeNum || "document"}.pdf`);
     } catch (e: any) {
       setError(
         e?.message

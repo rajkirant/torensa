@@ -20,6 +20,7 @@ import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import useToolStatus from "../hooks/useToolStatus";
+import downloadBlob from "../utils/downloadBlob";
 
 const LOG_LEVELS = ["TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"] as const;
 type LogLevel = (typeof LOG_LEVELS)[number];
@@ -670,14 +671,7 @@ export default function SpringBootLogAnalyzer() {
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json",
     });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "spring-boot-log-analysis.json";
-    document.body.append(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+    downloadBlob(blob, "spring-boot-log-analysis.json");
 
     setSuccess("JSON report exported.");
   };
