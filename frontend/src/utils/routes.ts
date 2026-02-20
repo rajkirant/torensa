@@ -20,8 +20,17 @@ const tools = (serviceCards as ServiceCardConfig[]).filter(
   (tool) => tool.isActive !== false,
 );
 
-// Grab all TSX pages under /pages at build time
-const pageModules = import.meta.glob("../pages/**/*.tsx");
+// Grab tool pages under /pages at build time.
+// Exclude app-shell pages that are imported through dedicated routes.
+const pageModules = import.meta.glob([
+  "../pages/**/*.tsx",
+  "!../pages/Home.tsx",
+  "!../pages/Contact.tsx",
+  "!../pages/Login.tsx",
+  "!../pages/Signup.tsx",
+  "!../pages/NotFound.tsx",
+  "!../pages/ProtectedRoute.tsx",
+]);
 
 function toModuleKey(component: string) {
   return `../pages/${component}.tsx`;
