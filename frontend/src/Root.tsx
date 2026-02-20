@@ -31,6 +31,7 @@ type ServiceCardConfig = {
   path: string;
   ctaLabel: string;
   offlineEnabled: boolean;
+  isActive?: boolean;
   authRequired?: boolean;
 };
 
@@ -45,7 +46,9 @@ export function Root() {
 
   const theme = useMemo(() => themes[themeName], [themeName]);
 
-  const tools = serviceCards as ServiceCardConfig[];
+  const tools = (serviceCards as ServiceCardConfig[]).filter(
+    (tool) => tool.isActive !== false,
+  );
 
   return (
     <ThemeProvider theme={theme}>

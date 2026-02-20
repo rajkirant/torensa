@@ -14,13 +14,18 @@ type ServiceCardConfig = {
   path: string;
   ctaLabel: string;
   offlineEnabled?: boolean;
+  isActive?: boolean;
 };
 
 const typedServiceCards = serviceCards as ServiceCardConfig[];
 
+function isCardActive(card: ServiceCardConfig) {
+  return card.isActive !== false;
+}
+
 // Generate regex for each offline-enabled route
 const offlineRouteRegexes = typedServiceCards
-  .filter((card) => card.offlineEnabled)
+  .filter((card) => isCardActive(card) && card.offlineEnabled)
   .map(
     (card) =>
       new RegExp(`^${card.path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
@@ -54,7 +59,7 @@ function collectPageChunkBases(dirPath: string): string[] {
 const pageChunkBases = collectPageChunkBases(resolve(process.cwd(), "src/pages"));
 
 const offlineToolChunkBases = typedServiceCards
-  .filter((card) => card.offlineEnabled)
+  .filter((card) => isCardActive(card) && card.offlineEnabled)
   .map((card) => componentChunkBase(card.component))
   .filter((name): name is string => Boolean(name));
 

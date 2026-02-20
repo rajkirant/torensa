@@ -25,6 +25,7 @@ type ServiceCardConfig = {
   ctaLabel: string;
   keywords?: string[];
   offlineEnabled: boolean;
+  isActive?: boolean;
   categoryId: string;
   authRequired?: boolean;
 };
@@ -33,6 +34,10 @@ type ServiceCardConfig = {
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 const INITIAL_VISIBLE_CARDS = 9;
 const LOAD_MORE_STEP = 6;
+
+function isCardActive(card: ServiceCardConfig) {
+  return card.isActive !== false;
+}
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
@@ -87,7 +92,9 @@ export default function Home() {
   };
 
   // Safety guard (never crash)
-  const allCards = Array.isArray(typedServiceCards) ? typedServiceCards : [];
+  const allCards = Array.isArray(typedServiceCards)
+    ? typedServiceCards.filter(isCardActive)
+    : [];
   const [searchTerm, setSearchTerm] = React.useState("");
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
   const cards =

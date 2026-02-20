@@ -115,7 +115,12 @@ def _metadata_paths():
 def _load_tool_metadata():
     service_cards_path, categories_path = _metadata_paths()
     with service_cards_path.open("r", encoding="utf-8") as file:
-        cards = json.load(file)
+        raw_cards = json.load(file)
+        cards = [
+            card
+            for card in raw_cards
+            if isinstance(card, dict) and card.get("isActive", True) is not False
+        ]
     with categories_path.open("r", encoding="utf-8") as file:
         categories = json.load(file)
 

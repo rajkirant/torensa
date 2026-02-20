@@ -30,6 +30,7 @@ type ChatMessage = {
 type ServiceCardMeta = {
   id: string;
   path: string;
+  isActive?: boolean;
 };
 
 const SUGGESTIONS = [
@@ -45,7 +46,9 @@ export default function ToolChatWidget() {
   const isDark = theme.palette.mode === "dark";
 
   const location = useLocation();
-  const cards = serviceCards as ServiceCardMeta[];
+  const cards = (serviceCards as ServiceCardMeta[]).filter(
+    (card) => card.isActive !== false,
+  );
 
   const currentToolId = useMemo(() => {
     const match = cards.find((card) => card.path === location.pathname);
