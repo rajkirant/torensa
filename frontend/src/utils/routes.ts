@@ -1,8 +1,9 @@
 import React, { lazy } from "react";
 import serviceCards from "../metadata/serviceCards.json";
+import HomePage from "../pages/Home";
 
 /* ===================== APP PAGES ===================== */
-export const Home = lazy(() => import("../pages/Home"));
+export const Home = HomePage;
 export const Contact = lazy(() => import("../pages/Contact"));
 export const Login = lazy(() => import("../pages/Login"));
 export const Signup = lazy(() => import("../pages/Signup"));
