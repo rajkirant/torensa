@@ -67,11 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
-    if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(run);
-    } else {
-      setTimeout(run, 0);
-    }
+    run();
   }, []);
 
   return (
