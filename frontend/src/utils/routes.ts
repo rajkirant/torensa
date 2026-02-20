@@ -12,9 +12,12 @@ export const NotFound = lazy(() => import("../pages/NotFound"));
 type ServiceCardConfig = {
   id: string;
   component: string;
+  isActive?: boolean;
 };
 
-const tools = serviceCards as ServiceCardConfig[];
+const tools = (serviceCards as ServiceCardConfig[]).filter(
+  (tool) => tool.isActive !== false,
+);
 
 // Grab all TSX pages under /pages at build time
 const pageModules = import.meta.glob("../pages/**/*.tsx");

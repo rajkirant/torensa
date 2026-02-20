@@ -10,7 +10,15 @@
     "authRequired": true,
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
-    "keywords": ["email", "mail", "campaign", "newsletter", "outreach", "gmail"]
+    "keywords": [
+      "email",
+      "mail",
+      "campaign",
+      "newsletter",
+      "outreach",
+      "gmail"
+    ],
+    "isActive": false
   },
   {
     "id": "excel-to-csv",
@@ -23,7 +31,8 @@
     "authRequired": false,
     "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
     "categoryId": "utilities",
-    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"]
+    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"],
+    "isActive": true
   },
   {
     "id": "text-to-qr",
@@ -36,7 +45,8 @@
     "authRequired": false,
     "detailedDescription": "Create scannable QR codes from plain text or links with live preview. Optionally add a logo and short label, then download the final image as PNG. Processing is done in-browser, so no input is uploaded.",
     "categoryId": "business",
-    "keywords": ["qr", "qrcode", "barcode", "text", "url", "link"]
+    "keywords": ["qr", "qrcode", "barcode", "text", "url", "link"],
+    "isActive": true
   },
   {
     "id": "image-compressor",
@@ -49,7 +59,8 @@
     "authRequired": false,
     "detailedDescription": "Reduce image file size directly in your browser with no uploads. Preview selected images immediately, tune compression quality, then compress and download files individually or as a ZIP archive. Ideal for fast web optimization while keeping images private.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "compress", "optimize", "size"]
+    "keywords": ["image", "photo", "picture", "compress", "optimize", "size"],
+    "isActive": true
   },
   {
     "id": "image-format-converter",
@@ -71,7 +82,8 @@
       "webp",
       "bmp",
       "convert"
-    ]
+    ],
+    "isActive": true
   },
   {
     "id": "image-pdf-to-pdf",
@@ -84,7 +96,16 @@
     "authRequired": false,
     "detailedDescription": "Combine multiple images and PDF documents into a single PDF file. Reorder items, rotate images, choose page size and margins, set fit behavior, and optionally add page numbers. Built with client-side processing for privacy and speed.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "pdf", "merge", "combine", "join"]
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "pdf",
+      "merge",
+      "combine",
+      "join"
+    ],
+    "isActive": true
   },
   {
     "id": "pdf-splitter",
@@ -97,7 +118,8 @@
     "authRequired": false,
     "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download. All processing runs on-device for privacy and offline use.",
     "categoryId": "utilities",
-    "keywords": ["pdf", "split", "extract", "pages", "document"]
+    "keywords": ["pdf", "split", "extract", "pages", "document"],
+    "isActive": true
   },
   {
     "id": "image-crop-tool",
@@ -110,7 +132,8 @@
     "authRequired": false,
     "detailedDescription": "Select a crop area with pixel-level controls, preview the selected region, and export as PNG, JPEG, or WebP. Everything runs entirely in your browser, so images never leave your device.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "crop", "resize", "edit"]
+    "keywords": ["image", "photo", "picture", "crop", "resize", "edit"],
+    "isActive": true
   },
   {
     "id": "invoice-generator",
@@ -123,7 +146,8 @@
     "authRequired": false,
     "detailedDescription": "Build polished invoices or receipts with seller/buyer details, line items, taxes, shipping, discounts, and notes. Totals are calculated automatically, and the final document can be exported as PDF. Data stays local and can be reused in your browser.",
     "categoryId": "business",
-    "keywords": ["invoice", "receipt", "billing", "payment", "business"]
+    "keywords": ["invoice", "receipt", "billing", "payment", "business"],
+    "isActive": true
   },
   {
     "id": "text-diff-checker",
@@ -136,7 +160,8 @@
     "authRequired": false,
     "detailedDescription": "Paste two versions of text and view line-by-line differences, including additions, removals, and modified blocks. Useful for reviewing edits in content, configs, or code snippets. Everything runs locally in your browser.",
     "categoryId": "developer",
-    "keywords": ["text", "diff", "compare", "changes", "checker"]
+    "keywords": ["text", "diff", "compare", "changes", "checker"],
+    "isActive": true
   },
   {
     "id": "json-formatter-validator",
@@ -149,7 +174,15 @@
     "authRequired": false,
     "detailedDescription": "Paste JSON and run quick validation with readable error feedback. Format with indentation for readability or minify for compact payloads. This utility is fully client-side, making it fast and privacy-friendly for developer workflows.",
     "categoryId": "developer",
-    "keywords": ["json", "format", "validator", "minify", "pretty", "developer"]
+    "keywords": [
+      "json",
+      "format",
+      "validator",
+      "minify",
+      "pretty",
+      "developer"
+    ],
+    "isActive": true
   },
   {
     "id": "spring-boot-log-analyzer",
@@ -162,7 +195,8 @@
     "authRequired": false,
     "detailedDescription": "Upload or paste Spring Boot logs to identify likely first-failure events, exception chains, stack-frame locations, and correlation-id clusters. Export a structured JSON incident report for sharing and follow-up debugging.",
     "categoryId": "developer",
-    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug"]
+    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug"],
+    "isActive": true
   },
   {
     "id": "cron-expression-builder",
@@ -175,7 +209,8 @@
     "authRequired": false,
     "detailedDescription": "Create cron expressions with direct input, validate syntax instantly, and preview upcoming execution times. Supports both 5-field (minute hour day-of-month month day-of-week) and 6-field (second minute hour day-of-month month day-of-week) formats, with human-readable interpretation to reduce scheduling mistakes.",
     "categoryId": "developer",
-    "keywords": ["cron", "schedule", "expression", "validator", "time"]
+    "keywords": ["cron", "schedule", "expression", "validator", "time"],
+    "isActive": true
   },
   {
     "id": "jwt-encoder-decoder",
@@ -188,7 +223,8 @@
     "authRequired": false,
     "detailedDescription": "Inspect JWT header and payload, edit claims, and generate new tokens using HS256 or HS512 algorithms. Helpful for API testing and debugging authentication flows. Operations are performed in-browser without sending token data to a backend.",
     "categoryId": "developer",
-    "keywords": ["jwt", "token", "encode", "decode", "auth", "security"]
+    "keywords": ["jwt", "token", "encode", "decode", "auth", "security"],
+    "isActive": true
   },
   {
     "id": "uuid-generator",
@@ -201,7 +237,8 @@
     "authRequired": false,
     "detailedDescription": "Create one or many UUID v4 identifiers with options like uppercase output or hyphen removal. Copy all generated values at once for use in development, testing, and data workflows.",
     "categoryId": "developer",
-    "keywords": ["uuid", "guid", "identifier", "id", "generate"]
+    "keywords": ["uuid", "guid", "identifier", "id", "generate"],
+    "isActive": true
   },
   {
     "id": "string-encryptor",
@@ -223,7 +260,8 @@
       "crypto",
       "string",
       "jasypt"
-    ]
+    ],
+    "isActive": true
   },
   {
     "id": "api-forge",
@@ -236,6 +274,7 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge lets you send API requests directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body.",
     "categoryId": "developer",
-    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"]
+    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
+    "isActive": true
   }
 ]

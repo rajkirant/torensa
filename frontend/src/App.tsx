@@ -45,6 +45,7 @@ import {
 import { themes } from "./theme";
 import type { ThemeName } from "./theme";
 import categories from "./metadata/categories.json";
+import serviceCards from "./metadata/serviceCards.json";
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -69,6 +70,11 @@ type CategoryConfig = {
   label: string;
 };
 
+type ServiceCardMeta = {
+  categoryId?: string;
+  isActive?: boolean;
+};
+
 export default function App({ themeName, setThemeName }: AppProps) {
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
@@ -76,20 +82,43 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const isMobile = useMediaQuery("(max-width:900px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const categoryOptions = categories as CategoryConfig[];
-  const categoryIds = new Set(categoryOptions.map((category) => category.id));
+  const activeCards = (serviceCards as ServiceCardMeta[]).filter(
+    (card) => card?.isActive !== false,
+  );
+  const activeCategoryIds = new Set(
+    activeCards
+      .map((card) => (card.categoryId || "").trim())
+      .filter((categoryId) => Boolean(categoryId)),
+  );
+  const visibleCategoryOptions = categoryOptions.filter((category) =>
+    activeCategoryIds.has(category.id),
+  );
+  const visibleCategoryIds = new Set(
+    visibleCategoryOptions.map((category) => category.id),
+  );
+  const shouldShowCategorySelect = visibleCategoryOptions.length > 0;
   const [selectedCategoryId, setSelectedCategoryId] = React.useState(() => {
     const categoryFromUrl = new URLSearchParams(window.location.search).get(
       "categories",
     );
-    return categoryFromUrl && categoryIds.has(categoryFromUrl)
+    return categoryFromUrl && visibleCategoryIds.has(categoryFromUrl)
       ? categoryFromUrl
       : "all";
   });
+  React.useEffect(() => {
+    if (
+      selectedCategoryId !== "all" &&
+      !visibleCategoryIds.has(selectedCategoryId)
+    ) {
+      setSelectedCategoryId("all");
+    }
+  }, [selectedCategoryId, visibleCategoryIds]);
   const selectedCategoryLabel =
     selectedCategoryId === "all"
       ? "All Categories"
-      : categoryOptions.find((category) => category.id === selectedCategoryId)
-          ?.label ?? "All Categories";
+      : visibleCategoryOptions.find(
+          (category) => category.id === selectedCategoryId,
+        )?.label ?? "All Categories";
 
   const headerTextColor = isMobile
     ? theme.palette.text.primary
@@ -183,28 +212,30 @@ export default function App({ themeName, setThemeName }: AppProps) {
         ))}
       </Select>
 
+      {shouldShowCategorySelect && (
         <Select
-          size="small"
-          value={selectedCategoryId}
-          onChange={(e) => handleCategoryChange(e.target.value)}
-          sx={{
-            ...themeSelectSx(theme, isMobile, headerTextColor),
-            minWidth: 170,
-        }}
-      >
-        <MenuItem value="all" onClick={() => handleCategoryOptionClick("all")}>
-          All Categories
-        </MenuItem>
-        {categoryOptions.map((category) => (
-          <MenuItem
-            key={category.id}
-            value={category.id}
-            onClick={() => handleCategoryOptionClick(category.id)}
-          >
-            {category.label}
+            size="small"
+            value={selectedCategoryId}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            sx={{
+              ...themeSelectSx(theme, isMobile, headerTextColor),
+              minWidth: 170,
+          }}
+        >
+          <MenuItem value="all" onClick={() => handleCategoryOptionClick("all")}>
+            All Categories
           </MenuItem>
-        ))}
-      </Select>
+          {visibleCategoryOptions.map((category) => (
+            <MenuItem
+              key={category.id}
+              value={category.id}
+              onClick={() => handleCategoryOptionClick(category.id)}
+            >
+              {category.label}
+            </MenuItem>
+          ))}
+        </Select>
+      )}
 
       {!loading &&
         (user ? (

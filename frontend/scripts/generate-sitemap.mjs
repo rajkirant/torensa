@@ -143,6 +143,7 @@ async function main() {
     for (const item of metadata) {
       if (!item || typeof item !== "object") continue;
       if (item.authRequired === true) continue;
+      if (item.isActive === false) continue;
 
       const normalized = normalizePath(item.path);
       if (normalized) routeToComponent.set(normalized, item.component);
