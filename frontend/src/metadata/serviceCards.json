@@ -10,14 +10,7 @@
     "authRequired": true,
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
-    "keywords": [
-      "email",
-      "mail",
-      "campaign",
-      "newsletter",
-      "outreach",
-      "gmail"
-    ],
+    "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
     "isActive": false
   },
   {
@@ -45,7 +38,7 @@
     "authRequired": false,
     "detailedDescription": "Create scannable QR codes from plain text or links with live preview. Optionally add a logo and short label, then download the final image as PNG. Processing is done in-browser, so no input is uploaded.",
     "categoryId": "business",
-    "keywords": ["qr", "qrcode", "barcode", "text", "url", "link"],
+    "keywords": ["qr", "qrcode", "text", "url", "link"],
     "isActive": true
   },
   {
@@ -174,14 +167,7 @@
     "authRequired": false,
     "detailedDescription": "Paste JSON and run quick validation with readable error feedback. Format with indentation for readability or minify for compact payloads. This utility is fully client-side, making it fast and privacy-friendly for developer workflows.",
     "categoryId": "developer",
-    "keywords": [
-      "json",
-      "format",
-      "validator",
-      "minify",
-      "pretty",
-      "developer"
-    ],
+    "keywords": ["json", "format", "validator", "minify", "pretty"],
     "isActive": true
   },
   {
