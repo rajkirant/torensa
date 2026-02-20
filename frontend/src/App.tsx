@@ -203,6 +203,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
         size="small"
         value={themeName}
         onChange={(e) => setThemeName(e.target.value as ThemeName)}
+        inputProps={{ "aria-label": "Theme selection" }}
         sx={themeSelectSx(theme, isMobile, headerTextColor)}
       >
         {Object.keys(themes).map((name) => (
@@ -217,6 +218,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             size="small"
             value={selectedCategoryId}
             onChange={(e) => handleCategoryChange(e.target.value)}
+            inputProps={{ "aria-label": "Category selection" }}
             sx={{
               ...themeSelectSx(theme, isMobile, headerTextColor),
               minWidth: 170,
