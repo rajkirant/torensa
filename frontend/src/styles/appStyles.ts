@@ -103,7 +103,7 @@ export const headerStyle = (theme: Theme): React.CSSProperties => ({
 });
 
 export const appShellStyle: React.CSSProperties = {
-  minHeight: "100dvh",
+  minHeight: "100svh",
   display: "flex",
   flexDirection: "column",
 };
@@ -116,6 +116,7 @@ export const contentShellStyle: React.CSSProperties = {
 
 export const footerStyle = (theme: Theme): React.CSSProperties => ({
   width: "100%",
+  boxSizing: "border-box",
   padding: "70px 0",
   background: theme.gradients.footer,
   borderTop: `1px solid ${theme.header.border}`,
