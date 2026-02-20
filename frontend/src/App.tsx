@@ -300,6 +300,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
           {isMobile && (
             <IconButton
+              aria-label="Open navigation menu"
               onClick={() => setMobileOpen(true)}
               sx={{ color: "#fff" }}
             >
