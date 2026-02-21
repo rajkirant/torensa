@@ -1,5 +1,8 @@
 import { useLocation } from "react-router-dom";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useAuth } from "../utils/auth";
 import type { ReactNode } from "react";
 

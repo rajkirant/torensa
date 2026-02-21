@@ -1,13 +1,11 @@
-import {
-  Box,
-  MenuItem,
-  Select,
-  Stack,
-  Switch,
-  TextField,
-  Typography,
-  FormControlLabel,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import Switch from "@mui/material/Switch";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { ActionButton } from "../../components/buttons/ActionButton";
 import { TransparentButton } from "../../components/buttons/TransparentButton";
 import FlexWrapRow from "../../components/layout/FlexWrapRow";

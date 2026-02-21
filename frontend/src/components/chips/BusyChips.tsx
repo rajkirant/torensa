@@ -1,5 +1,5 @@
 // components/BusyChip.tsx
-import { Chip } from "@mui/material";
+import Chip from "@mui/material/Chip";
 
 type Props = {
   label?: string;

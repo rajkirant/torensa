@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-  Typography,
-  TextField,
-} from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import { apiFetch } from "../../utils/api";
 import { formatApiError } from "../../utils/apiError";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";

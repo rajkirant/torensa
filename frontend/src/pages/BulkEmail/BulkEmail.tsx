@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Typography,
-  Divider,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Box,
-} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Box from "@mui/material/Box";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SmtpSettingsAccordion from "./SmtpSettingsAccordion";
 import SendEmailAccordion from "./SendEmailAccordion";
