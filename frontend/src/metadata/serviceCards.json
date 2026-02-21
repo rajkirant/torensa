@@ -38,7 +38,7 @@
     "authRequired": false,
     "detailedDescription": "Create scannable QR codes from plain text or links with live preview. Optionally add a logo and short label, then download the final image as PNG. Processing is done in-browser, so no input is uploaded.",
     "categoryId": "business",
-    "keywords": ["qr", "qrcode", "text", "url", "link"],
+    "keywords": ["qr", "qrcode", "text", "link"],
     "isActive": true
   },
   {
