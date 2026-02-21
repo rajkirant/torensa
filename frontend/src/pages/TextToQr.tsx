@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";

@@ -1,5 +1,8 @@
 import React from "react";
-import { Card, CardContent, Typography, Stack } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 import { useLocation } from "react-router-dom";
 import serviceCards from "../metadata/serviceCards.json";
 import OfflineChip from "./chips/OfflineChip";

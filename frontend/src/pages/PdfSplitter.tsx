@@ -1,15 +1,13 @@
 import React, { useMemo, useState } from "react";
 import JSZip from "jszip";
 import { PDFDocument } from "pdf-lib";
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DownloadIcon from "@mui/icons-material/Download";

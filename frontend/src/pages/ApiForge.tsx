@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Chip,
-  MenuItem,
-  Paper,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 import PageContainer from "../components/PageContainer";
 import { TransparentButton } from "../components/buttons/TransparentButton";

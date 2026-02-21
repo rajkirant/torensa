@@ -1,21 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  TextField,
-  Alert,
-  Divider,
-  IconButton,
-  Chip,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Alert from "@mui/material/Alert";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Chip from "@mui/material/Chip";
+import MenuItem from "@mui/material/MenuItem";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
