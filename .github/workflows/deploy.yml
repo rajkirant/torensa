@@ -29,18 +29,18 @@ jobs:
         run: |
           echo "Before SHA: ${{ github.event.before }}"
           echo "Current SHA: ${{ github.sha }}"
-          echo "Checking changes in: $TARGET_DIR/"
+          echo "Checking changes in: $TARGET_DIR/ or .github/workflows/deploy.yml"
 
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          if echo "$CHANGED_FILES" | grep -q "^${TARGET_DIR}/"; then
+          if echo "$CHANGED_FILES" | grep -Eq "^${TARGET_DIR}/|^\\.github/workflows/deploy\\.yml$"; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Frontend folder changed"
+            echo "Frontend or deploy workflow changed"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Frontend folder NOT changed"
+            echo "Frontend and deploy workflow NOT changed"
           fi
 
       - name: Detect lambda changes
