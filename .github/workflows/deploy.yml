@@ -147,7 +147,7 @@ jobs:
           fi
 
       - name: Create build-info JSON
-        if: steps.s3_changes.outputs.changed == 'true'
+        if: steps.detect_frontend.outputs.changed == 'true'
         shell: bash
         run: |
           mkdir -p frontend/dist/metadata
@@ -160,7 +160,7 @@ jobs:
           EOF
 
       - name: Deploy dist to S3
-        if: steps.s3_changes.outputs.changed == 'true'
+        if: steps.detect_frontend.outputs.changed == 'true'
         run: |
           aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete --exclude "assets/*"
           aws s3 sync frontend/dist/assets/ s3://${{ secrets.S3_BUCKET_NAME }}/assets/ --delete --cache-control "public,max-age=31536000,immutable"
@@ -179,7 +179,7 @@ jobs:
             --cache-control "public,max-age=31536000"
 
       - name: Invalidate CloudFront cache
-        if: steps.s3_changes.outputs.changed == 'true'
+        if: steps.detect_frontend.outputs.changed == 'true'
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
