@@ -33,10 +33,10 @@ const rainbow = createTheme({
   home: {
     card: {
       background:
-        "linear-gradient(160deg, rgba(37, 26, 92, 0.86) 0%, rgba(18, 75, 114, 0.82) 48%, rgba(18, 110, 88, 0.82) 100%)",
-      border: "1px solid rgba(255,255,255,0.26)",
+        "linear-gradient(140deg, rgba(239,68,68,0.26) 0%, rgba(245,158,11,0.24) 18%, rgba(234,179,8,0.22) 33%, rgba(34,197,94,0.22) 50%, rgba(6,182,212,0.24) 67%, rgba(59,130,246,0.24) 82%, rgba(168,85,247,0.26) 100%), linear-gradient(160deg, rgba(30,41,59,0.88) 0%, rgba(15,23,42,0.9) 100%)",
+      border: "1px solid rgba(255,255,255,0.34)",
       boxShadow:
-        "0 18px 36px rgba(2,6,23,0.42), 0 0 0 1px rgba(255,0,127,0.12), 0 0 0 2px rgba(0,180,216,0.08), inset 0 1px 0 rgba(255,255,255,0.08)",
+        "0 18px 36px rgba(2,6,23,0.45), 0 0 0 1px rgba(244,114,182,0.22), 0 0 24px rgba(59,130,246,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
     },
   },
 
@@ -65,9 +65,9 @@ const rainbow = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1e293b",
+          backgroundColor: "#1a2440",
           backgroundImage:
-            "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
+            "linear-gradient(150deg, rgba(244,114,182,0.12) 0%, rgba(59,130,246,0.12) 45%, rgba(16,185,129,0.1) 100%)",
           borderRadius: 16,
         },
       },
