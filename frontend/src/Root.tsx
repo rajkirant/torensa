@@ -37,7 +37,7 @@ type ServiceCardConfig = {
 
 export function Root() {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
-    return (localStorage.getItem("themeName") as ThemeName) || "dark";
+    return (localStorage.getItem("themeName") as ThemeName) || "light";
   });
 
   useEffect(() => {
