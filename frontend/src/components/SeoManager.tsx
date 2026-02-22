@@ -2,13 +2,10 @@ import React, { useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import serviceCards from "../metadata/serviceCards.json";
-
-type ServiceCardMeta = {
-  path: string;
-  title: string;
-  description: string;
-  isActive?: boolean;
-};
+import {
+  type ServiceCardConfig,
+  getActiveServiceCards,
+} from "../utils/serviceCards";
 
 type RouteMeta = {
   title: string;
@@ -54,8 +51,7 @@ export default function SeoManager() {
 
   const toolMetaByPath = useMemo(() => {
     const map = new Map<string, RouteMeta>();
-    for (const card of serviceCards as ServiceCardMeta[]) {
-      if (card?.isActive === false) continue;
+    for (const card of getActiveServiceCards(serviceCards as ServiceCardConfig[])) {
       map.set(normalizePath(card.path), {
         title: formatToolTitle(card.title),
         description: card.description,

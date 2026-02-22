@@ -15,29 +15,17 @@ import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import serviceCards from "../metadata/serviceCards.json";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import type { AppOutletContext } from "../App";
-
-/* ===================== TYPES ===================== */
-type ServiceCardConfig = {
-  id: string;
-  title: string;
-  description: string;
-  path: string;
-  ctaLabel: string;
-  keywords?: string[];
-  offlineEnabled: boolean;
-  isActive?: boolean;
-  categoryId: string;
-  authRequired?: boolean;
-};
+import {
+  type ServiceCardConfig,
+  getActiveServiceCards,
+  getOfflineServiceCards,
+  getServiceCardsByCategory,
+} from "../utils/serviceCards";
 
 /* ===================== DATA (JSON) ===================== */
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 const INITIAL_VISIBLE_CARDS = 9;
 const LOAD_MORE_STEP = 6;
-
-function isCardActive(card: ServiceCardConfig) {
-  return card.isActive !== false;
-}
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
@@ -93,15 +81,12 @@ export default function Home() {
 
   // Safety guard (never crash)
   const allCards = Array.isArray(typedServiceCards)
-    ? typedServiceCards.filter(isCardActive)
+    ? getActiveServiceCards(typedServiceCards)
     : [];
   const [searchTerm, setSearchTerm] = React.useState("");
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const cards =
-    selectedCategoryId === "all"
-      ? allCards
-      : allCards.filter((card) => card.categoryId === selectedCategoryId);
-  const offlineCards = cards.filter((card) => card.offlineEnabled);
+  const cards = getServiceCardsByCategory(allCards, selectedCategoryId);
+  const offlineCards = getOfflineServiceCards(cards);
   const matchesSearch = (card: ServiceCardConfig) => {
     if (!normalizedSearchTerm) return true;
     const keywordText = (card.keywords ?? []).join(" ");

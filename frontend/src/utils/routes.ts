@@ -1,6 +1,11 @@
 import React, { lazy } from "react";
 import serviceCards from "../metadata/serviceCards.json";
 import HomePage from "../pages/Home";
+import {
+  type ServiceCardConfig,
+  getActiveServiceCards,
+  getServiceCardsWithComponent,
+} from "./serviceCards";
 
 /* ===================== APP PAGES ===================== */
 export const Home = HomePage;
@@ -10,15 +15,8 @@ export const Signup = lazy(() => import("../pages/Signup"));
 export const NotFound = lazy(() => import("../pages/NotFound"));
 
 /* ===================== TOOL CONFIG ===================== */
-type ServiceCardConfig = {
-  id: string;
-  component: string;
-  isActive?: boolean;
-};
-
-const tools = (serviceCards as ServiceCardConfig[]).filter(
-  (tool) => tool.isActive !== false,
-);
+const tools = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
+const toolsWithComponent = getServiceCardsWithComponent(tools);
 
 // Grab tool pages under /pages at build time.
 // Exclude app-shell pages that are imported through dedicated routes.
@@ -56,7 +54,7 @@ function lazyFrom(component: string): React.LazyExoticComponent<any> {
 export const toolComponentMap: Record<
   string,
   React.LazyExoticComponent<any>
-> = tools.reduce(
+> = toolsWithComponent.reduce(
   (acc, tool) => {
     acc[tool.id.toLowerCase()] = lazyFrom(tool.component);
     return acc;

@@ -16,18 +16,17 @@ import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import ToolStatusAlerts from "../alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
 import serviceCards from "../../metadata/serviceCards.json";
+import {
+  type ServiceCardConfig,
+  findServiceCardByPath,
+  getActiveServiceCards,
+} from "../../utils/serviceCards";
 
 type ChatRole = "user" | "assistant";
 
 type ChatMessage = {
   role: ChatRole;
   content: string;
-};
-
-type ServiceCardMeta = {
-  id: string;
-  path: string;
-  isActive?: boolean;
 };
 
 const SUGGESTIONS = [
@@ -43,12 +42,10 @@ export default function ToolChatWidget() {
   const isDark = theme.palette.mode === "dark";
 
   const location = useLocation();
-  const cards = (serviceCards as ServiceCardMeta[]).filter(
-    (card) => card.isActive !== false,
-  );
+  const cards = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
 
   const currentToolId = useMemo(() => {
-    const match = cards.find((card) => card.path === location.pathname);
+    const match = findServiceCardByPath(cards, location.pathname);
     return match?.id ?? null;
   }, [cards, location.pathname]);
 
