@@ -1,8 +1,10 @@
-import React from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { useLocation } from "react-router-dom";
 import serviceCards from "../metadata/serviceCards.json";
 import OfflineChip from "./chips/OfflineChip";
@@ -18,12 +20,29 @@ type ServiceCard = {
     ctaLabel: string;
     offlineEnabled: boolean;
     authRequired: boolean;
+    advancedOptionsEnabled?: boolean;
 };
 
 type PageContainerProps = {
     children: React.ReactNode;
     maxWidth?: number;
 };
+
+type PageOptionsContextValue = {
+    showAdvancedOptions: boolean;
+    setShowAdvancedOptions: (value: boolean) => void;
+    advancedOptionsEnabled: boolean;
+};
+
+const PageOptionsContext = createContext<PageOptionsContextValue>({
+    showAdvancedOptions: false,
+    setShowAdvancedOptions: () => {},
+    advancedOptionsEnabled: false,
+});
+
+export function usePageOptions() {
+    return useContext(PageOptionsContext);
+}
 
 export default function PageContainer({
                                           children,
@@ -37,6 +56,12 @@ export default function PageContainer({
     );
 
     const title = meta?.title;
+    const advancedOptionsEnabled = Boolean(meta?.advancedOptionsEnabled);
+    const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+
+    useEffect(() => {
+        setShowAdvancedOptions(false);
+    }, [currentPath, advancedOptionsEnabled]);
 
     return (
         <>
@@ -66,14 +91,37 @@ export default function PageContainer({
                         >
                             {title}
 
+                            {advancedOptionsEnabled && (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={showAdvancedOptions}
+                                            onChange={(e) =>
+                                                setShowAdvancedOptions(e.target.checked)
+                                            }
+                                        />
+                                    }
+                                    label="Show advanced options"
+                                    sx={{ ml: "auto", mr: 1 }}
+                                />
+                            )}
+
                             {meta?.offlineEnabled && (
-                                <OfflineChip sx={{ ml: "auto" }} />
+                                <OfflineChip sx={{ ml: advancedOptionsEnabled ? 0 : "auto" }} />
                             )}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             {meta?.detailedDescription}
                         </Typography>
-                        {children}
+                        <PageOptionsContext.Provider
+                            value={{
+                                showAdvancedOptions,
+                                setShowAdvancedOptions,
+                                advancedOptionsEnabled,
+                            }}
+                        >
+                            {children}
+                        </PageOptionsContext.Provider>
                         <Stack direction="row" justifyContent="flex-end">
                             <BackButton />
                         </Stack>
