@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
 import { Suspense } from "react";
 
@@ -45,6 +45,10 @@ import { themes } from "./theme";
 import type { ThemeName } from "./theme";
 import categories from "./metadata/categories.json";
 import serviceCards from "./metadata/serviceCards.json";
+import {
+  type ServiceCardConfig,
+  getActiveServiceCards,
+} from "./utils/serviceCards";
 
 const ToolChatWidget = React.lazy(() => import("./components/chat/ToolChatWidget"));
 
@@ -71,11 +75,6 @@ type CategoryConfig = {
   label: string;
 };
 
-type ServiceCardMeta = {
-  categoryId?: string;
-  isActive?: boolean;
-};
-
 export default function App({ themeName, setThemeName }: AppProps) {
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
@@ -83,21 +82,32 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const isMobile = useMediaQuery("(max-width:900px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const categoryOptions = categories as CategoryConfig[];
-  const activeCards = (serviceCards as ServiceCardMeta[]).filter(
-    (card) => card?.isActive !== false,
+  const activeCards = useMemo(
+    () => getActiveServiceCards(serviceCards as ServiceCardConfig[]),
+    [],
   );
-  const activeCategoryIds = new Set(
-    activeCards
-      .map((card) => (card.categoryId || "").trim())
-      .filter((categoryId) => Boolean(categoryId)),
+  const activeCategoryIds = useMemo(
+    () =>
+      new Set(
+        activeCards
+          .map((card) => (card.categoryId || "").trim())
+          .filter((categoryId) => Boolean(categoryId)),
+      ),
+    [activeCards],
   );
-  const visibleCategoryOptions = categoryOptions.filter((category) =>
-    activeCategoryIds.has(category.id),
+  const visibleCategoryOptions = useMemo(
+    () =>
+      categoryOptions.filter((category) => activeCategoryIds.has(category.id)),
+    [categoryOptions, activeCategoryIds],
   );
-  const visibleCategoryIds = new Set(
-    visibleCategoryOptions.map((category) => category.id),
+  const visibleCategoryIds = useMemo(
+    () => new Set(visibleCategoryOptions.map((category) => category.id)),
+    [visibleCategoryOptions],
   );
-  const shouldShowCategorySelect = visibleCategoryOptions.length > 0;
+  const shouldShowCategorySelect = useMemo(
+    () => visibleCategoryOptions.length > 0,
+    [visibleCategoryOptions],
+  );
   const [selectedCategoryId, setSelectedCategoryId] = React.useState(() => {
     const categoryFromUrl = new URLSearchParams(window.location.search).get(
       "categories",
@@ -114,12 +124,15 @@ export default function App({ themeName, setThemeName }: AppProps) {
       setSelectedCategoryId("all");
     }
   }, [selectedCategoryId, visibleCategoryIds]);
-  const selectedCategoryLabel =
-    selectedCategoryId === "all"
-      ? "All Categories"
-      : visibleCategoryOptions.find(
-          (category) => category.id === selectedCategoryId,
-        )?.label ?? "All Categories";
+  const selectedCategoryLabel = useMemo(
+    () =>
+      selectedCategoryId === "all"
+        ? "All Categories"
+        : visibleCategoryOptions.find(
+            (category) => category.id === selectedCategoryId,
+          )?.label ?? "All Categories",
+    [selectedCategoryId, visibleCategoryOptions],
+  );
 
   const headerTextColor = isMobile
     ? theme.palette.text.primary

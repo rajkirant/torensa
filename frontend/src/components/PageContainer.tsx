@@ -9,19 +9,10 @@ import { useLocation } from "react-router-dom";
 import serviceCards from "../metadata/serviceCards.json";
 import OfflineChip from "./chips/OfflineChip";
 import BackButton from "./buttons/BackButton";
-
-type ServiceCard = {
-    id: string;
-    component: string;
-    title: string;
-    description: string;
-    detailedDescription: string;
-    path: string;
-    ctaLabel: string;
-    offlineEnabled: boolean;
-    authRequired: boolean;
-    advancedOptionsEnabled?: boolean;
-};
+import {
+    type ServiceCardConfig,
+    findServiceCardByPath,
+} from "../utils/serviceCards";
 
 type PageContainerProps = {
     children: React.ReactNode;
@@ -51,8 +42,9 @@ export default function PageContainer({
     const location = useLocation();
     const currentPath = location.pathname;
 
-    const meta = (serviceCards as ServiceCard[]).find(
-        (item) => item.path === currentPath,
+    const meta = findServiceCardByPath(
+        serviceCards as ServiceCardConfig[],
+        currentPath,
     );
 
     const title = meta?.title;

@@ -14,6 +14,10 @@ import type { ThemeName } from "./theme";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 import serviceCards from "./metadata/serviceCards.json";
+import {
+  type ServiceCardConfig,
+  getActiveServiceCards,
+} from "./utils/serviceCards";
 
 import {
   Home,
@@ -23,17 +27,6 @@ import {
   toolComponentMap,
   NotFound,
 } from "./utils/routes";
-
-type ServiceCardConfig = {
-  id: string;
-  title: string;
-  description: string;
-  path: string;
-  ctaLabel: string;
-  offlineEnabled: boolean;
-  isActive?: boolean;
-  authRequired?: boolean;
-};
 
 export function Root() {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
@@ -46,9 +39,7 @@ export function Root() {
 
   const theme = useMemo(() => themes[themeName], [themeName]);
 
-  const tools = (serviceCards as ServiceCardConfig[]).filter(
-    (tool) => tool.isActive !== false,
-  );
+  const tools = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
 
   return (
     <HelmetProvider>
