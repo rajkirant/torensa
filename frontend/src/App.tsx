@@ -6,7 +6,6 @@ import { NavButton } from "./components/buttons/NavButton";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
 import { apiFetch } from "./utils/api";
-import ToolChatWidget from "./components/chat/ToolChatWidget";
 
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -46,6 +45,8 @@ import { themes } from "./theme";
 import type { ThemeName } from "./theme";
 import categories from "./metadata/categories.json";
 import serviceCards from "./metadata/serviceCards.json";
+
+const ToolChatWidget = React.lazy(() => import("./components/chat/ToolChatWidget"));
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -385,7 +386,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
           </div>
         </div>
       </footer>
-      <ToolChatWidget />
+      <Suspense fallback={null}>
+        <ToolChatWidget />
+      </Suspense>
     </div>
   );
 }
