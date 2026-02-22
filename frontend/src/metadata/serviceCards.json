@@ -10,8 +10,15 @@
     "authRequired": true,
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
-    "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
-    "isActive": false
+    "keywords": [
+      "email",
+      "mail",
+      "campaign",
+      "newsletter",
+      "gmail"
+    ],
+    "isActive": false,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "excel-to-csv",
@@ -24,8 +31,16 @@
     "authRequired": false,
     "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
     "categoryId": "utilities",
-    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"],
-    "isActive": true
+    "keywords": [
+      "excel",
+      "csv",
+      "json",
+      "spreadsheet",
+      "convert",
+      "data"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "text-to-qr",
@@ -38,8 +53,37 @@
     "authRequired": false,
     "detailedDescription": "Create scannable QR codes from plain text or links with live preview. Optionally add a logo and short label, then download the final image as PNG. Processing is done in-browser, so no input is uploaded.",
     "categoryId": "business",
-    "keywords": ["qr", "qrcode", "text", "link"],
-    "isActive": true
+    "keywords": [
+      "qr",
+      "qrcode",
+      "text",
+      "link"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
+    "id": "barcode-generator",
+    "component": "BarcodeGenerator",
+    "title": "Barcode Generator",
+    "description": "Generate barcodes (Code 128, Code 39, EAN, UPC) and download as PNG.",
+    "path": "/barcode-generator",
+    "ctaLabel": "Generate Barcode",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Create printable barcodes directly in your browser with support for common formats like Code 128, Code 39, EAN-13, EAN-8, and UPC-A. Customize width, height, and label display, then export the barcode as PNG. Everything runs client-side for speed and privacy.",
+    "categoryId": "business",
+    "keywords": [
+      "barcode",
+      "code128",
+      "code39",
+      "ean13",
+      "ean8",
+      "upc",
+      "label"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": true
   },
   {
     "id": "image-compressor",
@@ -52,8 +96,16 @@
     "authRequired": false,
     "detailedDescription": "Reduce image file size directly in your browser with no uploads. Preview selected images immediately, tune compression quality, then compress and download files individually or as a ZIP archive. Ideal for fast web optimization while keeping images private.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "compress", "optimize", "size"],
-    "isActive": true
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "compress",
+      "optimize",
+      "size"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "image-format-converter",
@@ -76,7 +128,8 @@
       "bmp",
       "convert"
     ],
-    "isActive": true
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "image-pdf-to-pdf",
@@ -98,7 +151,8 @@
       "combine",
       "join"
     ],
-    "isActive": true
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "pdf-splitter",
@@ -111,8 +165,15 @@
     "authRequired": false,
     "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download. All processing runs on-device for privacy and offline use.",
     "categoryId": "utilities",
-    "keywords": ["pdf", "split", "extract", "pages", "document"],
-    "isActive": true
+    "keywords": [
+      "pdf",
+      "split",
+      "extract",
+      "pages",
+      "document"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "image-crop-tool",
@@ -125,8 +186,16 @@
     "authRequired": false,
     "detailedDescription": "Select a crop area with pixel-level controls, preview the selected region, and export as PNG, JPEG, or WebP. Everything runs entirely in your browser, so images never leave your device.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "crop", "resize", "edit"],
-    "isActive": true
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "crop",
+      "resize",
+      "edit"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "invoice-generator",
@@ -139,8 +208,15 @@
     "authRequired": false,
     "detailedDescription": "Build polished invoices or receipts with seller/buyer details, line items, taxes, shipping, discounts, and notes. Totals are calculated automatically, and the final document can be exported as PDF. Data stays local and can be reused in your browser.",
     "categoryId": "business",
-    "keywords": ["invoice", "receipt", "billing", "payment", "business"],
-    "isActive": true
+    "keywords": [
+      "invoice",
+      "receipt",
+      "billing",
+      "payment",
+      "business"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "text-diff-checker",
@@ -153,8 +229,15 @@
     "authRequired": false,
     "detailedDescription": "Paste two versions of text and view line-by-line differences, including additions, removals, and modified blocks. Useful for reviewing edits in content, configs, or code snippets. Everything runs locally in your browser.",
     "categoryId": "developer",
-    "keywords": ["text", "diff", "compare", "changes", "checker"],
-    "isActive": true
+    "keywords": [
+      "text",
+      "diff",
+      "compare",
+      "changes",
+      "checker"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "json-formatter-validator",
@@ -167,8 +250,15 @@
     "authRequired": false,
     "detailedDescription": "Paste JSON and run quick validation with readable error feedback. Format with indentation for readability or minify for compact payloads. This utility is fully client-side, making it fast and privacy-friendly for developer workflows.",
     "categoryId": "developer",
-    "keywords": ["json", "format", "validator", "minify", "pretty"],
-    "isActive": true
+    "keywords": [
+      "json",
+      "format",
+      "validator",
+      "minify",
+      "pretty"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "spring-boot-log-analyzer",
@@ -181,8 +271,16 @@
     "authRequired": false,
     "detailedDescription": "Upload or paste Spring Boot logs to identify likely first-failure events, exception chains, stack-frame locations, and correlation-id clusters. Export a structured JSON incident report for sharing and follow-up debugging.",
     "categoryId": "developer",
-    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug"],
-    "isActive": true
+    "keywords": [
+      "spring",
+      "boot",
+      "log",
+      "analyzer",
+      "exception",
+      "debug"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "cron-expression-builder",
@@ -195,8 +293,15 @@
     "authRequired": false,
     "detailedDescription": "Create cron expressions with direct input, validate syntax instantly, and preview upcoming execution times. Supports both 5-field (minute hour day-of-month month day-of-week) and 6-field (second minute hour day-of-month month day-of-week) formats, with human-readable interpretation to reduce scheduling mistakes.",
     "categoryId": "developer",
-    "keywords": ["cron", "schedule", "expression", "validator", "time"],
-    "isActive": true
+    "keywords": [
+      "cron",
+      "schedule",
+      "expression",
+      "validator",
+      "time"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "jwt-encoder-decoder",
@@ -209,8 +314,15 @@
     "authRequired": false,
     "detailedDescription": "Inspect JWT header and payload, edit claims, and generate new tokens using HS256 or HS512 algorithms. Helpful for API testing and debugging authentication flows. Operations are performed in-browser without sending token data to a backend.",
     "categoryId": "developer",
-    "keywords": ["jwt", "token", "encode", "decode", "security"],
-    "isActive": true
+    "keywords": [
+      "jwt",
+      "token",
+      "encode",
+      "decode",
+      "security"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "uuid-generator",
@@ -223,8 +335,15 @@
     "authRequired": false,
     "detailedDescription": "Create one or many UUID v4 identifiers with options like uppercase output or hyphen removal. Copy all generated values at once for use in development, testing, and data workflows.",
     "categoryId": "developer",
-    "keywords": ["uuid", "guid", "identifier", "id", "generate"],
-    "isActive": true
+    "keywords": [
+      "uuid",
+      "guid",
+      "identifier",
+      "id",
+      "generate"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "string-encryptor",
@@ -247,7 +366,8 @@
       "string",
       "jasypt"
     ],
-    "isActive": true
+    "isActive": true,
+    "advancedOptionsEnabled": false
   },
   {
     "id": "api-forge",
@@ -260,7 +380,16 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge lets you send API requests directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body.",
     "categoryId": "developer",
-    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
-    "isActive": true
+    "keywords": [
+      "api",
+      "request",
+      "http",
+      "rest",
+      "headers",
+      "json",
+      "test"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
   }
 ]
