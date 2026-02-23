@@ -1,4 +1,5 @@
 import re
+import logging
 
 from django.http import HttpResponse
 from rest_framework import status
@@ -16,6 +17,7 @@ ALLOWED_MIME_TYPES = {
     "image/jpg",
     "image/webp",
 }
+logger = logging.getLogger(__name__)
 
 
 def _enforce_csrf(request):
@@ -59,18 +61,26 @@ def remove_background_view(request):
 
     try:
         from rembg import remove
-    except Exception:
+    except Exception as exc:
+        logger.exception("Failed to import rembg in remove_background_view")
         return Response(
-            {"error": "Background remover is not available on this server."},
+            {
+                "error": "Background remover is not available on this server.",
+                "detail": str(exc),
+            },
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
 
     try:
         input_bytes = image_file.read()
         output_bytes = remove(input_bytes)
-    except Exception:
+    except Exception as exc:
+        logger.exception("Background removal failed while processing image")
         return Response(
-            {"error": "Failed to process this image. Try a different image."},
+            {
+                "error": "Failed to process this image. Try a different image.",
+                "detail": str(exc),
+            },
             status=status.HTTP_400_BAD_REQUEST,
         )
 
