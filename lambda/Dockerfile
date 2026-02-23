@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r /tmp/backend-requirements.txt -t ${LAMBDA_TASK
 
 # Preload rembg model at build time to avoid runtime download failures/timeouts.
 ENV U2NET_HOME=${LAMBDA_TASK_ROOT}/.u2net
+ENV NUMBA_DISABLE_JIT=1
 RUN mkdir -p ${U2NET_HOME} \
     && python - <<'PY'
 from rembg import new_session
