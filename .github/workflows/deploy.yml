@@ -98,23 +98,31 @@ jobs:
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build and push Lambda image
         id: build_image
-        env:
-          ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.LAMBDA_ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          IMAGE_URI="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-          docker build -f lambda/Dockerfile -t "$IMAGE_URI" .
-          docker push "$IMAGE_URI"
-          echo "image_uri=$IMAGE_URI" >> "$GITHUB_OUTPUT"
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: lambda/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.login_ecr.outputs.registry }}/${{ secrets.LAMBDA_ECR_REPOSITORY }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
 
       - name: Deploy Lambda (image)
+        env:
+          IMAGE_URI: ${{ steps.login_ecr.outputs.registry }}/${{ secrets.LAMBDA_ECR_REPOSITORY }}@${{ steps.build_image.outputs.digest }}
         run: |
+          echo "Deploying image: $IMAGE_URI"
           aws lambda update-function-code \
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-            --image-uri ${{ steps.build_image.outputs.image_uri }}
+            --image-uri "$IMAGE_URI"
 
       # ---------- Frontend ----------
       - name: Setup Node.js
