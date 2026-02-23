@@ -22,6 +22,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug dispatch inputs
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          echo "force_lambda_deploy(raw)=${{ github.event.inputs.force_lambda_deploy }}"
+          echo "force_lambda_deploy(inputs)=${{ inputs.force_lambda_deploy }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -71,7 +77,7 @@ jobs:
 
       # ----------- AWS deploy ASAP (early in workflow) -----------
       - name: Configure AWS credentials (OIDC)
-        if: steps.detect_frontend.outputs.changed == 'true' || steps.detect_lambda.outputs.changed == 'true' || github.event.inputs.force_lambda_deploy == 'true'
+        if: steps.detect_frontend.outputs.changed == 'true' || steps.detect_lambda.outputs.changed == 'true' || inputs.force_lambda_deploy
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
@@ -79,12 +85,12 @@ jobs:
 
       # ---------- Lambda deploy (container image) ----------
       - name: Login to Amazon ECR
-        if: steps.detect_lambda.outputs.changed == 'true' || github.event.inputs.force_lambda_deploy == 'true'
+        if: steps.detect_lambda.outputs.changed == 'true' || inputs.force_lambda_deploy
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push Lambda image
-        if: steps.detect_lambda.outputs.changed == 'true' || github.event.inputs.force_lambda_deploy == 'true'
+        if: steps.detect_lambda.outputs.changed == 'true' || inputs.force_lambda_deploy
         id: build_image
         env:
           ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
@@ -97,7 +103,7 @@ jobs:
           echo "image_uri=$IMAGE_URI" >> "$GITHUB_OUTPUT"
 
       - name: Deploy Lambda (image)
-        if: steps.detect_lambda.outputs.changed == 'true' || github.event.inputs.force_lambda_deploy == 'true'
+        if: steps.detect_lambda.outputs.changed == 'true' || inputs.force_lambda_deploy
         run: |
           aws lambda update-function-code \
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
