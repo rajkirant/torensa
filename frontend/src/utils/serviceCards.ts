@@ -37,7 +37,21 @@ export function findServiceCardByPath(
   cards: ServiceCardConfig[],
   path: string,
 ) {
-  return cards.find((card) => card.path === path);
+  const normalize = (value: string) => {
+    const trimmed = (value || "").trim();
+    if (trimmed.length > 1 && trimmed.endsWith("/")) {
+      return trimmed.slice(0, -1);
+    }
+    return trimmed;
+  };
+
+  const target = normalize(path);
+  if (!target) return undefined;
+
+  const exact = cards.find((card) => normalize(card.path) === target);
+  if (exact) return exact;
+
+  return cards.find((card) => target.endsWith(normalize(card.path)));
 }
 
 export function getServiceCardsByCategory(
