@@ -79,6 +79,8 @@ export default function PageContainer({
                                 display: "flex",
                                 alignItems: "center",
                                 width: "100%",
+                                flexWrap: { xs: "wrap", sm: "nowrap" },
+                                rowGap: { xs: 1, sm: 0 },
                             }}
                         >
                             {title}
@@ -94,12 +96,25 @@ export default function PageContainer({
                                         />
                                     }
                                     label="Show advanced options"
-                                    sx={{ ml: "auto", mr: 1 }}
+                                    sx={{
+                                        ml: { xs: 0, sm: "auto" },
+                                        mr: { xs: 0, sm: 1 },
+                                        width: { xs: "100%", sm: "auto" },
+                                        order: { xs: 2, sm: 0 },
+                                    }}
                                 />
                             )}
 
                             {meta?.offlineEnabled && (
-                                <OfflineChip sx={{ ml: advancedOptionsEnabled ? 0 : "auto" }} />
+                                <OfflineChip
+                                    sx={{
+                                        ml: {
+                                            xs: "auto",
+                                            sm: advancedOptionsEnabled ? 0 : "auto",
+                                        },
+                                        order: { xs: 1, sm: 0 },
+                                    }}
+                                />
                             )}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
