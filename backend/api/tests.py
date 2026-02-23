@@ -366,3 +366,29 @@ class ToolChatContextSelectionTests(TestCase):
         self.assertIn("JSON Formatter + Validator", context)
         self.assertNotIn("Bulk Email Sender", context)
         self.assertNotIn("Torensa API Forge", context)
+
+
+class ImageBackgroundRemoveTests(TestCase):
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=True)
+
+    def _get_csrf_token(self):
+        response = self.client.get("/api/me/")
+        self.assertEqual(response.status_code, 200)
+        token = response.json().get("csrfToken")
+        self.assertTrue(token)
+        return token
+
+    def test_remove_background_requires_csrf_token(self):
+        response = self.client.post("/api/remove-background/")
+        self.assertEqual(response.status_code, 403)
+
+    def test_remove_background_requires_image_file(self):
+        token = self._get_csrf_token()
+        response = self.client.post(
+            "/api/remove-background/",
+            data={},
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())

@@ -198,6 +198,28 @@
     "advancedOptionsEnabled": false
   },
   {
+    "id": "image-background-remover",
+    "component": "ImageBackgroundRemover",
+    "title": "Image Background Remover",
+    "description": "Remove image backgrounds and download transparent PNG output.",
+    "path": "/image-background-remover",
+    "ctaLabel": "Remove Background",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload a PNG, JPG, or WEBP image and remove the background using server-side segmentation. Preview before and after results, then download a transparent PNG.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "background",
+      "remove",
+      "transparent",
+      "png",
+      "cutout"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "invoice-generator",
     "component": "InvoiceGenerator",
     "title": "Invoice / Receipt Generator",
