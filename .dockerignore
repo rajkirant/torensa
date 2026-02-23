@@ -1,0 +1,10 @@
+.git
+.github
+.venv
+.vscode
+frontend/node_modules
+frontend/dist
+frontend/.pnpm-store
+**/__pycache__
+**/*.pyc
+**/.DS_Store
