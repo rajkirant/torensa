@@ -1,5 +1,8 @@
 import re
 import logging
+import os
+import shutil
+from pathlib import Path
 
 from django.http import HttpResponse
 from rest_framework import status
@@ -18,6 +21,8 @@ ALLOWED_MIME_TYPES = {
     "image/webp",
 }
 logger = logging.getLogger(__name__)
+LAMBDA_MODEL_SRC = Path("/var/task/.u2net")
+LAMBDA_MODEL_DST = Path("/tmp/.u2net")
 
 
 def _enforce_csrf(request):
@@ -34,11 +39,29 @@ def _safe_base_name(filename: str) -> str:
     return safe or "image"
 
 
+def _prepare_runtime_model_dir():
+    # Lambda /var/task is read-only. rembg/pymatting may create temp files
+    # in model directory, so we ensure U2NET_HOME points to writable /tmp.
+    os.environ.setdefault("NUMBA_DISABLE_JIT", "1")
+
+    if LAMBDA_MODEL_SRC.exists():
+        LAMBDA_MODEL_DST.mkdir(parents=True, exist_ok=True)
+        try:
+            shutil.copytree(LAMBDA_MODEL_SRC, LAMBDA_MODEL_DST, dirs_exist_ok=True)
+        except Exception:
+            logger.exception("Failed to sync .u2net model files into /tmp")
+    else:
+        LAMBDA_MODEL_DST.mkdir(parents=True, exist_ok=True)
+
+    os.environ["U2NET_HOME"] = str(LAMBDA_MODEL_DST)
+
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @parser_classes([MultiPartParser, FormParser])
 def remove_background_view(request):
     _enforce_csrf(request)
+    _prepare_runtime_model_dir()
 
     image_file = request.FILES.get("image")
     if image_file is None:
