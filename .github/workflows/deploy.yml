@@ -72,18 +72,18 @@ jobs:
         run: |
           echo "Before SHA: ${{ github.event.before }}"
           echo "Current SHA: ${{ github.sha }}"
-          echo "Checking changes in: lambda/, backend/, or frontend/src/metadata/"
+          echo "Checking changes in: backend/"
 
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          if echo "$CHANGED_FILES" | grep -Eq "^(lambda|backend)/|^frontend/src/metadata/"; then
+          if echo "$CHANGED_FILES" | grep -Eq "^backend/"; then
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Lambda/backend/metadata changed"
+            echo "Backend changed"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Lambda/backend/metadata NOT changed"
+            echo "Backend NOT changed"
           fi
 
       # ----------- AWS deploy ASAP (early in workflow) -----------
@@ -95,13 +95,16 @@ jobs:
 
       # ---------- Lambda deploy (container image) ----------
       - name: Login to Amazon ECR
+        if: steps.detect_lambda.outputs.changed == 'true'
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Setup Docker Buildx
+        if: steps.detect_lambda.outputs.changed == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push Lambda image
+        if: steps.detect_lambda.outputs.changed == 'true'
         id: build_image
         uses: docker/build-push-action@v6
         with:
@@ -116,6 +119,7 @@ jobs:
           sbom: false
 
       - name: Deploy Lambda (image)
+        if: steps.detect_lambda.outputs.changed == 'true'
         env:
           IMAGE_URI: ${{ steps.login_ecr.outputs.registry }}/${{ secrets.LAMBDA_ECR_REPOSITORY }}@${{ steps.build_image.outputs.digest }}
         run: |
