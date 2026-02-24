@@ -1,10 +1,11 @@
 import { useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "../utils/auth";
 import type { ReactNode } from "react";
+import { ActionButton } from "../components/buttons/ActionButton";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 
 export default function ProtectedRoute({
                                            children,
@@ -50,23 +51,20 @@ export default function ProtectedRoute({
                 </Typography>
 
                 <Stack spacing={1.5}>
-                    <Button
-                        variant="contained"
+                    <ActionButton
                         fullWidth
                         onClick={() => window.location.assign(`/login?redirect=${redirect}`)}
                     >
                         Log in
-                    </Button>
+                    </ActionButton>
 
-                    <Button
-                        variant="outlined"
+                    <TransparentButton
                         fullWidth
+                        label="Sign up"
                         onClick={() =>
                             window.location.assign(`/signup?redirect=${redirect}`)
                         }
-                    >
-                        Sign up
-                    </Button>
+                    />
                 </Stack>
 
                 <Typography variant="caption" sx={{ display: "block", mt: 2, color: "text.secondary" }}>
