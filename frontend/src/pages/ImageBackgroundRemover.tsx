@@ -80,7 +80,11 @@ export default function ImageBackgroundRemover() {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        setError(data?.error || "Failed to remove background.");
+        console.error("Background remover failed:", {
+          status: response.status,
+          error: data?.error,
+        });
+        setError("Unable to remove the background for this image.");
         return;
       }
 
@@ -88,7 +92,7 @@ export default function ImageBackgroundRemover() {
       setResultBlob(blob);
       setSuccess("Background removed successfully.");
     } catch {
-      setError("Network error. Could not reach background remover service.");
+      setError("Unable to remove the background for this image.");
     } finally {
       setLoading(false);
     }
