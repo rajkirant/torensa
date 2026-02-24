@@ -163,24 +163,19 @@ PGBOUNCER_TRANSACTION_MODE = _env_bool("PGBOUNCER_TRANSACTION_MODE", True)
 DB_SSL_REQUIRE = _env_bool("DB_SSL_REQUIRE", True)
 DB_CONN_MAX_AGE = int(os.getenv("DB_CONN_MAX_AGE", "0" if PGBOUNCER_TRANSACTION_MODE else "60"))
 
-if DATABASE_URL:
-    DATABASES = {
-        "default": dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=DB_CONN_MAX_AGE,
-            ssl_require=DB_SSL_REQUIRE,
-        )
-    }
-    # PgBouncer transaction pooling is incompatible with server-side cursors.
-    if PGBOUNCER_TRANSACTION_MODE:
-        DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+if not DATABASE_URL:
+    raise ImproperlyConfigured("DATABASE_URL environment variable is required.")
+
+DATABASES = {
+    "default": dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=DB_CONN_MAX_AGE,
+        ssl_require=DB_SSL_REQUIRE,
+    )
+}
+# PgBouncer transaction pooling is incompatible with server-side cursors.
+if PGBOUNCER_TRANSACTION_MODE:
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 
 
 # Password validation
