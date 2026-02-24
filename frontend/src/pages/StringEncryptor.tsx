@@ -11,7 +11,10 @@ import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import { apiFetch } from "../utils/api";
 
-type Algorithm = "CRYPTOJS_AES" | "PBKDF2_HMAC_SHA512_AES_256";
+type Algorithm =
+  | "CRYPTOJS_AES"
+  | "PBKDF2_HMAC_SHA512_AES_256"
+  | "JASYPT_PBEWITHHMACSHA512ANDAES_256";
 
 export default function StringEncryptor() {
   const [input, setInput] = useState("");
@@ -54,7 +57,7 @@ export default function StringEncryptor() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "encrypt",
-          algorithm: "PBKDF2_HMAC_SHA512_AES_256",
+          algorithm,
           text: input,
           secretKey,
         }),
@@ -65,7 +68,11 @@ export default function StringEncryptor() {
         return;
       }
       setOutput(typeof data?.output === "string" ? data.output : "");
-      setSuccess("Text encrypted successfully (PBKDF2-HMAC-SHA512 + AES-256).");
+      setSuccess(
+        algorithm === "JASYPT_PBEWITHHMACSHA512ANDAES_256"
+          ? "Text encrypted successfully (Jasypt default)."
+          : "Text encrypted successfully (PBKDF2-HMAC-SHA512 + AES-256).",
+      );
     } catch {
       setError("Network error. Could not reach encryption service.");
     } finally {
@@ -101,7 +108,7 @@ export default function StringEncryptor() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "decrypt",
-          algorithm: "PBKDF2_HMAC_SHA512_AES_256",
+          algorithm,
           text: input,
           secretKey,
         }),
@@ -112,7 +119,11 @@ export default function StringEncryptor() {
         return;
       }
       setOutput(typeof data?.output === "string" ? data.output : "");
-      setSuccess("Text decrypted successfully (PBKDF2-HMAC-SHA512 + AES-256).");
+      setSuccess(
+        algorithm === "JASYPT_PBEWITHHMACSHA512ANDAES_256"
+          ? "Text decrypted successfully (Jasypt default)."
+          : "Text decrypted successfully (PBKDF2-HMAC-SHA512 + AES-256).",
+      );
     } catch {
       failDecrypt("Network error. Could not reach decryption service.");
     } finally {
@@ -148,12 +159,17 @@ export default function StringEncryptor() {
           <MenuItem value="PBKDF2_HMAC_SHA512_AES_256">
             PBKDF2-HMAC-SHA512 + AES-256 (Server)
           </MenuItem>
+          <MenuItem value="JASYPT_PBEWITHHMACSHA512ANDAES_256">
+            Jasypt Default (Spring Boot)
+          </MenuItem>
         </TextField>
 
         <Typography variant="body2" color="text.secondary">
           {algorithm === "CRYPTOJS_AES"
             ? "Runs fully in browser."
-            : "Uses Python backend with PBKDF2-HMAC-SHA512 and AES-256-GCM."}
+            : algorithm === "JASYPT_PBEWITHHMACSHA512ANDAES_256"
+              ? "Jasypt-compatible defaults (ENC(...) format)."
+              : "Uses Python backend with PBKDF2-HMAC-SHA512 and AES-256-GCM."}
         </Typography>
 
         <TextField
