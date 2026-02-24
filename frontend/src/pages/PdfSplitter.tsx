@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import JSZip from "jszip";
 import { PDFDocument } from "pdf-lib";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
@@ -17,6 +16,7 @@ import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 import ProgressStatusBlock from "../components/tools/ProgressStatusBlock";
 import downloadBlob from "../utils/downloadBlob";
 
@@ -326,14 +326,12 @@ export default function PdfSplitter() {
               disabled={busy}
             />
 
-            <Button
-              variant="outlined"
+            <TransparentButton
+              label="Clear"
               startIcon={<DeleteOutlineIcon />}
               onClick={clearAll}
               disabled={busy || (!file && !error && !success)}
-            >
-              Clear
-            </Button>
+            />
           </Box>
         </Stack>
 

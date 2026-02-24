@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import PageContainer from "../components/PageContainer";
+import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 
 type HttpMethod =
@@ -306,9 +307,9 @@ const ApiForge: React.FC = () => {
                 value={requestUrl}
                 onChange={(event) => setRequestUrl(event.target.value)}
               />
-              <Button variant="contained" onClick={sendRequest} disabled={running}>
+              <ActionButton onClick={sendRequest} disabled={running}>
                 {running ? "Sending..." : "Send"}
-              </Button>
+              </ActionButton>
             </Stack>
 
             <TextField

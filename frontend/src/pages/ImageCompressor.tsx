@@ -3,7 +3,6 @@ import JSZip from "jszip";
 
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
@@ -22,6 +21,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
+import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 import ProgressStatusBlock from "../components/tools/ProgressStatusBlock";
 import downloadBlob from "../utils/downloadBlob";
@@ -451,23 +451,20 @@ export default function ImageCompressor() {
               justifyContent: { xs: "flex-start", sm: "flex-end" },
             }}
           >
-            <Button
-              variant="contained"
+            <ActionButton
               startIcon={<CloudUploadIcon />}
               onClick={() => inputRef.current?.click()}
               disabled={busy}
             >
               Choose images
-            </Button>
+            </ActionButton>
 
-            <Button
-              variant="outlined"
+            <TransparentButton
+              label="Clear"
               startIcon={<DeleteIcon />}
               onClick={clearAll}
               disabled={busy || (files.length === 0 && results.length === 0)}
-            >
-              Clear
-            </Button>
+            />
 
             <input
               ref={inputRef}
@@ -637,15 +634,14 @@ export default function ImageCompressor() {
             alignItems: "center",
           }}
         >
-          <Button
+          <ActionButton
             sx={{ width: { xs: "100%", sm: "auto" } }}
-            variant="contained"
             startIcon={<CompressIcon />}
             onClick={compressAll}
             disabled={busy || files.length === 0}
           >
             {busy ? "Compressing..." : "Compress"}
-          </Button>
+          </ActionButton>
 
           <ActionButton
             sx={{ width: { xs: "100%", sm: "auto" } }}
