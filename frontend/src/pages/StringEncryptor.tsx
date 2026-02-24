@@ -20,7 +20,9 @@ export default function StringEncryptor() {
   const [input, setInput] = useState("");
   const [secretKey, setSecretKey] = useState("");
   const [output, setOutput] = useState("");
-  const [algorithm, setAlgorithm] = useState<Algorithm>("CRYPTOJS_AES");
+  const [algorithm, setAlgorithm] = useState<Algorithm>(
+    "JASYPT_PBEWITHHMACSHA512ANDAES_256",
+  );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);

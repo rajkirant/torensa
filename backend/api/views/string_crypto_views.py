@@ -132,7 +132,9 @@ def string_crypto_view(request):
     payload = request.data if isinstance(request.data, dict) else {}
 
     mode = (payload.get("mode") or "").strip().lower()
-    algorithm = (payload.get("algorithm") or "").strip().upper()
+    algorithm = (
+        payload.get("algorithm") or ALGO_JASYPT_PBE_HMAC_SHA512_AES256
+    ).strip().upper()
     text = payload.get("text") or ""
     secret_key = payload.get("secretKey") or ""
 
