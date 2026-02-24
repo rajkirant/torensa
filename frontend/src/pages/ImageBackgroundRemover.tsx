@@ -120,6 +120,9 @@ export default function ImageBackgroundRemover() {
           accept={ACCEPT_TYPES}
           onFilesSelected={onFileSelected}
         />
+        <Typography variant="body2" color="text.secondary">
+          For best results, use smaller images.
+        </Typography>
 
         {file && (
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
