@@ -78,21 +78,37 @@ def _file_meta(share: TextShare):
 def create_text_share(request):
     payload = request.data if isinstance(request.data, dict) else {}
     text = (payload.get("text") or "").strip()
+    uploaded = request.FILES.get("file")
 
-    if not text:
+    if not text and not uploaded:
         return Response(
-            {"error": "Text is required."},
+            {"error": "Text or file is required."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    if len(text) > MAX_TEXT_LENGTH:
+    if text and len(text) > MAX_TEXT_LENGTH:
         return Response(
             {"error": f"Text exceeds {MAX_TEXT_LENGTH} characters."},
             status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
         )
 
+    file_payload = None
+    if uploaded:
+        if uploaded.size > MAX_FILE_SIZE:
+            return Response(
+                {"error": f"File exceeds {MAX_FILE_SIZE} bytes."},
+                status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            )
+        file_bytes = uploaded.read()
+        file_payload = {
+            "data": file_bytes,
+            "name": uploaded.name,
+            "content_type": uploaded.content_type or "application/octet-stream",
+            "size": len(file_bytes),
+        }
+
     client_ip = _get_client_ip(request)
-    share = _create_share(text=text, file_payload=None, client_ip=client_ip)
+    share = _create_share(text=text, file_payload=file_payload, client_ip=client_ip)
 
     if not share:
         return Response(
@@ -105,7 +121,7 @@ def create_text_share(request):
             "code": share.code,
             "expiresAt": share.expires_at.isoformat(),
             "expiresInSeconds": TTL_SECONDS,
-            "file": None,
+            "file": _file_meta(share),
         },
         status=status.HTTP_201_CREATED,
     )
@@ -252,3 +268,26 @@ def download_shared_file(request, code: str):
         f'attachment; filename="{share.file_name or "shared-file"}"'
     )
     return response
+
+
+@api_view(["DELETE"])
+@permission_classes([AllowAny])
+def delete_text_share(request, code: str):
+    sanitized = "".join(ch for ch in (code or "") if ch.isdigit())
+    if len(sanitized) != CODE_LENGTH:
+        return Response(
+            {"error": "Code must be 4 digits."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    now = timezone.now()
+    _cleanup_expired(now)
+
+    deleted, _ = TextShare.objects.filter(code=sanitized).delete()
+    if not deleted:
+        return Response(
+            {"error": "Code not found or expired."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    return Response({"message": "Deleted."}, status=status.HTTP_200_OK)

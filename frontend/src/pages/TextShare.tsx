@@ -8,6 +8,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import DownloadIcon from "@mui/icons-material/Download";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -32,6 +35,8 @@ const TextShareContent: React.FC = () => {
     size: number;
     contentType: string;
   } | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileShared, setFileShared] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [lastSharedText, setLastSharedText] = useState("");
@@ -46,9 +51,12 @@ const TextShareContent: React.FC = () => {
     [text.length],
   );
 
-  const shareText = async (value: string) => {
-    if (!value.trim()) {
-      setError("Enter some text to share.");
+  const shareText = async (value: string, file?: File | null) => {
+    const hasText = Boolean(value.trim());
+    const hasFile = Boolean(file);
+
+    if (!hasText && !hasFile) {
+      setError("Enter text or select a file to share.");
       return;
     }
 
@@ -56,10 +64,17 @@ const TextShareContent: React.FC = () => {
     clear();
 
     try {
+      const formData = new FormData();
+      if (hasText) {
+        formData.append("text", value);
+      }
+      if (hasFile && file) {
+        formData.append("file", file);
+      }
+
       const res = await apiFetch("/api/text-share/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: value }),
+        body: formData,
       });
 
       const data = await res.json().catch(() => null);
@@ -72,6 +87,10 @@ const TextShareContent: React.FC = () => {
       setExpiresAt(data.expiresAt || null);
       setFileInfo(data.file || null);
       setLastSharedText(value);
+      if (file) {
+        setSelectedFile(file);
+      }
+      setFileShared(Boolean(data.file));
       setSuccess("Code generated. Share it with the other device.");
     } catch {
       setError("Unable to reach the server. Try again.");
@@ -103,6 +122,8 @@ const TextShareContent: React.FC = () => {
       setText(String(data.text || ""));
       setExpiresAt(data.expiresAt || null);
       setFileInfo(data.file || null);
+      setSelectedFile(null);
+      setFileShared(Boolean(data.file));
       setSuccess("Text loaded from the shared code.");
     } catch {
       setError("Unable to reach the server. Try again.");
@@ -128,6 +149,8 @@ const TextShareContent: React.FC = () => {
       setText(String(data.text || ""));
       setExpiresAt(data.expiresAt || null);
       setFileInfo(data.file || null);
+      setSelectedFile(null);
+      setFileShared(Boolean(data.file));
       setSuccess("Loaded the latest shared text for this network.");
     } catch {
       // Silent fail: no recent share for this IP or server unreachable.
@@ -146,17 +169,21 @@ const TextShareContent: React.FC = () => {
       return;
     }
 
-    if (!text.trim() || text === lastSharedText) {
-      if (!text.trim()) {
+    const hasText = Boolean(text.trim());
+    const hasFile = Boolean(selectedFile);
+
+    if ((!hasText && !hasFile) || (hasText && text === lastSharedText)) {
+      if (!hasText && !hasFile) {
         setCode("");
         setExpiresAt(null);
         setLastSharedText("");
+        setFileInfo(null);
       }
       return;
     }
 
     shareTimerRef.current = window.setTimeout(() => {
-      void shareText(text);
+      void shareText(text, selectedFile);
     }, SHARE_DEBOUNCE_MS);
 
     return () => {
@@ -164,48 +191,22 @@ const TextShareContent: React.FC = () => {
         window.clearTimeout(shareTimerRef.current);
       }
     };
-  }, [text, lastSharedText]);
+  }, [text, lastSharedText, selectedFile]);
 
-  const handleFileUpload = async (file: File | null) => {
+  const handleFileUpload = (file: File | null) => {
     if (!file) return;
     if (file.size > MAX_FILE_SIZE) {
       setError(`File exceeds ${MAX_FILE_SIZE} bytes.`);
       return;
     }
-
-    clear();
-    setIsSharing(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await apiFetch("/api/text-share/file/", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json().catch(() => null);
-      if (!res.ok) {
-        setError(data?.error || "Unable to share file.");
-        return;
-      }
-
-      setCode(String(data.code || ""));
-      setExpiresAt(data.expiresAt || null);
-      setFileInfo(
-        data.file
-          ? {
-              name: data.file.name,
-              size: data.file.size,
-              contentType: data.file.contentType,
-            }
-          : null,
-      );
-      setSuccess("File shared. Send the code to the other device.");
-    } catch {
-      setError("Unable to reach the server. Try again.");
-    } finally {
-      setIsSharing(false);
-    }
+    setSelectedFile(file);
+    setFileInfo({
+      name: file.name,
+      size: file.size,
+      contentType: file.type || "application/octet-stream",
+    });
+    setFileShared(false);
+    setSuccess("File selected. Generate a code to share it.");
   };
 
   const downloadSharedFile = async () => {
@@ -314,32 +315,57 @@ const TextShareContent: React.FC = () => {
               onChange={(e) => {
                 const file = e.target.files?.[0] || null;
                 e.target.value = "";
-                void handleFileUpload(file);
+                handleFileUpload(file);
               }}
             />
           </Button>
-          {fileInfo && (
-            <Button
-              variant="text"
-              onClick={() => void downloadSharedFile()}
-              disabled={isFetching}
-            >
-              Download {fileInfo.name}
-            </Button>
-          )}
         </Stack>
 
         {fileInfo && (
-          <Typography variant="caption" color="text.secondary">
-            Shared file: {fileInfo.name} ({Math.round(fileInfo.size / 1024)} KB)
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              p: 1.25,
+              borderRadius: 1.5,
+              border: "1px solid rgba(148,163,184,0.3)",
+              bgcolor: "rgba(15,23,42,0.35)",
+            }}
+          >
+            <InsertDriveFileIcon fontSize="small" />
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="body2">{fileInfo.name}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {Math.round(fileInfo.size / 1024)} KB
+              </Typography>
+            </Box>
+            <IconButton
+              aria-label="Download shared file"
+              onClick={() => void downloadSharedFile()}
+              disabled={isFetching || !fileShared}
+            >
+              <DownloadIcon fontSize="small" />
+            </IconButton>
+            <IconButton
+              aria-label="Clear shared file"
+              onClick={() => {
+                setFileInfo(null);
+                setSelectedFile(null);
+                setFileShared(false);
+              }}
+              disabled={isSharing}
+            >
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          </Box>
         )}
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           <Button
             variant="outlined"
-            onClick={() => void shareText(text)}
-            disabled={!text.trim() || isSharing}
+            onClick={() => void shareText(text, selectedFile)}
+            disabled={(!text.trim() && !selectedFile) || isSharing}
           >
             {isSharing ? "Generating..." : "Generate Code"}
           </Button>
@@ -350,6 +376,8 @@ const TextShareContent: React.FC = () => {
               setCode("");
               setExpiresAt(null);
               setFileInfo(null);
+              setSelectedFile(null);
+              setFileShared(false);
               setLastSharedText("");
               clear();
             }}
