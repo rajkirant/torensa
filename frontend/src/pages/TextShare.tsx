@@ -13,9 +13,11 @@ import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import useToolStatus from "../hooks/useToolStatus";
 import { apiFetch } from "../utils/api";
+import downloadBlob from "../utils/downloadBlob";
 
 const CODE_LENGTH = 4;
 const MAX_TEXT_LENGTH = 20000;
+const MAX_FILE_SIZE = 10_485_760;
 const SHARE_DEBOUNCE_MS = 700;
 
 const sanitizeCode = (value: string) =>
@@ -25,6 +27,11 @@ const TextShareContent: React.FC = () => {
   const [code, setCode] = useState("");
   const [text, setText] = useState("");
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [fileInfo, setFileInfo] = useState<{
+    name: string;
+    size: number;
+    contentType: string;
+  } | null>(null);
   const [isSharing, setIsSharing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [lastSharedText, setLastSharedText] = useState("");
@@ -63,6 +70,7 @@ const TextShareContent: React.FC = () => {
 
       setCode(String(data.code || ""));
       setExpiresAt(data.expiresAt || null);
+      setFileInfo(data.file || null);
       setLastSharedText(value);
       setSuccess("Code generated. Share it with the other device.");
     } catch {
@@ -94,6 +102,7 @@ const TextShareContent: React.FC = () => {
       skipShareRef.current = true;
       setText(String(data.text || ""));
       setExpiresAt(data.expiresAt || null);
+      setFileInfo(data.file || null);
       setSuccess("Text loaded from the shared code.");
     } catch {
       setError("Unable to reach the server. Try again.");
@@ -118,6 +127,7 @@ const TextShareContent: React.FC = () => {
       setCode(String(data.code || ""));
       setText(String(data.text || ""));
       setExpiresAt(data.expiresAt || null);
+      setFileInfo(data.file || null);
       setSuccess("Loaded the latest shared text for this network.");
     } catch {
       // Silent fail: no recent share for this IP or server unreachable.
@@ -155,6 +165,72 @@ const TextShareContent: React.FC = () => {
       }
     };
   }, [text, lastSharedText]);
+
+  const handleFileUpload = async (file: File | null) => {
+    if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setError(`File exceeds ${MAX_FILE_SIZE} bytes.`);
+      return;
+    }
+
+    clear();
+    setIsSharing(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await apiFetch("/api/text-share/file/", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setError(data?.error || "Unable to share file.");
+        return;
+      }
+
+      setCode(String(data.code || ""));
+      setExpiresAt(data.expiresAt || null);
+      setFileInfo(
+        data.file
+          ? {
+              name: data.file.name,
+              size: data.file.size,
+              contentType: data.file.contentType,
+            }
+          : null,
+      );
+      setSuccess("File shared. Send the code to the other device.");
+    } catch {
+      setError("Unable to reach the server. Try again.");
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  const downloadSharedFile = async () => {
+    if (code.length !== CODE_LENGTH || !fileInfo) return;
+    clear();
+    setIsFetching(true);
+
+    try {
+      const res = await apiFetch(`/api/text-share/file/${code}/download/`, {
+        method: "GET",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.error || "Unable to download file.");
+        return;
+      }
+      const blob = await res.blob();
+      downloadBlob(blob, fileInfo.name || "shared-file");
+      setSuccess("File downloaded.");
+    } catch {
+      setError("Unable to reach the server. Try again.");
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
   useEffect(() => {
     void fetchLatestByIp();
@@ -230,6 +306,36 @@ const TextShareContent: React.FC = () => {
         />
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button variant="outlined" component="label" disabled={isSharing}>
+            Share File (max 10 MB)
+            <input
+              type="file"
+              hidden
+              onChange={(e) => {
+                const file = e.target.files?.[0] || null;
+                e.target.value = "";
+                void handleFileUpload(file);
+              }}
+            />
+          </Button>
+          {fileInfo && (
+            <Button
+              variant="text"
+              onClick={() => void downloadSharedFile()}
+              disabled={isFetching}
+            >
+              Download {fileInfo.name}
+            </Button>
+          )}
+        </Stack>
+
+        {fileInfo && (
+          <Typography variant="caption" color="text.secondary">
+            Shared file: {fileInfo.name} ({Math.round(fileInfo.size / 1024)} KB)
+          </Typography>
+        )}
+
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           <Button
             variant="outlined"
             onClick={() => void shareText(text)}
@@ -243,6 +349,7 @@ const TextShareContent: React.FC = () => {
               setText("");
               setCode("");
               setExpiresAt(null);
+              setFileInfo(null);
               setLastSharedText("");
               clear();
             }}

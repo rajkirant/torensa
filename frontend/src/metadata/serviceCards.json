@@ -65,13 +65,13 @@
   {
     "id": "text-share",
     "component": "TextShare",
-    "title": "Device Text Share",
-    "description": "Share text between devices with a short access code.",
-    "path": "/text-share",
-    "ctaLabel": "Open Text Share",
+    "title": "FlashShare (Text + File)",
+    "description": "Share text or files across devices using a 4-digit code.",
+    "path": "/file-text-share",
+    "ctaLabel": "Open FlashShare",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Paste text to generate a 4-digit code that expires after about an hour. Enter the code on another device to load the same text instantly.",
+    "detailedDescription": "Paste text or upload a file to instantly get a 4-digit access code (valid for about 1 hour). Open this tool on another device, enter the code, and download the text or file. If you’re on the same network, the latest share can auto-load or be pulled with the refresh button.",
     "categoryId": "communication",
     "keywords": [
       "text",
