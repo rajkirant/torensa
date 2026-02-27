@@ -13,6 +13,11 @@ from .views.email_views import (
 from .views.tool_chat_views import tool_chat_view
 from .views.string_crypto_views import string_crypto_view
 from .views.image_bg_remove_views import remove_background_view
+from .views.text_share_views import (
+    create_text_share,
+    get_text_share,
+    get_latest_text_share,
+)
 
 urlpatterns = [
     path("hello/", hello),
@@ -40,4 +45,7 @@ urlpatterns = [
     path("contact-groups/list/", list_contact_groups, name="list_contact_groups_legacy"),
     path("string-crypto/", string_crypto_view),
     path("remove-background/", remove_background_view),
+    path("text-share/latest/", get_latest_text_share),
+    path("text-share/", create_text_share),
+    path("text-share/<str:code>/", get_text_share),
 ]

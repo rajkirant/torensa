@@ -63,6 +63,27 @@
     "advancedOptionsEnabled": true
   },
   {
+    "id": "text-share",
+    "component": "TextShare",
+    "title": "Device Text Share",
+    "description": "Share text between devices with a short access code.",
+    "path": "/text-share",
+    "ctaLabel": "Open Text Share",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Paste text to generate a 4-digit code that expires after about an hour. Enter the code on another device to load the same text instantly.",
+    "categoryId": "communication",
+    "keywords": [
+      "text",
+      "share",
+      "code",
+      "clipboard",
+      "transfer"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "barcode-generator",
     "component": "BarcodeGenerator",
     "title": "Barcode Generator",
