@@ -75,3 +75,21 @@ class ContactGroupContact(models.Model):
 
     def __str__(self):
         return f"{self.name} <{self.email}>"
+
+
+class TextShare(models.Model):
+    code = models.CharField(max_length=4, unique=True)
+    text = models.TextField(blank=True)
+    file_data = models.BinaryField(null=True, blank=True)
+    file_name = models.CharField(max_length=255, blank=True)
+    file_content_type = models.CharField(max_length=255, blank=True)
+    file_size = models.IntegerField(null=True, blank=True)
+    client_ip = models.GenericIPAddressField(null=True, blank=True, db_index=True)
+    expires_at = models.DateTimeField(db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.code} ({self.created_at.isoformat()})"
