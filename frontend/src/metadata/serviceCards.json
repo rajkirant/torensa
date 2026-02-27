@@ -60,7 +60,7 @@
       "link"
     ],
     "isActive": true,
-    "advancedOptionsEnabled": false
+    "advancedOptionsEnabled": true
   },
   {
     "id": "barcode-generator",
