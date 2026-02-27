@@ -95,8 +95,18 @@ def remove_background_view(request):
         )
 
     try:
+        import io
+        from PIL import Image
+
         input_bytes = image_file.read()
-        output_bytes = remove(input_bytes)
+        png_bytes = remove(input_bytes)
+
+        # Convert PNG→WebP to stay under Lambda's 6 MB response payload limit.
+        # WebP with alpha is typically 70-80 % smaller than an equivalent PNG.
+        img = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+        webp_buf = io.BytesIO()
+        img.save(webp_buf, format="WEBP", lossless=False, quality=85, method=4)
+        output_bytes = webp_buf.getvalue()
     except Exception as exc:
         logger.exception("Background removal failed while processing image")
         return Response(
@@ -107,7 +117,7 @@ def remove_background_view(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    output_name = f"{_safe_base_name(image_file.name)}-no-bg.png"
-    response = HttpResponse(output_bytes, content_type="image/png")
+    output_name = f"{_safe_base_name(image_file.name)}-no-bg.webp"
+    response = HttpResponse(output_bytes, content_type="image/webp")
     response["Content-Disposition"] = f'attachment; filename="{output_name}"'
     return response

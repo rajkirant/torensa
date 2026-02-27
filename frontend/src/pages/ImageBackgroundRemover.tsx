@@ -11,8 +11,7 @@ import FilePickerButton from "../components/inputs/FilePickerButton";
 import { apiFetch } from "../utils/api";
 import downloadBlob from "../utils/downloadBlob";
 
-const ACCEPT_TYPES =
-  ".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp";
+const ACCEPT_TYPES = ".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp";
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -25,6 +24,37 @@ function outputFileName(inputName: string) {
   return `${base}-no-bg.png`;
 }
 
+/** Draws a WebP blob onto an off-screen canvas and exports it as PNG.
+ *  No additional quality loss — PNG is lossless. */
+function webpToPngBlob(webpBlob: Blob): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(webpBlob);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        URL.revokeObjectURL(url);
+        reject(new Error("Canvas 2D context unavailable"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      canvas.toBlob((pngBlob) => {
+        if (pngBlob) resolve(pngBlob);
+        else reject(new Error("Canvas toBlob returned null"));
+      }, "image/png");
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load WebP image"));
+    };
+    img.src = url;
+  });
+}
+
 export default function ImageBackgroundRemover() {
   const [file, setFile] = useState<File | null>(null);
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
@@ -32,7 +62,10 @@ export default function ImageBackgroundRemover() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const originalUrl = useMemo(() => (file ? URL.createObjectURL(file) : ""), [file]);
+  const originalUrl = useMemo(
+    () => (file ? URL.createObjectURL(file) : ""),
+    [file],
+  );
   const resultUrl = useMemo(
     () => (resultBlob ? URL.createObjectURL(resultBlob) : ""),
     [resultBlob],
@@ -98,9 +131,14 @@ export default function ImageBackgroundRemover() {
     }
   };
 
-  const downloadResult = () => {
+  const downloadResult = async () => {
     if (!resultBlob || !file) return;
-    downloadBlob(resultBlob, outputFileName(file.name));
+    try {
+      const pngBlob = await webpToPngBlob(resultBlob);
+      downloadBlob(pngBlob, outputFileName(file.name));
+    } catch {
+      setError("Failed to convert to PNG for download.");
+    }
   };
 
   const clearAll = () => {
@@ -127,19 +165,22 @@ export default function ImageBackgroundRemover() {
         {file && (
           <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
             <Chip label={`Input: ${formatBytes(file.size)}`} />
-            {resultBlob && <Chip label={`Output: ${formatBytes(resultBlob.size)}`} color="success" />}
+            {resultBlob && (
+              <Chip
+                label={`Output: ${formatBytes(resultBlob.size)}`}
+                color="success"
+              />
+            )}
           </Stack>
         )}
 
         <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-          <ActionButton onClick={() => void removeBackground()} loading={loading}>
+          <ActionButton
+            onClick={() => void removeBackground()}
+            loading={loading}
+          >
             Remove Background
           </ActionButton>
-          <TransparentButton
-            label="Download PNG"
-            disabled={!resultBlob}
-            onClick={downloadResult}
-          />
           <TransparentButton label="Clear" onClick={clearAll} />
         </Box>
 
@@ -182,7 +223,7 @@ export default function ImageBackgroundRemover() {
             }}
           >
             <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 700 }}>
-              Result (Transparent PNG)
+              Result (Transparent WebP)
             </Typography>
             {resultUrl ? (
               <Box
@@ -198,6 +239,15 @@ export default function ImageBackgroundRemover() {
             )}
           </Box>
         </Stack>
+
+        {resultBlob && (
+          <Box>
+            <TransparentButton
+              label="Download PNG"
+              onClick={() => void downloadResult()}
+            />
+          </Box>
+        )}
 
         <ToolStatusAlerts error={error} success={success} />
       </Stack>
