@@ -7,12 +7,20 @@ import { promisify } from "node:util";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
-const metadataPath = path.join(projectRoot, "src", "metadata", "serviceCards.json");
+const metadataPath = path.join(
+  projectRoot,
+  "src",
+  "metadata",
+  "serviceCards.json",
+);
 const sitemapPath = path.join(projectRoot, "public", "sitemap.xml");
 const pagesDir = path.join(projectRoot, "src", "pages");
 const execFileAsync = promisify(execFile);
 
-const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(/\/+$/, "");
+const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(
+  /\/+$/,
+  "",
+);
 const staticRouteComponents = {
   "/": "Home",
   "/contact": "Contact",
@@ -128,14 +136,19 @@ async function resolveLastmod(route, component, fallbackLastmod) {
       `Unable to resolve component file for route "${route}" from component "${component}". Falling back to metadata date.`,
     );
   } else {
-    console.warn(`No component mapped for route "${route}". Falling back to metadata date.`);
+    console.warn(
+      `No component mapped for route "${route}". Falling back to metadata date.`,
+    );
   }
 
   return fallbackLastmod;
 }
 
 async function main() {
-  const metadataRaw = await readFile(metadataPath, "utf-8");
+  const metadataRaw = (await readFile(metadataPath, "utf-8")).replace(
+    /^\uFEFF/,
+    "",
+  );
   const metadata = JSON.parse(metadataRaw);
   const routeToComponent = new Map(Object.entries(staticRouteComponents));
 
@@ -161,14 +174,20 @@ async function main() {
   const routeEntries = await Promise.all(
     sortedRoutes.map(async (route) => ({
       route,
-      lastmod: await resolveLastmod(route, routeToComponent.get(route), fallbackLastmod),
+      lastmod: await resolveLastmod(
+        route,
+        routeToComponent.get(route),
+        fallbackLastmod,
+      ),
     })),
   );
 
   const xml = buildSitemapXml(routeEntries);
 
   await writeFile(sitemapPath, xml, "utf-8");
-  console.log(`Generated sitemap with ${routeEntries.length} URLs at ${sitemapPath}`);
+  console.log(
+    `Generated sitemap with ${routeEntries.length} URLs at ${sitemapPath}`,
+  );
 }
 
 main().catch((error) => {
