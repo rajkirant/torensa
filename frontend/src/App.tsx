@@ -25,20 +25,20 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 import {
-    brandLinkStyle,
-    sectionBase,
-    headerStyle,
-    drawerNavButtonStyle,
-    cardStyle,
-    appShellStyle,
-    contentShellStyle,
-    footerStyle,
-    navStyle,
-    themeSelectSx,
-    userGreetingStyle,
-    footerInner,
-    footerLinksRow,
-    footerLinkStyle,
+  brandLinkStyle,
+  sectionBase,
+  headerStyle,
+  drawerNavButtonStyle,
+  cardStyle,
+  appShellStyle,
+  contentShellStyle,
+  footerStyle,
+  navStyle,
+  themeSelectSx,
+  userGreetingStyle,
+  footerInner,
+  footerLinksRow,
+  footerLinkStyle,
 } from "./styles/appStyles";
 
 import { themes } from "./theme";
@@ -50,7 +50,9 @@ import {
   getActiveServiceCards,
 } from "./utils/serviceCards";
 
-const ToolChatWidget = React.lazy(() => import("./components/chat/ToolChatWidget"));
+const ToolChatWidget = React.lazy(
+  () => import("./components/chat/ToolChatWidget"),
+);
 
 /* ===================== TYPES ===================== */
 type AppProps = {
@@ -128,9 +130,9 @@ export default function App({ themeName, setThemeName }: AppProps) {
     () =>
       selectedCategoryId === "all"
         ? "All Categories"
-        : visibleCategoryOptions.find(
+        : (visibleCategoryOptions.find(
             (category) => category.id === selectedCategoryId,
-          )?.label ?? "All Categories",
+          )?.label ?? "All Categories"),
     [selectedCategoryId, visibleCategoryOptions],
   );
 
@@ -213,22 +215,22 @@ export default function App({ themeName, setThemeName }: AppProps) {
           Contact
         </NavButton>
 
-      <Select
-        size="small"
-        value={themeName}
-        onChange={(e) => setThemeName(e.target.value as ThemeName)}
-        inputProps={{ "aria-label": "Theme selection" }}
-        sx={themeSelectSx(theme, isMobile, headerTextColor)}
-      >
-        {Object.keys(themes).map((name) => (
-          <MenuItem key={name} value={name}>
-            {name.charAt(0).toUpperCase() + name.slice(1)}
-          </MenuItem>
-        ))}
-      </Select>
-
-      {shouldShowCategorySelect && (
         <Select
+          size="small"
+          value={themeName}
+          onChange={(e) => setThemeName(e.target.value as ThemeName)}
+          inputProps={{ "aria-label": "Theme selection" }}
+          sx={themeSelectSx(theme, isMobile, headerTextColor)}
+        >
+          {Object.keys(themes).map((name) => (
+            <MenuItem key={name} value={name}>
+              {name.charAt(0).toUpperCase() + name.slice(1)}
+            </MenuItem>
+          ))}
+        </Select>
+
+        {shouldShowCategorySelect && (
+          <Select
             size="small"
             value={selectedCategoryId}
             onChange={(e) => handleCategoryChange(e.target.value)}
@@ -236,63 +238,66 @@ export default function App({ themeName, setThemeName }: AppProps) {
             sx={{
               ...themeSelectSx(theme, isMobile, headerTextColor),
               minWidth: 170,
-          }}
-        >
-          <MenuItem value="all" onClick={() => handleCategoryOptionClick("all")}>
-            All Categories
-          </MenuItem>
-          {visibleCategoryOptions.map((category) => (
+            }}
+          >
             <MenuItem
-              key={category.id}
-              value={category.id}
-              onClick={() => handleCategoryOptionClick(category.id)}
+              value="all"
+              onClick={() => handleCategoryOptionClick("all")}
             >
-              {category.label}
+              All Categories
             </MenuItem>
+            {visibleCategoryOptions.map((category) => (
+              <MenuItem
+                key={category.id}
+                value={category.id}
+                onClick={() => handleCategoryOptionClick(category.id)}
+              >
+                {category.label}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
+
+        {!loading &&
+          (user ? (
+            <>
+              <span style={userGreetingStyle(headerTextColor)}>
+                Hi, {user.username}
+              </span>
+
+              <NavButton
+                component={NavLink}
+                to="/"
+                startIcon={<LogoutIcon />}
+                onClick={onLogout}
+                sx={sx}
+              >
+                Logout
+              </NavButton>
+            </>
+          ) : (
+            <>
+              <NavButton
+                component={NavLink}
+                to="/login"
+                startIcon={<LoginIcon />}
+                onClick={onClick}
+                sx={sx}
+              >
+                Login
+              </NavButton>
+
+              <NavButton
+                component={NavLink}
+                to="/signup"
+                startIcon={<PersonAddIcon />}
+                onClick={onClick}
+                sx={sx}
+              >
+                Sign up
+              </NavButton>
+            </>
           ))}
-        </Select>
-      )}
-
-      {!loading &&
-        (user ? (
-          <>
-            <span style={userGreetingStyle(headerTextColor)}>
-              Hi, {user.username}
-            </span>
-
-            <NavButton
-              component={NavLink}
-              to="/"
-              startIcon={<LogoutIcon />}
-              onClick={onLogout}
-              sx={sx}
-            >
-              Logout
-            </NavButton>
-          </>
-        ) : (
-          <>
-            <NavButton
-              component={NavLink}
-              to="/login"
-              startIcon={<LoginIcon />}
-              onClick={onClick}
-              sx={sx}
-            >
-              Login
-            </NavButton>
-
-            <NavButton
-              component={NavLink}
-              to="/signup"
-              startIcon={<PersonAddIcon />}
-              onClick={onClick}
-              sx={sx}
-            >
-              Sign up
-            </NavButton>
-          </>
-        ))}
       </>
     );
   };
@@ -384,7 +389,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             >
               <GitHubIcon sx={{ fontSize: 24, color: "inherit" }} />
             </a>
-            <a
+            {/* <a
               href="https://www.linkedin.com/in/rajkirant/"
               target="_blank"
               rel="noopener noreferrer"
@@ -392,7 +397,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               aria-label="Raj Kiran LinkedIn"
             >
               <LinkedInIcon sx={{ fontSize: 24, color: "inherit" }} />
-            </a>
+            </a> */}
           </div>
           <div style={{ fontSize: 13, color: theme.header.textMuted }}>
             © {new Date().getFullYear()} Torensa. All rights reserved.
