@@ -37,12 +37,30 @@
       "Click Download to save the converted file to your device."
     ],
     "faqs": [
-      { "q": "Does this tool upload my file to a server?", "a": "No. All parsing and conversion happen entirely in your browser using client-side JavaScript. Your file is never sent to any server, which keeps your data completely private." },
-      { "q": "What file formats are supported?", "a": "The converter supports Excel (.xlsx), CSV (comma-separated values), and JSON. You can convert between any combination of these three formats." },
-      { "q": "Will my Excel formulas be preserved in the output?", "a": "Formulas are evaluated to their computed values during conversion. The raw formula text is not carried over to CSV or JSON output, but the resulting data values are preserved." },
-      { "q": "How large a file can I convert?", "a": "Since processing happens in-browser, practical limits depend on your device's available memory. Files up to a few hundred MB typically work without issues on modern hardware." },
-      { "q": "Can I convert a multi-sheet Excel file?", "a": "The converter processes the first (active) sheet of the Excel file by default, which covers the majority of single-sheet workbooks and exports." },
-      { "q": "Is this tool free to use?", "a": "Yes, the Data Files Converter is completely free with no account required. Just upload your file and convert instantly." }
+      {
+        "q": "Does this tool upload my file to a server?",
+        "a": "No. All parsing and conversion happen entirely in your browser using client-side JavaScript. Your file is never sent to any server, which keeps your data completely private."
+      },
+      {
+        "q": "What file formats are supported?",
+        "a": "The converter supports Excel (.xlsx), CSV (comma-separated values), and JSON. You can convert between any combination of these three formats."
+      },
+      {
+        "q": "Will my Excel formulas be preserved in the output?",
+        "a": "Formulas are evaluated to their computed values during conversion. The raw formula text is not carried over to CSV or JSON output, but the resulting data values are preserved."
+      },
+      {
+        "q": "How large a file can I convert?",
+        "a": "Since processing happens in-browser, practical limits depend on your device's available memory. Files up to a few hundred MB typically work without issues on modern hardware."
+      },
+      {
+        "q": "Can I convert a multi-sheet Excel file?",
+        "a": "The converter processes the first (active) sheet of the Excel file by default, which covers the majority of single-sheet workbooks and exports."
+      },
+      {
+        "q": "Is this tool free to use?",
+        "a": "Yes, the Data Files Converter is completely free with no account required. Just upload your file and convert instantly."
+      }
     ]
   },
   {
@@ -68,43 +86,79 @@
       "Click Download to save the QR code as a high-resolution PNG image."
     ],
     "faqs": [
-      { "q": "What types of content can I encode in a QR code?", "a": "You can encode plain text, website URLs, email addresses, phone numbers, Wi-Fi credentials, SMS messages, and more. Any UTF-8 text string can be stored in a QR code." },
-      { "q": "Will the QR code still scan if I add a logo?", "a": "Yes. QR codes have built-in error correction that allows up to 30% of the code to be obscured. Adding a small centered logo typically uses under 20% of the code area and remains fully scannable." },
-      { "q": "What is the error correction level setting?", "a": "Error correction controls how much of the QR code can be damaged before it becomes unreadable. Level L (7%) is the most compact, while Level H (30%) is most resilient but denser. Use Level M or H when adding a logo." },
-      { "q": "Can I use this tool offline?", "a": "Yes. The QR code is generated entirely in your browser with no server requests, so it works offline once the page is loaded." },
-      { "q": "What resolution is the downloaded PNG?", "a": "The exported PNG is generated at the size set in the advanced options (default 300x300 px, adjustable up to 1000x1000 px), making it suitable for digital use and printing." },
-      { "q": "Is there a limit on how much text I can encode?", "a": "A QR code can store up to about 4,296 alphanumeric characters, but longer content creates a denser code. For URLs and short strings under 200 characters, scan quality is always excellent." }
+      {
+        "q": "What types of content can I encode in a QR code?",
+        "a": "You can encode plain text, website URLs, email addresses, phone numbers, Wi-Fi credentials, SMS messages, and more. Any UTF-8 text string can be stored in a QR code."
+      },
+      {
+        "q": "Will the QR code still scan if I add a logo?",
+        "a": "Yes. QR codes have built-in error correction that allows up to 30% of the code to be obscured. Adding a small centered logo typically uses under 20% of the code area and remains fully scannable."
+      },
+      {
+        "q": "What is the error correction level setting?",
+        "a": "Error correction controls how much of the QR code can be damaged before it becomes unreadable. Level L (7%) is the most compact, while Level H (30%) is most resilient but denser. Use Level M or H when adding a logo."
+      },
+      {
+        "q": "Can I use this tool offline?",
+        "a": "Yes. The QR code is generated entirely in your browser with no server requests, so it works offline once the page is loaded."
+      },
+      {
+        "q": "What resolution is the downloaded PNG?",
+        "a": "The exported PNG is generated at the size set in the advanced options (default 300x300 px, adjustable up to 1000x1000 px), making it suitable for digital use and printing."
+      },
+      {
+        "q": "Is there a limit on how much text I can encode?",
+        "a": "A QR code can store up to about 4,296 alphanumeric characters, but longer content creates a denser code. For URLs and short strings under 200 characters, scan quality is always excellent."
+      }
     ]
   },
   {
     "id": "text-share",
-    "component": "TextShare",
-    "title": "FlashShare (Text + File)",
-    "description": "Share text or files across devices using a 4-digit code.",
-    "path": "/file-text-share",
-    "ctaLabel": "Open FlashShare",
+    "component": "EasyShare",
+    "title": "Easy Share (Text + File)",
+    "description": "Share text or a file across devices using a 4-digit code.",
+    "path": "/easy-share",
+    "ctaLabel": "Open Easy Share",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Paste text or upload a file to instantly get a 4-digit access code (valid for about 1 hour). Open this tool on another device, enter the code, and download the text or file.",
+    "detailedDescription": "Paste text or drop a file to instantly get a 4-digit access code (valid for about 1 hour). Open Easy Share on another device, enter the code, and download the text or file.",
     "categoryId": "communication",
     "keywords": ["text", "share", "code", "clipboard", "transfer"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Open FlashShare on the device you want to send from.",
-      "Paste your text into the text area, or click the file upload area to select a file.",
-      "Click Share. A unique 4-digit code is displayed immediately.",
-      "On the receiving device, open FlashShare and enter the 4-digit code.",
-      "Click Receive to load the shared text or download the file.",
+      "Open Easy Share on the device you want to send from.",
+      "Paste text into the text area, or drag and drop a file onto the upload zone.",
+      "Click × to remove the selected file if you want to change it.",
+      "Click Generate Code. A unique 4-digit code is displayed immediately.",
+      "On the receiving device, open Easy Share, enter the 4-digit code, and download the text or file.",
       "Shares expire automatically after approximately 1 hour for privacy."
     ],
     "faqs": [
-      { "q": "Do I need an account to use FlashShare?", "a": "No account is required. FlashShare is a fully anonymous tool — just open it and share instantly." },
-      { "q": "How long does the share code stay active?", "a": "Share codes and their content expire after approximately 1 hour. After expiry, the code is no longer valid and the content is deleted from the server." },
-      { "q": "What file types can I share?", "a": "You can share any file type — documents, images, archives, code files, and more. The receiving device downloads the file exactly as it was uploaded." },
-      { "q": "Is there a file size limit?", "a": "Uploads are subject to a reasonable size limit imposed by the server. For large files over a few hundred MB, a dedicated file transfer service would be more suitable." },
-      { "q": "Is my content private?", "a": "Content is stored temporarily on the server and accessible only to whoever has the 4-digit code. Shares are short-lived. Do not share sensitive or confidential data using this tool." },
-      { "q": "What does the auto-load feature do on the same network?", "a": "When two devices are on the same local network and one has recently shared, the receiving device can auto-detect the latest share using the refresh button, without needing to type the code manually." }
+      {
+        "q": "Do I need an account to use Easy Share?",
+        "a": "No account is required. Easy Share is a fully anonymous tool — just open it and share instantly."
+      },
+      {
+        "q": "How many files can I share at once?",
+        "a": "You can share one file per code. Select any file type and it will be uploaded and available for the receiving device to download."
+      },
+      {
+        "q": "How long does the share code stay active?",
+        "a": "Share codes and their content expire after approximately 1 hour. After expiry, the code is no longer valid and the content is deleted from the server."
+      },
+      {
+        "q": "Can I reorder files before sharing?",
+        "a": "You can remove and re-add files as needed before generating the share code."
+      },
+      {
+        "q": "Is there a file size limit?",
+        "a": "Files must be under 10 MB. For larger files, consider a dedicated file transfer service."
+      },
+      {
+        "q": "What does the auto-load feature do on the same network?",
+        "a": "When two devices are on the same local network and one has recently shared, the receiving device can auto-detect the latest share using the refresh button, without needing to type the code manually."
+      }
     ]
   },
   {
@@ -118,7 +172,15 @@
     "authRequired": false,
     "detailedDescription": "Create printable barcodes directly in your browser with support for common formats like Code 128, Code 39, EAN-13, EAN-8, and UPC-A. Customize width, height, and label display, then export the barcode as PNG.",
     "categoryId": "business",
-    "keywords": ["barcode", "code128", "code39", "ean13", "ean8", "upc", "label"],
+    "keywords": [
+      "barcode",
+      "code128",
+      "code39",
+      "ean13",
+      "ean8",
+      "upc",
+      "label"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -130,12 +192,30 @@
       "Click Download PNG to save the barcode image, ready for printing or embedding in documents."
     ],
     "faqs": [
-      { "q": "Which barcode format should I use?", "a": "Code 128 supports the full ASCII character set and variable length, making it ideal for general product labels, shipping, and inventory. Use EAN-13 or UPC-A for retail barcodes that need scanning at point-of-sale. Code 39 is common in industrial and automotive contexts." },
-      { "q": "What is the difference between EAN-13 and EAN-8?", "a": "EAN-13 encodes 13 digits and is the global standard for retail products. EAN-8 encodes 8 digits and is a compact version used on small packaging where a full EAN-13 barcode would not fit." },
-      { "q": "Do I need to include a check digit?", "a": "For EAN-13, EAN-8, and UPC-A, the check digit is calculated and appended automatically. For Code 128 and Code 39, just enter your value and the barcode is generated directly." },
-      { "q": "Can I use this barcode for retail scanning?", "a": "Yes, but EAN and UPC barcodes used for commercial retail require an officially licensed GS1 prefix to be globally unique. For internal inventory or personal use, any numeric value works fine." },
-      { "q": "What resolution is the PNG output?", "a": "The PNG is rendered at the width and height settings you configure. For print use, increase these values to achieve higher resolution suitable for label printers." },
-      { "q": "Does this work offline?", "a": "Yes. Barcode generation is entirely client-side with no server calls required. It works without an internet connection once the page is loaded." }
+      {
+        "q": "Which barcode format should I use?",
+        "a": "Code 128 supports the full ASCII character set and variable length, making it ideal for general product labels, shipping, and inventory. Use EAN-13 or UPC-A for retail barcodes that need scanning at point-of-sale. Code 39 is common in industrial and automotive contexts."
+      },
+      {
+        "q": "What is the difference between EAN-13 and EAN-8?",
+        "a": "EAN-13 encodes 13 digits and is the global standard for retail products. EAN-8 encodes 8 digits and is a compact version used on small packaging where a full EAN-13 barcode would not fit."
+      },
+      {
+        "q": "Do I need to include a check digit?",
+        "a": "For EAN-13, EAN-8, and UPC-A, the check digit is calculated and appended automatically. For Code 128 and Code 39, just enter your value and the barcode is generated directly."
+      },
+      {
+        "q": "Can I use this barcode for retail scanning?",
+        "a": "Yes, but EAN and UPC barcodes used for commercial retail require an officially licensed GS1 prefix to be globally unique. For internal inventory or personal use, any numeric value works fine."
+      },
+      {
+        "q": "What resolution is the PNG output?",
+        "a": "The PNG is rendered at the width and height settings you configure. For print use, increase these values to achieve higher resolution suitable for label printers."
+      },
+      {
+        "q": "Does this work offline?",
+        "a": "Yes. Barcode generation is entirely client-side with no server calls required. It works without an internet connection once the page is loaded."
+      }
     ]
   },
   {
@@ -161,12 +241,30 @@
       "Download individual compressed images, or click Download All as ZIP to get everything in one archive."
     ],
     "faqs": [
-      { "q": "Are my images uploaded to a server?", "a": "No. All compression happens locally in your browser using the Canvas API. Your images are never sent to any server, so they remain completely private." },
-      { "q": "What image formats are supported?", "a": "The compressor supports JPEG, PNG, and WEBP input formats. Output is saved as JPEG or WEBP, which offer the best compression ratios for photographic content." },
-      { "q": "How much will my file size be reduced?", "a": "Reduction depends on the original image and quality setting. Typical JPEG photos compressed at 80% quality see a 40-70% reduction in file size with minimal visible quality loss." },
-      { "q": "Will compression visibly degrade my image quality?", "a": "At quality settings of 75% and above, compression artifacts are generally not noticeable. For print use, keep quality at 90% or higher. For web thumbnails, 60-75% is acceptable." },
-      { "q": "Can I compress multiple images at once?", "a": "Yes. You can upload multiple images in one batch and download them individually or all at once as a ZIP file." },
-      { "q": "Does this tool work on mobile?", "a": "Yes. The compressor runs in any modern mobile or desktop browser and works offline once the page is loaded." }
+      {
+        "q": "Are my images uploaded to a server?",
+        "a": "No. All compression happens locally in your browser using the Canvas API. Your images are never sent to any server, so they remain completely private."
+      },
+      {
+        "q": "What image formats are supported?",
+        "a": "The compressor supports JPEG, PNG, and WEBP input formats. Output is saved as JPEG or WEBP, which offer the best compression ratios for photographic content."
+      },
+      {
+        "q": "How much will my file size be reduced?",
+        "a": "Reduction depends on the original image and quality setting. Typical JPEG photos compressed at 80% quality see a 40-70% reduction in file size with minimal visible quality loss."
+      },
+      {
+        "q": "Will compression visibly degrade my image quality?",
+        "a": "At quality settings of 75% and above, compression artifacts are generally not noticeable. For print use, keep quality at 90% or higher. For web thumbnails, 60-75% is acceptable."
+      },
+      {
+        "q": "Can I compress multiple images at once?",
+        "a": "Yes. You can upload multiple images in one batch and download them individually or all at once as a ZIP file."
+      },
+      {
+        "q": "Does this tool work on mobile?",
+        "a": "Yes. The compressor runs in any modern mobile or desktop browser and works offline once the page is loaded."
+      }
     ]
   },
   {
@@ -180,7 +278,16 @@
     "authRequired": false,
     "detailedDescription": "Convert a single image between PNG, JPG, WEBP, and BMP formats in your browser. Pick source and target formats, then export instantly with no uploads or backend processing.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "png", "jpg", "webp", "bmp", "convert"],
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "png",
+      "jpg",
+      "webp",
+      "bmp",
+      "convert"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -192,12 +299,30 @@
       "Click Download to save the image in the new format to your device."
     ],
     "faqs": [
-      { "q": "What formats can I convert between?", "a": "The tool supports conversion between PNG, JPEG (JPG), WEBP, and BMP. You can convert from any of these formats to any other." },
-      { "q": "Will converting to JPEG affect image quality?", "a": "JPEG uses lossy compression, so converting a PNG or WEBP to JPEG may introduce minor compression artifacts. Converting back to PNG from JPEG will not recover the lost data, so keep an original if precision matters." },
-      { "q": "Why would I convert an image to WEBP?", "a": "WEBP is a modern format developed by Google that offers significantly smaller file sizes than JPEG and PNG at comparable quality. It is widely supported in modern browsers and is the preferred format for web images." },
-      { "q": "Does PNG preserve transparency after conversion?", "a": "PNG supports transparency (alpha channel). If you convert a transparent PNG to JPEG or BMP, transparent areas will be filled with a white background. Converting to WEBP preserves transparency." },
-      { "q": "Is my image sent to a server?", "a": "No. All conversion is done client-side using the browser Canvas API. Your image never leaves your device." },
-      { "q": "Can I convert multiple images at once?", "a": "The current version converts one image at a time. For batch conversion, upload files sequentially." }
+      {
+        "q": "What formats can I convert between?",
+        "a": "The tool supports conversion between PNG, JPEG (JPG), WEBP, and BMP. You can convert from any of these formats to any other."
+      },
+      {
+        "q": "Will converting to JPEG affect image quality?",
+        "a": "JPEG uses lossy compression, so converting a PNG or WEBP to JPEG may introduce minor compression artifacts. Converting back to PNG from JPEG will not recover the lost data, so keep an original if precision matters."
+      },
+      {
+        "q": "Why would I convert an image to WEBP?",
+        "a": "WEBP is a modern format developed by Google that offers significantly smaller file sizes than JPEG and PNG at comparable quality. It is widely supported in modern browsers and is the preferred format for web images."
+      },
+      {
+        "q": "Does PNG preserve transparency after conversion?",
+        "a": "PNG supports transparency (alpha channel). If you convert a transparent PNG to JPEG or BMP, transparent areas will be filled with a white background. Converting to WEBP preserves transparency."
+      },
+      {
+        "q": "Is my image sent to a server?",
+        "a": "No. All conversion is done client-side using the browser Canvas API. Your image never leaves your device."
+      },
+      {
+        "q": "Can I convert multiple images at once?",
+        "a": "The current version converts one image at a time. For batch conversion, upload files sequentially."
+      }
     ]
   },
   {
@@ -211,7 +336,15 @@
     "authRequired": false,
     "detailedDescription": "Combine multiple images and PDF documents into a single PDF file. Reorder items, rotate images, choose page size and margins, set fit behavior, and optionally add page numbers. Built with client-side processing for privacy and speed.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "pdf", "merge", "combine", "join"],
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "pdf",
+      "merge",
+      "combine",
+      "join"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -223,12 +356,30 @@
       "Click Create PDF to generate the merged document, then click Download to save it."
     ],
     "faqs": [
-      { "q": "Can I merge both images and PDFs in the same document?", "a": "Yes. You can upload any combination of images (PNG, JPG, WEBP) and existing PDF files. They will all be merged into one PDF in the order you specify." },
-      { "q": "Is my data uploaded to a server?", "a": "No. All processing is done entirely in your browser. No files are uploaded to any server, making this safe for confidential documents." },
-      { "q": "Can I reorder pages before merging?", "a": "Yes. All uploaded files appear as a draggable list. Simply drag and drop items to set your desired page order before creating the PDF." },
-      { "q": "What happens to multi-page PDFs I upload?", "a": "Each page of an uploaded PDF becomes a separate page in the merged document, inserted at the position you placed the PDF in the list." },
-      { "q": "Can I rotate images before adding them to the PDF?", "a": "Yes. Each uploaded image has rotation controls so you can adjust the orientation before the merge." },
-      { "q": "What page size options are available?", "a": "The tool supports common page sizes including A4, A3, Letter, and Legal. You can also control margins and choose whether images should fill the page, fit within margins, or be centered." }
+      {
+        "q": "Can I merge both images and PDFs in the same document?",
+        "a": "Yes. You can upload any combination of images (PNG, JPG, WEBP) and existing PDF files. They will all be merged into one PDF in the order you specify."
+      },
+      {
+        "q": "Is my data uploaded to a server?",
+        "a": "No. All processing is done entirely in your browser. No files are uploaded to any server, making this safe for confidential documents."
+      },
+      {
+        "q": "Can I reorder pages before merging?",
+        "a": "Yes. All uploaded files appear as a draggable list. Simply drag and drop items to set your desired page order before creating the PDF."
+      },
+      {
+        "q": "What happens to multi-page PDFs I upload?",
+        "a": "Each page of an uploaded PDF becomes a separate page in the merged document, inserted at the position you placed the PDF in the list."
+      },
+      {
+        "q": "Can I rotate images before adding them to the PDF?",
+        "a": "Yes. Each uploaded image has rotation controls so you can adjust the orientation before the merge."
+      },
+      {
+        "q": "What page size options are available?",
+        "a": "The tool supports common page sizes including A4, A3, Letter, and Legal. You can also control margins and choose whether images should fill the page, fit within margins, or be centered."
+      }
     ]
   },
   {
@@ -254,12 +405,30 @@
       "Download the resulting PDF file, or if splitting into individual pages, download all pages as a ZIP archive."
     ],
     "faqs": [
-      { "q": "Is my PDF uploaded to a server?", "a": "No. The PDF is processed entirely within your browser using PDF.js and pdf-lib. No content is sent to any server." },
-      { "q": "Can I extract non-consecutive pages?", "a": "The current tool supports extracting a continuous page range (start page to end page). For non-consecutive selections, run multiple extract operations." },
-      { "q": "What happens to PDF bookmarks and annotations when splitting?", "a": "Page content, text, and images are preserved. Some metadata such as bookmarks and form fields may not be carried over depending on the complexity of the original file." },
-      { "q": "Is there a page count limit?", "a": "There is no hard limit. Large PDFs with hundreds of pages are handled in-browser, though very large files may take a few extra seconds depending on your device." },
-      { "q": "Can I split a password-protected PDF?", "a": "The tool does not currently support password-protected PDFs. Remove the password protection first using another tool before uploading." },
-      { "q": "What is the difference between extracting a range and splitting per page?", "a": "Extracting a range produces one new PDF containing only the specified pages. Splitting per page produces one separate PDF for every page, all packaged in a ZIP download." }
+      {
+        "q": "Is my PDF uploaded to a server?",
+        "a": "No. The PDF is processed entirely within your browser using PDF.js and pdf-lib. No content is sent to any server."
+      },
+      {
+        "q": "Can I extract non-consecutive pages?",
+        "a": "The current tool supports extracting a continuous page range (start page to end page). For non-consecutive selections, run multiple extract operations."
+      },
+      {
+        "q": "What happens to PDF bookmarks and annotations when splitting?",
+        "a": "Page content, text, and images are preserved. Some metadata such as bookmarks and form fields may not be carried over depending on the complexity of the original file."
+      },
+      {
+        "q": "Is there a page count limit?",
+        "a": "There is no hard limit. Large PDFs with hundreds of pages are handled in-browser, though very large files may take a few extra seconds depending on your device."
+      },
+      {
+        "q": "Can I split a password-protected PDF?",
+        "a": "The tool does not currently support password-protected PDFs. Remove the password protection first using another tool before uploading."
+      },
+      {
+        "q": "What is the difference between extracting a range and splitting per page?",
+        "a": "Extracting a range produces one new PDF containing only the specified pages. Splitting per page produces one separate PDF for every page, all packaged in a ZIP download."
+      }
     ]
   },
   {
@@ -285,12 +454,30 @@
       "Select the output format (PNG, JPEG, or WEBP) then click Crop and Download to save the cropped image."
     ],
     "faqs": [
-      { "q": "Is my image sent to a server for cropping?", "a": "No. All cropping is performed locally in your browser using the Canvas API. Your image is never uploaded anywhere." },
-      { "q": "Can I crop to a specific aspect ratio?", "a": "Yes. You can constrain the crop selection to common aspect ratios like 1:1 (square), 16:9, or 4:3, which is useful for social media and banner graphics." },
-      { "q": "What output formats are available?", "a": "You can export the cropped image as PNG (lossless), JPEG (smaller file size, suitable for photos), or WEBP (modern format with excellent quality-to-size ratio)." },
-      { "q": "Can I undo a crop and try again?", "a": "Yes. You can adjust the crop selection at any time before clicking Download. The original image remains untouched throughout the editing session." },
-      { "q": "Does this tool resize images?", "a": "The tool crops images by removing parts outside the selection. For resizing the entire image to different dimensions, use a dedicated resizing or compression tool." },
-      { "q": "What is the maximum image size I can crop?", "a": "There is no enforced size limit. Very large images above 20 megapixels may load more slowly but will process correctly." }
+      {
+        "q": "Is my image sent to a server for cropping?",
+        "a": "No. All cropping is performed locally in your browser using the Canvas API. Your image is never uploaded anywhere."
+      },
+      {
+        "q": "Can I crop to a specific aspect ratio?",
+        "a": "Yes. You can constrain the crop selection to common aspect ratios like 1:1 (square), 16:9, or 4:3, which is useful for social media and banner graphics."
+      },
+      {
+        "q": "What output formats are available?",
+        "a": "You can export the cropped image as PNG (lossless), JPEG (smaller file size, suitable for photos), or WEBP (modern format with excellent quality-to-size ratio)."
+      },
+      {
+        "q": "Can I undo a crop and try again?",
+        "a": "Yes. You can adjust the crop selection at any time before clicking Download. The original image remains untouched throughout the editing session."
+      },
+      {
+        "q": "Does this tool resize images?",
+        "a": "The tool crops images by removing parts outside the selection. For resizing the entire image to different dimensions, use a dedicated resizing or compression tool."
+      },
+      {
+        "q": "What is the maximum image size I can crop?",
+        "a": "There is no enforced size limit. Very large images above 20 megapixels may load more slowly but will process correctly."
+      }
     ]
   },
   {
@@ -304,7 +491,14 @@
     "authRequired": false,
     "detailedDescription": "Upload a PNG, JPG, or WEBP image and remove the background using server-side segmentation. Preview before and after results, then download a transparent PNG.",
     "categoryId": "utilities",
-    "keywords": ["image", "background", "remove", "transparent", "png", "cutout"],
+    "keywords": [
+      "image",
+      "background",
+      "remove",
+      "transparent",
+      "png",
+      "cutout"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -316,12 +510,30 @@
       "Use the transparent PNG in design tools, presentations, or websites where you need an isolated subject."
     ],
     "faqs": [
-      { "q": "What types of images work best?", "a": "The tool works best with images that have a clear distinction between the subject and the background. High-contrast images with well-defined edges produce the cleanest results." },
-      { "q": "Why does the output have slightly rough edges?", "a": "Background removal uses AI segmentation, which is accurate on simple backgrounds but may leave slightly rough edges on complex images with hair, fur, or intricate shapes." },
-      { "q": "Is this tool free to use?", "a": "Yes, the background remover is free to use without any account required." },
-      { "q": "What format is the output file?", "a": "The output is always a PNG file with a transparent background (alpha channel). PNG is the only common format that supports full transparency for cutout images." },
-      { "q": "Does this tool require an internet connection?", "a": "Yes. Unlike other Torensa tools, background removal is processed on the server using a machine learning model, so an active internet connection is required." },
-      { "q": "Is my image stored on the server?", "a": "Images are processed on the server and the result is returned to your browser. Images are not retained or used for any other purpose." }
+      {
+        "q": "What types of images work best?",
+        "a": "The tool works best with images that have a clear distinction between the subject and the background. High-contrast images with well-defined edges produce the cleanest results."
+      },
+      {
+        "q": "Why does the output have slightly rough edges?",
+        "a": "Background removal uses AI segmentation, which is accurate on simple backgrounds but may leave slightly rough edges on complex images with hair, fur, or intricate shapes."
+      },
+      {
+        "q": "Is this tool free to use?",
+        "a": "Yes, the background remover is free to use without any account required."
+      },
+      {
+        "q": "What format is the output file?",
+        "a": "The output is always a PNG file with a transparent background (alpha channel). PNG is the only common format that supports full transparency for cutout images."
+      },
+      {
+        "q": "Does this tool require an internet connection?",
+        "a": "Yes. Unlike other Torensa tools, background removal is processed on the server using a machine learning model, so an active internet connection is required."
+      },
+      {
+        "q": "Is my image stored on the server?",
+        "a": "Images are processed on the server and the result is returned to your browser. Images are not retained or used for any other purpose."
+      }
     ]
   },
   {
@@ -347,12 +559,30 @@
       "Add payment notes or terms in the notes field, then click Export PDF to download the finished invoice."
     ],
     "faqs": [
-      { "q": "Is my invoice data saved anywhere?", "a": "Invoice data is stored locally in your browser so you can return and reuse it without re-entering everything. No data is sent to any server." },
-      { "q": "Can I add a company logo to the invoice?", "a": "Yes. You can upload a logo image which will appear in the header of the invoice PDF." },
-      { "q": "What currencies are supported?", "a": "You can specify any currency symbol or code in the currency field. The tool works with USD, EUR, GBP, INR, or any other currency." },
-      { "q": "Can I apply multiple tax rates?", "a": "You can specify a tax percentage that applies to the subtotal. For invoices requiring multiple tax rates, enter individual taxes in the line items or notes section." },
-      { "q": "Is the generated PDF ready to send to clients?", "a": "Yes. The PDF output is professionally formatted and ready to email directly to a client. Review the PDF preview before sending." },
-      { "q": "Can I create receipts as well as invoices?", "a": "Yes. The tool works equally well for receipts. Label the document as a receipt in the title field and add a payment received date instead of a due date." }
+      {
+        "q": "Is my invoice data saved anywhere?",
+        "a": "Invoice data is stored locally in your browser so you can return and reuse it without re-entering everything. No data is sent to any server."
+      },
+      {
+        "q": "Can I add a company logo to the invoice?",
+        "a": "Yes. You can upload a logo image which will appear in the header of the invoice PDF."
+      },
+      {
+        "q": "What currencies are supported?",
+        "a": "You can specify any currency symbol or code in the currency field. The tool works with USD, EUR, GBP, INR, or any other currency."
+      },
+      {
+        "q": "Can I apply multiple tax rates?",
+        "a": "You can specify a tax percentage that applies to the subtotal. For invoices requiring multiple tax rates, enter individual taxes in the line items or notes section."
+      },
+      {
+        "q": "Is the generated PDF ready to send to clients?",
+        "a": "Yes. The PDF output is professionally formatted and ready to email directly to a client. Review the PDF preview before sending."
+      },
+      {
+        "q": "Can I create receipts as well as invoices?",
+        "a": "Yes. The tool works equally well for receipts. Label the document as a receipt in the title field and add a payment received date instead of a due date."
+      }
     ]
   },
   {
@@ -378,12 +608,30 @@
       "Copy or share specific changed sections as needed from the results panel."
     ],
     "faqs": [
-      { "q": "What types of text can I compare?", "a": "You can compare any plain text: article drafts, configuration files, code snippets, JSON, markdown documents, email templates, and more." },
-      { "q": "Is the comparison case-sensitive?", "a": "Yes, the comparison is case-sensitive by default, meaning 'Hello' and 'hello' will be flagged as different. This is the standard behavior for diff tools." },
-      { "q": "How large a text can I compare?", "a": "The tool handles large texts well for browser-based processing. Documents with thousands of lines are compared quickly." },
-      { "q": "Does it show inline word-level differences?", "a": "The tool highlights changed lines. For modified lines, it shows the old and new versions side by side so you can see exactly what within the line was edited." },
-      { "q": "Is my text sent to a server?", "a": "No. All diff computation runs entirely in your browser. Your text is never sent to any external service." },
-      { "q": "Can I use this tool to compare code?", "a": "Yes. The diff works on any plain text, including source code. It shows which lines were added, removed, or modified, similar to a git diff output." }
+      {
+        "q": "What types of text can I compare?",
+        "a": "You can compare any plain text: article drafts, configuration files, code snippets, JSON, markdown documents, email templates, and more."
+      },
+      {
+        "q": "Is the comparison case-sensitive?",
+        "a": "Yes, the comparison is case-sensitive by default, meaning 'Hello' and 'hello' will be flagged as different. This is the standard behavior for diff tools."
+      },
+      {
+        "q": "How large a text can I compare?",
+        "a": "The tool handles large texts well for browser-based processing. Documents with thousands of lines are compared quickly."
+      },
+      {
+        "q": "Does it show inline word-level differences?",
+        "a": "The tool highlights changed lines. For modified lines, it shows the old and new versions side by side so you can see exactly what within the line was edited."
+      },
+      {
+        "q": "Is my text sent to a server?",
+        "a": "No. All diff computation runs entirely in your browser. Your text is never sent to any external service."
+      },
+      {
+        "q": "Can I use this tool to compare code?",
+        "a": "Yes. The diff works on any plain text, including source code. It shows which lines were added, removed, or modified, similar to a git diff output."
+      }
     ]
   },
   {
@@ -409,12 +657,30 @@
       "Use the diff view to compare two JSON objects side by side."
     ],
     "faqs": [
-      { "q": "What counts as invalid JSON?", "a": "Common JSON errors include trailing commas after the last item in an array or object, single-quoted strings (JSON requires double quotes), missing commas between key-value pairs, and unquoted keys. The validator pinpoints the exact location of the error." },
-      { "q": "What is the difference between formatting and minifying?", "a": "Formatting (pretty-printing) adds indentation and newlines to make JSON readable by humans. Minifying removes all whitespace to produce the smallest possible JSON string, useful for reducing payload size in API responses." },
-      { "q": "Can I compare two JSON objects?", "a": "Yes. The tool includes a diff mode where you can paste two JSON objects and see a structured comparison of their differences, which is helpful when debugging API response changes." },
-      { "q": "Is there a size limit for the JSON I can paste?", "a": "There is no hard limit. The tool handles large JSON payloads up to several megabytes without issues in modern browsers." },
-      { "q": "Is my JSON sent to any server?", "a": "No. Validation, formatting, and minification all happen locally in your browser. Your JSON data never leaves your device." },
-      { "q": "Can I use this while working offline?", "a": "Yes. Once the page is loaded, the JSON formatter works completely offline with no internet connection required." }
+      {
+        "q": "What counts as invalid JSON?",
+        "a": "Common JSON errors include trailing commas after the last item in an array or object, single-quoted strings (JSON requires double quotes), missing commas between key-value pairs, and unquoted keys. The validator pinpoints the exact location of the error."
+      },
+      {
+        "q": "What is the difference between formatting and minifying?",
+        "a": "Formatting (pretty-printing) adds indentation and newlines to make JSON readable by humans. Minifying removes all whitespace to produce the smallest possible JSON string, useful for reducing payload size in API responses."
+      },
+      {
+        "q": "Can I compare two JSON objects?",
+        "a": "Yes. The tool includes a diff mode where you can paste two JSON objects and see a structured comparison of their differences, which is helpful when debugging API response changes."
+      },
+      {
+        "q": "Is there a size limit for the JSON I can paste?",
+        "a": "There is no hard limit. The tool handles large JSON payloads up to several megabytes without issues in modern browsers."
+      },
+      {
+        "q": "Is my JSON sent to any server?",
+        "a": "No. Validation, formatting, and minification all happen locally in your browser. Your JSON data never leaves your device."
+      },
+      {
+        "q": "Can I use this while working offline?",
+        "a": "Yes. Once the page is loaded, the JSON formatter works completely offline with no internet connection required."
+      }
     ]
   },
   {
@@ -440,12 +706,30 @@
       "Click Export Report to download a structured JSON incident report you can share with your team."
     ],
     "faqs": [
-      { "q": "What log formats are supported?", "a": "The analyzer is tuned for the standard Spring Boot log format produced by Logback (the default logging framework) and also handles Spring Boot applications using Log4j2 with the standard pattern layout." },
-      { "q": "What does root cause detection mean?", "a": "When a Spring Boot application throws a chain of wrapped exceptions, the root cause is the deepest original exception. The analyzer identifies this first-failure point to help you focus debugging on the actual problem." },
-      { "q": "Does this tool support multi-threaded log output?", "a": "Yes. The analyzer groups log lines by thread name and correlation ID (when present), letting you trace the lifecycle of a single HTTP request through a multi-threaded log stream." },
-      { "q": "Is my log data sent to a server?", "a": "No. All log parsing and analysis runs entirely in your browser. Your log data is never uploaded to any server." },
-      { "q": "Can I analyze logs from other Java frameworks?", "a": "The tool is optimized for Spring Boot but can parse any log file that uses standard format with timestamps, log levels (ERROR, WARN, INFO), thread names, and Java stack traces." },
-      { "q": "What is included in the exported JSON report?", "a": "The report includes a summary of error counts, a list of detected exceptions with their root causes, relevant stack frames, thread names, timestamps, and any correlation IDs found in the log." }
+      {
+        "q": "What log formats are supported?",
+        "a": "The analyzer is tuned for the standard Spring Boot log format produced by Logback (the default logging framework) and also handles Spring Boot applications using Log4j2 with the standard pattern layout."
+      },
+      {
+        "q": "What does root cause detection mean?",
+        "a": "When a Spring Boot application throws a chain of wrapped exceptions, the root cause is the deepest original exception. The analyzer identifies this first-failure point to help you focus debugging on the actual problem."
+      },
+      {
+        "q": "Does this tool support multi-threaded log output?",
+        "a": "Yes. The analyzer groups log lines by thread name and correlation ID (when present), letting you trace the lifecycle of a single HTTP request through a multi-threaded log stream."
+      },
+      {
+        "q": "Is my log data sent to a server?",
+        "a": "No. All log parsing and analysis runs entirely in your browser. Your log data is never uploaded to any server."
+      },
+      {
+        "q": "Can I analyze logs from other Java frameworks?",
+        "a": "The tool is optimized for Spring Boot but can parse any log file that uses standard format with timestamps, log levels (ERROR, WARN, INFO), thread names, and Java stack traces."
+      },
+      {
+        "q": "What is included in the exported JSON report?",
+        "a": "The report includes a summary of error counts, a list of detected exceptions with their root causes, relevant stack frames, thread names, timestamps, and any correlation IDs found in the log."
+      }
     ]
   },
   {
@@ -471,12 +755,30 @@
       "Copy the validated expression to use in your application's cron job configuration or scheduler."
     ],
     "faqs": [
-      { "q": "What is the difference between 5-field and 6-field cron expressions?", "a": "Standard Unix/Linux cron uses 5 fields: minute, hour, day-of-month, month, day-of-week. Java schedulers (Spring @Scheduled, Quartz) use a 6-field format that adds a seconds field at the start: second, minute, hour, day-of-month, month, day-of-week." },
-      { "q": "How do I run a job every 15 minutes?", "a": "Use '*/15 * * * *' for a 5-field expression, or '0 */15 * * * *' for a 6-field expression. The */n syntax means every n units." },
-      { "q": "Can I schedule a job for specific days of the week?", "a": "Yes. The day-of-week field accepts values 0-7 (0 and 7 both mean Sunday) or abbreviations MON, TUE, WED, THU, FRI, SAT, SUN. For example, '0 9 * * 1-5' runs at 9 AM every weekday." },
-      { "q": "What does the asterisk (*) mean in a cron expression?", "a": "An asterisk means every value for that field. In the minutes field, * means every minute. In the months field, * means every month." },
-      { "q": "What does L mean in cron expressions?", "a": "L stands for last. In the day-of-month field, L means the last day of the month. In the day-of-week field, 5L means the last Friday of the month. L is supported by Quartz/Spring but not all Unix cron implementations." },
-      { "q": "Is this tool useful for AWS EventBridge or GitHub Actions schedules?", "a": "Yes. Both AWS EventBridge and GitHub Actions use cron-style expressions. AWS EventBridge uses a 6-field format with year, while GitHub Actions uses 5-field expressions in UTC. The builder and validator work for both." }
+      {
+        "q": "What is the difference between 5-field and 6-field cron expressions?",
+        "a": "Standard Unix/Linux cron uses 5 fields: minute, hour, day-of-month, month, day-of-week. Java schedulers (Spring @Scheduled, Quartz) use a 6-field format that adds a seconds field at the start: second, minute, hour, day-of-month, month, day-of-week."
+      },
+      {
+        "q": "How do I run a job every 15 minutes?",
+        "a": "Use '*/15 * * * *' for a 5-field expression, or '0 */15 * * * *' for a 6-field expression. The */n syntax means every n units."
+      },
+      {
+        "q": "Can I schedule a job for specific days of the week?",
+        "a": "Yes. The day-of-week field accepts values 0-7 (0 and 7 both mean Sunday) or abbreviations MON, TUE, WED, THU, FRI, SAT, SUN. For example, '0 9 * * 1-5' runs at 9 AM every weekday."
+      },
+      {
+        "q": "What does the asterisk (*) mean in a cron expression?",
+        "a": "An asterisk means every value for that field. In the minutes field, * means every minute. In the months field, * means every month."
+      },
+      {
+        "q": "What does L mean in cron expressions?",
+        "a": "L stands for last. In the day-of-month field, L means the last day of the month. In the day-of-week field, 5L means the last Friday of the month. L is supported by Quartz/Spring but not all Unix cron implementations."
+      },
+      {
+        "q": "Is this tool useful for AWS EventBridge or GitHub Actions schedules?",
+        "a": "Yes. Both AWS EventBridge and GitHub Actions use cron-style expressions. AWS EventBridge uses a 6-field format with year, while GitHub Actions uses 5-field expressions in UTC. The builder and validator work for both."
+      }
     ]
   },
   {
@@ -502,12 +804,30 @@
       "Click Generate to produce a signed JWT token which you can copy and use in API requests."
     ],
     "faqs": [
-      { "q": "What is a JWT?", "a": "A JSON Web Token (JWT) is a compact, URL-safe token used to securely transmit information between parties. It has three Base64-encoded parts separated by dots: the header (algorithm info), the payload (claims), and the signature (used to verify the token has not been tampered with)." },
-      { "q": "Can anyone decode a JWT without the secret key?", "a": "Yes. The header and payload are only Base64-encoded, not encrypted. Anyone can decode and read the claims inside. Only the signature verification requires the secret key. Never put sensitive data like passwords directly in a JWT payload." },
-      { "q": "What is the difference between HS256 and HS512?", "a": "Both are HMAC-based signing algorithms. HS256 uses SHA-256 producing a 256-bit signature, while HS512 uses SHA-512 producing a 512-bit signature. HS512 is stronger but produces a slightly longer token. Both are widely supported." },
-      { "q": "Is my JWT or secret key sent to a server?", "a": "No. All decoding and encoding operations happen entirely in your browser. Your tokens and secret keys are never transmitted anywhere." },
-      { "q": "How do I verify a JWT signature?", "a": "Enter the token in the Decode tab and provide the HMAC secret key in the verification field. The tool will confirm whether the signature is valid or has been tampered with." },
-      { "q": "Can I use this tool to generate tokens for production use?", "a": "This tool is designed for development, testing, and debugging. For production, generate JWTs server-side using a trusted library with proper secret management such as environment variables or a secrets manager." }
+      {
+        "q": "What is a JWT?",
+        "a": "A JSON Web Token (JWT) is a compact, URL-safe token used to securely transmit information between parties. It has three Base64-encoded parts separated by dots: the header (algorithm info), the payload (claims), and the signature (used to verify the token has not been tampered with)."
+      },
+      {
+        "q": "Can anyone decode a JWT without the secret key?",
+        "a": "Yes. The header and payload are only Base64-encoded, not encrypted. Anyone can decode and read the claims inside. Only the signature verification requires the secret key. Never put sensitive data like passwords directly in a JWT payload."
+      },
+      {
+        "q": "What is the difference between HS256 and HS512?",
+        "a": "Both are HMAC-based signing algorithms. HS256 uses SHA-256 producing a 256-bit signature, while HS512 uses SHA-512 producing a 512-bit signature. HS512 is stronger but produces a slightly longer token. Both are widely supported."
+      },
+      {
+        "q": "Is my JWT or secret key sent to a server?",
+        "a": "No. All decoding and encoding operations happen entirely in your browser. Your tokens and secret keys are never transmitted anywhere."
+      },
+      {
+        "q": "How do I verify a JWT signature?",
+        "a": "Enter the token in the Decode tab and provide the HMAC secret key in the verification field. The tool will confirm whether the signature is valid or has been tampered with."
+      },
+      {
+        "q": "Can I use this tool to generate tokens for production use?",
+        "a": "This tool is designed for development, testing, and debugging. For production, generate JWTs server-side using a trusted library with proper secret management such as environment variables or a secrets manager."
+      }
     ]
   },
   {
@@ -533,12 +853,30 @@
       "Regenerate as many times as needed — each set of UUIDs is unique."
     ],
     "faqs": [
-      { "q": "What is a UUID?", "a": "A Universally Unique Identifier (UUID) is a 128-bit label used to uniquely identify information in computer systems. In standard format it looks like 550e8400-e29b-41d4-a716-446655440000. They are designed to be globally unique without central coordination." },
-      { "q": "What is UUID version 4?", "a": "UUID v4 is randomly generated. 122 of the 128 bits are random data, making the probability of a collision astronomically low — about 1 in 5.3 x 10^36. It is the most commonly used UUID version for application identifiers." },
-      { "q": "Is UUID the same as GUID?", "a": "Yes. GUID (Globally Unique Identifier) is Microsoft's term for the same concept. UUIDs and GUIDs follow the same RFC 4122 standard and are interchangeable." },
-      { "q": "Are the generated UUIDs truly unique?", "a": "UUID v4 values are generated using a cryptographically random number generator in your browser. The probability of generating two identical UUIDs is so small it is negligible for practical use." },
-      { "q": "Can I use these UUIDs as database primary keys?", "a": "Yes. UUID primary keys are widely used in distributed databases. Be aware that random UUID keys can fragment database indexes — for high-write databases, an ordered UUID variant is preferred." },
-      { "q": "Are these UUIDs generated on the server or client?", "a": "All UUIDs are generated entirely in your browser using the Web Crypto API. No server is involved and nothing is collected or logged." }
+      {
+        "q": "What is a UUID?",
+        "a": "A Universally Unique Identifier (UUID) is a 128-bit label used to uniquely identify information in computer systems. In standard format it looks like 550e8400-e29b-41d4-a716-446655440000. They are designed to be globally unique without central coordination."
+      },
+      {
+        "q": "What is UUID version 4?",
+        "a": "UUID v4 is randomly generated. 122 of the 128 bits are random data, making the probability of a collision astronomically low — about 1 in 5.3 x 10^36. It is the most commonly used UUID version for application identifiers."
+      },
+      {
+        "q": "Is UUID the same as GUID?",
+        "a": "Yes. GUID (Globally Unique Identifier) is Microsoft's term for the same concept. UUIDs and GUIDs follow the same RFC 4122 standard and are interchangeable."
+      },
+      {
+        "q": "Are the generated UUIDs truly unique?",
+        "a": "UUID v4 values are generated using a cryptographically random number generator in your browser. The probability of generating two identical UUIDs is so small it is negligible for practical use."
+      },
+      {
+        "q": "Can I use these UUIDs as database primary keys?",
+        "a": "Yes. UUID primary keys are widely used in distributed databases. Be aware that random UUID keys can fragment database indexes — for high-write databases, an ordered UUID variant is preferred."
+      },
+      {
+        "q": "Are these UUIDs generated on the server or client?",
+        "a": "All UUIDs are generated entirely in your browser using the Web Crypto API. No server is involved and nothing is collected or logged."
+      }
     ]
   },
   {
@@ -552,7 +890,16 @@
     "authRequired": false,
     "detailedDescription": "Encrypt plain text into ciphertext and decrypt ciphertext back into readable text using a secret key with AES (crypto-js). Includes a server mode with PBKDF2-HMAC-SHA512 + AES-256 for Jasypt-style workflows and interoperability scenarios.",
     "categoryId": "developer",
-    "keywords": ["encrypt", "decrypt", "aes", "secret key", "cipher", "crypto", "string", "jasypt"],
+    "keywords": [
+      "encrypt",
+      "decrypt",
+      "aes",
+      "secret key",
+      "cipher",
+      "crypto",
+      "string",
+      "jasypt"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -564,12 +911,30 @@
       "For decryption: paste the ciphertext, enter the same secret key, select the matching mode, and click Decrypt to recover the original text."
     ],
     "faqs": [
-      { "q": "What encryption algorithm is used?", "a": "The tool uses AES (Advanced Encryption Standard). In standard mode it uses AES with a key derived via crypto-js. In server mode it uses PBKDF2-HMAC-SHA512 for key derivation and AES-256-CBC for encryption, compatible with the Jasypt library." },
-      { "q": "What is Jasypt mode and when should I use it?", "a": "Jasypt is a popular Java encryption library used in Spring Boot applications to encrypt configuration properties. Use Jasypt mode when you need to generate or verify encrypted values for use in a Spring Boot application with the Jasypt Spring Boot starter." },
-      { "q": "Is AES encryption secure?", "a": "AES-256 is approved by the US National Security Agency for top-secret information and is considered secure when a strong and unique key is used. The security of your encrypted data depends entirely on the strength and secrecy of your key." },
-      { "q": "Is my text or key sent to a server?", "a": "In server mode, encryption and decryption are performed on the server to match the Jasypt backend implementation, but your data is not stored. In standard mode, all operations are client-side only." },
-      { "q": "What makes a good encryption key?", "a": "A strong key should be long (16+ characters), random, and contain a mix of uppercase, lowercase, numbers, and symbols. Avoid dictionary words, names, or short numeric PINs as encryption keys." },
-      { "q": "Can I decrypt text that was encrypted with a different AES tool?", "a": "Interoperability depends on the exact mode, key derivation method, and padding scheme. The standard mode uses crypto-js defaults and the Jasypt mode targets Spring Boot compatibility. Encrypted text from an unrelated implementation may not decrypt correctly." }
+      {
+        "q": "What encryption algorithm is used?",
+        "a": "The tool uses AES (Advanced Encryption Standard). In standard mode it uses AES with a key derived via crypto-js. In server mode it uses PBKDF2-HMAC-SHA512 for key derivation and AES-256-CBC for encryption, compatible with the Jasypt library."
+      },
+      {
+        "q": "What is Jasypt mode and when should I use it?",
+        "a": "Jasypt is a popular Java encryption library used in Spring Boot applications to encrypt configuration properties. Use Jasypt mode when you need to generate or verify encrypted values for use in a Spring Boot application with the Jasypt Spring Boot starter."
+      },
+      {
+        "q": "Is AES encryption secure?",
+        "a": "AES-256 is approved by the US National Security Agency for top-secret information and is considered secure when a strong and unique key is used. The security of your encrypted data depends entirely on the strength and secrecy of your key."
+      },
+      {
+        "q": "Is my text or key sent to a server?",
+        "a": "In server mode, encryption and decryption are performed on the server to match the Jasypt backend implementation, but your data is not stored. In standard mode, all operations are client-side only."
+      },
+      {
+        "q": "What makes a good encryption key?",
+        "a": "A strong key should be long (16+ characters), random, and contain a mix of uppercase, lowercase, numbers, and symbols. Avoid dictionary words, names, or short numeric PINs as encryption keys."
+      },
+      {
+        "q": "Can I decrypt text that was encrypted with a different AES tool?",
+        "a": "Interoperability depends on the exact mode, key derivation method, and padding scheme. The standard mode uses crypto-js defaults and the Jasypt mode targets Spring Boot compatibility. Encrypted text from an unrelated implementation may not decrypt correctly."
+      }
     ]
   },
   {
@@ -596,12 +961,30 @@
       "Click Send to make the request. The response status, headers, and body are displayed in the response panel."
     ],
     "faqs": [
-      { "q": "How is API Forge different from Postman?", "a": "API Forge is a lightweight, browser-based tool with no installation or account required. It covers the most common API testing needs in a fast, minimal interface. Postman offers more advanced features like collections, environments, and test scripts for complex workflows." },
-      { "q": "Can I test APIs that require authentication?", "a": "Yes. API Forge supports JWT Bearer token authentication. Enter your token in the Authorization section and it will be included as a Bearer header in the request." },
-      { "q": "Why does my request fail with a CORS error?", "a": "CORS errors occur when an API server blocks requests from a different origin. This is a browser security restriction, not an API Forge issue. To test CORS-restricted APIs, configure the server to allow the origin, or use a server-side proxy." },
-      { "q": "Does API Forge save my request history?", "a": "Recent requests may be saved to your browser local storage for convenience. No data is sent to any external server." },
-      { "q": "What content types are supported for the request body?", "a": "API Forge supports JSON, plain text, and raw body formats. Set the Content-Type header to application/json, text/plain, or any other type required by your API." },
-      { "q": "Can I use API Forge to test GraphQL APIs?", "a": "Yes. GraphQL uses HTTP POST requests with a JSON body containing the query and variables fields. Enter the GraphQL endpoint, set Content-Type to application/json, and paste your GraphQL query as the request body." }
+      {
+        "q": "How is API Forge different from Postman?",
+        "a": "API Forge is a lightweight, browser-based tool with no installation or account required. It covers the most common API testing needs in a fast, minimal interface. Postman offers more advanced features like collections, environments, and test scripts for complex workflows."
+      },
+      {
+        "q": "Can I test APIs that require authentication?",
+        "a": "Yes. API Forge supports JWT Bearer token authentication. Enter your token in the Authorization section and it will be included as a Bearer header in the request."
+      },
+      {
+        "q": "Why does my request fail with a CORS error?",
+        "a": "CORS errors occur when an API server blocks requests from a different origin. This is a browser security restriction, not an API Forge issue. To test CORS-restricted APIs, configure the server to allow the origin, or use a server-side proxy."
+      },
+      {
+        "q": "Does API Forge save my request history?",
+        "a": "Recent requests may be saved to your browser local storage for convenience. No data is sent to any external server."
+      },
+      {
+        "q": "What content types are supported for the request body?",
+        "a": "API Forge supports JSON, plain text, and raw body formats. Set the Content-Type header to application/json, text/plain, or any other type required by your API."
+      },
+      {
+        "q": "Can I use API Forge to test GraphQL APIs?",
+        "a": "Yes. GraphQL uses HTTP POST requests with a JSON body containing the query and variables fields. Enter the GraphQL endpoint, set Content-Type to application/json, and paste your GraphQL query as the request body."
+      }
     ]
   }
 ]
