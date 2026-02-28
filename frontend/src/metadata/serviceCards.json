@@ -481,58 +481,66 @@
     ]
   },
   {
-    "id": "image-background-remover",
-    "component": "ImageBackgroundRemover",
-    "title": "Image Background Remover",
-    "description": "Remove image backgrounds and download transparent PNG output.",
-    "path": "/image-background-remover",
-    "ctaLabel": "Remove Background",
+    "id": "image-background-editor",
+    "component": "ImageBackgroundEditor",
+    "title": "Image Background Remover/Changer",
+    "description": "Remove, replace with a solid color, or swap in a custom image background — all in one tool.",
+    "path": "/image-background-editor",
+    "ctaLabel": "Edit Background",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Upload a PNG, JPG, or WEBP image and remove the background using server-side segmentation. Preview before and after results, then download a transparent PNG.",
+    "detailedDescription": "Upload any PNG, JPG, or WEBP image and choose what to do with its background: remove it entirely to get a transparent PNG, fill it with a solid color of your choice, or composite it over a completely new background image. All processing is done server-side using AI segmentation, with a live before/after preview before you download.",
     "categoryId": "utilities",
     "keywords": [
       "image",
       "background",
       "remove",
+      "replace",
+      "change",
       "transparent",
-      "png",
-      "cutout"
+      "cutout",
+      "solid color",
+      "composite",
+      "png"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Click the upload area or drag and drop your image file (PNG, JPG, or WEBP).",
-      "Click Remove Background. The image is sent to the processing server for AI-based segmentation.",
-      "The result appears in a side-by-side before/after preview once processing is complete.",
-      "Inspect the edges of the subject in the preview to verify the background has been cleanly removed.",
-      "Click Download to save the result as a transparent PNG file.",
-      "Use the transparent PNG in design tools, presentations, or websites where you need an isolated subject."
+      "Select a mode at the top: Remove BG to get a transparent cutout, Solid Color BG to fill with a chosen color, or Custom Image BG to place the subject over a new background photo.",
+      "If you chose Solid Color BG, click the color swatch to pick any color using the color picker.",
+      "If you chose Custom Image BG, upload the background image you want to use.",
+      "Upload your subject image (PNG, JPG, or WEBP, up to 10 MB).",
+      "Click Remove Background or Change Background. The image is sent to the server for AI-based segmentation.",
+      "Preview the before/after result side by side, then click Download PNG to save the output."
     ],
     "faqs": [
       {
-        "q": "What types of images work best?",
-        "a": "The tool works best with images that have a clear distinction between the subject and the background. High-contrast images with well-defined edges produce the cleanest results."
+        "q": "What modes does this tool support?",
+        "a": "Three modes: Remove BG produces a transparent PNG cutout, Solid Color BG fills the background with any hex color you pick, and Custom Image BG composites your subject over a new background image you upload."
       },
       {
-        "q": "Why does the output have slightly rough edges?",
-        "a": "Background removal uses AI segmentation, which is accurate on simple backgrounds but may leave slightly rough edges on complex images with hair, fur, or intricate shapes."
+        "q": "What types of images work best?",
+        "a": "Images with a clear distinction between the subject and the background produce the best results. High-contrast scenes with well-defined edges are ideal. Complex cases like hair, fur, or transparent objects may have slightly rougher edges."
+      },
+      {
+        "q": "How does the custom background image get fitted?",
+        "a": "The background image is scaled to cover the subject's canvas (maintaining its aspect ratio) and then center-cropped to match the subject size exactly, similar to CSS background-size: cover."
+      },
+      {
+        "q": "What format is the downloaded output?",
+        "a": "The download is always a PNG file. When removing the background it contains an alpha (transparency) channel; when using a solid or image background the result is a fully opaque PNG."
       },
       {
         "q": "Is this tool free to use?",
-        "a": "Yes, the background remover is free to use without any account required."
-      },
-      {
-        "q": "What format is the output file?",
-        "a": "The output is always a PNG file with a transparent background (alpha channel). PNG is the only common format that supports full transparency for cutout images."
+        "a": "Yes, the background editor is completely free and requires no account."
       },
       {
         "q": "Does this tool require an internet connection?",
-        "a": "Yes. Unlike other Torensa tools, background removal is processed on the server using a machine learning model, so an active internet connection is required."
+        "a": "Yes. Background processing uses a machine learning model running on the server, so an active internet connection is required."
       },
       {
         "q": "Is my image stored on the server?",
-        "a": "Images are processed on the server and the result is returned to your browser. Images are not retained or used for any other purpose."
+        "a": "Images are processed in memory on the server and the result is returned directly to your browser. No images are stored or used for any other purpose."
       }
     ]
   },
