@@ -1,3 +1,8 @@
+export type Faq = {
+  q: string;
+  a: string;
+};
+
 export type ServiceCardConfig = {
   id: string;
   component?: string;
@@ -12,6 +17,8 @@ export type ServiceCardConfig = {
   keywords?: string[];
   detailedDescription?: string;
   advancedOptionsEnabled?: boolean;
+  howTo?: string[];
+  faqs?: Faq[];
 };
 
 type ActiveFlag = {
