@@ -16,6 +16,7 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import PageContainer, { usePageOptions } from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import DownloadIcon from "@mui/icons-material/Download";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import downloadBlob from "../utils/downloadBlob";
@@ -28,7 +29,11 @@ type QrType = "url" | "text" | "contact" | "wifi";
 type WifiEncryption = "WPA" | "WEP" | "nopass";
 
 const escapeWifiValue = (value: string) =>
-  value.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/:/g, "\\:");
+  value
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/:/g, "\\:");
 
 const escapeVcardValue = (value: string) =>
   value
@@ -186,7 +191,8 @@ const TextToQrContent: React.FC = () => {
       }
       if (trimmedOrg) lines.push(`ORG:${escapeVcardValue(trimmedOrg)}`);
       if (trimmedTitle) lines.push(`TITLE:${escapeVcardValue(trimmedTitle)}`);
-      if (trimmedPhone) lines.push(`TEL;TYPE=CELL:${escapeVcardValue(trimmedPhone)}`);
+      if (trimmedPhone)
+        lines.push(`TEL;TYPE=CELL:${escapeVcardValue(trimmedPhone)}`);
       if (trimmedEmail) lines.push(`EMAIL:${escapeVcardValue(trimmedEmail)}`);
       if (trimmedWebsite) lines.push(`URL:${escapeVcardValue(trimmedWebsite)}`);
       lines.push("END:VCARD");
@@ -335,284 +341,286 @@ const TextToQrContent: React.FC = () => {
 
   return (
     <Stack spacing={2.5}>
-        {useAdvancedOptions ? (
-          <Stack spacing={2}>
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                border: "1px solid rgba(148,163,184,0.3)",
-                bgcolor: "rgba(15,23,42,0.4)",
+      {useAdvancedOptions ? (
+        <Stack spacing={2}>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: "1px solid rgba(148,163,184,0.3)",
+              bgcolor: "rgba(15,23,42,0.4)",
+            }}
+          >
+            <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
+              QR Code Type
+            </Typography>
+            <TextField
+              select
+              label="QR Code Type"
+              value={qrType}
+              onChange={(e) => {
+                setQrType(e.target.value as QrType);
+                setError(null);
+              }}
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    {qrType === "url" && <LinkIcon fontSize="small" />}
+                    {qrType === "text" && <TextFieldsIcon fontSize="small" />}
+                    {qrType === "contact" && (
+                      <ContactMailIcon fontSize="small" />
+                    )}
+                    {qrType === "wifi" && <WifiIcon fontSize="small" />}
+                  </InputAdornment>
+                ),
               }}
             >
-              <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
-                QR Code Type
-              </Typography>
+              <MenuItem value="url">URL</MenuItem>
+              <MenuItem value="text">Text</MenuItem>
+              <MenuItem value="contact">Contact</MenuItem>
+              <MenuItem value="wifi">WiFi</MenuItem>
+            </TextField>
+          </Box>
+
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: "1px solid rgba(148,163,184,0.3)",
+              bgcolor: "rgba(15,23,42,0.4)",
+            }}
+          >
+            <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
+              Input Data
+            </Typography>
+
+            {qrType === "url" && (
               <TextField
-                select
-                label="QR Code Type"
-                value={qrType}
+                label="URL"
+                placeholder="https://torensa.com"
+                value={urlValue}
                 onChange={(e) => {
-                  setQrType(e.target.value as QrType);
+                  setUrlValue(e.target.value);
                   setError(null);
                 }}
                 fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      {qrType === "url" && <LinkIcon fontSize="small" />}
-                      {qrType === "text" && <TextFieldsIcon fontSize="small" />}
-                      {qrType === "contact" && <ContactMailIcon fontSize="small" />}
-                      {qrType === "wifi" && <WifiIcon fontSize="small" />}
-                    </InputAdornment>
-                  ),
-                }}
-              >
-                <MenuItem value="url">URL</MenuItem>
-                <MenuItem value="text">Text</MenuItem>
-                <MenuItem value="contact">Contact</MenuItem>
-                <MenuItem value="wifi">WiFi</MenuItem>
-              </TextField>
-            </Box>
-
-            <Box
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                border: "1px solid rgba(148,163,184,0.3)",
-                bgcolor: "rgba(15,23,42,0.4)",
-              }}
-            >
-              <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1.5 }}>
-                Input Data
-              </Typography>
-
-              {qrType === "url" && (
-                <TextField
-                  label="URL"
-                  placeholder="https://torensa.com"
-                  value={urlValue}
-                  onChange={(e) => {
-                    setUrlValue(e.target.value);
-                    setError(null);
-                  }}
-                  fullWidth
-                />
-              )}
-
-              {qrType === "text" && (
-                <TextField
-                  label="Text"
-                  placeholder="Add any message or link"
-                  value={textValue}
-                  onChange={(e) => {
-                    setTextValue(e.target.value);
-                    setError(null);
-                  }}
-                  multiline
-                  minRows={3}
-                  fullWidth
-                />
-              )}
-
-              {qrType === "contact" && (
-                <Stack spacing={2}>
-                  <TextField
-                    label="Full name"
-                    value={contactName}
-                    onChange={(e) => {
-                      setContactName(e.target.value);
-                      setError(null);
-                    }}
-                    fullWidth
-                  />
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                    <TextField
-                      label="Phone"
-                      value={contactPhone}
-                      onChange={(e) => {
-                        setContactPhone(e.target.value);
-                        setError(null);
-                      }}
-                      fullWidth
-                    />
-                    <TextField
-                      label="Email"
-                      value={contactEmail}
-                      onChange={(e) => {
-                        setContactEmail(e.target.value);
-                        setError(null);
-                      }}
-                      fullWidth
-                    />
-                  </Stack>
-                  <TextField
-                    label="Organization"
-                    value={contactOrg}
-                    onChange={(e) => {
-                      setContactOrg(e.target.value);
-                      setError(null);
-                    }}
-                    fullWidth
-                  />
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-                    <TextField
-                      label="Title"
-                      value={contactTitle}
-                      onChange={(e) => {
-                        setContactTitle(e.target.value);
-                        setError(null);
-                      }}
-                      fullWidth
-                    />
-                    <TextField
-                      label="Website"
-                      value={contactWebsite}
-                      onChange={(e) => {
-                        setContactWebsite(e.target.value);
-                        setError(null);
-                      }}
-                      fullWidth
-                    />
-                  </Stack>
-                </Stack>
-              )}
-
-              {qrType === "wifi" && (
-                <Stack spacing={2}>
-                  <TextField
-                    label="Network Name (SSID)"
-                    placeholder="MyWiFiNetwork"
-                    value={wifiSsid}
-                    onChange={(e) => {
-                      setWifiSsid(e.target.value);
-                      setError(null);
-                    }}
-                    fullWidth
-                  />
-                  <TextField
-                    label="Password"
-                    placeholder="Network Password"
-                    value={wifiPassword}
-                    onChange={(e) => {
-                      setWifiPassword(e.target.value);
-                      setError(null);
-                    }}
-                    type="password"
-                    fullWidth
-                  />
-                  <TextField
-                    select
-                    label="Encryption"
-                    value={wifiEncryption}
-                    onChange={(e) => {
-                      setWifiEncryption(e.target.value as WifiEncryption);
-                      setError(null);
-                    }}
-                    fullWidth
-                  >
-                    <MenuItem value="WPA">WPA/WPA2</MenuItem>
-                    <MenuItem value="WEP">WEP</MenuItem>
-                    <MenuItem value="nopass">None</MenuItem>
-                  </TextField>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={wifiHidden}
-                        onChange={(e) => {
-                          setWifiHidden(e.target.checked);
-                          setError(null);
-                        }}
-                      />
-                    }
-                    label="Hidden Network"
-                  />
-                </Stack>
-              )}
-            </Box>
-          </Stack>
-        ) : (
-          <TextField
-            label="Text or URL"
-            placeholder="https://torensa.com"
-            value={basicText}
-            onChange={(e) => {
-              setBasicText(e.target.value);
-              setError(null);
-            }}
-            multiline
-            minRows={3}
-            fullWidth
-          />
-        )}
-
-        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          <FilePickerButton
-            variant="outlined"
-            sx={{ textTransform: "none" }}
-            label="Upload Logo"
-            accept="image/*"
-            inputRef={fileInputRef}
-            onFilesSelected={handleLogoUpload}
-          />
-
-          {logo && (
-            <TransparentButton
-              label="Remove Logo"
-              color="error"
-              onClick={removeLogo}
-            />
-          )}
-        </Box>
-
-        {logo && (
-          <>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={showLogoText}
-                  onChange={(e) => setShowLogoText(e.target.checked)}
-                />
-              }
-              label="Show text under logo"
-            />
-
-            {showLogoText && (
-              <TextField
-                label="Logo text"
-                value={logoText}
-                inputProps={{ maxLength: MAX_TEXT_LENGTH }}
-                helperText={`${logoText.length}/${MAX_TEXT_LENGTH} characters`}
-                onChange={(e) => setLogoText(e.target.value)}
               />
             )}
-          </>
-        )}
 
-        {qrValue.trim() && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: 16,
-              background: "#ffffff",
-              borderRadius: 8,
-            }}
-          >
-            <canvas
-              ref={canvasRef}
-              width={QR_SIZE}
-              height={QR_SIZE}
-              style={{ display: "block" }}
+            {qrType === "text" && (
+              <TextField
+                label="Text"
+                placeholder="Add any message or link"
+                value={textValue}
+                onChange={(e) => {
+                  setTextValue(e.target.value);
+                  setError(null);
+                }}
+                multiline
+                minRows={3}
+                fullWidth
+              />
+            )}
+
+            {qrType === "contact" && (
+              <Stack spacing={2}>
+                <TextField
+                  label="Full name"
+                  value={contactName}
+                  onChange={(e) => {
+                    setContactName(e.target.value);
+                    setError(null);
+                  }}
+                  fullWidth
+                />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    label="Phone"
+                    value={contactPhone}
+                    onChange={(e) => {
+                      setContactPhone(e.target.value);
+                      setError(null);
+                    }}
+                    fullWidth
+                  />
+                  <TextField
+                    label="Email"
+                    value={contactEmail}
+                    onChange={(e) => {
+                      setContactEmail(e.target.value);
+                      setError(null);
+                    }}
+                    fullWidth
+                  />
+                </Stack>
+                <TextField
+                  label="Organization"
+                  value={contactOrg}
+                  onChange={(e) => {
+                    setContactOrg(e.target.value);
+                    setError(null);
+                  }}
+                  fullWidth
+                />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    label="Title"
+                    value={contactTitle}
+                    onChange={(e) => {
+                      setContactTitle(e.target.value);
+                      setError(null);
+                    }}
+                    fullWidth
+                  />
+                  <TextField
+                    label="Website"
+                    value={contactWebsite}
+                    onChange={(e) => {
+                      setContactWebsite(e.target.value);
+                      setError(null);
+                    }}
+                    fullWidth
+                  />
+                </Stack>
+              </Stack>
+            )}
+
+            {qrType === "wifi" && (
+              <Stack spacing={2}>
+                <TextField
+                  label="Network Name (SSID)"
+                  placeholder="MyWiFiNetwork"
+                  value={wifiSsid}
+                  onChange={(e) => {
+                    setWifiSsid(e.target.value);
+                    setError(null);
+                  }}
+                  fullWidth
+                />
+                <TextField
+                  label="Password"
+                  placeholder="Network Password"
+                  value={wifiPassword}
+                  onChange={(e) => {
+                    setWifiPassword(e.target.value);
+                    setError(null);
+                  }}
+                  type="password"
+                  fullWidth
+                />
+                <TextField
+                  select
+                  label="Encryption"
+                  value={wifiEncryption}
+                  onChange={(e) => {
+                    setWifiEncryption(e.target.value as WifiEncryption);
+                    setError(null);
+                  }}
+                  fullWidth
+                >
+                  <MenuItem value="WPA">WPA/WPA2</MenuItem>
+                  <MenuItem value="WEP">WEP</MenuItem>
+                  <MenuItem value="nopass">None</MenuItem>
+                </TextField>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={wifiHidden}
+                      onChange={(e) => {
+                        setWifiHidden(e.target.checked);
+                        setError(null);
+                      }}
+                    />
+                  }
+                  label="Hidden Network"
+                />
+              </Stack>
+            )}
+          </Box>
+        </Stack>
+      ) : (
+        <TextField
+          label="Text or URL"
+          placeholder="https://torensa.com"
+          value={basicText}
+          onChange={(e) => {
+            setBasicText(e.target.value);
+            setError(null);
+          }}
+          multiline
+          minRows={3}
+          fullWidth
+        />
+      )}
+
+      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+        <FilePickerButton
+          variant="outlined"
+          sx={{ textTransform: "none" }}
+          label="Upload Logo"
+          accept="image/*"
+          inputRef={fileInputRef}
+          onFilesSelected={handleLogoUpload}
+        />
+
+        {logo && (
+          <TransparentButton
+            label="Remove Logo"
+            color="error"
+            onClick={removeLogo}
+          />
+        )}
+      </Box>
+
+      {logo && (
+        <>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showLogoText}
+                onChange={(e) => setShowLogoText(e.target.checked)}
+              />
+            }
+            label="Show text under logo"
+          />
+
+          {showLogoText && (
+            <TextField
+              label="Logo text"
+              value={logoText}
+              inputProps={{ maxLength: MAX_TEXT_LENGTH }}
+              helperText={`${logoText.length}/${MAX_TEXT_LENGTH} characters`}
+              onChange={(e) => setLogoText(e.target.value)}
             />
-          </div>
-        )}
+          )}
+        </>
+      )}
 
-        <ActionButton onClick={downloadQr}>
-          Generate & Download QR
-        </ActionButton>
+      {qrValue.trim() && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: 16,
+            background: "#ffffff",
+            borderRadius: 8,
+          }}
+        >
+          <canvas
+            ref={canvasRef}
+            width={QR_SIZE}
+            height={QR_SIZE}
+            style={{ display: "block" }}
+          />
+        </div>
+      )}
 
-        <ToolStatusAlerts error={error} />
+      <ActionButton startIcon={<DownloadIcon />} onClick={downloadQr}>
+        Generate & Download QR
+      </ActionButton>
+
+      <ToolStatusAlerts error={error} />
     </Stack>
   );
 };

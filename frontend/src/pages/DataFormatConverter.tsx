@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 
+import DownloadIcon from "@mui/icons-material/Download";
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -103,7 +104,10 @@ function validateHeaders(headers: string[]) {
   }
 }
 
-function normalizeTabularRows(rows: string[][]): { headers: string[]; records: JsonRecord[] } {
+function normalizeTabularRows(rows: string[][]): {
+  headers: string[];
+  records: JsonRecord[];
+} {
   if (!rows.length) {
     throw new Error("Input file is empty.");
   }
@@ -143,7 +147,9 @@ function toCsv(headers: string[], records: JsonRecord[]): string {
     headers,
     ...records.map((record) => headers.map((header) => record[header] ?? "")),
   ];
-  return rows.map((row) => row.map((cell) => escapeCsvValue(cell)).join(",")).join("\r\n");
+  return rows
+    .map((row) => row.map((cell) => escapeCsvValue(cell)).join(","))
+    .join("\r\n");
 }
 
 function toJson(records: JsonRecord[]): string {
@@ -170,7 +176,10 @@ function escapeXml(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-async function toXlsxBlob(headers: string[], records: JsonRecord[]): Promise<Blob> {
+async function toXlsxBlob(
+  headers: string[],
+  records: JsonRecord[],
+): Promise<Blob> {
   const allRows = [
     headers,
     ...records.map((record) => headers.map((header) => record[header] ?? "")),
@@ -253,14 +262,20 @@ async function toXlsxBlob(headers: string[], records: JsonRecord[]): Promise<Blo
 
   return zip.generateAsync({
     type: "blob",
-    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
 }
 
-async function parseInputFile(file: File, sourceFormat: Format): Promise<{ headers: string[]; records: JsonRecord[] }> {
+async function parseInputFile(
+  file: File,
+  sourceFormat: Format,
+): Promise<{ headers: string[]; records: JsonRecord[] }> {
   if (sourceFormat === "xlsx") {
     const parsedRows = await readXlsxFile(file, { trim: false });
-    const normalizedRows = parsedRows.map((row) => row.map(parseSpreadsheetCell));
+    const normalizedRows = parsedRows.map((row) =>
+      row.map(parseSpreadsheetCell),
+    );
     return normalizeTabularRows(normalizedRows);
   }
 
@@ -342,7 +357,10 @@ export default function CsvToJsonConverter() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const targetOptions = useMemo(
-    () => (["xlsx", "csv", "json"] as Format[]).filter((fmt) => fmt !== sourceFormat),
+    () =>
+      (["xlsx", "csv", "json"] as Format[]).filter(
+        (fmt) => fmt !== sourceFormat,
+      ),
     [sourceFormat],
   );
 
@@ -389,7 +407,10 @@ export default function CsvToJsonConverter() {
 
       if (targetFormat === "csv") {
         const csv = toCsv(headers, records);
-        downloadBlob(new Blob([csv], { type: "text/csv;charset=utf-8;" }), outFileName);
+        downloadBlob(
+          new Blob([csv], { type: "text/csv;charset=utf-8;" }),
+          outFileName,
+        );
       } else if (targetFormat === "json") {
         const json = toJson(records);
         downloadBlob(
@@ -427,7 +448,9 @@ export default function CsvToJsonConverter() {
             labelId="source-format-label"
             label="From"
             value={sourceFormat}
-            onChange={(event) => handleSourceFormatChange(event.target.value as Format)}
+            onChange={(event) =>
+              handleSourceFormatChange(event.target.value as Format)
+            }
           >
             <MenuItem value="xlsx">{formatLabel.xlsx}</MenuItem>
             <MenuItem value="csv">{formatLabel.csv}</MenuItem>
@@ -452,7 +475,11 @@ export default function CsvToJsonConverter() {
         </FormControl>
       </Stack>
 
-      <ActionButton onClick={handleConvert} loading={loading}>
+      <ActionButton
+        startIcon={<DownloadIcon />}
+        onClick={handleConvert}
+        loading={loading}
+      >
         Convert & Download
       </ActionButton>
 

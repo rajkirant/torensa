@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import DownloadIcon from "@mui/icons-material/Download";
 import PageContainer, { usePageOptions } from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
@@ -108,7 +109,9 @@ const BarcodeGeneratorContent: React.FC = () => {
   const useAdvancedOptions = advancedOptionsEnabled && showAdvancedOptions;
   const effectiveFormat = useAdvancedOptions ? format : DEFAULT_FORMAT;
   const effectiveBarWidth = useAdvancedOptions ? barWidth : DEFAULT_BAR_WIDTH;
-  const effectiveBarHeight = useAdvancedOptions ? barHeight : DEFAULT_BAR_HEIGHT;
+  const effectiveBarHeight = useAdvancedOptions
+    ? barHeight
+    : DEFAULT_BAR_HEIGHT;
   const effectiveShowText = useAdvancedOptions ? showText : DEFAULT_SHOW_TEXT;
 
   const selectedFormat = useMemo(
@@ -127,7 +130,10 @@ const BarcodeGeneratorContent: React.FC = () => {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const validationError = validateBarcodeInput(effectiveFormat, normalizedValue);
+    const validationError = validateBarcodeInput(
+      effectiveFormat,
+      normalizedValue,
+    );
     if (validationError) {
       setError(validationError);
       return;
@@ -160,7 +166,10 @@ const BarcodeGeneratorContent: React.FC = () => {
   const handleDownload = async () => {
     clear();
 
-    const validationError = validateBarcodeInput(effectiveFormat, normalizedValue);
+    const validationError = validateBarcodeInput(
+      effectiveFormat,
+      normalizedValue,
+    );
     if (validationError) {
       setError(validationError);
       return;
@@ -235,7 +244,9 @@ const BarcodeGeneratorContent: React.FC = () => {
               type="number"
               value={barWidth}
               onChange={(e) =>
-                setBarWidth(Math.max(1, Math.min(4, Number(e.target.value) || 1)))
+                setBarWidth(
+                  Math.max(1, Math.min(4, Number(e.target.value) || 1)),
+                )
               }
               inputProps={{ min: 1, max: 4, step: 1 }}
               sx={{ width: { xs: "100%", sm: 130 } }}
@@ -272,7 +283,10 @@ const BarcodeGeneratorContent: React.FC = () => {
         )}
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <ActionButton onClick={() => void handleDownload()}>
+          <ActionButton
+            startIcon={<DownloadIcon />}
+            onClick={() => void handleDownload()}
+          >
             Download PNG
           </ActionButton>
           <TransparentButton label="Clear" onClick={clearAll} />

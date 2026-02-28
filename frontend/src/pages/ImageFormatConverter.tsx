@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 
+import DownloadIcon from "@mui/icons-material/Download";
 import PageContainer from "../components/PageContainer";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -86,10 +87,14 @@ async function loadCanvasFromFile(file: File): Promise<HTMLCanvasElement> {
   return canvas;
 }
 
-async function canvasToBlob(canvas: HTMLCanvasElement, mime: string): Promise<Blob> {
+async function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  mime: string,
+): Promise<Blob> {
   return await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Image export failed."))),
+      (blob) =>
+        blob ? resolve(blob) : reject(new Error("Image export failed.")),
       mime,
       0.92,
     );
@@ -144,7 +149,11 @@ function canvasToBmpBlob(canvas: HTMLCanvasElement): Blob {
   return new Blob([buffer], { type: "image/bmp" });
 }
 
-async function convertImage(file: File, sourceFormat: Format, targetFormat: Format): Promise<Blob> {
+async function convertImage(
+  file: File,
+  sourceFormat: Format,
+  targetFormat: Format,
+): Promise<Blob> {
   ensureFormatMatchesSource(file, sourceFormat);
 
   if (sourceFormat === targetFormat) {
@@ -275,7 +284,11 @@ export default function ImageFormatConverter() {
         </FormControl>
       </Stack>
 
-      <ActionButton onClick={handleConvert} loading={loading}>
+      <ActionButton
+        startIcon={<DownloadIcon />}
+        onClick={handleConvert}
+        loading={loading}
+      >
         Convert & Download
       </ActionButton>
 
