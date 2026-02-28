@@ -174,9 +174,9 @@ export default function Home() {
   if (!isOnline) {
     return (
       <section style={sectionBase}>
-        <h2 style={{ textAlign: "center", marginBottom: 16 }}>
+        <h1 style={{ textAlign: "center", marginBottom: 16 }}>
           Limited offline mode
-        </h2>
+        </h1>
 
         <p
           style={{
@@ -192,9 +192,7 @@ export default function Home() {
 
         {searchInput}
 
-        <div
-          style={cardsGridStyle}
-        >
+        <div style={cardsGridStyle}>
           {visibleOfflineCards.map((card) => (
             <div
               key={card.id}
@@ -246,15 +244,13 @@ export default function Home() {
   // ✅ ONLINE: show all services
   return (
     <section style={sectionBase}>
-      <h2 style={{ textAlign: "center", marginBottom: 40 }}>
+      <h1 style={{ textAlign: "center", margin: "0 0 20px" }}>
         {selectedCategoryLabel}
-      </h2>
+      </h1>
 
       {searchInput}
 
-      <div
-        style={cardsGridStyle}
-      >
+      <div style={cardsGridStyle}>
         {visibleCards.map((card) => (
           <div
             key={card.id}
