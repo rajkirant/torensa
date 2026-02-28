@@ -1,0 +1,66 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "backend/**"
+      - "lambda/**"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch:
+    inputs:
+      force_lambda_deploy:
+        description: "Force Lambda image deploy even when no lambda/backend files changed"
+        required: false
+        type: boolean
+        default: false
+
+# Needed for AWS OIDC
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login_ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Lambda image
+        id: build_image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: lambda/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.login_ecr.outputs.registry }}/${{ secrets.LAMBDA_ECR_REPOSITORY }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
+
+      - name: Deploy Lambda (image)
+        env:
+          IMAGE_URI: ${{ steps.login_ecr.outputs.registry }}/${{ secrets.LAMBDA_ECR_REPOSITORY }}@${{ steps.build_image.outputs.digest }}
+        run: |
+          echo "Deploying image: $IMAGE_URI"
+          aws lambda update-function-code \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --image-uri "$IMAGE_URI"
