@@ -14,13 +14,22 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import DownloadIcon from "@mui/icons-material/Download";
+import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 import FilePickerButton from "../components/inputs/FilePickerButton";
 import useToolStatus from "../hooks/useToolStatus";
 import downloadBlob from "../utils/downloadBlob";
 
-const LOG_LEVELS = ["TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"] as const;
+const LOG_LEVELS = [
+  "TRACE",
+  "DEBUG",
+  "INFO",
+  "WARN",
+  "ERROR",
+  "FATAL",
+] as const;
 type LogLevel = (typeof LOG_LEVELS)[number];
 
 type LogEntry = {
@@ -177,7 +186,9 @@ function splitLogEntries(text: string): string[] {
     entries.push(current.join("\n"));
   }
 
-  return entries.map((entry) => entry.trimEnd()).filter((entry) => entry.trim().length > 0);
+  return entries
+    .map((entry) => entry.trimEnd())
+    .filter((entry) => entry.trim().length > 0);
 }
 
 function parseRest(rest: string): { logger?: string; message: string } {
@@ -246,7 +257,9 @@ function extractException(lines: string[]) {
       const causeType = causedByMatch[1]?.trim();
       const causeMessage = causedByMatch[2]?.trim();
       if (causeType) {
-        const causeText = causeMessage ? `${causeType}: ${causeMessage}` : causeType;
+        const causeText = causeMessage
+          ? `${causeType}: ${causeMessage}`
+          : causeType;
         causeChain.push(causeText);
       }
       if (!exceptionType && causeType) {
@@ -289,8 +302,12 @@ function extractStackFrames(lines: string[]) {
 
     const classSeparatorIndex = methodPath.lastIndexOf(".");
     const className =
-      classSeparatorIndex > -1 ? methodPath.slice(0, classSeparatorIndex) : methodPath;
-    const frameworkFrame = FRAMEWORK_PREFIXES.some((prefix) => className.startsWith(prefix));
+      classSeparatorIndex > -1
+        ? methodPath.slice(0, classSeparatorIndex)
+        : methodPath;
+    const frameworkFrame = FRAMEWORK_PREFIXES.some((prefix) =>
+      className.startsWith(prefix),
+    );
 
     if (!frameworkFrame) {
       appFrames.push(frame);
@@ -316,7 +333,10 @@ function extractCorrelationIds(raw: string) {
   const traceIds = new Set<string>(uniqueMatches(raw, TRACE_ID_REGEX));
   const requestIds = new Set<string>(uniqueMatches(raw, REQUEST_ID_REGEX));
 
-  const sleuthMatcher = new RegExp(SLEUTH_TRACE_REGEX.source, SLEUTH_TRACE_REGEX.flags);
+  const sleuthMatcher = new RegExp(
+    SLEUTH_TRACE_REGEX.source,
+    SLEUTH_TRACE_REGEX.flags,
+  );
   for (const match of raw.matchAll(sleuthMatcher)) {
     const trace = match[1]?.trim();
     if (trace) traceIds.add(trace);
@@ -382,7 +402,10 @@ function parseLogEntry(rawEntry: string, index: number): LogEntry {
   };
 }
 
-function toSortedHistogram(map: Map<string, number>, limit = 8): HistogramRow[] {
+function toSortedHistogram(
+  map: Map<string, number>,
+  limit = 8,
+): HistogramRow[] {
   return Array.from(map.entries())
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
@@ -417,9 +440,7 @@ function buildReport(result: Omit<AnalysisResult, "reportText">): string {
   lines.push(`Entries analyzed: ${result.entryCount}`);
   lines.push(`Potential error entries: ${result.errorCount}`);
   lines.push(`Warning entries: ${result.warningCount}`);
-  lines.push(
-    `Out-of-order timestamps detected: ${result.outOfOrderCount}`,
-  );
+  lines.push(`Out-of-order timestamps detected: ${result.outOfOrderCount}`);
   lines.push(
     `Errors without correlation id: ${result.missingCorrelationErrors}`,
   );
@@ -465,7 +486,9 @@ function buildReport(result: Omit<AnalysisResult, "reportText">): string {
     lines.push("");
     lines.push("Top failing correlations");
     for (const row of result.correlationRows.slice(0, 5)) {
-      lines.push(`- ${row.id}: errors ${row.errors}, total entries ${row.total}`);
+      lines.push(
+        `- ${row.id}: errors ${row.errors}, total entries ${row.total}`,
+      );
     }
   }
 
@@ -476,7 +499,9 @@ function analyzeLogText(text: string): AnalysisResult | null {
   const rawEntries = splitLogEntries(text);
   if (rawEntries.length === 0) return null;
 
-  const parsedEntries = rawEntries.map((rawEntry, index) => parseLogEntry(rawEntry, index));
+  const parsedEntries = rawEntries.map((rawEntry, index) =>
+    parseLogEntry(rawEntry, index),
+  );
   const levelCount = createLevelCount();
   const exceptionMap = new Map<string, number>();
   const loggerMap = new Map<string, number>();
@@ -504,7 +529,9 @@ function analyzeLogText(text: string): AnalysisResult | null {
     }
 
     const hasErrorSignal =
-      entry.level === "ERROR" || entry.level === "FATAL" || Boolean(entry.exceptionType);
+      entry.level === "ERROR" ||
+      entry.level === "FATAL" ||
+      Boolean(entry.exceptionType);
 
     if (hasErrorSignal) {
       errorEntries.push(entry);
@@ -548,11 +575,16 @@ function analyzeLogText(text: string): AnalysisResult | null {
         errors: counts.errors,
         total: counts.total,
       }))
-      .sort((a, b) => b.errors - a.errors || b.total - a.total || a.id.localeCompare(b.id))
+      .sort(
+        (a, b) =>
+          b.errors - a.errors || b.total - a.total || a.id.localeCompare(b.id),
+      )
       .slice(0, 12),
     missingCorrelationErrors,
     outOfOrderCount,
-    primaryFailure: primaryFailureEntry ? formatFailure(primaryFailureEntry) : undefined,
+    primaryFailure: primaryFailureEntry
+      ? formatFailure(primaryFailureEntry)
+      : undefined,
     errorEntries: errorEntries.slice(0, 20),
   };
 
@@ -565,7 +597,8 @@ function analyzeLogText(text: string): AnalysisResult | null {
 export default function SpringBootLogAnalyzer() {
   const [logText, setLogText] = useState("");
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
-  const { error, success, info, setError, setSuccess, setInfo } = useToolStatus();
+  const { error, success, info, setError, setSuccess, setInfo } =
+    useToolStatus();
 
   const clearAlerts = () => {
     setError();
@@ -597,9 +630,13 @@ export default function SpringBootLogAnalyzer() {
       const location = result.primaryFailure.location
         ? ` at ${result.primaryFailure.location}`
         : "";
-      setInfo(`Likely first failure: ${result.primaryFailure.message}${location}`);
+      setInfo(
+        `Likely first failure: ${result.primaryFailure.message}${location}`,
+      );
     } else {
-      setInfo("No strong error signal found. Review WARN entries and correlation groups.");
+      setInfo(
+        "No strong error signal found. Review WARN entries and correlation groups.",
+      );
     }
   };
 
@@ -697,8 +734,8 @@ export default function SpringBootLogAnalyzer() {
       <Stack spacing={2.25}>
         <Typography variant="h5">Spring Boot Log Analyzer</Typography>
         <Typography variant="body2" color="text.secondary">
-          Paste or upload Spring Boot logs to locate likely first failure, root cause chain,
-          stack frame hints, and correlation id clusters.
+          Paste or upload Spring Boot logs to locate likely first failure, root
+          cause chain, stack frame hints, and correlation id clusters.
         </Typography>
 
         <ToolStatusAlerts error={error} success={success} info={info} />
@@ -715,7 +752,9 @@ export default function SpringBootLogAnalyzer() {
             sx={{ textTransform: "none" }}
           />
           <TransparentButton label="Copy Report" onClick={handleCopyReport} />
-          <TransparentButton label="Export JSON" onClick={handleExportJson} />
+          <ActionButton startIcon={<DownloadIcon />} onClick={handleExportJson}>
+            Export JSON
+          </ActionButton>
           <TransparentButton label="Clear" onClick={handleClear} />
         </FlexWrapRow>
 
@@ -745,14 +784,22 @@ export default function SpringBootLogAnalyzer() {
               <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 1.5 }}>
                 <Chip label={`Entries: ${analysis.entryCount}`} />
                 <Chip label={`Errors: ${analysis.errorCount}`} color="error" />
-                <Chip label={`Warnings: ${analysis.warningCount}`} color="warning" />
-                <Chip label={`No Correlation IDs: ${analysis.missingCorrelationErrors}`} />
-                <Chip label={`Out-of-Order Timestamps: ${analysis.outOfOrderCount}`} />
+                <Chip
+                  label={`Warnings: ${analysis.warningCount}`}
+                  color="warning"
+                />
+                <Chip
+                  label={`No Correlation IDs: ${analysis.missingCorrelationErrors}`}
+                />
+                <Chip
+                  label={`Out-of-Order Timestamps: ${analysis.outOfOrderCount}`}
+                />
               </Box>
 
               {analysis.primaryFailure ? (
                 <Alert severity="error" sx={{ mt: 2 }}>
-                  <strong>Likely first failure:</strong> {analysis.primaryFailure.message}
+                  <strong>Likely first failure:</strong>{" "}
+                  {analysis.primaryFailure.message}
                   {analysis.primaryFailure.exception
                     ? ` | Exception: ${analysis.primaryFailure.exception}`
                     : ""}
@@ -762,7 +809,8 @@ export default function SpringBootLogAnalyzer() {
                 </Alert>
               ) : (
                 <Alert severity="info" sx={{ mt: 2 }}>
-                  No strong error signal detected. Try logs that include stack traces or ERROR lines.
+                  No strong error signal detected. Try logs that include stack
+                  traces or ERROR lines.
                 </Alert>
               )}
             </Paper>
@@ -779,16 +827,23 @@ export default function SpringBootLogAnalyzer() {
                 </TableHead>
                 <TableBody>
                   {Array.from({
-                    length: Math.max(analysis.exceptionCounts.length, analysis.loggerCounts.length),
+                    length: Math.max(
+                      analysis.exceptionCounts.length,
+                      analysis.loggerCounts.length,
+                    ),
                   }).map((_, index) => {
                     const exception = analysis.exceptionCounts[index];
                     const logger = analysis.loggerCounts[index];
                     return (
                       <TableRow key={`hist-${index}`}>
                         <TableCell>{exception?.name ?? "-"}</TableCell>
-                        <TableCell align="right">{exception?.count ?? "-"}</TableCell>
+                        <TableCell align="right">
+                          {exception?.count ?? "-"}
+                        </TableCell>
                         <TableCell>{logger?.name ?? "-"}</TableCell>
-                        <TableCell align="right">{logger?.count ?? "-"}</TableCell>
+                        <TableCell align="right">
+                          {logger?.count ?? "-"}
+                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -808,7 +863,9 @@ export default function SpringBootLogAnalyzer() {
                 <TableBody>
                   {analysis.correlationRows.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={3}>No correlation ids found in current logs.</TableCell>
+                      <TableCell colSpan={3}>
+                        No correlation ids found in current logs.
+                      </TableCell>
                     </TableRow>
                   ) : (
                     analysis.correlationRows.map((row) => (
@@ -838,7 +895,9 @@ export default function SpringBootLogAnalyzer() {
                 <TableBody>
                   {analysis.errorEntries.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6}>No error entries detected.</TableCell>
+                      <TableCell colSpan={6}>
+                        No error entries detected.
+                      </TableCell>
                     </TableRow>
                   ) : (
                     analysis.errorEntries.map((entry) => (
@@ -848,7 +907,9 @@ export default function SpringBootLogAnalyzer() {
                         <TableCell>{entry.level ?? "-"}</TableCell>
                         <TableCell>{entry.logger ?? "-"}</TableCell>
                         <TableCell>{entry.message}</TableCell>
-                        <TableCell>{entry.appFrames[0] ?? entry.stackFrames[0] ?? "-"}</TableCell>
+                        <TableCell>
+                          {entry.appFrames[0] ?? entry.stackFrames[0] ?? "-"}
+                        </TableCell>
                       </TableRow>
                     ))
                   )}

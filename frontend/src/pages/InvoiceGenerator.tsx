@@ -17,6 +17,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DownloadIcon from "@mui/icons-material/Download";
 
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
@@ -463,299 +464,301 @@ export default function InvoiceGenerator() {
 
   return (
     <PageContainer>
-
-        {/* Doc meta */}
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <TextField
-            label="Type"
-            value={form.docType}
-            onChange={(e) => updateForm("docType", e.target.value as DocType)}
-            select
-            fullWidth
-          >
-            <MenuItem value="invoice">Invoice</MenuItem>
-            <MenuItem value="receipt">Receipt</MenuItem>
-          </TextField>
-
-          <TextField
-            label={form.docType === "invoice" ? "Invoice #" : "Receipt #"}
-            value={form.docNumber}
-            onChange={(e) => updateForm("docNumber", e.target.value)}
-            fullWidth
-          />
-
-          <TextField
-            label="Currency"
-            value={form.currency}
-            onChange={(e) => updateForm("currency", e.target.value)}
-            select
-            fullWidth
-          >
-            {CURRENCY_OPTIONS.map((c) => (
-              <MenuItem key={c.code} value={c.code}>
-                {c.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Stack>
-
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          alignItems="center"
+      {/* Doc meta */}
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <TextField
+          label="Type"
+          value={form.docType}
+          onChange={(e) => updateForm("docType", e.target.value as DocType)}
+          select
+          fullWidth
         >
-          <TextField
-            label="Issue date"
-            type="date"
-            value={form.issueDate}
-            onChange={(e) => updateForm("issueDate", e.target.value)}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-          />
+          <MenuItem value="invoice">Invoice</MenuItem>
+          <MenuItem value="receipt">Receipt</MenuItem>
+        </TextField>
 
-          <TextField
-            label="Due date"
-            type="date"
-            value={form.dueDate}
-            onChange={(e) => updateForm("dueDate", e.target.value)}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            disabled={form.docType !== "invoice" || !form.showDueDate}
-          />
+        <TextField
+          label={form.docType === "invoice" ? "Invoice #" : "Receipt #"}
+          value={form.docNumber}
+          onChange={(e) => updateForm("docNumber", e.target.value)}
+          fullWidth
+        />
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={form.showDueDate}
-                onChange={(e) => updateForm("showDueDate", e.target.checked)}
-                disabled={form.docType !== "invoice"}
-              />
-            }
-            label="Show due date"
-            sx={{ whiteSpace: "nowrap" }}
-          />
-        </Stack>
-
-        <Divider />
-
-        {/* Parties */}
-        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-          <Stack spacing={2} flex={1}>
-            <TextField
-              label="Seller / Business name"
-              value={form.sellerName}
-              onChange={(e) => updateForm("sellerName", e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Seller details (address, email, phone)"
-              value={form.sellerDetails}
-              onChange={(e) => updateForm("sellerDetails", e.target.value)}
-              multiline
-              minRows={4}
-              fullWidth
-            />
-          </Stack>
-
-          <Stack spacing={2} flex={1}>
-            <TextField
-              label="Bill To name"
-              value={form.billToName}
-              onChange={(e) => updateForm("billToName", e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Bill To details (address, email, etc.)"
-              value={form.billToDetails}
-              onChange={(e) => updateForm("billToDetails", e.target.value)}
-              multiline
-              minRows={4}
-              fullWidth
-            />
-          </Stack>
-        </Stack>
-
-        <Divider />
-
-        {/* Items */}
-        <Stack spacing={1}>
-          <Typography variant="subtitle1" fontWeight={700}>
-            Line items
-          </Typography>
-
-          {items.map((it) => (
-            <Stack
-              key={it.id}
-              direction={{ xs: "column", md: "row" }}
-              spacing={2}
-              alignItems={{ md: "center" }}
-              sx={{
-                p: 2,
-                border: "1px solid rgba(0,0,0,0.12)",
-                borderRadius: 2,
-              }}
-            >
-              <TextField
-                label="Description"
-                value={it.description}
-                onChange={(e) =>
-                  updateItem(it.id, { description: e.target.value })
-                }
-                fullWidth
-              />
-              <TextField
-                label="Qty"
-                type="number"
-                value={it.quantity}
-                onChange={(e) =>
-                  updateItem(it.id, {
-                    quantity: safeNumber(e.target.value, 1),
-                  })
-                }
-                inputProps={{ min: 0, step: 1 }}
-                sx={{ width: { md: 120 } }}
-              />
-              <TextField
-                label="Unit price"
-                type="number"
-                value={it.unitPrice}
-                onChange={(e) =>
-                  updateItem(it.id, {
-                    unitPrice: safeNumber(e.target.value, 0),
-                  })
-                }
-                inputProps={{ min: 0, step: "0.01" }}
-                sx={{ width: { md: 160 } }}
-              />
-
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ minWidth: 150 }}
-                >
-                  {money(
-                    Math.max(0, safeNumber(it.quantity, 0)) *
-                      Math.max(0, safeNumber(it.unitPrice, 0)),
-                    form.currency,
-                  )}
-                </Typography>
-
-                <IconButton
-                  aria-label="Remove item"
-                  onClick={() => removeItem(it.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Stack>
-            </Stack>
+        <TextField
+          label="Currency"
+          value={form.currency}
+          onChange={(e) => updateForm("currency", e.target.value)}
+          select
+          fullWidth
+        >
+          {CURRENCY_OPTIONS.map((c) => (
+            <MenuItem key={c.code} value={c.code}>
+              {c.label}
+            </MenuItem>
           ))}
+        </TextField>
+      </Stack>
 
-          <TransparentButton
-            label="Add item"
-            startIcon={<AddIcon />}
-            onClick={addItem}
-            sx={{ width: "fit-content" }}
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={2}
+        alignItems="center"
+      >
+        <TextField
+          label="Issue date"
+          type="date"
+          value={form.issueDate}
+          onChange={(e) => updateForm("issueDate", e.target.value)}
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+        />
+
+        <TextField
+          label="Due date"
+          type="date"
+          value={form.dueDate}
+          onChange={(e) => updateForm("dueDate", e.target.value)}
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+          disabled={form.docType !== "invoice" || !form.showDueDate}
+        />
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={form.showDueDate}
+              onChange={(e) => updateForm("showDueDate", e.target.checked)}
+              disabled={form.docType !== "invoice"}
+            />
+          }
+          label="Show due date"
+          sx={{ whiteSpace: "nowrap" }}
+        />
+      </Stack>
+
+      <Divider />
+
+      {/* Parties */}
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+        <Stack spacing={2} flex={1}>
+          <TextField
+            label="Seller / Business name"
+            value={form.sellerName}
+            onChange={(e) => updateForm("sellerName", e.target.value)}
+            fullWidth
+          />
+          <TextField
+            label="Seller details (address, email, phone)"
+            value={form.sellerDetails}
+            onChange={(e) => updateForm("sellerDetails", e.target.value)}
+            multiline
+            minRows={4}
+            fullWidth
           />
         </Stack>
 
-        <Divider />
+        <Stack spacing={2} flex={1}>
+          <TextField
+            label="Bill To name"
+            value={form.billToName}
+            onChange={(e) => updateForm("billToName", e.target.value)}
+            fullWidth
+          />
+          <TextField
+            label="Bill To details (address, email, etc.)"
+            value={form.billToDetails}
+            onChange={(e) => updateForm("billToDetails", e.target.value)}
+            multiline
+            minRows={4}
+            fullWidth
+          />
+        </Stack>
+      </Stack>
 
-        {/* Notes + totals */}
-        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-          <Stack spacing={2} flex={1}>
+      <Divider />
+
+      {/* Items */}
+      <Stack spacing={1}>
+        <Typography variant="subtitle1" fontWeight={700}>
+          Line items
+        </Typography>
+
+        {items.map((it) => (
+          <Stack
+            key={it.id}
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ md: "center" }}
+            sx={{
+              p: 2,
+              border: "1px solid rgba(0,0,0,0.12)",
+              borderRadius: 2,
+            }}
+          >
             <TextField
-              label="Notes"
-              value={form.notes}
-              onChange={(e) => updateForm("notes", e.target.value)}
-              multiline
-              minRows={4}
+              label="Description"
+              value={it.description}
+              onChange={(e) =>
+                updateItem(it.id, { description: e.target.value })
+              }
+              fullWidth
+            />
+            <TextField
+              label="Qty"
+              type="number"
+              value={it.quantity}
+              onChange={(e) =>
+                updateItem(it.id, {
+                  quantity: safeNumber(e.target.value, 1),
+                })
+              }
+              inputProps={{ min: 0, step: 1 }}
+              sx={{ width: { md: 120 } }}
+            />
+            <TextField
+              label="Unit price"
+              type="number"
+              value={it.unitPrice}
+              onChange={(e) =>
+                updateItem(it.id, {
+                  unitPrice: safeNumber(e.target.value, 0),
+                })
+              }
+              inputProps={{ min: 0, step: "0.01" }}
+              sx={{ width: { md: 160 } }}
+            />
+
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ minWidth: 150 }}
+              >
+                {money(
+                  Math.max(0, safeNumber(it.quantity, 0)) *
+                    Math.max(0, safeNumber(it.unitPrice, 0)),
+                  form.currency,
+                )}
+              </Typography>
+
+              <IconButton
+                aria-label="Remove item"
+                onClick={() => removeItem(it.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Stack>
+          </Stack>
+        ))}
+
+        <TransparentButton
+          label="Add item"
+          startIcon={<AddIcon />}
+          onClick={addItem}
+          sx={{ width: "fit-content" }}
+        />
+      </Stack>
+
+      <Divider />
+
+      {/* Notes + totals */}
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+        <Stack spacing={2} flex={1}>
+          <TextField
+            label="Notes"
+            value={form.notes}
+            onChange={(e) => updateForm("notes", e.target.value)}
+            multiline
+            minRows={4}
+            fullWidth
+          />
+        </Stack>
+
+        <Stack spacing={2} flex={1}>
+          <Stack direction="row" spacing={2}>
+            <TextField
+              label="Tax rate (%)"
+              type="number"
+              value={form.taxRate}
+              onChange={(e) =>
+                updateForm("taxRate", safeNumber(e.target.value, 0))
+              }
+              inputProps={{ min: 0, step: "0.01" }}
+              fullWidth
+            />
+            <TextField
+              label="Shipping"
+              type="number"
+              value={form.shipping}
+              onChange={(e) =>
+                updateForm("shipping", safeNumber(e.target.value, 0))
+              }
+              inputProps={{ min: 0, step: "0.01" }}
+              fullWidth
+            />
+            <TextField
+              label="Discount"
+              type="number"
+              value={form.discount}
+              onChange={(e) =>
+                updateForm("discount", safeNumber(e.target.value, 0))
+              }
+              inputProps={{ min: 0, step: "0.01" }}
               fullWidth
             />
           </Stack>
 
-          <Stack spacing={2} flex={1}>
-            <Stack direction="row" spacing={2}>
-              <TextField
-                label="Tax rate (%)"
-                type="number"
-                value={form.taxRate}
-                onChange={(e) =>
-                  updateForm("taxRate", safeNumber(e.target.value, 0))
-                }
-                inputProps={{ min: 0, step: "0.01" }}
-                fullWidth
-              />
-              <TextField
-                label="Shipping"
-                type="number"
-                value={form.shipping}
-                onChange={(e) =>
-                  updateForm("shipping", safeNumber(e.target.value, 0))
-                }
-                inputProps={{ min: 0, step: "0.01" }}
-                fullWidth
-              />
-              <TextField
-                label="Discount"
-                type="number"
-                value={form.discount}
-                onChange={(e) =>
-                  updateForm("discount", safeNumber(e.target.value, 0))
-                }
-                inputProps={{ min: 0, step: "0.01" }}
-                fullWidth
-              />
+          <Stack
+            spacing={1}
+            sx={{
+              p: 2,
+              border: "1px solid rgba(0,0,0,0.12)",
+              borderRadius: 2,
+            }}
+          >
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                Subtotal
+              </Typography>
+              <Typography variant="body2">
+                {money(subtotal, form.currency)}
+              </Typography>
             </Stack>
 
-            <Stack
-              spacing={1}
-              sx={{
-                p: 2,
-                border: "1px solid rgba(0,0,0,0.12)",
-                borderRadius: 2,
-              }}
-            >
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">
-                  Subtotal
-                </Typography>
-                <Typography variant="body2">
-                  {money(subtotal, form.currency)}
-                </Typography>
-              </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                Tax
+              </Typography>
+              <Typography variant="body2">
+                {money(taxAmount, form.currency)}
+              </Typography>
+            </Stack>
 
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">
-                  Tax
-                </Typography>
-                <Typography variant="body2">
-                  {money(taxAmount, form.currency)}
-                </Typography>
-              </Stack>
-
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">
-                  Total
-                </Typography>
-                <Typography variant="body2" fontWeight={700}>
-                  {money(total, form.currency)}
-                </Typography>
-              </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="body2" color="text.secondary">
+                Total
+              </Typography>
+              <Typography variant="body2" fontWeight={700}>
+                {money(total, form.currency)}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
+      </Stack>
 
-        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-          <ActionButton onClick={download} loading={busy}>
-            Generate & Download PDF
-          </ActionButton>
+      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+        <ActionButton
+          startIcon={<DownloadIcon />}
+          onClick={download}
+          loading={busy}
+        >
+          Generate & Download PDF
+        </ActionButton>
 
-          <TransparentButton label="Reset" color="error" onClick={reset} />
-        </Box>
+        <TransparentButton label="Reset" color="error" onClick={reset} />
+      </Box>
 
-        {error && <Alert severity="error">{error}</Alert>}
-
+      {error && <Alert severity="error">{error}</Alert>}
     </PageContainer>
   );
 }

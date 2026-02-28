@@ -10,6 +10,7 @@ import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import FilePickerButton from "../components/inputs/FilePickerButton";
+import DownloadIcon from "@mui/icons-material/Download";
 import { apiFetch } from "../utils/api";
 import downloadBlob from "../utils/downloadBlob";
 
@@ -352,10 +353,12 @@ export default function ImageBackgroundEditor() {
 
         {resultBlob && (
           <Box>
-            <TransparentButton
-              label="Download PNG"
+            <ActionButton
+              startIcon={<DownloadIcon />}
               onClick={() => void downloadResult()}
-            />
+            >
+              Download PNG
+            </ActionButton>
           </Box>
         )}
 
