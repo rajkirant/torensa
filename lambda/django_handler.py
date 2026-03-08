@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 from mangum import Mangum
@@ -35,6 +36,37 @@ def _get_handler():
         app = get_asgi_application()
         _handler = Mangum(app, lifespan="off")
     return _handler
+
+
+def _prewarm_libreoffice():
+    """Start and immediately exit LibreOffice during container init so the
+    first real conversion request doesn't pay the cold-start penalty."""
+    try:
+        from pathlib import Path
+        import shutil
+
+        candidates = [
+            "/usr/local/bin/soffice",
+            "/usr/bin/soffice",
+            "/usr/bin/libreoffice",
+            "/opt/libreoffice/program/soffice",
+        ]
+        soffice = next(
+            (c for c in candidates if shutil.which(c) or Path(c).exists()), None
+        )
+        if soffice:
+            subprocess.run(
+                [soffice, "--headless", "--norestore", "--nofirststartwizard", "--version"],
+                capture_output=True,
+                timeout=30,
+                env={**os.environ, "HOME": "/tmp", "SAL_USE_VCLPLUGIN": "svp"},
+            )
+    except Exception:
+        pass  # prewarm is best-effort, never block startup
+
+
+# Run once at container init (outside the handler)
+_prewarm_libreoffice()
 
 
 def lambda_handler(event, context):
