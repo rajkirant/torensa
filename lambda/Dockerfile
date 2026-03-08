@@ -1,7 +1,8 @@
 FROM public.ecr.aws/lambda/python:3.14
 
 # Runtime lib used by onnxruntime/numba wheels.
-RUN dnf install -y libgomp && dnf clean all
+# LibreOffice for Word-to-PDF conversion.
+RUN dnf install -y libgomp libreoffice && dnf clean all
 
 # Install Python dependencies into Lambda task root.
 COPY backend/requirements.txt /tmp/backend-requirements.txt
