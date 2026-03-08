@@ -13,7 +13,7 @@ from .views.email_views import (
 from .views.tool_chat_views import tool_chat_view
 from .views.string_crypto_views import string_crypto_view
 from .views.image_bg_remove_views import remove_background_view
-from .views.doc_convert_views import word_to_pdf_view
+from .views.doc_convert_views import word_to_pdf_view, pdf_to_word_view
 from .views.text_share_views import (
     create_text_share,
     create_file_share,
@@ -49,6 +49,7 @@ urlpatterns = [
     path("string-crypto/", string_crypto_view),
     path("remove-background/", remove_background_view),
     path("doc-convert/word-to-pdf/", word_to_pdf_view),
+    path("doc-convert/pdf-to-word/", pdf_to_word_view),
     path("text-share/latest/", get_latest_text_share),
     path("text-share/file/", create_file_share),
     path("text-share/file/<str:code>/download/", download_shared_file),

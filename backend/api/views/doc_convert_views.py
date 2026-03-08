@@ -146,3 +146,106 @@ def word_to_pdf_view(request):
     response["Content-Disposition"] = f'attachment; filename="{output_name}"'
     response["Content-Length"] = str(len(pdf_bytes))
     return response
+
+
+def _convert_to_docx(input_path: str, output_dir: str) -> str:
+    """Run LibreOffice headless PDF→DOCX conversion and return the output path."""
+    soffice = _find_soffice()
+    if soffice is None:
+        raise RuntimeError(
+            "LibreOffice is not installed. "
+            "On Windows: winget install TheDocumentFoundation.LibreOffice\n"
+            "On Linux:   apt-get install -y libreoffice\n"
+            "On macOS:   brew install --cask libreoffice"
+        )
+
+    env = {
+        **os.environ,
+        "HOME": "/tmp",
+        "SAL_USE_VCLPLUGIN": "svp",
+    }
+
+    result = subprocess.run(
+        [
+            soffice,
+            "--headless",
+            "--norestore",
+            "--nofirststartwizard",
+            "--convert-to",
+            "docx:MS Word 2007 XML",
+            "--outdir",
+            output_dir,
+            input_path,
+        ],
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env=env,
+    )
+
+    if result.returncode != 0:
+        logger.error("LibreOffice stderr: %s", result.stderr)
+        raise RuntimeError(f"LibreOffice conversion failed: {result.stderr[:500]}")
+
+    stem = Path(input_path).stem
+    docx_path = Path(output_dir) / f"{stem}.docx"
+    if not docx_path.exists():
+        raise RuntimeError(
+            f"Expected output DOCX not found at {docx_path}. "
+            f"stdout={result.stdout!r} stderr={result.stderr!r}"
+        )
+
+    return str(docx_path)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@parser_classes([MultiPartParser, FormParser])
+def pdf_to_word_view(request):
+    pdf_file = request.FILES.get("file")
+    if pdf_file is None:
+        return Response({"error": "No file uploaded. Send a PDF file as 'file'."}, status=400)
+
+    name_lower = (pdf_file.name or "").lower()
+    content_type = (pdf_file.content_type or "").split(";")[0].strip().lower()
+    if content_type != "application/pdf" and not name_lower.endswith(".pdf"):
+        return Response(
+            {"error": f"Unsupported file type '{content_type}'. Please upload a .pdf file."},
+            status=415,
+        )
+
+    if pdf_file.size > MAX_UPLOAD_BYTES:
+        return Response(
+            {"error": f"File too large. Maximum allowed size is {MAX_UPLOAD_BYTES // 1024 // 1024} MB."},
+            status=413,
+        )
+
+    with tempfile.TemporaryDirectory(prefix="torensa_docconv_") as tmpdir:
+        input_filename = f"{uuid.uuid4().hex}.pdf"
+        input_path = os.path.join(tmpdir, input_filename)
+
+        with open(input_path, "wb") as fh:
+            for chunk in pdf_file.chunks():
+                fh.write(chunk)
+
+        try:
+            docx_path = _convert_to_docx(input_path, tmpdir)
+        except RuntimeError as exc:
+            logger.exception("PDF-to-Word conversion error")
+            return Response({"error": str(exc)}, status=500)
+        except subprocess.TimeoutExpired:
+            return Response({"error": "Conversion timed out. Please try a smaller file."}, status=500)
+
+        with open(docx_path, "rb") as fh:
+            docx_bytes = fh.read()
+
+    original_stem = Path(pdf_file.name or "document").stem
+    output_name = f"{original_stem}.docx"
+
+    response = HttpResponse(
+        docx_bytes,
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
+    response["Content-Disposition"] = f'attachment; filename="{output_name}"'
+    response["Content-Length"] = str(len(docx_bytes))
+    return response

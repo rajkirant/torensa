@@ -1033,5 +1033,40 @@
         "a": "Yes, both .doc (Word 97-2003) and .docx (Word 2007+) formats are accepted."
       }
     ]
+  },
+  {
+    "id": "pdf-to-word",
+    "component": "PdfToWord",
+    "title": "PDF to Word Converter",
+    "description": "Convert PDF files to editable Word documents (.docx) in seconds.",
+    "path": "/pdf-to-word",
+    "ctaLabel": "Convert to Word",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload a PDF and convert it to an editable .docx file. Conversion runs on the server using LibreOffice, preserving layout and text. Files are processed in memory and never stored.",
+    "categoryId": "utilities",
+    "keywords": ["pdf", "word", "docx", "convert", "document"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click 'Choose PDF file' and select a .pdf file from your device.",
+      "Click 'Convert to Word' to start the conversion.",
+      "Wait a few seconds while LibreOffice processes the file on the server.",
+      "Click 'Download' to save the resulting .docx file to your device."
+    ],
+    "faqs": [
+      {
+        "q": "Is my file stored on the server?",
+        "a": "No. The file is processed in a temporary directory and deleted immediately after conversion. Nothing is persisted."
+      },
+      {
+        "q": "What is the maximum file size?",
+        "a": "Files up to 20 MB are supported."
+      },
+      {
+        "q": "Will the formatting be preserved?",
+        "a": "LibreOffice does its best to reconstruct the layout, but PDF to Word conversion is inherently imperfect — complex layouts may need manual cleanup after conversion."
+      }
+    ]
   }
 ]
