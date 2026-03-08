@@ -15,7 +15,7 @@ RUN dnf install -y \
       libxslt \
     && dnf reinstall -y nss \
     && dnf clean all \
-    && ldconfig
+    && /sbin/ldconfig
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
 RUN curl -fsSL \
