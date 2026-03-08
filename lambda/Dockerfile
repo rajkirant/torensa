@@ -5,7 +5,7 @@ RUN dnf install -y libgomp fontconfig libX11 libXext libXrender cups-libs tar gz
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
 RUN curl -fsSL \
-      "https://download.documentfoundation.org/libreoffice/stable/24.8.5/rpm/x86_64/LibreOffice_24.8.5.2_Linux_x86-64_rpm.tar.gz" \
+      "https://download.documentfoundation.org/libreoffice/stable/25.2.7/rpm/x86_64/LibreOffice_25.2.7_Linux_x86-64_rpm.tar.gz" \
       | tar xz -C /tmp/ \
     && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
     && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
