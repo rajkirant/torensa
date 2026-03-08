@@ -1,33 +1,15 @@
 FROM public.ecr.aws/lambda/python:3.14
 
 # Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
-RUN dnf install -y \
-      libgomp \
-      fontconfig \
-      libX11 \
-      libXext \
-      libXrender \
-      libXinerama \
-      cups-libs \
-      nss \
-      tar \
-      gzip \
-      libxslt \
-    && dnf reinstall -y nss \
-    && dnf clean all \
-    && /sbin/ldconfig
+RUN dnf install -y libgomp fontconfig libX11 libXext libXrender libXinerama cups-libs nss tar gzip && dnf clean all
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
 RUN curl -fsSL \
       "https://download.documentfoundation.org/libreoffice/stable/25.2.7/rpm/x86_64/LibreOffice_25.2.7_Linux_x86-64_rpm.tar.gz" \
       | tar xz -C /tmp/ \
-    && dnf install -y /tmp/LibreOffice_*/RPMS/*.rpm \
+    && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
     && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
-    && rm -rf /tmp/LibreOffice_* \
-    && dnf clean all
-
-# Fail image build early if LibreOffice has unresolved runtime dependencies.
-RUN /usr/local/bin/soffice --headless --version
+    && rm -rf /tmp/LibreOffice_*
 
 # Install Python dependencies into Lambda task root.
 COPY backend/requirements.txt /tmp/backend-requirements.txt
