@@ -92,9 +92,41 @@ async function getGitLastmodForFile(filePath) {
   return null;
 }
 
-async function getPreferredLastmodForFile(filePath) {
+async function readExistingSitemapDates() {
+  try {
+    const xml = await readFile(sitemapPath, "utf-8");
+    const dates = new Map();
+    const urlBlockRegex =
+      /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g;
+    let match;
+    while ((match = urlBlockRegex.exec(xml)) !== null) {
+      const loc = match[1].trim();
+      const lastmod = match[2].trim();
+      // Store by path (strip site origin)
+      try {
+        const url = new URL(loc);
+        dates.set(
+          url.pathname === "/" ? "/" : url.pathname.replace(/\/+$/, ""),
+          lastmod,
+        );
+      } catch {
+        dates.set(loc, lastmod);
+      }
+    }
+    return dates;
+  } catch {
+    return new Map();
+  }
+}
+
+async function getPreferredLastmodForFile(filePath, existingDate) {
   const gitLastmod = await getGitLastmodForFile(filePath);
   if (gitLastmod) return gitLastmod;
+
+  // Prefer the preserved date from the existing sitemap over unreliable filesystem mtime.
+  // On Windows, mtime is often set to today on checkout, which would incorrectly
+  // mark every URL as modified today.
+  if (existingDate) return existingDate;
 
   const fileStat = await stat(filePath);
   return toDateString(fileStat.mtime);
@@ -122,10 +154,16 @@ function getComponentCandidates(component) {
   ];
 }
 
-async function resolveLastmod(route, component, fallbackLastmod) {
+async function resolveLastmod(
+  route,
+  component,
+  fallbackLastmod,
+  existingDates,
+) {
+  const existingDate = existingDates.get(route);
   for (const candidate of getComponentCandidates(component)) {
     try {
-      return await getPreferredLastmodForFile(candidate);
+      return await getPreferredLastmodForFile(candidate, existingDate);
     } catch {
       // Keep trying candidates until one exists.
     }
@@ -141,14 +179,14 @@ async function resolveLastmod(route, component, fallbackLastmod) {
     );
   }
 
-  return fallbackLastmod;
+  return existingDate ?? fallbackLastmod;
 }
 
 async function main() {
-  const metadataRaw = (await readFile(metadataPath, "utf-8")).replace(
-    /^\uFEFF/,
-    "",
-  );
+  const [metadataRaw, existingDates] = await Promise.all([
+    readFile(metadataPath, "utf-8").then((s) => s.replace(/^\uFEFF/, "")),
+    readExistingSitemapDates(),
+  ]);
   const metadata = JSON.parse(metadataRaw);
   const routeToComponent = new Map(Object.entries(staticRouteComponents));
 
@@ -169,7 +207,10 @@ async function main() {
     return a.localeCompare(b);
   });
 
-  const fallbackLastmod = await getPreferredLastmodForFile(metadataPath);
+  const fallbackLastmod = await getPreferredLastmodForFile(
+    metadataPath,
+    existingDates.get("/"),
+  );
 
   const routeEntries = await Promise.all(
     sortedRoutes.map(async (route) => ({
@@ -178,6 +219,7 @@ async function main() {
         route,
         routeToComponent.get(route),
         fallbackLastmod,
+        existingDates,
       ),
     })),
   );
