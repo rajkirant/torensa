@@ -994,5 +994,44 @@
         "a": "Yes. GraphQL uses HTTP POST requests with a JSON body containing the query and variables fields. Enter the GraphQL endpoint, set Content-Type to application/json, and paste your GraphQL query as the request body."
       }
     ]
+  },
+  {
+    "id": "word-to-pdf",
+    "component": "WordToPdf",
+    "title": "Word to PDF Converter",
+    "description": "Convert Word documents (.doc, .docx) to PDF with perfect layout fidelity.",
+    "path": "/word-to-pdf",
+    "ctaLabel": "Convert to PDF",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload a Word document (.doc or .docx) and convert it to a PDF in seconds. Conversion runs on the server using LibreOffice, preserving fonts, tables, images, and formatting. Files are processed in memory and never stored.",
+    "categoryId": "utilities",
+    "keywords": ["word", "docx", "doc", "pdf", "convert", "document"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click 'Choose Word document' and select a .doc or .docx file from your device.",
+      "Click 'Convert to PDF' to start the conversion.",
+      "Wait a few seconds while LibreOffice processes the file on the server.",
+      "Click 'Download' to save the resulting PDF to your device."
+    ],
+    "faqs": [
+      {
+        "q": "Is my document stored on the server?",
+        "a": "No. The file is processed in a temporary directory and deleted immediately after conversion. Nothing is persisted."
+      },
+      {
+        "q": "What is the maximum file size?",
+        "a": "Files up to 20 MB are supported."
+      },
+      {
+        "q": "Will my formatting be preserved?",
+        "a": "Yes. Conversion is done by LibreOffice, which faithfully renders fonts, tables, images, headers, and footers. Complex documents with custom fonts may have minor differences if those fonts are not installed on the server."
+      },
+      {
+        "q": "Can I convert .doc files (older Word format)?",
+        "a": "Yes, both .doc (Word 97-2003) and .docx (Word 2007+) formats are accepted."
+      }
+    ]
   }
 ]
