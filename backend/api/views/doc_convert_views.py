@@ -23,6 +23,7 @@ ALLOWED_MIME_TYPES = {
 SOFFICE_CANDIDATES = [
     "libreoffice",
     "soffice",
+    "/usr/local/bin/soffice",   # symlink created in Lambda container image
     "/usr/bin/libreoffice",
     "/usr/bin/soffice",
     "/opt/libreoffice/program/soffice",
