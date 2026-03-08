@@ -1,8 +1,15 @@
 FROM public.ecr.aws/lambda/python:3.14
 
-# Runtime lib used by onnxruntime/numba wheels.
-# LibreOffice for Word-to-PDF conversion.
-RUN dnf install -y libgomp libreoffice && dnf clean all
+# Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
+RUN dnf install -y libgomp fontconfig libX11 libXext libXrender cups-libs && dnf clean all
+
+# LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
+RUN curl -fsSL \
+      "https://download.documentfoundation.org/libreoffice/stable/24.8.5/rpm/x86_64/LibreOffice_24.8.5_Linux_x86-64_rpm.tar.gz" \
+      | tar xz -C /tmp/ \
+    && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
+    && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
+    && rm -rf /tmp/LibreOffice_*
 
 # Install Python dependencies into Lambda task root.
 COPY backend/requirements.txt /tmp/backend-requirements.txt
