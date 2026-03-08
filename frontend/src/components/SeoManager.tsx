@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import serviceCards from "../metadata/serviceCards.json";
@@ -23,7 +23,8 @@ const STATIC_ROUTE_META: Record<string, RouteMeta> = {
   "/": DEFAULT_META,
   "/contact": {
     title: "Contact | Torensa",
-    description: "Get in touch with Torensa for support, feedback, or inquiries.",
+    description:
+      "Get in touch with Torensa for support, feedback, or inquiries.",
   },
   "/login": {
     title: "Login | Torensa",
@@ -31,7 +32,8 @@ const STATIC_ROUTE_META: Record<string, RouteMeta> = {
   },
   "/signup": {
     title: "Sign Up | Torensa",
-    description: "Create your Torensa account to get started with available tools.",
+    description:
+      "Create your Torensa account to get started with available tools.",
   },
 };
 
@@ -51,7 +53,9 @@ export default function SeoManager() {
 
   const toolMetaByPath = useMemo(() => {
     const map = new Map<string, RouteMeta>();
-    for (const card of getActiveServiceCards(serviceCards as ServiceCardConfig[])) {
+    for (const card of getActiveServiceCards(
+      serviceCards as ServiceCardConfig[],
+    )) {
       map.set(normalizePath(card.path), {
         title: formatToolTitle(card.title),
         description: card.description,
@@ -60,10 +64,8 @@ export default function SeoManager() {
     return map;
   }, []);
 
-  const meta =
-    toolMetaByPath.get(normalizedPath) ??
-    STATIC_ROUTE_META[normalizedPath] ??
-    {
+  const meta = toolMetaByPath.get(normalizedPath) ??
+    STATIC_ROUTE_META[normalizedPath] ?? {
       title: "Page Not Found | Torensa",
       description:
         "The requested page could not be found. Explore Torensa tools from the homepage.",
@@ -71,24 +73,6 @@ export default function SeoManager() {
 
   const canonical =
     normalizedPath === "/" ? SITE_URL : `${SITE_URL}${normalizedPath}`;
-
-  useEffect(() => {
-    document.title = meta.title;
-
-    const descriptionEl = document.querySelector(
-      'meta[name="description"]',
-    ) as HTMLMetaElement | null;
-    if (descriptionEl) {
-      descriptionEl.content = meta.description;
-    }
-
-    const canonicalEl = document.querySelector(
-      'link[rel="canonical"]',
-    ) as HTMLLinkElement | null;
-    if (canonicalEl) {
-      canonicalEl.href = canonical;
-    }
-  }, [meta.title, meta.description, canonical]);
 
   return (
     <Helmet>
