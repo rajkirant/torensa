@@ -2,7 +2,6 @@ FROM public.ecr.aws/lambda/python:3.14
 
 # Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
 RUN dnf install -y \
-      curl \
       libgomp \
       fontconfig \
       libX11 \
@@ -14,7 +13,9 @@ RUN dnf install -y \
       tar \
       gzip \
       libxslt \
-    && dnf clean all
+    && dnf reinstall -y nss \
+    && dnf clean all \
+    && ldconfig
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
 RUN curl -fsSL \
