@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 import App from "./App";
@@ -27,6 +27,7 @@ import {
   toolComponentMap,
   NotFound,
 } from "./utils/routes";
+import { useScrollTop } from "./hooks/useScrollTop";
 
 export function Root() {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
@@ -47,6 +48,7 @@ export function Root() {
         <CssBaseline />
         <AuthProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <SeoManager />
             <Suspense fallback={null}>
               <Routes>
@@ -92,4 +94,12 @@ export function Root() {
       </ThemeProvider>
     </HelmetProvider>
   );
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useScrollTop([pathname]);
+
+  return null;
 }
