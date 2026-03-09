@@ -23,6 +23,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import FacebookIcon from "@mui/icons-material/Facebook";
 
 import {
   brandLinkStyle,
@@ -388,6 +389,15 @@ export default function App({ themeName, setThemeName }: AppProps) {
               aria-label="Torensa GitHub"
             >
               <GitHubIcon sx={{ fontSize: 24, color: "inherit" }} />
+            </a>
+            <a
+              href="https://www.facebook.com/tryTorensa"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={footerLinkStyle(theme)}
+              aria-label="Torensa Facebook"
+            >
+              <FacebookIcon sx={{ fontSize: 24, color: "inherit" }} />
             </a>
             {/* <a
               href="https://www.linkedin.com/in/rajkirant/"
