@@ -17,6 +17,9 @@ const sitemapPath = path.join(projectRoot, "public", "sitemap.xml");
 const pagesDir = path.join(projectRoot, "src", "pages");
 const execFileAsync = promisify(execFile);
 
+let shallowRepoCache = null;
+let warnedShallowRepo = false;
+
 const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(
   /\/+$/,
   "",
@@ -77,6 +80,16 @@ function toRepoRelativePath(filePath) {
 }
 
 async function getGitLastmodForFile(filePath) {
+  if (await isShallowRepo()) {
+    if (!warnedShallowRepo) {
+      console.warn(
+        "Git history is shallow; skipping per-file git lastmod. Consider fetching full history to preserve accurate lastmod dates.",
+      );
+      warnedShallowRepo = true;
+    }
+    return null;
+  }
+
   try {
     const relativePath = toRepoRelativePath(filePath);
     const { stdout } = await execFileAsync(
@@ -90,6 +103,21 @@ async function getGitLastmodForFile(filePath) {
     // Fall back to filesystem mtime when git is unavailable or path is untracked.
   }
   return null;
+}
+
+async function isShallowRepo() {
+  if (shallowRepoCache !== null) return shallowRepoCache;
+  try {
+    const { stdout } = await execFileAsync(
+      "git",
+      ["-C", projectRoot, "rev-parse", "--is-shallow-repository"],
+      { timeout: 10000 },
+    );
+    shallowRepoCache = stdout.trim() === "true";
+  } catch {
+    shallowRepoCache = false;
+  }
+  return shallowRepoCache;
 }
 
 async function readExistingSitemapDates() {
