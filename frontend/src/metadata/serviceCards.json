@@ -1035,6 +1035,53 @@
     ]
   },
   {
+    "id": "excel-to-pdf",
+    "component": "ExcelToPdf",
+    "title": "Excel to PDF Converter",
+    "description": "Convert Excel spreadsheets (.xls, .xlsx) to PDF with accurate layout and charts.",
+    "path": "/excel-to-pdf",
+    "ctaLabel": "Convert to PDF",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload an Excel spreadsheet (.xls, .xlsx, or .xlsm) and convert it to a PDF in seconds. Conversion runs on the server using LibreOffice, preserving sheet formatting, tables, and charts. Files are processed in memory and never stored.",
+    "categoryId": "utilities",
+    "keywords": [
+      "excel",
+      "xls",
+      "xlsx",
+      "xlsm",
+      "pdf",
+      "convert",
+      "spreadsheet"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click 'Choose Excel file' and select a .xls, .xlsx, or .xlsm file from your device.",
+      "Click 'Convert to PDF' to start the conversion.",
+      "Wait a few seconds while LibreOffice processes the spreadsheet on the server.",
+      "Click 'Download' to save the resulting PDF to your device."
+    ],
+    "faqs": [
+      {
+        "q": "Is my spreadsheet stored on the server?",
+        "a": "No. The file is processed in a temporary directory and deleted immediately after conversion. Nothing is persisted."
+      },
+      {
+        "q": "What is the maximum file size?",
+        "a": "Files up to 20 MB are supported."
+      },
+      {
+        "q": "Will formulas and charts be preserved?",
+        "a": "LibreOffice renders the sheet into PDF, so formulas are evaluated and charts are preserved as they appear in the spreadsheet."
+      },
+      {
+        "q": "Can I convert multi-sheet workbooks?",
+        "a": "Yes. LibreOffice exports all sheets into a single PDF, in the same order as your workbook."
+      }
+    ]
+  },
+  {
     "id": "pdf-to-word",
     "component": "PdfToWord",
     "title": "PDF to Word Converter",
