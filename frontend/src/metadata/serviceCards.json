@@ -741,11 +741,11 @@
     ]
   },
   {
-    "id": "ai-cron-generator-validator",
+    "id": "cron-generator-validator",
     "component": "CronExpressionBuilder",
     "title": "AI Cron Generator + Validator",
     "description": "Describe your schedule in plain English and let AI generate cron expressions. Also validate, explain, and preview 5-field and 6-field cron schedules.",
-    "path": "/ai-cron-generator-validator",
+    "path": "/cron-generator-validator",
     "ctaLabel": "Open Cron Tool",
     "offlineEnabled": false,
     "aiPowered": true,
@@ -1131,11 +1131,11 @@
     ]
   },
   {
-    "id": "ai-image-generator",
+    "id": "image-generator",
     "component": "AiImageGenerator",
     "title": "AI Image Generator",
     "description": "Describe any image in plain English and AI will generate it for you. Download as PNG.",
-    "path": "/ai-image-generator",
+    "path": "/image-generator",
     "ctaLabel": "Open Image Generator",
     "offlineEnabled": false,
     "aiPowered": true,

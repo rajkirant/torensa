@@ -4,8 +4,14 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
 import DownloadIcon from "@mui/icons-material/Download";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import TelegramIcon from "@mui/icons-material/Telegram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -76,20 +82,57 @@ export default function AiImageGenerator() {
     downloadBlob(blob, "generated-image.png");
   };
 
+  const SHARE_URL = "https://torensa.com/ai-image-generator";
+  const SHARE_TEXT = "Check out this AI-generated image!";
+
   const canShareFiles =
     typeof navigator !== "undefined" &&
     typeof navigator.canShare === "function";
 
-  const handleShareWhatsApp = async () => {
+  const shareImageFile = async (appText?: string) => {
     if (!imageData) return;
     const blob = base64ToBlob(imageData, "image/png");
     const file = new File([blob], "generated-image.png", { type: "image/png" });
     if (!canShareFiles || !navigator.canShare({ files: [file] })) return;
     try {
-      await navigator.share({ files: [file] });
+      await navigator.share({
+        files: [file],
+        text: appText ?? `${SHARE_TEXT} Generated from ${SHARE_URL}`,
+      });
     } catch {
       // user cancelled or share failed
     }
+  };
+
+  const handleShareWhatsApp = () =>
+    shareImageFile(`Generated from ${SHARE_URL}`);
+
+  const handleShareTelegram = () => {
+    if (canShareFiles) {
+      shareImageFile(`${SHARE_TEXT} ${SHARE_URL}`);
+    } else {
+      window.open(
+        `https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(SHARE_TEXT)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    }
+  };
+
+  const handleShareTwitter = () => {
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${SHARE_TEXT} ${SHARE_URL}`)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
+  const handleShareFacebook = () => {
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
@@ -136,14 +179,61 @@ export default function AiImageGenerator() {
               startIcon={<DownloadIcon />}
             />
           )}
-          {imageData && canShareFiles && (
-            <TransparentButton
-              label="Share on WhatsApp"
-              onClick={handleShareWhatsApp}
-              startIcon={<WhatsAppIcon />}
-            />
-          )}
         </FlexWrapRow>
+
+        {imageData && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              flexWrap: "wrap",
+            }}
+          >
+            <Typography variant="body2" color="text.secondary" sx={{ mr: 0.5 }}>
+              Share:
+            </Typography>
+            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
+            {canShareFiles && (
+              <Tooltip title="Share on WhatsApp">
+                <IconButton
+                  onClick={handleShareWhatsApp}
+                  size="small"
+                  sx={{ color: "#25D366" }}
+                >
+                  <WhatsAppIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+            <Tooltip title="Share on Telegram">
+              <IconButton
+                onClick={handleShareTelegram}
+                size="small"
+                sx={{ color: "#26A5E4" }}
+              >
+                <TelegramIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Share on X (Twitter)">
+              <IconButton
+                onClick={handleShareTwitter}
+                size="small"
+                sx={{ color: "text.primary" }}
+              >
+                <TwitterIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Share on Facebook">
+              <IconButton
+                onClick={handleShareFacebook}
+                size="small"
+                sx={{ color: "#1877F2" }}
+              >
+                <FacebookIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
 
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
