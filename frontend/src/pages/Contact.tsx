@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import missionData from "../metadata/mission.json";
 import contactData from "../metadata/contact.json";
 
@@ -37,7 +38,7 @@ export default function Contact() {
           />
         </div>
 
-        <h1>About & Contact</h1>
+        <h1>About Us</h1>
 
         <p className="subtitle">{mission.subtitle}</p>
 
@@ -49,7 +50,7 @@ export default function Contact() {
       <div className="cards">
         {/* EMAIL CARD */}
         <div className="card">
-          <h3>Email</h3>
+          <h3>Contact Us</h3>
           <p>{contact.email.intro}</p>
 
           <p>
@@ -57,7 +58,7 @@ export default function Contact() {
               href={`mailto:${contact.email.address}`}
               style={{
                 fontWeight: 600,
-                color: "#4fd1c5", // accessible teal
+                color: "#4fd1c5",
                 textDecoration: "underline",
               }}
             >
@@ -74,6 +75,23 @@ export default function Contact() {
           <h3>Response Time</h3>
           <p>{contact.responseTime}</p>
         </div>
+      </div>
+
+      <div
+        style={{
+          maxWidth: 800,
+          margin: "40px auto 0",
+          textAlign: "center",
+          fontSize: 14,
+          lineHeight: 1.6,
+        }}
+      >
+        <Link to="/privacy" style={{ color: "#4fd1c5", marginRight: 20 }}>
+          Privacy Policy
+        </Link>
+        <Link to="/terms" style={{ color: "#4fd1c5" }}>
+          Terms of Service
+        </Link>
       </div>
     </>
   );

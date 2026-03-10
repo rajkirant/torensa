@@ -26,7 +26,9 @@ const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(
 );
 const staticRouteComponents = {
   "/": "Home",
-  "/contact": "Contact",
+  "/about": "Contact",
+  "/privacy": "PrivacyPolicy",
+  "/terms": "TermsOfService",
   "/login": "Login",
   "/signup": "Signup",
 };

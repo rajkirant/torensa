@@ -21,10 +21,25 @@ const DEFAULT_META: RouteMeta = {
 
 const STATIC_ROUTE_META: Record<string, RouteMeta> = {
   "/": DEFAULT_META,
-  "/contact": {
-    title: "Contact | Torensa",
+  "/about": {
+    title: "About Us | Torensa",
     description:
-      "Get in touch with Torensa for support, feedback, or inquiries.",
+      "Learn about Torensa, our mission to build open-source productivity tools, and how to get in touch.",
+  },
+  "/contact": {
+    title: "About Us | Torensa",
+    description:
+      "Learn about Torensa, our mission to build open-source productivity tools, and how to get in touch.",
+  },
+  "/privacy": {
+    title: "Privacy Policy | Torensa",
+    description:
+      "Learn how Torensa collects, uses, and protects your information. Covers cookies, analytics, advertising, and your data rights.",
+  },
+  "/terms": {
+    title: "Terms of Service | Torensa",
+    description:
+      "Read the Terms of Service for using Torensa tools, including acceptable use, intellectual property, and liability.",
   },
   "/login": {
     title: "Login | Torensa",
