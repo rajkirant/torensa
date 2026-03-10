@@ -741,51 +741,65 @@
     ]
   },
   {
-    "id": "cron-expression-builder",
+    "id": "ai-cron-generator-validator",
     "component": "CronExpressionBuilder",
-    "title": "Cron Builder + Validator",
-    "description": "Build, validate, and preview 5-field and 6-field cron schedules.",
-    "path": "/cron-expression-builder",
+    "title": "AI Cron Generator + Validator",
+    "description": "Describe your schedule in plain English and let AI generate cron expressions. Also validate, explain, and preview 5-field and 6-field cron schedules.",
+    "path": "/ai-cron-generator-validator",
     "ctaLabel": "Open Cron Tool",
-    "offlineEnabled": true,
+    "offlineEnabled": false,
+    "aiPowered": true,
     "authRequired": false,
-    "detailedDescription": "Create cron expressions with direct input, validate syntax instantly, and preview upcoming execution times. Supports both 5-field and 6-field formats, with human-readable interpretation to reduce scheduling mistakes.",
+    "detailedDescription": "Use AI to generate cron expressions from plain English descriptions, or create them manually. Validate syntax instantly, get human-readable interpretations, and preview upcoming execution times. Supports both 5-field and 6-field formats.",
     "categoryId": "developer",
-    "keywords": ["cron", "schedule", "expression", "validator", "time"],
+    "keywords": [
+      "cron",
+      "schedule",
+      "expression",
+      "validator",
+      "time",
+      "ai",
+      "generator"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Type a cron expression directly into the input field, or use the field-by-field builder to construct it visually.",
-      "Select whether your expression uses 5 fields (standard Unix cron) or 6 fields (Spring @Scheduled / Quartz).",
-      "The human-readable description updates instantly, showing exactly when the schedule will trigger in plain English.",
-      "The next execution times panel shows the upcoming 5-10 run times so you can verify the schedule is correct.",
-      "If the expression has a syntax error, a clear message describes the problem and which field to fix.",
-      "Copy the validated expression to use in your application's cron job configuration or scheduler."
+      "In the AI Cron Generator section, type your schedule in plain English — for example 'every weekday at 9 AM' or 'every 30 minutes between 8 AM and 6 PM'.",
+      "Choose whether you want a 5-field (standard) or 6-field (with seconds) expression from the Cron format dropdown, then click Generate.",
+      "The AI-generated expression is placed directly into the cron input field below, ready to validate, explain, or preview.",
+      "Click Explain to get a human-readable description of the expression, confirming it matches your intended schedule.",
+      "Click Next Run Preview to see the next 5 upcoming execution times, so you can verify the timing is exactly right.",
+      "Click Validate to check the syntax of any expression — whether AI-generated or typed manually.",
+      "You can also type or paste a cron expression directly into the input field and use all the same tools without the AI generator."
     ],
     "faqs": [
+      {
+        "q": "How does the AI cron generator work?",
+        "a": "You describe your schedule in plain English and the AI (Claude via AWS Bedrock) converts it into a valid cron expression. You can then validate, explain, or preview it using the built-in tools."
+      },
       {
         "q": "What is the difference between 5-field and 6-field cron expressions?",
         "a": "Standard Unix/Linux cron uses 5 fields: minute, hour, day-of-month, month, day-of-week. Java schedulers (Spring @Scheduled, Quartz) use a 6-field format that adds a seconds field at the start: second, minute, hour, day-of-month, month, day-of-week."
       },
       {
+        "q": "Can I use this without the AI generator?",
+        "a": "Yes. You can type or paste any cron expression directly into the input field and use the Validate, Explain, and Next Run Preview tools independently."
+      },
+      {
         "q": "How do I run a job every 15 minutes?",
-        "a": "Use '*/15 * * * *' for a 5-field expression, or '0 */15 * * * *' for a 6-field expression. The */n syntax means every n units."
+        "a": "You can type 'every 15 minutes' in the AI generator, or enter '*/15 * * * *' manually for a 5-field expression (or '0 */15 * * * *' for 6-field)."
       },
       {
         "q": "Can I schedule a job for specific days of the week?",
-        "a": "Yes. The day-of-week field accepts values 0-7 (0 and 7 both mean Sunday) or abbreviations MON, TUE, WED, THU, FRI, SAT, SUN. For example, '0 9 * * 1-5' runs at 9 AM every weekday."
+        "a": "Yes. The day-of-week field accepts values 0-6 (0 = Sunday) or type something like 'every Monday and Wednesday at 9 AM' into the AI generator and it will figure it out."
       },
       {
         "q": "What does the asterisk (*) mean in a cron expression?",
-        "a": "An asterisk means every value for that field. In the minutes field, * means every minute. In the months field, * means every month."
-      },
-      {
-        "q": "What does L mean in cron expressions?",
-        "a": "L stands for last. In the day-of-month field, L means the last day of the month. In the day-of-week field, 5L means the last Friday of the month. L is supported by Quartz/Spring but not all Unix cron implementations."
+        "a": "An asterisk means every valid value for that field. For example, * in the minutes field means every minute, and * in the months field means every month."
       },
       {
         "q": "Is this tool useful for AWS EventBridge or GitHub Actions schedules?",
-        "a": "Yes. Both AWS EventBridge and GitHub Actions use cron-style expressions. AWS EventBridge uses a 6-field format with year, while GitHub Actions uses 5-field expressions in UTC. The builder and validator work for both."
+        "a": "Yes. Both AWS EventBridge and GitHub Actions use cron-style expressions. AWS EventBridge uses a 6-field format with year, while GitHub Actions uses 5-field expressions in UTC. The AI generator and validator work for both."
       }
     ]
   },

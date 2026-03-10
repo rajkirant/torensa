@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useLocation } from "react-router-dom";
 import serviceCards from "../metadata/serviceCards.json";
 import OfflineChip from "./chips/OfflineChip";
+import AiPoweredChip from "./chips/AiPoweredChip";
 import BackButton from "./buttons/BackButton";
 import {
   type ServiceCardConfig,
@@ -114,6 +115,21 @@ export default function PageContainer({
                     ml: {
                       xs: "auto",
                       sm: advancedOptionsEnabled ? 0 : "auto",
+                    },
+                    order: { xs: 1, sm: 0 },
+                  }}
+                />
+              )}
+
+              {meta?.aiPowered && (
+                <AiPoweredChip
+                  sx={{
+                    ml: {
+                      xs: meta?.offlineEnabled ? 0 : "auto",
+                      sm:
+                        advancedOptionsEnabled || meta?.offlineEnabled
+                          ? 0
+                          : "auto",
                     },
                     order: { xs: 1, sm: 0 },
                   }}
