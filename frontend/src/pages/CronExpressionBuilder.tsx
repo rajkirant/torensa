@@ -571,7 +571,7 @@ export default function CronExpressionBuilder() {
     setAiError("");
 
     try {
-      const response = await apiFetch("/api/cron-ai/", {
+      const response = await apiFetch("/ai/cron-ai/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: trimmed, fields: aiFields }),
