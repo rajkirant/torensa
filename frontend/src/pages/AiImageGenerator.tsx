@@ -1,16 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
 import DownloadIcon from "@mui/icons-material/Download";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import TelegramIcon from "@mui/icons-material/Telegram";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -32,6 +28,7 @@ export default function AiImageGenerator() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const [statusMessage, setStatusMessage] = useState<{
     info?: string;
     success?: string;
@@ -69,6 +66,12 @@ export default function AiImageGenerator() {
 
       setImageData(b64);
       setStatusMessage({ success: "Image generated successfully." });
+      setTimeout(() => {
+        imageRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
     } catch {
       setStatusMessage({ error: "Network error. Please try again." });
     } finally {
@@ -83,56 +86,47 @@ export default function AiImageGenerator() {
   };
 
   const SHARE_URL = "https://torensa.com/ai-image-generator";
-  const SHARE_TEXT = "Check out this AI-generated image!";
 
   const canShareFiles =
     typeof navigator !== "undefined" &&
     typeof navigator.canShare === "function";
 
-  const shareImageFile = async (appText?: string) => {
+  const handleShareWhatsApp = async () => {
     if (!imageData) return;
     const blob = base64ToBlob(imageData, "image/png");
     const file = new File([blob], "generated-image.png", { type: "image/png" });
-    if (!canShareFiles || !navigator.canShare({ files: [file] })) return;
-    try {
-      await navigator.share({
-        files: [file],
-        text: appText ?? `${SHARE_TEXT} Generated from ${SHARE_URL}`,
-      });
-    } catch {
-      // user cancelled or share failed
+    if (canShareFiles && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          text: `Generated from ${SHARE_URL}`,
+        });
+      } catch {
+        // user cancelled
+      }
     }
   };
 
-  const handleShareWhatsApp = () =>
-    shareImageFile(`Generated from ${SHARE_URL}`);
-
-  const handleShareTelegram = () => {
-    if (canShareFiles) {
-      shareImageFile(`${SHARE_TEXT} ${SHARE_URL}`);
+  const handleShareFacebook = async () => {
+    if (!imageData) return;
+    const blob = base64ToBlob(imageData, "image/png");
+    const file = new File([blob], "generated-image.png", { type: "image/png" });
+    if (canShareFiles && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          text: `Generated from ${SHARE_URL}`,
+        });
+      } catch {
+        // user cancelled
+      }
     } else {
       window.open(
-        `https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(SHARE_TEXT)}`,
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`,
         "_blank",
         "noopener,noreferrer",
       );
     }
-  };
-
-  const handleShareTwitter = () => {
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${SHARE_TEXT} ${SHARE_URL}`)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
-  };
-
-  const handleShareFacebook = () => {
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
   };
 
   return (
@@ -172,68 +166,7 @@ export default function AiImageGenerator() {
               ) : undefined
             }
           />
-          {imageData && (
-            <TransparentButton
-              label="Download PNG"
-              onClick={handleDownload}
-              startIcon={<DownloadIcon />}
-            />
-          )}
         </FlexWrapRow>
-
-        {imageData && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.5,
-              flexWrap: "wrap",
-            }}
-          >
-            <Typography variant="body2" color="text.secondary" sx={{ mr: 0.5 }}>
-              Share:
-            </Typography>
-            <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
-            {canShareFiles && (
-              <Tooltip title="Share on WhatsApp">
-                <IconButton
-                  onClick={handleShareWhatsApp}
-                  size="small"
-                  sx={{ color: "#25D366" }}
-                >
-                  <WhatsAppIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            )}
-            <Tooltip title="Share on Telegram">
-              <IconButton
-                onClick={handleShareTelegram}
-                size="small"
-                sx={{ color: "#26A5E4" }}
-              >
-                <TelegramIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Share on X (Twitter)">
-              <IconButton
-                onClick={handleShareTwitter}
-                size="small"
-                sx={{ color: "text.primary" }}
-              >
-                <TwitterIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Share on Facebook">
-              <IconButton
-                onClick={handleShareFacebook}
-                size="small"
-                sx={{ color: "#1877F2" }}
-              >
-                <FacebookIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
 
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
@@ -243,10 +176,13 @@ export default function AiImageGenerator() {
 
         {imageData && (
           <Box
+            ref={imageRef}
             sx={{
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
               mt: 2,
+              gap: 1.5,
             }}
           >
             <Box
@@ -260,6 +196,40 @@ export default function AiImageGenerator() {
                 boxShadow: 3,
               }}
             />
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <TransparentButton
+                label="Download PNG"
+                onClick={handleDownload}
+                startIcon={<DownloadIcon />}
+              />
+              <Tooltip title="Share on WhatsApp">
+                <IconButton
+                  onClick={handleShareWhatsApp}
+                  size="small"
+                  sx={{ color: "#25D366" }}
+                >
+                  <WhatsAppIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Share on Facebook">
+                <IconButton
+                  onClick={handleShareFacebook}
+                  size="small"
+                  sx={{ color: "#1877F2" }}
+                >
+                  <FacebookIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Box>
         )}
       </Stack>
