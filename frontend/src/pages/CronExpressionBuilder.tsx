@@ -2,13 +2,23 @@ import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import MenuItem from "@mui/material/MenuItem";
 import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
+import { apiFetch } from "../utils/api";
 
-type FieldKey = "second" | "minute" | "hour" | "dayOfMonth" | "month" | "dayOfWeek";
+type FieldKey =
+  | "second"
+  | "minute"
+  | "hour"
+  | "dayOfMonth"
+  | "month"
+  | "dayOfWeek";
 
 type FieldConfig = {
   key: FieldKey;
@@ -165,20 +175,26 @@ function parseFieldSegment(
   const numberMatch = segment.match(/^(\d+)$/);
   if (numberMatch) {
     const rawValue = Number(numberMatch[1]);
-    const maxRange = config.key === "dayOfWeek" ? "0-7" : `${config.min}-${config.max}`;
+    const maxRange =
+      config.key === "dayOfWeek" ? "0-7" : `${config.min}-${config.max}`;
     if (
       !Number.isInteger(rawValue) ||
       rawValue < config.min ||
       rawValue > (config.key === "dayOfWeek" ? 7 : config.max)
     ) {
-      throw new Error(`${fieldLabel}: value "${segment}" is out of range (${maxRange}).`);
+      throw new Error(
+        `${fieldLabel}: value "${segment}" is out of range (${maxRange}).`,
+      );
     }
 
     const value =
       config.key === "dayOfWeek" ? normalizeDayOfWeekValue(rawValue) : rawValue;
     if (!Number.isInteger(value) || value < config.min || value > config.max) {
-      const maxRange = config.key === "dayOfWeek" ? "0-7" : `${config.min}-${config.max}`;
-      throw new Error(`${fieldLabel}: value "${segment}" is out of range (${maxRange}).`);
+      const maxRange =
+        config.key === "dayOfWeek" ? "0-7" : `${config.min}-${config.max}`;
+      throw new Error(
+        `${fieldLabel}: value "${segment}" is out of range (${maxRange}).`,
+      );
     }
     return [value];
   }
@@ -189,7 +205,8 @@ function parseFieldSegment(
     const endRaw = Number(rangeMatch[2]);
     const step = rangeMatch[3] ? Number(rangeMatch[3]) : 1;
     const maxBound = config.key === "dayOfWeek" ? 7 : config.max;
-    const maxRange = config.key === "dayOfWeek" ? "0-7" : `${config.min}-${config.max}`;
+    const maxRange =
+      config.key === "dayOfWeek" ? "0-7" : `${config.min}-${config.max}`;
 
     if (!Number.isInteger(step) || step <= 0) {
       throw new Error(`${fieldLabel}: step must be a positive integer.`);
@@ -202,7 +219,9 @@ function parseFieldSegment(
       endRaw < config.min ||
       endRaw > maxBound
     ) {
-      throw new Error(`${fieldLabel}: range "${segment}" is out of range (${maxRange}).`);
+      throw new Error(
+        `${fieldLabel}: range "${segment}" is out of range (${maxRange}).`,
+      );
     }
     if (startRaw > endRaw) {
       throw new Error(`${fieldLabel}: range start must be <= range end.`);
@@ -290,7 +309,12 @@ function describeField(config: FieldConfig, parsed: ParsedField): string {
     }
   }
 
-  if (uniformStep && step > 0 && values[0] === config.min && values.length > 2) {
+  if (
+    uniformStep &&
+    step > 0 &&
+    values[0] === config.min &&
+    values.length > 2
+  ) {
     return `every ${step} ${config.unitPlural}`;
   }
 
@@ -341,12 +365,15 @@ function describeTime(
 function describeDayOfMonth(parsed: ParsedField): string {
   const values = Array.from(parsed.values).sort((a, b) => a - b);
   if (values.length === 31) return "every day of the month";
-  if (values.length === 1) return `on the ${toOrdinal(values[0])} day of the month`;
+  if (values.length === 1)
+    return `on the ${toOrdinal(values[0])} day of the month`;
   if (values.length > 1 && values[0] === 1) {
     const step = values[1] - values[0];
     const isStep =
       values.length > 2 &&
-      values.every((value, index) => index === 0 || value - values[index - 1] === step);
+      values.every(
+        (value, index) => index === 0 || value - values[index - 1] === step,
+      );
     if (isStep && step > 1) return `every ${toOrdinal(step)} day of the month`;
   }
   return `on day ${values.join(", ")} of the month`;
@@ -362,31 +389,39 @@ function describeMonth(parsed: ParsedField): string {
 function describeDayOfWeek(parsed: ParsedField): string {
   const values = Array.from(parsed.values).sort((a, b) => a - b);
   if (values.length === 7) return "every day of the week";
-  if (values.length === 5 && values.join(",") === "1,2,3,4,5") return "on weekdays";
+  if (values.length === 5 && values.join(",") === "1,2,3,4,5")
+    return "on weekdays";
   if (values.length === 2 && values.join(",") === "0,6") return "on weekends";
   if (values.length === 1) return `on ${WEEKDAY_NAMES[values[0]]}`;
   return `on ${values.map((day) => WEEKDAY_NAMES[day]).join(", ")}`;
 }
 
 function buildSentenceSummary(parsed: ParsedCron): string {
-  const timePart = describeTime(parsed.second, parsed.minute, parsed.hour, parsed.hasSeconds);
+  const timePart = describeTime(
+    parsed.second,
+    parsed.minute,
+    parsed.hour,
+    parsed.hasSeconds,
+  );
   const dayOfMonthPart = describeDayOfMonth(parsed.dayOfMonth);
   const monthPart = describeMonth(parsed.month);
   const dayOfWeekPart = describeDayOfWeek(parsed.dayOfWeek);
 
   const domWildcard = parsed.dayOfMonth.isWildcard;
   const dowWildcard = parsed.dayOfWeek.isWildcard;
+  const monWildcard = parsed.month.isWildcard;
+  const monthSuffix = monWildcard ? "" : `, ${monthPart}`;
 
   if (domWildcard && dowWildcard) {
-    return `It runs ${timePart}, ${monthPart}.`;
+    return `It runs ${timePart}${monthSuffix}.`;
   }
   if (!domWildcard && dowWildcard) {
-    return `It runs ${timePart}, ${dayOfMonthPart}, ${monthPart}.`;
+    return `It runs ${timePart}, ${dayOfMonthPart}${monthSuffix}.`;
   }
   if (domWildcard && !dowWildcard) {
-    return `It runs ${timePart}, ${dayOfWeekPart}, ${monthPart}.`;
+    return `It runs ${timePart}, ${dayOfWeekPart}${monthSuffix}.`;
   }
-  return `It runs ${timePart}, ${dayOfMonthPart} and ${dayOfWeekPart}, ${monthPart}.`;
+  return `It runs ${timePart}, ${dayOfMonthPart} and ${dayOfWeekPart}${monthSuffix}.`;
 }
 
 function matchesCronWithoutSecond(date: Date, cron: ParsedCron): boolean {
@@ -504,7 +539,8 @@ function validateCron(expression: string): ValidationResult {
   } catch (error) {
     return {
       ok: false,
-      error: error instanceof Error ? error.message : "Invalid cron expression.",
+      error:
+        error instanceof Error ? error.message : "Invalid cron expression.",
     };
   }
 }
@@ -520,7 +556,50 @@ export default function CronExpressionBuilder() {
   const [previewRuns, setPreviewRuns] = useState<Date[]>([]);
   const [previewIncludesSeconds, setPreviewIncludesSeconds] = useState(false);
 
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiFields, setAiFields] = useState<5 | 6>(5);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
+
   const runValidation = () => validateCron(expression);
+
+  const handleGenerateFromAI = async () => {
+    const trimmed = aiPrompt.trim();
+    if (!trimmed) return;
+
+    setAiLoading(true);
+    setAiError("");
+
+    try {
+      const response = await apiFetch("/api/cron-ai/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: trimmed, fields: aiFields }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setAiError(data.error || "Failed to generate cron expression.");
+        return;
+      }
+
+      const generated = (data.expression || "").trim();
+      if (!generated) {
+        setAiError("AI returned an empty response. Please try rephrasing.");
+        return;
+      }
+
+      setExpression(generated);
+      setExplanation("");
+      setPreviewRuns([]);
+      setPreviewIncludesSeconds(false);
+      setStatusMessage({ success: "Cron expression generated by AI." });
+    } catch {
+      setAiError("Network error. Please try again.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const handleValidate = () => {
     const result = runValidation();
@@ -564,6 +643,81 @@ export default function CronExpressionBuilder() {
   return (
     <PageContainer maxWidth={980}>
       <Stack spacing={2}>
+        <Stack
+          spacing={1.5}
+          sx={{
+            p: 2,
+            borderRadius: 2,
+            border: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          <Typography
+            variant="subtitle2"
+            sx={{
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+            }}
+          >
+            <AutoAwesomeRoundedIcon fontSize="small" />
+            AI Cron Generator
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Describe your schedule in plain English and let AI generate the cron
+            expression.
+          </Typography>
+          <TextField
+            label="Describe your schedule"
+            value={aiPrompt}
+            onChange={(event) => {
+              setAiPrompt(event.target.value);
+              setAiError("");
+            }}
+            placeholder='e.g. "every 4 minutes" or "every Sunday at 4 PM"'
+            fullWidth
+            multiline
+            minRows={1}
+            maxRows={3}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                handleGenerateFromAI();
+              }
+            }}
+          />
+          <TextField
+            select
+            label="Cron format"
+            value={aiFields}
+            onChange={(event) =>
+              setAiFields(Number(event.target.value) as 5 | 6)
+            }
+            sx={{ minWidth: 220 }}
+          >
+            <MenuItem value={5}>5 fields (standard)</MenuItem>
+            <MenuItem value={6}>6 fields (with seconds)</MenuItem>
+          </TextField>
+          {aiError && (
+            <Typography variant="body2" color="error">
+              {aiError}
+            </Typography>
+          )}
+          <FlexWrapRow>
+            <TransparentButton
+              label={aiLoading ? "Generating…" : "Generate"}
+              onClick={handleGenerateFromAI}
+              disabled={aiLoading || !aiPrompt.trim()}
+              startIcon={
+                aiLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : undefined
+              }
+            />
+          </FlexWrapRow>
+        </Stack>
+
         <ToolStatusAlerts
           error={statusMessage.error ?? ""}
           success={statusMessage.success ?? ""}
@@ -611,7 +765,10 @@ export default function CronExpressionBuilder() {
             </Typography>
             <Stack spacing={0.5}>
               {previewRuns.map((runAt, index) => (
-                <Typography key={`${runAt.toISOString()}-${index}`} variant="body2">
+                <Typography
+                  key={`${runAt.toISOString()}-${index}`}
+                  variant="body2"
+                >
                   {index + 1}.{" "}
                   {previewIncludesSeconds
                     ? PREVIEW_FORMATTER_WITH_SECONDS.format(runAt)
@@ -621,10 +778,7 @@ export default function CronExpressionBuilder() {
             </Stack>
           </Stack>
         )}
-
       </Stack>
     </PageContainer>
   );
 }
-
-

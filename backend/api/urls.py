@@ -11,6 +11,7 @@ from .views.email_views import (
     list_contact_groups,
 )
 from .views.tool_chat_views import tool_chat_view
+from .views.cron_ai_views import cron_ai_view
 from .views.string_crypto_views import string_crypto_view
 from .views.image_bg_remove_views import remove_background_view
 from .views.doc_convert_views import word_to_pdf_view, pdf_to_word_view, excel_to_pdf_view
@@ -43,6 +44,7 @@ urlpatterns = [
     path("auth/google/callback", gmail_oauth_callback),
     path("send-email-bulk/", send_email),
     path("tool-chat/", tool_chat_view),
+    path("cron-ai/", cron_ai_view),
     # Contact groups (DRF)
     path("contact-groups/save/", save_contact_group, name="save_contact_group"),
     path("contact-groups/", list_contact_groups, name="list_contact_groups"),

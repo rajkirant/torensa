@@ -17,6 +17,7 @@ export type ServiceCardConfig = {
   keywords?: string[];
   detailedDescription?: string;
   advancedOptionsEnabled?: boolean;
+  aiPowered?: boolean;
   howTo?: string[];
   faqs?: Faq[];
 };
