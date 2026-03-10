@@ -6,8 +6,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
+import ShareIcon from "@mui/icons-material/Share";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -91,42 +91,31 @@ export default function AiImageGenerator() {
     typeof navigator !== "undefined" &&
     typeof navigator.canShare === "function";
 
-  const handleShareWhatsApp = async () => {
+  const handleShare = async () => {
     if (!imageData) return;
     const blob = base64ToBlob(imageData, "image/png");
     const file = new File([blob], "generated-image.png", { type: "image/png" });
-    if (canShareFiles && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          text: `Generated from ${SHARE_URL}`,
-        });
-      } catch {
-        // user cancelled
-      }
+    if (!canShareFiles || !navigator.canShare({ files: [file] })) return;
+    try {
+      await navigator.share({
+        files: [file],
+        text: `Generated from ${SHARE_URL}`,
+      });
+    } catch {
+      // user cancelled
     }
   };
 
-  const handleShareFacebook = async () => {
+  const handleShareWhatsApp = () => {
     if (!imageData) return;
     const blob = base64ToBlob(imageData, "image/png");
-    const file = new File([blob], "generated-image.png", { type: "image/png" });
-    if (canShareFiles && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          files: [file],
-          text: `Generated from ${SHARE_URL}`,
-        });
-      } catch {
-        // user cancelled
-      }
-    } else {
-      window.open(
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
-    }
+    downloadBlob(blob, "generated-image.png");
+    const text = `Check out this AI-generated image! Generated from ${SHARE_URL}`;
+    window.open(
+      `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
@@ -211,6 +200,13 @@ export default function AiImageGenerator() {
                 onClick={handleDownload}
                 startIcon={<DownloadIcon />}
               />
+              {canShareFiles && (
+                <Tooltip title="Share image">
+                  <IconButton onClick={handleShare} size="small">
+                    <ShareIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
               <Tooltip title="Share on WhatsApp">
                 <IconButton
                   onClick={handleShareWhatsApp}
@@ -218,15 +214,6 @@ export default function AiImageGenerator() {
                   sx={{ color: "#25D366" }}
                 >
                   <WhatsAppIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Share on Facebook">
-                <IconButton
-                  onClick={handleShareFacebook}
-                  size="small"
-                  sx={{ color: "#1877F2" }}
-                >
-                  <FacebookIcon />
                 </IconButton>
               </Tooltip>
             </Box>
