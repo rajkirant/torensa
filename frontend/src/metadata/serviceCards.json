@@ -744,7 +744,7 @@
     "id": "cron-generator-validator",
     "component": "CronExpressionBuilder",
     "title": "AI Cron Generator + Validator",
-    "description": "Describe your schedule in plain English and let AI generate cron expressions. Also validate, explain, and preview 5-field and 6-field cron schedules.",
+    "description": "Describe your schedule in plain English and let AI generate cron expressions.",
     "path": "/cron-generator-validator",
     "ctaLabel": "Open Cron Tool",
     "offlineEnabled": false,
@@ -1181,6 +1181,62 @@
       {
         "q": "How long does it take to generate an image?",
         "a": "Typically a few seconds, depending on complexity and current server load."
+      }
+    ]
+  },
+  {
+    "id": "pdf-text-extractor",
+    "component": "PdfTextExtractor",
+    "title": "PDF Text Extractor (OCR)",
+    "description": "Extract text from scanned or digital PDFs using OCR.",
+    "path": "/pdf-text-extractor",
+    "ctaLabel": "Extract Text",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload any PDF — whether it contains selectable text or scanned images — and extract all readable text. Digital PDFs are parsed directly for perfect accuracy, while scanned pages are processed with Tesseract OCR. Copy the result to your clipboard or download as a .txt file.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf",
+      "ocr",
+      "text",
+      "extract",
+      "scan",
+      "scanned",
+      "read",
+      "convert"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click the upload area or drag and drop your PDF file onto the page.",
+      "Click Extract Text to start processing. Digital text is extracted instantly; scanned pages are OCR-processed automatically.",
+      "Review the extracted text in the output panel below.",
+      "Click Copy Text to copy the result to your clipboard, or Download .txt to save it as a text file."
+    ],
+    "faqs": [
+      {
+        "q": "Does this tool work with scanned PDFs?",
+        "a": "Yes. Pages that contain only images (scanned documents) are automatically processed with Tesseract OCR to extract the text. Digital PDFs with selectable text are parsed directly for best accuracy."
+      },
+      {
+        "q": "What languages are supported for OCR?",
+        "a": "The default OCR engine recognizes English text. For most scanned documents, receipts, contracts, and reports in English the results are highly accurate."
+      },
+      {
+        "q": "Is there a page or file size limit?",
+        "a": "Files up to 20 MB are accepted. Larger scanned PDFs with many pages may take longer to process due to OCR on each page."
+      },
+      {
+        "q": "Is my file stored on the server?",
+        "a": "No. The uploaded file is processed in a temporary directory and deleted immediately after text extraction completes. Nothing is stored."
+      },
+      {
+        "q": "Why is the extracted text empty?",
+        "a": "If the PDF contains only images without recognizable text (e.g., photos, diagrams), OCR may not find readable characters. Ensure the scanned document has reasonably clear text."
+      },
+      {
+        "q": "Can I extract text from a password-protected PDF?",
+        "a": "Password-protected (encrypted) PDFs must be unlocked before uploading. The tool does not prompt for passwords."
       }
     ]
   }
