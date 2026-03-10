@@ -16,7 +16,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import HomeIcon from "@mui/icons-material/Home";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -208,12 +208,12 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
         <NavButton
           component={NavLink}
-          to="/contact"
-          startIcon={<ContactMailIcon />}
+          to="/about"
+          startIcon={<InfoOutlinedIcon />}
           onClick={onClick}
           sx={sx}
         >
-          Contact
+          About
         </NavButton>
 
         <Select
@@ -409,7 +409,52 @@ export default function App({ themeName, setThemeName }: AppProps) {
               <LinkedInIcon sx={{ fontSize: 24, color: "inherit" }} />
             </a> */}
           </div>
-          <div style={{ fontSize: 13, color: theme.header.textMuted }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 20,
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            <Link
+              to="/about"
+              style={{
+                fontSize: 13,
+                color: theme.header.textMuted,
+                textDecoration: "none",
+              }}
+            >
+              About
+            </Link>
+            <Link
+              to="/privacy"
+              style={{
+                fontSize: 13,
+                color: theme.header.textMuted,
+                textDecoration: "none",
+              }}
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              to="/terms"
+              style={{
+                fontSize: 13,
+                color: theme.header.textMuted,
+                textDecoration: "none",
+              }}
+            >
+              Terms of Service
+            </Link>
+          </div>
+          <div
+            style={{
+              fontSize: 13,
+              color: theme.header.textMuted,
+              marginTop: 8,
+            }}
+          >
             © {new Date().getFullYear()} Torensa. All rights reserved.
           </div>
         </div>

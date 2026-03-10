@@ -10,6 +10,8 @@ import {
 /* ===================== APP PAGES ===================== */
 export const Home = HomePage;
 export const Contact = lazy(() => import("../pages/Contact"));
+export const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
+export const TermsOfService = lazy(() => import("../pages/TermsOfService"));
 export const Login = lazy(() => import("../pages/Login"));
 export const Signup = lazy(() => import("../pages/Signup"));
 export const NotFound = lazy(() => import("../pages/NotFound"));
@@ -24,6 +26,8 @@ const pageModules = import.meta.glob([
   "../pages/**/*.tsx",
   "!../pages/Home.tsx",
   "!../pages/Contact.tsx",
+  "!../pages/PrivacyPolicy.tsx",
+  "!../pages/TermsOfService.tsx",
   "!../pages/Login.tsx",
   "!../pages/Signup.tsx",
   "!../pages/NotFound.tsx",
