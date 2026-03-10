@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import DownloadIcon from "@mui/icons-material/Download";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -75,6 +76,22 @@ export default function AiImageGenerator() {
     downloadBlob(blob, "generated-image.png");
   };
 
+  const canShareFiles =
+    typeof navigator !== "undefined" &&
+    typeof navigator.canShare === "function";
+
+  const handleShareWhatsApp = async () => {
+    if (!imageData) return;
+    const blob = base64ToBlob(imageData, "image/png");
+    const file = new File([blob], "generated-image.png", { type: "image/png" });
+    if (!canShareFiles || !navigator.canShare({ files: [file] })) return;
+    try {
+      await navigator.share({ files: [file] });
+    } catch {
+      // user cancelled or share failed
+    }
+  };
+
   return (
     <PageContainer maxWidth={980}>
       <Stack spacing={2}>
@@ -117,6 +134,13 @@ export default function AiImageGenerator() {
               label="Download PNG"
               onClick={handleDownload}
               startIcon={<DownloadIcon />}
+            />
+          )}
+          {imageData && canShareFiles && (
+            <TransparentButton
+              label="Share on WhatsApp"
+              onClick={handleShareWhatsApp}
+              startIcon={<WhatsAppIcon />}
             />
           )}
         </FlexWrapRow>

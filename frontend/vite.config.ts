@@ -56,7 +56,9 @@ function collectPageChunkBases(dirPath: string): string[] {
   return chunkBases;
 }
 
-const pageChunkBases = collectPageChunkBases(resolve(process.cwd(), "src/pages"));
+const pageChunkBases = collectPageChunkBases(
+  resolve(process.cwd(), "src/pages"),
+);
 
 const offlineToolChunkBases = typedServiceCards
   .filter((card) => isCardActive(card) && card.offlineEnabled)
@@ -164,7 +166,9 @@ export default defineConfig({
         globIgnores: workboxGlobIgnores,
         manifestTransforms: [
           async (entries) => ({
-            manifest: entries.filter((entry) => shouldKeepPrecacheUrl(entry.url)),
+            manifest: entries.filter((entry) =>
+              shouldKeepPrecacheUrl(entry.url),
+            ),
             warnings: [],
           }),
         ],
@@ -176,6 +180,10 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
+        target: "http://127.0.0.1:8000",
+        changeOrigin: true,
+      },
+      "/ai": {
         target: "http://127.0.0.1:8000",
         changeOrigin: true,
       },
