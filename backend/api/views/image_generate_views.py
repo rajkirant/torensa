@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 import os
 
 from django.conf import settings
@@ -15,6 +16,8 @@ from .tool_chat_static import (
     ERROR_CHAT_NOT_CONFIGURED,
     ERROR_ASSISTANT_REQUEST_FAILED,
 )
+
+logger = logging.getLogger(__name__)
 
 ENV_IMAGE_MODEL_ID = "BEDROCK_IMAGE_MODEL_ID"
 DEFAULT_IMAGE_MODEL_ID = "amazon.titan-image-generator-v2:0"
@@ -79,6 +82,7 @@ def image_generate_view(request):
 
     except Exception as exc:
         error_msg = str(exc)
+        logger.error("Image generation failed: %s (%s)", error_msg, type(exc).__name__)
         if "Could not connect to the endpoint URL" in error_msg or "UnrecognizedClientException" in error_msg:
             return Response(
                 {"error": ERROR_CHAT_NOT_CONFIGURED},
@@ -87,6 +91,7 @@ def image_generate_view(request):
         error_payload = {"error": ERROR_ASSISTANT_REQUEST_FAILED}
         if settings.DEBUG:
             error_payload["details"] = error_msg
+            error_payload["exceptionType"] = type(exc).__name__
         return Response(
             error_payload,
             status=status.HTTP_502_BAD_GATEWAY,
