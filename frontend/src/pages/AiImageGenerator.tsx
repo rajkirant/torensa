@@ -40,7 +40,7 @@ export default function AiImageGenerator() {
     setStatusMessage({});
 
     try {
-      const response = await apiFetch("/api/image-generate/", {
+      const response = await apiFetch("/ai/image-generate/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: trimmed }),
