@@ -61,9 +61,12 @@ OFFLINE_QUERY_PHRASES = (
 )
 
 ENV_TOOL_METADATA_DIR = "TOOL_METADATA_DIR"
-ENV_OPENAI_API_KEY = "OPENAI_API_KEY"
-ENV_OPENAI_MODEL = "OPENAI_MODEL"
-DEFAULT_OPENAI_MODEL = "gpt-5-mini"
+ENV_AWS_REGION = "AWS_REGION"
+ENV_BEDROCK_MODEL_ID = "BEDROCK_MODEL_ID"
+DEFAULT_AWS_REGION = "us-east-1"
+DEFAULT_BEDROCK_MODEL_ID = "anthropic.claude-3-haiku-20240307-v1:0"
+BEDROCK_ANTHROPIC_VERSION = "bedrock-2023-05-31"
+BEDROCK_MAX_TOKENS = 1024
 
 SERVICE_CARDS_FILENAME = "serviceCards.json"
 CATEGORIES_FILENAME = "categories.json"
@@ -93,7 +96,7 @@ USER_PROMPT_TEMPLATE = (
 
 ERROR_MESSAGE_REQUIRED = "message is required"
 ERROR_CHAT_NOT_CONFIGURED = "Chat assistant is not configured on server."
-ERROR_OPENAI_SDK_MISSING = "OpenAI SDK is not installed on server."
+ERROR_BEDROCK_SDK_MISSING = "AWS SDK (boto3) is not installed on server."
 ERROR_TOOL_METADATA_UNAVAILABLE = "Tool metadata is unavailable."
 ERROR_ASSISTANT_REQUEST_FAILED = "Assistant request failed. Please try again."
 
@@ -126,9 +129,6 @@ FALLBACK_ANSWER_TEMPLATE = (
 HISTORY_ROLE_USER = "user"
 HISTORY_ROLE_ASSISTANT = "assistant"
 HISTORY_ITEM_TEMPLATE = "{role}: {content}"
-
-OPENAI_ROLE_SYSTEM = "system"
-OPENAI_ROLE_USER = "user"
 
 TOOL_TOKEN = "tool"
 TOOLS_TOKEN = "tools"
