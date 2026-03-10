@@ -12,7 +12,7 @@ from .views.email_views import (
 )
 from .views.string_crypto_views import string_crypto_view
 from .views.image_bg_remove_views import remove_background_view
-from .views.doc_convert_views import word_to_pdf_view, pdf_to_word_view, excel_to_pdf_view
+from .views.doc_convert_views import word_to_pdf_view, pdf_to_word_view, excel_to_pdf_view, pdf_extract_text_view
 from .views.contact_views import submit_contact_message
 from .views.text_share_views import (
     create_text_share,
@@ -51,6 +51,7 @@ urlpatterns = [
     path("doc-convert/word-to-pdf/", word_to_pdf_view),
     path("doc-convert/excel-to-pdf/", excel_to_pdf_view),
     path("doc-convert/pdf-to-word/", pdf_to_word_view),
+    path("doc-convert/pdf-extract-text/", pdf_extract_text_view),
     path("text-share/latest/", get_latest_text_share),
     path("text-share/file/", create_file_share),
     path("text-share/file/<str:code>/download/", download_shared_file),

@@ -601,3 +601,83 @@ def pdf_to_word_view(request):
     response["Content-Disposition"] = f'attachment; filename="{output_name}"'
     response["Content-Length"] = str(len(docx_bytes))
     return response
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@parser_classes([MultiPartParser, FormParser])
+def pdf_extract_text_view(request):
+    pdf_file = request.FILES.get("file")
+    if pdf_file is None:
+        return Response({"error": "No file uploaded. Send a PDF file as 'file'."}, status=400)
+
+    name_lower = (pdf_file.name or "").lower()
+    content_type = (pdf_file.content_type or "").split(";")[0].strip().lower()
+    if content_type != "application/pdf" and not name_lower.endswith(".pdf"):
+        return Response(
+            {"error": f"Unsupported file type '{content_type}'. Please upload a .pdf file."},
+            status=415,
+        )
+
+    if pdf_file.size > MAX_UPLOAD_BYTES:
+        return Response(
+            {"error": f"File too large. Maximum allowed size is {MAX_UPLOAD_BYTES // 1024 // 1024} MB."},
+            status=413,
+        )
+
+    with tempfile.TemporaryDirectory(prefix="torensa_pdfocr_") as tmpdir:
+        input_filename = f"{uuid.uuid4().hex}.pdf"
+        input_path = os.path.join(tmpdir, input_filename)
+
+        with open(input_path, "wb") as fh:
+            for chunk in pdf_file.chunks():
+                fh.write(chunk)
+
+        try:
+            text = _extract_text_from_pdf(input_path)
+        except RuntimeError as exc:
+            logger.exception("PDF text extraction error")
+            return Response({"error": str(exc)}, status=500)
+
+    return Response({"text": text})
+
+
+def _extract_text_from_pdf(input_path: str) -> str:
+    """Extract text from a PDF, falling back to OCR for scanned pages."""
+    import fitz  # PyMuPDF
+
+    doc = fitz.open(input_path)
+    pages_text = []
+
+    try:
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            text = page.get_text().strip()
+
+            if len(text) < 20:
+                # Likely a scanned page — try OCR
+                ocr_text = _ocr_page(page)
+                if ocr_text:
+                    text = ocr_text
+
+            pages_text.append(text)
+    finally:
+        doc.close()
+
+    return "\n\n".join(pages_text)
+
+
+def _ocr_page(page) -> str:
+    """Render a PDF page to an image and run Tesseract OCR on it."""
+    try:
+        import pytesseract
+        from PIL import Image
+        from io import BytesIO
+
+        # Render at 300 DPI for good OCR quality
+        pix = page.get_pixmap(dpi=300)
+        img = Image.open(BytesIO(pix.tobytes("png")))
+        return pytesseract.image_to_string(img).strip()
+    except Exception as exc:
+        logger.warning("OCR failed for page %s: %s", page.number, exc)
+        return ""

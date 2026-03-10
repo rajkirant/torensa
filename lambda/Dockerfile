@@ -8,6 +8,7 @@ RUN dnf install -y \
       nss \
       libxslt \
       tar gzip \
+      tesseract \
     && dnf clean all
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
