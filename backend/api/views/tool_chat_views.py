@@ -159,7 +159,10 @@ def _score_tool(
     description = (tool.get("description") or "").strip().lower()
     detailed = (tool.get("detailedDescription") or "").strip().lower()
     path = (tool.get("path") or "").strip().lower()
-    text_blob = " ".join([tool_id, title, description, detailed, path])
+    raw_keywords = tool.get("keywords") or []
+    keywords = [k.strip().lower() for k in raw_keywords if isinstance(k, str) and k.strip()]
+    keywords_blob = " ".join(keywords)
+    text_blob = " ".join([tool_id, title, description, detailed, path, keywords_blob])
 
     if tool_id and tool_id in explicit_tool_ids:
         score += 10
@@ -185,6 +188,8 @@ def _score_tool(
             score += 1.3
         if token in detailed:
             score += 1.0
+        if any(token == kw or token in kw for kw in keywords):
+            score += 1.5
         if token in text_blob:
             score += 0.4
 
