@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useScrollBottom } from "../../hooks/useScrollTop";
 import { useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -60,6 +61,11 @@ export default function ToolChatWidget() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+
+  const messagesContainerRef = useScrollBottom<HTMLDivElement>([
+    messages,
+    sending,
+  ]);
 
   const sendMessage = async (rawText: string) => {
     const text = rawText.trim();
@@ -219,6 +225,7 @@ export default function ToolChatWidget() {
           </Box>
 
           <Box
+            ref={messagesContainerRef}
             sx={{
               p: 1.4,
               flex: 1,
