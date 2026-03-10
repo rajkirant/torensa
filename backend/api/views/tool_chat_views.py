@@ -13,15 +13,18 @@ from .tool_chat_static import (
     AUTH_NOT_REQUIRED_TEXT,
     AUTH_REQUIRED_TEXT,
     BACKEND_METADATA_PATH_PARTS,
+    BEDROCK_ANTHROPIC_VERSION,
+    BEDROCK_MAX_TOKENS,
     CATEGORIES_FILENAME,
-    DEFAULT_OPENAI_MODEL,
-    ENV_OPENAI_API_KEY,
-    ENV_OPENAI_MODEL,
+    DEFAULT_AWS_REGION,
+    DEFAULT_BEDROCK_MODEL_ID,
+    ENV_AWS_REGION,
+    ENV_BEDROCK_MODEL_ID,
     ENV_TOOL_METADATA_DIR,
     ERROR_ASSISTANT_REQUEST_FAILED,
+    ERROR_BEDROCK_SDK_MISSING,
     ERROR_CHAT_NOT_CONFIGURED,
     ERROR_MESSAGE_REQUIRED,
-    ERROR_OPENAI_SDK_MISSING,
     ERROR_TOOL_METADATA_UNAVAILABLE,
     FALLBACK_NO_TOOL,
     FALLBACK_ANSWER_TEMPLATE,
@@ -40,8 +43,6 @@ from .tool_chat_static import (
     OFFLINE_DISABLED_TEXT,
     OFFLINE_ENABLED_TEXT,
     OFFLINE_QUERY_PHRASES,
-    OPENAI_ROLE_SYSTEM,
-    OPENAI_ROLE_USER,
     ROOT_METADATA_PATH_PARTS,
     QUERY_STOP_TOKENS,
     SERVICE_CARDS_FILENAME,
@@ -412,20 +413,14 @@ def tool_chat_view(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    api_key = os.getenv(ENV_OPENAI_API_KEY, "").strip()
-    model = os.getenv(ENV_OPENAI_MODEL, DEFAULT_OPENAI_MODEL).strip() or DEFAULT_OPENAI_MODEL
-
-    if not api_key:
-        return Response(
-            {"error": ERROR_CHAT_NOT_CONFIGURED},
-            status=status.HTTP_503_SERVICE_UNAVAILABLE,
-        )
+    region = os.getenv(ENV_AWS_REGION, DEFAULT_AWS_REGION).strip() or DEFAULT_AWS_REGION
+    model_id = os.getenv(ENV_BEDROCK_MODEL_ID, DEFAULT_BEDROCK_MODEL_ID).strip() or DEFAULT_BEDROCK_MODEL_ID
 
     try:
-        from openai import OpenAI
+        import boto3
     except Exception:
         return Response(
-            {"error": ERROR_OPENAI_SDK_MISSING},
+            {"error": ERROR_BEDROCK_SDK_MISSING},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
 
@@ -441,10 +436,15 @@ def tool_chat_view(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
+    # Augment tool-matching query with recent history so follow-up questions
+    # like "how do I use this tool?" resolve to the previously discussed tool.
+    history_text = " ".join(item.split(": ", 1)[-1] for item in history[-3:])
+    context_query = f"{message} {history_text}".strip() if history_text else message
+
     context_text, matched_tool = _build_context(
         cards=cards,
         category_map=category_map,
-        query=message,
+        query=context_query,
         current_tool_id=current_tool_id,
     )
 
@@ -457,21 +457,26 @@ def tool_chat_view(request):
     )
 
     try:
-        client = OpenAI(api_key=api_key)
-        response = client.responses.create(
-            model=model,
-            input=[
-                {"role": OPENAI_ROLE_SYSTEM, "content": SYSTEM_PROMPT},
-                {"role": OPENAI_ROLE_USER, "content": user_prompt},
-            ],
-        )
-        answer = (getattr(response, "output_text", "") or "").strip()
+        bedrock = boto3.client("bedrock-runtime", region_name=region)
+        body = json.dumps({
+            "anthropic_version": BEDROCK_ANTHROPIC_VERSION,
+            "max_tokens": BEDROCK_MAX_TOKENS,
+            "system": SYSTEM_PROMPT,
+            "messages": [{"role": "user", "content": user_prompt}],
+        })
+        response = bedrock.invoke_model(modelId=model_id, body=body)
+        result = json.loads(response["body"].read())
+        answer = (result.get("content", [{}])[0].get("text", "") or "").strip()
         if not answer or len(answer.split()) < 3:
             answer = _fallback_answer(matched_tool)
     except Exception as exc:
-        payload = {"error": ERROR_ASSISTANT_REQUEST_FAILED}
+        error_msg = str(exc)
+        if "Could not connect to the endpoint URL" in error_msg or "UnrecognizedClientException" in error_msg:
+            payload = {"error": ERROR_CHAT_NOT_CONFIGURED}
+        else:
+            payload = {"error": ERROR_ASSISTANT_REQUEST_FAILED}
         if settings.DEBUG:
-            payload["details"] = str(exc)
+            payload["details"] = error_msg
             payload["exceptionType"] = exc.__class__.__name__
         return Response(
             payload,
@@ -482,7 +487,7 @@ def tool_chat_view(request):
         {
             "answer": answer,
             "matchedToolId": matched_tool.get("id") if isinstance(matched_tool, dict) else None,
-            "model": model,
+            "model": model_id,
         },
         status=status.HTTP_200_OK,
     )
