@@ -89,6 +89,69 @@ export default function SeoManager() {
   const canonical =
     normalizedPath === "/" ? SITE_URL : `${SITE_URL}${normalizedPath}`;
 
+  const isHome = normalizedPath === "/";
+  const isTool = toolMetaByPath.has(normalizedPath);
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Torensa",
+    url: SITE_URL,
+    logo: `${SITE_URL}/favicon.svg`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "admin@torensa.com",
+      contactType: "customer support",
+    },
+    sameAs: [
+      "https://github.com/rajkirant/torensa",
+      "https://www.facebook.com/tryTorensa",
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Torensa",
+    url: SITE_URL,
+    description: DEFAULT_META.description,
+  };
+
+  const toolSchema = isTool
+    ? {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        name: meta.title.replace(" | Torensa", ""),
+        url: canonical,
+        description: meta.description,
+        applicationCategory: "UtilitiesApplication",
+        operatingSystem: "All",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      }
+    : null;
+
+  const breadcrumbSchema =
+    normalizedPath !== "/"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: SITE_URL,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: meta.title.replace(" | Torensa", ""),
+              item: canonical,
+            },
+          ],
+        }
+      : null;
+
   return (
     <Helmet>
       <title>{meta.title}</title>
@@ -97,6 +160,24 @@ export default function SeoManager() {
       <meta property="og:title" content={meta.title} />
       <meta property="og:description" content={meta.description} />
       <meta property="og:url" content={canonical} />
+      {isHome && (
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
+      )}
+      {isHome && (
+        <script type="application/ld+json">
+          {JSON.stringify(websiteSchema)}
+        </script>
+      )}
+      {toolSchema && (
+        <script type="application/ld+json">{JSON.stringify(toolSchema)}</script>
+      )}
+      {breadcrumbSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      )}
     </Helmet>
   );
 }

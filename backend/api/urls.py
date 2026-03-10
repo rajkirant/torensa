@@ -14,6 +14,7 @@ from .views.tool_chat_views import tool_chat_view
 from .views.string_crypto_views import string_crypto_view
 from .views.image_bg_remove_views import remove_background_view
 from .views.doc_convert_views import word_to_pdf_view, pdf_to_word_view, excel_to_pdf_view
+from .views.contact_views import submit_contact_message
 from .views.text_share_views import (
     create_text_share,
     create_file_share,
@@ -48,6 +49,7 @@ urlpatterns = [
     path("contact-groups/list/", list_contact_groups, name="list_contact_groups_legacy"),
     path("string-crypto/", string_crypto_view),
     path("remove-background/", remove_background_view),
+    path("contact-message/", submit_contact_message),
     path("doc-convert/word-to-pdf/", word_to_pdf_view),
     path("doc-convert/excel-to-pdf/", excel_to_pdf_view),
     path("doc-convert/pdf-to-word/", pdf_to_word_view),
