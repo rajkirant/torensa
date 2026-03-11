@@ -467,7 +467,7 @@ const TextShareContent: React.FC = () => {
     }
   };
 
-  // ── Auto-share on text change ──────────────────────────────────────────────
+  // ── Auto-share on text change (files are only shared on explicit Generate) ─
 
   useEffect(() => {
     if (shareTimerRef.current) window.clearTimeout(shareTimerRef.current);
@@ -478,13 +478,9 @@ const TextShareContent: React.FC = () => {
     }
 
     const hasText = Boolean(text.trim());
-    const hasFiles = selectedFiles.length > 0;
 
-    if (
-      (!hasText && !hasFiles) ||
-      (hasText && !hasFiles && text === lastSharedText)
-    ) {
-      if (!hasText && !hasFiles) {
+    if (!hasText || text === lastSharedText) {
+      if (!hasText && selectedFiles.length === 0) {
         setCode("");
         setExpiresAt(null);
         setLastSharedText("");
@@ -493,14 +489,15 @@ const TextShareContent: React.FC = () => {
       return;
     }
 
+    // Only auto-share text (no files) — files require explicit Generate Code
     shareTimerRef.current = window.setTimeout(() => {
-      void shareContent(text, selectedFiles);
+      void shareContent(text, []);
     }, SHARE_DEBOUNCE_MS);
 
     return () => {
       if (shareTimerRef.current) window.clearTimeout(shareTimerRef.current);
     };
-  }, [text, lastSharedText, selectedFiles]);
+  }, [text, lastSharedText]);
 
   useEffect(() => {
     void fetchLatestByIp();

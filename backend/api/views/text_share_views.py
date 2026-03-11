@@ -111,7 +111,7 @@ def create_text_share(request):
         )
 
     file_payload = None
-    uploaded_files = request.FILES.getlist("file")
+    uploaded_files = request._request.FILES.getlist("file")
     if uploaded_files:
         files_data = []
         for f in uploaded_files:
