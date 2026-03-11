@@ -20,6 +20,7 @@ from .views.text_share_views import (
     get_text_share,
     get_latest_text_share,
     download_shared_file,
+    delete_text_share,
 )
 
 urlpatterns = [
@@ -57,4 +58,5 @@ urlpatterns = [
     path("text-share/file/<str:code>/download/", download_shared_file),
     path("text-share/", create_text_share),
     path("text-share/<str:code>/", get_text_share),
+    path("text-share/<str:code>/delete/", delete_text_share),
 ]
