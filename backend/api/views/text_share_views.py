@@ -81,11 +81,14 @@ def _file_meta(share: TextShare):
             ]
         except Exception:
             return None
-    return {
-        "name": share.file_name,
-        "contentType": share.file_content_type or "application/octet-stream",
-        "size": share.file_size or 0,
-    }
+    # Legacy single-file format — wrap in list for consistency
+    return [
+        {
+            "name": share.file_name,
+            "contentType": share.file_content_type or "application/octet-stream",
+            "size": share.file_size or 0,
+        }
+    ]
 
 
 @api_view(["POST"])
@@ -110,41 +113,26 @@ def create_text_share(request):
     file_payload = None
     uploaded_files = request.FILES.getlist("file")
     if uploaded_files:
-        if len(uploaded_files) == 1:
-            f = uploaded_files[0]
+        files_data = []
+        for f in uploaded_files:
             if f.size > MAX_FILE_SIZE:
                 return Response(
-                    {"error": f"File exceeds {MAX_FILE_SIZE // 1_048_576} MB."},
+                    {"error": f"{f.name} exceeds {MAX_FILE_SIZE // 1_048_576} MB."},
                     status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
                 )
-            file_bytes = f.read()
-            file_payload = {
-                "data": file_bytes,
+            files_data.append({
                 "name": f.name,
                 "content_type": f.content_type or "application/octet-stream",
-                "size": len(file_bytes),
-            }
-        else:
-            files_data = []
-            for f in uploaded_files:
-                if f.size > MAX_FILE_SIZE:
-                    return Response(
-                        {"error": f"{f.name} exceeds {MAX_FILE_SIZE // 1_048_576} MB."},
-                        status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-                    )
-                files_data.append({
-                    "name": f.name,
-                    "content_type": f.content_type or "application/octet-stream",
-                    "size": f.size,
-                    "data": base64.b64encode(f.read()).decode(),
-                })
-            json_bytes = json.dumps(files_data).encode()
-            file_payload = {
-                "data": json_bytes,
-                "name": "__multifile__",
-                "content_type": "application/json",
-                "size": len(json_bytes),
-            }
+                "size": f.size,
+                "data": base64.b64encode(f.read()).decode(),
+            })
+        json_bytes = json.dumps(files_data).encode()
+        file_payload = {
+            "data": json_bytes,
+            "name": "__multifile__",
+            "content_type": "application/json",
+            "size": len(json_bytes),
+        }
 
     client_ip = _get_client_ip(request)
     share = _create_share(text=text, file_payload=file_payload, client_ip=client_ip)
