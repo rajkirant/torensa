@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
 
 import Alert from "@mui/material/Alert";
@@ -14,15 +14,15 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CompressIcon from "@mui/icons-material/Compress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
+import ImageIcon from "@mui/icons-material/Image";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
-import FlexWrapRow from "../components/layout/FlexWrapRow";
+import FileDropZone from "../components/inputs/FileDropZone";
 import ProgressStatusBlock from "../components/tools/ProgressStatusBlock";
 import downloadBlob from "../utils/downloadBlob";
 import supportsCanvasMime from "../utils/supportsCanvasMime";
@@ -232,8 +232,6 @@ export default function ImageCompressor() {
     Record<string, string>
   >({});
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
   const [spec, setSpec] = useState<CompressSpec>(() => ({
     chooseFormat: {
       enabled: false,
@@ -320,7 +318,9 @@ export default function ImageCompressor() {
           ? spec.chooseFormat.format
           : normalizeOutputFormat(file.type);
         if (!supportsCanvasMime(outputMime)) {
-          throw new Error(`${outputMime} export is not supported by this browser.`);
+          throw new Error(
+            `${outputMime} export is not supported by this browser.`,
+          );
         }
 
         const effectiveSpec: CompressSpec =
@@ -367,7 +367,6 @@ export default function ImageCompressor() {
     setResults([]);
     setError(null);
     setProgress({ done: 0, total: 0 });
-    if (inputRef.current) inputRef.current.value = "";
   }
 
   async function downloadAllZip() {
@@ -445,63 +444,22 @@ export default function ImageCompressor() {
             1) Upload
           </Typography>
 
-          <FlexWrapRow
-            sx={{
-              width: { xs: "100%", sm: "auto" },
-              justifyContent: { xs: "flex-start", sm: "flex-end" },
-            }}
-          >
-            <ActionButton
-              startIcon={<CloudUploadIcon />}
-              onClick={() => inputRef.current?.click()}
-              disabled={busy}
-            >
-              Choose images
-            </ActionButton>
-
-            <TransparentButton
-              label="Clear"
-              startIcon={<DeleteIcon />}
-              onClick={clearAll}
-              disabled={busy || (files.length === 0 && results.length === 0)}
-            />
-
-            <input
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              hidden
-              onChange={(e) => {
-                onPickFiles(e.target.files);
-                e.currentTarget.value = "";
-              }}
-            />
-          </FlexWrapRow>
+          <TransparentButton
+            label="Clear"
+            startIcon={<DeleteIcon />}
+            onClick={clearAll}
+            disabled={busy || (files.length === 0 && results.length === 0)}
+          />
         </Stack>
 
-        <Box
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onPickFiles(e.dataTransfer.files);
-          }}
-          sx={{
-            p: 2,
-            borderRadius: 2,
-            border: "2px dashed",
-            borderColor: "divider",
-            bgcolor: "background.default",
-            textAlign: "center",
-            color: "text.secondary",
-          }}
-        >
-          Drag & drop images here
-        </Box>
+        <FileDropZone
+          accept="image/*"
+          multiple
+          disabled={busy}
+          onFilesSelected={onPickFiles}
+          icon={ImageIcon}
+          label="Drag & drop images here, or tap to browse"
+        />
       </Stack>
 
       <Divider />

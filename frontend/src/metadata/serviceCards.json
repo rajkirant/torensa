@@ -329,7 +329,7 @@
     "id": "image-pdf-to-pdf",
     "component": "imagePdfToPdf",
     "title": "Image / PDF Merger",
-    "description": "Merge images and PDFs into one PDF, fully offline-capable.",
+    "description": "Merge images and PDFs into one polished PDF, reorder pages, and keep everything fully offline-capable.",
     "path": "/pdf-merger",
     "ctaLabel": "Create PDF",
     "offlineEnabled": true,

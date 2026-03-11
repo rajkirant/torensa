@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import JSZip from "jszip";
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -17,6 +18,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
+import FileDropZone from "../components/inputs/FileDropZone";
 import useToolStatus from "../hooks/useToolStatus";
 import { apiFetch } from "../utils/api";
 import downloadBlob from "../utils/downloadBlob";
@@ -24,7 +26,7 @@ import downloadBlob from "../utils/downloadBlob";
 const CODE_LENGTH = 4;
 const MAX_TEXT_LENGTH = 20000;
 const MAX_FILE_SIZE = 10_485_760; // 10 MB per file
-const MAX_FILES = 1;
+const MAX_FILES = 5;
 const SHARE_DEBOUNCE_MS = 700;
 
 const sanitizeCode = (value: string) =>
@@ -199,75 +201,6 @@ const FileCard: React.FC<FileCardProps> = ({
   );
 };
 
-// ── Drop Zone ───────────────────────────────────────────────────────────────
-
-type DropZoneProps = {
-  onFiles: (files: File[]) => void;
-  disabled: boolean;
-  remaining: number;
-};
-
-const DropZone: React.FC<DropZoneProps> = ({
-  onFiles,
-  disabled,
-  remaining,
-}) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [dragOver, setDragOver] = useState(false);
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    if (disabled) return;
-    const files = Array.from(e.dataTransfer.files).slice(0, remaining);
-    if (files.length) onFiles(files);
-  };
-
-  return (
-    <Box
-      onClick={() => !disabled && inputRef.current?.click()}
-      onDragOver={(e) => {
-        e.preventDefault();
-        if (!disabled) setDragOver(true);
-      }}
-      onDragLeave={() => setDragOver(false)}
-      onDrop={handleDrop}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 1,
-        p: 2.5,
-        borderRadius: 2,
-        border: `2px dashed ${dragOver ? "rgba(59,130,246,0.7)" : "rgba(148,163,184,0.3)"}`,
-        bgcolor: dragOver ? "rgba(59,130,246,0.07)" : "transparent",
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.45 : 1,
-        transition: "border-color 0.15s, background 0.15s",
-        "&:hover": !disabled ? { borderColor: "rgba(148,163,184,0.55)" } : {},
-      }}
-    >
-      <UploadFileIcon sx={{ fontSize: 30, opacity: 0.5 }} />
-      <Typography variant="body2" color="text.secondary" textAlign="center">
-        {disabled
-          ? "File slot full — remove the current file to select a new one"
-          : "Drop a file here or click to browse"}
-      </Typography>
-      <input
-        ref={inputRef}
-        type="file"
-        hidden
-        onChange={(e) => {
-          const files = Array.from(e.target.files ?? []).slice(0, remaining);
-          e.target.value = "";
-          if (files.length) onFiles(files);
-        }}
-      />
-    </Box>
-  );
-};
-
 // ── Main Component ──────────────────────────────────────────────────────────
 
 const TextShareContent: React.FC = () => {
@@ -315,7 +248,17 @@ const TextShareContent: React.FC = () => {
       if (hasText) formData.append("text", value);
 
       if (hasFiles) {
-        formData.append("file", files[0]);
+        if (files.length === 1) {
+          formData.append("file", files[0]);
+        } else {
+          const zip = new JSZip();
+          for (const f of files) {
+            const buf = await f.arrayBuffer();
+            zip.file(f.name, buf);
+          }
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          formData.append("file", zipBlob, "shared-files.zip");
+        }
       }
 
       const res = await apiFetch("/api/text-share/", {
@@ -581,13 +524,19 @@ const TextShareContent: React.FC = () => {
         />
 
         {/* File drop zone */}
-        {selectedFiles.length < MAX_FILES && (
-          <DropZone
-            onFiles={addFiles}
-            disabled={isSharing}
-            remaining={MAX_FILES - selectedFiles.length}
-          />
-        )}
+        <FileDropZone
+          multiple
+          disabled={isSharing || selectedFiles.length >= MAX_FILES}
+          onFilesSelected={(fileList) => {
+            if (fileList) addFiles(Array.from(fileList));
+          }}
+          icon={UploadFileIcon}
+          label={
+            selectedFiles.length >= MAX_FILES
+              ? `Limit reached (${MAX_FILES} files) — remove a file to add more`
+              : "Drag & drop files here, or tap to browse"
+          }
+        />
 
         {/* File canvas */}
         {selectedFiles.length > 0 && (

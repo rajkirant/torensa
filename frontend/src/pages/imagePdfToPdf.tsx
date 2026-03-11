@@ -25,7 +25,7 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import BusyChip from "../components/chips/BusyChips";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import downloadBlob from "../utils/downloadBlob";
 
 type ItemKind = "image" | "pdf";
@@ -135,7 +135,6 @@ const ImagePdfToPdf: React.FC = () => {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const itemsRef = useRef<QueueItem[]>([]);
 
   useEffect(() => {
@@ -199,7 +198,6 @@ const ImagePdfToPdf: React.FC = () => {
 
     if (next.length === 0) {
       setError("No supported files selected. Please choose images or PDFs.");
-      if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
 
@@ -208,8 +206,6 @@ const ImagePdfToPdf: React.FC = () => {
     if (failed.length > 0) {
       setError(`Skipped ${failed.length} PDF(s) that could not be read.`);
     }
-
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const removeItem = (id: string) => {
@@ -258,14 +254,13 @@ const ImagePdfToPdf: React.FC = () => {
     );
   };
 
-  const onDragStart =
-    (id: string) => (e: React.DragEvent<HTMLDivElement>) => {
-      if (busy) return;
-      setDraggingId(id);
-      setDragOverId(id);
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("text/plain", id);
-    };
+  const onDragStart = (id: string) => (e: React.DragEvent<HTMLDivElement>) => {
+    if (busy) return;
+    setDraggingId(id);
+    setDragOverId(id);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", id);
+  };
 
   const onDragOver = (id: string) => (e: React.DragEvent<HTMLDivElement>) => {
     if (!draggingId || draggingId === id) return;
@@ -414,49 +409,49 @@ const ImagePdfToPdf: React.FC = () => {
       <Divider />
 
       {/* Upload */}
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1.5,
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        <FilePickerButton
-          variant="outlined"
-          startIcon={<UploadFileIcon />}
-          sx={{ textTransform: "none" }}
-          label="Add images / PDFs"
+      <Stack spacing={1.5}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            variant="text"
+            color="inherit"
+            onClick={clearAll}
+            disabled={items.length === 0 || busy}
+            sx={{ textTransform: "none" }}
+          >
+            Clear
+          </Button>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            sx={{ ml: { xs: 0, sm: "auto" } }}
+          >
+            <Chip
+              size="small"
+              label={`${totalCount} page${totalCount === 1 ? "" : "s"}`}
+              variant="outlined"
+            />
+            {busy && <BusyChip />}
+          </Stack>
+        </Box>
+
+        <FileDropZone
           accept="application/pdf,image/*"
           multiple
-          inputRef={fileInputRef}
+          disabled={busy}
           onFilesSelected={onPickFiles}
+          icon={UploadFileIcon}
+          label="Drag & drop images / PDFs here, or tap to browse"
         />
-
-        <Button
-          variant="text"
-          color="inherit"
-          onClick={clearAll}
-          disabled={items.length === 0 || busy}
-          sx={{ textTransform: "none" }}
-        >
-          Clear
-        </Button>
-
-        <Stack
-          direction="row"
-          spacing={1}
-          alignItems="center"
-          sx={{ ml: { xs: 0, sm: "auto" } }}
-        >
-          <Chip
-            size="small"
-            label={`${totalCount} page${totalCount === 1 ? "" : "s"}`}
-            variant="outlined"
-          />
-          {busy && <BusyChip />}
-        </Stack>
-      </Box>
+      </Stack>
 
       {/* Queue */}
       {items.length > 0 && (
@@ -479,7 +474,8 @@ const ImagePdfToPdf: React.FC = () => {
                   borderRadius: 2,
                   overflow: "hidden",
                   opacity: draggingId === it.id ? 0.65 : 1,
-                  borderColor: dragOverId === it.id ? "primary.main" : undefined,
+                  borderColor:
+                    dragOverId === it.id ? "primary.main" : undefined,
                 }}
               >
                 <CardContent sx={{ py: 1.5 }}>
@@ -533,7 +529,9 @@ const ImagePdfToPdf: React.FC = () => {
                           sx={{ maxWidth: "100%" }}
                         >
                           {idx + 1}. {it.name}
-                          {it.kind === "pdf" ? ` (page ${it.pdfPageNumber})` : ""}
+                          {it.kind === "pdf"
+                            ? ` (page ${it.pdfPageNumber})`
+                            : ""}
                         </Typography>
 
                         <Chip
