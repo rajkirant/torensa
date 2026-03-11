@@ -21,6 +21,8 @@ from .views.text_share_views import (
     get_latest_text_share,
     download_shared_file,
     delete_text_share,
+    init_text_share_upload,
+    complete_text_share_upload,
 )
 
 urlpatterns = [
@@ -54,6 +56,8 @@ urlpatterns = [
     path("doc-convert/pdf-to-word/", pdf_to_word_view),
     path("doc-convert/pdf-extract-text/", pdf_extract_text_view),
     path("text-share/latest/", get_latest_text_share),
+    path("text-share/uploads/init/", init_text_share_upload),
+    path("text-share/uploads/<str:code>/complete/", complete_text_share_upload),
     path("text-share/file/", create_file_share),
     path("text-share/file/<str:code>/download/", download_shared_file),
     path("text-share/", create_text_share),
