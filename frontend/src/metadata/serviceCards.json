@@ -1188,7 +1188,7 @@
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "title": "PDF Text Extractor (OCR)",
-    "description": "Extract text from scanned or digital PDFs using OCR.",
+    "description": "Extract text from scanned or digital PDFs using Optical Character Recognition",
     "path": "/pdf-text-extractor",
     "ctaLabel": "Extract Text",
     "offlineEnabled": false,
