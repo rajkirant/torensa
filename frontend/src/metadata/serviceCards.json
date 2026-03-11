@@ -116,22 +116,23 @@
     "id": "text-share",
     "component": "EasyShare",
     "title": "Easy Share (Text + File)",
-    "description": "Share text or a file across devices using a 4-digit code.",
+    "description": "Share text or up to 5 files up to 1 GB each across devices using a 4-digit code.",
     "path": "/easy-share",
     "ctaLabel": "Open Easy Share",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Paste text or drop a file to instantly get a 4-digit access code (valid for about 1 hour). Open Easy Share on another device, enter the code, and download the text or file.",
+    "detailedDescription": "Paste text or drop up to 5 files up to 1 GB each to get a 4-digit access code valid for about 1 hour. Easy Share uploads files directly to Cloudflare-backed storage, so you can open the code on another device and download the content without routing large files through the app server.",
     "categoryId": "communication",
     "keywords": ["text", "share", "code", "clipboard", "transfer"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Open Easy Share on the device you want to send from.",
-      "Paste text into the text area, or drag and drop a file onto the upload zone.",
-      "Click × to remove the selected file if you want to change it.",
+      "Paste text into the text area, or drag and drop up to 5 files onto the upload zone.",
+      "Each file can be up to 1 GB, and files upload directly to Cloudflare-backed storage.",
+      "Use drag-and-drop to reorder selected files, or click × to remove one before sharing.",
       "Click Generate Code. A unique 4-digit code is displayed immediately.",
-      "On the receiving device, open Easy Share, enter the 4-digit code, and download the text or file.",
+      "On the receiving device, open Easy Share, enter the 4-digit code, and download the shared text or files.",
       "Shares expire automatically after approximately 1 hour for privacy."
     ],
     "faqs": [
@@ -141,19 +142,19 @@
       },
       {
         "q": "How many files can I share at once?",
-        "a": "You can share one file per code. Select any file type and it will be uploaded and available for the receiving device to download."
+        "a": "You can share up to 5 files per code. The receiving device can download them individually in the same order you arranged before sharing."
       },
       {
         "q": "How long does the share code stay active?",
-        "a": "Share codes and their content expire after approximately 1 hour. After expiry, the code is no longer valid and the content is deleted from the server."
+        "a": "Share codes expire after approximately 1 hour. After expiry, the code stops working immediately in the app, and leftover files are cleaned up from storage automatically afterward."
       },
       {
         "q": "Can I reorder files before sharing?",
-        "a": "You can remove and re-add files as needed before generating the share code."
+        "a": "Yes. You can drag files to reorder them before generating the share code, and the receiver will see them in that same order."
       },
       {
         "q": "Is there a file size limit?",
-        "a": "Files must be under 150 MB. For larger files, consider a dedicated file transfer service."
+        "a": "Yes. Each file can be up to 1 GB, and you can attach up to 5 files in one share."
       },
       {
         "q": "What does the auto-load feature do on the same network?",

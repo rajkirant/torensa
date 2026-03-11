@@ -680,7 +680,7 @@ const TextShareContent: React.FC = () => {
   const addFiles = (incoming: File[]) => {
     const oversized = incoming.filter((f) => f.size > MAX_FILE_SIZE);
     if (oversized.length) {
-      setError(`${oversized[0].name} exceeds 1024 MB limit.`);
+      setError(`${oversized[0].name} exceeds the 1 GB per-file limit.`);
       return;
     }
     setSelectedFiles((prev) => {
@@ -808,9 +808,15 @@ const TextShareContent: React.FC = () => {
           label={
             selectedFiles.length >= MAX_FILES
               ? `Limit reached (${MAX_FILES} files) — remove a file to add more`
-              : "Drag & drop files here, or tap to browse. Files upload directly to Cloudflare."
+              : "Drag & drop up to 5 files here, or tap to browse. Each file can be up to 1 GB and uploads directly to Cloudflare."
           }
         />
+
+        <Typography variant="caption" color="text.secondary">
+          Share text plus up to {MAX_FILES} files, with a{" "}
+          {MAX_FILE_SIZE / 1_073_741_824} GB limit per file. Codes expire after
+          about 1 hour.
+        </Typography>
 
         {/* File canvas */}
         {selectedFiles.length > 0 && (
