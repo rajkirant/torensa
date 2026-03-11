@@ -329,10 +329,11 @@ const TextShareContent: React.FC = () => {
   const [fileShared, setFileShared] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [lastSharedText, setLastSharedText] = useState("");
   const skipShareRef = useRef(false);
   const shareTimerRef = useRef<number | null>(null);
   const dragIndexRef = useRef<number | null>(null);
+  const codeRef = useRef(code);
+  codeRef.current = code;
 
   const { error, success, info, setError, setSuccess, setInfo, clear } =
     useToolStatus();
@@ -348,15 +349,19 @@ const TextShareContent: React.FC = () => {
     const hasText = Boolean(value.trim());
     const hasFiles = files.length > 0;
 
-    if (!hasText && !hasFiles) {
-      setError("Enter text or select files to share.");
-      return;
-    }
+    if (!hasText && !hasFiles) return;
 
     setIsSharing(true);
     clear();
 
     try {
+      // Delete old share first
+      if (code.length === CODE_LENGTH) {
+        await apiFetch(`/api/text-share/${code}/delete/`, {
+          method: "DELETE",
+        }).catch(() => {});
+      }
+
       const formData = new FormData();
       if (hasText) formData.append("text", value);
 
@@ -380,7 +385,6 @@ const TextShareContent: React.FC = () => {
       setCode(String(data.code || ""));
       setExpiresAt(data.expiresAt || null);
       setReceivedFileInfo(normalizeFileInfo(data.file));
-      setLastSharedText(value);
       setFileShared(Boolean(data.file));
       setSuccess("Code generated. Share it with the other device.");
     } catch {
@@ -467,7 +471,7 @@ const TextShareContent: React.FC = () => {
     }
   };
 
-  // ── Auto-share on text change (files are only shared on explicit Generate) ─
+  // ── Auto-share on text or file change ─────────────────────────────────────
 
   useEffect(() => {
     if (shareTimerRef.current) window.clearTimeout(shareTimerRef.current);
@@ -478,26 +482,30 @@ const TextShareContent: React.FC = () => {
     }
 
     const hasText = Boolean(text.trim());
+    const hasFiles = selectedFiles.length > 0;
 
-    if (!hasText || text === lastSharedText) {
-      if (!hasText && selectedFiles.length === 0) {
-        setCode("");
-        setExpiresAt(null);
-        setLastSharedText("");
-        setReceivedFileInfo(null);
+    if (!hasText && !hasFiles) {
+      // Everything cleared — delete old share
+      if (codeRef.current.length === CODE_LENGTH) {
+        void apiFetch(`/api/text-share/${codeRef.current}/delete/`, {
+          method: "DELETE",
+        }).catch(() => {});
       }
+      setCode("");
+      setExpiresAt(null);
+      setReceivedFileInfo(null);
+      setFileShared(false);
       return;
     }
 
-    // Only auto-share text (no files) — files require explicit Generate Code
     shareTimerRef.current = window.setTimeout(() => {
-      void shareContent(text, []);
+      void shareContent(text, selectedFiles);
     }, SHARE_DEBOUNCE_MS);
 
     return () => {
       if (shareTimerRef.current) window.clearTimeout(shareTimerRef.current);
     };
-  }, [text, lastSharedText]);
+  }, [text, selectedFiles]);
 
   useEffect(() => {
     void fetchLatestByIp();
@@ -562,7 +570,6 @@ const TextShareContent: React.FC = () => {
     setReceivedFileInfo(null);
     setSelectedFiles([]);
     setFileShared(false);
-    setLastSharedText("");
     clear();
   };
 
