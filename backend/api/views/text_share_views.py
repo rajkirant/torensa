@@ -1,4 +1,6 @@
 from datetime import timedelta
+import base64
+import json
 import random
 
 from django.db import IntegrityError, transaction
@@ -66,6 +68,19 @@ def _create_share(*, text: str, file_payload: dict | None, client_ip: str | None
 def _file_meta(share: TextShare):
     if not share.file_data:
         return None
+    if share.file_name == "__multifile__":
+        try:
+            files = json.loads(bytes(share.file_data))
+            return [
+                {
+                    "name": f["name"],
+                    "contentType": f.get("content_type", "application/octet-stream"),
+                    "size": f["size"],
+                }
+                for f in files
+            ]
+        except Exception:
+            return None
     return {
         "name": share.file_name,
         "contentType": share.file_content_type or "application/octet-stream",
@@ -78,9 +93,9 @@ def _file_meta(share: TextShare):
 def create_text_share(request):
     payload = request.data if isinstance(request.data, dict) else {}
     text = (payload.get("text") or "").strip()
-    uploaded = request.FILES.get("file")
+    has_files = bool(request.FILES.getlist("file"))
 
-    if not text and not uploaded:
+    if not text and not has_files:
         return Response(
             {"error": "Text or file is required."},
             status=status.HTTP_400_BAD_REQUEST,
@@ -93,19 +108,43 @@ def create_text_share(request):
         )
 
     file_payload = None
-    if uploaded:
-        if uploaded.size > MAX_FILE_SIZE:
-            return Response(
-                {"error": f"File exceeds {MAX_FILE_SIZE} bytes."},
-                status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-            )
-        file_bytes = uploaded.read()
-        file_payload = {
-            "data": file_bytes,
-            "name": uploaded.name,
-            "content_type": uploaded.content_type or "application/octet-stream",
-            "size": len(file_bytes),
-        }
+    uploaded_files = request.FILES.getlist("file")
+    if uploaded_files:
+        if len(uploaded_files) == 1:
+            f = uploaded_files[0]
+            if f.size > MAX_FILE_SIZE:
+                return Response(
+                    {"error": f"File exceeds {MAX_FILE_SIZE // 1_048_576} MB."},
+                    status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                )
+            file_bytes = f.read()
+            file_payload = {
+                "data": file_bytes,
+                "name": f.name,
+                "content_type": f.content_type or "application/octet-stream",
+                "size": len(file_bytes),
+            }
+        else:
+            files_data = []
+            for f in uploaded_files:
+                if f.size > MAX_FILE_SIZE:
+                    return Response(
+                        {"error": f"{f.name} exceeds {MAX_FILE_SIZE // 1_048_576} MB."},
+                        status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    )
+                files_data.append({
+                    "name": f.name,
+                    "content_type": f.content_type or "application/octet-stream",
+                    "size": f.size,
+                    "data": base64.b64encode(f.read()).decode(),
+                })
+            json_bytes = json.dumps(files_data).encode()
+            file_payload = {
+                "data": json_bytes,
+                "name": "__multifile__",
+                "content_type": "application/json",
+                "size": len(json_bytes),
+            }
 
     client_ip = _get_client_ip(request)
     share = _create_share(text=text, file_payload=file_payload, client_ip=client_ip)
@@ -260,13 +299,30 @@ def download_shared_file(request, code: str):
             status=status.HTTP_404_NOT_FOUND,
         )
 
+    if share.file_name == "__multifile__":
+        try:
+            index = int(request.GET.get("index", 0))
+        except (ValueError, TypeError):
+            index = 0
+        try:
+            files = json.loads(bytes(share.file_data))
+        except Exception:
+            return Response({"error": "Corrupted multi-file data."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if index < 0 or index >= len(files):
+            return Response({"error": "File index out of range."}, status=status.HTTP_404_NOT_FOUND)
+        entry = files[index]
+        file_bytes = base64.b64decode(entry["data"])
+        safe_name = entry["name"].replace('"', "").replace("\n", "").replace("\r", "")
+        response = HttpResponse(file_bytes, content_type=entry.get("content_type", "application/octet-stream"))
+        response["Content-Disposition"] = f'attachment; filename="{safe_name}"'
+        return response
+
+    safe_name = (share.file_name or "shared-file").replace('"', "").replace("\n", "").replace("\r", "")
     response = HttpResponse(
         share.file_data,
         content_type=share.file_content_type or "application/octet-stream",
     )
-    response["Content-Disposition"] = (
-        f'attachment; filename="{share.file_name or "shared-file"}"'
-    )
+    response["Content-Disposition"] = f'attachment; filename="{safe_name}"'
     return response
 
 

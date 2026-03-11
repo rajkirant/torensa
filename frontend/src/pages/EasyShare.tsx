@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import JSZip from "jszip";
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -201,17 +200,23 @@ const FileCard: React.FC<FileCardProps> = ({
   );
 };
 
+type SharedFileInfo = { name: string; size: number; contentType: string };
+
+function normalizeFileInfo(file: unknown): SharedFileInfo[] | null {
+  if (!file) return null;
+  if (Array.isArray(file)) return file as SharedFileInfo[];
+  return [file as SharedFileInfo];
+}
+
 // ── Main Component ──────────────────────────────────────────────────────────
 
 const TextShareContent: React.FC = () => {
   const [code, setCode] = useState("");
   const [text, setText] = useState("");
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
-  const [receivedFileInfo, setReceivedFileInfo] = useState<{
-    name: string;
-    size: number;
-    contentType: string;
-  } | null>(null);
+  const [receivedFileInfo, setReceivedFileInfo] = useState<
+    SharedFileInfo[] | null
+  >(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileShared, setFileShared] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -248,16 +253,8 @@ const TextShareContent: React.FC = () => {
       if (hasText) formData.append("text", value);
 
       if (hasFiles) {
-        if (files.length === 1) {
-          formData.append("file", files[0]);
-        } else {
-          const zip = new JSZip();
-          for (const f of files) {
-            const buf = await f.arrayBuffer();
-            zip.file(f.name, buf);
-          }
-          const zipBlob = await zip.generateAsync({ type: "blob" });
-          formData.append("file", zipBlob, "shared-files.zip");
+        for (const f of files) {
+          formData.append("file", f);
         }
       }
 
@@ -274,7 +271,7 @@ const TextShareContent: React.FC = () => {
 
       setCode(String(data.code || ""));
       setExpiresAt(data.expiresAt || null);
-      setReceivedFileInfo(data.file || null);
+      setReceivedFileInfo(normalizeFileInfo(data.file));
       setLastSharedText(value);
       setFileShared(Boolean(data.file));
       setSuccess("Code generated. Share it with the other device.");
@@ -306,7 +303,7 @@ const TextShareContent: React.FC = () => {
       skipShareRef.current = true;
       setText(String(data.text || ""));
       setExpiresAt(data.expiresAt || null);
-      setReceivedFileInfo(data.file || null);
+      setReceivedFileInfo(normalizeFileInfo(data.file));
       setSelectedFiles([]);
       setFileShared(Boolean(data.file));
       setSuccess("Text loaded from the shared code.");
@@ -327,7 +324,7 @@ const TextShareContent: React.FC = () => {
       setCode(String(data.code || ""));
       setText(String(data.text || ""));
       setExpiresAt(data.expiresAt || null);
-      setReceivedFileInfo(data.file || null);
+      setReceivedFileInfo(normalizeFileInfo(data.file));
       setSelectedFiles([]);
       setFileShared(Boolean(data.file));
       setSuccess("Loaded the latest shared text for this network.");
@@ -338,21 +335,22 @@ const TextShareContent: React.FC = () => {
     }
   };
 
-  const downloadSharedFile = async () => {
-    if (code.length !== CODE_LENGTH || !receivedFileInfo) return;
+  const downloadSharedFile = async (index: number, fileName: string) => {
+    if (code.length !== CODE_LENGTH) return;
     clear();
     setIsFetching(true);
     try {
-      const res = await apiFetch(`/api/text-share/file/${code}/download/`, {
-        method: "GET",
-      });
+      const res = await apiFetch(
+        `/api/text-share/file/${code}/download/?index=${index}`,
+        { method: "GET" },
+      );
       if (!res.ok) {
         const data = await res.json().catch(() => null);
         setError(data?.error || "Unable to download file.");
         return;
       }
       const blob = await res.blob();
-      downloadBlob(blob, receivedFileInfo.name || "shared-file");
+      downloadBlob(blob, fileName);
       setSuccess("File downloaded.");
     } catch {
       setError("Unable to reach the server. Try again.");
@@ -568,42 +566,60 @@ const TextShareContent: React.FC = () => {
         )}
 
         {/* Received file info (from fetched code) */}
-        {receivedFileInfo && selectedFiles.length === 0 && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              p: 1.25,
-              borderRadius: 1.5,
-              border: "1px solid rgba(148,163,184,0.3)",
-              bgcolor: "rgba(15,23,42,0.35)",
-            }}
-          >
-            <InsertDriveFileIcon fontSize="small" />
-            <Box sx={{ flex: 1 }}>
-              <Typography variant="body2">{receivedFileInfo.name}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {receivedFileInfo.size >= 1_048_576
-                  ? `${(receivedFileInfo.size / 1_048_576).toFixed(1)} MB`
-                  : `${Math.round(receivedFileInfo.size / 1024)} KB`}
-              </Typography>
-            </Box>
-            <IconButton
-              aria-label="Download shared file"
-              onClick={() => void downloadSharedFile()}
-              disabled={isFetching || !fileShared}
-            >
-              <DownloadIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              aria-label="Clear file"
-              onClick={() => setReceivedFileInfo(null)}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        )}
+        {receivedFileInfo &&
+          receivedFileInfo.length > 0 &&
+          selectedFiles.length === 0 && (
+            <Stack spacing={0.75}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography variant="caption" color="text.secondary">
+                  {receivedFileInfo.length} shared file
+                  {receivedFileInfo.length > 1 ? "s" : ""}
+                </Typography>
+                <IconButton
+                  size="small"
+                  aria-label="Clear received files"
+                  onClick={() => setReceivedFileInfo(null)}
+                >
+                  <CloseIcon sx={{ fontSize: 16 }} />
+                </IconButton>
+              </Stack>
+              {receivedFileInfo.map((rf, i) => (
+                <Box
+                  key={`${rf.name}-${i}`}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    p: 1.25,
+                    borderRadius: 1.5,
+                    border: "1px solid rgba(148,163,184,0.3)",
+                    bgcolor: "rgba(15,23,42,0.35)",
+                  }}
+                >
+                  <InsertDriveFileIcon fontSize="small" />
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="body2">{rf.name}</Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {rf.size >= 1_048_576
+                        ? `${(rf.size / 1_048_576).toFixed(1)} MB`
+                        : `${Math.round(rf.size / 1024)} KB`}
+                    </Typography>
+                  </Box>
+                  <IconButton
+                    aria-label={`Download ${rf.name}`}
+                    onClick={() => void downloadSharedFile(i, rf.name)}
+                    disabled={isFetching || !fileShared}
+                  >
+                    <DownloadIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              ))}
+            </Stack>
+          )}
 
         {/* Actions */}
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -623,8 +639,6 @@ const TextShareContent: React.FC = () => {
         {expiresAt && (
           <Typography variant="caption" color="text.secondary">
             Code expires around {new Date(expiresAt).toLocaleTimeString()}.
-            {selectedFiles.length > 1 &&
-              " Multiple files will be bundled as a ZIP."}
           </Typography>
         )}
       </Stack>
