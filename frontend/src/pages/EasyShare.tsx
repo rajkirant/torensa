@@ -208,6 +208,114 @@ function normalizeFileInfo(file: unknown): SharedFileInfo[] | null {
   return [file as SharedFileInfo];
 }
 
+// ── Received File Card ──────────────────────────────────────────────────────
+
+type ReceivedFileCardProps = {
+  info: SharedFileInfo;
+  index: number;
+  onDownload: (index: number, name: string) => void;
+  disabled: boolean;
+};
+
+const ReceivedFileCard: React.FC<ReceivedFileCardProps> = ({
+  info,
+  index,
+  onDownload,
+  disabled,
+}) => {
+  const ext = getFileExt(info.name);
+  const color = getExtColor(info.name);
+  const sizeLabel =
+    info.size >= 1_048_576
+      ? `${(info.size / 1_048_576).toFixed(1)} MB`
+      : `${Math.round(info.size / 1024)} KB`;
+
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 0.75,
+        p: 1.5,
+        borderRadius: 2,
+        border: "1px solid rgba(148,163,184,0.2)",
+        bgcolor: "rgba(15,23,42,0.4)",
+        width: 110,
+        cursor: disabled ? "default" : "pointer",
+        transition: "border-color 0.15s, box-shadow 0.15s",
+        "&:hover": disabled
+          ? {}
+          : {
+              borderColor: "rgba(148,163,184,0.45)",
+              boxShadow: "0 4px 14px rgba(0,0,0,0.35)",
+            },
+      }}
+      onClick={() => !disabled && onDownload(index, info.name)}
+    >
+      {/* Download icon */}
+      <DownloadIcon
+        sx={{
+          position: "absolute",
+          top: 5,
+          right: 5,
+          fontSize: 14,
+          opacity: 0.5,
+        }}
+      />
+
+      {/* File type badge */}
+      <Box
+        sx={{
+          width: 52,
+          height: 52,
+          borderRadius: 1.5,
+          bgcolor: `${color}22`,
+          border: `1.5px solid ${color}55`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 0.25,
+        }}
+      >
+        <InsertDriveFileIcon sx={{ fontSize: 20, color }} />
+        <Typography sx={{ fontSize: 9, fontWeight: 700, color, lineHeight: 1 }}>
+          {ext}
+        </Typography>
+      </Box>
+
+      {/* File name */}
+      <Tooltip title={info.name} placement="bottom" enterDelay={600}>
+        <Typography
+          variant="caption"
+          sx={{
+            maxWidth: 96,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            textAlign: "center",
+            lineHeight: 1.3,
+            fontSize: "0.68rem",
+          }}
+        >
+          {info.name}
+        </Typography>
+      </Tooltip>
+
+      {/* File size */}
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{ fontSize: "0.62rem" }}
+      >
+        {sizeLabel}
+      </Typography>
+    </Box>
+  );
+};
+
 // ── Main Component ──────────────────────────────────────────────────────────
 
 const TextShareContent: React.FC = () => {
@@ -569,7 +677,7 @@ const TextShareContent: React.FC = () => {
         {receivedFileInfo &&
           receivedFileInfo.length > 0 &&
           selectedFiles.length === 0 && (
-            <Stack spacing={0.75}>
+            <Stack spacing={1}>
               <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -577,7 +685,7 @@ const TextShareContent: React.FC = () => {
               >
                 <Typography variant="caption" color="text.secondary">
                   {receivedFileInfo.length} shared file
-                  {receivedFileInfo.length > 1 ? "s" : ""}
+                  {receivedFileInfo.length > 1 ? "s" : ""} — tap to download
                 </Typography>
                 <IconButton
                   size="small"
@@ -587,37 +695,30 @@ const TextShareContent: React.FC = () => {
                   <CloseIcon sx={{ fontSize: 16 }} />
                 </IconButton>
               </Stack>
-              {receivedFileInfo.map((rf, i) => (
-                <Box
-                  key={`${rf.name}-${i}`}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    p: 1.25,
-                    borderRadius: 1.5,
-                    border: "1px solid rgba(148,163,184,0.3)",
-                    bgcolor: "rgba(15,23,42,0.35)",
-                  }}
-                >
-                  <InsertDriveFileIcon fontSize="small" />
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="body2">{rf.name}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {rf.size >= 1_048_576
-                        ? `${(rf.size / 1_048_576).toFixed(1)} MB`
-                        : `${Math.round(rf.size / 1024)} KB`}
-                    </Typography>
-                  </Box>
-                  <IconButton
-                    aria-label={`Download ${rf.name}`}
-                    onClick={() => void downloadSharedFile(i, rf.name)}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1.5,
+                  p: 1.5,
+                  borderRadius: 2,
+                  border: "1px solid rgba(148,163,184,0.18)",
+                  bgcolor: "rgba(15,23,42,0.25)",
+                  minHeight: 100,
+                }}
+              >
+                {receivedFileInfo.map((rf, i) => (
+                  <ReceivedFileCard
+                    key={`${rf.name}-${i}`}
+                    info={rf}
+                    index={i}
+                    onDownload={(idx, name) =>
+                      void downloadSharedFile(idx, name)
+                    }
                     disabled={isFetching || !fileShared}
-                  >
-                    <DownloadIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
+                  />
+                ))}
+              </Box>
             </Stack>
           )}
 
