@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
@@ -30,10 +31,9 @@ export default function AiImageGenerator() {
   const [imageData, setImageData] = useState<string | null>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const [statusMessage, setStatusMessage] = useState<{
-    info?: string;
     success?: string;
     error?: string;
-  }>({ info: "Describe what you want to see and click Generate." });
+  }>({});
 
   const handleGenerate = async () => {
     const trimmed = prompt.trim();
@@ -124,7 +124,6 @@ export default function AiImageGenerator() {
         <ToolStatusAlerts
           error={statusMessage.error ?? ""}
           success={statusMessage.success ?? ""}
-          info={statusMessage.info ?? ""}
         />
 
         <TextField
@@ -156,6 +155,12 @@ export default function AiImageGenerator() {
             }
           />
         </FlexWrapRow>
+
+        {!loading && !imageData && !statusMessage.error && (
+          <Typography variant="caption" color="text.secondary">
+            Describe what you want to see and click Generate.
+          </Typography>
+        )}
 
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
