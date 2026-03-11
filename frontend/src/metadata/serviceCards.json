@@ -153,7 +153,7 @@
       },
       {
         "q": "Is there a file size limit?",
-        "a": "Files must be under 10 MB. For larger files, consider a dedicated file transfer service."
+        "a": "Files must be under 150 MB. For larger files, consider a dedicated file transfer service."
       },
       {
         "q": "What does the auto-load feature do on the same network?",
