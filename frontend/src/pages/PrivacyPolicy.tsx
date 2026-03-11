@@ -3,20 +3,20 @@ export default function PrivacyPolicy() {
     <>
       <header style={{ marginBottom: 40 }}>
         <h1>Privacy Policy</h1>
-        <p className="subtitle">Last updated: March 10, 2026</p>
+        <p className="subtitle">Last updated: March 11, 2026</p>
       </header>
 
       <div style={{ maxWidth: 800, margin: "0 auto", lineHeight: 1.8 }}>
         <section style={{ marginBottom: 32 }}>
           <h2>Introduction</h2>
           <p>
-            Torensa (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;)
-            operates the website{" "}
+            Torensa is independently operated and maintained by a single
+            individual through{" "}
             <a href="https://torensa.com" style={{ color: "#4fd1c5" }}>
               torensa.com
             </a>
-            . This Privacy Policy explains how we collect, use, and protect
-            information when you visit our website.
+            . This Privacy Policy explains how information may be collected,
+            used, and protected when you visit the website.
           </p>
         </section>
 
