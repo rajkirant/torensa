@@ -24,7 +24,7 @@ import downloadBlob from "../utils/downloadBlob";
 
 const CODE_LENGTH = 4;
 const MAX_TEXT_LENGTH = 20000;
-const MAX_FILE_SIZE = 157_286_400; // 150 MB per file
+const MAX_FILE_SIZE = 1_073_741_824; // 1 GB per file via direct Cloudflare upload
 const MAX_FILES = 5;
 const SHARE_DEBOUNCE_MS = 700;
 
@@ -202,10 +202,45 @@ const FileCard: React.FC<FileCardProps> = ({
 
 type SharedFileInfo = { name: string; size: number; contentType: string };
 
+type UploadTarget = {
+  index: number;
+  name: string;
+  size: number;
+  contentType: string;
+  uploadUrl: string;
+  method: "PUT";
+  headers?: Record<string, string>;
+};
+
+type DownloadTarget = {
+  downloadUrl: string;
+  fileName?: string;
+  expiresInSeconds?: number;
+};
+
 function normalizeFileInfo(file: unknown): SharedFileInfo[] | null {
   if (!file) return null;
   if (Array.isArray(file)) return file as SharedFileInfo[];
   return [file as SharedFileInfo];
+}
+
+function isDownloadTarget(value: unknown): value is DownloadTarget {
+  return Boolean(
+    value &&
+    typeof value === "object" &&
+    "downloadUrl" in value &&
+    typeof (value as { downloadUrl?: unknown }).downloadUrl === "string",
+  );
+}
+
+function triggerDirectDownload(url: string): void {
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.rel = "noopener noreferrer";
+  anchor.target = "_blank";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
 }
 
 // ── Received File Card ──────────────────────────────────────────────────────
@@ -362,31 +397,147 @@ const TextShareContent: React.FC = () => {
         }).catch(() => {});
       }
 
-      const formData = new FormData();
-      if (hasText) formData.append("text", value);
+      let res: Response;
+      let data: unknown = null;
 
       if (hasFiles) {
-        for (const f of files) {
-          formData.append("file", f);
+        const initRes = await apiFetch("/api/text-share/uploads/init/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: hasText ? value : "",
+            files: files.map((file) => ({
+              name: file.name,
+              size: file.size,
+              contentType: file.type || "application/octet-stream",
+            })),
+          }),
+        });
+
+        data = await initRes.json().catch(() => null);
+        if (!initRes.ok) {
+          if (initRes.status === 413) {
+            setError(
+              data && typeof data === "object" && "error" in data
+                ? String((data as { error?: unknown }).error || "")
+                : "Selected files exceed the configured limit.",
+            );
+            return;
+          }
+          setError(
+            data && typeof data === "object" && "error" in data
+              ? String(
+                  (data as { error?: unknown }).error ||
+                    "Unable to prepare the upload.",
+                )
+              : "Unable to prepare the upload.",
+          );
+          return;
         }
+
+        const uploadTargets = Array.isArray(
+          (data as { uploadTargets?: unknown })?.uploadTargets,
+        )
+          ? (data as { uploadTargets: UploadTarget[] }).uploadTargets
+          : [];
+
+        if (uploadTargets.length !== files.length) {
+          setError("Upload session is incomplete. Try again.");
+          return;
+        }
+
+        for (const [index, file] of files.entries()) {
+          const target = uploadTargets[index];
+          const uploadRes = await fetch(target.uploadUrl, {
+            method: target.method,
+            headers: target.headers,
+            body: file,
+          });
+          if (!uploadRes.ok) {
+            const codeToDelete =
+              data && typeof data === "object" && "code" in data
+                ? String((data as { code?: unknown }).code || "")
+                : "";
+            if (codeToDelete.length === CODE_LENGTH) {
+              await apiFetch(`/api/text-share/${codeToDelete}/delete/`, {
+                method: "DELETE",
+              }).catch(() => {});
+            }
+            setError(`Upload failed for ${file.name}.`);
+            return;
+          }
+        }
+
+        res = await apiFetch(
+          `/api/text-share/uploads/${String((data as { code?: unknown }).code || "")}/complete/`,
+          {
+            method: "POST",
+          },
+        );
+        data = await res.json().catch(() => null);
+      } else {
+        const formData = new FormData();
+        if (hasText) formData.append("text", value);
+
+        res = await apiFetch("/api/text-share/", {
+          method: "POST",
+          body: formData,
+        });
+        data = await res.json().catch(() => null);
       }
 
-      const res = await apiFetch("/api/text-share/", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json().catch(() => null);
       if (!res.ok) {
-        setError(data?.error || "Unable to generate a code.");
+        if (res.status === 413) {
+          setError(
+            hasFiles
+              ? "Upload rejected by the configured EasyShare size limit."
+              : "Upload rejected by the deployed API gateway/server. The infrastructure limit is lower than the app limit for this endpoint.",
+          );
+          return;
+        }
+        setError(
+          data && typeof data === "object" && "error" in data
+            ? String(
+                (data as { error?: unknown }).error ||
+                  "Unable to generate a code.",
+              )
+            : "Unable to generate a code.",
+        );
         return;
       }
 
-      setCode(String(data.code || ""));
-      setExpiresAt(data.expiresAt || null);
-      setReceivedFileInfo(normalizeFileInfo(data.file));
-      setFileShared(Boolean(data.file));
-      setSuccess("Code generated. Share it with the other device.");
+      setCode(
+        data && typeof data === "object" && "code" in data
+          ? String((data as { code?: unknown }).code || "")
+          : "",
+      );
+      setExpiresAt(
+        data && typeof data === "object" && "expiresAt" in data
+          ? String((data as { expiresAt?: unknown }).expiresAt || "") || null
+          : null,
+      );
+      setReceivedFileInfo(
+        normalizeFileInfo(
+          data && typeof data === "object" && "file" in data
+            ? (data as { file?: unknown }).file
+            : null,
+        ),
+      );
+      setFileShared(
+        Boolean(
+          data &&
+          typeof data === "object" &&
+          "file" in data &&
+          (data as { file?: unknown }).file,
+        ),
+      );
+      setSuccess(
+        hasFiles
+          ? "Code generated after uploading to Cloudflare. Share it with the other device."
+          : "Code generated. Share it with the other device.",
+      );
     } catch {
       setError("Unable to reach the server. Try again.");
     } finally {
@@ -461,6 +612,19 @@ const TextShareContent: React.FC = () => {
         setError(data?.error || "Unable to download file.");
         return;
       }
+
+      const contentType = res.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json().catch(() => null);
+        if (!isDownloadTarget(data)) {
+          setError("Unable to prepare file download.");
+          return;
+        }
+        triggerDirectDownload(data.downloadUrl);
+        setSuccess("Download started from Cloudflare.");
+        return;
+      }
+
       const blob = await res.blob();
       downloadBlob(blob, fileName);
       setSuccess("File downloaded.");
@@ -516,7 +680,7 @@ const TextShareContent: React.FC = () => {
   const addFiles = (incoming: File[]) => {
     const oversized = incoming.filter((f) => f.size > MAX_FILE_SIZE);
     if (oversized.length) {
-      setError(`${oversized[0].name} exceeds 150 MB limit.`);
+      setError(`${oversized[0].name} exceeds 1024 MB limit.`);
       return;
     }
     setSelectedFiles((prev) => {
@@ -644,7 +808,7 @@ const TextShareContent: React.FC = () => {
           label={
             selectedFiles.length >= MAX_FILES
               ? `Limit reached (${MAX_FILES} files) — remove a file to add more`
-              : "Drag & drop files here, or tap to browse"
+              : "Drag & drop files here, or tap to browse. Files upload directly to Cloudflare."
           }
         />
 

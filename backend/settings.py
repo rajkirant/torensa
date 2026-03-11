@@ -242,6 +242,37 @@ GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "")
 GOOGLE_OAUTH_REDIRECT_URI = os.getenv("GOOGLE_OAUTH_REDIRECT_URI", "")
 GOOGLE_OAUTH_FRONTEND_REDIRECT_URI = os.getenv("GOOGLE_OAUTH_FRONTEND_REDIRECT_URI", "")
 
+TEXT_SHARE_STORAGE_BACKEND = os.getenv("TEXT_SHARE_STORAGE_BACKEND", "db").strip().lower() or "db"
+TEXT_SHARE_MAX_FILE_SIZE = _env_int("TEXT_SHARE_MAX_FILE_SIZE", 1_073_741_824)
+TEXT_SHARE_MAX_FILES = _env_int("TEXT_SHARE_MAX_FILES", 5)
+TEXT_SHARE_R2_BUCKET_NAME = os.getenv("TEXT_SHARE_R2_BUCKET_NAME", "").strip()
+TEXT_SHARE_R2_ACCOUNT_ID = os.getenv("TEXT_SHARE_R2_ACCOUNT_ID", "").strip()
+TEXT_SHARE_R2_ACCESS_KEY_ID = os.getenv("TEXT_SHARE_R2_ACCESS_KEY_ID", "").strip()
+TEXT_SHARE_R2_SECRET_ACCESS_KEY = os.getenv("TEXT_SHARE_R2_SECRET_ACCESS_KEY", "").strip()
+TEXT_SHARE_R2_UPLOAD_URL_TTL = _env_int("TEXT_SHARE_R2_UPLOAD_URL_TTL", 900)
+TEXT_SHARE_R2_DOWNLOAD_URL_TTL = _env_int("TEXT_SHARE_R2_DOWNLOAD_URL_TTL", 300)
+TEXT_SHARE_R2_OBJECT_PREFIX = os.getenv("TEXT_SHARE_R2_OBJECT_PREFIX", "easyshare").strip().strip("/") or "easyshare"
+TEXT_SHARE_R2_ENDPOINT = os.getenv(
+    "TEXT_SHARE_R2_ENDPOINT",
+    f"https://{TEXT_SHARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com" if TEXT_SHARE_R2_ACCOUNT_ID else "",
+).strip()
+
+if TEXT_SHARE_STORAGE_BACKEND == "r2":
+    missing_r2_vars = [
+        name
+        for name, value in (
+            ("TEXT_SHARE_R2_BUCKET_NAME", TEXT_SHARE_R2_BUCKET_NAME),
+            ("TEXT_SHARE_R2_ACCESS_KEY_ID", TEXT_SHARE_R2_ACCESS_KEY_ID),
+            ("TEXT_SHARE_R2_SECRET_ACCESS_KEY", TEXT_SHARE_R2_SECRET_ACCESS_KEY),
+            ("TEXT_SHARE_R2_ENDPOINT", TEXT_SHARE_R2_ENDPOINT),
+        )
+        if not value
+    ]
+    if missing_r2_vars:
+        raise ImproperlyConfigured(
+            "Missing R2 configuration: " + ", ".join(missing_r2_vars)
+        )
+
 CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
 
