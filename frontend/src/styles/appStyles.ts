@@ -94,7 +94,7 @@ export const headerStyle = (theme: Theme): React.CSSProperties => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "12px 16px",
+  padding: "16px 16px",
   boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
   color: theme.header.text,
   flexWrap: "wrap",
@@ -147,4 +147,3 @@ export const footerLinkStyle = (theme: Theme): React.CSSProperties => ({
   display: "inline-flex",
   alignItems: "center",
 });
-

@@ -92,7 +92,7 @@ export default function Contact() {
     <>
       <header style={{ marginBottom: 40 }}>
         {/* PROFILE IMAGE */}
-        <div style={{ textAlign: "center", marginBottom: 20 }}>
+        <div style={{ textAlign: "center", marginTop: -18, marginBottom: 2 }}>
           <img
             src="/me.webp"
             alt="Raj Kiran"
