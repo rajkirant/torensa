@@ -15,7 +15,7 @@ from ..models import TextShare
 
 CODE_LENGTH = 4
 MAX_TEXT_LENGTH = 20000
-MAX_FILE_SIZE = 10_485_760
+MAX_FILE_SIZE = 157_286_400
 TTL_SECONDS = 60 * 60
 MAX_GENERATION_ATTEMPTS = 80
 
@@ -166,7 +166,7 @@ def create_file_share(request):
 
     if uploaded.size > MAX_FILE_SIZE:
         return Response(
-            {"error": f"File exceeds {MAX_FILE_SIZE} bytes."},
+            {"error": f"File exceeds {MAX_FILE_SIZE // 1_048_576} MB."},
             status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
         )
 

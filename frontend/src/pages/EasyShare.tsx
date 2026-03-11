@@ -24,7 +24,7 @@ import downloadBlob from "../utils/downloadBlob";
 
 const CODE_LENGTH = 4;
 const MAX_TEXT_LENGTH = 20000;
-const MAX_FILE_SIZE = 10_485_760; // 10 MB per file
+const MAX_FILE_SIZE = 157_286_400; // 150 MB per file
 const MAX_FILES = 5;
 const SHARE_DEBOUNCE_MS = 700;
 
@@ -516,7 +516,7 @@ const TextShareContent: React.FC = () => {
   const addFiles = (incoming: File[]) => {
     const oversized = incoming.filter((f) => f.size > MAX_FILE_SIZE);
     if (oversized.length) {
-      setError(`${oversized[0].name} exceeds 10 MB limit.`);
+      setError(`${oversized[0].name} exceeds 150 MB limit.`);
       return;
     }
     setSelectedFiles((prev) => {
