@@ -42,6 +42,11 @@ const light = createTheme({
     border: "rgba(255,255,255,0.14)",
   },
 
+  dropzone: {
+    background: "rgba(37,99,235,0.08)",
+    active: "rgba(37,99,235,0.16)",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },

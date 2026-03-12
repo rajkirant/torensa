@@ -42,6 +42,11 @@ const dark = createTheme({
     border: "rgba(255,255,255,0.12)",
   },
 
+  dropzone: {
+    background: "rgba(59,130,246,0.12)",
+    active: "rgba(59,130,246,0.22)",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },
