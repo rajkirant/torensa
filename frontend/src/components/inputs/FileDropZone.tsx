@@ -74,21 +74,21 @@ export default function FileDropZone({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      sx={{
+      sx={(theme) => ({
         p: 3,
         position: "relative",
         borderRadius: 2,
         border: "2px dashed",
         borderColor: dragActive ? "primary.main" : "divider",
-        bgcolor: dragActive ? "action.hover" : "background.default",
+        bgcolor: dragActive ? theme.dropzone.active : theme.dropzone.background,
         textAlign: "center",
         color: disabled ? "text.disabled" : "text.secondary",
         cursor: disabled ? "default" : "pointer",
         transition: "border-color 0.2s, background-color 0.2s",
         "&:hover": disabled
           ? {}
-          : { borderColor: "primary.main", bgcolor: "action.hover" },
-      }}
+          : { borderColor: "primary.main", bgcolor: theme.dropzone.active },
+      })}
     >
       {onClear && (
         <Button

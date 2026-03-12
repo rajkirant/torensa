@@ -46,6 +46,11 @@ const rainbow = createTheme({
     border: "rgba(255,255,255,0.2)",
   },
 
+  dropzone: {
+    background: "rgba(236,72,153,0.14)",
+    active: "rgba(59,130,246,0.2)",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },

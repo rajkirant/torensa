@@ -18,6 +18,10 @@ declare module "@mui/material/styles" {
       textMuted: string;
       border: string;
     };
+    dropzone: {
+      background: string;
+      active: string;
+    };
   }
 
   interface ThemeOptions {
@@ -36,6 +40,10 @@ declare module "@mui/material/styles" {
       text?: string;
       textMuted?: string;
       border?: string;
+    };
+    dropzone?: {
+      background?: string;
+      active?: string;
     };
   }
 }
