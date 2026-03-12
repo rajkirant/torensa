@@ -14,7 +14,6 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -450,7 +449,7 @@ const ImagePdfToPdf: React.FC = () => {
           onFilesSelected={onPickFiles}
           onClear={clearAll}
           clearDisabled={items.length === 0 || busy}
-          icon={UploadFileIcon}
+          fileType="pdf"
           label="Drag & drop images / PDFs here, or tap to browse"
         />
       </Stack>

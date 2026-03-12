@@ -18,7 +18,6 @@ import CompressIcon from "@mui/icons-material/Compress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
-import ImageIcon from "@mui/icons-material/Image";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -459,7 +458,7 @@ export default function ImageCompressor() {
           onFilesSelected={onPickFiles}
           onClear={clearAll}
           clearDisabled={busy || (files.length === 0 && results.length === 0)}
-          icon={ImageIcon}
+          fileType="image"
           label="Drag & drop images here, or tap to browse"
         />
       </Stack>
