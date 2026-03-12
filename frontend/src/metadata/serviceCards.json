@@ -15,55 +15,6 @@
     "advancedOptionsEnabled": false
   },
   {
-    "id": "excel-to-csv",
-    "component": "DataFormatConverter",
-    "title": "Data files Converter",
-    "description": "Convert between Excel (.xlsx), CSV, and JSON files directly in your browser.",
-    "path": "/data-format-converter",
-    "ctaLabel": "Convert Files",
-    "offlineEnabled": true,
-    "authRequired": false,
-    "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
-    "categoryId": "utilities",
-    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Click the upload area or drag and drop your Excel (.xlsx), CSV, or JSON file onto the page.",
-      "The tool automatically detects the input file format based on its extension.",
-      "Select your desired output format from the format options (Excel, CSV, or JSON).",
-      "Click the Convert button to start the conversion process.",
-      "Preview the converted output in the result panel to verify the data looks correct.",
-      "Click Download to save the converted file to your device."
-    ],
-    "faqs": [
-      {
-        "q": "Does this tool upload my file to a server?",
-        "a": "No. All parsing and conversion happen entirely in your browser using client-side JavaScript. Your file is never sent to any server, which keeps your data completely private."
-      },
-      {
-        "q": "What file formats are supported?",
-        "a": "The converter supports Excel (.xlsx), CSV (comma-separated values), and JSON. You can convert between any combination of these three formats."
-      },
-      {
-        "q": "Will my Excel formulas be preserved in the output?",
-        "a": "Formulas are evaluated to their computed values during conversion. The raw formula text is not carried over to CSV or JSON output, but the resulting data values are preserved."
-      },
-      {
-        "q": "How large a file can I convert?",
-        "a": "Since processing happens in-browser, practical limits depend on your device's available memory. Files up to a few hundred MB typically work without issues on modern hardware."
-      },
-      {
-        "q": "Can I convert a multi-sheet Excel file?",
-        "a": "The converter processes the first (active) sheet of the Excel file by default, which covers the majority of single-sheet workbooks and exports."
-      },
-      {
-        "q": "Is this tool free to use?",
-        "a": "Yes, the Data Files Converter is completely free with no account required. Just upload your file and convert instantly."
-      }
-    ]
-  },
-  {
     "id": "text-to-qr",
     "component": "TextToQr",
     "title": "Text to QR Builder",
@@ -1238,6 +1189,55 @@
       {
         "q": "Can I extract text from a password-protected PDF?",
         "a": "Password-protected (encrypted) PDFs must be unlocked before uploading. The tool does not prompt for passwords."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-csv",
+    "component": "DataFormatConverter",
+    "title": "Data files Converter",
+    "description": "Convert between Excel (.xlsx), CSV, and JSON files directly in your browser.",
+    "path": "/data-format-converter",
+    "ctaLabel": "Convert Files",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
+    "categoryId": "utilities",
+    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click the upload area or drag and drop your Excel (.xlsx), CSV, or JSON file onto the page.",
+      "The tool automatically detects the input file format based on its extension.",
+      "Select your desired output format from the format options (Excel, CSV, or JSON).",
+      "Click the Convert button to start the conversion process.",
+      "Preview the converted output in the result panel to verify the data looks correct.",
+      "Click Download to save the converted file to your device."
+    ],
+    "faqs": [
+      {
+        "q": "Does this tool upload my file to a server?",
+        "a": "No. All parsing and conversion happen entirely in your browser using client-side JavaScript. Your file is never sent to any server, which keeps your data completely private."
+      },
+      {
+        "q": "What file formats are supported?",
+        "a": "The converter supports Excel (.xlsx), CSV (comma-separated values), and JSON. You can convert between any combination of these three formats."
+      },
+      {
+        "q": "Will my Excel formulas be preserved in the output?",
+        "a": "Formulas are evaluated to their computed values during conversion. The raw formula text is not carried over to CSV or JSON output, but the resulting data values are preserved."
+      },
+      {
+        "q": "How large a file can I convert?",
+        "a": "Since processing happens in-browser, practical limits depend on your device's available memory. Files up to a few hundred MB typically work without issues on modern hardware."
+      },
+      {
+        "q": "Can I convert a multi-sheet Excel file?",
+        "a": "The converter processes the first (active) sheet of the Excel file by default, which covers the majority of single-sheet workbooks and exports."
+      },
+      {
+        "q": "Is this tool free to use?",
+        "a": "Yes, the Data Files Converter is completely free with no account required. Just upload your file and convert instantly."
       }
     ]
   }
