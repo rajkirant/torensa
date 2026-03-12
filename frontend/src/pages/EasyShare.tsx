@@ -13,7 +13,6 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import DownloadIcon from "@mui/icons-material/Download";
 import CloseIcon from "@mui/icons-material/Close";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -811,7 +810,7 @@ const TextShareContent: React.FC = () => {
           }}
           onClear={clearSelectedFiles}
           clearDisabled={selectedFiles.length === 0 || isSharing}
-          icon={UploadFileIcon}
+          fileType="file"
           label={
             selectedFiles.length >= MAX_FILES
               ? `Limit reached (${MAX_FILES} files) — remove a file to add more`

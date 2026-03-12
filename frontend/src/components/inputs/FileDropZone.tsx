@@ -3,7 +3,23 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import ImageIcon from "@mui/icons-material/Image";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import AudioFileIcon from "@mui/icons-material/AudioFile";
+import MovieIcon from "@mui/icons-material/Movie";
+import DescriptionIcon from "@mui/icons-material/Description";
+import ArchiveIcon from "@mui/icons-material/Archive";
 import type { SvgIconComponent } from "@mui/icons-material";
+
+type FileType =
+  | "image"
+  | "pdf"
+  | "video"
+  | "audio"
+  | "archive"
+  | "document"
+  | "file";
 
 type FileDropZoneProps = {
   accept?: string;
@@ -13,6 +29,7 @@ type FileDropZoneProps = {
   onClear?: () => void;
   clearLabel?: ReactNode;
   clearDisabled?: boolean;
+  fileType?: FileType;
   label?: ReactNode;
   icon?: SvgIconComponent;
 };
@@ -25,12 +42,23 @@ export default function FileDropZone({
   onClear,
   clearLabel = "Clear",
   clearDisabled = false,
+  fileType,
   label = "Drag & drop files here, or tap to browse",
   icon: Icon = CloudUploadIcon,
 }: FileDropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const isClearDisabled = disabled || clearDisabled;
+  const fileTypeIconMap: Record<FileType, SvgIconComponent> = {
+    image: ImageIcon,
+    pdf: PictureAsPdfIcon,
+    video: MovieIcon,
+    audio: AudioFileIcon,
+    archive: ArchiveIcon,
+    document: DescriptionIcon,
+    file: InsertDriveFileIcon,
+  };
+  const ResolvedIcon = fileType ? fileTypeIconMap[fileType] : Icon;
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -128,7 +156,9 @@ export default function FileDropZone({
         hidden
         onChange={handleChange}
       />
-      <Icon sx={{ fontSize: 36, mb: 0.5, color: "inherit", opacity: 0.7 }} />
+      <ResolvedIcon
+        sx={{ fontSize: 36, mb: 0.5, color: "inherit", opacity: 0.7 }}
+      />
       <Typography variant="body2" color="inherit">
         {label}
       </Typography>
