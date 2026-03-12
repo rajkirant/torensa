@@ -278,3 +278,12 @@ CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True
+
+# ---------- AWS ----------
+AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+
+# ---------- AWS SES ----------
+SES_FROM_EMAIL = os.getenv("SES_FROM_EMAIL", "noreply@torensa.com")
+SES_VERIFICATION_URL = os.getenv(
+    "SES_VERIFICATION_URL", "http://localhost:5173/verify-email"
+)

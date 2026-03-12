@@ -90,6 +90,23 @@ class ContactMessage(models.Model):
         return f"{self.name} <{self.email}> - {self.created_at.strftime('%Y-%m-%d')}"
 
 
+class EmailVerification(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="email_verification",
+    )
+    is_verified = models.BooleanField(default=False)
+    verification_code = models.CharField(max_length=64, blank=True)
+    code_expires_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    verified_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        status = "verified" if self.is_verified else "unverified"
+        return f"{self.user.username} ({status})"
+
+
 class TextShare(models.Model):
     code = models.CharField(max_length=4, unique=True)
     text = models.TextField(blank=True)

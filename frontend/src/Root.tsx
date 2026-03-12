@@ -24,6 +24,7 @@ import {
   Contact,
   Login,
   Signup,
+  VerifyEmail,
   PrivacyPolicy,
   TermsOfService,
   toolComponentMap,
@@ -67,6 +68,7 @@ export function Root() {
                   <Route path="terms" element={<TermsOfService />} />
                   <Route path="login" element={<Login />} />
                   <Route path="signup" element={<Signup />} />
+                  <Route path="verify-email" element={<VerifyEmail />} />
 
                   {tools.map((tool) => {
                     const key = tool.id.toLowerCase();

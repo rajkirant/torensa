@@ -14,6 +14,7 @@ export const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
 export const TermsOfService = lazy(() => import("../pages/TermsOfService"));
 export const Login = lazy(() => import("../pages/Login"));
 export const Signup = lazy(() => import("../pages/Signup"));
+export const VerifyEmail = lazy(() => import("../pages/VerifyEmail"));
 export const NotFound = lazy(() => import("../pages/NotFound"));
 
 /* ===================== TOOL CONFIG ===================== */
