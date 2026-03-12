@@ -695,6 +695,11 @@ const TextShareContent: React.FC = () => {
     setFileShared(false);
   };
 
+  const clearSelectedFiles = () => {
+    setSelectedFiles([]);
+    setFileShared(false);
+  };
+
   // ── Drag-to-reorder handlers ───────────────────────────────────────────────
 
   const handleDragStart = (index: number) => {
@@ -804,6 +809,8 @@ const TextShareContent: React.FC = () => {
           onFilesSelected={(fileList) => {
             if (fileList) addFiles(Array.from(fileList));
           }}
+          onClear={clearSelectedFiles}
+          clearDisabled={selectedFiles.length === 0 || isSharing}
           icon={UploadFileIcon}
           label={
             selectedFiles.length >= MAX_FILES

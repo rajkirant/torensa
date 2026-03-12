@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 const dark = createTheme({
   shape: {
-    borderRadius: 16, // ✅ global rounding
+    borderRadius: 8, // ✅ global rounding
   },
 
   palette: {
