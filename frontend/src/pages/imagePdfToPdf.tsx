@@ -448,6 +448,8 @@ const ImagePdfToPdf: React.FC = () => {
           multiple
           disabled={busy}
           onFilesSelected={onPickFiles}
+          onClear={clearAll}
+          clearDisabled={items.length === 0 || busy}
           icon={UploadFileIcon}
           label="Drag & drop images / PDFs here, or tap to browse"
         />

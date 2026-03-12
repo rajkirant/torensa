@@ -457,6 +457,8 @@ export default function ImageCompressor() {
           multiple
           disabled={busy}
           onFilesSelected={onPickFiles}
+          onClear={clearAll}
+          clearDisabled={busy || (files.length === 0 && results.length === 0)}
           icon={ImageIcon}
           label="Drag & drop images here, or tap to browse"
         />
