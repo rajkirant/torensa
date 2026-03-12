@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.middleware.csrf import get_token
 from django.conf import settings
 from django.core.exceptions import ValidationError
+import logging
 
 from rest_framework.decorators import (
     api_view,
@@ -14,6 +15,11 @@ from rest_framework.authentication import CSRFCheck
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status
+
+from ..models import EmailVerification
+
+
+logger = logging.getLogger(__name__)
 
 
 def _enforce_csrf(request):
@@ -79,6 +85,20 @@ def signup_view(request):
         password=password,
     )
 
+    # ---------- Email verification ----------
+    verification_sent = False
+    verification_error = False
+    try:
+        from .email_verification_views import _create_verification
+        _create_verification(user)
+        verification_sent = True
+    except Exception:
+        verification_error = True
+        logger.exception(
+            "Failed to send signup verification email for user %s",
+            user.id,
+        )
+
     # ---------- Auto login ----------
     login(request, user)
 
@@ -86,10 +106,13 @@ def signup_view(request):
         {
             "message": "Signup successful",
             "csrfToken": get_token(request),
+            "verification_sent": verification_sent,
+            "verification_error": verification_error,
             "user": {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
+                "email_verified": False,
             },
         },
         status=status.HTTP_201_CREATED,
@@ -121,6 +144,10 @@ def login_view(request):
 
     login(request, user)
 
+    email_verified = EmailVerification.objects.filter(
+        user=user, is_verified=True
+    ).exists()
+
     return Response(
         {
             "message": "Login successful",
@@ -129,6 +156,7 @@ def login_view(request):
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
+                "email_verified": email_verified,
             },
         },
         status=status.HTTP_200_OK,
@@ -140,6 +168,9 @@ def login_view(request):
 def me(request):
     csrf_token = get_token(request)
     if request.user.is_authenticated:
+        email_verified = EmailVerification.objects.filter(
+            user=request.user, is_verified=True
+        ).exists()
         return Response(
             {
                 "csrfToken": csrf_token,
@@ -147,6 +178,7 @@ def me(request):
                     "id": request.user.id,
                     "username": request.user.username,
                     "email": request.user.email,
+                    "email_verified": email_verified,
                 },
             },
             status=status.HTTP_200_OK,

@@ -15,6 +15,7 @@ export type User = {
   id: number;
   username: string;
   email: string;
+  email_verified?: boolean;
 };
 
 type MeResponse = {
