@@ -85,7 +85,7 @@ export default function AiImageGenerator() {
     downloadBlob(blob, "generated-image.png");
   };
 
-  const SHARE_URL = "https://torensa.com/ai-image-generator";
+  const SHARE_URL = "https://torensa.com/image-generator";
 
   const canShareFiles =
     typeof navigator !== "undefined" &&
