@@ -205,13 +205,6 @@ export default function AiImageGenerator() {
                 onClick={handleDownload}
                 startIcon={<DownloadIcon />}
               />
-              {canShareFiles && (
-                <Tooltip title="Share image">
-                  <IconButton onClick={handleShare} size="small">
-                    <ShareIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
               <Tooltip title="Share on WhatsApp">
                 <IconButton
                   onClick={handleShareWhatsApp}
