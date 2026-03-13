@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import time
 import uuid
@@ -47,6 +48,8 @@ MEDIA_FORMATS = {
     "amr": "amr",
 }
 
+logger = logging.getLogger(__name__)
+
 
 def _env_int(name: str, default: int) -> int:
     raw = os.getenv(name)
@@ -82,8 +85,11 @@ def _get_media_format(filename: str, content_type: str | None) -> str | None:
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def transcribe_view(request):
+    request_id = uuid.uuid4().hex
+    logger.info("transcribe.start request_id=%s", request_id)
     audio_file = request.FILES.get("file")
     if not audio_file:
+        logger.warning("transcribe.missing_file request_id=%s", request_id)
         return Response(
             {"error": ERROR_FILE_REQUIRED},
             status=status.HTTP_400_BAD_REQUEST,
@@ -92,6 +98,12 @@ def transcribe_view(request):
     max_upload_mb = _env_int(ENV_TRANSCRIBE_MAX_UPLOAD_MB, DEFAULT_MAX_UPLOAD_MB)
     max_upload_bytes = max_upload_mb * 1024 * 1024
     if audio_file.size > max_upload_bytes:
+        logger.warning(
+            "transcribe.file_too_large request_id=%s size=%s max=%s",
+            request_id,
+            audio_file.size,
+            max_upload_bytes,
+        )
         return Response(
             {"error": f"{ERROR_FILE_TOO_LARGE} Max {max_upload_mb} MB."},
             status=status.HTTP_400_BAD_REQUEST,
@@ -99,6 +111,12 @@ def transcribe_view(request):
 
     media_format = _get_media_format(audio_file.name, audio_file.content_type)
     if not media_format:
+        logger.warning(
+            "transcribe.unsupported_format request_id=%s name=%s content_type=%s",
+            request_id,
+            audio_file.name,
+            audio_file.content_type,
+        )
         return Response(
             {"error": ERROR_UNSUPPORTED_FORMAT},
             status=status.HTTP_400_BAD_REQUEST,
@@ -106,6 +124,7 @@ def transcribe_view(request):
 
     bucket = os.getenv(ENV_TRANSCRIBE_S3_BUCKET, "").strip()
     if not bucket:
+        logger.error("transcribe.missing_bucket request_id=%s", request_id)
         return Response(
             {"error": ERROR_TRANSCRIBE_BUCKET_REQUIRED},
             status=status.HTTP_502_BAD_GATEWAY,
@@ -127,6 +146,7 @@ def transcribe_view(request):
     try:
         import boto3
     except Exception:
+        logger.exception("transcribe.boto3_missing request_id=%s", request_id)
         return Response(
             {"error": ERROR_TRANSCRIBE_SDK_MISSING},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -138,6 +158,14 @@ def transcribe_view(request):
     job_name = None
 
     try:
+        logger.info(
+            "transcribe.uploading request_id=%s bucket=%s key=%s content_type=%s size=%s",
+            request_id,
+            bucket,
+            object_key,
+            audio_file.content_type,
+            audio_file.size,
+        )
         s3.upload_fileobj(
             audio_file,
             bucket,
@@ -146,6 +174,13 @@ def transcribe_view(request):
         )
 
         job_name = f"torensa-transcribe-{uuid.uuid4().hex}"
+        logger.info(
+            "transcribe.start_job request_id=%s job_name=%s language=%s media_format=%s",
+            request_id,
+            job_name,
+            language_code,
+            media_format,
+        )
         job_request = {
             "TranscriptionJobName": job_name,
             "LanguageCode": language_code,
@@ -167,11 +202,23 @@ def transcribe_view(request):
             if status_value in ("COMPLETED", "FAILED"):
                 break
             if time.time() - start_time > timeout_seconds:
+                logger.error(
+                    "transcribe.timeout request_id=%s job_name=%s timeout=%s",
+                    request_id,
+                    job_name,
+                    timeout_seconds,
+                )
                 raise TimeoutError(ERROR_TRANSCRIBE_TIMEOUT)
             time.sleep(max(1, poll_seconds))
 
         if job.get("TranscriptionJobStatus") != "COMPLETED":
             failure_reason = job.get("FailureReason") or ERROR_TRANSCRIBE_FAILED
+            logger.error(
+                "transcribe.failed request_id=%s job_name=%s reason=%s",
+                request_id,
+                job_name,
+                failure_reason,
+            )
             return Response(
                 {"error": failure_reason},
                 status=status.HTTP_502_BAD_GATEWAY,
@@ -179,11 +226,21 @@ def transcribe_view(request):
 
         transcript_uri = job.get("Transcript", {}).get("TranscriptFileUri")
         if not transcript_uri:
+            logger.error(
+                "transcribe.missing_transcript_uri request_id=%s job_name=%s",
+                request_id,
+                job_name,
+            )
             return Response(
                 {"error": ERROR_TRANSCRIBE_FAILED},
                 status=status.HTTP_502_BAD_GATEWAY,
             )
 
+        logger.info(
+            "transcribe.fetch_transcript request_id=%s job_name=%s",
+            request_id,
+            job_name,
+        )
         with urllib.request.urlopen(transcript_uri, timeout=30) as resp:
             transcript_payload = json.loads(resp.read().decode("utf-8"))
         transcripts = transcript_payload.get("results", {}).get("transcripts", [])
@@ -198,11 +255,13 @@ def transcribe_view(request):
             status=status.HTTP_200_OK,
         )
     except TimeoutError as exc:
+        logger.exception("transcribe.timeout_error request_id=%s", request_id)
         return Response(
             {"error": str(exc) or ERROR_TRANSCRIBE_TIMEOUT},
             status=status.HTTP_504_GATEWAY_TIMEOUT,
         )
     except Exception as exc:
+        logger.exception("transcribe.exception request_id=%s", request_id)
         payload = {"error": ERROR_TRANSCRIBE_FAILED}
         if settings.DEBUG:
             payload["details"] = str(exc)
@@ -214,10 +273,32 @@ def transcribe_view(request):
     finally:
         try:
             s3.delete_object(Bucket=bucket, Key=object_key)
+            logger.info(
+                "transcribe.deleted_source request_id=%s bucket=%s key=%s",
+                request_id,
+                bucket,
+                object_key,
+            )
         except Exception:
+            logger.exception(
+                "transcribe.delete_source_failed request_id=%s bucket=%s key=%s",
+                request_id,
+                bucket,
+                object_key,
+            )
             pass
         if job_name:
             try:
                 transcribe.delete_transcription_job(TranscriptionJobName=job_name)
+                logger.info(
+                    "transcribe.deleted_job request_id=%s job_name=%s",
+                    request_id,
+                    job_name,
+                )
             except Exception:
+                logger.exception(
+                    "transcribe.delete_job_failed request_id=%s job_name=%s",
+                    request_id,
+                    job_name,
+                )
                 pass
