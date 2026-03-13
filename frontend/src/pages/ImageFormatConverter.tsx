@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import PageContainer from "../components/PageContainer";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import downloadBlob from "../utils/downloadBlob";
@@ -206,6 +206,12 @@ export default function ImageFormatConverter() {
     }
   };
 
+  const clearSelection = () => {
+    setFile(null);
+    setError(null);
+    setSuccess(null);
+  };
+
   const handleSourceFormatChange = (nextFormat: Format) => {
     setSourceFormat(nextFormat);
     if (nextFormat === targetFormat) {
@@ -241,11 +247,14 @@ export default function ImageFormatConverter() {
 
   return (
     <PageContainer maxWidth={560}>
-      <FilePickerButton
-        variant="outlined"
-        label={file ? file.name : "Choose Image File"}
+      <FileDropZone
         accept=".png,.jpg,.jpeg,.webp,.bmp,image/png,image/jpeg,image/webp,image/bmp,image/x-ms-bmp"
+        disabled={loading}
         onFilesSelected={handleFileChange}
+        onClear={clearSelection}
+        clearDisabled={loading || !file}
+        fileType="image"
+        label={file ? file.name : "Drag & drop an image here, or tap to browse"}
       />
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>

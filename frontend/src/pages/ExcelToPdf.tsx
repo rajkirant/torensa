@@ -6,7 +6,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import DownloadIcon from "@mui/icons-material/Download";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { apiFetch } from "../utils/api";
@@ -33,6 +33,14 @@ export default function ExcelToPdf() {
     if (!files?.length) return;
     setFile(files[0]);
     setResultBlob(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const clearSelection = () => {
+    setFile(null);
+    setResultBlob(null);
+    setResultName("");
     setError(null);
     setSuccess(null);
   };
@@ -88,10 +96,18 @@ export default function ExcelToPdf() {
 
       <Stack spacing={3} sx={{ maxWidth: 520 }}>
         <Box>
-          <FilePickerButton
+          <FileDropZone
             accept={ACCEPT_TYPES}
+            disabled={loading}
             onFilesSelected={onFileSelected}
-            label={file ? file.name : "Choose Excel file (.xls / .xlsx)"}
+            onClear={clearSelection}
+            clearDisabled={loading || !file}
+            fileType="document"
+            label={
+              file
+                ? file.name
+                : "Drag & drop an Excel file here, or tap to browse"
+            }
           />
           {file && (
             <Typography
