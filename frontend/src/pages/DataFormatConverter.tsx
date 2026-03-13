@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import PageContainer from "../components/PageContainer";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import downloadBlob from "../utils/downloadBlob";
@@ -385,6 +385,12 @@ export default function CsvToJsonConverter() {
     }
   };
 
+  const clearSelection = () => {
+    setFile(null);
+    setError(null);
+    setSuccess(null);
+  };
+
   const handleConvert = async () => {
     if (!file) {
       setError("Please select a file.");
@@ -434,11 +440,14 @@ export default function CsvToJsonConverter() {
 
   return (
     <PageContainer maxWidth={560}>
-      <FilePickerButton
-        variant="outlined"
-        label={file ? file.name : "Choose File"}
+      <FileDropZone
         accept=".xlsx,.csv,.json,application/json,text/csv"
+        disabled={loading}
         onFilesSelected={handleFileChange}
+        onClear={clearSelection}
+        clearDisabled={loading || !file}
+        fileType="file"
+        label={file ? file.name : "Drag & drop a file here, or tap to browse"}
       />
 
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>

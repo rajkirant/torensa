@@ -6,7 +6,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import DownloadIcon from "@mui/icons-material/Download";
 import ArticleIcon from "@mui/icons-material/Article";
 import { apiFetch } from "../utils/api";
@@ -32,6 +32,14 @@ export default function PdfToWord() {
     if (!files?.length) return;
     setFile(files[0]);
     setResultBlob(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const clearSelection = () => {
+    setFile(null);
+    setResultBlob(null);
+    setResultName("");
     setError(null);
     setSuccess(null);
   };
@@ -88,10 +96,14 @@ export default function PdfToWord() {
       <Stack spacing={3} sx={{ maxWidth: 520 }}>
         {/* File picker */}
         <Box>
-          <FilePickerButton
+          <FileDropZone
             accept={ACCEPT_TYPES}
+            disabled={loading}
             onFilesSelected={onFileSelected}
-            label={file ? file.name : "Choose PDF file (.pdf)"}
+            onClear={clearSelection}
+            clearDisabled={loading || !file}
+            fileType="pdf"
+            label={file ? file.name : "Drag & drop a PDF here, or tap to browse"}
           />
           {file && (
             <Typography

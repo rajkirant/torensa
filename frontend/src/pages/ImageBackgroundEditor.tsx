@@ -9,7 +9,7 @@ import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import DownloadIcon from "@mui/icons-material/Download";
 import { apiFetch } from "../utils/api";
 import downloadBlob from "../utils/downloadBlob";
@@ -102,6 +102,20 @@ export default function ImageBackgroundEditor() {
   const onBgFileSelected = (files: FileList | null) => {
     if (!files?.length) return;
     setBgFile(files[0]);
+    setResultBlob(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const clearSubject = () => {
+    setFile(null);
+    setResultBlob(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const clearBackground = () => {
+    setBgFile(null);
     setResultBlob(null);
     setError(null);
     setSuccess(null);
@@ -252,19 +266,33 @@ export default function ImageBackgroundEditor() {
 
         {/* Background image picker — shown only in "image" mode */}
         {bgMode === "image" && (
-          <FilePickerButton
-            variant="outlined"
-            label={bgFile ? bgFile.name : "Choose Background Image"}
+          <FileDropZone
             accept={ACCEPT_TYPES}
+            disabled={loading}
             onFilesSelected={onBgFileSelected}
+            onClear={clearBackground}
+            clearDisabled={loading || !bgFile}
+            fileType="image"
+            label={
+              bgFile
+                ? bgFile.name
+                : "Drag & drop a background image here, or tap to browse"
+            }
           />
         )}
 
-        <FilePickerButton
-          variant="outlined"
-          label={file ? file.name : "Choose Subject Image"}
+        <FileDropZone
           accept={ACCEPT_TYPES}
+          disabled={loading}
           onFilesSelected={onFileSelected}
+          onClear={clearSubject}
+          clearDisabled={loading || !file}
+          fileType="image"
+          label={
+            file
+              ? file.name
+              : "Drag & drop the subject image here, or tap to browse"
+          }
         />
         <Typography variant="body2" color="text.secondary">
           For best results, use smaller images.

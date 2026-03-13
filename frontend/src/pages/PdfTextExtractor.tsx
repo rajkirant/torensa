@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -33,6 +33,13 @@ export default function PdfTextExtractor() {
   const onFileSelected = (files: FileList | null) => {
     if (!files?.length) return;
     setFile(files[0]);
+    setExtractedText("");
+    setError(null);
+    setSuccess(null);
+  };
+
+  const clearSelection = () => {
+    setFile(null);
     setExtractedText("");
     setError(null);
     setSuccess(null);
@@ -108,10 +115,14 @@ export default function PdfTextExtractor() {
 
       <Stack spacing={3} sx={{ maxWidth: 640 }}>
         <Box>
-          <FilePickerButton
+          <FileDropZone
             accept={ACCEPT_TYPES}
+            disabled={loading}
             onFilesSelected={onFileSelected}
-            label={file ? file.name : "Choose PDF file (.pdf)"}
+            onClear={clearSelection}
+            clearDisabled={loading || !file}
+            fileType="pdf"
+            label={file ? file.name : "Drag & drop a PDF here, or tap to browse"}
           />
           {file && (
             <Typography
