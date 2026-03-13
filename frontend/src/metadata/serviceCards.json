@@ -1240,5 +1240,48 @@
         "a": "Yes, the Data Files Converter is completely free with no account required. Just upload your file and convert instantly."
       }
     ]
+  },
+  {
+    "id": "speech-to-text",
+    "component": "Transcribe",
+    "title": "Speech to Text Converter",
+    "description": "Convert speech in audio/video files to accurate text using AWS Transcribe.",
+    "path": "/speech-to-text",
+    "ctaLabel": "Open Speech to Text",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Upload an audio file and receive a clean transcript powered by Amazon Transcribe. Supports common audio formats like MP3, WAV, MP4, M4A, FLAC, OGG, and WEBM.",
+    "categoryId": "utilities",
+    "keywords": [
+      "transcribe",
+      "speech",
+      "audio",
+      "speech to text",
+      "aws",
+      "transcript"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Drop an audio file or click to browse for one.",
+      "Choose the spoken language in the audio.",
+      "Click Transcribe Audio and wait for processing to complete.",
+      "Review the transcript and copy or download it as a .txt file."
+    ],
+    "faqs": [
+      {
+        "q": "Which audio formats are supported?",
+        "a": "Common formats including MP3, WAV, MP4/M4A, FLAC, OGG, and WEBM are supported."
+      },
+      {
+        "q": "How long does transcription take?",
+        "a": "Short clips finish in seconds, while longer recordings may take a few minutes depending on size and server load."
+      },
+      {
+        "q": "Is my audio stored permanently?",
+        "a": "The server uploads audio to a temporary storage location for transcription and then deletes it after processing."
+      }
+    ]
   }
 ]
