@@ -7,13 +7,12 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DownloadIcon from "@mui/icons-material/Download";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 
 import PageContainer from "../components/PageContainer";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -316,16 +315,6 @@ export default function PdfSplitter() {
           </Typography>
 
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            <FilePickerButton
-              variant="contained"
-              startIcon={<UploadFileIcon />}
-              label={file ? "Change PDF" : "Choose PDF"}
-              accept=".pdf,application/pdf"
-              onFilesSelected={onPickPdf}
-              resetAfterSelect
-              disabled={busy}
-            />
-
             <TransparentButton
               label="Clear"
               startIcon={<DeleteOutlineIcon />}
@@ -334,6 +323,16 @@ export default function PdfSplitter() {
             />
           </Box>
         </Stack>
+
+        <FileDropZone
+          accept=".pdf,application/pdf"
+          disabled={busy}
+          onFilesSelected={onPickPdf}
+          onClear={clearAll}
+          clearDisabled={busy || (!file && !error && !success)}
+          fileType="pdf"
+          label={file ? file.name : "Drag & drop a PDF here, or tap to browse"}
+        />
 
         <Stack
           direction={{ xs: "column", sm: "row" }}

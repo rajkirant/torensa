@@ -18,7 +18,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import useToolStatus from "../hooks/useToolStatus";
 import downloadBlob from "../utils/downloadBlob";
 
@@ -743,20 +743,21 @@ export default function SpringBootLogAnalyzer() {
         <FlexWrapRow>
           <TransparentButton label="Analyze Log" onClick={handleAnalyze} />
           <TransparentButton label="Load Sample" onClick={handleSample} />
-          <FilePickerButton
-            label="Load File"
-            variant="outlined"
-            accept=".log,.txt,.json,.jsonl"
-            onFilesSelected={handleFilesSelected}
-            resetAfterSelect
-            sx={{ textTransform: "none" }}
-          />
           <TransparentButton label="Copy Report" onClick={handleCopyReport} />
           <ActionButton startIcon={<DownloadIcon />} onClick={handleExportJson}>
             Export JSON
           </ActionButton>
           <TransparentButton label="Clear" onClick={handleClear} />
         </FlexWrapRow>
+
+        <FileDropZone
+          accept=".log,.txt,.json,.jsonl"
+          onFilesSelected={handleFilesSelected}
+          onClear={handleClear}
+          clearDisabled={!logText}
+          fileType="file"
+          label="Drag & drop a log file here, or tap to browse"
+        />
 
         <TextField
           value={logText}
