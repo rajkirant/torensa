@@ -7,13 +7,12 @@ import Divider from "@mui/material/Divider";
 import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DownloadIcon from "@mui/icons-material/Download";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
-import FilePickerButton from "../components/inputs/FilePickerButton";
+import FileDropZone from "../components/inputs/FileDropZone";
 import supportsCanvasMime from "../utils/supportsCanvasMime";
 import downloadBlob from "../utils/downloadBlob";
 
@@ -208,7 +207,6 @@ export default function ImageCropTool() {
   const [isRenderingPreview, setIsRenderingPreview] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const previewRef = useRef<HTMLImageElement | null>(null);
   const previewJobRef = useRef(0);
 
@@ -241,7 +239,6 @@ export default function ImageCropTool() {
       if (prev) URL.revokeObjectURL(prev);
       return null;
     });
-    if (inputRef.current) inputRef.current.value = "";
   };
 
   useEffect(() => {
@@ -444,7 +441,6 @@ export default function ImageCropTool() {
       setCrop(null);
     }
 
-    if (inputRef.current) inputRef.current.value = "";
   };
 
   const downloadResult = () => {
@@ -481,22 +477,12 @@ export default function ImageCropTool() {
           spacing={1}
           alignItems={{ sm: "center" }}
         >
-          <FilePickerButton
-            label="Choose image"
-            variant="contained"
-            startIcon={<UploadFileIcon />}
-            accept="image/*"
-            onFilesSelected={onFilesSelected}
-            inputRef={inputRef}
-            disabled={busy}
-          />
-
           <Button
             variant="text"
             color="inherit"
             startIcon={<RestartAltIcon />}
             onClick={clearAll}
-            disabled={busy && !sourceUrl}
+            disabled={busy || !sourceUrl}
           >
             Clear
           </Button>
@@ -510,6 +496,20 @@ export default function ImageCropTool() {
             />
           )}
         </Stack>
+
+        <FileDropZone
+          accept="image/*"
+          disabled={busy}
+          onFilesSelected={onFilesSelected}
+          onClear={clearAll}
+          clearDisabled={busy || !sourceUrl}
+          fileType="image"
+          label={
+            file
+              ? `${file.name} • ${formatBytes(file.size)}`
+              : "Drag & drop an image here, or tap to browse"
+          }
+        />
 
         {error && <Alert severity="error">{error}</Alert>}
       </Stack>
