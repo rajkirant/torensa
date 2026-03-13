@@ -295,10 +295,27 @@ def transcribe_view(request):
                     request_id,
                     job_name,
                 )
-            except Exception:
-                logger.exception(
-                    "transcribe.delete_job_failed request_id=%s job_name=%s",
-                    request_id,
-                    job_name,
-                )
-                pass
+            except Exception as exc:
+                ignore = False
+                try:
+                    from botocore.exceptions import ClientError
+
+                    if isinstance(exc, ClientError):
+                        code = exc.response.get("Error", {}).get("Code")
+                        if code in {"BadRequestException", "ResourceNotFoundException"}:
+                            ignore = True
+                except Exception:
+                    pass
+
+                if ignore:
+                    logger.warning(
+                        "transcribe.delete_job_not_found request_id=%s job_name=%s",
+                        request_id,
+                        job_name,
+                    )
+                else:
+                    logger.exception(
+                        "transcribe.delete_job_failed request_id=%s job_name=%s",
+                        request_id,
+                        job_name,
+                    )
