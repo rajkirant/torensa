@@ -74,7 +74,7 @@
       }
     ]
   },
-  {
+    {
     "id": "text-share",
     "component": "EasyShare",
     "title": "Easy Share (Text + File)",
@@ -95,12 +95,13 @@
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Open Easy Share on the device you want to send from.",
-      "Paste text into the text area, or drag and drop up to 5 files onto the upload zone.",
+      "Open Easy Share and choose a mode (Send or Receive).",
+      "In Send mode, paste text and/or drag up to 5 files into the upload zone.",
       "Each file can be up to 1 GB, and files upload directly to Cloudflare-backed storage.",
-      "Use drag-and-drop to reorder selected files, or click × to remove one before sharing.",
-      "Click Generate Code. A unique 4-digit code is displayed immediately.",
-      "On the receiving device, open Easy Share, enter the 4-digit code, and download the shared text or files.",
+      "Reorder files with drag-and-drop or remove a file before sharing.",
+      "Click Generate Code to get a 4-digit access code.",
+      "In Receive mode, enter the 4-digit code or use refresh to load the latest share on your network.",
+      "Shared files appear in the download list and any shared text appears below it.",
       "Shares expire automatically after approximately 1 hour for privacy."
     ],
     "faqs": [
@@ -126,7 +127,11 @@
       },
       {
         "q": "What does the auto-load feature do on the same network?",
-        "a": "When two devices are on the same local network and one has recently shared, the receiving device can auto-detect the latest share using the refresh button, without needing to type the code manually."
+        "a": "When two devices are on the same local network and one has recently shared, the receiving device can use the refresh button to load the latest share without typing the code."
+      },
+      {
+        "q": "Where do I see the shared text when receiving?",
+        "a": "After entering a valid code, shared files appear in the download list and any shared text is shown below that list."
       }
     ]
   },
