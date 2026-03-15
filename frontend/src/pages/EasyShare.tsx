@@ -823,7 +823,7 @@ const TextShareContent: React.FC = () => {
               <Typography
                 variant="body2"
                 color="text.secondary"
-                sx={{ whiteSpace: "nowrap", fontWeight: 600 }}
+                sx={{ fontWeight: 600, flex: "1 1 260px" }}
               >
                 {isFetching
                   ? "Checking for recent shares on this network..."
