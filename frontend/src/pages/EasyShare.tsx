@@ -8,6 +8,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import CircularProgress from "@mui/material/CircularProgress";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -353,6 +358,7 @@ const ReceivedFileCard: React.FC<ReceivedFileCardProps> = ({
 // ── Main Component ──────────────────────────────────────────────────────────
 
 const TextShareContent: React.FC = () => {
+  const [mode, setMode] = useState<"" | "send" | "receive">("");
   const [code, setCode] = useState("");
   const [text, setText] = useState("");
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
@@ -491,7 +497,7 @@ const TextShareContent: React.FC = () => {
         if (res.status === 413) {
           setError(
             hasFiles
-              ? "Upload rejected by the configured EasyShare size limit."
+              ? "Upload rejected by the configured File Share size limit."
               : "Upload rejected by the deployed API gateway/server. The infrastructure limit is lower than the app limit for this endpoint.",
           );
           return;
@@ -637,6 +643,7 @@ const TextShareContent: React.FC = () => {
   // ── Auto-share on text or file change ─────────────────────────────────────
 
   useEffect(() => {
+    if (mode !== "send") return;
     if (shareTimerRef.current) window.clearTimeout(shareTimerRef.current);
 
     if (skipShareRef.current) {
@@ -668,11 +675,13 @@ const TextShareContent: React.FC = () => {
     return () => {
       if (shareTimerRef.current) window.clearTimeout(shareTimerRef.current);
     };
-  }, [text, selectedFiles]);
+  }, [text, selectedFiles, mode]);
 
   useEffect(() => {
-    void fetchLatestByIp();
-  }, []);
+    if (mode === "receive") {
+      void fetchLatestByIp();
+    }
+  }, [mode]);
 
   // ── File handlers ──────────────────────────────────────────────────────────
 
@@ -728,6 +737,9 @@ const TextShareContent: React.FC = () => {
     setCode(next);
     setError();
     setSuccess();
+    setReceivedFileInfo(null);
+    setFileShared(false);
+    setExpiresAt(null);
     if (next.length === CODE_LENGTH) void fetchText(next);
   };
 
@@ -755,106 +767,182 @@ const TextShareContent: React.FC = () => {
             "linear-gradient(140deg, rgba(59,130,246,0.16) 0%, rgba(15,23,42,0.12) 55%, rgba(14,165,233,0.12) 100%)",
         }}
       >
-        {/* Code input */}
-        <TextField
-          label="Access Code"
-          value={code}
-          onChange={(e) => handleCodeChange(e.target.value)}
-          inputProps={{ inputMode: "numeric", pattern: "[0-9]*", maxLength: 4 }}
-          placeholder="0000"
-          helperText={
-            isFetching
-              ? "Checking for recent shares on this network..."
-              : "Enter a 4-digit code to load content from another device."
-          }
-          InputProps={{
-            startAdornment: <InputAdornment position="start">#</InputAdornment>,
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="Load latest shared content"
-                  onClick={() => void fetchLatestByIp()}
-                  disabled={isFetching}
-                  edge="end"
-                >
-                  <RefreshIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-        />
-
-        {/* Text input */}
-        <TextField
-          label="Shared Text"
-          value={text}
-          onChange={(e) => {
-            const next = e.target.value.slice(0, MAX_TEXT_LENGTH);
-            setText(next);
-            setInfo("");
-          }}
-          placeholder="Paste or type text here to generate a code."
-          multiline
-          minRows={5}
-          fullWidth
-          helperText={remainingChars}
-        />
-
-        {/* File drop zone */}
-        <FileDropZone
-          multiple
-          disabled={isSharing || selectedFiles.length >= MAX_FILES}
-          onFilesSelected={(fileList) => {
-            if (fileList) addFiles(Array.from(fileList));
-          }}
-          onClear={clearSelectedFiles}
-          clearDisabled={selectedFiles.length === 0 || isSharing}
-          fileType="file"
-          label={
-            selectedFiles.length >= MAX_FILES
-              ? `Limit reached (${MAX_FILES} files) — remove a file to add more`
-              : "Drag & drop up to 5 files here, or tap to browse. Each file can be up to 1 GB and uploads directly to Cloudflare."
-          }
-        />
-
-        <Typography variant="caption" color="text.secondary">
-          Share text plus up to {MAX_FILES} files, with a{" "}
-          {MAX_FILE_SIZE / 1_073_741_824} GB limit per file. Codes expire after
-          about 1 hour.
-        </Typography>
-
-        {/* File canvas */}
-        {selectedFiles.length > 0 && (
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 1.5,
-              p: 1.5,
-              borderRadius: 2,
-              border: "1px solid rgba(148,163,184,0.18)",
-              bgcolor: "rgba(15,23,42,0.25)",
-              minHeight: 100,
+        <FormControl fullWidth>
+          <InputLabel id="file-share-mode-label" shrink>
+            Mode
+          </InputLabel>
+          <Select
+            labelId="file-share-mode-label"
+            value={mode}
+            label="Mode"
+            renderValue={(selected) =>
+              selected === "" ? "Select mode" : selected === "send" ? "Send a file" : "Receive a file"
+            }
+            onChange={(e) => {
+              const next = e.target.value as "" | "send" | "receive";
+              setMode(next);
+              if (next === "receive") {
+                setCode("");
+                setText("");
+                setSelectedFiles([]);
+                setReceivedFileInfo(null);
+                setFileShared(false);
+                setExpiresAt(null);
+              } else if (next === "send") {
+                setCode("");
+                setText("");
+                setSelectedFiles([]);
+                setReceivedFileInfo(null);
+                setFileShared(false);
+                setExpiresAt(null);
+              }
+              clear();
+              setInfo("");
+              setSuccess();
+              setError();
             }}
+            displayEmpty
           >
-            {selectedFiles.map((file, i) => (
-              <FileCard
-                key={`${file.name}-${i}`}
-                file={file}
-                index={i}
-                total={selectedFiles.length}
-                onRemove={removeFile}
-                onDragStart={handleDragStart}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-              />
-            ))}
-          </Box>
+            <MenuItem value="" disabled>
+              Select mode
+            </MenuItem>
+            <MenuItem value="send">Send a file</MenuItem>
+            <MenuItem value="receive">Receive a file</MenuItem>
+          </Select>
+        </FormControl>
+
+        {mode === "receive" && (
+          <Stack spacing={0.75}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1.5}
+              flexWrap="wrap"
+              useFlexGap
+            >
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ whiteSpace: "nowrap", fontWeight: 600 }}
+              >
+                {isFetching
+                  ? "Checking for recent shares on this network..."
+                  : "Enter a 4-digit code to load content from sender device."}
+                <Box
+                  component="span"
+                  sx={{
+                    display: "inline-block",
+                    ml: 0.5,
+                    animation: "arrowNudge 1.1s ease-in-out infinite",
+                    "@keyframes arrowNudge": {
+                      "0%": { transform: "translateX(0)" },
+                      "50%": { transform: "translateX(6px)" },
+                      "100%": { transform: "translateX(0)" },
+                    },
+                  }}
+                >
+                  {"\u2192"}
+                </Box>
+              </Typography>
+              <Box sx={{ width: 120 }}>
+                <TextField
+                  aria-label="Access Code"
+                  value={code}
+                  onChange={(e) => handleCodeChange(e.target.value)}
+                  inputProps={{
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                    maxLength: 4,
+                  }}
+                  placeholder="0000"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">#</InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="Load latest shared content"
+                          onClick={() => void fetchLatestByIp()}
+                          disabled={isFetching}
+                          edge="end"
+                        >
+                          <RefreshIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+            </Stack>
+          </Stack>
+        )}
+
+        {mode === "send" && (
+          <>
+            <FileDropZone
+              multiple
+              disabled={isSharing || selectedFiles.length >= MAX_FILES}
+              onFilesSelected={(fileList) => {
+                if (fileList) addFiles(Array.from(fileList));
+              }}
+              onClear={clearSelectedFiles}
+              clearDisabled={selectedFiles.length === 0 || isSharing}
+              fileType="file"
+              label={
+                selectedFiles.length >= MAX_FILES
+                  ? `Limit reached (${MAX_FILES} files) - remove a file to add more`
+                  : "Drag & drop up to 5 files here, or tap to browse. Each file can be up to 1 GB and uploads directly to Cloudflare."
+              }
+            />
+
+            {selectedFiles.length > 0 && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1.5,
+                  p: 1.5,
+                  borderRadius: 2,
+                  border: "1px solid rgba(148,163,184,0.18)",
+                  bgcolor: "rgba(15,23,42,0.25)",
+                  minHeight: 100,
+                }}
+              >
+                {selectedFiles.map((file, i) => (
+                  <FileCard
+                    key={`${file.name}-${i}`}
+                    file={file}
+                    index={i}
+                    total={selectedFiles.length}
+                    onRemove={removeFile}
+                    onDragStart={handleDragStart}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                  />
+                ))}
+              </Box>
+            )}
+            <TextField
+              label="Text to share (optional)"
+              value={text}
+              onChange={(e) => {
+                const next = e.target.value.slice(0, MAX_TEXT_LENGTH);
+                setText(next);
+                setInfo("");
+              }}
+              placeholder="Paste or type text here to generate a code."
+              multiline
+              minRows={2}
+              fullWidth
+              helperText={remainingChars}
+            />
+          </>
         )}
 
         {/* Received file info (from fetched code) */}
-        {receivedFileInfo &&
+        {mode === "receive" &&
+          receivedFileInfo &&
           receivedFileInfo.length > 0 &&
           selectedFiles.length === 0 && (
             <Stack spacing={1}>
@@ -902,22 +990,94 @@ const TextShareContent: React.FC = () => {
             </Stack>
           )}
 
+        {mode === "receive" && text.trim().length > 0 && (
+          <TextField
+            label="Shared text"
+            value={text}
+            InputProps={{ readOnly: true }}
+            multiline
+            minRows={2}
+            fullWidth
+            helperText={`${text.length}/${MAX_TEXT_LENGTH} characters`}
+          />
+        )}
+
         {/* Actions */}
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Button
-            variant="outlined"
-            onClick={() => void shareContent(text, selectedFiles)}
-            disabled={(!text.trim() && selectedFiles.length === 0) || isSharing}
-          >
-            {isSharing ? "Generating..." : "Generate Code"}
-          </Button>
-          <Button variant="text" onClick={handleClearAll}>
-            Clear
-          </Button>
-        </Stack>
+        {mode === "send" && (
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            <Button
+              variant="outlined"
+              onClick={() => void shareContent(text, selectedFiles)}
+              disabled={
+                (!text.trim() && selectedFiles.length === 0) || isSharing
+              }
+            >
+              {isSharing ? (
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <CircularProgress size={16} thickness={5} />
+                  <span>Generating...</span>
+                </Stack>
+              ) : (
+                "Generate Code"
+              )}
+            </Button>
+            <Button variant="text" onClick={handleClearAll}>
+              Clear
+            </Button>
+            {!isSharing && code.length === CODE_LENGTH && (
+              <Stack
+                direction="row"
+                spacing={1.5}
+                alignItems="center"
+                flexWrap="wrap"
+              >
+                <Typography
+                  variant="body2"
+                  color="error.main"
+                  sx={{ whiteSpace: "nowrap", fontWeight: 700 }}
+                >
+                  On the receiver side, use this code to get the file/text{" "}
+                  <Box
+                    component="span"
+                    sx={{
+                      display: "inline-block",
+                      ml: 0.5,
+                      animation: "arrowNudge 1.1s ease-in-out infinite",
+                      "@keyframes arrowNudge": {
+                        "0%": { transform: "translateX(0)" },
+                        "50%": { transform: "translateX(6px)" },
+                        "100%": { transform: "translateX(0)" },
+                      },
+                    }}
+                  >
+                    {"\u2192"}
+                  </Box>
+                </Typography>
+                <Box sx={{ width: 100 }}>
+                  <TextField
+                    label="Access Code"
+                    value={code}
+                    inputProps={{ readOnly: true }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">#</InputAdornment>
+                      ),
+                    }}
+                    fullWidth
+                  />
+                </Box>
+              </Stack>
+            )}
+            <Typography variant="caption" color="text.secondary">
+              Share text plus up to {MAX_FILES} files, with a{" "}
+              {MAX_FILE_SIZE / 1_073_741_824} GB limit per file. Codes expire
+              after about 1 hour.
+            </Typography>
+          </Stack>
+        )}
 
         {/* Expiry */}
-        {expiresAt && (
+        {mode === "send" && expiresAt && (
           <Typography variant="caption" color="text.secondary">
             Code expires around {new Date(expiresAt).toLocaleTimeString()}.
           </Typography>
