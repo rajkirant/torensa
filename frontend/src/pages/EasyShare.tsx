@@ -776,7 +776,11 @@ const TextShareContent: React.FC = () => {
             value={mode}
             label="Mode"
             renderValue={(selected) =>
-              selected === "" ? "Select mode" : selected === "send" ? "Send a file" : "Receive a file"
+              selected === ""
+                ? "Select mode"
+                : selected === "send"
+                  ? "Send a file/text"
+                  : "Receive a file/text"
             }
             onChange={(e) => {
               const next = e.target.value as "" | "send" | "receive";
@@ -806,8 +810,8 @@ const TextShareContent: React.FC = () => {
             <MenuItem value="" disabled>
               Select mode
             </MenuItem>
-            <MenuItem value="send">Send a file</MenuItem>
-            <MenuItem value="receive">Receive a file</MenuItem>
+            <MenuItem value="send">Send a file/text</MenuItem>
+            <MenuItem value="receive">Receive a file/text</MenuItem>
           </Select>
         </FormControl>
 
