@@ -94,4 +94,6 @@ const rainbow = createTheme({
   },
 });
 
+export { default as icon } from "@mui/icons-material/AutoAwesome";
+
 export default rainbow;

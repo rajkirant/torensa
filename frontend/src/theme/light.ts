@@ -98,4 +98,6 @@ const light = createTheme({
   },
 });
 
+export { default as icon } from "@mui/icons-material/LightMode";
+
 export default light;
