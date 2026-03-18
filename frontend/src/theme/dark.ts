@@ -72,4 +72,6 @@ const dark = createTheme({
   },
 });
 
+export { default as icon } from "@mui/icons-material/DarkMode";
+
 export default dark;
