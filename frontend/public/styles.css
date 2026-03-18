@@ -60,6 +60,14 @@ body {
   transform: translateY(-6px);
 }
 
+.card-hover .MuiSvgIcon-root {
+  transition: transform 0.25s ease;
+}
+
+.card-hover:hover .MuiSvgIcon-root {
+  transform: scale(1.2);
+}
+
 /* =========================
    MISC
    ========================= */
