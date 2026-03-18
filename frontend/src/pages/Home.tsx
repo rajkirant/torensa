@@ -26,6 +26,7 @@ import {
   getOfflineServiceCards,
   getServiceCardsByCategory,
 } from "../utils/serviceCards";
+import { toolIcons } from "../metadata/toolIcons";
 
 /* ===================== DATA (JSON) ===================== */
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
@@ -198,22 +199,26 @@ export default function Home() {
         {searchInput}
 
         <div style={cardsGridStyle}>
-          {visibleOfflineCards.map((card) => (
-            <div
-              key={card.id}
-              style={cardStyle}
-              onClick={() => navigate(card.path)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") navigate(card.path);
-              }}
-            >
-              <h3>{card.title}</h3>
-              <p style={secondaryText}>{card.description}</p>
-              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
-            </div>
-          ))}
+          {visibleOfflineCards.map((card) => {
+            const Icon = toolIcons[card.id];
+            return (
+              <div
+                key={card.id}
+                style={cardStyle}
+                onClick={() => navigate(card.path)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") navigate(card.path);
+                }}
+              >
+                {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
+                <h3>{card.title}</h3>
+                <p style={secondaryText}>{card.description}</p>
+                <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+              </div>
+            );
+          })}
 
           {filteredOfflineCards.length === 0 && (
             <p
@@ -256,22 +261,26 @@ export default function Home() {
       {searchInput}
 
       <div style={cardsGridStyle}>
-        {visibleCards.map((card) => (
-          <div
-            key={card.id}
-            style={cardStyle}
-            onClick={() => navigate(card.path)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") navigate(card.path);
-            }}
-          >
-            <h3>{card.title}</h3>
-            <p style={secondaryText}>{card.description}</p>
-            <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
-          </div>
-        ))}
+        {visibleCards.map((card) => {
+          const Icon = toolIcons[card.id];
+          return (
+            <div
+              key={card.id}
+              style={cardStyle}
+              onClick={() => navigate(card.path)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") navigate(card.path);
+              }}
+            >
+              {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
+              <h3>{card.title}</h3>
+              <p style={secondaryText}>{card.description}</p>
+              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+            </div>
+          );
+        })}
 
         {filteredCards.length === 0 && (
           <p
