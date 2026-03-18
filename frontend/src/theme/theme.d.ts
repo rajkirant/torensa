@@ -12,6 +12,17 @@ declare module "@mui/material/styles" {
         border?: string;
         boxShadow?: string;
       };
+      searchBar: {
+        background: string;
+        backgroundHover: string;
+        backgroundFocused: string;
+        gradient: string;
+        gradientFocused: string;
+        focusShadow: string;
+        iconColor: string;
+        placeholderColor: string;
+        textColor: string;
+      };
     };
     header: {
       text: string;
@@ -34,6 +45,17 @@ declare module "@mui/material/styles" {
         background?: string;
         border?: string;
         boxShadow?: string;
+      };
+      searchBar?: {
+        background?: string;
+        backgroundHover?: string;
+        backgroundFocused?: string;
+        gradient?: string;
+        gradientFocused?: string;
+        focusShadow?: string;
+        iconColor?: string;
+        placeholderColor?: string;
+        textColor?: string;
       };
     };
     header?: {

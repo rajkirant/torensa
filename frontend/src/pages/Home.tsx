@@ -16,6 +16,11 @@ import serviceCards from "../metadata/serviceCards.json";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import type { AppOutletContext } from "../App";
 import {
+  searchBarSx,
+  searchBarIconSx,
+  searchBarClearIconSx,
+} from "../styles/appStyles";
+import {
   type ServiceCardConfig,
   getActiveServiceCards,
   getOfflineServiceCards,
@@ -143,7 +148,6 @@ export default function Home() {
     <div style={searchWrapperStyle}>
       <TextField
         fullWidth
-        size="small"
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
         placeholder="Search tools by name, description, or keyword"
@@ -151,7 +155,7 @@ export default function Home() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchRoundedIcon fontSize="small" />
+              <SearchRoundedIcon sx={searchBarIconSx(theme)} />
             </InputAdornment>
           ),
           endAdornment: searchTerm ? (
@@ -161,11 +165,12 @@ export default function Home() {
                 size="small"
                 onClick={() => setSearchTerm("")}
               >
-                <CloseRoundedIcon fontSize="small" />
+                <CloseRoundedIcon sx={searchBarClearIconSx(theme)} fontSize="small" />
               </IconButton>
             </InputAdornment>
           ) : undefined,
         }}
+        sx={searchBarSx(theme)}
       />
     </div>
   );

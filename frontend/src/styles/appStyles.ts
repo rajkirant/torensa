@@ -147,3 +147,61 @@ export const footerLinkStyle = (theme: Theme): React.CSSProperties => ({
   display: "inline-flex",
   alignItems: "center",
 });
+
+export const searchBarSx = (theme: Theme) => {
+  const sb = theme.home.searchBar;
+  return {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "16px",
+      background: sb.background,
+      padding: "4px 8px",
+      fontSize: 16,
+      color: sb.textColor,
+      border: "1px solid transparent",
+      backgroundClip: "padding-box",
+      position: "relative",
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        inset: -1,
+        borderRadius: "17px",
+        padding: "1px",
+        background: sb.gradient,
+        WebkitMask:
+          "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+        WebkitMaskComposite: "xor",
+        maskComposite: "exclude",
+        pointerEvents: "none",
+      },
+      "& fieldset": {
+        border: "none",
+      },
+      "&:hover": {
+        background: sb.backgroundHover,
+      },
+      "&.Mui-focused": {
+        background: sb.backgroundFocused,
+        boxShadow: sb.focusShadow,
+        "&::before": {
+          background: sb.gradientFocused,
+        },
+      },
+    },
+    "& .MuiOutlinedInput-input": {
+      padding: "12px 8px",
+      "&::placeholder": {
+        color: sb.placeholderColor,
+        opacity: 1,
+      },
+    },
+  };
+};
+
+export const searchBarIconSx = (theme: Theme) => ({
+  color: theme.home.searchBar.iconColor,
+  fontSize: 22,
+});
+
+export const searchBarClearIconSx = (theme: Theme) => ({
+  color: theme.home.searchBar.iconColor,
+});
