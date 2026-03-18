@@ -204,6 +204,7 @@ export default function Home() {
             return (
               <div
                 key={card.id}
+                className="card-hover"
                 style={cardStyle}
                 onClick={() => navigate(card.path)}
                 role="button"
@@ -266,6 +267,7 @@ export default function Home() {
           return (
             <div
               key={card.id}
+              className="card-hover"
               style={cardStyle}
               onClick={() => navigate(card.path)}
               role="button"

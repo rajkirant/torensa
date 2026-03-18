@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npx tsc:*)",
       "Bash(xargs grep:*)",
-      "Bash(find c:UsersrajkiWorkspacetorensafrontendnode_modules@muiicons-material -maxdepth 1 -name *arcode*)"
+      "Bash(find c:UsersrajkiWorkspacetorensafrontendnode_modules@muiicons-material -maxdepth 1 -name *arcode*)",
+      "Bash(find /c/Users/rajki/Workspace/torensa/frontend/src -type f \\\\\\(-iname *card* -o -name *.json \\\\\\))"
     ]
   }
 }
