@@ -29,11 +29,11 @@ export const PrimaryButton = styled(Button)(({ theme }) => ({
     color: "#ffffff",
     background: "linear-gradient(135deg, #3b82f6, #1e40af)",
 
-    animation: `${softPulse} 3.5s ease-in-out infinite`,
+    animation: "none",
     transition: "transform 0.2s ease, box-shadow 0.2s ease",
 
     "&:hover": {
-        animation: "none",
+        animation: `${softPulse} 3.5s ease-in-out infinite`,
         boxShadow:
             "0 6px 16px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.45)",
         transform: "translateY(-2px)",
