@@ -238,7 +238,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
                       mr: 1,
                       verticalAlign: "middle",
                       position: "relative",
-                      top: "0px",
                     }}
                   />
                 )}
