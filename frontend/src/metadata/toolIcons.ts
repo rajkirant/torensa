@@ -25,6 +25,7 @@ import FindInPageIcon from "@mui/icons-material/FindInPage";
 import TableViewIcon from "@mui/icons-material/TableView";
 import SubtitlesIcon from "@mui/icons-material/Subtitles";
 import MicIcon from "@mui/icons-material/Mic";
+import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -55,4 +56,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "excel-to-csv": TableViewIcon,
   "subtitle-downloader": SubtitlesIcon,
   "speech-to-text": MicIcon,
+  "habit-tracker": TrackChangesIcon,
 };

@@ -1323,5 +1323,41 @@
         "a": "The server uploads audio to a temporary storage location for transcription and then deletes it after processing."
       }
     ]
+  },
+  {
+    "id": "habit-tracker",
+    "component": "HabitTracker",
+    "title": "Habit Tracker",
+    "description": "Track daily habits, earn points for completed tasks, and visualize your progress over time.",
+    "path": "/habit-tracker",
+    "ctaLabel": "Track Habits",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Build a list of habits you want to do every day, each with a custom point value. Check off completed habits daily to earn points. A bar chart shows your points over the last 14 days so you can track your consistency. All data is stored locally in your browser.",
+    "categoryId": "utilities",
+    "keywords": ["habit", "tracker", "daily", "routine", "points", "productivity", "goals", "checklist"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Enter a habit name and point value, then click Add.",
+      "Check off each habit as you complete it throughout the day.",
+      "Your points for today update in real time as you check habits.",
+      "View the bar chart to see your points trend over the last 14 days.",
+      "Remove a habit by clicking the delete icon next to it."
+    ],
+    "faqs": [
+      {
+        "q": "Where is my data stored?",
+        "a": "All habits and completion data are stored in your browser's local storage. Nothing is sent to a server."
+      },
+      {
+        "q": "Can I use this offline?",
+        "a": "Yes, the habit tracker works fully offline since all processing happens in your browser."
+      },
+      {
+        "q": "Does the chart reset?",
+        "a": "The chart always shows the last 14 days. Older data is still stored and will appear if you look back."
+      }
+    ]
   }
 ]

@@ -4,7 +4,16 @@
       "Bash(npx tsc:*)",
       "Bash(xargs grep:*)",
       "Bash(find c:UsersrajkiWorkspacetorensafrontendnode_modules@muiicons-material -maxdepth 1 -name *arcode*)",
-      "Bash(find /c/Users/rajki/Workspace/torensa/frontend/src -type f \\\\\\(-iname *card* -o -name *.json \\\\\\))"
+      "Bash(find /c/Users/rajki/Workspace/torensa/frontend/src -type f \\\\\\(-iname *card* -o -name *.json \\\\\\))",
+      "Bash(convert --version)",
+      "Bash(npx --yes sharp-cli --version)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm build:*)",
+      "Bash(python manage.py makemigrations api)",
+      "Bash(source venv/Scripts/activate)",
+      "Bash(source .venv/Scripts/activate)",
+      "Bash(python backend/manage.py makemigrations api)",
+      "Bash(python backend/manage.py migrate)"
     ]
   }
 }
