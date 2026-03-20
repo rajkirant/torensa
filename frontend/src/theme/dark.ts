@@ -34,6 +34,19 @@ const dark = createTheme({
       boxShadow:
         "0 18px 36px rgba(2,6,23,0.45), inset 0 1px 0 rgba(255,255,255,0.04)",
     },
+    searchBar: {
+      background: "rgba(15, 15, 35, 0.7)",
+      backgroundHover: "rgba(15, 15, 35, 0.85)",
+      backgroundFocused: "rgba(15, 15, 35, 0.9)",
+      gradient:
+        "linear-gradient(135deg, rgba(120,80,220,0.5), rgba(60,120,220,0.4), rgba(120,80,220,0.3))",
+      gradientFocused:
+        "linear-gradient(135deg, rgba(140,90,255,0.7), rgba(70,140,255,0.6), rgba(140,90,255,0.5))",
+      focusShadow: "none",
+      iconColor: "rgba(255,255,255,0.5)",
+      placeholderColor: "rgba(255,255,255,0.4)",
+      textColor: "rgba(255,255,255,0.85)",
+    },
   },
 
   header: {
@@ -71,5 +84,7 @@ const dark = createTheme({
     },
   },
 });
+
+export { default as icon } from "@mui/icons-material/DarkMode";
 
 export default dark;

@@ -34,6 +34,19 @@ const light = createTheme({
       border: undefined,
       boxShadow: undefined,
     },
+    searchBar: {
+      background: "rgba(255,255,255,0.9)",
+      backgroundHover: "rgba(245,245,255,0.95)",
+      backgroundFocused: "rgba(255,255,255,1)",
+      gradient:
+        "linear-gradient(135deg, rgba(120,80,220,0.3), rgba(60,120,220,0.25), rgba(120,80,220,0.2))",
+      gradientFocused:
+        "linear-gradient(135deg, rgba(120,80,220,0.5), rgba(60,120,220,0.4), rgba(120,80,220,0.35))",
+      focusShadow: "0 0 0 3px rgba(100,80,220,0.12)",
+      iconColor: "rgba(0,0,0,0.4)",
+      placeholderColor: "rgba(0,0,0,0.4)",
+      textColor: "#0f172a",
+    },
   },
 
   header: {
@@ -97,5 +110,7 @@ const light = createTheme({
     },
   },
 });
+
+export { default as icon } from "@mui/icons-material/LightMode";
 
 export default light;

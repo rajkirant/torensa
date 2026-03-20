@@ -16,11 +16,17 @@ import serviceCards from "../metadata/serviceCards.json";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import type { AppOutletContext } from "../App";
 import {
+  searchBarSx,
+  searchBarIconSx,
+  searchBarClearIconSx,
+} from "../styles/appStyles";
+import {
   type ServiceCardConfig,
   getActiveServiceCards,
   getOfflineServiceCards,
   getServiceCardsByCategory,
 } from "../utils/serviceCards";
+import { toolIcons } from "../metadata/toolIcons";
 
 /* ===================== DATA (JSON) ===================== */
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
@@ -143,7 +149,6 @@ export default function Home() {
     <div style={searchWrapperStyle}>
       <TextField
         fullWidth
-        size="small"
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
         placeholder="Search tools by name, description, or keyword"
@@ -151,7 +156,7 @@ export default function Home() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchRoundedIcon fontSize="small" />
+              <SearchRoundedIcon sx={searchBarIconSx(theme)} />
             </InputAdornment>
           ),
           endAdornment: searchTerm ? (
@@ -161,11 +166,12 @@ export default function Home() {
                 size="small"
                 onClick={() => setSearchTerm("")}
               >
-                <CloseRoundedIcon fontSize="small" />
+                <CloseRoundedIcon sx={searchBarClearIconSx(theme)} fontSize="small" />
               </IconButton>
             </InputAdornment>
           ) : undefined,
         }}
+        sx={searchBarSx(theme)}
       />
     </div>
   );
@@ -193,22 +199,27 @@ export default function Home() {
         {searchInput}
 
         <div style={cardsGridStyle}>
-          {visibleOfflineCards.map((card) => (
-            <div
-              key={card.id}
-              style={cardStyle}
-              onClick={() => navigate(card.path)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") navigate(card.path);
-              }}
-            >
-              <h3>{card.title}</h3>
-              <p style={secondaryText}>{card.description}</p>
-              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
-            </div>
-          ))}
+          {visibleOfflineCards.map((card) => {
+            const Icon = toolIcons[card.id];
+            return (
+              <div
+                key={card.id}
+                className="card-hover"
+                style={cardStyle}
+                onClick={() => navigate(card.path)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") navigate(card.path);
+                }}
+              >
+                {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
+                <h3>{card.title}</h3>
+                <p style={secondaryText}>{card.description}</p>
+                <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+              </div>
+            );
+          })}
 
           {filteredOfflineCards.length === 0 && (
             <p
@@ -251,22 +262,27 @@ export default function Home() {
       {searchInput}
 
       <div style={cardsGridStyle}>
-        {visibleCards.map((card) => (
-          <div
-            key={card.id}
-            style={cardStyle}
-            onClick={() => navigate(card.path)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") navigate(card.path);
-            }}
-          >
-            <h3>{card.title}</h3>
-            <p style={secondaryText}>{card.description}</p>
-            <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
-          </div>
-        ))}
+        {visibleCards.map((card) => {
+          const Icon = toolIcons[card.id];
+          return (
+            <div
+              key={card.id}
+              className="card-hover"
+              style={cardStyle}
+              onClick={() => navigate(card.path)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") navigate(card.path);
+              }}
+            >
+              {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
+              <h3>{card.title}</h3>
+              <p style={secondaryText}>{card.description}</p>
+              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+            </div>
+          );
+        })}
 
         {filteredCards.length === 0 && (
           <p

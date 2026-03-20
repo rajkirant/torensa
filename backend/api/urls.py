@@ -30,6 +30,12 @@ from .views.text_share_views import (
     init_text_share_upload,
     complete_text_share_upload,
 )
+from .views.habit_views import (
+    habits_view,
+    habit_delete_view,
+    habit_toggle_view,
+    habit_logs_view,
+)
 
 urlpatterns = [
     path("hello/", hello),
@@ -73,4 +79,9 @@ urlpatterns = [
     path("text-share/", create_text_share),
     path("text-share/<str:code>/", get_text_share),
     path("text-share/<str:code>/delete/", delete_text_share),
+    # Habit tracker
+    path("habits/", habits_view),
+    path("habits/<int:habit_id>/", habit_delete_view),
+    path("habits/<int:habit_id>/toggle/", habit_toggle_view),
+    path("habits/logs/", habit_logs_view),
 ]

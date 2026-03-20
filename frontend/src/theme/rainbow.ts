@@ -38,6 +38,23 @@ const rainbow = createTheme({
       boxShadow:
         "0 18px 36px rgba(2,6,23,0.45), 0 0 0 1px rgba(244,114,182,0.22), 0 0 24px rgba(59,130,246,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
     },
+    searchBar: {
+      background:
+        "linear-gradient(160deg, rgba(30,20,60,0.8) 0%, rgba(15,15,40,0.85) 100%)",
+      backgroundHover:
+        "linear-gradient(160deg, rgba(35,25,70,0.85) 0%, rgba(20,18,50,0.9) 100%)",
+      backgroundFocused:
+        "linear-gradient(160deg, rgba(40,28,75,0.9) 0%, rgba(22,20,55,0.95) 100%)",
+      gradient:
+        "linear-gradient(90deg, rgba(255,0,0,0.4), rgba(255,127,0,0.4), rgba(255,255,0,0.35), rgba(0,255,0,0.35), rgba(0,0,255,0.4), rgba(75,0,130,0.4), rgba(143,0,255,0.4))",
+      gradientFocused:
+        "linear-gradient(90deg, rgba(255,0,0,0.6), rgba(255,127,0,0.6), rgba(255,255,0,0.5), rgba(0,255,0,0.5), rgba(0,0,255,0.6), rgba(75,0,130,0.6), rgba(143,0,255,0.6))",
+      focusShadow:
+        "0 0 20px rgba(255,0,127,0.15), 0 0 40px rgba(59,130,246,0.1)",
+      iconColor: "rgba(255,255,255,0.55)",
+      placeholderColor: "rgba(255,255,255,0.4)",
+      textColor: "rgba(255,255,255,0.9)",
+    },
   },
 
   header: {
@@ -93,5 +110,7 @@ const rainbow = createTheme({
     },
   },
 });
+
+export { default as icon } from "@mui/icons-material/AutoAwesome";
 
 export default rainbow;

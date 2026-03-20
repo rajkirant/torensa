@@ -49,6 +49,26 @@ body {
 }
 
 /* =========================
+   CARD HOVER LIFT
+   ========================= */
+
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+}
+
+.card-hover .MuiSvgIcon-root {
+  transition: transform 0.25s ease;
+}
+
+.card-hover:hover .MuiSvgIcon-root {
+  transform: scale(1.2);
+}
+
+/* =========================
    MISC
    ========================= */
 
