@@ -16,7 +16,7 @@ const SITE_URL = "https://torensa.com";
 const DEFAULT_META: RouteMeta = {
   title: "Torensa | Smart Online Tools for Work & Productivity",
   description:
-    "Torensa offers practical online tools including bulk email sending, text-to-QR, Excel to CSV conversion, and automation utilities built for productivity.",
+    "Torensa offers free online productivity tools: QR code generator, barcode tools, image compressor, file converters, PDF merger, PDF splitter, crop and more.",
 };
 
 const STATIC_ROUTE_META: Record<string, RouteMeta> = {
