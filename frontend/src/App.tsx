@@ -42,7 +42,7 @@ import {
   footerLinkStyle,
 } from "./styles/appStyles";
 
-import { themes } from "./theme";
+import { themes, themeIconComponents } from "./theme";
 import type { ThemeName } from "./theme";
 import categories from "./metadata/categories.json";
 import serviceCards from "./metadata/serviceCards.json";
@@ -223,11 +223,28 @@ export default function App({ themeName, setThemeName }: AppProps) {
           inputProps={{ "aria-label": "Theme selection" }}
           sx={themeSelectSx(theme, isMobile, headerTextColor)}
         >
-          {Object.keys(themes).map((name) => (
-            <MenuItem key={name} value={name}>
-              {name.charAt(0).toUpperCase() + name.slice(1)}
-            </MenuItem>
-          ))}
+          {Object.keys(themes).map((name) => {
+            const Icon = themeIconComponents[name];
+            return (
+              <MenuItem
+                key={name}
+                value={name}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                {Icon && (
+                  <Icon
+                    fontSize="small"
+                    sx={{
+                      mr: 1,
+                      verticalAlign: "middle",
+                      position: "relative",
+                    }}
+                  />
+                )}
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </MenuItem>
+            );
+          })}
         </Select>
 
         {shouldShowCategorySelect && (
