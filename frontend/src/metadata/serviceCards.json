@@ -1361,6 +1361,55 @@
     ]
   },
   {
+    "id": "text-to-speech",
+    "component": "TextToSpeech",
+    "title": "Text to Speech Converter",
+    "description": "Convert text to natural-sounding speech using your browser's built-in voices.",
+    "path": "/text-to-speech",
+    "ctaLabel": "Open Text to Speech",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Type or paste any text and hear it read aloud using the Web Speech API built into your browser. Choose from dozens of voices and languages, adjust speed, pitch, and volume, and control playback with pause, resume, and stop. Fully client-side — your text never leaves your browser.",
+    "categoryId": "utilities",
+    "keywords": ["text", "speech", "tts", "voice", "read", "aloud", "audio", "speak"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Type or paste the text you want to hear into the text area.",
+      "Select a voice from the dropdown — voices vary by browser and operating system.",
+      "Adjust the speed, pitch, and volume sliders to your preference.",
+      "Click Speak to start playback.",
+      "Use Pause, Resume, or Stop to control playback as needed.",
+      "Click Load Sample to try the tool with example text."
+    ],
+    "faqs": [
+      {
+        "q": "Does this tool send my text to a server?",
+        "a": "No. All speech synthesis happens locally in your browser using the Web Speech API. Your text never leaves your device."
+      },
+      {
+        "q": "Why do I see different voices on different browsers?",
+        "a": "Available voices depend on your browser and operating system. Chrome, Edge, Firefox, and Safari each provide different voice sets. Some browsers also include online-enhanced voices when connected to the internet."
+      },
+      {
+        "q": "Can I use this tool offline?",
+        "a": "Yes. Once the page is loaded, text-to-speech works offline using your system's built-in voices. Some premium or online-only voices may not be available offline."
+      },
+      {
+        "q": "What languages are supported?",
+        "a": "The tool supports any language your browser provides voices for. Most systems include voices for English, Spanish, French, German, Japanese, Chinese, and many others."
+      },
+      {
+        "q": "Is there a text length limit?",
+        "a": "There is no hard limit in this tool, but very long texts may be subject to browser-specific limits. For best results, keep individual passages under a few thousand words."
+      },
+      {
+        "q": "Can I download the audio?",
+        "a": "The Web Speech API does not support audio export. The speech is played directly through your speakers. For downloadable audio, a server-side TTS service would be needed."
+      }
+    ]
+  },
+  {
     "id": "sql-formatter",
     "component": "SqlFormatter",
     "title": "SQL Formatter + Beautifier",
