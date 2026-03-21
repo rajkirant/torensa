@@ -148,6 +148,76 @@ export const footerLinkStyle = (theme: Theme): React.CSSProperties => ({
   alignItems: "center",
 });
 
+/* ===================== HERO BANNER ===================== */
+
+export const heroBannerStyle: React.CSSProperties = {
+  textAlign: "center",
+  marginBottom: 8,
+};
+
+export const heroHeadlineStyle = (isMobile: boolean): React.CSSProperties => ({
+  fontSize: isMobile ? 24 : 32,
+  fontWeight: 800,
+  lineHeight: 1.25,
+  margin: "0 0 8px",
+  letterSpacing: -0.3,
+});
+
+export const heroGradientTextStyle = (theme: Theme): React.CSSProperties => ({
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)"
+      : "linear-gradient(135deg, #2563eb, #7c3aed, #db2777)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent",
+  backgroundClip: "text",
+});
+
+export const heroSubtitleStyle = (
+  isMobile: boolean,
+  theme: Theme,
+): React.CSSProperties => ({
+  fontSize: isMobile ? 14 : 16,
+  color: theme.palette.text.secondary,
+  lineHeight: 1.5,
+  margin: "0 auto 14px",
+  maxWidth: 540,
+});
+
+export const heroPillarsRowStyle = (
+  isMobile: boolean,
+  theme: Theme,
+): React.CSSProperties => ({
+  display: "flex",
+  justifyContent: "center",
+  gap: isMobile ? 14 : 24,
+  flexWrap: "wrap",
+  fontSize: 13,
+  fontWeight: 600,
+  color: theme.palette.text.secondary,
+});
+
+export const heroPillarItemStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 5,
+};
+
+export const heroIconColor = (theme: Theme): string =>
+  theme.palette.mode === "dark" ? "#60a5fa" : "#2563eb";
+
+export const seoTextBlockStyle = (
+  isMobile: boolean,
+  secondaryTextColor: string,
+): React.CSSProperties => ({
+  fontSize: isMobile ? 13 : 14,
+  lineHeight: 1.7,
+  color: secondaryTextColor,
+  marginBottom: 20,
+});
+
+/* ===================== SEARCH BAR ===================== */
+
 export const searchBarSx = (theme: Theme) => {
   const sb = theme.home.searchBar;
   return {

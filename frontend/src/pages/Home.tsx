@@ -10,6 +10,9 @@ import { useTheme } from "@mui/material/styles";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import WifiOffOutlinedIcon from "@mui/icons-material/WifiOffOutlined";
+import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import serviceCards from "../metadata/serviceCards.json";
@@ -19,6 +22,14 @@ import {
   searchBarSx,
   searchBarIconSx,
   searchBarClearIconSx,
+  heroBannerStyle,
+  heroHeadlineStyle,
+  heroGradientTextStyle,
+  heroSubtitleStyle,
+  heroPillarsRowStyle,
+  heroPillarItemStyle,
+  heroIconColor,
+  seoTextBlockStyle,
 } from "../styles/appStyles";
 import {
   type ServiceCardConfig,
@@ -32,6 +43,47 @@ import { toolIcons } from "../metadata/toolIcons";
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 const INITIAL_VISIBLE_CARDS = 9;
 const LOAD_MORE_STEP = 6;
+
+/* ===================== HERO BANNER ===================== */
+function HeroBanner({
+  isMobile,
+  toolCount,
+}: {
+  isMobile: boolean;
+  toolCount: number;
+}) {
+  const theme = useTheme();
+  const iconSx = { fontSize: 16, color: heroIconColor(theme) };
+
+  return (
+    <header style={heroBannerStyle}>
+      <h1 style={heroHeadlineStyle(isMobile)}>
+        Free Online Tools,{" "}
+        <span style={heroGradientTextStyle(theme)}>Zero Nonsense</span>
+      </h1>
+
+      <p style={heroSubtitleStyle(isMobile, theme)}>
+        {toolCount}+ privacy-first online tools that run right in your browser.
+        No sign-up required, no ads, and most work offline.
+      </p>
+
+      <div style={heroPillarsRowStyle(isMobile, theme)}>
+        <span style={heroPillarItemStyle}>
+          <ShieldOutlinedIcon sx={iconSx} />
+          Privacy-first
+        </span>
+        <span style={heroPillarItemStyle}>
+          <WifiOffOutlinedIcon sx={iconSx} />
+          Works offline
+        </span>
+        <span style={heroPillarItemStyle}>
+          <CodeOutlinedIcon sx={iconSx} />
+          Open source
+        </span>
+      </div>
+    </header>
+  );
+}
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
@@ -112,6 +164,8 @@ export default function Home() {
   const canLoadMoreCards = visibleCount < filteredCards.length;
   const canLoadMoreOfflineCards = visibleCount < filteredOfflineCards.length;
 
+  const showHero = selectedCategoryId === "all" && !normalizedSearchTerm;
+
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + LOAD_MORE_STEP);
   };
@@ -166,7 +220,10 @@ export default function Home() {
                 size="small"
                 onClick={() => setSearchTerm("")}
               >
-                <CloseRoundedIcon sx={searchBarClearIconSx(theme)} fontSize="small" />
+                <CloseRoundedIcon
+                  sx={searchBarClearIconSx(theme)}
+                  fontSize="small"
+                />
               </IconButton>
             </InputAdornment>
           ) : undefined,
@@ -176,7 +233,14 @@ export default function Home() {
     </div>
   );
 
-  // 🔥 OFFLINE: show message + only offlineEnabled tools
+  const toolsSectionTitle: CSSProperties = {
+    textAlign: "center",
+    margin: "0 0 20px",
+    fontSize: showHero ? 28 : undefined,
+    fontWeight: showHero ? 700 : undefined,
+  };
+
+  // OFFLINE: show message + only offlineEnabled tools
   if (!isOnline) {
     return (
       <section style={sectionBase}>
@@ -252,70 +316,102 @@ export default function Home() {
     );
   }
 
-  // ✅ ONLINE: show all services
+  // ONLINE: show hero + all services
   return (
     <section style={sectionBase}>
-      <h1 style={{ textAlign: "center", margin: "0 0 20px" }}>
-        {selectedCategoryLabel}
-      </h1>
+      {showHero && (
+        <HeroBanner isMobile={isMobile} toolCount={allCards.length} />
+      )}
 
-      {searchInput}
+      <div>
+        {!showHero && (
+          <h2 style={toolsSectionTitle}>{selectedCategoryLabel}</h2>
+        )}
 
-      <div style={cardsGridStyle}>
-        {visibleCards.map((card) => {
-          const Icon = toolIcons[card.id];
-          return (
-            <div
-              key={card.id}
-              className="card-hover"
-              style={cardStyle}
-              onClick={() => navigate(card.path)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") navigate(card.path);
-              }}
-            >
-              {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
-              <h3>{card.title}</h3>
-              <p style={secondaryText}>{card.description}</p>
-              <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
-            </div>
-          );
-        })}
-
-        {filteredCards.length === 0 && (
-          <p
+        {showHero && (
+          <div
             style={{
-              ...secondaryText,
-              textAlign: "center",
-              gridColumn: "1 / -1",
+              ...searchWrapperStyle,
+              ...seoTextBlockStyle(isMobile, secondaryTextColor),
             }}
           >
-            {normalizedSearchTerm ? (
-              "No tools match your search in this category."
-            ) : (
-              <>
-                No services found. Add entries to{" "}
-                <code>metadata/serviceCards.json</code>.
-              </>
-            )}
-          </p>
+            <p style={{ margin: "0 0 10px" }}>
+              Torensa is a free collection of online tools built for everyday
+              productivity. Image tools, Easy fileshare, generate QR codes and
+              barcodes, format JSON, diff text, create invoices, and more - all
+              without creating an account. Every tool is designed to be fast,
+              lightweight, and respectful of your data.
+            </p>
+            <p style={{ margin: 0 }}>
+              Need a <strong>PDF tools</strong>,{" "}
+              <strong>AI image generation</strong>, or{" "}
+              <strong>developer utilities</strong> like a JWT decoder or cron
+              expression validator? Torensa processes most files directly in
+              your browser so nothing is uploaded to external servers. The
+              entire project is open source on GitHub, making it easy to audit,
+              contribute to, or self-host.
+            </p>
+          </div>
+        )}
+
+        {searchInput}
+
+        <div style={cardsGridStyle}>
+          {visibleCards.map((card) => {
+            const Icon = toolIcons[card.id];
+            return (
+              <div
+                key={card.id}
+                className="card-hover"
+                style={cardStyle}
+                onClick={() => navigate(card.path)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") navigate(card.path);
+                }}
+              >
+                {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
+                <h3>{card.title}</h3>
+                <p style={secondaryText}>{card.description}</p>
+                <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
+              </div>
+            );
+          })}
+
+          {filteredCards.length === 0 && (
+            <p
+              style={{
+                ...secondaryText,
+                textAlign: "center",
+                gridColumn: "1 / -1",
+              }}
+            >
+              {normalizedSearchTerm ? (
+                "No tools match your search in this category."
+              ) : (
+                <>
+                  No services found. Add entries to{" "}
+                  <code>metadata/serviceCards.json</code>.
+                </>
+              )}
+            </p>
+          )}
+        </div>
+
+        {canLoadMoreCards && (
+          <div style={loadMoreWrapperStyle}>
+            <Button
+              type="button"
+              style={loadMoreButtonStyle}
+              onClick={handleLoadMore}
+              endIcon={<KeyboardArrowDownRoundedIcon />}
+            >
+              Load more
+            </Button>
+          </div>
         )}
       </div>
-
-      {canLoadMoreCards && (
-        <div style={loadMoreWrapperStyle}>
-          <Button
-            type="button"
-            style={loadMoreButtonStyle}
-            onClick={handleLoadMore}
-            endIcon={<KeyboardArrowDownRoundedIcon />}
-          >
-            Load more
-          </Button>
-        </div>
-      )}
     </section>
   );
 }

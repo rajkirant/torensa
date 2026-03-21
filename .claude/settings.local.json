@@ -14,7 +14,8 @@
       "Bash(source .venv/Scripts/activate)",
       "Bash(python backend/manage.py makemigrations api)",
       "Bash(python backend/manage.py migrate)",
-      "Bash(node scripts/generate-llms-txt.mjs)"
+      "Bash(node scripts/generate-llms-txt.mjs)",
+      "Bash(grep -E \"\\\\.\\(json|md|txt\\)$|^d\")"
     ]
   }
 }
