@@ -7,7 +7,7 @@ RUN dnf install -y \
       cups-libs \
       nss \
       libxslt \
-      tar gzip \
+      tar gzip xz \
     && dnf clean all
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
@@ -17,6 +17,13 @@ RUN curl -fsSL \
     && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
     && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
     && rm -rf /tmp/LibreOffice_*
+
+# FFmpeg (static build) for video/audio conversions.
+RUN curl -fsSL "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz" \
+      | tar xJ -C /tmp/ \
+    && cp /tmp/ffmpeg-*/ffmpeg /usr/local/bin/ffmpeg \
+    && chmod +x /usr/local/bin/ffmpeg \
+    && rm -rf /tmp/ffmpeg-*
 
 # Install Python dependencies into Lambda task root.
 COPY backend/requirements.txt /tmp/backend-requirements.txt

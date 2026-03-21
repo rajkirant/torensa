@@ -1325,6 +1325,41 @@
     ]
   },
   {
+    "id": "video-to-audio",
+    "component": "VideoToAudio",
+    "title": "Video to MP3/WAV",
+    "description": "Extract audio from videos and download as MP3 or WAV.",
+    "path": "/video-to-audio",
+    "ctaLabel": "Extract Audio",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload a video file and extract the audio track as MP3 or WAV. Conversion runs on the server using FFmpeg. Files are processed in memory and never stored.",
+    "categoryId": "utilities",
+    "keywords": ["video", "audio", "mp3", "wav", "extract", "convert"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload a video file (MP4, MOV, MKV, WEBM, AVI, and more).",
+      "Choose MP3 for a smaller file or WAV for lossless audio.",
+      "Click Extract Audio to start the conversion.",
+      "Download the converted audio file."
+    ],
+    "faqs": [
+      {
+        "q": "What video formats are supported?",
+        "a": "Common formats including MP4, MOV, MKV, WEBM, AVI, M4V, MPG, MPEG, 3GP, WMV, FLV, and OGV are supported."
+      },
+      {
+        "q": "What is the maximum file size?",
+        "a": "Files up to 100 MB are supported by default. Larger limits can be configured on the server."
+      },
+      {
+        "q": "Is my file stored on the server?",
+        "a": "No. Files are processed in a temporary directory and deleted immediately after conversion."
+      }
+    ]
+  },
+  {
     "id": "habit-tracker",
     "component": "HabitTracker",
     "title": "Habit Tracker",
