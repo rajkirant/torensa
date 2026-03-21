@@ -28,6 +28,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
+import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -61,4 +62,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "habit-tracker": TrackChangesIcon,
   "sql-formatter": StorageRoundedIcon,
   "text-to-speech": RecordVoiceOverIcon,
+  "video-to-audio": AudiotrackIcon,
 };
