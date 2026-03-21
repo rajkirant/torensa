@@ -1489,5 +1489,50 @@
         "a": "Yes. Once the page is loaded, the SQL formatter works completely offline with no internet connection required."
       }
     ]
+  },
+  {
+    "id": "song-identifier",
+    "component": "SongIdentifier",
+    "title": "Song Identifier",
+    "description": "Identify any song playing around you using your microphone.",
+    "path": "/song-identifier",
+    "ctaLabel": "Identify Song",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Play any song near your device's microphone and identify it instantly. The tool records a short audio clip, sends it to ACRCloud's music recognition engine, and returns the song title, artist, album, genre, and direct links to Spotify, YouTube, and Deezer. Works with music from speakers, TV, radio, or even humming.",
+    "categoryId": "utilities",
+    "keywords": ["song", "music", "identify", "recognize", "shazam", "audio", "mic", "detect", "find song"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Play the song you want to identify from any source — speakers, TV, radio, or even hum or sing it.",
+      "Click the microphone button to start listening.",
+      "The tool records up to 10 seconds of audio from your microphone.",
+      "You can tap Stop early if you have a clear clip.",
+      "The audio is sent to ACRCloud for identification.",
+      "Song details including title, artist, album, and streaming links appear on screen."
+    ],
+    "faqs": [
+      {
+        "q": "How long does the recording need to be?",
+        "a": "A 5-10 second clip is ideal. The tool auto-stops at 10 seconds, but you can stop earlier if the song is playing clearly."
+      },
+      {
+        "q": "Can it identify songs from humming or singing?",
+        "a": "ACRCloud supports humming recognition, but results are most accurate when the original song is playing from a speaker or audio source."
+      },
+      {
+        "q": "Why does it need microphone access?",
+        "a": "The tool records audio through your device's microphone to capture the song playing around you. The audio clip is sent to ACRCloud for recognition and is not stored."
+      },
+      {
+        "q": "What music databases does it search?",
+        "a": "ACRCloud searches a database of over 100 million tracks including music from Spotify, YouTube, Deezer, and other major platforms."
+      },
+      {
+        "q": "Is my audio recording stored?",
+        "a": "No. The audio clip is sent to ACRCloud for recognition only and is discarded after the result is returned. Nothing is stored on our servers."
+      }
+    ]
   }
 ]

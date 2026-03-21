@@ -29,6 +29,7 @@ import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import AudiotrackIcon from "@mui/icons-material/Audiotrack";
+import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -63,4 +64,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "sql-formatter": StorageRoundedIcon,
   "text-to-speech": RecordVoiceOverIcon,
   "video-to-audio": AudiotrackIcon,
+  "song-identifier": GraphicEqIcon,
 };

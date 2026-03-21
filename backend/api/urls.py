@@ -19,6 +19,7 @@ from .views.video_convert_views import (
     video_to_audio_view,
     video_upload_init_view,
 )
+from .views.song_identify_views import song_identify_view, song_preview_download_view
 from .views.contact_views import submit_contact_message
 from .views.email_verification_views import (
     verify_email,
@@ -87,6 +88,9 @@ urlpatterns = [
     path("text-share/", create_text_share),
     path("text-share/<str:code>/", get_text_share),
     path("text-share/<str:code>/delete/", delete_text_share),
+    # Song identifier
+    path("song-identify/", song_identify_view),
+    path("song-identify/download/", song_preview_download_view),
     # Habit tracker
     path("habits/", habits_view),
     path("habits/<int:habit_id>/", habit_delete_view),
