@@ -14,7 +14,6 @@ import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
 import FileDropZone from "../components/inputs/FileDropZone";
 import { apiFetch } from "../utils/api";
-import downloadBlob from "../utils/downloadBlob";
 
 const ACCEPT_TYPES =
   "video/*,.mp4,.mov,.mkv,.webm,.avi,.m4v,.mpg,.mpeg,.3gp,.wmv,.flv,.ogv";
@@ -38,21 +37,24 @@ export default function VideoToAudio() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [resultBlob, setResultBlob] = useState<Blob | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string>("");
   const [resultName, setResultName] = useState<string>("");
+  const [resultSize, setResultSize] = useState<number | null>(null);
 
   const onFileSelected = (files: FileList | null) => {
     if (!files?.length) return;
     setFile(files[0]);
-    setResultBlob(null);
+    setDownloadUrl("");
+    setResultSize(null);
     setError(null);
     setSuccess(null);
   };
 
   const clearSelection = () => {
     setFile(null);
-    setResultBlob(null);
+    setDownloadUrl("");
     setResultName("");
+    setResultSize(null);
     setError(null);
     setSuccess(null);
   };
@@ -63,23 +65,24 @@ export default function VideoToAudio() {
     setLoading(true);
     setError(null);
     setSuccess(null);
-    setResultBlob(null);
+    setDownloadUrl("");
+    setResultSize(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("format", outputFormat);
-
-      const response = await apiFetch("/api/video-convert/to-audio/", {
+      const initResponse = await apiFetch("/api/video-convert/upload/init/", {
         method: "POST",
-        body: formData,
-        csrf: true,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+        }),
       });
 
-      if (!response.ok) {
-        let msg = `Server error (${response.status})`;
+      if (!initResponse.ok) {
+        let msg = `Server error (${initResponse.status})`;
         try {
-          const data = await response.json();
+          const data = await initResponse.json();
           msg = data?.error || msg;
         } catch {
           // ignore JSON parse error
@@ -87,12 +90,55 @@ export default function VideoToAudio() {
         throw new Error(msg);
       }
 
-      const blob = await response.blob();
-      const baseName = file.name.replace(/\.[^/.]+$/, "") || "audio";
-      const outputName = `${baseName}.${outputFormat}`;
-      setResultBlob(blob);
-      setResultName(outputName);
-      setSuccess(`Converted successfully - ${formatBytes(blob.size)}`);
+      const initPayload = await initResponse.json();
+      const uploadUrl = initPayload?.uploadUrl as string;
+      const objectKey = initPayload?.objectKey as string;
+      if (!uploadUrl || !objectKey) {
+        throw new Error("Upload initialization failed. Please try again.");
+      }
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type || "application/octet-stream",
+        },
+        body: file,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`Upload failed (${uploadResponse.status}).`);
+      }
+
+      const convertResponse = await apiFetch("/api/video-convert/from-r2/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ objectKey, format: outputFormat }),
+      });
+
+      if (!convertResponse.ok) {
+        let msg = `Server error (${convertResponse.status})`;
+        try {
+          const data = await convertResponse.json();
+          msg = data?.error || msg;
+        } catch {
+          // ignore JSON parse error
+        }
+        throw new Error(msg);
+      }
+
+      const payload = await convertResponse.json();
+      if (!payload?.downloadUrl) {
+        throw new Error("Conversion succeeded but no download URL was returned.");
+      }
+
+      setDownloadUrl(payload.downloadUrl as string);
+      setResultName((payload.filename as string) || "audio");
+      setResultSize(
+        typeof payload.size === "number" ? payload.size : null,
+      );
+      const sizeLabel =
+        typeof payload.size === "number" ? ` - ${formatBytes(payload.size)}` : "";
+      setSuccess(`Converted successfully${sizeLabel}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Conversion failed.");
     } finally {
@@ -101,7 +147,15 @@ export default function VideoToAudio() {
   };
 
   const handleDownload = () => {
-    if (resultBlob) downloadBlob(resultBlob, resultName);
+    if (!downloadUrl) return;
+    const anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    if (resultName) anchor.download = resultName;
+    anchor.rel = "noopener";
+    anchor.target = "_blank";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
   };
 
   return (
@@ -166,13 +220,13 @@ export default function VideoToAudio() {
           </Box>
         )}
 
-        {resultBlob && (
+        {downloadUrl && (
           <ActionButton
             onClick={handleDownload}
             startIcon={<DownloadIcon />}
             variant="outlined"
           >
-            Download {resultName}
+            Download {resultName || "audio"}
           </ActionButton>
         )}
       </Stack>
