@@ -26,6 +26,7 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import SubtitlesIcon from "@mui/icons-material/Subtitles";
 import MicIcon from "@mui/icons-material/Mic";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
+import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -57,4 +58,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "subtitle-downloader": SubtitlesIcon,
   "speech-to-text": MicIcon,
   "habit-tracker": TrackChangesIcon,
+  "sql-formatter": StorageRoundedIcon,
 };

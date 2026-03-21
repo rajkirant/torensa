@@ -15,7 +15,9 @@
       "Bash(python backend/manage.py makemigrations api)",
       "Bash(python backend/manage.py migrate)",
       "Bash(node scripts/generate-llms-txt.mjs)",
-      "Bash(grep -E \"\\\\.\\(json|md|txt\\)$|^d\")"
+      "Bash(grep -E \"\\\\.\\(json|md|txt\\)$|^d\")",
+      "Bash(python3:*)",
+      "Bash(npx vite:*)"
     ]
   }
 }
