@@ -17,7 +17,8 @@
       "Bash(node scripts/generate-llms-txt.mjs)",
       "Bash(grep -E \"\\\\.\\(json|md|txt\\)$|^d\")",
       "Bash(python3:*)",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")"
     ]
   }
 }
