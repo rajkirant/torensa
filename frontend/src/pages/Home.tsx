@@ -62,11 +62,6 @@ function HeroBanner({
         <span style={heroGradientTextStyle(theme)}>Zero Nonsense</span>
       </h1>
 
-      <p style={heroSubtitleStyle(isMobile, theme)}>
-        {toolCount}+ privacy-first online tools that run right in your browser.
-        No sign-up required, no ads, and most work offline.
-      </p>
-
       <div style={heroPillarsRowStyle(isMobile, theme)}>
         <span style={heroPillarItemStyle}>
           <ShieldOutlinedIcon sx={iconSx} />
@@ -79,6 +74,42 @@ function HeroBanner({
         <span style={heroPillarItemStyle}>
           <CodeOutlinedIcon sx={iconSx} />
           Open source
+        </span>
+        <span style={heroPillarItemStyle}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              fontSize: 16,
+              color: heroIconColor(theme),
+              marginRight: 6,
+            }}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ marginRight: 2 }}
+            >
+              <circle
+                cx="10"
+                cy="10"
+                r="8"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+              />
+              <path
+                d="M10 4v4m0 4v4m4-4h-4m-4 0h4"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </span>
+          AI-powered
         </span>
       </div>
     </header>
@@ -335,21 +366,13 @@ export default function Home() {
               ...seoTextBlockStyle(isMobile, secondaryTextColor),
             }}
           >
-            <p style={{ margin: "0 0 10px" }}>
-              Torensa is a free collection of online tools built for everyday
-              productivity. Image tools, Easy fileshare, generate QR codes and
-              barcodes, format JSON, diff text, create invoices, and more - all
-              without creating an account. Every tool is designed to be fast,
-              lightweight, and respectful of your data.
-            </p>
             <p style={{ margin: 0 }}>
-              Need a <strong>PDF tools</strong>,{" "}
-              <strong>AI image generation</strong>, or{" "}
-              <strong>developer utilities</strong> like a JWT decoder or cron
-              expression validator? Torensa processes most files directly in
-              your browser so nothing is uploaded to external servers. The
-              entire project is open source on GitHub, making it easy to audit,
-              contribute to, or self-host.
+              Torensa offers a comprehensive suite of free online tools designed
+              for productivity, privacy, and ease of use, no sign-up or payment
+              required. Discover AI-powered, offline-capable, and resourceful
+              utilities for developers and everyday users. Torensa is fully open
+              source on GitHub, making it easy to audit, contribute, or
+              self-host your favorite tools.
             </p>
           </div>
         )}
