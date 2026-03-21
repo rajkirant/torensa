@@ -1,5 +1,115 @@
 [
   {
+    "id": "song-identifier",
+    "component": "SongIdentifier",
+    "title": "Song Identifier",
+    "description": "Identify any song playing around you using your microphone.",
+    "path": "/song-identifier",
+    "ctaLabel": "Identify Song",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Play any song near your device's microphone and identify it instantly. The tool records a short audio clip, sends it to ACRCloud's music recognition engine, and returns the song title, artist, album, genre, and direct links to Spotify, YouTube, and Deezer. Works with music from speakers, TV, radio, or even humming.",
+    "categoryId": "utilities",
+    "keywords": [
+      "song",
+      "music",
+      "identify",
+      "recognize",
+      "shazam",
+      "audio",
+      "mic",
+      "detect",
+      "find song"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Play the song you want to identify from any source — speakers, TV, radio, or even hum or sing it.",
+      "Click the microphone button to start listening.",
+      "The tool records up to 10 seconds of audio from your microphone.",
+      "You can tap Stop early if you have a clear clip.",
+      "The audio is sent to ACRCloud for identification.",
+      "Song details including title, artist, album, and streaming links appear on screen."
+    ],
+    "faqs": [
+      {
+        "q": "How long does the recording need to be?",
+        "a": "A 5-10 second clip is ideal. The tool auto-stops at 10 seconds, but you can stop earlier if the song is playing clearly."
+      },
+      {
+        "q": "Can it identify songs from humming or singing?",
+        "a": "ACRCloud supports humming recognition, but results are most accurate when the original song is playing from a speaker or audio source."
+      },
+      {
+        "q": "Why does it need microphone access?",
+        "a": "The tool records audio through your device's microphone to capture the song playing around you. The audio clip is sent to ACRCloud for recognition and is not stored."
+      },
+      {
+        "q": "What music databases does it search?",
+        "a": "ACRCloud searches a database of over 100 million tracks including music from Spotify, YouTube, Deezer, and other major platforms."
+      },
+      {
+        "q": "Is my audio recording stored?",
+        "a": "No. The audio clip is sent to ACRCloud for recognition only and is discarded after the result is returned. Nothing is stored on our servers."
+      }
+    ]
+  },
+  {
+    "id": "text-share",
+    "component": "EasyShare",
+    "title": "Easy Share (Text + File)",
+    "description": "Share files or text multiple devices across the internet (no signup, phone number, or email required).",
+    "path": "/easy-share",
+    "ctaLabel": "Open Easy Share",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Easy Share lets you send text and up to 5 files (up to 1 GB each) between devices in different networks using a 4-digit access code via internet. No signup, phone, or email is required.",
+    "categoryId": "communication",
+    "keywords": ["text", "share", "code", "clipboard", "transfer"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Open Easy Share and choose a mode (Send or Receive).",
+      "In Send mode, paste text and/or drag up to 5 files into the upload zone.",
+      "Each file can be up to 1 GB, and files upload directly to Cloudflare-backed storage.",
+      "Reorder files with drag-and-drop or remove a file before sharing.",
+      "Click Generate Code to get a 4-digit access code.",
+      "In Receive mode, enter the 4-digit code or use refresh to load the latest share on your network.",
+      "Shared files appear in the download list and any shared text appears below it.",
+      "Shares expire automatically after approximately 1 hour for privacy."
+    ],
+    "faqs": [
+      {
+        "q": "Do I need an account to use Easy Share?",
+        "a": "No account is required. Easy Share is a fully anonymous tool — just open it and share instantly."
+      },
+      {
+        "q": "How many files can I share at once?",
+        "a": "You can share up to 5 files per code. The receiving device can download them individually in the same order you arranged before sharing."
+      },
+      {
+        "q": "How long does the share code stay active?",
+        "a": "Share codes expire after approximately 1 hour. After expiry, the code stops working immediately in the app, and leftover files are cleaned up from storage automatically afterward."
+      },
+      {
+        "q": "Can I reorder files before sharing?",
+        "a": "Yes. You can drag files to reorder them before generating the share code, and the receiver will see them in that same order."
+      },
+      {
+        "q": "Is there a file size limit?",
+        "a": "Yes. Each file can be up to 1 GB, and you can attach up to 5 files in one share."
+      },
+      {
+        "q": "What does the auto-load feature do on the same network?",
+        "a": "When two devices are on the same local network and one has recently shared, the receiving device can use the refresh button to load the latest share without typing the code."
+      },
+      {
+        "q": "Where do I see the shared text when receiving?",
+        "a": "After entering a valid code, shared files appear in the download list and any shared text is shown below that list."
+      }
+    ]
+  },
+  {
     "id": "bulk-email",
     "component": "BulkEmail/BulkEmail",
     "title": "Bulk Email Sender",
@@ -63,61 +173,7 @@
       }
     ]
   },
-  {
-    "id": "text-share",
-    "component": "EasyShare",
-    "title": "Easy Share (Text + File)",
-    "description": "Share files or text each across multiple devices using a 4-digit code (no signup, phone number, or email required).",
-    "path": "/easy-share",
-    "ctaLabel": "Open Easy Share",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "detailedDescription": "Easy Share lets you send text and up to 5 files (up to 1 GB each) between devices in different networks using a 4-digit access code via internet. No signup, phone, or email is required.",
-    "categoryId": "communication",
-    "keywords": ["text", "share", "code", "clipboard", "transfer"],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Open Easy Share and choose a mode (Send or Receive).",
-      "In Send mode, paste text and/or drag up to 5 files into the upload zone.",
-      "Each file can be up to 1 GB, and files upload directly to Cloudflare-backed storage.",
-      "Reorder files with drag-and-drop or remove a file before sharing.",
-      "Click Generate Code to get a 4-digit access code.",
-      "In Receive mode, enter the 4-digit code or use refresh to load the latest share on your network.",
-      "Shared files appear in the download list and any shared text appears below it.",
-      "Shares expire automatically after approximately 1 hour for privacy."
-    ],
-    "faqs": [
-      {
-        "q": "Do I need an account to use Easy Share?",
-        "a": "No account is required. Easy Share is a fully anonymous tool — just open it and share instantly."
-      },
-      {
-        "q": "How many files can I share at once?",
-        "a": "You can share up to 5 files per code. The receiving device can download them individually in the same order you arranged before sharing."
-      },
-      {
-        "q": "How long does the share code stay active?",
-        "a": "Share codes expire after approximately 1 hour. After expiry, the code stops working immediately in the app, and leftover files are cleaned up from storage automatically afterward."
-      },
-      {
-        "q": "Can I reorder files before sharing?",
-        "a": "Yes. You can drag files to reorder them before generating the share code, and the receiver will see them in that same order."
-      },
-      {
-        "q": "Is there a file size limit?",
-        "a": "Yes. Each file can be up to 1 GB, and you can attach up to 5 files in one share."
-      },
-      {
-        "q": "What does the auto-load feature do on the same network?",
-        "a": "When two devices are on the same local network and one has recently shared, the receiving device can use the refresh button to load the latest share without typing the code."
-      },
-      {
-        "q": "Where do I see the shared text when receiving?",
-        "a": "After entering a valid code, shared files appear in the download list and any shared text is shown below that list."
-      }
-    ]
-  },
+
   {
     "id": "barcode-generator",
     "component": "BarcodeGenerator",
@@ -1370,7 +1426,16 @@
     "authRequired": true,
     "detailedDescription": "Build a list of habits you want to do every day, each with a custom point value. Check off completed habits daily to earn points. A bar chart shows your points over the last 14 days so you can track your consistency. All data is stored locally in your browser.",
     "categoryId": "utilities",
-    "keywords": ["habit", "tracker", "daily", "routine", "points", "productivity", "goals", "checklist"],
+    "keywords": [
+      "habit",
+      "tracker",
+      "daily",
+      "routine",
+      "points",
+      "productivity",
+      "goals",
+      "checklist"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1406,7 +1471,16 @@
     "authRequired": false,
     "detailedDescription": "Type or paste any text and hear it read aloud using the Web Speech API built into your browser. Choose from dozens of voices and languages, adjust speed, pitch, and volume, and control playback with pause, resume, and stop. Fully client-side — your text never leaves your browser.",
     "categoryId": "utilities",
-    "keywords": ["text", "speech", "tts", "voice", "read", "aloud", "audio", "speak"],
+    "keywords": [
+      "text",
+      "speech",
+      "tts",
+      "voice",
+      "read",
+      "aloud",
+      "audio",
+      "speak"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1455,7 +1529,17 @@
     "authRequired": false,
     "detailedDescription": "Paste any SQL query and instantly format it with proper indentation and line breaks for readability. Minify queries for compact storage, toggle keyword casing between UPPERCASE and lowercase, and choose your preferred indent style. Fully client-side — your SQL never leaves your browser.",
     "categoryId": "developer",
-    "keywords": ["sql", "format", "beautify", "minify", "query", "database", "mysql", "postgres", "sqlite"],
+    "keywords": [
+      "sql",
+      "format",
+      "beautify",
+      "minify",
+      "query",
+      "database",
+      "mysql",
+      "postgres",
+      "sqlite"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1487,51 +1571,6 @@
       {
         "q": "Can I use this offline?",
         "a": "Yes. Once the page is loaded, the SQL formatter works completely offline with no internet connection required."
-      }
-    ]
-  },
-  {
-    "id": "song-identifier",
-    "component": "SongIdentifier",
-    "title": "Song Identifier",
-    "description": "Identify any song playing around you using your microphone.",
-    "path": "/song-identifier",
-    "ctaLabel": "Identify Song",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "detailedDescription": "Play any song near your device's microphone and identify it instantly. The tool records a short audio clip, sends it to ACRCloud's music recognition engine, and returns the song title, artist, album, genre, and direct links to Spotify, YouTube, and Deezer. Works with music from speakers, TV, radio, or even humming.",
-    "categoryId": "utilities",
-    "keywords": ["song", "music", "identify", "recognize", "shazam", "audio", "mic", "detect", "find song"],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Play the song you want to identify from any source — speakers, TV, radio, or even hum or sing it.",
-      "Click the microphone button to start listening.",
-      "The tool records up to 10 seconds of audio from your microphone.",
-      "You can tap Stop early if you have a clear clip.",
-      "The audio is sent to ACRCloud for identification.",
-      "Song details including title, artist, album, and streaming links appear on screen."
-    ],
-    "faqs": [
-      {
-        "q": "How long does the recording need to be?",
-        "a": "A 5-10 second clip is ideal. The tool auto-stops at 10 seconds, but you can stop earlier if the song is playing clearly."
-      },
-      {
-        "q": "Can it identify songs from humming or singing?",
-        "a": "ACRCloud supports humming recognition, but results are most accurate when the original song is playing from a speaker or audio source."
-      },
-      {
-        "q": "Why does it need microphone access?",
-        "a": "The tool records audio through your device's microphone to capture the song playing around you. The audio clip is sent to ACRCloud for recognition and is not stored."
-      },
-      {
-        "q": "What music databases does it search?",
-        "a": "ACRCloud searches a database of over 100 million tracks including music from Spotify, YouTube, Deezer, and other major platforms."
-      },
-      {
-        "q": "Is my audio recording stored?",
-        "a": "No. The audio clip is sent to ACRCloud for recognition only and is discarded after the result is returned. Nothing is stored on our servers."
       }
     ]
   }
