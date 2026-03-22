@@ -60,6 +60,16 @@ const dark = createTheme({
     active: "rgba(59,130,246,0.22)",
   },
 
+  contactForm: {
+    background: "#1a1a2e",
+    inputBackground: "#1e1e2e",
+    inputBorder: "#444",
+    inputText: "#e0e0e0",
+    buttonBackground: "#4fd1c5",
+    buttonBackgroundDisabled: "#2dd4bf88",
+    buttonText: "#1a1a2e",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },

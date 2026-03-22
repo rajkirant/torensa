@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useTheme } from "@mui/material/styles";
 import missionData from "../metadata/mission.json";
 import contactData from "../metadata/contact.json";
 
@@ -19,6 +20,8 @@ type ContactData = {
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 export default function Contact() {
+  const theme = useTheme();
+  const cf = theme.contactForm;
   const mission = missionData as MissionData;
   const contact = contactData as ContactData;
   const [formData, setFormData] = useState({
@@ -81,9 +84,9 @@ export default function Contact() {
     width: "100%",
     padding: "10px 12px",
     borderRadius: 6,
-    border: "1px solid #444",
-    background: "#1e1e2e",
-    color: "#e0e0e0",
+    border: `1px solid ${cf.inputBorder}`,
+    background: cf.inputBackground,
+    color: cf.inputText,
     fontSize: 14,
     boxSizing: "border-box",
   };
@@ -121,7 +124,7 @@ export default function Contact() {
           maxWidth: 600,
           margin: "40px auto 50px",
           padding: "30px",
-          background: "#1a1a2e",
+          background: cf.background,
           borderRadius: 12,
         }}
       >
@@ -227,8 +230,8 @@ export default function Contact() {
                 padding: "12px",
                 borderRadius: 6,
                 border: "none",
-                background: submitting ? "#2dd4bf88" : "#4fd1c5",
-                color: "#1a1a2e",
+                background: submitting ? cf.buttonBackgroundDisabled : cf.buttonBackground,
+                color: cf.buttonText,
                 fontWeight: 700,
                 fontSize: 15,
                 cursor: submitting ? "not-allowed" : "pointer",

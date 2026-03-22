@@ -18,7 +18,8 @@
       "Bash(grep -E \"\\\\.\\(json|md|txt\\)$|^d\")",
       "Bash(python3:*)",
       "Bash(npx vite:*)",
-      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")"
+      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
+      "Bash(ls c:/Users/rajki/Workspace/torensa/frontend/src/theme/*.ts)"
     ]
   }
 }

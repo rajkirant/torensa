@@ -33,6 +33,15 @@ declare module "@mui/material/styles" {
       background: string;
       active: string;
     };
+    contactForm: {
+      background: string;
+      inputBackground: string;
+      inputBorder: string;
+      inputText: string;
+      buttonBackground: string;
+      buttonBackgroundDisabled: string;
+      buttonText: string;
+    };
   }
 
   interface ThemeOptions {
@@ -66,6 +75,15 @@ declare module "@mui/material/styles" {
     dropzone?: {
       background?: string;
       active?: string;
+    };
+    contactForm?: {
+      background?: string;
+      inputBackground?: string;
+      inputBorder?: string;
+      inputText?: string;
+      buttonBackground?: string;
+      buttonBackgroundDisabled?: string;
+      buttonText?: string;
     };
   }
 }

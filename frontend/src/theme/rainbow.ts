@@ -68,6 +68,16 @@ const rainbow = createTheme({
     active: "rgba(59,130,246,0.2)",
   },
 
+  contactForm: {
+    background: "#1a1a2e",
+    inputBackground: "#1e1e2e",
+    inputBorder: "#444",
+    inputText: "#e0e0e0",
+    buttonBackground: "linear-gradient(135deg, #ff007f, #7c3aed)",
+    buttonBackgroundDisabled: "linear-gradient(135deg, #ff007f88, #7c3aed88)",
+    buttonText: "#ffffff",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },
