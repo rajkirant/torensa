@@ -39,6 +39,21 @@ import {
 } from "../utils/serviceCards";
 import { toolIcons } from "../metadata/toolIcons";
 
+const ADSENSE_CLIENT_ID =
+  import.meta.env.VITE_ADSENSE_CLIENT || "ca-pub-7466905660040122";
+const ADSENSE_SCRIPT_ID = "adsense-script";
+
+function ensureAdSenseScript() {
+  if (document.getElementById(ADSENSE_SCRIPT_ID)) return;
+
+  const script = document.createElement("script");
+  script.id = ADSENSE_SCRIPT_ID;
+  script.async = true;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`;
+  script.crossOrigin = "anonymous";
+  document.head.appendChild(script);
+}
+
 /* ===================== DATA (JSON) ===================== */
 const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 const INITIAL_VISIBLE_CARDS = 9;
@@ -204,6 +219,10 @@ export default function Home() {
   React.useEffect(() => {
     setVisibleCount(INITIAL_VISIBLE_CARDS);
   }, [selectedCategoryId, isOnline, searchTerm]);
+
+  React.useEffect(() => {
+    ensureAdSenseScript();
+  }, []);
 
   React.useEffect(() => {
     const params = new URLSearchParams(location.search);
