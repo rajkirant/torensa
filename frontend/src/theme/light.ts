@@ -60,6 +60,16 @@ const light = createTheme({
     active: "rgba(37,99,235,0.16)",
   },
 
+  contactForm: {
+    background: "#e2e8f0",
+    inputBackground: "#ffffff",
+    inputBorder: "#cbd5e1",
+    inputText: "#0f172a",
+    buttonBackground: "#2563eb",
+    buttonBackgroundDisabled: "#2563eb88",
+    buttonText: "#ffffff",
+  },
+
   typography: {
     fontFamily: `"Inter", system-ui, sans-serif`,
   },
