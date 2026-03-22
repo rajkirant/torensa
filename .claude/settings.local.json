@@ -19,7 +19,14 @@
       "Bash(python3:*)",
       "Bash(npx vite:*)",
       "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
-      "Bash(ls c:/Users/rajki/Workspace/torensa/frontend/src/theme/*.ts)"
+      "Bash(ls c:/Users/rajki/Workspace/torensa/frontend/src/theme/*.ts)",
+      "Bash(grep -r \"mongodb\\\\|DATABASE_URL\\\\|DB_HOST\\\\|DB_USER\" /c/Users/rajki/Workspace/torensa --include=*.py --include=*.ts --include=*.tsx --include=*.js)",
+      "Bash(grep -r \"sk-proj-\\\\|GOCSPX-\\\\|AIzaSy\\\\|ghp_\\\\|gho_\\\\|0x[0-9a-f]\\\\{32,\\\\}\" /c/Users/rajki/Workspace/torensa --include=*.py --include=*.ts --include=*.tsx --include=*.js --include=*.json)",
+      "Bash(grep -r \"#.*secret\\\\|#.*password\\\\|#.*key\\\\|#.*token\\\\|//.*secret\\\\|//.*password\" /c/Users/rajki/Workspace/torensa --include=*.py --include=*.ts --include=*.tsx --include=*.js -i)",
+      "Bash(find /c/Users/rajki/Workspace/torensa -type f -name *.bak -o -name *.old -o -name *backup*)",
+      "Bash(grep -r \"192\\\\.168\\\\.|10\\\\.0\\\\.|172\\\\.1[6-9]\\\\.|localhost\\\\|127\\\\.0\\\\.\" /c/Users/rajki/Workspace/torensa --include=*.py --include=*.ts --include=*.tsx --include=*.js --include=*.json)",
+      "Bash(grep -r \"under construction\\\\|coming soon\\\\|lorem ipsum\\\\|TODO\\\\|FIXME\" /c/Users/rajki/Workspace/torensa/frontend/src/pages --include=*.tsx)",
+      "Bash(grep -r \"adsense\\\\|adsbygoogle\\\\|ad\\\\|Ad\" /c/Users/rajki/Workspace/torensa/frontend/src --include=*.tsx --include=*.ts)"
     ]
   }
 }
