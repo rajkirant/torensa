@@ -39,8 +39,7 @@ import {
 } from "../utils/serviceCards";
 import { toolIcons } from "../metadata/toolIcons";
 
-const ADSENSE_CLIENT_ID =
-  import.meta.env.VITE_ADSENSE_CLIENT || "ca-pub-7466905660040122";
+const ADSENSE_CLIENT_ID = "ca-pub-7466905660040122";
 const ADSENSE_SCRIPT_ID = "adsense-script";
 
 function ensureAdSenseScript() {
