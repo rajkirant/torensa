@@ -70,6 +70,15 @@ export default function Signup() {
   return (
     <div style={{ maxWidth: 420, margin: "80px auto" }}>
       <h2>Create Account</h2>
+      <p style={{ color: "#6b7280", marginBottom: 24, lineHeight: 1.6 }}>
+        Create a free Torensa account to unlock tools that require
+        authentication, save your preferences, and get the most out of
+        Torensa&apos;s privacy-first online tools. Already have an account?{" "}
+        <a href="/login" style={{ color: "#2563eb" }}>
+          Log in
+        </a>
+        .
+      </p>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 16 }}>
