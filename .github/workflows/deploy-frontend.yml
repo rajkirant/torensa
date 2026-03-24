@@ -103,3 +103,65 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
+
+      - name: Submit IndexNow for changed URLs
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import sys
+          import xml.etree.ElementTree as ET
+
+          CURRENT_PATH = "frontend/public/sitemap.xml"
+
+          def parse_urls(xml_text: str) -> set[str]:
+              root = ET.fromstring(xml_text)
+              ns = {"ns": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+              return {loc.text.strip() for loc in root.findall(".//ns:loc", ns) if loc.text}
+
+          try:
+              with open(CURRENT_PATH, "r", encoding="utf-8") as f:
+                  current_xml = f.read()
+          except FileNotFoundError:
+              print("Sitemap not found; skipping IndexNow.")
+              sys.exit(0)
+
+          try:
+              prev_xml = subprocess.check_output(
+                  ["git", "show", f"HEAD^:{CURRENT_PATH}"],
+                  text=True,
+                  stderr=subprocess.DEVNULL,
+              )
+          except Exception:
+              prev_xml = ""
+
+          current_urls = parse_urls(current_xml)
+          prev_urls = parse_urls(prev_xml) if prev_xml else set()
+
+          changed_urls = sorted(current_urls.symmetric_difference(prev_urls))
+
+          if not changed_urls:
+              print("No URL changes detected in sitemap; skipping IndexNow.")
+              sys.exit(0)
+
+          body = {
+              "host": "torensa.com",
+              "key": "c5683bf624454ee2a78fff4acb82ef83",
+              "keyLocation": "https://torensa.com/c5683bf624454ee2a78fff4acb82ef83.txt",
+              "urlList": changed_urls,
+          }
+
+          with open("indexnow.json", "w", encoding="utf-8") as f:
+              json.dump(body, f)
+
+          print(f"IndexNow URL count: {len(changed_urls)}")
+          PY
+
+          if [ -f indexnow.json ]; then
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d @indexnow.json \
+              https://api.indexnow.org/IndexNow)
+            echo "IndexNow status: $status"
+          fi
