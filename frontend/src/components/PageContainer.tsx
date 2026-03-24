@@ -97,6 +97,7 @@ export default function PageContainer({
         <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
           <Stack spacing={3}>
             <Typography
+              component="h1"
               variant="h5"
               fontWeight={700}
               sx={{
