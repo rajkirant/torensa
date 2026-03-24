@@ -386,12 +386,40 @@ export default function Home() {
             }}
           >
             <p style={{ margin: 0 }}>
-              Torensa offers a comprehensive suite of free online tools designed
-              for productivity, privacy, and ease of use, no sign-up or payment
-              required. Discover AI-powered, offline-capable, and resourceful
-              utilities for developers and everyday users. Torensa is fully open
-              source on GitHub, making it easy to audit, contribute, or
-              self-host your favorite tools.
+              Torensa is a growing collection of free online tools built to make
+              everyday work faster, safer, and more reliable without forcing you
+              to create an account or pay a fee. The platform brings together
+              practical utilities for writing, converting, calculating,
+              formatting, organizing, and researching, with a focus on clean
+              interfaces that let you get in, get a result, and get back to your
+              task. Many tools are designed for developers, such as code
+              formatters, validators, and data utilities, while others are made
+              for anyone who needs quick answers, better productivity, or
+              privacy friendly workflows. The goal is to remove friction and
+              replace it with clarity: open a tool, drop in your input, and see
+              the output instantly.
+              <br />
+              <br />
+              A major emphasis is privacy and control. Torensa avoids tracking
+              heavy analytics and keeps the experience lightweight, so you can
+              use tools without feeling watched or profiled. Many features are
+              offline capable, which means a tool can keep working even when
+              your connection is unstable or when you prefer to stay offline.
+              This matters for travel, secure environments, or anyone who just
+              wants consistent performance. When a tool uses AI assistance, the
+              behavior is made clear in the interface and the results are
+              designed to be helpful without locking you into a paid tier.
+              <br />
+              <br />
+              Torensa is also fully open source on GitHub, which means the code
+              is visible, auditable, and ready for contributions. You can review
+              how a tool works, suggest improvements, or build your own
+              self-hosted version for your team. This transparency builds trust
+              and lets the community shape the roadmap. Whether you are a
+              student, a builder, a small business, or just someone who values
+              privacy and simplicity, Torensa offers a dependable set of
+              resources that keep your data in your hands and your workflow
+              moving forward.
             </p>
           </div>
         )}
