@@ -24,6 +24,14 @@
     "enabled": true
   },
   {
+    "id": "health-wellbeing",
+    "label": "Health & Wellbeing",
+    "description": "Tools for wellness, fitness, and daily motivation",
+    "icon": "favorite",
+    "sortOrder": 35,
+    "enabled": true
+  },
+  {
     "id": "developer",
     "label": "Developer",
     "description": "Developer-focused tools",

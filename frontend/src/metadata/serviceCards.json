@@ -1425,7 +1425,7 @@
     "offlineEnabled": false,
     "authRequired": true,
     "detailedDescription": "Build a list of habits you want to do every day, each with a custom point value. Check off completed habits daily to earn points. A bar chart shows your points over the last 14 days so you can track your consistency. All data is stored locally in your browser.",
-    "categoryId": "utilities",
+    "categoryId": "health-wellbeing",
     "keywords": [
       "habit",
       "tracker",
@@ -1434,7 +1434,9 @@
       "points",
       "productivity",
       "goals",
-      "checklist"
+      "checklist",
+      "wellness",
+      "health"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
@@ -1571,6 +1573,75 @@
       {
         "q": "Can I use this offline?",
         "a": "Yes. Once the page is loaded, the SQL formatter works completely offline with no internet connection required."
+      }
+    ]
+  },
+
+  {
+    "id": "bmi-calculator",
+    "component": "BmiCalculator",
+    "title": "BMI Calculator (kg, cm, lb, ft)",
+    "description": "Free BMI calculator for kg/cm or lb/ft. Get your Body Mass Index and category instantly.",
+    "path": "/bmi-calculator",
+    "ctaLabel": "Calculate BMI",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Calculate Body Mass Index (BMI) from your height and weight in seconds. Use metric (kg/cm) or imperial (lb/ft) units and see your BMI category on a color scale. Runs fully in your browser - your data never leaves your device.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "bmi",
+      "bmi calculator",
+      "body mass index",
+      "calculator",
+      "weight",
+      "height",
+      "kg",
+      "cm",
+      "lb",
+      "lbs",
+      "ft",
+      "feet",
+      "inches",
+      "health",
+      "fitness",
+      "obesity",
+      "underweight",
+      "overweight",
+      "wellness"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Select Metric (kg/cm) or Imperial (lb/ft).",
+      "Enter your weight.",
+      "Enter your height. In Imperial mode, enter feet and inches separately.",
+      "Click Calculate BMI to see your result.",
+      "Review your BMI number and category on the scale."
+    ],
+    "faqs": [
+      {
+        "q": "What is BMI?",
+        "a": "Body Mass Index (BMI) is a simple measure that uses your height and weight to estimate whether you are underweight, normal weight, overweight, or obese. It is widely used as a quick screening tool."
+      },
+      {
+        "q": "How is BMI calculated?",
+        "a": "In metric: BMI = weight (kg) / height (m)^2. In imperial: BMI = (weight (lb) / height (in)^2) x 703."
+      },
+      {
+        "q": "Is BMI accurate for everyone?",
+        "a": "BMI is a useful general indicator but does not account for muscle mass, bone density, age, or sex. Athletes and muscular individuals may have a high BMI without excess body fat. Consult a healthcare professional for a complete assessment."
+      },
+      {
+        "q": "What are the BMI categories?",
+        "a": "Adult BMI categories are: under 18.5 (underweight), 18.5 to 24.9 (normal), 25 to 29.9 (overweight), and 30+ (obese). These ranges are general guidelines."
+      },
+      {
+        "q": "Is my data sent anywhere?",
+        "a": "No. All calculations happen locally in your browser. Your weight and height are never sent to any server."
+      },
+      {
+        "q": "Can I use this offline?",
+        "a": "Yes. The BMI calculator works completely offline with no internet connection required."
       }
     ]
   }
