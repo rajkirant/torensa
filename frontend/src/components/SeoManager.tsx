@@ -66,18 +66,21 @@ export default function SeoManager() {
   const location = useLocation();
   const normalizedPath = normalizePath(location.pathname);
 
+  const activeCards = useMemo(
+    () => getActiveServiceCards(serviceCards as ServiceCardConfig[]),
+    [],
+  );
+
   const toolMetaByPath = useMemo(() => {
     const map = new Map<string, RouteMeta>();
-    for (const card of getActiveServiceCards(
-      serviceCards as ServiceCardConfig[],
-    )) {
+    for (const card of activeCards) {
       map.set(normalizePath(card.path), {
         title: formatToolTitle(card.title),
         description: card.description,
       });
     }
     return map;
-  }, []);
+  }, [activeCards]);
 
   const meta = toolMetaByPath.get(normalizedPath) ??
     STATIC_ROUTE_META[normalizedPath] ?? {
@@ -91,6 +94,11 @@ export default function SeoManager() {
 
   const isHome = normalizedPath === "/";
   const isTool = toolMetaByPath.has(normalizedPath);
+  const currentTool = isTool
+    ? activeCards.find(
+        (card) => normalizePath(card.path) === normalizedPath,
+      )
+    : null;
 
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -129,6 +137,22 @@ export default function SeoManager() {
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       }
     : null;
+
+  const faqSchema =
+    currentTool?.faqs && currentTool.faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: currentTool.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.a,
+            },
+          })),
+        }
+      : null;
 
   const breadcrumbSchema =
     normalizedPath !== "/"
@@ -172,6 +196,9 @@ export default function SeoManager() {
       )}
       {toolSchema && (
         <script type="application/ld+json">{JSON.stringify(toolSchema)}</script>
+      )}
+      {faqSchema && (
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       )}
       {breadcrumbSchema && (
         <script type="application/ld+json">
