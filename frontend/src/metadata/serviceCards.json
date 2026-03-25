@@ -2,24 +2,30 @@
   {
     "id": "song-identifier",
     "component": "SongIdentifier",
-    "title": "Song Identifier",
-    "description": "Identify any song playing around you using your microphone.",
+    "title": "Song Identifier - Find What Song Is Playing",
+    "description": "Identify any song playing around you instantly. Get the title, artist, album, and streaming links to Spotify, YouTube Music, and more — free, no app needed.",
     "path": "/song-identifier",
     "ctaLabel": "Identify Song",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Play any song near your device's microphone and identify it instantly. The tool records a short audio clip, sends it to ACRCloud's music recognition engine, and returns the song title, artist, album, genre, and direct links to Spotify, YouTube, and Deezer. Works with music from speakers, TV, radio, or even humming.",
+    "detailedDescription": "Wondering what song is playing? Use your microphone to identify any song in seconds. This free online song finder records a short audio clip, recognizes it against a database of over 100 million tracks, and returns the song title, artist, album, and genre. Get direct streaming links to Spotify, YouTube Music, Apple Music, Amazon Music, and Deezer. Works with music from speakers, TV, radio, or even humming — no app install required.",
     "categoryId": "utilities",
     "keywords": [
-      "song",
-      "music",
-      "identify",
-      "recognize",
-      "shazam",
-      "audio",
-      "mic",
-      "detect",
-      "find song"
+      "song identifier",
+      "what song is this",
+      "identify song online",
+      "song finder",
+      "what song is playing",
+      "name that song",
+      "song recognition",
+      "music identifier",
+      "find song by sound",
+      "recognize song online",
+      "song detector",
+      "identify music",
+      "shazam online",
+      "song search by listening",
+      "free song identifier"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
@@ -33,24 +39,32 @@
     ],
     "faqs": [
       {
-        "q": "How long does the recording need to be?",
-        "a": "A 5-10 second clip is ideal. The tool auto-stops at 10 seconds, but you can stop earlier if the song is playing clearly."
+        "q": "How do I identify a song playing around me?",
+        "a": "Click the microphone button, let the tool listen for 5-10 seconds, and it will recognize the song automatically. You'll get the song title, artist, album, and links to stream it on Spotify, YouTube Music, Apple Music, and more."
       },
       {
-        "q": "Can it identify songs from humming or singing?",
-        "a": "ACRCloud supports humming recognition, but results are most accurate when the original song is playing from a speaker or audio source."
+        "q": "Can I identify a song by humming or singing?",
+        "a": "Yes, the tool supports humming and singing recognition. Results are most accurate when the original song is playing from a speaker or audio source, but humming can work for popular tracks."
       },
       {
-        "q": "Why does it need microphone access?",
-        "a": "The tool records audio through your device's microphone to capture the song playing around you. The audio clip is sent to ACRCloud for recognition and is not stored."
+        "q": "Is this song identifier free to use?",
+        "a": "Yes, this song identifier is completely free. No sign-up, no app download, and no limits. Just open it in your browser and start identifying songs."
       },
       {
-        "q": "What music databases does it search?",
-        "a": "ACRCloud searches a database of over 100 million tracks including music from Spotify, YouTube, Deezer, and other major platforms."
+        "q": "How accurate is the song recognition?",
+        "a": "The tool searches a database of over 100 million tracks across Spotify, YouTube, Deezer, and other major platforms. Recognition is highly accurate for recorded music, live performances, and most cover versions."
       },
       {
-        "q": "Is my audio recording stored?",
-        "a": "No. The audio clip is sent to ACRCloud for recognition only and is discarded after the result is returned. Nothing is stored on our servers."
+        "q": "Does it work on phone and desktop?",
+        "a": "Yes, the song identifier works on any device with a microphone and a modern browser — including iPhones, Android phones, tablets, laptops, and desktops. No app install required."
+      },
+      {
+        "q": "Is my audio recording stored or saved?",
+        "a": "No. The audio clip is used only for recognition and is discarded immediately after the result is returned. Nothing is stored on our servers. Your privacy is fully protected."
+      },
+      {
+        "q": "What streaming links do I get after identifying a song?",
+        "a": "After identification, you get direct links to listen on Spotify, YouTube Music, Apple Music, Amazon Music, Deezer, and Shazam. You can also preview and download a short audio clip."
       }
     ]
   },
