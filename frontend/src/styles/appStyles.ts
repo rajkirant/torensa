@@ -164,13 +164,17 @@ export const heroHeadlineStyle = (isMobile: boolean): React.CSSProperties => ({
 });
 
 export const heroGradientTextStyle = (theme: Theme): React.CSSProperties => ({
-  background:
+  display: "inline-block",
+  color: "transparent",
+  backgroundImage:
     theme.palette.mode === "dark"
       ? "linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)"
       : "linear-gradient(135deg, #2563eb, #7c3aed, #db2777)",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "100% 100%",
+  backgroundClip: "text",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
-  backgroundClip: "text",
 });
 
 export const heroSubtitleStyle = (
