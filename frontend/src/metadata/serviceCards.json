@@ -1658,5 +1658,85 @@
         "a": "Yes. The BMI calculator works completely offline with no internet connection required."
       }
     ]
+  },
+  {
+    "id": "resume-builder",
+    "component": "ResumeBuilder",
+    "title": "Free Resume Builder - Create a Professional CV Online",
+    "description": "Build a professional resume or CV in minutes. Choose from multiple templates, fill in your details, and download a polished PDF — free, no sign-up required.",
+    "path": "/resume-builder",
+    "ctaLabel": "Build Resume",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Create a job-winning resume or CV in minutes with this free online resume builder. Choose from professional, modern, or minimal templates. Add your personal details, work experience, education, skills, and a professional summary. Preview your resume in real time and download it as a clean, ATS-friendly PDF. Your data is saved locally in your browser — nothing is sent to any server. No sign-up, no watermark, no limits. Works offline too, so you can build your CV anywhere, anytime.",
+    "categoryId": "business",
+    "keywords": [
+      "resume builder",
+      "cv builder",
+      "free resume builder",
+      "resume maker",
+      "cv maker online",
+      "create resume online",
+      "build cv free",
+      "professional resume builder",
+      "resume generator",
+      "cv generator",
+      "resume template",
+      "cv template free",
+      "ats friendly resume",
+      "resume pdf download",
+      "online cv creator",
+      "free cv builder no sign up",
+      "resume builder no watermark",
+      "simple resume maker",
+      "job resume builder",
+      "curriculum vitae builder"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Select a resume template: Professional, Modern, or Minimal.",
+      "Enter your personal information — name, email, phone, location, and website or LinkedIn URL.",
+      "Write a professional summary highlighting your experience and career goals.",
+      "Add your work experience with job titles, companies, dates, and key achievements.",
+      "Add your education with degrees, institutions, and any relevant details.",
+      "List your skills — technical, soft, and industry-specific.",
+      "Click Preview to see how your resume looks as a PDF.",
+      "Click Download PDF to save your resume. The file is named automatically using your name."
+    ],
+    "faqs": [
+      {
+        "q": "Is this resume builder really free?",
+        "a": "Yes, 100% free. There is no sign-up, no hidden fees, no watermark, and no limit on how many resumes you can create or download."
+      },
+      {
+        "q": "What resume templates are available?",
+        "a": "Three templates are available: Professional (classic blue headers with clean lines), Modern (bold typography with a contemporary feel), and Minimal (simple and lightweight for a no-frills CV)."
+      },
+      {
+        "q": "Is my resume data stored or sent to a server?",
+        "a": "No. All your data stays in your browser's local storage. Nothing is uploaded to any server. Your information is completely private."
+      },
+      {
+        "q": "Can I use this resume builder offline?",
+        "a": "Yes. Once the page has loaded, the resume builder works entirely offline. You can fill in your details and download a PDF without an internet connection."
+      },
+      {
+        "q": "Is the PDF ATS-friendly?",
+        "a": "Yes. The generated PDF uses standard fonts (Helvetica) and a clean, single-column layout that is easily parsed by Applicant Tracking Systems (ATS)."
+      },
+      {
+        "q": "Can I add multiple work experiences and education entries?",
+        "a": "Yes. You can add as many work experience and education entries as you need. Click the Add button in each section to add more entries."
+      },
+      {
+        "q": "How do I edit my resume later?",
+        "a": "Your resume data is automatically saved in your browser. When you come back to the page, your previous entries will still be there. You can also click Reset to start over."
+      },
+      {
+        "q": "What format is the downloaded resume?",
+        "a": "The resume is downloaded as a PDF file. PDF is the most widely accepted format for job applications and ensures your formatting stays consistent across all devices."
+      }
+    ]
   }
 ]
