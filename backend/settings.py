@@ -76,6 +76,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://torensa.com",
     "https://www.torensa.com",
+    "https://torensa.onrender.com",
     "https://dph88mmllcgzw.cloudfront.net"
 ]
 
@@ -84,6 +85,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://torensa.com",
     "https://www.torensa.com",
+    "https://torensa.onrender.com",
     "https://www.torensa.pythonanywhere.com",
     "https://dph88mmllcgzw.cloudfront.net"
 ]
