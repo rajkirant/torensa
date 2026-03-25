@@ -148,11 +148,19 @@ const { server, port } = await startStaticServer();
 const baseUrl = `http://127.0.0.1:${port}`;
 
 const executablePath = resolveExecutablePath();
-const browser = await puppeteer.launch({
-  headless: "new",
-  args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  ...(executablePath ? { executablePath } : {}),
-});
+
+let browser;
+try {
+  browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    ...(executablePath ? { executablePath } : {}),
+  });
+} catch (err) {
+  console.warn(`⚠ Prerender skipped – could not launch browser: ${err.message}`);
+  await new Promise((resolveClose) => server.close(resolveClose));
+  process.exit(0);
+}
 
 try {
   const page = await browser.newPage();
