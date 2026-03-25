@@ -9,12 +9,13 @@ const distDir = resolve(process.cwd(), "dist");
 
 const staticRoutes = ["/", "/about", "/contact", "/privacy", "/terms"];
 
-const serviceCardsUrl = pathToFileURL(
-  resolve(process.cwd(), "src/metadata/serviceCards.json"),
+const serviceCardsPath = resolve(
+  process.cwd(),
+  "src/metadata/serviceCards.json",
 );
-const { default: serviceCards } = await import(serviceCardsUrl.href, {
-  assert: { type: "json" },
-});
+const serviceCards = JSON.parse(
+  await readFile(serviceCardsPath, "utf-8"),
+);
 
 const toolRoutes = serviceCards
   .filter((card) => card && card.isActive !== false)

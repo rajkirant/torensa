@@ -7,148 +7,212 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 ## Business Tools
 
 ### Text to QR Builder
-- Generate QR codes from any text, URL, phone number, or email with live preview.
-- Optionally embed a logo and short label; export as high-resolution PNG.
+- Create scannable QR codes from plain text or links with live preview.
+- Optionally add a logo and short label, then download the final image as PNG.
+- Processing is done in-browser, so no input is uploaded.
 - Works fully offline once loaded.
-- [Generate QR Code](https://torensa.com/qr-code-generator)
+- [Generate QR](https://torensa.com/qr-code-generator)
 
 ### Barcode Generator
-- Create barcodes in Code 128, Code 39, EAN-13, EAN-8, and UPC-A formats.
-- Customize width, height, and label display; download as PNG.
+- Create printable barcodes directly in your browser with support for common formats like Code 128, Code 39, EAN-13, EAN-8, and UPC-A.
+- Customize width, height, and label display, then export the barcode as PNG.
 - Works fully offline once loaded.
 - [Generate Barcode](https://torensa.com/barcode-generator)
 
 ### Invoice / Receipt Generator
-- Build professional invoices and receipts with line items, taxes, discounts, and shipping.
-- Supports any currency; export as PDF. Data saved locally in the browser.
+- Build polished invoices or receipts with seller/buyer details, line items, taxes, shipping, discounts, and notes.
+- Totals are calculated automatically, and the final document can be exported as PDF.
+- Data stays local and can be reused in your browser.
+- Works fully offline once loaded.
 - [Create Invoice](https://torensa.com/invoice-generator)
 
 ## Communication Tools
 
 ### Easy Share (Text + File)
-- Share text and up to 5 files (up to 1 GB each) across devices using a 4-digit code.
-- No signup, email, or phone number required. Shares expire after ~1 hour.
+- Easy Share lets you send text and up to 5 files (up to 1 GB each) between devices in different networks using a 4-digit access code via internet.
+- No signup, phone, or email is required.
 - [Open Easy Share](https://torensa.com/easy-share)
 
 ## Image Tools
 
 ### Image Compressor
-- Compress JPG, PNG, and WEBP images locally with a quality slider and before/after preview.
-- Download individually or as a ZIP archive. No uploads, fully private.
+- Reduce image file size directly in your browser with no uploads.
+- Preview selected images immediately, tune compression quality, then compress and download files individually or as a ZIP archive.
+- Works fully offline once loaded.
 - [Compress Images](https://torensa.com/image-compressor)
 
 ### Image Format Converter
-- Convert images between PNG, JPG, WEBP, and BMP formats entirely in the browser.
-- [Convert Image Format](https://torensa.com/image-format-converter)
+- Convert a single image between PNG, JPG, WEBP, and BMP formats in your browser.
+- Pick source and target formats, then export instantly with no uploads or backend processing.
+- Works fully offline once loaded.
+- [Convert Image](https://torensa.com/image-format-converter)
+
+### Image / PDF Merger
+- Combine multiple images and PDF documents into a single PDF file.
+- Reorder items, rotate images, choose page size and margins, set fit behavior, and optionally add page numbers.
+- Built with client-side processing for privacy and speed.
+- Works fully offline once loaded.
+- [Create PDF](https://torensa.com/pdf-merger)
 
 ### Image Crop Tool
-- Crop images with an interactive selection overlay; supports aspect ratio constraints.
-- Export as PNG, JPEG, or WEBP.
+- Select a crop area with pixel-level controls, preview the selected region, and export as PNG, JPEG, or WebP.
+- Everything runs entirely in your browser, so images never leave your device.
+- Works fully offline once loaded.
 - [Crop Image](https://torensa.com/image-crop-tool)
 
-### Image Background Remover / Changer
-- Remove the background to get a transparent PNG, fill with a solid color, or swap in a custom background image.
-- Uses AI-based segmentation (server-side); requires internet connection.
-- [Edit Image Background](https://torensa.com/image-background-editor)
+### Image Background Remover/Changer
+- Upload any PNG, JPG, or WEBP image and choose what to do with its background: remove it entirely to get a transparent PNG, fill it with a solid color of your choice, or composite it over a completely new background image.
+- All processing is done server-side using AI segmentation, with a live before/after preview before you download.
+- [Edit Background](https://torensa.com/image-background-editor)
 
 ### AI Image Generator
-- Describe any image in plain English and AI (Amazon Titan via AWS Bedrock) generates it.
-- Output is a 1024×1024 PNG. Requires internet connection.
-- [Generate AI Image](https://torensa.com/image-generator)
+- Type a description of the image you want — anything from a realistic landscape to a creative illustration — and AI (Amazon Titan Image Generator via AWS Bedrock) will create it.
+- Preview the result instantly and download as a high-resolution PNG.
+- [Open Image Generator](https://torensa.com/image-generator)
 
 ## PDF & Document Tools
 
-### Image / PDF Merger
-- Combine multiple images (PNG, JPG, WEBP) and PDFs into one PDF.
-- Reorder pages, rotate images, set page size/margins, and optionally add page numbers.
-- Works fully offline once loaded.
-- [Merge to PDF](https://torensa.com/pdf-merger)
-
 ### PDF Splitter
-- Extract a page range or split every page into individual PDFs (downloaded as ZIP).
-- Works fully offline once loaded.
+- Upload a PDF and split it locally in your browser.
+- Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download.
+- All processing runs on-device for privacy and offline use.
 - [Split PDF](https://torensa.com/pdf-splitter)
 
 ### Word to PDF Converter
-- Convert .doc and .docx files to PDF using LibreOffice on the server.
-- Preserves fonts, tables, images, and formatting. Files are never stored.
-- [Convert Word to PDF](https://torensa.com/word-to-pdf)
+- Upload a Word document (.doc or .docx) and convert it to a PDF in seconds.
+- Conversion runs on the server using LibreOffice, preserving fonts, tables, images, and formatting.
+- Files are processed in memory and never stored.
+- [Convert to PDF](https://torensa.com/word-to-pdf)
 
 ### Excel to PDF Converter
-- Convert .xls, .xlsx, and .xlsm spreadsheets to PDF; charts and formatting preserved.
-- [Convert Excel to PDF](https://torensa.com/excel-to-pdf)
+- Upload an Excel spreadsheet (.xls, .xlsx, or .xlsm) and convert it to a PDF in seconds.
+- Conversion runs on the server using LibreOffice, preserving sheet formatting, tables, and charts.
+- Files are processed in memory and never stored.
+- [Convert to PDF](https://torensa.com/excel-to-pdf)
 
 ### PDF to Word Converter
-- Convert PDF files to editable .docx documents using LibreOffice. Files are never stored.
-- [Convert PDF to Word](https://torensa.com/pdf-to-word)
+- Upload a PDF and convert it to an editable .docx file.
+- Conversion runs on the server using LibreOffice, preserving layout and text.
+- Files are processed in memory and never stored.
+- [Convert to Word](https://torensa.com/pdf-to-word)
 
 ### PDF Text Extractor (OCR)
-- Extract text from digital PDFs (direct parse) or scanned PDFs (Tesseract OCR).
-- Copy to clipboard or download as .txt.
-- [Extract PDF Text](https://torensa.com/pdf-text-extractor)
+- Upload any PDF — whether it contains selectable text or scanned images — and extract all readable text.
+- Digital PDFs are parsed directly for perfect accuracy, while scanned pages are processed with Tesseract OCR.
+- Copy the result to your clipboard or download as a .txt file.
+- [Extract Text](https://torensa.com/pdf-text-extractor)
+
+### Data files Converter
+- Upload an Excel, CSV, or JSON file and convert it to either of the other two formats.
+- All parsing and conversion happen client-side, so your files stay on your device.
+- Works fully offline once loaded.
+- [Convert Files](https://torensa.com/data-format-converter)
 
 ## Data & Media Tools
 
-### Data Files Converter
-- Convert between Excel (.xlsx), CSV, and JSON entirely in the browser.
-- [Convert Data Files](https://torensa.com/data-format-converter)
+### Song Identifier
+- Play any song near your device's microphone and identify it instantly.
+- The tool records a short audio clip, sends it to ACRCloud's music recognition engine, and returns the song title, artist, album, genre, and direct links to Spotify, YouTube, and Deezer.
+- Works with music from speakers, TV, radio, or even humming.
+- [Identify Song](https://torensa.com/song-identifier)
 
 ### Subtitle Downloader
-- Paste a video URL to download SRT subtitles via yt-dlp; falls back to auto-generated captions.
-- Supports YouTube and other yt-dlp-compatible sites.
+- Paste a video URL to fetch subtitles as an SRT file.
+- The tool tries existing captions first, then falls back to auto-generated subtitles if available.
+- Supports YouTube and other sites supported by yt-dlp.
 - [Download Subtitles](https://torensa.com/subtitle-downloader)
 
 ### Speech to Text Converter
-- Upload an audio file (MP3, WAV, MP4, M4A, FLAC, OGG, WEBM) and receive a transcript.
-- Powered by Amazon Transcribe (AWS). Download result as .txt.
-- [Speech to Text](https://torensa.com/speech-to-text)
+- Upload an audio file and receive a clean transcript powered by Amazon Transcribe.
+- Supports common audio formats like MP3, WAV, MP4, M4A, FLAC, OGG, and WEBM.
+- AI-powered.
+- [Open Speech to Text](https://torensa.com/speech-to-text)
 
-### Habit Tracker
-- Track daily habits with custom point values; visualize 14-day progress as a bar chart.
-- Data stored locally in the browser. Requires login.
-- [Track Habits](https://torensa.com/habit-tracker)
+### Video to MP3/WAV
+- Upload a video file and extract the audio track as MP3 or WAV.
+- Conversion runs on the server using FFmpeg.
+- Files are processed in memory and never stored.
+- [Extract Audio](https://torensa.com/video-to-audio)
+
+### Text to Speech Converter
+- Type or paste any text and hear it read aloud using the Web Speech API built into your browser.
+- Choose from dozens of voices and languages, adjust speed, pitch, and volume, and control playback with pause, resume, and stop.
+- Fully client-side — your text never leaves your browser.
+- Works fully offline once loaded.
+- [Open Text to Speech](https://torensa.com/text-to-speech)
 
 ## Developer Tools
 
 ### Text Difference Checker
-- Paste two versions of text to see line-by-line additions and removals.
+- Paste two versions of text and view line-by-line differences, including additions, removals, and modified blocks.
+- Useful for reviewing edits in content, configs, or code snippets.
+- Everything runs locally in your browser.
 - Works fully offline once loaded.
 - [Compare Text](https://torensa.com/text-diff-checker)
 
 ### JSON Formatter + Validator
-- Validate, pretty-print, and minify JSON; includes a diff mode to compare two JSON objects.
+- Paste JSON and run quick validation with readable error feedback.
+- Format with indentation for readability or minify for compact payloads.
+- This utility is fully client-side, making it fast and privacy-friendly for developer workflows.
 - Works fully offline once loaded.
-- [Format JSON](https://torensa.com/json-formatter-validator)
+- [Open JSON Tool](https://torensa.com/json-formatter-validator)
 
 ### Spring Boot Log Analyzer
-- Paste or upload Spring Boot logs to identify root-cause exceptions, stack traces, and correlation IDs.
-- Export a structured JSON incident report.
+- Upload or paste Spring Boot logs to identify likely first-failure events, exception chains, stack-frame locations, and correlation-id clusters.
+- Export a structured JSON incident report for sharing and follow-up debugging.
+- Works fully offline once loaded.
 - [Analyze Logs](https://torensa.com/spring-boot-log-analyzer)
 
 ### AI Cron Generator + Validator
-- Describe a schedule in plain English and AI (Claude via AWS Bedrock) generates the cron expression.
-- Validates syntax, explains in plain English, and previews next 5 run times. Supports 5-field and 6-field formats.
+- Use AI to generate cron expressions from plain English descriptions, or create them manually.
+- Validate syntax instantly, get human-readable interpretations, and preview upcoming execution times.
+- Supports both 5-field and 6-field formats.
 - [Open Cron Tool](https://torensa.com/cron-generator-validator)
 
 ### JWT Encoder / Decoder
-- Decode any JWT to inspect header, payload, and claims; encode new tokens with HS256 or HS512.
-- All operations are client-side — tokens never leave your browser.
+- Inspect JWT header and payload, edit claims, and generate new tokens using HS256 or HS512 algorithms.
+- Helpful for API testing and debugging authentication flows.
+- Operations are performed in-browser without sending token data to a backend.
+- Works fully offline once loaded.
 - [Open JWT Tool](https://torensa.com/jwt-decoder-encoder)
 
 ### UUID Generator
-- Generate 1–100 UUID v4 values at once; options for uppercase and hyphen-free formats.
+- Create one or many UUID v4 identifiers with options like uppercase output or hyphen removal.
+- Copy all generated values at once for use in development, testing, and data workflows.
 - Works fully offline once loaded.
 - [Generate UUID](https://torensa.com/uuid-generator)
 
 ### String Encryptor / Decryptor
-- Encrypt and decrypt text with a secret key using AES.
-- Includes a Jasypt-compatible server mode for Spring Boot configuration encryption.
+- Encrypt plain text into ciphertext and decrypt ciphertext back into readable text using a secret key with AES (crypto-js).
+- Includes a server mode with PBKDF2-HMAC-SHA512 + AES-256 for Jasypt-style workflows and interoperability scenarios.
 - [Open Encryptor](https://torensa.com/string-encryptor)
 
 ### Torensa API Forge
-- Send HTTP requests (GET, POST, PUT, PATCH, DELETE) directly from the browser.
-- Supports JWT Bearer auth, custom headers, query params, and JSON body.
+- Torensa API Forge lets you send API requests directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body.
 - [Open API Forge](https://torensa.com/api-request-builder)
+
+### SQL Formatter + Beautifier
+- Paste any SQL query and instantly format it with proper indentation and line breaks for readability.
+- Minify queries for compact storage, toggle keyword casing between UPPERCASE and lowercase, and choose your preferred indent style.
+- Fully client-side — your SQL never leaves your browser.
+- Works fully offline once loaded.
+- [Open SQL Tool](https://torensa.com/sql-formatter)
+
+## health-wellbeing
+
+### Habit Tracker
+- Build a list of habits you want to do every day, each with a custom point value. Check off completed habits daily to earn points.
+- A bar chart shows your points over the last 14 days so you can track your consistency.
+- All data is stored locally in your browser.
+- Requires login.
+- [Track Habits](https://torensa.com/habit-tracker)
+
+### BMI Calculator (kg, cm, lb, ft)
+- Calculate Body Mass Index (BMI) from your height and weight in seconds.
+- Use metric (kg/cm) or imperial (lb/ft) units and see your BMI category on a color scale.
+- Runs fully in your browser - your data never leaves your device.
+- Works fully offline once loaded.
+- [Calculate BMI](https://torensa.com/bmi-calculator)
 
 ## Resources
 
