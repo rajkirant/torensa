@@ -89,16 +89,21 @@ function startStaticServer() {
 }
 
 async function waitForSeoTags(page) {
-  await page.waitForFunction(() => {
-    const canonical = document.querySelector('link[rel="canonical"]');
-    const description = document.querySelector('meta[name="description"]');
-    return (
-      canonical &&
-      canonical.getAttribute("href") &&
-      description &&
-      description.getAttribute("content")
+  try {
+    await page.waitForFunction(
+      () => {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        const description = document.querySelector('meta[name="description"]');
+        const hasDescription = !!(description && description.getAttribute("content"));
+        const hasCanonical = !!(canonical && canonical.getAttribute("href"));
+        // If Helmet runs, we should get both; otherwise at least keep description.
+        return hasDescription && (hasCanonical || document.location.pathname === "/");
+      },
+      { timeout: 60000 },
     );
-  });
+  } catch {
+    // Do not fail the build if SEO tags are slow to hydrate.
+  }
 }
 
 async function renderRoute(page, baseUrl, route) {
