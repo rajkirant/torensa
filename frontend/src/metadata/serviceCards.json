@@ -1167,7 +1167,7 @@
     "offlineEnabled": false,
     "aiPowered": true,
     "authRequired": false,
-    "detailedDescription": "Type a description of the image you want — anything from a realistic landscape to a creative illustration — and AI (Amazon Titan Image Generator via AWS Bedrock) will create it. Preview the result instantly and download as a high-resolution PNG.",
+    "detailedDescription": "Type a description of the image you want — anything from a realistic landscape to a creative illustration — and AI (Stability AI Stable Image Core via AWS Bedrock) will create it. Preview the result instantly and download as a high-resolution PNG.",
     "categoryId": "utilities",
     "keywords": [
       "image",
@@ -1191,7 +1191,7 @@
     "faqs": [
       {
         "q": "How does the AI image generation work?",
-        "a": "Your text description is sent to Amazon Titan Image Generator on AWS Bedrock, which creates a 1024×1024 image based on your prompt."
+        "a": "Your text description is sent to Stability AI Stable Image Core on AWS Bedrock, which creates a 1024×1024 image based on your prompt."
       },
       {
         "q": "What kind of images can I generate?",

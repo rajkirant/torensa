@@ -18,7 +18,9 @@ from .tool_chat_static import (
 )
 
 ENV_IMAGE_MODEL_ID = "BEDROCK_IMAGE_MODEL_ID"
-DEFAULT_IMAGE_MODEL_ID = "amazon.titan-image-generator-v2:0"
+DEFAULT_IMAGE_MODEL_ID = "stability.stable-image-core-v1:1"
+ENV_IMAGE_REGION = "BEDROCK_IMAGE_REGION"
+DEFAULT_IMAGE_REGION = "us-west-2"
 ENV_IMAGE_PROVIDER = "IMAGE_PROVIDER"
 DEFAULT_IMAGE_PROVIDER = "bedrock"
 
@@ -117,7 +119,7 @@ def image_generate_view(request):
                 status=status.HTTP_502_BAD_GATEWAY,
             )
     else:
-        region = os.getenv(ENV_AWS_REGION, DEFAULT_AWS_REGION).strip() or DEFAULT_AWS_REGION
+        image_region = os.getenv(ENV_IMAGE_REGION, "").strip() or DEFAULT_IMAGE_REGION
         model_id = os.getenv(ENV_IMAGE_MODEL_ID, DEFAULT_IMAGE_MODEL_ID).strip() or DEFAULT_IMAGE_MODEL_ID
 
         try:
@@ -129,18 +131,9 @@ def image_generate_view(request):
             )
 
         try:
-            bedrock = boto3.client("bedrock-runtime", region_name=region)
+            bedrock = boto3.client("bedrock-runtime", region_name=image_region)
             body = json.dumps({
-                "taskType": "TEXT_IMAGE",
-                "textToImageParams": {
-                    "text": prompt,
-                },
-                "imageGenerationConfig": {
-                    "numberOfImages": 1,
-                    "height": 1024,
-                    "width": 1024,
-                    "cfgScale": 8.0,
-                },
+                "prompt": prompt,
             })
             response = bedrock.invoke_model(modelId=model_id, body=body)
             result = json.loads(response["body"].read())
