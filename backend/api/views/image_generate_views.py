@@ -1,3 +1,5 @@
+import base64
+import io
 import json
 import os
 import urllib.error
@@ -38,6 +40,23 @@ ERROR_OPENAI_NOT_CONFIGURED = "OpenAI API key is not configured."
 ERROR_OPENAI_REQUEST_FAILED = "OpenAI image generation failed."
 
 MAX_PROMPT_LENGTH = 512
+TARGET_IMAGE_SIZE = 512
+
+
+def resize_base64_png(image_b64: str, size: int) -> str:
+    if not image_b64:
+        return image_b64
+    try:
+        from PIL import Image
+
+        image_bytes = base64.b64decode(image_b64)
+        with Image.open(io.BytesIO(image_bytes)) as image:
+            resized = image.resize((size, size), Image.LANCZOS)
+            output = io.BytesIO()
+            resized.save(output, format="PNG")
+        return base64.b64encode(output.getvalue()).decode("utf-8")
+    except Exception:
+        return image_b64
 
 
 @api_view(["POST"])
@@ -73,7 +92,7 @@ def image_generate_view(request):
             "model": model_id,
             "prompt": prompt,
             "n": 1,
-            "size": "1024x1024",
+            "size": f"{TARGET_IMAGE_SIZE}x{TARGET_IMAGE_SIZE}",
             "quality": quality,
         }
 
@@ -99,6 +118,7 @@ def image_generate_view(request):
                     status=status.HTTP_502_BAD_GATEWAY,
                 )
             image_b64 = images[0]["b64_json"]
+            image_b64 = resize_base64_png(image_b64, TARGET_IMAGE_SIZE)
         except urllib.error.HTTPError as exc:
             error_msg = exc.read().decode("utf-8", errors="ignore")
             error_payload = {"error": ERROR_OPENAI_REQUEST_FAILED}
@@ -146,6 +166,7 @@ def image_generate_view(request):
                 )
 
             image_b64 = images[0]
+            image_b64 = resize_base64_png(image_b64, TARGET_IMAGE_SIZE)
 
         except Exception as exc:
             error_msg = str(exc)
