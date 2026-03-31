@@ -1430,6 +1430,51 @@
     ]
   },
   {
+    "id": "voice-changer",
+    "component": "VoiceChanger",
+    "title": "Voice Changer (Character Presets)",
+    "description": "Upload audio and transform it into character-style voices.",
+    "path": "/voice-changer",
+    "ctaLabel": "Change Voice",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload an audio file and apply character presets like deep narrator, tiny alien, robot, or vintage radio. The conversion runs on the server using FFmpeg filters and returns a downloadable MP3 or WAV file.",
+    "categoryId": "utilities",
+    "keywords": [
+      "voice changer",
+      "voice effects",
+      "character voice",
+      "audio",
+      "pitch",
+      "robot voice",
+      "chipmunk voice",
+      "radio voice"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload an audio file (MP3, WAV, M4A, AAC, OGG, FLAC, AMR, or WEBM).",
+      "Choose a character preset such as Space Captain, Tiny Alien, Robot, or Vintage Radio.",
+      "Pick MP3 for a smaller file or WAV for lossless output.",
+      "Click Change Voice and wait for the conversion to finish.",
+      "Download the converted audio file."
+    ],
+    "faqs": [
+      {
+        "q": "Is this a real-time voice changer?",
+        "a": "No. This is a file-based tool. Upload an audio file, choose a preset, and download the converted audio."
+      },
+      {
+        "q": "What audio formats are supported?",
+        "a": "Common formats including MP3, WAV, M4A, AAC, OGG, FLAC, AMR, and WEBM."
+      },
+      {
+        "q": "Is my audio stored on the server?",
+        "a": "No. Files are processed in a temporary directory and deleted immediately after conversion."
+      }
+    ]
+  },
+  {
     "id": "habit-tracker",
     "component": "HabitTracker",
     "title": "Habit Tracker",
