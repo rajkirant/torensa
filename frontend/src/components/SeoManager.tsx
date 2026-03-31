@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import serviceCards from "../metadata/serviceCards.json";
@@ -62,9 +62,20 @@ function formatToolTitle(title: string) {
   return title.toLowerCase().includes("torensa") ? title : `${title} | Torensa`;
 }
 
+declare function gtag(...args: unknown[]): void;
+
 export default function SeoManager() {
   const location = useLocation();
   const normalizedPath = normalizePath(location.pathname);
+
+  useEffect(() => {
+    if (typeof gtag !== "undefined") {
+      gtag("event", "page_view", {
+        page_path: location.pathname,
+        page_search: location.search,
+      });
+    }
+  }, [location.pathname, location.search]);
 
   const activeCards = useMemo(
     () => getActiveServiceCards(serviceCards as ServiceCardConfig[]),
