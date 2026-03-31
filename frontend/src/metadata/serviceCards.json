@@ -1438,7 +1438,7 @@
     "ctaLabel": "Change Voice",
     "offlineEnabled": false,
     "authRequired": false,
-    "detailedDescription": "Upload an audio file and apply character presets like deep narrator, tiny alien, robot, or vintage radio. The conversion runs on the server using FFmpeg filters and returns a downloadable MP3 or WAV file.",
+    "detailedDescription": "Upload an audio file and apply character presets like deep narrator, tiny alien, husky man, or old lady. The conversion runs on the server using FFmpeg filters and returns a downloadable MP3 or WAV file.",
     "categoryId": "utilities",
     "keywords": [
       "voice changer",
@@ -1446,15 +1446,15 @@
       "character voice",
       "audio",
       "pitch",
-      "robot voice",
-      "chipmunk voice",
-      "radio voice"
+      "husky voice",
+      "old lady voice",
+      "chipmunk voice"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Upload an audio file (MP3, WAV, M4A, AAC, OGG, FLAC, AMR, or WEBM).",
-      "Choose a character preset such as Space Captain, Tiny Alien, Robot, or Vintage Radio.",
+      "Choose a character preset such as Space Captain, Tiny Alien, Husky Man, or Old Lady.",
       "Pick MP3 for a smaller file or WAV for lossless output.",
       "Click Change Voice and wait for the conversion to finish.",
       "Download the converted audio file."

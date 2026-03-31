@@ -20,7 +20,7 @@ const ACCEPT_TYPES =
   "audio/*,.mp3,.wav,.m4a,.mp4,.flac,.ogg,.webm,.amr,.aac";
 
 type OutputFormat = "mp3" | "wav";
-type PresetId = "chipmunk" | "deep" | "robot" | "radio" | "echo";
+type PresetId = "chipmunk" | "deep" | "husky" | "old-lady";
 
 const formatLabel: Record<OutputFormat, string> = {
   mp3: "MP3 (small, compatible)",
@@ -30,9 +30,8 @@ const formatLabel: Record<OutputFormat, string> = {
 const presetLabel: Record<PresetId, string> = {
   deep: "Space Captain (deep)",
   chipmunk: "Tiny Alien (chipmunk)",
-  robot: "Robot",
-  radio: "Vintage Radio",
-  echo: "Echo Chamber",
+  husky: "Husky Man",
+  "old-lady": "Old Lady",
 };
 
 function formatBytes(bytes: number) {
