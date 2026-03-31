@@ -60,6 +60,9 @@ export default function VoiceChanger() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [lastName, setLastName] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string>("");
+  const [resultName, setResultName] = useState<string>("");
+  const [resultSize, setResultSize] = useState<number | null>(null);
 
   const onFileSelected = (files: FileList | null) => {
     if (!files?.length) return;
@@ -67,6 +70,9 @@ export default function VoiceChanger() {
     setLastName(files[0].name);
     setError(null);
     setSuccess(null);
+    setDownloadUrl("");
+    setResultName("");
+    setResultSize(null);
   };
 
   const clearSelection = () => {
@@ -74,6 +80,50 @@ export default function VoiceChanger() {
     setLastName(null);
     setError(null);
     setSuccess(null);
+    setDownloadUrl("");
+    setResultName("");
+    setResultSize(null);
+  };
+
+  const handleDownload = () => {
+    if (!downloadUrl) return;
+    const anchor = document.createElement("a");
+    anchor.href = downloadUrl;
+    if (resultName) anchor.download = resultName;
+    anchor.rel = "noopener";
+    anchor.target = "_blank";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+  };
+
+  const convertDirect = async () => {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("preset", preset);
+    formData.append("format", outputFormat);
+
+    const response = await apiFetch("/api/voice-change/", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      let msg = `Server error (${response.status})`;
+      try {
+        const data = await response.json();
+        msg = data?.error || msg;
+      } catch {
+        // ignore JSON parse error
+      }
+      throw new Error(msg);
+    }
+
+    const blob = await response.blob();
+    const outputName = buildOutputName(file.name, preset, outputFormat);
+    downloadBlob(blob, outputName);
+    setSuccess("Voice conversion complete. Your download should start now.");
   };
 
   const handleConvert = async () => {
@@ -82,22 +132,65 @@ export default function VoiceChanger() {
     setLoading(true);
     setError(null);
     setSuccess(null);
+    setDownloadUrl("");
+    setResultName("");
+    setResultSize(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("preset", preset);
-      formData.append("format", outputFormat);
-
-      const response = await apiFetch("/api/voice-change/", {
+      const initResponse = await apiFetch("/api/voice-change/upload/init/", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+        }),
       });
 
-      if (!response.ok) {
-        let msg = `Server error (${response.status})`;
+      if (!initResponse.ok) {
+        let msg = `Server error (${initResponse.status})`;
         try {
-          const data = await response.json();
+          const data = await initResponse.json();
+          msg = data?.error || msg;
+        } catch {
+          // ignore JSON parse error
+        }
+        if (initResponse.status === 503 && msg.includes("R2")) {
+          await convertDirect();
+          return;
+        }
+        throw new Error(msg);
+      }
+
+      const initPayload = await initResponse.json();
+      const uploadUrl = initPayload?.uploadUrl as string;
+      const objectKey = initPayload?.objectKey as string;
+      if (!uploadUrl || !objectKey) {
+        throw new Error("Upload initialization failed. Please try again.");
+      }
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type || "application/octet-stream",
+        },
+        body: file,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`Upload failed (${uploadResponse.status}).`);
+      }
+
+      const convertResponse = await apiFetch("/api/voice-change/from-r2/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ objectKey, preset, format: outputFormat }),
+      });
+
+      if (!convertResponse.ok) {
+        let msg = `Server error (${convertResponse.status})`;
+        try {
+          const data = await convertResponse.json();
           msg = data?.error || msg;
         } catch {
           // ignore JSON parse error
@@ -105,10 +198,19 @@ export default function VoiceChanger() {
         throw new Error(msg);
       }
 
-      const blob = await response.blob();
-      const outputName = buildOutputName(file.name, preset, outputFormat);
-      downloadBlob(blob, outputName);
-      setSuccess("Voice conversion complete. Your download should start now.");
+      const payload = await convertResponse.json();
+      if (!payload?.downloadUrl) {
+        throw new Error("Conversion succeeded but no download URL was returned.");
+      }
+
+      setDownloadUrl(payload.downloadUrl as string);
+      setResultName((payload.filename as string) || "audio");
+      setResultSize(
+        typeof payload.size === "number" ? payload.size : null,
+      );
+      const sizeLabel =
+        typeof payload.size === "number" ? ` - ${formatBytes(payload.size)}` : "";
+      setSuccess(`Converted successfully${sizeLabel}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Conversion failed.");
     } finally {
@@ -204,6 +306,16 @@ export default function VoiceChanger() {
           <Typography variant="caption" color="text.secondary">
             Output name: {buildOutputName(lastName, preset, outputFormat)}
           </Typography>
+        )}
+
+        {downloadUrl && (
+          <ActionButton
+            onClick={handleDownload}
+            startIcon={<DownloadIcon />}
+            variant="outlined"
+          >
+            Download {resultName || "audio"}
+          </ActionButton>
         )}
       </Stack>
     </PageContainer>
