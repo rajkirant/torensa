@@ -52,12 +52,10 @@ PRESET_FILTERS: dict[str, str] = {
     "chipmunk": "asetrate=44100*1.35,aresample=44100,atempo=1/1.35",
     # Lower pitch, slower formants
     "deep": "asetrate=44100*0.78,aresample=44100,atempo=1/0.78",
-    # Robotic tremolo with limited bandwidth
-    "robot": "tremolo=f=25:d=0.9,highpass=f=120,lowpass=f=4000",
-    # Telephone/radio style bandpass
-    "radio": "highpass=f=300,lowpass=f=3400,volume=1.2",
-    # Echo chamber effect
-    "echo": "aecho=0.8:0.9:60:0.4",
+    # Husky lower voice with slight warmth
+    "husky": "asetrate=44100*0.84,aresample=44100,atempo=1/0.84,lowpass=f=3800,volume=1.1",
+    # Old lady higher, thinner voice
+    "old-lady": "asetrate=44100*1.18,aresample=44100,atempo=1/1.18,highpass=f=250,volume=1.05",
 }
 
 from ..r2_storage import (
