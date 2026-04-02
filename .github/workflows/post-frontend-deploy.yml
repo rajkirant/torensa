@@ -1,4 +1,7 @@
-name: Deploy Sitemap
+name: Post Frontend Deploy
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
   workflow_run:
@@ -11,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-sitemap:
+  post-frontend-deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
@@ -26,6 +29,21 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create and deploy build-info JSON
+        shell: bash
+        run: |
+          BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          cat > /tmp/build-info.json <<EOF
+          {
+            "buildNumber": "${{ github.run_number }}",
+            "buildTimestamp": "$BUILD_TIMESTAMP"
+          }
+          EOF
+          aws s3 cp /tmp/build-info.json "s3://${{ secrets.S3_BUCKET_NAME }}/metadata/build-info.json" \
+            --content-type "application/json" \
+            --cache-control "public,max-age=0,must-revalidate"
+          echo "Deployed build-info.json"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

@@ -66,18 +66,6 @@ jobs:
             echo "No S3 deploy changes detected; skipping S3 deploy"
           fi
 
-      - name: Create build-info JSON
-        shell: bash
-        run: |
-          mkdir -p frontend/dist/metadata
-          BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > frontend/dist/metadata/build-info.json <<EOF
-          {
-            "buildNumber": "${{ github.run_number }}",
-            "buildTimestamp": "$BUILD_TIMESTAMP"
-          }
-          EOF
-
       - name: Deploy dist to S3
         run: |
           aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete --exclude "assets/*"
