@@ -152,7 +152,7 @@ export default function SeoManager() {
     ? {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        name: meta.title.replace(" | Torensa", ""),
+        name: currentTool?.name ?? meta.title.replace(" | Torensa", ""),
         url: canonical,
         description: meta.description,
         applicationCategory: "UtilitiesApplication",
@@ -192,7 +192,7 @@ export default function SeoManager() {
             {
               "@type": "ListItem",
               position: 2,
-              name: meta.title.replace(" | Torensa", ""),
+              name: currentTool?.name ?? meta.title.replace(" | Torensa", ""),
               item: canonical,
             },
           ],
