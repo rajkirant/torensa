@@ -1,6 +1,8 @@
-import { terms as desc } from "../metadata/pageDescriptions.json";
+import { usePageDescriptions } from "../utils/language";
 
 export default function TermsOfService() {
+  const { terms: desc } = usePageDescriptions();
+
   return (
     <>
       <header style={{ marginBottom: 40 }}>
