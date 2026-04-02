@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import serviceCards from "../metadata/serviceCards.json";
+import { useLanguage, useServiceCards } from "../utils/language";
 import {
   type ServiceCardConfig,
   getActiveServiceCards,
@@ -67,6 +67,8 @@ declare function gtag(...args: unknown[]): void;
 export default function SeoManager() {
   const location = useLocation();
   const normalizedPath = normalizePath(location.pathname);
+  const { language } = useLanguage();
+  const serviceCards = useServiceCards();
 
   useEffect(() => {
     if (typeof gtag !== "undefined") {
@@ -79,7 +81,7 @@ export default function SeoManager() {
 
   const activeCards = useMemo(
     () => getActiveServiceCards(serviceCards as ServiceCardConfig[]),
-    [],
+    [serviceCards],
   );
 
   const toolMetaByPath = useMemo(() => {
@@ -189,6 +191,7 @@ export default function SeoManager() {
 
   return (
     <Helmet>
+      <html lang={language} />
       <title>{meta.title}</title>
       <meta name="description" content={meta.description} />
       <link rel="canonical" href={canonical} />
