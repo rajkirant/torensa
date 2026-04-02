@@ -53,7 +53,7 @@ export default function Login() {
 
   return (
     <div style={{ maxWidth: 400, margin: "80px auto" }}>
-      <h2>Login</h2>
+      <h1>Login</h1>
       <p style={{ color: "#6b7280", marginBottom: 24, lineHeight: 1.6 }}>
         Sign in to access tools that require an account, track your usage, and
         manage your Torensa preferences. New here?{" "}

@@ -95,7 +95,7 @@ export default function VerifyEmail() {
 
   return (
     <div style={{ maxWidth: 480, margin: "80px auto", textAlign: "center" }}>
-      <h2>Email Verification</h2>
+      <h1>Email Verification</h1>
 
       {status === "loading" && (
         <div style={{ marginTop: 32 }}>

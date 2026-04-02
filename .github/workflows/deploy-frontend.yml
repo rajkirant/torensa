@@ -51,6 +51,10 @@ jobs:
         working-directory: frontend
         run: pnpm run build
 
+      - name: Prerender routes for SEO
+        working-directory: frontend
+        run: pnpm run prerender
+
       - name: Deploy dist to S3
         run: |
           aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete --exclude "assets/*"
