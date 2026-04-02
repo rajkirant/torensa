@@ -7,7 +7,7 @@ import puppeteer from "puppeteer";
 
 const distDir = resolve(process.cwd(), "dist");
 
-const staticRoutes = ["/", "/about", "/contact", "/privacy", "/terms"];
+const staticRoutes = ["/", "/about", "/privacy", "/terms"];
 
 const serviceCardsPath = resolve(
   process.cwd(),

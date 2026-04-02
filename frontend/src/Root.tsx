@@ -77,7 +77,6 @@ function RootRoutes({
             >
               <Route index element={<Home />} />
               <Route path="about" element={<Contact />} />
-              <Route path="contact" element={<Contact />} />
               <Route path="privacy" element={<PrivacyPolicy />} />
               <Route path="terms" element={<TermsOfService />} />
               <Route path="login" element={<Login />} />
@@ -114,7 +113,6 @@ function RootRoutes({
             >
               <Route index element={<Home />} />
               <Route path="about" element={<Contact />} />
-              <Route path="contact" element={<Contact />} />
               <Route path="privacy" element={<PrivacyPolicy />} />
               <Route path="terms" element={<TermsOfService />} />
               <Route path="login" element={<Login />} />
@@ -153,7 +151,6 @@ function RootRoutes({
             >
               <Route index element={<Home />} />
               <Route path="about" element={<Contact />} />
-              <Route path="contact" element={<Contact />} />
               <Route path="privacy" element={<PrivacyPolicy />} />
               <Route path="terms" element={<TermsOfService />} />
               <Route path="login" element={<Login />} />
