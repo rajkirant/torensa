@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Root } from "./Root";
+import "./i18n";
 
 import { registerSW } from "virtual:pwa-register";
 import { syncBuildFromStaticFile } from "./utils/buildSync";

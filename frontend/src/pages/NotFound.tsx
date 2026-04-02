@@ -1,12 +1,15 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useLanguage, withLanguagePrefix } from "../utils/language";
 
 export default function NotFound() {
+  const { t } = useTranslation();
   const { language } = useLanguage();
   const location = useLocation();
   const shouldForceEnglishPrefix =
     location.pathname === "/en" || location.pathname.startsWith("/en/");
+
   return (
     <div
       style={{
@@ -20,10 +23,10 @@ export default function NotFound() {
       }}
     >
       <h1 style={{ fontSize: 56, marginBottom: 8 }}>404</h1>
-      <h2 style={{ marginBottom: 12 }}>Page not found</h2>
+      <h2 style={{ marginBottom: 12 }}>{t("notFound.title")}</h2>
 
       <p style={{ opacity: 0.7, maxWidth: 420, marginBottom: 24 }}>
-        The page you’re looking for doesn’t exist or may have been moved.
+        {t("notFound.body")}
       </p>
 
       <Link
@@ -39,7 +42,7 @@ export default function NotFound() {
           fontWeight: 500,
         }}
       >
-        Go back home
+        {t("notFound.backHome")}
       </Link>
     </div>
   );
