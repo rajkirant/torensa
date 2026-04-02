@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import serviceCardsEn from "../metadata/serviceCards.json";
 import serviceCardsDe from "../metadata/serviceCards.de.json";
 import type { ServiceCardConfig } from "./serviceCards";
+import i18n from "../i18n";
 
 export type LanguageCode = "en" | "de";
 
@@ -36,6 +37,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    if (i18n.language !== language) {
+      void i18n.changeLanguage(language);
+    }
   }, [language]);
 
   const setLanguage = (nextLanguage: LanguageCode) => {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useScrollBottom } from "../../hooks/useScrollTop";
 import { useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -17,6 +17,7 @@ import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import ToolStatusAlerts from "../alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
 import { useServiceCards, stripLanguagePrefix } from "../../utils/language";
+import { useTranslation } from "react-i18next";
 import {
   type ServiceCardConfig,
   findServiceCardByPath,
@@ -30,15 +31,16 @@ type ChatMessage = {
   content: string;
 };
 
-const SUGGESTIONS = [
-  "What does this tool do?",
-  "Which tool should I use for invoices?",
-  "Which tools work offline?",
+const DEFAULT_SUGGESTIONS = [
+  "chat.suggestions.one",
+  "chat.suggestions.two",
+  "chat.suggestions.three",
 ];
 
 const CHAT_FONT = `"Space Grotesk", "Avenir Next", "Segoe UI", sans-serif`;
 
 export default function ToolChatWidget() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -58,13 +60,21 @@ export default function ToolChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content:
-        "Hi, I can explain Torensa tools in simple terms. Ask me anything.",
+      content: t("chat.greeting"),
     },
   ]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].role === "assistant") {
+        return [{ role: "assistant", content: t("chat.greeting") }];
+      }
+      return prev;
+    });
+  }, [t]);
 
   const messagesContainerRef = useScrollBottom<HTMLDivElement>([
     messages,
@@ -95,18 +105,18 @@ export default function ToolChatWidget() {
 
       const data = await response.json().catch(() => null);
       if (!response.ok) {
-        setError(data?.error || "Assistant is unavailable right now.");
+        setError(data?.error || t("chat.unavailable"));
         return;
       }
 
       const answer =
         typeof data?.answer === "string" && data.answer.trim()
           ? data.answer.trim()
-          : "I couldn't generate an answer right now.";
+          : t("chat.noAnswer");
 
       setMessages((prev) => [...prev, { role: "assistant", content: answer }]);
     } catch {
-      setError("Network error. Please try again.");
+      setError(t("chat.networkError"));
     } finally {
       setSending(false);
     }
@@ -201,7 +211,7 @@ export default function ToolChatWidget() {
                     letterSpacing: 0.3,
                   }}
                 >
-                  AI Tool Assistant
+                  {t("chat.title")}
                 </Typography>
                 <Typography
                   sx={{
@@ -211,7 +221,7 @@ export default function ToolChatWidget() {
                     fontWeight: 600,
                   }}
                 >
-                  Ask by category, feature, or tool name
+                  {t("chat.subtitle")}
                 </Typography>
               </Box>
             </Stack>
@@ -382,17 +392,17 @@ export default function ToolChatWidget() {
               </Box>
             )}
 
-            {messages.length <= 1 && (
+                {messages.length <= 1 && (
               <Stack direction="row" flexWrap="wrap" gap={0.8}>
-                {SUGGESTIONS.map((item) => (
+                {DEFAULT_SUGGESTIONS.map((item) => (
                   <Box
                     key={item}
                     role="button"
                     tabIndex={0}
-                    onClick={() => void sendMessage(item)}
+                    onClick={() => void sendMessage(t(item))}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
-                        void sendMessage(item);
+                        void sendMessage(t(item));
                       }
                     }}
                     sx={{
@@ -438,12 +448,12 @@ export default function ToolChatWidget() {
           >
             <ToolStatusAlerts error={error} />
             <Stack direction="row" spacing={1} alignItems="center">
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Ask about a tool..."
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
+                <TextField
+                  fullWidth
+                  size="small"
+                  placeholder={t("chat.placeholder")}
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();

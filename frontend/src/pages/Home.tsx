@@ -42,6 +42,7 @@ import {
   getServiceCardsByCategory,
 } from "../utils/serviceCards";
 import { toolIcons } from "../metadata/toolIcons";
+import { useTranslation } from "react-i18next";
 
 const ADSENSE_CLIENT_ID = "ca-pub-7466905660040122";
 const ADSENSE_SCRIPT_ID = "adsense-script";
@@ -68,28 +69,31 @@ function HeroBanner({
   isMobile: boolean;
   toolCount: number;
 }) {
+  const { t } = useTranslation();
   const theme = useTheme();
   const iconSx = { fontSize: 16, color: heroIconColor(theme) };
 
   return (
     <header style={heroBannerStyle}>
       <h1 style={heroHeadlineStyle(isMobile)}>
-        Free Online Tools,{" "}
-        <span style={heroGradientTextStyle(theme)}>Zero Nonsense</span>
+        {t("home.heroTitle")}{" "}
+        <span style={heroGradientTextStyle(theme)}>
+          {t("home.heroHighlight")}
+        </span>
       </h1>
 
       <div style={heroPillarsRowStyle(isMobile, theme)}>
         <span style={heroPillarItemStyle}>
           <ShieldOutlinedIcon sx={iconSx} />
-          Privacy-first
+          {t("home.heroPillars.privacy")}
         </span>
         <span style={heroPillarItemStyle}>
           <WifiOffOutlinedIcon sx={iconSx} />
-          Works offline
+          {t("home.heroPillars.offline")}
         </span>
         <span style={heroPillarItemStyle}>
           <CodeOutlinedIcon sx={iconSx} />
-          Open source
+          {t("home.heroPillars.openSource")}
         </span>
         <span style={heroPillarItemStyle}>
           <span
@@ -125,7 +129,7 @@ function HeroBanner({
               />
             </svg>
           </span>
-          AI-powered
+          {t("home.heroPillars.ai")}
         </span>
       </div>
     </header>
@@ -134,6 +138,7 @@ function HeroBanner({
 
 /* ===================== COMPONENT ===================== */
 export default function Home() {
+  const { t } = useTranslation();
   const {
     secondaryTextColor,
     sectionBase,
@@ -267,7 +272,7 @@ export default function Home() {
         fullWidth
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
-        placeholder="Search tools by name, description, or keyword"
+        placeholder={t("home.searchPlaceholder")}
         aria-label="Search tools"
         InputProps={{
           startAdornment: (
@@ -307,7 +312,7 @@ export default function Home() {
     return (
       <section style={sectionBase}>
         <h1 style={{ textAlign: "center", marginBottom: 16 }}>
-          Limited offline mode
+          {t("home.offlineTitle")}
         </h1>
 
         <p
@@ -318,8 +323,7 @@ export default function Home() {
             margin: "0 auto 32px",
           }}
         >
-          You&apos;re offline. Only tools that support offline usage are
-          available right now.
+          {t("home.offlineBody")}
         </p>
 
         {searchInput}
@@ -357,8 +361,8 @@ export default function Home() {
               }}
             >
               {normalizedSearchTerm
-                ? "No offline tools match your search."
-                : "No tools are available offline yet."}
+                ? t("home.noOfflineMatch")
+                : t("home.noOfflineTools")}
             </p>
           )}
         </div>
@@ -371,7 +375,7 @@ export default function Home() {
               onClick={handleLoadMore}
               endIcon={<KeyboardArrowDownRoundedIcon />}
             >
-              Load more
+              {t("home.loadMore")}
             </Button>
           </div>
         )}
@@ -472,10 +476,10 @@ export default function Home() {
               }}
             >
               {normalizedSearchTerm ? (
-                "No tools match your search in this category."
+                t("home.noToolsInCategory")
               ) : (
                 <>
-                  No services found. Add entries to{" "}
+                  {t("home.noServicesFound")}{" "}
                   <code>metadata/serviceCards.json</code>.
                 </>
               )}
@@ -491,7 +495,7 @@ export default function Home() {
               onClick={handleLoadMore}
               endIcon={<KeyboardArrowDownRoundedIcon />}
             >
-              Load more
+              {t("home.loadMore")}
             </Button>
           </div>
         )}

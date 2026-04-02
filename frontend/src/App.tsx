@@ -52,6 +52,7 @@ import {
   withLanguagePrefix,
   stripLanguagePrefix,
 } from "./utils/language";
+import { useTranslation } from "react-i18next";
 import {
   type ServiceCardConfig,
   getActiveServiceCards,
@@ -85,6 +86,7 @@ type CategoryConfig = {
 };
 
 export default function App({ themeName, setThemeName }: AppProps) {
+  const { t } = useTranslation();
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
   const navigate = useNavigate();
@@ -139,11 +141,11 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const selectedCategoryLabel = useMemo(
     () =>
       selectedCategoryId === "all"
-        ? "All Categories"
+        ? t("nav.allCategories")
         : (visibleCategoryOptions.find(
             (category) => category.id === selectedCategoryId,
-          )?.label ?? "All Categories"),
-    [selectedCategoryId, visibleCategoryOptions],
+          )?.label ?? t("nav.allCategories")),
+    [selectedCategoryId, visibleCategoryOptions, t],
   );
 
   const headerTextColor = isMobile
@@ -222,7 +224,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           onClick={handleHomeClick}
           sx={sx}
         >
-          Home
+          {t("nav.home")}
         </NavButton>
 
         <NavButton
@@ -232,7 +234,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           onClick={onClick}
           sx={sx}
         >
-          About
+          {t("nav.about")}
         </NavButton>
 
         <Select
@@ -308,7 +310,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               value="all"
               onClick={() => handleCategoryOptionClick("all")}
             >
-              All Categories
+              {t("nav.allCategories")}
             </MenuItem>
             {visibleCategoryOptions.map((category) => (
               <MenuItem
@@ -326,7 +328,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           (user ? (
             <>
               <span style={userGreetingStyle(headerTextColor)}>
-                Hi, {user.username}
+                {t("nav.greeting", { name: user.username })}
               </span>
 
               <NavButton
@@ -336,7 +338,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 onClick={onLogout}
                 sx={sx}
               >
-                Logout
+                {t("nav.logout")}
               </NavButton>
             </>
           ) : (
@@ -348,7 +350,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 onClick={onClick}
                 sx={sx}
               >
-                Login
+                {t("nav.login")}
               </NavButton>
 
               <NavButton
@@ -358,7 +360,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 onClick={onClick}
                 sx={sx}
               >
-                Sign up
+                {t("nav.signup")}
               </NavButton>
             </>
           ))}
@@ -491,7 +493,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 textDecoration: "none",
               }}
             >
-              About
+              {t("footer.about")}
             </Link>
             <Link
               to={langPath("/privacy")}
@@ -501,7 +503,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 textDecoration: "none",
               }}
             >
-              Privacy Policy
+              {t("footer.privacy")}
             </Link>
             <Link
               to={langPath("/terms")}
@@ -511,7 +513,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
                 textDecoration: "none",
               }}
             >
-              Terms of Service
+              {t("footer.terms")}
             </Link>
           </div>
           <div
@@ -521,7 +523,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               marginTop: 8,
             }}
           >
-            © {new Date().getFullYear()} Torensa. All rights reserved.
+            © {new Date().getFullYear()} Torensa. {t("footer.rights")}
           </div>
         </div>
       </footer>

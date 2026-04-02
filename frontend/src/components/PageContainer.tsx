@@ -20,6 +20,7 @@ import {
   type ServiceCardConfig,
   findServiceCardByPath,
 } from "../utils/serviceCards";
+import { useTranslation } from "react-i18next";
 
 const ADSENSE_CLIENT_ID = "ca-pub-7466905660040122";
 const ADSENSE_SCRIPT_ID = "adsense-script";
@@ -60,6 +61,7 @@ export default function PageContainer({
   children,
   maxWidth = 1100,
 }: PageContainerProps) {
+  const { t } = useTranslation();
   const location = useLocation();
   const currentPath = location.pathname;
   const serviceCards = useServiceCards();
@@ -119,7 +121,7 @@ export default function PageContainer({
                       onChange={(e) => setShowAdvancedOptions(e.target.checked)}
                     />
                   }
-                  label="Show advanced options"
+                  label={t("tool.showAdvanced")}
                   sx={{
                     ml: { xs: 0, sm: "auto" },
                     mr: { xs: 0, sm: 1 },
@@ -172,7 +174,7 @@ export default function PageContainer({
               <Box
                 component="section"
                 sx={{ mt: 2 }}
-                aria-label="About this tool"
+                aria-label={t("tool.howToUse")}
               >
                 <Divider sx={{ mb: 3, opacity: 0.2 }} />
 
@@ -184,7 +186,7 @@ export default function PageContainer({
                       gutterBottom
                       sx={{ fontSize: "1rem", letterSpacing: 0.3 }}
                     >
-                      How to use
+                      {t("tool.howToUse")}
                     </Typography>
                     <Box
                       component="ol"
@@ -219,7 +221,7 @@ export default function PageContainer({
                       gutterBottom
                       sx={{ fontSize: "1rem", letterSpacing: 0.3, mb: 1.5 }}
                     >
-                      Frequently asked questions
+                      {t("tool.faqs")}
                     </Typography>
                     {(meta.faqs as { q: string; a: string }[]).map((faq, i) => (
                       <Accordion
