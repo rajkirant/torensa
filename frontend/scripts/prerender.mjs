@@ -164,9 +164,9 @@ try {
     ...(executablePath ? { executablePath } : {}),
   });
 } catch (err) {
-  console.warn(`⚠ Prerender skipped – could not launch browser: ${err.message}`);
+  console.error(`✗ Prerender FAILED – could not launch browser: ${err.message}`);
   await new Promise((resolveClose) => server.close(resolveClose));
-  process.exit(0);
+  process.exit(1);
 }
 
 try {
