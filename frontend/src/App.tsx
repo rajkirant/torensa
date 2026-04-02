@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { Suspense } from "react";
 
 import { NavButton } from "./components/buttons/NavButton";
@@ -45,7 +45,13 @@ import {
 import { themes, themeIconComponents } from "./theme";
 import type { ThemeName } from "./theme";
 import categories from "./metadata/categories.json";
-import { useLanguage, useServiceCards, type LanguageCode } from "./utils/language";
+import {
+  useLanguage,
+  useServiceCards,
+  type LanguageCode,
+  withLanguagePrefix,
+  stripLanguagePrefix,
+} from "./utils/language";
 import {
   type ServiceCardConfig,
   getActiveServiceCards,
@@ -82,6 +88,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const theme = themes[themeName];
   const { user, loading, setUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useMediaQuery("(max-width:900px)");
   const { language, setLanguage } = useLanguage();
   const serviceCards = useServiceCards();
@@ -150,6 +157,16 @@ export default function App({ themeName, setThemeName }: AppProps) {
     border: theme.home?.card?.border ?? cardStyle.border,
     boxShadow: theme.home?.card?.boxShadow ?? cardStyle.boxShadow,
   };
+
+  const shouldForceEnglishPrefix =
+    location.pathname === "/en" || location.pathname.startsWith("/en/");
+  const langPath = useCallback(
+    (path: string) =>
+      withLanguagePrefix(path, language, {
+        forcePrefix: language === "en" && shouldForceEnglishPrefix,
+      }),
+    [language, shouldForceEnglishPrefix],
+  );
   const handleLogout = useCallback(async () => {
     try {
       await apiFetch("/api/logout/", { method: "POST", csrf: true });
@@ -176,7 +193,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
     const navigateToCategoryListing = (categoryId: string) => {
       onClick?.();
       navigate({
-        pathname: "/",
+        pathname: langPath("/"),
         search:
           categoryId === "all"
             ? ""
@@ -199,7 +216,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
       <>
         <NavButton
           component={NavLink}
-          to="/"
+          to={langPath("/")}
           end
           startIcon={<HomeIcon />}
           onClick={handleHomeClick}
@@ -210,7 +227,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
         <NavButton
           component={NavLink}
-          to="/about"
+          to={langPath("/about")}
           startIcon={<InfoOutlinedIcon />}
           onClick={onClick}
           sx={sx}
@@ -252,7 +269,23 @@ export default function App({ themeName, setThemeName }: AppProps) {
         <Select
           size="small"
           value={language}
-          onChange={(e) => setLanguage(e.target.value as LanguageCode)}
+          onChange={(e) => {
+            const nextLanguage = e.target.value as LanguageCode;
+            const strippedPath = stripLanguagePrefix(location.pathname || "/");
+            const isCurrentlyPrefixedEn =
+              location.pathname === "/en" || location.pathname.startsWith("/en/");
+            const nextPath = withLanguagePrefix(strippedPath, nextLanguage, {
+              forcePrefix: nextLanguage === "en" && isCurrentlyPrefixedEn,
+            });
+            setLanguage(nextLanguage);
+            navigate(
+              {
+                pathname: nextPath,
+                search: location.search,
+              },
+              { replace: true },
+            );
+          }}
           inputProps={{ "aria-label": "Language selection" }}
           sx={themeSelectSx(theme, isMobile, headerTextColor)}
         >
@@ -298,7 +331,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
               <NavButton
                 component={NavLink}
-                to="/"
+                to={langPath("/")}
                 startIcon={<LogoutIcon />}
                 onClick={onLogout}
                 sx={sx}
@@ -310,7 +343,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             <>
               <NavButton
                 component={NavLink}
-                to="/login"
+                to={langPath("/login")}
                 startIcon={<LoginIcon />}
                 onClick={onClick}
                 sx={sx}
@@ -320,7 +353,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
 
               <NavButton
                 component={NavLink}
-                to="/signup"
+                to={langPath("/signup")}
                 startIcon={<PersonAddIcon />}
                 onClick={onClick}
                 sx={sx}
@@ -336,7 +369,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
   return (
     <div style={appShellStyle}>
       <header style={headerStyle(theme)}>
-        <Link to="/" style={{ ...brandLinkStyle, color: theme.header.text }}>
+        <Link
+          to={langPath("/")}
+          style={{ ...brandLinkStyle, color: theme.header.text }}
+        >
           <img
             src="/favicon.svg"
             alt="Torensa"
@@ -448,7 +484,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
             }}
           >
             <Link
-              to="/about"
+              to={langPath("/about")}
               style={{
                 fontSize: 13,
                 color: theme.header.textMuted,
@@ -458,7 +494,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               About
             </Link>
             <Link
-              to="/privacy"
+              to={langPath("/privacy")}
               style={{
                 fontSize: 13,
                 color: theme.header.textMuted,
@@ -468,7 +504,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               Privacy Policy
             </Link>
             <Link
-              to="/terms"
+              to={langPath("/terms")}
               style={{
                 fontSize: 13,
                 color: theme.header.textMuted,

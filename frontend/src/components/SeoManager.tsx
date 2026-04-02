@@ -1,7 +1,12 @@
 import React, { useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useLanguage, useServiceCards } from "../utils/language";
+import {
+  useLanguage,
+  useServiceCards,
+  stripLanguagePrefix,
+  withLanguagePrefix,
+} from "../utils/language";
 import {
   type ServiceCardConfig,
   getActiveServiceCards,
@@ -67,6 +72,7 @@ declare function gtag(...args: unknown[]): void;
 export default function SeoManager() {
   const location = useLocation();
   const normalizedPath = normalizePath(location.pathname);
+  const strippedPath = normalizePath(stripLanguagePrefix(location.pathname));
   const { language } = useLanguage();
   const serviceCards = useServiceCards();
 
@@ -95,21 +101,25 @@ export default function SeoManager() {
     return map;
   }, [activeCards]);
 
-  const meta = toolMetaByPath.get(normalizedPath) ??
-    STATIC_ROUTE_META[normalizedPath] ?? {
+  const meta = toolMetaByPath.get(strippedPath) ??
+    STATIC_ROUTE_META[strippedPath] ?? {
       title: "Page Not Found | Torensa",
       description:
         "The requested page could not be found. Explore Torensa tools from the homepage.",
     };
 
+  const canonicalPath =
+    language === "de"
+      ? withLanguagePrefix(strippedPath, "de")
+      : stripLanguagePrefix(normalizedPath);
   const canonical =
-    normalizedPath === "/" ? SITE_URL : `${SITE_URL}${normalizedPath}`;
+    canonicalPath === "/" ? SITE_URL : `${SITE_URL}${canonicalPath}`;
 
-  const isHome = normalizedPath === "/";
-  const isTool = toolMetaByPath.has(normalizedPath);
+  const isHome = strippedPath === "/";
+  const isTool = toolMetaByPath.has(strippedPath);
   const currentTool = isTool
     ? activeCards.find(
-        (card) => normalizePath(card.path) === normalizedPath,
+        (card) => normalizePath(card.path) === strippedPath,
       )
     : null;
 
@@ -168,7 +178,7 @@ export default function SeoManager() {
       : null;
 
   const breadcrumbSchema =
-    normalizedPath !== "/"
+    strippedPath !== "/"
       ? {
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",

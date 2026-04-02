@@ -16,7 +16,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import ToolStatusAlerts from "../alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
-import { useServiceCards } from "../../utils/language";
+import { useServiceCards, stripLanguagePrefix } from "../../utils/language";
 import {
   type ServiceCardConfig,
   findServiceCardByPath,
@@ -47,7 +47,10 @@ export default function ToolChatWidget() {
   const cards = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
 
   const currentToolId = useMemo(() => {
-    const match = findServiceCardByPath(cards, location.pathname);
+    const match = findServiceCardByPath(
+      cards,
+      stripLanguagePrefix(location.pathname),
+    );
     return match?.id ?? null;
   }, [cards, location.pathname]);
 
