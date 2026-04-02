@@ -15,7 +15,11 @@ import WifiOffOutlinedIcon from "@mui/icons-material/WifiOffOutlined";
 import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
-import { useServiceCards } from "../utils/language";
+import {
+  useLanguage,
+  useServiceCards,
+  withLanguagePrefix,
+} from "../utils/language";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import type { AppOutletContext } from "../App";
 import {
@@ -144,6 +148,7 @@ export default function Home() {
   const isOnline = useOnlineStatus();
   const isMobile = useMediaQuery("(max-width:700px)");
   const isTablet = useMediaQuery("(max-width:1050px)");
+  const { language } = useLanguage();
   const typedServiceCards = useServiceCards();
   const columns = isMobile ? 1 : isTablet ? 2 : 3;
   const outlinedBorderColor =
@@ -209,6 +214,15 @@ export default function Home() {
   const canLoadMoreOfflineCards = visibleCount < filteredOfflineCards.length;
 
   const showHero = selectedCategoryId === "all" && !normalizedSearchTerm;
+  const shouldForceEnglishPrefix =
+    location.pathname === "/en" || location.pathname.startsWith("/en/");
+  const langPath = React.useCallback(
+    (path: string) =>
+      withLanguagePrefix(path, language, {
+        forcePrefix: language === "en" && shouldForceEnglishPrefix,
+      }),
+    [language, shouldForceEnglishPrefix],
+  );
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + LOAD_MORE_STEP);
@@ -318,11 +332,12 @@ export default function Home() {
                 key={card.id}
                 className="card-hover"
                 style={cardStyle}
-                onClick={() => navigate(card.path)}
+                onClick={() => navigate(langPath(card.path))}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") navigate(card.path);
+                  if (e.key === "Enter" || e.key === " ")
+                    navigate(langPath(card.path));
                 }}
               >
                 {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
@@ -432,11 +447,12 @@ export default function Home() {
                 key={card.id}
                 className="card-hover"
                 style={cardStyle}
-                onClick={() => navigate(card.path)}
+                onClick={() => navigate(langPath(card.path))}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") navigate(card.path);
+                  if (e.key === "Enter" || e.key === " ")
+                    navigate(langPath(card.path));
                 }}
               >
                 {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}

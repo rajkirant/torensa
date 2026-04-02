@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useLanguage, withLanguagePrefix } from "../../utils/language";
 
 type BackButtonProps = {
   fallbackTo?: string;
@@ -8,13 +9,21 @@ type BackButtonProps = {
 
 export default function BackButton({ fallbackTo = "/" }: BackButtonProps) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { language } = useLanguage();
 
   const handleBack = () => {
     if (window.history.length > 1) {
       navigate(-1);
       return;
     }
-    navigate(fallbackTo);
+    const shouldForceEnglishPrefix =
+      location.pathname === "/en" || location.pathname.startsWith("/en/");
+    navigate(
+      withLanguagePrefix(fallbackTo, language, {
+        forcePrefix: language === "en" && shouldForceEnglishPrefix,
+      }),
+    );
   };
 
   return (

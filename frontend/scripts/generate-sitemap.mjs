@@ -49,6 +49,11 @@ function normalizePath(routePath) {
   return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
 }
 
+function withLangPrefix(route, lang) {
+  if (!route || route === "/") return `/${lang}`;
+  return `/${lang}${route}`;
+}
+
 function buildSitemapXml(routeEntries) {
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -243,11 +248,20 @@ async function main() {
   );
 
   const routeEntries = await Promise.all(
-    sortedRoutes.map(async (route) => ({
+    sortedRoutes.flatMap((route) => [
+      {
+        route,
+        lang: "en",
+      },
+      {
+        route: withLangPrefix(route, "de"),
+        lang: "de",
+      },
+    ]).map(async ({ route }) => ({
       route,
       lastmod: await resolveLastmod(
         route,
-        routeToComponent.get(route),
+        routeToComponent.get(route === "/de" ? "/" : route.replace(/^\/de/, "")),
         fallbackLastmod,
         existingDates,
       ),

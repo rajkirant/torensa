@@ -23,7 +23,14 @@ const toolRoutes = serviceCards
   .map((card) => card.path)
   .filter((path) => typeof path === "string" && path.startsWith("/"));
 
-const routes = Array.from(new Set([...staticRoutes, ...toolRoutes]));
+function withLangPrefix(route, lang) {
+  if (!route || route === "/") return `/${lang}`;
+  return `/${lang}${route}`;
+}
+
+const baseRoutes = Array.from(new Set([...staticRoutes, ...toolRoutes]));
+const deRoutes = baseRoutes.map((route) => withLangPrefix(route, "de"));
+const routes = Array.from(new Set([...baseRoutes, ...deRoutes]));
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",

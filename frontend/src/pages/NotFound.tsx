@@ -1,7 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useLanguage, withLanguagePrefix } from "../utils/language";
 
 export default function NotFound() {
+  const { language } = useLanguage();
+  const location = useLocation();
+  const shouldForceEnglishPrefix =
+    location.pathname === "/en" || location.pathname.startsWith("/en/");
   return (
     <div
       style={{
@@ -22,7 +27,9 @@ export default function NotFound() {
       </p>
 
       <Link
-        to="/"
+        to={withLanguagePrefix("/", language, {
+          forcePrefix: language === "en" && shouldForceEnglishPrefix,
+        })}
         style={{
           padding: "10px 18px",
           borderRadius: 6,
