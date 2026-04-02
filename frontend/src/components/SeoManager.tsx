@@ -31,11 +31,6 @@ const STATIC_ROUTE_META: Record<string, RouteMeta> = {
     description:
       "Learn about Torensa, our mission to build open-source productivity tools, and how to get in touch.",
   },
-  "/contact": {
-    title: "About Us | Torensa",
-    description:
-      "Learn about Torensa, our mission to build open-source productivity tools, and how to get in touch.",
-  },
   "/privacy": {
     title: "Privacy Policy | Torensa",
     description:
