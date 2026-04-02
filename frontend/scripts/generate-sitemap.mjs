@@ -13,7 +13,7 @@ const metadataPath = path.join(
   "metadata",
   "serviceCards.json",
 );
-const sitemapPath = path.join(projectRoot, "public", "sitemap.xml");
+const publicDir = path.join(projectRoot, "public");
 const pagesDir = path.join(projectRoot, "src", "pages");
 const execFileAsync = promisify(execFile);
 
@@ -24,6 +24,16 @@ const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(
   /\/+$/,
   "",
 );
+
+// ── Language configuration ──────────────────────────────────────────
+// To add a new language, append an entry here and create the
+// corresponding serviceCards.<code>.json + ui.<code>.json metadata.
+const LANGUAGES = [
+  { code: "en", isDefault: true },
+  { code: "de", isDefault: false },
+];
+const DEFAULT_LANG = LANGUAGES.find((l) => l.isDefault) ?? LANGUAGES[0];
+
 const staticRouteComponents = {
   "/": "Home",
   "/about": "Contact",
@@ -32,6 +42,8 @@ const staticRouteComponents = {
   "/login": "Login",
   "/signup": "Signup",
 };
+
+// ── XML helpers ─────────────────────────────────────────────────────
 
 function xmlEscape(value) {
   return value
@@ -49,31 +61,69 @@ function normalizePath(routePath) {
   return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
 }
 
-function withLangPrefix(route, lang) {
-  if (!route || route === "/") return `/${lang}`;
-  return `/${lang}${route}`;
+function routeUrl(route, lang) {
+  const prefix = lang.isDefault ? "" : `/${lang.code}`;
+  const fullPath = route === "/" ? prefix || "/" : `${prefix}${route}`;
+  return new URL(fullPath, `${siteUrl}/`).toString();
 }
 
-function buildSitemapXml(routeEntries) {
+// ── Sitemap XML builders ────────────────────────────────────────────
+
+function buildLanguageSitemapXml(routes, lang, lastmodMap) {
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
-    '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
-    '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9',
-    '                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">',
+    '        xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   ];
 
-  for (const entry of routeEntries) {
-    const loc = new URL(entry.route, `${siteUrl}/`).toString();
+  for (const route of routes) {
+    const loc = routeUrl(route, lang);
+    const lastmod = lastmodMap.get(route);
+
     lines.push("  <url>");
     lines.push(`    <loc>${xmlEscape(loc)}</loc>`);
-    lines.push(`    <lastmod>${entry.lastmod}</lastmod>`);
+    if (lastmod) lines.push(`    <lastmod>${lastmod}</lastmod>`);
+
+    // hreflang alternates pointing to every language variant
+    for (const altLang of LANGUAGES) {
+      const href = routeUrl(route, altLang);
+      lines.push(
+        `    <xhtml:link rel="alternate" hreflang="${altLang.code}" href="${xmlEscape(href)}"/>`,
+      );
+    }
+    // x-default points to the default language
+    const defaultHref = routeUrl(route, DEFAULT_LANG);
+    lines.push(
+      `    <xhtml:link rel="alternate" hreflang="x-default" href="${xmlEscape(defaultHref)}"/>`,
+    );
+
     lines.push("  </url>");
   }
 
   lines.push("</urlset>");
   return `${lines.join("\n")}\n`;
 }
+
+function buildSitemapIndexXml() {
+  const now = new Date().toISOString();
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ];
+
+  for (const lang of LANGUAGES) {
+    const loc = `${siteUrl}/sitemap-${lang.code}.xml`;
+    lines.push("  <sitemap>");
+    lines.push(`    <loc>${xmlEscape(loc)}</loc>`);
+    lines.push(`    <lastmod>${now}</lastmod>`);
+    lines.push("  </sitemap>");
+  }
+
+  lines.push("</sitemapindex>");
+  return `${lines.join("\n")}\n`;
+}
+
+// ── Date resolution helpers ─────────────────────────────────────────
 
 function toDateString(date) {
   const year = date.getFullYear();
@@ -84,6 +134,21 @@ function toDateString(date) {
 
 function toRepoRelativePath(filePath) {
   return path.relative(projectRoot, filePath).split(path.sep).join("/");
+}
+
+async function isShallowRepo() {
+  if (shallowRepoCache !== null) return shallowRepoCache;
+  try {
+    const { stdout } = await execFileAsync(
+      "git",
+      ["-C", projectRoot, "rev-parse", "--is-shallow-repository"],
+      { timeout: 10000 },
+    );
+    shallowRepoCache = stdout.trim() === "true";
+  } catch {
+    shallowRepoCache = false;
+  }
+  return shallowRepoCache;
 }
 
 async function getGitLastmodForFile(filePath) {
@@ -112,46 +177,52 @@ async function getGitLastmodForFile(filePath) {
   return null;
 }
 
-async function isShallowRepo() {
-  if (shallowRepoCache !== null) return shallowRepoCache;
-  try {
-    const { stdout } = await execFileAsync(
-      "git",
-      ["-C", projectRoot, "rev-parse", "--is-shallow-repository"],
-      { timeout: 10000 },
-    );
-    shallowRepoCache = stdout.trim() === "true";
-  } catch {
-    shallowRepoCache = false;
+async function readExistingSitemapDates() {
+  const dates = new Map();
+
+  // Read dates from all existing per-language sitemaps and the legacy single sitemap
+  const filesToCheck = [
+    path.join(publicDir, "sitemap.xml"),
+    ...LANGUAGES.map((l) => path.join(publicDir, `sitemap-${l.code}.xml`)),
+  ];
+
+  for (const filePath of filesToCheck) {
+    try {
+      const xml = await readFile(filePath, "utf-8");
+      const urlBlockRegex =
+        /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g;
+      let match;
+      while ((match = urlBlockRegex.exec(xml)) !== null) {
+        const loc = match[1].trim();
+        const lastmod = match[2].trim();
+        try {
+          const url = new URL(loc);
+          const pathname =
+            url.pathname === "/" ? "/" : url.pathname.replace(/\/+$/, "");
+          // Strip language prefix to get the canonical route
+          const stripped = stripLangPrefix(pathname);
+          if (!dates.has(stripped)) dates.set(stripped, lastmod);
+        } catch {
+          dates.set(loc, lastmod);
+        }
+      }
+    } catch {
+      // File doesn't exist yet — skip.
+    }
   }
-  return shallowRepoCache;
+
+  return dates;
 }
 
-async function readExistingSitemapDates() {
-  try {
-    const xml = await readFile(sitemapPath, "utf-8");
-    const dates = new Map();
-    const urlBlockRegex =
-      /<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g;
-    let match;
-    while ((match = urlBlockRegex.exec(xml)) !== null) {
-      const loc = match[1].trim();
-      const lastmod = match[2].trim();
-      // Store by path (strip site origin)
-      try {
-        const url = new URL(loc);
-        dates.set(
-          url.pathname === "/" ? "/" : url.pathname.replace(/\/+$/, ""),
-          lastmod,
-        );
-      } catch {
-        dates.set(loc, lastmod);
-      }
-    }
-    return dates;
-  } catch {
-    return new Map();
+function stripLangPrefix(pathname) {
+  for (const lang of LANGUAGES) {
+    if (lang.isDefault) continue;
+    const prefix = `/${lang.code}`;
+    if (pathname === prefix) return "/";
+    if (pathname.startsWith(`${prefix}/`))
+      return pathname.slice(prefix.length);
   }
+  return pathname;
 }
 
 async function getPreferredLastmodForFile(filePath, existingDate) {
@@ -189,12 +260,7 @@ function getComponentCandidates(component) {
   ];
 }
 
-async function resolveLastmod(
-  route,
-  component,
-  fallbackLastmod,
-  existingDates,
-) {
+async function resolveLastmod(route, component, fallbackLastmod, existingDates) {
   const existingDate = existingDates.get(route);
   for (const candidate of getComponentCandidates(component)) {
     try {
@@ -216,6 +282,8 @@ async function resolveLastmod(
 
   return existingDate ?? fallbackLastmod;
 }
+
+// ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
   const [metadataRaw, existingDates] = await Promise.all([
@@ -247,33 +315,39 @@ async function main() {
     existingDates.get("/"),
   );
 
-  const routeEntries = await Promise.all(
-    sortedRoutes.flatMap((route) => [
-      {
+  // Resolve lastmod once per canonical route (shared across languages)
+  const lastmodMap = new Map();
+  await Promise.all(
+    sortedRoutes.map(async (route) => {
+      const lastmod = await resolveLastmod(
         route,
-        lang: "en",
-      },
-      {
-        route: withLangPrefix(route, "de"),
-        lang: "de",
-      },
-    ]).map(async ({ route }) => ({
-      route,
-      lastmod: await resolveLastmod(
-        route,
-        routeToComponent.get(route === "/de" ? "/" : route.replace(/^\/de/, "")),
+        routeToComponent.get(route),
         fallbackLastmod,
         existingDates,
-      ),
-    })),
+      );
+      lastmodMap.set(route, lastmod);
+    }),
   );
 
-  const xml = buildSitemapXml(routeEntries);
+  // Generate per-language sitemaps
+  const writes = [];
+  for (const lang of LANGUAGES) {
+    const xml = buildLanguageSitemapXml(sortedRoutes, lang, lastmodMap);
+    const filePath = path.join(publicDir, `sitemap-${lang.code}.xml`);
+    writes.push(writeFile(filePath, xml, "utf-8"));
+    console.log(
+      `Generated sitemap-${lang.code}.xml with ${sortedRoutes.length} URLs`,
+    );
+  }
 
-  await writeFile(sitemapPath, xml, "utf-8");
+  // Generate sitemap index
+  const indexXml = buildSitemapIndexXml();
+  writes.push(writeFile(path.join(publicDir, "sitemap.xml"), indexXml, "utf-8"));
   console.log(
-    `Generated sitemap with ${routeEntries.length} URLs at ${sitemapPath}`,
+    `Generated sitemap.xml index referencing ${LANGUAGES.length} language sitemaps`,
   );
+
+  await Promise.all(writes);
 }
 
 main().catch((error) => {
