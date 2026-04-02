@@ -1,0 +1,1809 @@
+[
+  {
+    "id": "song-identifier",
+    "component": "SongIdentifier",
+    "title": "Song-Erkennung – Welcher Song läuft gerade?",
+    "description": "Erkennen Sie jeden Song in Ihrer Umgebung sofort. Mit direkten Links zu Spotify, YouTube Music und mehr.",
+    "path": "/song-identifier",
+    "ctaLabel": "Song erkennen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Welcher Song läuft gerade? Nutzen Sie Ihr Mikrofon und identifizieren Sie jeden Song in Sekundenschnelle. Dieser kostenlose Online-Songfinder nimmt einen kurzen Audioclip auf, gleicht ihn mit einer Datenbank von über 100 Millionen Titeln ab und liefert Ihnen Songtitel, Interpret, Album und Genre. Erhalten Sie direkte Streaming-Links zu Spotify, YouTube Music, Apple Music, Amazon Music und Deezer. Funktioniert mit Musik aus Lautsprechern, TV, Radio oder sogar durch Summen – ganz ohne App-Installation.",
+    "categoryId": "utilities",
+    "keywords": [
+      "song identifier",
+      "what song is this",
+      "identify song online",
+      "song finder",
+      "what song is playing",
+      "name that song",
+      "song recognition",
+      "music identifier",
+      "find song by sound",
+      "recognize song online",
+      "song detector",
+      "identify music",
+      "shazam online",
+      "song search by listening",
+      "free song identifier",
+      "song erkennen",
+      "welcher song ist das",
+      "lied erkennen",
+      "musik erkennen",
+      "song finden",
+      "kostenlos song erkennen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Spielen Sie den Song ab, den Sie erkennen möchten – aus Lautsprechern, TV, Radio, oder summen bzw. singen Sie ihn einfach.",
+      "Klicken Sie auf die Mikrofon-Schaltfläche, um die Aufnahme zu starten.",
+      "Das Tool nimmt bis zu 10 Sekunden Audio über Ihr Mikrofon auf.",
+      "Sie können die Aufnahme jederzeit vorzeitig stoppen, sobald ein klarer Ausschnitt vorhanden ist.",
+      "Der Audioclip wird zur Erkennung an ACRCloud gesendet.",
+      "Die Songdetails – Titel, Interpret, Album und Streaming-Links – erscheinen direkt auf dem Bildschirm."
+    ],
+    "faqs": [
+      {
+        "q": "Wie erkenne ich einen Song, der gerade in meiner Nähe läuft?",
+        "a": "Klicken Sie auf die Mikrofon-Schaltfläche, lassen Sie das Tool 5–10 Sekunden zuhören, und der Song wird automatisch erkannt. Sie erhalten den Songtitel, Interpreten, das Album sowie Links zum Streamen auf Spotify, YouTube Music, Apple Music und weiteren Plattformen."
+      },
+      {
+        "q": "Kann ich einen Song durch Summen oder Singen erkennen lassen?",
+        "a": "Ja, das Tool unterstützt die Erkennung durch Summen und Singen. Die besten Ergebnisse erzielen Sie, wenn der Originalsong über einen Lautsprecher abgespielt wird. Bei bekannten Titeln kann aber auch Summen zum Erfolg führen."
+      },
+      {
+        "q": "Ist die Song-Erkennung kostenlos?",
+        "a": "Ja, die Song-Erkennung ist vollständig kostenlos. Keine Registrierung, kein App-Download und keine Einschränkungen. Einfach im Browser öffnen und loslegen."
+      },
+      {
+        "q": "Wie genau ist die Song-Erkennung?",
+        "a": "Das Tool durchsucht eine Datenbank mit über 100 Millionen Titeln auf Spotify, YouTube, Deezer und anderen großen Plattformen. Die Erkennung ist bei aufgenommener Musik, Live-Auftritten und den meisten Cover-Versionen äußerst zuverlässig."
+      },
+      {
+        "q": "Funktioniert es auf Smartphone und Desktop?",
+        "a": "Ja, die Song-Erkennung funktioniert auf jedem Gerät mit Mikrofon und modernem Browser – iPhones, Android-Handys, Tablets, Laptops und Desktop-PCs. Keine App-Installation nötig."
+      },
+      {
+        "q": "Wird meine Audioaufnahme gespeichert?",
+        "a": "Nein. Der Audioclip wird ausschließlich zur Erkennung verwendet und sofort nach der Ergebnisanzeige verworfen. Es wird nichts auf unseren Servern gespeichert. Ihre Privatsphäre ist vollständig geschützt."
+      },
+      {
+        "q": "Welche Streaming-Links erhalte ich nach der Erkennung?",
+        "a": "Nach der Erkennung erhalten Sie direkte Links zum Anhören auf Spotify, YouTube Music, Apple Music, Amazon Music, Deezer und Shazam. Außerdem können Sie einen kurzen Audioclip vorhören und herunterladen."
+      }
+    ]
+  },
+  {
+    "id": "text-share",
+    "component": "EasyShare",
+    "title": "Easy Share (Text + Dateien)",
+    "description": "Teilen Sie Dateien oder Text zwischen Geräten über das Internet – ohne Registrierung, Telefonnummer oder E-Mail.",
+    "path": "/easy-share",
+    "ctaLabel": "Easy Share öffnen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Mit Easy Share senden Sie Text und bis zu 5 Dateien (je bis zu 1 GB) zwischen Geräten in verschiedenen Netzwerken – einfach über einen 4-stelligen Zugangscode per Internet. Keine Registrierung, kein Telefon und keine E-Mail erforderlich.",
+    "categoryId": "communication",
+    "keywords": ["text", "share", "code", "clipboard", "transfer", "teilen", "datei senden", "zwischenablage"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Öffnen Sie Easy Share und wählen Sie einen Modus (Senden oder Empfangen).",
+      "Im Sendemodus fügen Sie Text ein und/oder ziehen bis zu 5 Dateien in den Upload-Bereich.",
+      "Jede Datei kann bis zu 1 GB groß sein – der Upload erfolgt direkt über Cloudflare-gesicherten Speicher.",
+      "Ordnen Sie Dateien per Drag-and-Drop neu an oder entfernen Sie einzelne Dateien vor dem Teilen.",
+      "Klicken Sie auf Code generieren, um einen 4-stelligen Zugangscode zu erhalten.",
+      "Im Empfangsmodus geben Sie den 4-stelligen Code ein oder nutzen die Aktualisieren-Schaltfläche, um die neueste Freigabe in Ihrem Netzwerk zu laden.",
+      "Geteilte Dateien erscheinen in der Download-Liste, geteilter Text wird darunter angezeigt.",
+      "Freigaben laufen aus Datenschutzgründen automatisch nach etwa 1 Stunde ab."
+    ],
+    "faqs": [
+      {
+        "q": "Brauche ich ein Konto, um Easy Share zu nutzen?",
+        "a": "Nein, es ist kein Konto erforderlich. Easy Share ist ein vollständig anonymes Tool – einfach öffnen und sofort teilen."
+      },
+      {
+        "q": "Wie viele Dateien kann ich gleichzeitig teilen?",
+        "a": "Sie können bis zu 5 Dateien pro Code teilen. Das empfangende Gerät kann sie einzeln in der von Ihnen festgelegten Reihenfolge herunterladen."
+      },
+      {
+        "q": "Wie lange bleibt der Freigabecode aktiv?",
+        "a": "Freigabecodes laufen nach etwa 1 Stunde ab. Danach funktioniert der Code sofort nicht mehr in der App, und verbleibende Dateien werden automatisch aus dem Speicher entfernt."
+      },
+      {
+        "q": "Kann ich die Reihenfolge der Dateien vor dem Teilen ändern?",
+        "a": "Ja. Sie können Dateien per Drag-and-Drop neu anordnen, bevor Sie den Freigabecode generieren. Der Empfänger sieht sie in derselben Reihenfolge."
+      },
+      {
+        "q": "Gibt es eine Dateigrößenbeschränkung?",
+        "a": "Ja. Jede Datei kann bis zu 1 GB groß sein, und Sie können bis zu 5 Dateien in einer Freigabe anhängen."
+      },
+      {
+        "q": "Was bewirkt die automatische Ladefunktion im selben Netzwerk?",
+        "a": "Wenn sich zwei Geräte im selben lokalen Netzwerk befinden und eines kürzlich etwas geteilt hat, kann das empfangende Gerät über die Aktualisieren-Schaltfläche die neueste Freigabe laden, ohne den Code einzugeben."
+      },
+      {
+        "q": "Wo sehe ich den geteilten Text beim Empfangen?",
+        "a": "Nach Eingabe eines gültigen Codes erscheinen geteilte Dateien in der Download-Liste. Geteilter Text wird unterhalb dieser Liste angezeigt."
+      }
+    ]
+  },
+  {
+    "id": "bulk-email",
+    "component": "BulkEmail/BulkEmail",
+    "title": "Massen-E-Mail-Versand",
+    "description": "Versenden Sie personalisierte Massen-E-Mails über Ihr verbundenes Gmail-Konto.",
+    "path": "/bulk-email",
+    "ctaLabel": "Massen-E-Mail öffnen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Erstellen und versenden Sie E-Mail-Kampagnen zentral an einem Ort. Verbinden Sie Gmail per OAuth, erstellen Sie Kontaktgruppen, importieren Sie Empfänger aus Excel, personalisieren Sie Betreff und Inhalt und fügen Sie Anhänge hinzu. Ihre SMTP-Konfiguration wird pro Konto gespeichert und für den Versand über Ihre eigene Gmail-Verbindung verwendet.",
+    "categoryId": "communication",
+    "keywords": ["email", "mail", "campaign", "newsletter", "gmail", "massen-email", "e-mail versand", "kampagne"],
+    "isActive": false,
+    "advancedOptionsEnabled": false
+  },
+  {
+    "id": "text-to-qr",
+    "component": "TextToQr",
+    "title": "Text-zu-QR-Code-Generator",
+    "description": "Erstellen Sie QR-Codes aus Text oder URLs – mit optionaler Logo-Einbindung.",
+    "path": "/qr-code-generator",
+    "ctaLabel": "QR-Code erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Erzeugen Sie scannbare QR-Codes aus beliebigem Text oder Links mit Live-Vorschau. Fügen Sie optional ein Logo und eine kurze Beschriftung hinzu und laden Sie das fertige Bild als PNG herunter. Die Verarbeitung erfolgt vollständig im Browser – es werden keine Daten hochgeladen.",
+    "categoryId": "business",
+    "keywords": ["qr", "qrcode", "text", "link", "qr-code erstellen", "qr-code generator"],
+    "isActive": true,
+    "advancedOptionsEnabled": true,
+    "howTo": [
+      "Geben Sie beliebigen Text, eine URL, Telefonnummer oder E-Mail-Adresse in das Eingabefeld ein.",
+      "Eine Live-Vorschau des QR-Codes wird sofort aktualisiert, während Sie tippen.",
+      "Optional: Laden Sie ein Logo-Bild hoch, um es in der Mitte des QR-Codes einzubetten.",
+      "Optional: Geben Sie eine kurze Beschriftung ein, die im exportierten Bild unter dem QR-Code erscheint.",
+      "Nutzen Sie die erweiterten Optionen, um QR-Größe, Fehlerkorrektur-Stufe oder Farben anzupassen.",
+      "Klicken Sie auf Herunterladen, um den QR-Code als hochauflösendes PNG-Bild zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Inhalte kann ich in einem QR-Code speichern?",
+        "a": "Sie können beliebigen Text, Website-URLs, E-Mail-Adressen, Telefonnummern, WLAN-Zugangsdaten, SMS-Nachrichten und vieles mehr kodieren. Jede UTF-8-Zeichenkette lässt sich in einem QR-Code speichern."
+      },
+      {
+        "q": "Funktioniert der QR-Code noch, wenn ich ein Logo hinzufüge?",
+        "a": "Ja. QR-Codes verfügen über eine eingebaute Fehlerkorrektur, die es erlaubt, bis zu 30 % des Codes zu verdecken. Ein kleines, zentriertes Logo nutzt in der Regel weniger als 20 % der Codefläche und bleibt problemlos scannbar."
+      },
+      {
+        "q": "Was bedeutet die Einstellung für die Fehlerkorrektur-Stufe?",
+        "a": "Die Fehlerkorrektur bestimmt, wie viel des QR-Codes beschädigt sein darf, bevor er unlesbar wird. Stufe L (7 %) ist am kompaktesten, Stufe H (30 %) am widerstandsfähigsten, aber dichter. Verwenden Sie Stufe M oder H, wenn Sie ein Logo einbetten."
+      },
+      {
+        "q": "Kann ich dieses Tool offline nutzen?",
+        "a": "Ja. Der QR-Code wird vollständig in Ihrem Browser generiert, ohne Serveranfragen. Sobald die Seite geladen ist, funktioniert es auch offline."
+      },
+      {
+        "q": "Welche Auflösung hat das heruntergeladene PNG?",
+        "a": "Das exportierte PNG wird in der unter den erweiterten Optionen eingestellten Größe erzeugt (Standard 300×300 px, einstellbar bis 1000×1000 px) – geeignet für digitale Nutzung und Druck."
+      },
+      {
+        "q": "Gibt es eine Begrenzung für die Textlänge?",
+        "a": "Ein QR-Code kann bis zu etwa 4.296 alphanumerische Zeichen speichern. Längere Inhalte erzeugen jedoch einen dichteren Code. Bei URLs und kurzen Texten unter 200 Zeichen ist die Scan-Qualität immer ausgezeichnet."
+      }
+    ]
+  },
+  {
+    "id": "barcode-generator",
+    "component": "BarcodeGenerator",
+    "title": "Barcode-Generator",
+    "description": "Erstellen Sie Barcodes (Code 128, Code 39, EAN, UPC) und laden Sie sie als PNG herunter.",
+    "path": "/barcode-generator",
+    "ctaLabel": "Barcode erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Erstellen Sie druckfertige Barcodes direkt im Browser – mit Unterstützung für gängige Formate wie Code 128, Code 39, EAN-13, EAN-8 und UPC-A. Passen Sie Breite, Höhe und Beschriftung an und exportieren Sie den Barcode als PNG.",
+    "categoryId": "business",
+    "keywords": [
+      "barcode",
+      "code128",
+      "code39",
+      "ean13",
+      "ean8",
+      "upc",
+      "label",
+      "barcode erstellen",
+      "strichcode"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": true,
+    "howTo": [
+      "Wählen Sie das Barcode-Format, das zu Ihrem Anwendungsfall passt (Code 128 ist die sichere Standardwahl für die meisten Text- und Zahlenwerte).",
+      "Geben Sie den zu kodierenden Wert in das Eingabefeld ein. Die Vorschau wird in Echtzeit aktualisiert.",
+      "Passen Sie Breite, Höhe und Schriftgröße an Ihre Etikettierungsanforderungen an.",
+      "Aktivieren oder deaktivieren Sie die Textanzeige, um den menschenlesbaren Text unter dem Barcode ein- oder auszublenden.",
+      "Überprüfen Sie den Barcode in der Live-Vorschau.",
+      "Klicken Sie auf PNG herunterladen, um das Barcode-Bild zu speichern – druckfertig oder zum Einbetten in Dokumente."
+    ],
+    "faqs": [
+      {
+        "q": "Welches Barcode-Format sollte ich verwenden?",
+        "a": "Code 128 unterstützt den vollständigen ASCII-Zeichensatz und variable Länge – ideal für allgemeine Produktetiketten, Versand und Lagerverwaltung. Verwenden Sie EAN-13 oder UPC-A für Einzelhandels-Barcodes, die an der Kasse gescannt werden. Code 39 ist in der Industrie und im Automobilbereich verbreitet."
+      },
+      {
+        "q": "Was ist der Unterschied zwischen EAN-13 und EAN-8?",
+        "a": "EAN-13 kodiert 13 Ziffern und ist der weltweite Standard für Einzelhandelsprodukte. EAN-8 kodiert 8 Ziffern und ist eine kompakte Version für kleine Verpackungen, auf denen ein vollständiger EAN-13-Barcode keinen Platz hätte."
+      },
+      {
+        "q": "Muss ich eine Prüfziffer angeben?",
+        "a": "Bei EAN-13, EAN-8 und UPC-A wird die Prüfziffer automatisch berechnet und angehängt. Bei Code 128 und Code 39 geben Sie einfach Ihren Wert ein, und der Barcode wird direkt erzeugt."
+      },
+      {
+        "q": "Kann ich diesen Barcode für den Einzelhandel verwenden?",
+        "a": "Ja, allerdings erfordern EAN- und UPC-Barcodes im Einzelhandel ein offiziell lizenziertes GS1-Präfix, um weltweit eindeutig zu sein. Für interne Lagerverwaltung oder den privaten Gebrauch funktioniert jeder beliebige Zahlenwert."
+      },
+      {
+        "q": "Welche Auflösung hat die PNG-Ausgabe?",
+        "a": "Das PNG wird in der von Ihnen eingestellten Breite und Höhe gerendert. Für den Druck erhöhen Sie diese Werte, um eine höhere Auflösung für Etikettendrucker zu erzielen."
+      },
+      {
+        "q": "Funktioniert das auch offline?",
+        "a": "Ja. Die Barcode-Erstellung erfolgt vollständig im Browser ohne Serveraufrufe. Sobald die Seite geladen ist, funktioniert es ohne Internetverbindung."
+      }
+    ]
+  },
+  {
+    "id": "image-compressor",
+    "component": "ImageCompressor",
+    "title": "Bildkomprimierung",
+    "description": "Komprimieren Sie Bilder lokal mit sofortiger Vorschau.",
+    "path": "/image-compressor",
+    "ctaLabel": "Bilder komprimieren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Reduzieren Sie die Dateigröße Ihrer Bilder direkt im Browser – ohne Upload. Sehen Sie sofort eine Vorschau der ausgewählten Bilder, stellen Sie die Komprimierungsqualität ein und laden Sie die Ergebnisse einzeln oder als ZIP-Archiv herunter.",
+    "categoryId": "utilities",
+    "keywords": ["image", "photo", "picture", "compress", "optimize", "size", "bild komprimieren", "bildgröße reduzieren", "foto komprimieren"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload-Bereich oder ziehen Sie eine oder mehrere Bilddateien hinein (JPG, PNG oder WEBP).",
+      "Für jedes Bild wird sofort eine Vorschau zusammen mit der ursprünglichen Dateigröße angezeigt.",
+      "Passen Sie den Qualitätsregler an, um das Verhältnis zwischen Dateigröße und Bildqualität zu steuern. Für den Webeinsatz werden 75–85 % empfohlen.",
+      "Klicken Sie auf Komprimieren, um alle hochgeladenen Bilder zu verarbeiten.",
+      "Überprüfen Sie die komprimierten Vorschauen und die neuen Dateigrößen im Ergebnisbereich.",
+      "Laden Sie einzelne komprimierte Bilder herunter oder klicken Sie auf Alle als ZIP herunterladen, um alles in einem Archiv zu erhalten."
+    ],
+    "faqs": [
+      {
+        "q": "Werden meine Bilder auf einen Server hochgeladen?",
+        "a": "Nein. Die gesamte Komprimierung erfolgt lokal in Ihrem Browser über die Canvas API. Ihre Bilder werden niemals an einen Server gesendet und bleiben vollständig privat."
+      },
+      {
+        "q": "Welche Bildformate werden unterstützt?",
+        "a": "Der Komprimierer unterstützt JPEG, PNG und WEBP als Eingabeformate. Die Ausgabe erfolgt als JPEG oder WEBP, da diese die besten Komprimierungsverhältnisse für fotografische Inhalte bieten."
+      },
+      {
+        "q": "Wie stark wird meine Dateigröße reduziert?",
+        "a": "Die Reduzierung hängt vom Originalbild und der Qualitätseinstellung ab. Typische JPEG-Fotos, die bei 80 % Qualität komprimiert werden, erreichen eine Reduzierung von 40–70 % bei kaum sichtbarem Qualitätsverlust."
+      },
+      {
+        "q": "Verschlechtert die Komprimierung die Bildqualität sichtbar?",
+        "a": "Bei Qualitätseinstellungen ab 75 % sind Komprimierungsartefakte in der Regel nicht erkennbar. Für Druckzwecke empfehlen sich 90 % oder höher. Für Web-Thumbnails sind 60–75 % akzeptabel."
+      },
+      {
+        "q": "Kann ich mehrere Bilder gleichzeitig komprimieren?",
+        "a": "Ja. Sie können mehrere Bilder in einem Durchgang hochladen und sie einzeln oder alle zusammen als ZIP-Datei herunterladen."
+      },
+      {
+        "q": "Funktioniert dieses Tool auf dem Smartphone?",
+        "a": "Ja. Der Komprimierer läuft in jedem modernen mobilen oder Desktop-Browser und funktioniert offline, sobald die Seite geladen ist."
+      }
+    ]
+  },
+  {
+    "id": "image-format-converter",
+    "component": "ImageFormatConverter",
+    "title": "Bildformat-Konverter",
+    "description": "Konvertieren Sie PNG-, JPG-, WEBP- und BMP-Bilder vollständig im Browser.",
+    "path": "/image-format-converter",
+    "ctaLabel": "Bild konvertieren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Konvertieren Sie ein einzelnes Bild zwischen PNG, JPG, WEBP und BMP direkt in Ihrem Browser. Wählen Sie Quell- und Zielformat und exportieren Sie sofort – ohne Upload oder serverseitige Verarbeitung.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "png",
+      "jpg",
+      "webp",
+      "bmp",
+      "convert",
+      "bild konvertieren",
+      "bildformat ändern"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload-Bereich oder ziehen Sie eine Bilddatei hinein (PNG, JPG, WEBP oder BMP).",
+      "Das Tool erkennt das Quellformat automatisch anhand der Dateiendung.",
+      "Wählen Sie das gewünschte Ausgabeformat über den Format-Selektor aus.",
+      "Klicken Sie auf Konvertieren. Die Umwandlung erfolgt sofort in Ihrem Browser.",
+      "Sehen Sie sich das konvertierte Bild im Ergebnisbereich als Vorschau an.",
+      "Klicken Sie auf Herunterladen, um das Bild im neuen Format auf Ihrem Gerät zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Zwischen welchen Formaten kann ich konvertieren?",
+        "a": "Das Tool unterstützt die Konvertierung zwischen PNG, JPEG (JPG), WEBP und BMP. Sie können von jedem dieser Formate in jedes andere umwandeln."
+      },
+      {
+        "q": "Beeinträchtigt die Konvertierung nach JPEG die Bildqualität?",
+        "a": "JPEG verwendet verlustbehaftete Komprimierung, daher kann die Umwandlung von PNG oder WEBP nach JPEG leichte Komprimierungsartefakte verursachen. Eine Rückkonvertierung von JPEG nach PNG stellt die verlorenen Daten nicht wieder her – bewahren Sie also ein Original auf, wenn Präzision wichtig ist."
+      },
+      {
+        "q": "Warum sollte ich ein Bild nach WEBP konvertieren?",
+        "a": "WEBP ist ein modernes, von Google entwickeltes Format, das bei vergleichbarer Qualität deutlich kleinere Dateigrößen als JPEG und PNG bietet. Es wird von modernen Browsern breit unterstützt und ist das bevorzugte Format für Webbilder."
+      },
+      {
+        "q": "Bleibt die Transparenz bei PNG nach der Konvertierung erhalten?",
+        "a": "PNG unterstützt Transparenz (Alphakanal). Wenn Sie ein transparentes PNG nach JPEG oder BMP konvertieren, werden transparente Bereiche mit einem weißen Hintergrund gefüllt. Bei der Konvertierung nach WEBP bleibt die Transparenz erhalten."
+      },
+      {
+        "q": "Wird mein Bild an einen Server gesendet?",
+        "a": "Nein. Die gesamte Konvertierung erfolgt clientseitig über die Browser-Canvas-API. Ihr Bild verlässt niemals Ihr Gerät."
+      },
+      {
+        "q": "Kann ich mehrere Bilder gleichzeitig konvertieren?",
+        "a": "Die aktuelle Version konvertiert jeweils ein Bild. Für die Stapelkonvertierung laden Sie die Dateien nacheinander hoch."
+      }
+    ]
+  },
+  {
+    "id": "image-pdf-to-pdf",
+    "component": "imagePdfToPdf",
+    "title": "Bild / PDF Zusammenführung",
+    "description": "Bilder und PDFs zu einem einzigen PDF zusammenführen und Seiten offline neu anordnen.",
+    "path": "/pdf-merger",
+    "ctaLabel": "PDF erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Fügen Sie mehrere Bilder und PDF-Dokumente zu einer einzigen PDF-Datei zusammen. Ordnen Sie Elemente neu an, drehen Sie Bilder, wählen Sie Seitengröße und Ränder, legen Sie das Einpassverhalten fest und fügen Sie optional Seitenzahlen hinzu. Die Verarbeitung erfolgt vollständig im Browser – für mehr Datenschutz und Geschwindigkeit.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "pdf",
+      "merge",
+      "combine",
+      "join",
+      "pdf zusammenführen",
+      "bilder zusammenführen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload-Bereich oder ziehen Sie mehrere Dateien hinein – Sie können Bilder (PNG, JPG, WEBP) und vorhandene PDFs mischen.",
+      "Alle hochgeladenen Elemente erscheinen in einer sortierbaren Liste. Ziehen Sie die Einträge, um die Seitenreihenfolge im finalen PDF festzulegen.",
+      "Bei Bildern können Sie die Drehschaltflächen nutzen, um die Ausrichtung vor dem Zusammenführen zu korrigieren.",
+      "Wählen Sie die gewünschte Seitengröße (A4, Letter usw.), die Ränder und wie Bilder auf die Seite eingepasst werden sollen.",
+      "Optional aktivieren Sie Seitenzahlen, die automatisch auf jeder Seite hinzugefügt werden.",
+      "Klicken Sie auf PDF erstellen, um das Dokument zu erzeugen, und anschließend auf Herunterladen, um es zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Kann ich Bilder und PDFs im selben Dokument zusammenführen?",
+        "a": "Ja. Sie können beliebige Kombinationen aus Bildern (PNG, JPG, WEBP) und bestehenden PDF-Dateien hochladen. Alles wird in der von Ihnen festgelegten Reihenfolge zu einer PDF zusammengeführt."
+      },
+      {
+        "q": "Werden meine Daten auf einen Server hochgeladen?",
+        "a": "Nein. Die gesamte Verarbeitung erfolgt vollständig in Ihrem Browser. Es werden keine Dateien auf einen Server hochgeladen, was das Tool sicher für vertrauliche Dokumente macht."
+      },
+      {
+        "q": "Kann ich die Seiten vor dem Zusammenführen neu anordnen?",
+        "a": "Ja. Alle hochgeladenen Dateien erscheinen als ziehbare Liste. Ziehen Sie die Einträge einfach an die gewünschte Position, bevor Sie die PDF erstellen."
+      },
+      {
+        "q": "Was passiert mit mehrseitigen PDFs, die ich hochlade?",
+        "a": "Jede Seite einer hochgeladenen PDF wird zu einer eigenen Seite im zusammengeführten Dokument und an der Stelle eingefügt, an der Sie die PDF in der Liste platziert haben."
+      },
+      {
+        "q": "Kann ich Bilder vor dem Hinzufügen zur PDF drehen?",
+        "a": "Ja. Jedes hochgeladene Bild hat Drehregler, mit denen Sie die Ausrichtung vor dem Zusammenführen anpassen können."
+      },
+      {
+        "q": "Welche Seitengrößen werden unterstützt?",
+        "a": "Das Tool unterstützt gängige Seitengrößen wie A4, A3, Letter und Legal. Außerdem können Sie Ränder steuern und wählen, ob Bilder die Seite füllen, innerhalb der Ränder passen oder zentriert werden."
+      }
+    ]
+  },
+  {
+    "id": "pdf-splitter",
+    "component": "PdfSplitter",
+    "title": "PDF-Splitter",
+    "description": "Seitenbereiche extrahieren oder ein PDF in mehrere Dateien aufteilen.",
+    "path": "/pdf-splitter",
+    "ctaLabel": "PDF teilen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie ein PDF hoch und teilen Sie es lokal in Ihrem Browser. Extrahieren Sie ausgewählte Seiten zu einer einzigen PDF oder erzeugen Sie eine PDF pro Seite als ZIP-Download. Die Verarbeitung erfolgt vollständig auf dem Gerät – für Datenschutz und Offline-Nutzung.",
+    "categoryId": "utilities",
+    "keywords": ["pdf", "split", "extract", "pages", "document", "pdf teilen", "seiten extrahieren"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload-Bereich oder ziehen Sie die PDF-Datei hinein, die Sie teilen möchten.",
+      "Nach dem Upload wird die Gesamtseitenzahl angezeigt.",
+      "Wählen Sie einen Modus: einen benutzerdefinierten Seitenbereich in eine neue PDF extrahieren oder jede Seite als separate PDF aufteilen.",
+      "Wenn Sie einen Bereich extrahieren, geben Sie Start- und Endseite an (z. B. Seiten 3 bis 7).",
+      "Klicken Sie auf Teilen, um das Dokument im Browser zu verarbeiten.",
+      "Laden Sie die resultierende PDF herunter oder – bei Einzelseiten – alle Seiten als ZIP-Archiv."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein PDF auf einen Server hochgeladen?",
+        "a": "Nein. Das PDF wird vollständig in Ihrem Browser mit PDF.js und pdf-lib verarbeitet. Es werden keine Inhalte an einen Server gesendet."
+      },
+      {
+        "q": "Kann ich nicht zusammenhängende Seiten extrahieren?",
+        "a": "Das Tool unterstützt aktuell nur zusammenhängende Seitenbereiche (Start- bis Endseite). Für nicht zusammenhängende Seiten führen Sie mehrere Extraktionen aus."
+      },
+      {
+        "q": "Was passiert mit Lesezeichen und Anmerkungen beim Teilen?",
+        "a": "Seiteninhalte, Text und Bilder bleiben erhalten. Einige Metadaten wie Lesezeichen und Formularfelder werden je nach Komplexität der Originaldatei möglicherweise nicht übernommen."
+      },
+      {
+        "q": "Gibt es eine Begrenzung der Seitenanzahl?",
+        "a": "Es gibt keine feste Begrenzung. Große PDFs mit vielen Seiten werden im Browser verarbeitet, können aber je nach Gerät etwas länger benötigen."
+      },
+      {
+        "q": "Kann ich ein passwortgeschütztes PDF teilen?",
+        "a": "Das Tool unterstützt derzeit keine passwortgeschützten PDFs. Entfernen Sie den Passwortschutz zuerst mit einem anderen Tool, bevor Sie die Datei hochladen."
+      },
+      {
+        "q": "Was ist der Unterschied zwischen Bereich extrahieren und pro Seite teilen?",
+        "a": "Beim Extrahieren eines Bereichs entsteht eine neue PDF mit nur den ausgewählten Seiten. Beim Teilen pro Seite entsteht für jede Seite eine separate PDF, die als ZIP heruntergeladen wird."
+      }
+    ]
+  },
+  {
+    "id": "image-crop-tool",
+    "component": "ImageCropTool",
+    "title": "Bild-Zuschneide-Tool",
+    "description": "Bilder lokal zuschneiden – mit Live-Vorschau und Exportoptionen.",
+    "path": "/image-crop-tool",
+    "ctaLabel": "Bild zuschneiden",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Wählen Sie einen Zuschnitt mit pixelgenauen Steuerelementen, sehen Sie eine Vorschau des ausgewählten Bereichs und exportieren Sie als PNG, JPEG oder WebP. Alles läuft vollständig im Browser – Bilder verlassen Ihr Gerät nie.",
+    "categoryId": "utilities",
+    "keywords": ["image", "photo", "picture", "crop", "resize", "edit", "bild zuschneiden", "foto zuschneiden"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload-Bereich oder ziehen Sie das Bild hinein, das Sie zuschneiden möchten (PNG, JPG, WEBP).",
+      "Das Bild wird im Zuschneide-Editor mit einer verschiebbaren Auswahl geladen.",
+      "Ziehen Sie an Ecken oder Kanten der Auswahl, um den Bereich festzulegen, den Sie behalten möchten.",
+      "Verschieben Sie die Auswahl durch Ziehen, um sie neu zu positionieren.",
+      "Optional können Sie exakte Pixelmaße für den Zuschnitt eingeben.",
+      "Wählen Sie das Ausgabeformat (PNG, JPEG oder WEBP) und klicken Sie auf Zuschneiden und Herunterladen."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein Bild zum Zuschneiden an einen Server gesendet?",
+        "a": "Nein. Das Zuschneiden erfolgt vollständig lokal in Ihrem Browser über die Canvas API. Ihr Bild wird nicht hochgeladen."
+      },
+      {
+        "q": "Kann ich auf ein bestimmtes Seitenverhältnis zuschneiden?",
+        "a": "Ja. Sie können die Auswahl auf gängige Seitenverhältnisse wie 1:1 (Quadrat), 16:9 oder 4:3 beschränken – nützlich für Social Media und Banner."
+      },
+      {
+        "q": "Welche Ausgabeformate sind verfügbar?",
+        "a": "Sie können das zugeschnittene Bild als PNG (verlustfrei), JPEG (kleinere Datei, geeignet für Fotos) oder WEBP (modernes Format mit sehr guter Qualität/Dateigröße) exportieren."
+      },
+      {
+        "q": "Kann ich den Zuschnitt rückgängig machen und neu ausprobieren?",
+        "a": "Ja. Sie können die Auswahl jederzeit anpassen, bevor Sie auf Herunterladen klicken. Das Originalbild bleibt während der Bearbeitung unverändert."
+      },
+      {
+        "q": "Verkleinert dieses Tool Bilder?",
+        "a": "Dieses Tool schneidet Bereiche außerhalb der Auswahl ab. Für das Skalieren auf andere Abmessungen verwenden Sie ein separates Resize- oder Komprimierungs-Tool."
+      },
+      {
+        "q": "Wie groß darf ein Bild zum Zuschneiden sein?",
+        "a": "Es gibt kein festes Limit. Sehr große Bilder über 20 Megapixel können etwas länger laden, lassen sich aber korrekt verarbeiten."
+      }
+    ]
+  },
+  {
+    "id": "image-background-editor",
+    "component": "ImageBackgroundEditor",
+    "title": "Bildhintergrund Entfernen/Ändern",
+    "description": "Hintergrund entfernen, durch eine Vollfarbe ersetzen oder ein eigenes Hintergrundbild verwenden – alles in einem Tool.",
+    "path": "/image-background-editor",
+    "ctaLabel": "Hintergrund bearbeiten",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie ein PNG-, JPG- oder WEBP-Bild hoch und entscheiden Sie, was mit dem Hintergrund passieren soll: vollständig entfernen (transparente PNG), mit einer Vollfarbe füllen oder das Motiv auf ein neues Hintergrundbild setzen. Die Verarbeitung erfolgt serverseitig mit KI-Segmentierung – mit Live-Vorher/Nachher-Vorschau vor dem Download.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "background",
+      "remove",
+      "replace",
+      "change",
+      "transparent",
+      "cutout",
+      "solid color",
+      "composite",
+      "png",
+      "hintergrund entfernen",
+      "bild freistellen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie oben einen Modus: Hintergrund entfernen für einen transparenten Ausschnitt, Vollfarbe für einen einfarbigen Hintergrund oder Eigenes Hintergrundbild für ein neues Foto.",
+      "Wenn Sie Vollfarbe gewählt haben, klicken Sie auf das Farbfeld, um eine Farbe auszuwählen.",
+      "Wenn Sie Eigenes Hintergrundbild gewählt haben, laden Sie das gewünschte Hintergrundbild hoch.",
+      "Laden Sie Ihr Motivbild hoch (PNG, JPG oder WEBP, bis 10 MB).",
+      "Klicken Sie auf Hintergrund entfernen oder Hintergrund ändern. Das Bild wird zur KI-Segmentierung an den Server gesendet.",
+      "Vergleichen Sie Vorher/Nachher nebeneinander und klicken Sie auf PNG herunterladen."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Modi unterstützt das Tool?",
+        "a": "Drei Modi: Hintergrund entfernen erstellt einen transparenten PNG-Ausschnitt, Vollfarbe füllt den Hintergrund mit einer ausgewählten Farbe, und Eigenes Hintergrundbild setzt das Motiv auf ein neues, hochgeladenes Bild."
+      },
+      {
+        "q": "Welche Bilder funktionieren am besten?",
+        "a": "Bilder mit klarer Trennung zwischen Motiv und Hintergrund liefern die besten Ergebnisse. Hoher Kontrast und saubere Kanten sind ideal. Komplexe Fälle wie Haare, Fell oder transparente Objekte können etwas rauere Kanten haben."
+      },
+      {
+        "q": "Wie wird das eigene Hintergrundbild eingepasst?",
+        "a": "Das Hintergrundbild wird skaliert, sodass es die Fläche des Motivs vollständig abdeckt (Seitenverhältnis bleibt erhalten), und anschließend zentriert zugeschnitten – ähnlich wie CSS background-size: cover."
+      },
+      {
+        "q": "In welchem Format ist der Download?",
+        "a": "Der Download ist immer eine PNG-Datei. Beim Entfernen des Hintergrunds enthält sie einen Alpha-Kanal (Transparenz); bei Vollfarbe oder Bildhintergrund ist das PNG vollständig deckend."
+      },
+      {
+        "q": "Ist das Tool kostenlos?",
+        "a": "Ja, der Hintergrund-Editor ist vollständig kostenlos und erfordert kein Konto."
+      },
+      {
+        "q": "Benötigt das Tool eine Internetverbindung?",
+        "a": "Ja. Die Hintergrundverarbeitung nutzt ein Server-Modell für maschinelles Lernen, daher ist eine aktive Internetverbindung erforderlich."
+      },
+      {
+        "q": "Werden meine Bilder auf dem Server gespeichert?",
+        "a": "Bilder werden auf dem Server im Arbeitsspeicher verarbeitet und das Ergebnis direkt an Ihren Browser zurückgegeben. Es werden keine Bilder gespeichert oder für andere Zwecke verwendet."
+      }
+    ]
+  },
+  {
+    "id": "invoice-generator",
+    "component": "InvoiceGenerator",
+    "title": "Rechnungs- / Beleg-Generator",
+    "description": "Erstellen Sie professionelle Rechnungen und Belege direkt im Browser.",
+    "path": "/invoice-generator",
+    "ctaLabel": "Rechnung erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Erstellen Sie professionelle Rechnungen oder Belege mit Verkäufer-/Kundendaten, Positionen, Steuern, Versand, Rabatten und Notizen. Die Summen werden automatisch berechnet und das fertige Dokument kann als PDF exportiert werden. Die Daten bleiben lokal und können im Browser wiederverwendet werden.",
+    "categoryId": "business",
+    "keywords": ["invoice", "receipt", "billing", "payment", "business", "rechnung", "beleg", "abrechnung"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Tragen Sie die Absenderdaten (Ihr Unternehmen) ein: Name, Adresse, E-Mail und optional ein Logo.",
+      "Tragen Sie die Empfängerdaten (Kunde) ein: Name, Adresse und Kontaktdaten.",
+      "Geben Sie Rechnungsnummer, Ausstellungsdatum und Fälligkeitsdatum ein.",
+      "Fügen Sie Positionen mit Beschreibung, Menge und Einzelpreis hinzu. Die Summen werden automatisch berechnet.",
+      "Wenden Sie bei Bedarf Steuern, Rabatte oder Versandkosten an. Die Gesamtsumme aktualisiert sich in Echtzeit.",
+      "Fügen Sie Zahlungsnotizen oder Bedingungen hinzu und klicken Sie auf PDF exportieren, um die fertige Rechnung herunterzuladen."
+    ],
+    "faqs": [
+      {
+        "q": "Werden meine Rechnungsdaten irgendwo gespeichert?",
+        "a": "Rechnungsdaten werden lokal in Ihrem Browser gespeichert, sodass Sie sie wiederverwenden können, ohne alles neu einzugeben. Es werden keine Daten an einen Server gesendet."
+      },
+      {
+        "q": "Kann ich ein Firmenlogo zur Rechnung hinzufügen?",
+        "a": "Ja. Sie können ein Logo-Bild hochladen, das im Kopfbereich der PDF-Rechnung angezeigt wird."
+      },
+      {
+        "q": "Welche Währungen werden unterstützt?",
+        "a": "Sie können jedes Währungssymbol oder jede Währungseinheit im Währungsfeld angeben. Das Tool funktioniert mit USD, EUR, GBP, INR oder jeder anderen Währung."
+      },
+      {
+        "q": "Kann ich mehrere Steuersätze anwenden?",
+        "a": "Sie können einen Steuersatz angeben, der auf die Zwischensumme angewendet wird. Für mehrere Steuersätze fügen Sie die Steuern in den Positionen oder im Notizfeld hinzu."
+      },
+      {
+        "q": "Ist die erzeugte PDF bereit zum Versenden an Kunden?",
+        "a": "Ja. Die PDF-Ausgabe ist professionell formatiert und kann direkt an Kunden gesendet werden. Prüfen Sie die PDF-Vorschau vor dem Versand."
+      },
+      {
+        "q": "Kann ich neben Rechnungen auch Belege erstellen?",
+        "a": "Ja. Das Tool eignet sich auch für Belege. Kennzeichnen Sie das Dokument im Titelfeld als Beleg und tragen Sie statt eines Fälligkeitsdatums ein Zahlungsdatum ein."
+      }
+    ]
+  },
+  {
+    "id": "text-diff-checker",
+    "component": "TextDiffChecker",
+    "title": "Text-Unterschiede prüfen",
+    "description": "Vergleichen Sie zwei Textversionen und sehen Sie, was sich geändert hat.",
+    "path": "/text-diff-checker",
+    "ctaLabel": "Text vergleichen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Fügen Sie zwei Textversionen ein und sehen Sie zeilenweise Unterschiede, einschließlich Ergänzungen, Löschungen und geänderter Blöcke. Ideal für das Prüfen von Änderungen in Inhalten, Konfigurationen oder Code-Snippets. Alles läuft lokal im Browser.",
+    "categoryId": "developer",
+    "keywords": ["text", "diff", "compare", "changes", "checker", "textvergleich", "unterschiede"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie den ursprünglichen (vorherigen) Text in das linke Feld ein.",
+      "Fügen Sie die geänderte (nachherige) Version in das rechte Feld ein.",
+      "Das Ergebnis aktualisiert sich automatisch und markiert hinzugefügte, entfernte oder geänderte Zeilen.",
+      "Grün markiert hinzugefügte Zeilen, rot markiert entfernte Zeilen.",
+      "Nutzen Sie die Zusammenfassung oben, um die Anzahl der Änderungen auf einen Blick zu sehen.",
+      "Kopieren oder teilen Sie bei Bedarf bestimmte geänderte Bereiche aus der Ergebnisansicht."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Textarten kann ich vergleichen?",
+        "a": "Sie können jeden Plain-Text vergleichen: Artikelentwürfe, Konfigurationsdateien, Code-Snippets, JSON, Markdown-Dokumente, E-Mail-Vorlagen und mehr."
+      },
+      {
+        "q": "Ist der Vergleich groß-/kleinschreibungsabhängig?",
+        "a": "Ja, standardmäßig ist der Vergleich case-sensitiv. Das bedeutet, dass „Hello“ und „hello“ als unterschiedlich markiert werden."
+      },
+      {
+        "q": "Wie groß darf der Text zum Vergleichen sein?",
+        "a": "Das Tool verarbeitet auch große Texte effizient. Dokumente mit Tausenden Zeilen werden schnell verglichen."
+      },
+      {
+        "q": "Zeigt es Unterschiede auf Wortebene an?",
+        "a": "Das Tool markiert geänderte Zeilen. Bei geänderten Zeilen werden die alte und neue Version nebeneinander angezeigt, sodass Sie sehen, was innerhalb der Zeile geändert wurde."
+      },
+      {
+        "q": "Wird mein Text an einen Server gesendet?",
+        "a": "Nein. Die gesamte Diff-Berechnung läuft lokal im Browser. Ihr Text wird nicht an externe Dienste gesendet."
+      },
+      {
+        "q": "Kann ich damit auch Code vergleichen?",
+        "a": "Ja. Der Diff funktioniert für jeden Plain-Text, einschließlich Quellcode. Er zeigt, welche Zeilen hinzugefügt, entfernt oder geändert wurden – ähnlich wie ein Git-Diff."
+      }
+    ]
+  },
+  {
+    "id": "json-formatter-validator",
+    "component": "JsonFormatterDiff",
+    "title": "JSON-Formatter + Validator",
+    "description": "JSON sofort validieren, formatieren und minimieren.",
+    "path": "/json-formatter-validator",
+    "ctaLabel": "JSON-Tool öffnen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Fügen Sie JSON ein und prüfen Sie es mit klaren Fehlermeldungen. Formatieren Sie mit Einrückungen für bessere Lesbarkeit oder minimieren Sie für kompakte Payloads. Das Tool läuft vollständig clientseitig und ist schnell sowie datenschutzfreundlich.",
+    "categoryId": "developer",
+    "keywords": ["json", "format", "validator", "minify", "pretty", "json formatieren", "json prüfen"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie Ihren rohen JSON-Text in den Editor ein.",
+      "Der Validator prüft das JSON in Echtzeit und zeigt Fehler mit Zeilen- und Zeichenposition an.",
+      "Klicken Sie auf Formatieren / Pretty Print, um das JSON mit Einrückung und Zeilenumbrüchen zu lesen.",
+      "Klicken Sie auf Minimieren, um alle Leerzeichen zu entfernen und die kompakte Version zu erzeugen.",
+      "Kopieren Sie die formatierte oder minimierte Ausgabe mit der Kopieren-Schaltfläche.",
+      "Nutzen Sie die Diff-Ansicht, um zwei JSON-Objekte nebeneinander zu vergleichen."
+    ],
+    "faqs": [
+      {
+        "q": "Was gilt als ungültiges JSON?",
+        "a": "Häufige Fehler sind nachgestellte Kommas, einfache Anführungszeichen (JSON benötigt doppelte), fehlende Kommas zwischen Schlüssel-Wert-Paaren und nicht in Anführungszeichen gesetzte Schlüssel. Der Validator zeigt die genaue Fehlerposition."
+      },
+      {
+        "q": "Was ist der Unterschied zwischen Formatieren und Minimieren?",
+        "a": "Formatieren (Pretty Print) fügt Einrückungen und Zeilenumbrüche hinzu, damit JSON gut lesbar ist. Minimieren entfernt Leerzeichen und erzeugt die kleinste mögliche JSON-Zeichenkette."
+      },
+      {
+        "q": "Kann ich zwei JSON-Objekte vergleichen?",
+        "a": "Ja. Das Tool bietet einen Diff-Modus, in dem Sie zwei JSON-Objekte einfügen und die Unterschiede strukturiert vergleichen können – hilfreich beim Debuggen von API-Änderungen."
+      },
+      {
+        "q": "Gibt es eine Größenbegrenzung für JSON?",
+        "a": "Es gibt kein festes Limit. Das Tool verarbeitet auch große JSON-Payloads von mehreren Megabyte in modernen Browsern."
+      },
+      {
+        "q": "Wird mein JSON an einen Server gesendet?",
+        "a": "Nein. Validierung, Formatierung und Minimierung erfolgen vollständig lokal im Browser. Ihre JSON-Daten verlassen Ihr Gerät nicht."
+      },
+      {
+        "q": "Kann ich das Tool offline nutzen?",
+        "a": "Ja. Sobald die Seite geladen ist, funktioniert der JSON-Formatter vollständig offline."
+      }
+    ]
+  },
+  {
+    "id": "spring-boot-log-analyzer",
+    "component": "SpringBootLogAnalyzer",
+    "title": "Spring-Boot-Log-Analyzer",
+    "description": "Spring-Boot-Logs analysieren und wahrscheinliche Ursachen erkennen.",
+    "path": "/spring-boot-log-analyzer",
+    "ctaLabel": "Logs analysieren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie Spring-Boot-Logs hoch oder fügen Sie sie ein, um wahrscheinliche Erstfehler, Exception-Ketten, Stack-Frame-Stellen und Correlation-ID-Cluster zu erkennen. Exportieren Sie einen strukturierten JSON-Bericht für das Teilen und weitere Debugging-Schritte.",
+    "categoryId": "developer",
+    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug", "log analyse", "spring boot logs"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie Ihre Spring-Boot-Logs direkt in das Textfeld ein oder laden Sie eine Textdatei hoch.",
+      "Klicken Sie auf Analysieren. Das Tool durchsucht die Logs nach ERROR- und WARN-Einträgen, Exception-Ketten und Stacktraces.",
+      "Im Ergebnisbereich sehen Sie eine Zeitleiste der Fehler, wobei wahrscheinliche Ursachen oben hervorgehoben werden.",
+      "Klicken Sie auf einen Fehler, um den vollständigen Stacktrace mit Klasse, Methode und Zeilennummer anzuzeigen.",
+      "Correlation IDs und Thread-Namen werden gruppiert, damit Sie einen Request durch mehrere Threads verfolgen können.",
+      "Klicken Sie auf Bericht exportieren, um einen strukturierten JSON-Bericht herunterzuladen."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Log-Formate werden unterstützt?",
+        "a": "Der Analyzer ist auf das Standard-Spring-Boot-Logformat von Logback (Standard-Logging-Framework) abgestimmt und unterstützt auch Spring Boot mit Log4j2 im Standard-Pattern."
+      },
+      {
+        "q": "Was bedeutet Root-Cause-Erkennung?",
+        "a": "Wenn eine Anwendung eine Kette von Exceptions wirft, ist die Root Cause die tiefste, ursprüngliche Exception. Der Analyzer identifiziert diesen Erstfehler, damit Sie sich auf das eigentliche Problem konzentrieren können."
+      },
+      {
+        "q": "Unterstützt das Tool multi-threaded Logs?",
+        "a": "Ja. Der Analyzer gruppiert Logzeilen nach Thread-Namen und Correlation IDs (falls vorhanden), sodass Sie den Ablauf eines Requests durch mehrere Threads verfolgen können."
+      },
+      {
+        "q": "Werden meine Logs an einen Server gesendet?",
+        "a": "Nein. Die gesamte Log-Analyse läuft lokal im Browser. Ihre Logdaten werden nicht hochgeladen."
+      },
+      {
+        "q": "Kann ich den Report teilen?",
+        "a": "Ja. Sie können den JSON-Bericht exportieren und mit Ihrem Team teilen, um die Analyse nachzuvollziehen."
+      }
+    ]
+  },
+  {
+    "id": "cron-generator-validator",
+    "component": "CronExpressionBuilder",
+    "title": "KI‑Cron‑Generator + Validator",
+    "description": "Beschreiben Sie Ihren Zeitplan in einfacher Sprache und lassen Sie KI Cron-Ausdrücke erzeugen.",
+    "path": "/cron-generator-validator",
+    "ctaLabel": "Cron-Tool öffnen",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Nutzen Sie KI, um Cron-Ausdrücke aus natürlicher Sprache zu erzeugen, oder erstellen Sie sie manuell. Validieren Sie die Syntax sofort, erhalten Sie eine menschenlesbare Erklärung und sehen Sie eine Vorschau der nächsten Ausführungszeiten. Unterstützt 5‑Feld‑ und 6‑Feld‑Formate.",
+    "categoryId": "developer",
+    "keywords": [
+      "cron",
+      "schedule",
+      "expression",
+      "validator",
+      "time",
+      "ai",
+      "generator",
+      "zeitplan",
+      "cron ausdruck"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Geben Sie im Bereich KI‑Cron‑Generator Ihren Zeitplan in Alltagssprache ein – z. B. „jeden Werktag um 9 Uhr“ oder „alle 30 Minuten zwischen 8 und 18 Uhr“.",
+      "Wählen Sie im Cron-Format-Dropdown aus, ob Sie ein 5‑Feld‑ (Standard) oder 6‑Feld‑Format (mit Sekunden) benötigen, und klicken Sie auf Generieren.",
+      "Der KI‑Ausdruck wird direkt in das Cron-Eingabefeld übernommen, bereit zum Validieren, Erklären oder Vorschauen.",
+      "Klicken Sie auf Erklären, um eine menschenlesbare Beschreibung des Ausdrucks zu erhalten.",
+      "Klicken Sie auf Nächste Läufe, um die nächsten 5 Ausführungszeiten zu prüfen.",
+      "Klicken Sie auf Validieren, um die Syntax jedes Ausdrucks zu prüfen – egal ob KI‑generiert oder manuell eingegeben.",
+      "Sie können auch direkt einen Cron-Ausdruck einfügen und alle Tools ohne KI nutzen."
+    ],
+    "faqs": [
+      {
+        "q": "Wie funktioniert der KI‑Cron‑Generator?",
+        "a": "Sie beschreiben Ihren Zeitplan in Alltagssprache und die KI (Claude über AWS Bedrock) wandelt ihn in einen gültigen Cron‑Ausdruck um. Anschließend können Sie ihn validieren, erklären oder eine Vorschau anzeigen."
+      },
+      {
+        "q": "Was ist der Unterschied zwischen 5‑Feld‑ und 6‑Feld‑Cron?",
+        "a": "Standard‑Cron unter Unix/Linux nutzt 5 Felder: Minute, Stunde, Tag‑im‑Monat, Monat, Wochentag. Java‑Scheduler (Spring @Scheduled, Quartz) nutzen 6 Felder mit Sekunden am Anfang: Sekunde, Minute, Stunde, Tag‑im‑Monat, Monat, Wochentag."
+      },
+      {
+        "q": "Kann ich das Tool ohne KI verwenden?",
+        "a": "Ja. Sie können einen Cron‑Ausdruck direkt einfügen und die Funktionen Validieren, Erklären und Vorschau unabhängig vom KI‑Generator verwenden."
+      },
+      {
+        "q": "Wie plane ich einen Job alle 15 Minuten?",
+        "a": "Geben Sie „alle 15 Minuten“ im KI‑Generator ein oder nutzen Sie manuell „*/15 * * * *“ (5‑Feld) bzw. „0 */15 * * * *“ (6‑Feld)."
+      },
+      {
+        "q": "Kann ich Jobs an bestimmten Wochentagen planen?",
+        "a": "Ja. Das Feld Wochentag akzeptiert Werte 0–6 (0 = Sonntag) oder Sie beschreiben z. B. „jeden Montag und Mittwoch um 9 Uhr“ im KI‑Generator."
+      },
+      {
+        "q": "Was bedeutet das Sternchen (*) in einem Cron‑Ausdruck?",
+        "a": "Ein Sternchen bedeutet „jeder gültige Wert“ für das jeweilige Feld. Beispielsweise * im Minutenfeld heißt „jede Minute“."
+      },
+      {
+        "q": "Ist das Tool für AWS EventBridge oder GitHub Actions hilfreich?",
+        "a": "Ja. Beide verwenden Cron‑Ausdrücke. AWS EventBridge nutzt ein 6‑Feld‑Format mit Jahr, GitHub Actions verwendet 5 Felder in UTC. Der Generator und Validator funktionieren für beide."
+      }
+    ]
+  },
+  {
+    "id": "jwt-encoder-decoder",
+    "component": "JwtTool/JwtTool",
+    "title": "JWT‑Encoder / Decoder",
+    "description": "JWTs decodieren und signierte HS256/HS512‑Tokens erzeugen.",
+    "path": "/jwt-decoder-encoder",
+    "ctaLabel": "JWT‑Tool öffnen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Prüfen Sie JWT‑Header und Payload, bearbeiten Sie Claims und erzeugen Sie neue Tokens mit HS256 oder HS512. Ideal für API‑Tests und Debugging von Auth‑Flows. Alles läuft im Browser, Token‑Daten werden nicht an ein Backend gesendet.",
+    "categoryId": "developer",
+    "keywords": ["jwt", "token", "encode", "decode", "security", "auth"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie ein bestehendes JWT im Decode‑Feld ein, um den Inhalt zu prüfen.",
+      "Das Tool zerlegt das Token in Header, Payload und Signatur und zeigt sie als formatiertes JSON an.",
+      "Prüfen Sie Claims wie sub (Subject), iat (Issued At), exp (Expiry) sowie eigene Claims.",
+      "Zum Erzeugen eines neuen Tokens wechseln Sie zum Encode‑Tab und tragen die Payload‑Claims als JSON ein.",
+      "Geben Sie den HMAC‑Secret‑Key ein und wählen Sie den Algorithmus (HS256 oder HS512).",
+      "Klicken Sie auf Generieren, um ein signiertes JWT zu erstellen, das Sie kopieren können."
+    ],
+    "faqs": [
+      {
+        "q": "Was ist ein JWT?",
+        "a": "Ein JSON Web Token (JWT) ist ein kompaktes, URL‑sicheres Token zur sicheren Übertragung von Informationen. Es besteht aus drei Base64‑Teilen: Header (Algorithmus), Payload (Claims) und Signatur (Manipulationsschutz)."
+      },
+      {
+        "q": "Kann jeder ein JWT ohne Secret Key decodieren?",
+        "a": "Ja. Header und Payload sind nur Base64‑kodiert, nicht verschlüsselt. Jeder kann sie lesen. Nur die Signaturprüfung benötigt den Secret Key. Keine sensiblen Daten in der Payload speichern."
+      },
+      {
+        "q": "Was ist der Unterschied zwischen HS256 und HS512?",
+        "a": "Beide sind HMAC‑Signaturen. HS256 nutzt SHA‑256 mit 256‑Bit‑Signatur, HS512 nutzt SHA‑512 mit 512‑Bit‑Signatur. HS512 ist stärker, erzeugt aber ein etwas längeres Token."
+      },
+      {
+        "q": "Werden JWTs oder Secret Keys an einen Server gesendet?",
+        "a": "Nein. Alle Decode‑/Encode‑Operationen laufen vollständig im Browser. Tokens und Keys werden nicht übertragen."
+      },
+      {
+        "q": "Wie prüfe ich eine JWT‑Signatur?",
+        "a": "Fügen Sie das Token im Decode‑Tab ein und geben Sie den HMAC‑Secret‑Key im Prüfbereich an. Das Tool bestätigt, ob die Signatur gültig ist."
+      },
+      {
+        "q": "Kann ich damit Tokens für Produktion erzeugen?",
+        "a": "Das Tool ist für Entwicklung, Tests und Debugging gedacht. Für Produktion sollten JWTs serverseitig mit einer vertrauenswürdigen Library und sicherem Secret‑Management erzeugt werden."
+      }
+    ]
+  },
+  {
+    "id": "uuid-generator",
+    "component": "UuidGenerator",
+    "title": "UUID‑Generator",
+    "description": "UUID‑v4‑Werte schnell in großer Menge erzeugen.",
+    "path": "/uuid-generator",
+    "ctaLabel": "UUID erzeugen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Erstellen Sie eine oder mehrere UUID‑v4‑Kennungen mit Optionen wie Großschreibung oder Entfernen von Bindestrichen. Kopieren Sie alle generierten Werte auf einmal für Entwicklung, Tests und Datenworkflows.",
+    "categoryId": "developer",
+    "keywords": ["uuid", "guid", "identifier", "id", "generate", "kennung"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie, wie viele UUIDs Sie erzeugen möchten (1 bis 100).",
+      "Klicken Sie auf Generieren, um sofort eine Liste zufälliger UUID‑v4‑Werte zu erhalten.",
+      "Aktivieren Sie Großbuchstaben, wenn Ihr System das verlangt.",
+      "Aktivieren Sie Bindestriche entfernen, wenn Sie eine kompakte 32‑Zeichen‑Hex‑UUID benötigen.",
+      "Klicken Sie auf Alle kopieren, um die komplette Liste in die Zwischenablage zu übernehmen.",
+      "Sie können beliebig oft neu generieren – jede Liste ist einzigartig."
+    ],
+    "faqs": [
+      {
+        "q": "Was ist eine UUID?",
+        "a": "Eine Universally Unique Identifier (UUID) ist eine 128‑Bit‑Kennung zur eindeutigen Identifikation. Im Standardformat sieht sie z. B. so aus: 550e8400-e29b-41d4-a716-446655440000."
+      },
+      {
+        "q": "Was ist UUID Version 4?",
+        "a": "UUID v4 wird zufällig erzeugt. 122 der 128 Bits sind Zufallsdaten – die Kollisionswahrscheinlichkeit ist extrem gering (ca. 1 zu 5,3 × 10^36)."
+      },
+      {
+        "q": "Ist UUID dasselbe wie GUID?",
+        "a": "Ja. GUID ist der Microsoft‑Begriff für das gleiche Konzept. UUIDs und GUIDs folgen dem gleichen RFC‑4122‑Standard."
+      },
+      {
+        "q": "Sind die erzeugten UUIDs wirklich eindeutig?",
+        "a": "UUID v4 wird mit einem kryptografisch sicheren Zufallsgenerator im Browser erzeugt. Die Wahrscheinlichkeit identischer UUIDs ist praktisch vernachlässigbar."
+      },
+      {
+        "q": "Kann ich UUIDs als Primärschlüssel in Datenbanken nutzen?",
+        "a": "Ja. UUID‑Primärschlüssel sind verbreitet. Zufällige UUIDs können jedoch Indizes fragmentieren; für sehr schreibintensive Systeme sind geordnete UUID‑Varianten sinnvoll."
+      },
+      {
+        "q": "Werden die UUIDs serverseitig erzeugt?",
+        "a": "Nein. Alle UUIDs werden vollständig im Browser mit der Web Crypto API erzeugt. Es wird nichts gespeichert."
+      }
+    ]
+  },
+  {
+    "id": "string-encryptor",
+    "component": "StringEncryptor",
+    "title": "String‑Verschlüsseler / Entschlüsseler",
+    "description": "Text mit einem Secret Key per AES ver- und entschlüsseln, inkl. Jasypt‑Workflows.",
+    "path": "/string-encryptor",
+    "ctaLabel": "Verschlüsselung öffnen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Verschlüsseln Sie Klartext zu Ciphertext und entschlüsseln Sie ihn mit einem Secret Key per AES (crypto-js). Enthält einen Server‑Modus mit PBKDF2‑HMAC‑SHA512 + AES‑256 für Jasypt‑Workflows und Interoperabilität.",
+    "categoryId": "developer",
+    "keywords": [
+      "encrypt",
+      "decrypt",
+      "aes",
+      "secret key",
+      "cipher",
+      "crypto",
+      "string",
+      "jasypt",
+      "verschlüsseln"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie oben zwischen Verschlüsseln und Entschlüsseln.",
+      "Zum Verschlüsseln: Geben Sie den Klartext in das Eingabefeld ein.",
+      "Geben Sie Ihren Secret Key ein. Dieser muss geheim bleiben – jeder mit diesem Key kann den Text entschlüsseln.",
+      "Wählen Sie den Modus: Standard‑AES für allgemeine Nutzung oder Server (Jasypt) für Spring‑Boot‑Kompatibilität.",
+      "Klicken Sie auf Verschlüsseln und kopieren Sie das Ergebnis.",
+      "Zum Entschlüsseln: Fügen Sie den Ciphertext ein, geben Sie denselben Secret Key an, wählen Sie den passenden Modus und klicken Sie auf Entschlüsseln."
+    ],
+    "faqs": [
+      {
+        "q": "Welcher Algorithmus wird verwendet?",
+        "a": "Das Tool nutzt AES. Im Standardmodus wird AES mit einem via crypto‑js abgeleiteten Key verwendet. Im Server‑Modus werden PBKDF2‑HMAC‑SHA512 und AES‑256‑CBC genutzt, kompatibel zu Jasypt."
+      },
+      {
+        "q": "Was ist der Jasypt‑Modus und wann brauche ich ihn?",
+        "a": "Jasypt ist eine Java‑Bibliothek für Spring‑Boot‑Konfigurationsverschlüsselung. Nutzen Sie den Jasypt‑Modus, wenn Sie Werte für eine Spring‑Boot‑App mit Jasypt erzeugen oder prüfen möchten."
+      },
+      {
+        "q": "Ist AES sicher?",
+        "a": "AES‑256 gilt als sicher, wenn ein starker, einzigartiger Schlüssel verwendet wird. Die Sicherheit Ihrer Daten hängt vollständig von der Qualität und Geheimhaltung des Keys ab."
+      },
+      {
+        "q": "Werden Text oder Key an einen Server gesendet?",
+        "a": "Im Server‑Modus erfolgen Ver‑/Entschlüsselung serverseitig zur Jasypt‑Kompatibilität, aber die Daten werden nicht gespeichert. Im Standardmodus läuft alles clientseitig."
+      },
+      {
+        "q": "Wie sieht ein guter Schlüssel aus?",
+        "a": "Ein starker Key ist lang (16+ Zeichen), zufällig und enthält Groß‑/Kleinbuchstaben, Zahlen und Symbole. Vermeiden Sie Wörter, Namen oder kurze PINs."
+      },
+      {
+        "q": "Kann ich Texte entschlüsseln, die mit einem anderen AES‑Tool erzeugt wurden?",
+        "a": "Die Kompatibilität hängt von Modus, Key‑Ableitung und Padding ab. Der Standardmodus nutzt crypto‑js‑Defaults, der Jasypt‑Modus zielt auf Spring‑Boot‑Kompatibilität. Andere Implementierungen sind ggf. nicht kompatibel."
+      }
+    ]
+  },
+  {
+    "id": "api-forge",
+    "component": "ApiForge",
+    "title": "Torensa API Forge",
+    "description": "API‑Requests direkt im Browser erstellen und testen.",
+    "path": "/api-request-builder",
+    "ctaLabel": "API Forge öffnen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Torensa API Forge ermöglicht API‑Requests direkt im Browser, einschließlich JWT‑Bearer‑Auth, benutzerdefinierten Headern, Query/Path‑Parametern sowie JSON‑ oder Raw‑Body.",
+    "categoryId": "developer",
+    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie die HTTP‑Methode (GET, POST, PUT, PATCH, DELETE).",
+      "Geben Sie die vollständige API‑URL inkl. Pfadparametern ein.",
+      "Fügen Sie Query‑Parameter im Params‑Tab hinzu – sie werden automatisch an die URL angehängt.",
+      "Fügen Sie benutzerdefinierte Header im Headers‑Tab hinzu (z. B. Content‑Type, Accept oder API‑Spezialheader).",
+      "Für POST/PUT/PATCH wechseln Sie zum Body‑Tab und geben JSON oder Raw‑Body ein.",
+      "Für JWT‑Bearer‑Auth geben Sie den Token im Authorization‑Tab ein.",
+      "Klicken Sie auf Senden. Status, Header und Body erscheinen im Antwortbereich."
+    ],
+    "faqs": [
+      {
+        "q": "Wie unterscheidet sich API Forge von Postman?",
+        "a": "API Forge ist ein leichtgewichtiges Browser‑Tool ohne Installation oder Konto. Es deckt die gängigsten Testfälle schnell ab. Postman bietet zusätzlich erweiterte Funktionen wie Collections, Environments und Test‑Scripts."
+      },
+      {
+        "q": "Kann ich APIs mit Authentifizierung testen?",
+        "a": "Ja. API Forge unterstützt JWT‑Bearer‑Auth. Geben Sie den Token im Authorization‑Bereich ein; er wird als Bearer‑Header gesendet."
+      },
+      {
+        "q": "Warum schlägt meine Anfrage mit CORS‑Fehler fehl?",
+        "a": "CORS‑Fehler entstehen, wenn ein API‑Server Anfragen von einem anderen Ursprung blockiert. Das ist eine Browser‑Sicherheitsfunktion. Erlauben Sie den Origin serverseitig oder nutzen Sie einen Proxy."
+      },
+      {
+        "q": "Speichert API Forge meinen Request‑Verlauf?",
+        "a": "Letzte Requests können zur Bequemlichkeit im lokalen Browser‑Speicher abgelegt werden. Es werden keine Daten an externe Server gesendet."
+      },
+      {
+        "q": "Welche Content‑Types werden für den Body unterstützt?",
+        "a": "API Forge unterstützt JSON, Plain Text und Raw‑Body. Setzen Sie den Content‑Type‑Header entsprechend (z. B. application/json, text/plain)."
+      },
+      {
+        "q": "Kann ich API Forge für GraphQL verwenden?",
+        "a": "Ja. GraphQL nutzt HTTP‑POST mit JSON‑Body (query und variables). Tragen Sie den Endpoint ein, setzen Sie Content‑Type auf application/json und fügen Sie die Query im Body ein."
+      }
+    ]
+  },
+  {
+    "id": "word-to-pdf",
+    "component": "WordToPdf",
+    "title": "Word‑zu‑PDF‑Konverter",
+    "description": "Word‑Dokumente (.doc, .docx) mit exakter Layouttreue in PDF umwandeln.",
+    "path": "/word-to-pdf",
+    "ctaLabel": "In PDF umwandeln",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie ein Word‑Dokument (.doc oder .docx) hoch und wandeln Sie es in Sekunden in ein PDF um. Die Konvertierung läuft serverseitig mit LibreOffice und erhält Schriftarten, Tabellen, Bilder und Formatierung. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
+    "categoryId": "utilities",
+    "keywords": ["word", "docx", "doc", "pdf", "convert", "document", "word in pdf"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf „Word‑Dokument auswählen“ und wählen Sie eine .doc‑ oder .docx‑Datei.",
+      "Klicken Sie auf „In PDF umwandeln“, um die Konvertierung zu starten.",
+      "Warten Sie einige Sekunden, während LibreOffice die Datei auf dem Server verarbeitet.",
+      "Klicken Sie auf „Download“, um das resultierende PDF zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein Dokument auf dem Server gespeichert?",
+        "a": "Nein. Die Datei wird in einem temporären Verzeichnis verarbeitet und unmittelbar nach der Konvertierung gelöscht."
+      },
+      {
+        "q": "Wie groß darf die Datei sein?",
+        "a": "Dateien bis zu 20 MB werden unterstützt."
+      },
+      {
+        "q": "Bleibt die Formatierung erhalten?",
+        "a": "Ja. LibreOffice rendert Schriftarten, Tabellen, Bilder, Kopf‑ und Fußzeilen weitgehend originalgetreu. Bei sehr komplexen Dokumenten mit Sonderfonts kann es zu kleinen Abweichungen kommen, wenn die Schriftarten auf dem Server fehlen."
+      },
+      {
+        "q": "Kann ich auch .doc‑Dateien (altes Word‑Format) konvertieren?",
+        "a": "Ja, sowohl .doc (Word 97‑2003) als auch .docx (Word 2007+) werden unterstützt."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-pdf",
+    "component": "ExcelToPdf",
+    "title": "Excel‑zu‑PDF‑Konverter",
+    "description": "Excel‑Tabellen (.xls, .xlsx) mit korrektem Layout und Diagrammen in PDF umwandeln.",
+    "path": "/excel-to-pdf",
+    "ctaLabel": "In PDF umwandeln",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie eine Excel‑Datei (.xls, .xlsx oder .xlsm) hoch und wandeln Sie sie in Sekunden in ein PDF um. Die Konvertierung läuft serverseitig mit LibreOffice und erhält Tabellenlayout, Formatierungen und Diagramme. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
+    "categoryId": "utilities",
+    "keywords": [
+      "excel",
+      "xls",
+      "xlsx",
+      "xlsm",
+      "pdf",
+      "convert",
+      "spreadsheet",
+      "excel in pdf"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf „Excel‑Datei auswählen“ und wählen Sie eine .xls‑, .xlsx‑ oder .xlsm‑Datei.",
+      "Klicken Sie auf „In PDF umwandeln“, um die Konvertierung zu starten.",
+      "Warten Sie einige Sekunden, während LibreOffice die Tabelle auf dem Server verarbeitet.",
+      "Klicken Sie auf „Download“, um das resultierende PDF zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Wird meine Tabelle auf dem Server gespeichert?",
+        "a": "Nein. Die Datei wird in einem temporären Verzeichnis verarbeitet und direkt nach der Konvertierung gelöscht."
+      },
+      {
+        "q": "Wie groß darf die Datei sein?",
+        "a": "Dateien bis zu 20 MB werden unterstützt."
+      },
+      {
+        "q": "Bleiben Formeln und Diagramme erhalten?",
+        "a": "LibreOffice rendert das Blatt in ein PDF, daher werden Formeln ausgewertet und Diagramme so übernommen, wie sie in der Tabelle angezeigt werden."
+      },
+      {
+        "q": "Kann ich mehrseitige Arbeitsmappen konvertieren?",
+        "a": "Ja. LibreOffice exportiert alle Tabellenblätter in einer einzigen PDF, in der gleichen Reihenfolge wie in der Arbeitsmappe."
+      }
+    ]
+  },
+  {
+    "id": "pdf-to-word",
+    "component": "PdfToWord",
+    "title": "PDF‑zu‑Word‑Konverter",
+    "description": "PDF‑Dateien in Sekunden in bearbeitbare Word‑Dokumente (.docx) umwandeln.",
+    "path": "/pdf-to-word",
+    "ctaLabel": "In Word umwandeln",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie ein PDF hoch und wandeln Sie es in eine bearbeitbare .docx‑Datei um. Die Konvertierung läuft serverseitig mit LibreOffice und erhält Layout und Text so gut wie möglich. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
+    "categoryId": "utilities",
+    "keywords": ["pdf", "word", "docx", "convert", "document", "pdf in word"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf „PDF‑Datei auswählen“ und wählen Sie eine .pdf‑Datei.",
+      "Klicken Sie auf „In Word umwandeln“, um die Konvertierung zu starten.",
+      "Warten Sie einige Sekunden, während LibreOffice die Datei auf dem Server verarbeitet.",
+      "Klicken Sie auf „Download“, um die resultierende .docx‑Datei zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Wird meine Datei auf dem Server gespeichert?",
+        "a": "Nein. Die Datei wird in einem temporären Verzeichnis verarbeitet und sofort nach der Konvertierung gelöscht."
+      },
+      {
+        "q": "Wie groß darf die Datei sein?",
+        "a": "Dateien bis zu 20 MB werden unterstützt."
+      },
+      {
+        "q": "Bleibt die Formatierung erhalten?",
+        "a": "LibreOffice rekonstruiert das Layout so gut wie möglich, aber die Umwandlung von PDF zu Word ist grundsätzlich nicht perfekt – komplexe Layouts können Nachbearbeitung erfordern."
+      }
+    ]
+  },
+  {
+    "id": "image-generator",
+    "component": "AiImageGenerator",
+    "title": "KI‑Bildgenerator",
+    "description": "Beschreiben Sie ein Bild in Alltagssprache und die KI erzeugt es als PNG.",
+    "path": "/image-generator",
+    "ctaLabel": "Bildgenerator öffnen",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Geben Sie eine Beschreibung des gewünschten Bildes ein – von realistischen Landschaften bis zu kreativen Illustrationen – und die KI (Stability AI Stable Image Core über AWS Bedrock) erzeugt es. Vorschau sofort anzeigen und als hochauflösendes PNG herunterladen.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "generate",
+      "ai",
+      "picture",
+      "art",
+      "illustration",
+      "create",
+      "text to image",
+      "bild generieren"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Geben Sie eine Beschreibung des gewünschten Bildes ins Textfeld ein – je genauer, desto besser.",
+      "Klicken Sie auf Bild generieren und warten Sie einige Sekunden.",
+      "Das erzeugte Bild erscheint unter dem Eingabefeld. Prüfen Sie, ob es Ihrer Beschreibung entspricht.",
+      "Klicken Sie auf PNG herunterladen, um das Bild zu speichern.",
+      "Wenn das Ergebnis nicht passt, passen Sie die Beschreibung an und generieren Sie erneut."
+    ],
+    "faqs": [
+      {
+        "q": "Wie funktioniert die KI‑Bildgenerierung?",
+        "a": "Ihre Beschreibung wird an Stability AI Stable Image Core auf AWS Bedrock gesendet, das ein 1024×1024‑Bild basierend auf Ihrem Prompt erzeugt."
+      },
+      {
+        "q": "Welche Arten von Bildern kann ich generieren?",
+        "a": "Sie können nahezu alles beschreiben – Landschaften, Tiere, abstrakte Kunst, Produkt‑Mockups, Illustrationen und mehr. Je spezifischer die Beschreibung, desto besser das Ergebnis."
+      },
+      {
+        "q": "In welchem Format wird das Bild heruntergeladen?",
+        "a": "Bilder werden als PNG mit 1024×1024 Auflösung heruntergeladen."
+      },
+      {
+        "q": "Wird mein Prompt gespeichert?",
+        "a": "Prompts werden in Echtzeit verarbeitet und nach der Bildgenerierung nicht gespeichert."
+      },
+      {
+        "q": "Wie lange dauert die Generierung?",
+        "a": "In der Regel nur wenige Sekunden, abhängig von Komplexität und Serverauslastung."
+      }
+    ]
+  },
+  {
+    "id": "pdf-text-extractor",
+    "component": "PdfTextExtractor",
+    "title": "PDF‑Text‑Extractor (OCR)",
+    "description": "Text aus gescannten oder digitalen PDFs per OCR extrahieren.",
+    "path": "/pdf-text-extractor",
+    "ctaLabel": "Text extrahieren",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie ein PDF hoch – mit auswählbarem Text oder als Scan – und extrahieren Sie den gesamten lesbaren Text. Digitale PDFs werden direkt ausgelesen, gescannte Seiten automatisch mit Tesseract OCR verarbeitet. Kopieren Sie das Ergebnis oder laden Sie es als .txt herunter.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf",
+      "ocr",
+      "text",
+      "extract",
+      "scan",
+      "scanned",
+      "read",
+      "convert",
+      "text aus pdf"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload‑Bereich oder ziehen Sie Ihr PDF auf die Seite.",
+      "Klicken Sie auf Text extrahieren. Digitaler Text wird sofort gelesen, Scans werden per OCR verarbeitet.",
+      "Prüfen Sie den extrahierten Text im Ausgabebereich.",
+      "Klicken Sie auf Text kopieren oder .txt herunterladen."
+    ],
+    "faqs": [
+      {
+        "q": "Funktioniert das Tool mit gescannten PDFs?",
+        "a": "Ja. Seiten, die nur Bilder enthalten, werden automatisch mit Tesseract OCR verarbeitet. Digitale PDFs mit auswählbarem Text werden direkt ausgelesen."
+      },
+      {
+        "q": "Welche Sprachen unterstützt die OCR?",
+        "a": "Die Standard‑OCR erkennt englischen Text. Für die meisten Scans wie Belege, Verträge und Berichte auf Englisch sind die Ergebnisse sehr genau."
+      },
+      {
+        "q": "Gibt es ein Seiten‑ oder Dateigrößenlimit?",
+        "a": "Dateien bis 20 MB werden akzeptiert. Große gescannte PDFs können länger dauern, da jede Seite per OCR verarbeitet wird."
+      },
+      {
+        "q": "Wird meine Datei auf dem Server gespeichert?",
+        "a": "Nein. Die Datei wird in einem temporären Verzeichnis verarbeitet und direkt nach der Textextraktion gelöscht."
+      },
+      {
+        "q": "Warum ist der extrahierte Text leer?",
+        "a": "Wenn das PDF nur Bilder ohne erkennbaren Text enthält (z. B. Fotos oder Diagramme), kann OCR keinen lesbaren Text finden. Achten Sie auf ausreichend klare Scans."
+      },
+      {
+        "q": "Kann ich Text aus passwortgeschützten PDFs extrahieren?",
+        "a": "Passwortgeschützte (verschlüsselte) PDFs müssen vor dem Upload entsperrt werden. Das Tool fragt keine Passwörter ab."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-csv",
+    "component": "DataFormatConverter",
+    "title": "Datenformat‑Konverter",
+    "description": "Excel‑, CSV‑ und JSON‑Dateien direkt im Browser konvertieren.",
+    "path": "/data-format-converter",
+    "ctaLabel": "Dateien konvertieren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie eine Excel‑, CSV‑ oder JSON‑Datei hoch und konvertieren Sie sie in eines der anderen Formate. Parsing und Konvertierung erfolgen vollständig clientseitig – Ihre Dateien bleiben auf Ihrem Gerät.",
+    "categoryId": "utilities",
+    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data", "daten konvertieren"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf den Upload‑Bereich oder ziehen Sie Ihre Excel‑ (.xlsx), CSV‑ oder JSON‑Datei auf die Seite.",
+      "Das Tool erkennt das Eingabeformat automatisch anhand der Dateiendung.",
+      "Wählen Sie das gewünschte Ausgabeformat (Excel, CSV oder JSON).",
+      "Klicken Sie auf Konvertieren, um den Prozess zu starten.",
+      "Prüfen Sie die Ausgabe in der Vorschau.",
+      "Klicken Sie auf Download, um die konvertierte Datei zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Lädt das Tool meine Datei auf einen Server hoch?",
+        "a": "Nein. Alle Verarbeitung erfolgt vollständig im Browser. Ihre Datei wird nie an einen Server gesendet."
+      },
+      {
+        "q": "Welche Dateiformate werden unterstützt?",
+        "a": "Unterstützt werden Excel (.xlsx), CSV (Comma‑Separated Values) und JSON. Sie können zwischen allen drei Formaten konvertieren."
+      },
+      {
+        "q": "Bleiben Excel‑Formeln erhalten?",
+        "a": "Formeln werden beim Konvertieren in ihre berechneten Werte umgewandelt. Der Formeltext selbst wird nicht in CSV oder JSON übernommen."
+      },
+      {
+        "q": "Wie groß darf eine Datei sein?",
+        "a": "Da alles im Browser läuft, hängt die praktische Grenze vom verfügbaren Arbeitsspeicher ab. Dateien bis zu mehreren hundert MB funktionieren auf moderner Hardware in der Regel gut."
+      },
+      {
+        "q": "Kann ich mehrseitige Excel‑Dateien konvertieren?",
+        "a": "Standardmäßig wird das erste (aktive) Tabellenblatt verarbeitet – das deckt die meisten Einblatt‑Workbooks ab."
+      },
+      {
+        "q": "Ist das Tool kostenlos?",
+        "a": "Ja, der Datenformat‑Konverter ist komplett kostenlos und erfordert kein Konto."
+      }
+    ]
+  },
+  {
+    "id": "subtitle-downloader",
+    "component": "SubtitleDownloader",
+    "title": "Untertitel‑Downloader",
+    "description": "SRT‑Untertitel aus Online‑Videos mit yt‑dlp herunterladen.",
+    "path": "/subtitle-downloader",
+    "ctaLabel": "Untertitel herunterladen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Fügen Sie eine Video‑URL ein, um Untertitel als SRT zu laden. Das Tool versucht zuerst vorhandene Untertitel und fällt auf automatisch generierte zurück, falls verfügbar. Unterstützt YouTube und andere von yt‑dlp unterstützte Seiten.",
+    "categoryId": "utilities",
+    "keywords": ["subtitle", "subtitles", "srt", "captions", "yt-dlp", "video", "untertitel"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie die Video‑URL in das Eingabefeld ein.",
+      "Wählen Sie den Sprachcode für Untertitel (z. B. en, es, fr).",
+      "Klicken Sie auf Untertitel herunterladen.",
+      "Wenn Untertitel vorhanden sind, wird eine SRT‑Datei zum Download erzeugt."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Seiten werden unterstützt?",
+        "a": "Alle von yt‑dlp unterstützten Seiten, einschließlich YouTube. Die Verfügbarkeit hängt von den Untertiteln der jeweiligen Plattform ab."
+      },
+      {
+        "q": "Was passiert, wenn ein Video keine Untertitel hat?",
+        "a": "Das Tool versucht zuerst vorhandene Untertitel, danach automatisch generierte. Wenn beides fehlt, schlägt der Download fehl."
+      },
+      {
+        "q": "In welchem Format ist die Ausgabe?",
+        "a": "Untertitel werden im SRT‑Format bereitgestellt."
+      }
+    ]
+  },
+  {
+    "id": "speech-to-text",
+    "component": "Transcribe",
+    "title": "Sprache‑zu‑Text‑Konverter",
+    "description": "Sprache in Audio/Video‑Dateien mit AWS Transcribe in präzisen Text umwandeln.",
+    "path": "/speech-to-text",
+    "ctaLabel": "Sprache‑zu‑Text öffnen",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie eine Audiodatei hoch und erhalten Sie ein sauberes Transkript mit Amazon Transcribe. Unterstützt gängige Formate wie MP3, WAV, MP4, M4A, FLAC, OGG und WEBM.",
+    "categoryId": "utilities",
+    "keywords": [
+      "transcribe",
+      "speech",
+      "audio",
+      "speech to text",
+      "aws",
+      "transcript",
+      "sprache zu text"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Ziehen Sie eine Audiodatei hinein oder klicken Sie zum Auswählen.",
+      "Wählen Sie die gesprochene Sprache der Aufnahme.",
+      "Klicken Sie auf Audio transkribieren und warten Sie, bis die Verarbeitung abgeschlossen ist.",
+      "Prüfen Sie das Transkript und kopieren oder laden Sie es als .txt herunter."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Audioformate werden unterstützt?",
+        "a": "Gängige Formate wie MP3, WAV, MP4/M4A, FLAC, OGG und WEBM werden unterstützt."
+      },
+      {
+        "q": "Wie lange dauert die Transkription?",
+        "a": "Kurze Clips sind in Sekunden fertig, längere Aufnahmen können je nach Größe und Serverlast einige Minuten dauern."
+      },
+      {
+        "q": "Wird mein Audio dauerhaft gespeichert?",
+        "a": "Das Audio wird für die Transkription temporär hochgeladen und nach Abschluss gelöscht."
+      }
+    ]
+  },
+  {
+    "id": "video-to-audio",
+    "component": "VideoToAudio",
+    "title": "Video‑zu‑MP3/WAV",
+    "description": "Audio aus Videos extrahieren und als MP3 oder WAV herunterladen.",
+    "path": "/video-to-audio",
+    "ctaLabel": "Audio extrahieren",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie eine Videodatei hoch und extrahieren Sie die Audiospur als MP3 oder WAV. Die Konvertierung läuft serverseitig mit FFmpeg. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
+    "categoryId": "utilities",
+    "keywords": ["video", "audio", "mp3", "wav", "extract", "convert", "audio extrahieren"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Laden Sie eine Videodatei hoch (MP4, MOV, MKV, WEBM, AVI und mehr).",
+      "Wählen Sie MP3 für kleinere Dateien oder WAV für verlustfreie Audioqualität.",
+      "Klicken Sie auf Audio extrahieren, um die Konvertierung zu starten.",
+      "Laden Sie die konvertierte Audiodatei herunter."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Videoformate werden unterstützt?",
+        "a": "Gängige Formate wie MP4, MOV, MKV, WEBM, AVI, M4V, MPG, MPEG, 3GP, WMV, FLV und OGV werden unterstützt."
+      },
+      {
+        "q": "Wie groß darf die Datei sein?",
+        "a": "Dateien bis 100 MB werden standardmäßig unterstützt. Größere Limits können serverseitig konfiguriert werden."
+      },
+      {
+        "q": "Wird meine Datei auf dem Server gespeichert?",
+        "a": "Nein. Dateien werden in einem temporären Verzeichnis verarbeitet und unmittelbar nach der Konvertierung gelöscht."
+      }
+    ]
+  },
+  {
+    "id": "voice-changer",
+    "component": "VoiceChanger",
+    "title": "Stimmen‑Changer (Charakter‑Presets)",
+    "description": "Audio hochladen und in charakterähnliche Stimmen umwandeln.",
+    "path": "/voice-changer",
+    "ctaLabel": "Stimme ändern",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Laden Sie eine Audiodatei hoch und wenden Sie Charakter‑Presets wie Tiefer Erzähler, Kleiner Alien, Rauher Mann oder Alte Dame an. Die Konvertierung läuft serverseitig mit FFmpeg‑Filtern und liefert eine MP3‑ oder WAV‑Datei.",
+    "categoryId": "utilities",
+    "keywords": [
+      "voice changer",
+      "voice effects",
+      "character voice",
+      "audio",
+      "pitch",
+      "husky voice",
+      "old lady voice",
+      "chipmunk voice",
+      "stimme ändern"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Laden Sie eine Audiodatei hoch (MP3, WAV, M4A, AAC, OGG, FLAC, AMR oder WEBM).",
+      "Wählen Sie ein Charakter‑Preset wie Space Captain, Tiny Alien, Husky Man oder Old Lady.",
+      "Wählen Sie MP3 für kleinere Dateien oder WAV für verlustfreie Ausgabe.",
+      "Klicken Sie auf Stimme ändern und warten Sie, bis die Konvertierung abgeschlossen ist.",
+      "Laden Sie die konvertierte Audiodatei herunter."
+    ],
+    "faqs": [
+      {
+        "q": "Ist das ein Echtzeit‑Stimmenverzerrer?",
+        "a": "Nein. Das Tool arbeitet dateibasiert: Datei hochladen, Preset wählen, Ergebnis herunterladen."
+      },
+      {
+        "q": "Welche Audioformate werden unterstützt?",
+        "a": "Gängige Formate wie MP3, WAV, M4A, AAC, OGG, FLAC, AMR und WEBM."
+      },
+      {
+        "q": "Wird mein Audio auf dem Server gespeichert?",
+        "a": "Nein. Dateien werden in einem temporären Verzeichnis verarbeitet und sofort nach der Konvertierung gelöscht."
+      }
+    ]
+  },
+  {
+    "id": "habit-tracker",
+    "component": "HabitTracker",
+    "title": "Gewohnheiten‑Tracker",
+    "description": "Tägliche Gewohnheiten verfolgen, Punkte sammeln und Fortschritt visualisieren.",
+    "path": "/habit-tracker",
+    "ctaLabel": "Gewohnheiten verfolgen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Erstellen Sie eine Liste täglicher Gewohnheiten mit individuellen Punktwerten. Haken Sie erledigte Gewohnheiten ab, sammeln Sie Punkte und sehen Sie Ihren Verlauf der letzten 14 Tage in einem Balkendiagramm. Alle Daten werden lokal im Browser gespeichert.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "habit",
+      "tracker",
+      "daily",
+      "routine",
+      "points",
+      "productivity",
+      "goals",
+      "checklist",
+      "wellness",
+      "health",
+      "gewohnheiten"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Geben Sie einen Gewohnheitsnamen und einen Punktwert ein und klicken Sie auf Hinzufügen.",
+      "Haken Sie jede Gewohnheit ab, wenn Sie sie im Laufe des Tages erledigen.",
+      "Ihre Punkte für heute werden in Echtzeit aktualisiert.",
+      "Sehen Sie im Balkendiagramm Ihre Punkte der letzten 14 Tage.",
+      "Entfernen Sie eine Gewohnheit über das Löschsymbol."
+    ],
+    "faqs": [
+      {
+        "q": "Wo werden meine Daten gespeichert?",
+        "a": "Alle Gewohnheiten und Erledigungsdaten werden im lokalen Speicher Ihres Browsers abgelegt. Es wird nichts an einen Server gesendet."
+      },
+      {
+        "q": "Kann ich das Tool offline nutzen?",
+        "a": "Ja, der Gewohnheiten‑Tracker funktioniert vollständig offline, da alles im Browser läuft."
+      },
+      {
+        "q": "Setzt sich das Diagramm zurück?",
+        "a": "Das Diagramm zeigt immer die letzten 14 Tage. Ältere Daten bleiben gespeichert und können bei Bedarf später angesehen werden."
+      }
+    ]
+  },
+  {
+    "id": "text-to-speech",
+    "component": "TextToSpeech",
+    "title": "Text‑zu‑Sprache‑Konverter",
+    "description": "Text in natürliche Sprache umwandeln – mit den integrierten Browser‑Stimmen.",
+    "path": "/text-to-speech",
+    "ctaLabel": "Text‑zu‑Sprache öffnen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Geben Sie Text ein oder fügen Sie ihn ein und lassen Sie ihn über die Web Speech API vorlesen. Wählen Sie aus mehreren Stimmen und Sprachen, passen Sie Geschwindigkeit, Tonhöhe und Lautstärke an und steuern Sie die Wiedergabe. Alles läuft clientseitig – Ihr Text bleibt im Browser.",
+    "categoryId": "utilities",
+    "keywords": [
+      "text",
+      "speech",
+      "tts",
+      "voice",
+      "read",
+      "aloud",
+      "audio",
+      "speak",
+      "text to speech"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Geben Sie den Text in das Textfeld ein oder fügen Sie ihn ein.",
+      "Wählen Sie eine Stimme aus der Liste – die Verfügbarkeit hängt von Browser und Betriebssystem ab.",
+      "Passen Sie Geschwindigkeit, Tonhöhe und Lautstärke über die Regler an.",
+      "Klicken Sie auf Sprechen, um die Wiedergabe zu starten.",
+      "Nutzen Sie Pause, Fortsetzen oder Stopp zur Steuerung.",
+      "Klicken Sie auf Beispiel laden, um das Tool mit Beispieltext auszuprobieren."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein Text an einen Server gesendet?",
+        "a": "Nein. Die Sprachausgabe erfolgt lokal im Browser über die Web Speech API. Ihr Text verlässt Ihr Gerät nicht."
+      },
+      {
+        "q": "Warum sehe ich in verschiedenen Browsern unterschiedliche Stimmen?",
+        "a": "Die verfügbaren Stimmen hängen von Browser und Betriebssystem ab. Chrome, Edge, Firefox und Safari bieten unterschiedliche Stimmen. Einige Browser stellen online‑verbesserte Stimmen bereit."
+      },
+      {
+        "q": "Kann ich das Tool offline nutzen?",
+        "a": "Ja. Sobald die Seite geladen ist, funktioniert die Sprachausgabe mit den Systemstimmen auch offline. Online‑Stimmen sind ggf. nicht verfügbar."
+      },
+      {
+        "q": "Welche Sprachen werden unterstützt?",
+        "a": "Unterstützt werden alle Sprachen, für die Ihr Browser Stimmen bereitstellt. Viele Systeme bieten Englisch, Spanisch, Französisch, Deutsch, Japanisch, Chinesisch und weitere."
+      },
+      {
+        "q": "Gibt es ein Textlängen‑Limit?",
+        "a": "Es gibt kein festes Limit, sehr lange Texte können jedoch browserabhängige Grenzen haben. Für beste Ergebnisse teilen Sie lange Inhalte in Abschnitte."
+      },
+      {
+        "q": "Kann ich die Audioausgabe herunterladen?",
+        "a": "Die Web Speech API unterstützt keinen Audio‑Export. Die Sprache wird direkt über die Lautsprecher ausgegeben. Für Downloads wäre ein serverseitiger TTS‑Dienst nötig."
+      }
+    ]
+  },
+  {
+    "id": "sql-formatter",
+    "component": "SqlFormatter",
+    "title": "SQL‑Formatter + Beautifier",
+    "description": "SQL‑Abfragen sofort formatieren, minimieren und bereinigen.",
+    "path": "/sql-formatter",
+    "ctaLabel": "SQL‑Tool öffnen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Fügen Sie eine SQL‑Abfrage ein und formatieren Sie sie mit sauberer Einrückung und Zeilenumbrüchen. Minimieren Sie Queries für kompakte Speicherung, ändern Sie die Keyword‑Großschreibung und wählen Sie Ihren bevorzugten Einrückungsstil. Vollständig clientseitig – Ihr SQL verlässt den Browser nicht.",
+    "categoryId": "developer",
+    "keywords": [
+      "sql",
+      "format",
+      "beautify",
+      "minify",
+      "query",
+      "database",
+      "mysql",
+      "postgres",
+      "sqlite",
+      "sql formatieren"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie Ihre SQL‑Abfrage in den Editor ein.",
+      "Klicken Sie auf Formatieren, um Einrückungen und Zeilenumbrüche zu erzeugen.",
+      "Klicken Sie auf Minimieren, um die Abfrage in eine kompakte Zeile zu verwandeln.",
+      "Nutzen Sie UPPERCASE oder lowercase, um die Keyword‑Großschreibung zu ändern.",
+      "Wählen Sie Ihren Einrückungsstil (2 Leerzeichen, 4 Leerzeichen oder Tab).",
+      "Klicken Sie auf Kopieren, um das Ergebnis in die Zwischenablage zu übernehmen.",
+      "Klicken Sie auf Beispiel laden, um ein Muster‑SQL zu testen."
+    ],
+    "faqs": [
+      {
+        "q": "Welche SQL‑Dialekte werden unterstützt?",
+        "a": "Der Formatter arbeitet mit Standard‑SQL und unterstützt gängige Dialekte wie MySQL, PostgreSQL, SQLite und SQL Server. Er erkennt Keywords aller großen Datenbanken."
+      },
+      {
+        "q": "Ändert die Formatierung die Bedeutung meiner Abfrage?",
+        "a": "Nein. Die Formatierung verändert nur Leerzeichen, Einrückungen und optional die Keyword‑Großschreibung. Die Logik bleibt identisch."
+      },
+      {
+        "q": "Bleiben String‑Literals erhalten?",
+        "a": "Ja. Der Formatter verändert keine Inhalte innerhalb von Strings, quoted identifiers oder Kommentaren."
+      },
+      {
+        "q": "Wird mein SQL an einen Server gesendet?",
+        "a": "Nein. Formatierung, Minimierung und Keyword‑Casing laufen vollständig lokal im Browser."
+      },
+      {
+        "q": "Kann ich das Tool offline nutzen?",
+        "a": "Ja. Sobald die Seite geladen ist, funktioniert der SQL‑Formatter komplett offline."
+      }
+    ]
+  },
+  {
+    "id": "bmi-calculator",
+    "component": "BmiCalculator",
+    "title": "BMI‑Rechner (kg, cm, lb, ft)",
+    "description": "Kostenloser BMI‑Rechner für kg/cm oder lb/ft – BMI und Kategorie sofort.",
+    "path": "/bmi-calculator",
+    "ctaLabel": "BMI berechnen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Berechnen Sie Ihren Body‑Mass‑Index (BMI) in Sekunden. Nutzen Sie metrische (kg/cm) oder imperiale (lb/ft) Einheiten und sehen Sie Ihre BMI‑Kategorie auf einer Farbschala. Läuft vollständig im Browser – Ihre Daten bleiben lokal.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "bmi",
+      "bmi calculator",
+      "body mass index",
+      "calculator",
+      "weight",
+      "height",
+      "kg",
+      "cm",
+      "lb",
+      "lbs",
+      "ft",
+      "feet",
+      "inches",
+      "health",
+      "fitness",
+      "obesity",
+      "underweight",
+      "overweight",
+      "wellness",
+      "bmi rechner"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie Metrisch (kg/cm) oder Imperial (lb/ft).",
+      "Geben Sie Ihr Gewicht ein.",
+      "Geben Sie Ihre Körpergröße ein. Im Imperial‑Modus werden Fuß und Zoll getrennt eingegeben.",
+      "Klicken Sie auf BMI berechnen, um das Ergebnis zu sehen.",
+      "Prüfen Sie Ihren BMI‑Wert und die zugehörige Kategorie."
+    ],
+    "faqs": [
+      {
+        "q": "Was ist BMI?",
+        "a": "Der Body‑Mass‑Index (BMI) ist ein einfacher Wert, der Körpergröße und Gewicht nutzt, um Untergewicht, Normalgewicht, Übergewicht oder Adipositas einzuschätzen."
+      },
+      {
+        "q": "Wie wird BMI berechnet?",
+        "a": "Metrisch: BMI = Gewicht (kg) / Größe (m)^2. Imperial: BMI = (Gewicht (lb) / Größe (in)^2) × 703."
+      },
+      {
+        "q": "Ist BMI für alle Menschen genau?",
+        "a": "BMI ist ein grober Indikator und berücksichtigt keine Muskelmasse, Knochendichte, Alter oder Geschlecht. Sportliche Personen können einen hohen BMI ohne hohes Körperfett haben."
+      },
+      {
+        "q": "Welche BMI‑Kategorien gibt es?",
+        "a": "Erwachsene: unter 18,5 (untergewichtig), 18,5–24,9 (normal), 25–29,9 (übergewichtig), 30+ (adipös)."
+      },
+      {
+        "q": "Werden meine Daten gespeichert?",
+        "a": "Nein. Alle Berechnungen erfolgen lokal im Browser. Gewicht und Größe werden nicht an einen Server gesendet."
+      },
+      {
+        "q": "Kann ich den Rechner offline nutzen?",
+        "a": "Ja. Der BMI‑Rechner funktioniert vollständig offline."
+      }
+    ]
+  },
+  {
+    "id": "resume-builder",
+    "component": "ResumeBuilder",
+    "title": "Kostenloser Lebenslauf‑Builder – Professionellen CV online erstellen",
+    "description": "Erstellen Sie einen professionellen Lebenslauf. Wählen Sie eine Vorlage, füllen Sie Ihre Daten aus und laden Sie ein poliertes PDF herunter.",
+    "path": "/resume-builder",
+    "ctaLabel": "Lebenslauf erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Erstellen Sie in wenigen Minuten einen überzeugenden Lebenslauf oder CV. Wählen Sie aus professionellen, modernen oder minimalistischen Vorlagen. Ergänzen Sie persönliche Daten, Berufserfahrung, Ausbildung, Skills und eine Zusammenfassung. Vorschau in Echtzeit und Export als sauberes, ATS‑freundliches PDF. Ihre Daten bleiben lokal im Browser – keine Registrierung, kein Wasserzeichen, keine Limits. Funktioniert auch offline.",
+    "categoryId": "business",
+    "keywords": [
+      "resume builder",
+      "cv builder",
+      "free resume builder",
+      "resume maker",
+      "cv maker online",
+      "create resume online",
+      "build cv free",
+      "professional resume builder",
+      "resume generator",
+      "cv generator",
+      "resume template",
+      "cv template free",
+      "ats friendly resume",
+      "resume pdf download",
+      "online cv creator",
+      "free cv builder no sign up",
+      "resume builder no watermark",
+      "simple resume maker",
+      "job resume builder",
+      "curriculum vitae builder",
+      "lebenslauf erstellen",
+      "cv erstellen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie eine Vorlage: Professionell, Modern oder Minimal.",
+      "Geben Sie Ihre persönlichen Daten ein – Name, E‑Mail, Telefon, Ort sowie Website/LinkedIn.",
+      "Schreiben Sie eine kurze Zusammenfassung Ihrer Erfahrung und Ziele.",
+      "Fügen Sie Berufserfahrung mit Position, Unternehmen, Datum und Erfolgen hinzu.",
+      "Fügen Sie Ausbildung mit Abschlüssen, Institutionen und Details hinzu.",
+      "Listen Sie Ihre Skills – technische, soziale und branchenspezifische.",
+      "Klicken Sie auf Vorschau, um den Lebenslauf als PDF zu sehen.",
+      "Klicken Sie auf PDF herunterladen, um den Lebenslauf zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Ist der Lebenslauf‑Builder wirklich kostenlos?",
+        "a": "Ja, zu 100 % kostenlos. Keine Registrierung, keine versteckten Kosten, kein Wasserzeichen und keine Begrenzung."
+      },
+      {
+        "q": "Welche Vorlagen gibt es?",
+        "a": "Es gibt drei Vorlagen: Professionell (klassische blaue Header), Modern (kräftige Typografie) und Minimal (sehr schlicht)."
+      },
+      {
+        "q": "Werden meine Daten gespeichert oder hochgeladen?",
+        "a": "Nein. Alle Daten bleiben im lokalen Browser‑Speicher. Es wird nichts an einen Server gesendet."
+      },
+      {
+        "q": "Kann ich den Builder offline nutzen?",
+        "a": "Ja. Sobald die Seite geladen ist, funktioniert der Builder komplett offline."
+      },
+      {
+        "q": "Ist das PDF ATS‑freundlich?",
+        "a": "Ja. Das PDF nutzt Standard‑Schriften (Helvetica) und ein klares einspaltiges Layout, das von ATS‑Systemen gut gelesen wird."
+      },
+      {
+        "q": "Kann ich mehrere Einträge hinzufügen?",
+        "a": "Ja. Sie können beliebig viele Berufs‑ und Ausbildungseinträge hinzufügen."
+      },
+      {
+        "q": "Wie bearbeite ich den Lebenslauf später?",
+        "a": "Ihre Daten werden im Browser gespeichert. Beim nächsten Besuch sind die Inhalte wieder verfügbar. Mit Zurücksetzen starten Sie neu."
+      },
+      {
+        "q": "In welchem Format wird der Lebenslauf heruntergeladen?",
+        "a": "Der Download erfolgt als PDF, dem Standardformat für Bewerbungen."
+      }
+    ]
+  }
+]

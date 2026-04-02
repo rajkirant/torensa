@@ -45,7 +45,7 @@ import {
 import { themes, themeIconComponents } from "./theme";
 import type { ThemeName } from "./theme";
 import categories from "./metadata/categories.json";
-import serviceCards from "./metadata/serviceCards.json";
+import { useLanguage, useServiceCards, type LanguageCode } from "./utils/language";
 import {
   type ServiceCardConfig,
   getActiveServiceCards,
@@ -83,11 +83,13 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const { user, loading, setUser } = useAuth();
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width:900px)");
+  const { language, setLanguage } = useLanguage();
+  const serviceCards = useServiceCards();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const categoryOptions = categories as CategoryConfig[];
   const activeCards = useMemo(
     () => getActiveServiceCards(serviceCards as ServiceCardConfig[]),
-    [],
+    [serviceCards],
   );
   const activeCategoryIds = useMemo(
     () =>
@@ -245,6 +247,17 @@ export default function App({ themeName, setThemeName }: AppProps) {
               </MenuItem>
             );
           })}
+        </Select>
+
+        <Select
+          size="small"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value as LanguageCode)}
+          inputProps={{ "aria-label": "Language selection" }}
+          sx={themeSelectSx(theme, isMobile, headerTextColor)}
+        >
+          <MenuItem value="en">English</MenuItem>
+          <MenuItem value="de">Deutsch</MenuItem>
         </Select>
 
         {shouldShowCategorySelect && (

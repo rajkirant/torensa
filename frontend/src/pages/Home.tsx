@@ -15,7 +15,7 @@ import WifiOffOutlinedIcon from "@mui/icons-material/WifiOffOutlined";
 import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
-import serviceCards from "../metadata/serviceCards.json";
+import { useServiceCards } from "../utils/language";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import type { AppOutletContext } from "../App";
 import {
@@ -53,8 +53,6 @@ function ensureAdSenseScript() {
   document.head.appendChild(script);
 }
 
-/* ===================== DATA (JSON) ===================== */
-const typedServiceCards = (serviceCards as ServiceCardConfig[]) ?? [];
 const INITIAL_VISIBLE_CARDS = 9;
 const LOAD_MORE_STEP = 6;
 
@@ -146,6 +144,7 @@ export default function Home() {
   const isOnline = useOnlineStatus();
   const isMobile = useMediaQuery("(max-width:700px)");
   const isTablet = useMediaQuery("(max-width:1050px)");
+  const typedServiceCards = useServiceCards();
   const columns = isMobile ? 1 : isTablet ? 2 : 3;
   const outlinedBorderColor =
     theme.palette.mode === "dark"

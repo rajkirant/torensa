@@ -12,7 +12,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useLocation } from "react-router-dom";
-import serviceCards from "../metadata/serviceCards.json";
+import { useServiceCards } from "../utils/language";
 import OfflineChip from "./chips/OfflineChip";
 import AiPoweredChip from "./chips/AiPoweredChip";
 import BackButton from "./buttons/BackButton";
@@ -62,6 +62,7 @@ export default function PageContainer({
 }: PageContainerProps) {
   const location = useLocation();
   const currentPath = location.pathname;
+  const serviceCards = useServiceCards();
 
   const meta = findServiceCardByPath(
     serviceCards as ServiceCardConfig[],
