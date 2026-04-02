@@ -6,6 +6,7 @@ export type Faq = {
 export type ServiceCardConfig = {
   id: string;
   component?: string;
+  name: string;
   title: string;
   description: string;
   path: string;

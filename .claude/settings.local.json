@@ -27,7 +27,8 @@
       "Bash(grep -r \"192\\\\.168\\\\.|10\\\\.0\\\\.|172\\\\.1[6-9]\\\\.|localhost\\\\|127\\\\.0\\\\.\" /c/Users/rajki/Workspace/torensa --include=*.py --include=*.ts --include=*.tsx --include=*.js --include=*.json)",
       "Bash(grep -r \"under construction\\\\|coming soon\\\\|lorem ipsum\\\\|TODO\\\\|FIXME\" /c/Users/rajki/Workspace/torensa/frontend/src/pages --include=*.tsx)",
       "Bash(grep -r \"adsense\\\\|adsbygoogle\\\\|ad\\\\|Ad\" /c/Users/rajki/Workspace/torensa/frontend/src --include=*.tsx --include=*.ts)",
-      "WebFetch(domain:torensa.com)"
+      "WebFetch(domain:torensa.com)",
+      "Bash(/c/Users/rkiran/AppData/Local/Programs/Python/Python313/python -c ':*)"
     ]
   }
 }
