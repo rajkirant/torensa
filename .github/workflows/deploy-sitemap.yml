@@ -1,0 +1,155 @@
+name: Deploy Sitemap
+
+on:
+  workflow_run:
+    workflows: ["Deploy Frontend"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-sitemap:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack and pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.0 --activate
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate sitemaps
+        working-directory: frontend
+        run: pnpm run sitemap:generate
+
+      - name: Download current sitemaps from S3
+        run: |
+          mkdir -p /tmp/current-sitemaps
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap.xml /tmp/current-sitemaps/sitemap.xml || true
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap-en.xml /tmp/current-sitemaps/sitemap-en.xml || true
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap-de.xml /tmp/current-sitemaps/sitemap-de.xml || true
+
+      - name: Check for sitemap changes
+        id: sitemap_diff
+        shell: bash
+        run: |
+          changed=false
+          for file in frontend/public/sitemap.xml frontend/public/sitemap-en.xml frontend/public/sitemap-de.xml; do
+            filename=$(basename "$file")
+            current="/tmp/current-sitemaps/$filename"
+            if [ ! -f "$current" ]; then
+              echo "$filename is new"
+              changed=true
+              break
+            fi
+            # Compare ignoring the <lastmod> in the sitemap index (changes every run)
+            if [ "$filename" = "sitemap.xml" ]; then
+              diff_result=$(diff <(grep -v '<lastmod>' "$file") <(grep -v '<lastmod>' "$current")) || true
+            else
+              diff_result=$(diff "$file" "$current") || true
+            fi
+            if [ -n "$diff_result" ]; then
+              echo "$filename has changes"
+              changed=true
+              break
+            fi
+          done
+
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          if [ "$changed" = "false" ]; then
+            echo "No sitemap changes detected; skipping deploy."
+          fi
+
+      - name: Deploy sitemaps to S3
+        if: steps.sitemap_diff.outputs.changed == 'true'
+        run: |
+          for file in sitemap.xml sitemap-en.xml sitemap-de.xml; do
+            aws s3 cp "frontend/public/$file" "s3://${{ secrets.S3_BUCKET_NAME }}/$file" \
+              --content-type "application/xml" \
+              --cache-control "public,max-age=3600"
+          done
+
+      - name: Invalidate CloudFront cache for sitemaps
+        if: steps.sitemap_diff.outputs.changed == 'true'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/sitemap.xml" "/sitemap-en.xml" "/sitemap-de.xml"
+
+      - name: Submit IndexNow for changed URLs
+        if: steps.sitemap_diff.outputs.changed == 'true'
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import sys
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          NS = {"ns": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+
+          def parse_urls(xml_path: Path) -> set[str]:
+              try:
+                  root = ET.parse(xml_path).getroot()
+                  return {loc.text.strip() for loc in root.findall(".//ns:loc", NS) if loc.text}
+              except Exception:
+                  return set()
+
+          new_dir = Path("frontend/public")
+          old_dir = Path("/tmp/current-sitemaps")
+
+          new_urls = set()
+          old_urls = set()
+          for lang_file in ["sitemap-en.xml", "sitemap-de.xml"]:
+              new_urls |= parse_urls(new_dir / lang_file)
+              old_urls |= parse_urls(old_dir / lang_file)
+
+          changed_urls = sorted(new_urls.symmetric_difference(old_urls))
+
+          if not changed_urls:
+              print("No URL changes detected; skipping IndexNow.")
+              sys.exit(0)
+
+          body = {
+              "host": "torensa.com",
+              "key": "c5683bf624454ee2a78fff4acb82ef83",
+              "keyLocation": "https://torensa.com/c5683bf624454ee2a78fff4acb82ef83.txt",
+              "urlList": changed_urls,
+          }
+
+          with open("indexnow.json", "w", encoding="utf-8") as f:
+              json.dump(body, f)
+
+          print(f"IndexNow URL count: {len(changed_urls)}")
+          PY
+
+          if [ -f indexnow.json ]; then
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              -d @indexnow.json \
+              https://api.indexnow.org/IndexNow)
+            echo "IndexNow status: $status"
+          fi
