@@ -68,6 +68,10 @@ jobs:
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
 
+      - name: Install Chromium for prerender
+        working-directory: frontend
+        run: npx puppeteer browsers install chrome
+
       - name: Build and prerender
         working-directory: frontend
         run: |
