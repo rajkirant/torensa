@@ -39,8 +39,6 @@ const staticRouteComponents = {
   "/about": "Contact",
   "/privacy": "PrivacyPolicy",
   "/terms": "TermsOfService",
-  "/login": "Login",
-  "/signup": "Signup",
 };
 
 // ── XML helpers ─────────────────────────────────────────────────────
