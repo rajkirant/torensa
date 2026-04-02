@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo } from "react";
-import { NavLink, Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import {
+  NavLink,
+  Link,
+  Outlet,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { Suspense } from "react";
 
 import { NavButton } from "./components/buttons/NavButton";
@@ -275,7 +281,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
             const nextLanguage = e.target.value as LanguageCode;
             const strippedPath = stripLanguagePrefix(location.pathname || "/");
             const isCurrentlyPrefixedEn =
-              location.pathname === "/en" || location.pathname.startsWith("/en/");
+              location.pathname === "/en" ||
+              location.pathname.startsWith("/en/");
             const nextPath = withLanguagePrefix(strippedPath, nextLanguage, {
               forcePrefix: nextLanguage === "en" && isCurrentlyPrefixedEn,
             });
@@ -292,7 +299,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           sx={themeSelectSx(theme, isMobile, headerTextColor)}
         >
           <MenuItem value="en">English</MenuItem>
-          <MenuItem value="de">Deutsch</MenuItem>
+          <MenuItem value="de">German</MenuItem>
         </Select>
 
         {shouldShowCategorySelect && (
