@@ -51,21 +51,6 @@ jobs:
         working-directory: frontend
         run: pnpm run build
 
-      - name: Check if S3 deploy has changes
-        id: s3_changes
-        shell: bash
-        run: |
-          DRYRUN_OUTPUT=$(aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete --dryrun)
-          echo "$DRYRUN_OUTPUT"
-
-          if [ -n "$DRYRUN_OUTPUT" ]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "S3 deploy changes detected"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No S3 deploy changes detected; skipping S3 deploy"
-          fi
-
       - name: Deploy dist to S3
         run: |
           aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete --exclude "assets/*"
