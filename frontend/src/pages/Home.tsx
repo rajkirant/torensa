@@ -203,7 +203,7 @@ export default function Home() {
     if (!normalizedSearchTerm) return true;
     const keywordText = (card.keywords ?? []).join(" ");
     const searchableText =
-      `${card.title} ${card.description} ${card.ctaLabel} ${keywordText}`.toLowerCase();
+      `${card.name} ${card.description} ${card.ctaLabel} ${keywordText}`.toLowerCase();
     return searchableText.includes(normalizedSearchTerm);
   };
   const filteredCards = cards.filter((card) => {
@@ -345,7 +345,7 @@ export default function Home() {
                 }}
               >
                 {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
-                <h3>{card.title}</h3>
+                <h3>{card.name}</h3>
                 <p style={secondaryText}>{card.description}</p>
                 <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
               </div>
@@ -460,7 +460,7 @@ export default function Home() {
                 }}
               >
                 {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
-                <h3>{card.title}</h3>
+                <h3>{card.name}</h3>
                 <p style={secondaryText}>{card.description}</p>
                 <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
               </div>
