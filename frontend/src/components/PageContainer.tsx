@@ -71,7 +71,7 @@ export default function PageContainer({
     stripLanguagePrefix(currentPath),
   );
 
-  const title = meta?.title;
+  const title = meta?.name;
   const advancedOptionsEnabled = Boolean(meta?.advancedOptionsEnabled);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
