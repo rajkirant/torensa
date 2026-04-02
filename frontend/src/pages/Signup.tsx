@@ -69,7 +69,7 @@ export default function Signup() {
 
   return (
     <div style={{ maxWidth: 420, margin: "80px auto" }}>
-      <h2>Create Account</h2>
+      <h1>Create Account</h1>
       <p style={{ color: "#6b7280", marginBottom: 24, lineHeight: 1.6 }}>
         Create a free Torensa account to unlock tools that require
         authentication, save your preferences, and get the most out of
