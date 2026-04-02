@@ -108,36 +108,44 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
+          import glob
           import json
           import subprocess
           import sys
           import xml.etree.ElementTree as ET
 
-          CURRENT_PATH = "frontend/public/sitemap.xml"
+          SITEMAP_PATTERN = "frontend/public/sitemap-*.xml"
 
           def parse_urls(xml_text: str) -> set[str]:
               root = ET.fromstring(xml_text)
               ns = {"ns": "http://www.sitemaps.org/schemas/sitemap/0.9"}
               return {loc.text.strip() for loc in root.findall(".//ns:loc", ns) if loc.text}
 
-          try:
-              with open(CURRENT_PATH, "r", encoding="utf-8") as f:
-                  current_xml = f.read()
-          except FileNotFoundError:
-              print("Sitemap not found; skipping IndexNow.")
+          def collect_urls_from_sitemaps(paths, use_git_prev=False) -> set[str]:
+              urls = set()
+              for p in paths:
+                  try:
+                      if use_git_prev:
+                          xml_text = subprocess.check_output(
+                              ["git", "show", f"HEAD^:{p}"],
+                              text=True,
+                              stderr=subprocess.DEVNULL,
+                          )
+                      else:
+                          with open(p, "r", encoding="utf-8") as f:
+                              xml_text = f.read()
+                      urls |= parse_urls(xml_text)
+                  except Exception:
+                      pass
+              return urls
+
+          sitemap_files = sorted(glob.glob(SITEMAP_PATTERN))
+          if not sitemap_files:
+              print("No language sitemaps found; skipping IndexNow.")
               sys.exit(0)
 
-          try:
-              prev_xml = subprocess.check_output(
-                  ["git", "show", f"HEAD^:{CURRENT_PATH}"],
-                  text=True,
-                  stderr=subprocess.DEVNULL,
-              )
-          except Exception:
-              prev_xml = ""
-
-          current_urls = parse_urls(current_xml)
-          prev_urls = parse_urls(prev_xml) if prev_xml else set()
+          current_urls = collect_urls_from_sitemaps(sitemap_files)
+          prev_urls = collect_urls_from_sitemaps(sitemap_files, use_git_prev=True)
 
           changed_urls = sorted(current_urls.symmetric_difference(prev_urls))
 
