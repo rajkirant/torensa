@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import { useLocation } from "react-router-dom";
 import serviceCardsEn from "../metadata/serviceCards.json";
 import serviceCardsDe from "../metadata/serviceCards.de.json";
+import pageDescriptionsEn from "../metadata/pageDescriptions.json";
+import pageDescriptionsDe from "../metadata/pageDescriptions.de.json";
 import type { ServiceCardConfig } from "./serviceCards";
 import i18n from "../i18n";
 
@@ -102,4 +104,13 @@ export function getServiceCardsForLanguage(language: LanguageCode) {
 export function useServiceCards() {
   const { language } = useLanguage();
   return useMemo(() => getServiceCardsForLanguage(language), [language]);
+}
+
+export function getPageDescriptionsForLanguage(language: LanguageCode) {
+  return language === "de" ? pageDescriptionsDe : pageDescriptionsEn;
+}
+
+export function usePageDescriptions() {
+  const { language } = useLanguage();
+  return useMemo(() => getPageDescriptionsForLanguage(language), [language]);
 }

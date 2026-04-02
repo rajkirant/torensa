@@ -17,6 +17,7 @@ import CodeOutlinedIcon from "@mui/icons-material/CodeOutlined";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import {
   useLanguage,
+  usePageDescriptions,
   useServiceCards,
   withLanguagePrefix,
 } from "../utils/language";
@@ -42,7 +43,6 @@ import {
   getServiceCardsByCategory,
 } from "../utils/serviceCards";
 import { toolIcons } from "../metadata/toolIcons";
-import pageDescriptions from "../metadata/pageDescriptions.json";
 import { useTranslation } from "react-i18next";
 
 const ADSENSE_CLIENT_ID = "ca-pub-7466905660040122";
@@ -156,6 +156,7 @@ export default function Home() {
   const isTablet = useMediaQuery("(max-width:1050px)");
   const { language } = useLanguage();
   const typedServiceCards = useServiceCards();
+  const pageDescriptions = usePageDescriptions();
   const columns = isMobile ? 1 : isTablet ? 2 : 3;
   const outlinedBorderColor =
     theme.palette.mode === "dark"

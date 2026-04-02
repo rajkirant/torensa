@@ -1,6 +1,8 @@
-import { privacy as desc } from "../metadata/pageDescriptions.json";
+import { usePageDescriptions } from "../utils/language";
 
 export default function PrivacyPolicy() {
+  const { privacy: desc } = usePageDescriptions();
+
   return (
     <>
       <header style={{ marginBottom: 40 }}>
