@@ -1,0 +1,35 @@
+{
+  "home": {
+    "seoText": [
+      "Torensa is a growing collection of free online tools built to make everyday work faster, safer, and more reliable without forcing you to create an account or pay a fee. The platform brings together practical utilities for writing, converting, calculating, formatting, organizing, and researching, with a focus on clean interfaces that let you get in, get a result, and get back to your task. Many tools are designed for developers, such as code formatters, validators, and data utilities, while others are made for anyone who needs quick answers, better productivity, or privacy friendly workflows. The goal is to remove friction and replace it with clarity: open a tool, drop in your input, and see the output instantly.",
+      "A major emphasis is privacy and control. Torensa avoids tracking heavy analytics and keeps the experience lightweight, so you can use tools without feeling watched or profiled. Many features are offline capable, which means a tool can keep working even when your connection is unstable or when you prefer to stay offline. This matters for travel, secure environments, or anyone who just wants consistent performance. When a tool uses AI assistance, the behavior is made clear in the interface and the results are designed to be helpful without locking you into a paid tier.",
+      "Torensa is also fully open source on GitHub, which means the code is visible, auditable, and ready for contributions. You can review how a tool works, suggest improvements, or build your own self-hosted version for your team. This transparency builds trust and lets the community shape the roadmap. Whether you are a student, a builder, a small business, or just someone who values privacy and simplicity, Torensa offers a dependable set of resources that keep your data in your hands and your workflow moving forward."
+    ]
+  },
+  "privacy": {
+    "introduction": "Torensa is independently operated and maintained by a single individual through torensa.com. This Privacy Policy explains how information may be collected, used, and protected when you visit the website.",
+    "automaticallyCollected": "When you visit our website, we may automatically collect certain information through Google Analytics, including your IP address, browser type, operating system, referring URLs, pages visited, and timestamps. This data helps us understand how visitors use our site and improve the user experience.",
+    "accountInfo": "If you create an account, we collect your username, email address, and password (stored in hashed form). This information is used solely for authentication and access to tools that require login.",
+    "toolUsage": "Many of our tools process data entirely in your browser and do not send any data to our servers. For tools that require server-side processing (such as background removal or document conversion), files are processed in memory and are not stored after the response is returned.",
+    "cookies": "We use the following types of cookies:",
+    "thirdPartyServices": "We use the following third-party services:",
+    "dataRetention": "We do not store files or tool processing data. Account information is retained until you request deletion. Analytics data is governed by Google Analytics' retention policies.",
+    "yourRights": "Depending on your location, you may have the right to access, correct, or delete your personal data. To exercise these rights, contact us at admin@torensa.com.",
+    "childrensPrivacy": "Our website is not directed at children under 13. We do not knowingly collect personal information from children.",
+    "changesToPolicy": "We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date.",
+    "contactUs": "If you have questions about this Privacy Policy, email us at admin@torensa.com."
+  },
+  "terms": {
+    "acceptance": "By accessing or using Torensa (torensa.com), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the website.",
+    "descriptionOfService": "Torensa provides a collection of free online tools for productivity, document processing, image editing, and developer utilities. Many tools run entirely in your browser; some require server-side processing.",
+    "userAccounts": "Certain tools require you to create an account. You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. You must notify us immediately of any unauthorized use.",
+    "acceptableUse": "You agree not to:",
+    "intellectualProperty": "Torensa is an open-source project. The source code is available under its respective license on GitHub. You retain ownership of any content you create using our tools. We do not claim rights over files you upload or outputs you generate.",
+    "privacySection": "Your use of the service is also governed by our Privacy Policy, which describes how we collect, use, and protect your information.",
+    "disclaimerOfWarranties": "The service is provided \"as is\" and \"as available\" without warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, error-free, or free of harmful components. Use the tools at your own risk.",
+    "limitationOfLiability": "To the fullest extent permitted by law, Torensa and its maintainers shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenue arising from your use of the service.",
+    "modifications": "We reserve the right to modify or discontinue the service (or any part of it) at any time without notice. We may also update these Terms of Service from time to time. Continued use of the service after changes constitutes acceptance of the updated terms.",
+    "termination": "We may suspend or terminate your access to the service at our discretion, without prior notice, if you violate these terms or engage in conduct that we determine to be harmful to the service or other users.",
+    "contact": "If you have questions about these Terms of Service, email us at admin@torensa.com."
+  }
+}
