@@ -2,6 +2,7 @@
   {
     "id": "song-identifier",
     "component": "SongIdentifier",
+    "name": "Song-Erkennung – Welcher Song läuft gerade?",
     "title": "Song-Erkennung – Welcher Song läuft gerade?",
     "description": "Erkennen Sie jeden Song in Ihrer Umgebung sofort. Mit direkten Links zu Spotify, YouTube Music und mehr.",
     "path": "/song-identifier",
@@ -77,7 +78,8 @@
   {
     "id": "text-share",
     "component": "EasyShare",
-    "title": "Easy Share (Text + Dateien)",
+    "name": "Easy Share (Text + Dateien)",
+    "title": "Easy Share – Texte & Dateien schnell online teilen",
     "description": "Teilen Sie Dateien oder Text zwischen Geräten über das Internet – ohne Registrierung, Telefonnummer oder E-Mail.",
     "path": "/easy-share",
     "ctaLabel": "Easy Share öffnen",
@@ -85,7 +87,16 @@
     "authRequired": false,
     "detailedDescription": "Mit Easy Share senden Sie Text und bis zu 5 Dateien (je bis zu 1 GB) zwischen Geräten in verschiedenen Netzwerken – einfach über einen 4-stelligen Zugangscode per Internet. Keine Registrierung, kein Telefon und keine E-Mail erforderlich.",
     "categoryId": "communication",
-    "keywords": ["text", "share", "code", "clipboard", "transfer", "teilen", "datei senden", "zwischenablage"],
+    "keywords": [
+      "text",
+      "share",
+      "code",
+      "clipboard",
+      "transfer",
+      "teilen",
+      "datei senden",
+      "zwischenablage"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -132,7 +143,8 @@
   {
     "id": "bulk-email",
     "component": "BulkEmail/BulkEmail",
-    "title": "Massen-E-Mail-Versand",
+    "name": "Massen-E-Mail-Versand",
+    "title": "Massen-E-Mail-Versand – Viele E-Mails kostenlos senden",
     "description": "Versenden Sie personalisierte Massen-E-Mails über Ihr verbundenes Gmail-Konto.",
     "path": "/bulk-email",
     "ctaLabel": "Massen-E-Mail öffnen",
@@ -140,14 +152,24 @@
     "authRequired": true,
     "detailedDescription": "Erstellen und versenden Sie E-Mail-Kampagnen zentral an einem Ort. Verbinden Sie Gmail per OAuth, erstellen Sie Kontaktgruppen, importieren Sie Empfänger aus Excel, personalisieren Sie Betreff und Inhalt und fügen Sie Anhänge hinzu. Ihre SMTP-Konfiguration wird pro Konto gespeichert und für den Versand über Ihre eigene Gmail-Verbindung verwendet.",
     "categoryId": "communication",
-    "keywords": ["email", "mail", "campaign", "newsletter", "gmail", "massen-email", "e-mail versand", "kampagne"],
+    "keywords": [
+      "email",
+      "mail",
+      "campaign",
+      "newsletter",
+      "gmail",
+      "massen-email",
+      "e-mail versand",
+      "kampagne"
+    ],
     "isActive": false,
     "advancedOptionsEnabled": false
   },
   {
     "id": "text-to-qr",
     "component": "TextToQr",
-    "title": "Text-zu-QR-Code-Generator",
+    "name": "Text-zu-QR-Code-Generator",
+    "title": "Text-zu-QR-Code-Generator – QR-Codes kostenlos erstellen",
     "description": "Erstellen Sie QR-Codes aus Text oder URLs – mit optionaler Logo-Einbindung.",
     "path": "/qr-code-generator",
     "ctaLabel": "QR-Code erstellen",
@@ -155,7 +177,14 @@
     "authRequired": false,
     "detailedDescription": "Erzeugen Sie scannbare QR-Codes aus beliebigem Text oder Links mit Live-Vorschau. Fügen Sie optional ein Logo und eine kurze Beschriftung hinzu und laden Sie das fertige Bild als PNG herunter. Die Verarbeitung erfolgt vollständig im Browser – es werden keine Daten hochgeladen.",
     "categoryId": "business",
-    "keywords": ["qr", "qrcode", "text", "link", "qr-code erstellen", "qr-code generator"],
+    "keywords": [
+      "qr",
+      "qrcode",
+      "text",
+      "link",
+      "qr-code erstellen",
+      "qr-code generator"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -196,7 +225,8 @@
   {
     "id": "barcode-generator",
     "component": "BarcodeGenerator",
-    "title": "Barcode-Generator",
+    "name": "Barcode-Generator",
+    "title": "Barcode-Generator – Barcodes kostenlos online erstellen",
     "description": "Erstellen Sie Barcodes (Code 128, Code 39, EAN, UPC) und laden Sie sie als PNG herunter.",
     "path": "/barcode-generator",
     "ctaLabel": "Barcode erstellen",
@@ -255,7 +285,8 @@
   {
     "id": "image-compressor",
     "component": "ImageCompressor",
-    "title": "Bildkomprimierung",
+    "name": "Bildkomprimierung",
+    "title": "Bildkomprimierung – Bildgröße online kostenlos reduzieren",
     "description": "Komprimieren Sie Bilder lokal mit sofortiger Vorschau.",
     "path": "/image-compressor",
     "ctaLabel": "Bilder komprimieren",
@@ -263,7 +294,17 @@
     "authRequired": false,
     "detailedDescription": "Reduzieren Sie die Dateigröße Ihrer Bilder direkt im Browser – ohne Upload. Sehen Sie sofort eine Vorschau der ausgewählten Bilder, stellen Sie die Komprimierungsqualität ein und laden Sie die Ergebnisse einzeln oder als ZIP-Archiv herunter.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "compress", "optimize", "size", "bild komprimieren", "bildgröße reduzieren", "foto komprimieren"],
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "compress",
+      "optimize",
+      "size",
+      "bild komprimieren",
+      "bildgröße reduzieren",
+      "foto komprimieren"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -304,7 +345,8 @@
   {
     "id": "image-format-converter",
     "component": "ImageFormatConverter",
-    "title": "Bildformat-Konverter",
+    "name": "Bildformat-Konverter",
+    "title": "Bildformat-Konverter – JPG PNG WebP kostenlos konvertieren",
     "description": "Konvertieren Sie PNG-, JPG-, WEBP- und BMP-Bilder vollständig im Browser.",
     "path": "/image-format-converter",
     "ctaLabel": "Bild konvertieren",
@@ -364,7 +406,8 @@
   {
     "id": "image-pdf-to-pdf",
     "component": "imagePdfToPdf",
-    "title": "Bild / PDF Zusammenführung",
+    "name": "Bild / PDF Zusammenführung",
+    "title": "Bild & PDF Zusammenführung – Dateien online zusammenführen",
     "description": "Bilder und PDFs zu einem einzigen PDF zusammenführen und Seiten offline neu anordnen.",
     "path": "/pdf-merger",
     "ctaLabel": "PDF erstellen",
@@ -423,7 +466,8 @@
   {
     "id": "pdf-splitter",
     "component": "PdfSplitter",
-    "title": "PDF-Splitter",
+    "name": "PDF-Splitter",
+    "title": "PDF-Splitter – PDF-Seiten kostenlos online aufteilen",
     "description": "Seitenbereiche extrahieren oder ein PDF in mehrere Dateien aufteilen.",
     "path": "/pdf-splitter",
     "ctaLabel": "PDF teilen",
@@ -431,7 +475,15 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie ein PDF hoch und teilen Sie es lokal in Ihrem Browser. Extrahieren Sie ausgewählte Seiten zu einer einzigen PDF oder erzeugen Sie eine PDF pro Seite als ZIP-Download. Die Verarbeitung erfolgt vollständig auf dem Gerät – für Datenschutz und Offline-Nutzung.",
     "categoryId": "utilities",
-    "keywords": ["pdf", "split", "extract", "pages", "document", "pdf teilen", "seiten extrahieren"],
+    "keywords": [
+      "pdf",
+      "split",
+      "extract",
+      "pages",
+      "document",
+      "pdf teilen",
+      "seiten extrahieren"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -472,7 +524,8 @@
   {
     "id": "image-crop-tool",
     "component": "ImageCropTool",
-    "title": "Bild-Zuschneide-Tool",
+    "name": "Bild-Zuschneide-Tool",
+    "title": "Bild-Zuschneide-Tool – Fotos online zuschneiden & skalieren",
     "description": "Bilder lokal zuschneiden – mit Live-Vorschau und Exportoptionen.",
     "path": "/image-crop-tool",
     "ctaLabel": "Bild zuschneiden",
@@ -480,7 +533,16 @@
     "authRequired": false,
     "detailedDescription": "Wählen Sie einen Zuschnitt mit pixelgenauen Steuerelementen, sehen Sie eine Vorschau des ausgewählten Bereichs und exportieren Sie als PNG, JPEG oder WebP. Alles läuft vollständig im Browser – Bilder verlassen Ihr Gerät nie.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "crop", "resize", "edit", "bild zuschneiden", "foto zuschneiden"],
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "crop",
+      "resize",
+      "edit",
+      "bild zuschneiden",
+      "foto zuschneiden"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -521,7 +583,8 @@
   {
     "id": "image-background-editor",
     "component": "ImageBackgroundEditor",
-    "title": "Bildhintergrund Entfernen/Ändern",
+    "name": "Bildhintergrund Entfernen/Ändern",
+    "title": "Bildhintergrund Entfernen & Ändern – Kostenlos Online",
     "description": "Hintergrund entfernen, durch eine Vollfarbe ersetzen oder ein eigenes Hintergrundbild verwenden – alles in einem Tool.",
     "path": "/image-background-editor",
     "ctaLabel": "Hintergrund bearbeiten",
@@ -587,7 +650,8 @@
   {
     "id": "invoice-generator",
     "component": "InvoiceGenerator",
-    "title": "Rechnungs- / Beleg-Generator",
+    "name": "Rechnungs- / Beleg-Generator",
+    "title": "Rechnungs- & Beleg-Generator – Kostenlos Online erstellen",
     "description": "Erstellen Sie professionelle Rechnungen und Belege direkt im Browser.",
     "path": "/invoice-generator",
     "ctaLabel": "Rechnung erstellen",
@@ -595,7 +659,16 @@
     "authRequired": false,
     "detailedDescription": "Erstellen Sie professionelle Rechnungen oder Belege mit Verkäufer-/Kundendaten, Positionen, Steuern, Versand, Rabatten und Notizen. Die Summen werden automatisch berechnet und das fertige Dokument kann als PDF exportiert werden. Die Daten bleiben lokal und können im Browser wiederverwendet werden.",
     "categoryId": "business",
-    "keywords": ["invoice", "receipt", "billing", "payment", "business", "rechnung", "beleg", "abrechnung"],
+    "keywords": [
+      "invoice",
+      "receipt",
+      "billing",
+      "payment",
+      "business",
+      "rechnung",
+      "beleg",
+      "abrechnung"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -636,7 +709,8 @@
   {
     "id": "text-diff-checker",
     "component": "TextDiffChecker",
-    "title": "Text-Unterschiede prüfen",
+    "name": "Text-Unterschiede prüfen",
+    "title": "Text-Unterschiede prüfen – Zwei Texte online vergleichen",
     "description": "Vergleichen Sie zwei Textversionen und sehen Sie, was sich geändert hat.",
     "path": "/text-diff-checker",
     "ctaLabel": "Text vergleichen",
@@ -644,7 +718,15 @@
     "authRequired": false,
     "detailedDescription": "Fügen Sie zwei Textversionen ein und sehen Sie zeilenweise Unterschiede, einschließlich Ergänzungen, Löschungen und geänderter Blöcke. Ideal für das Prüfen von Änderungen in Inhalten, Konfigurationen oder Code-Snippets. Alles läuft lokal im Browser.",
     "categoryId": "developer",
-    "keywords": ["text", "diff", "compare", "changes", "checker", "textvergleich", "unterschiede"],
+    "keywords": [
+      "text",
+      "diff",
+      "compare",
+      "changes",
+      "checker",
+      "textvergleich",
+      "unterschiede"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -685,7 +767,8 @@
   {
     "id": "json-formatter-validator",
     "component": "JsonFormatterDiff",
-    "title": "JSON-Formatter + Validator",
+    "name": "JSON-Formatter + Validator",
+    "title": "JSON-Formatter & Validator – JSON online formatieren",
     "description": "JSON sofort validieren, formatieren und minimieren.",
     "path": "/json-formatter-validator",
     "ctaLabel": "JSON-Tool öffnen",
@@ -693,7 +776,15 @@
     "authRequired": false,
     "detailedDescription": "Fügen Sie JSON ein und prüfen Sie es mit klaren Fehlermeldungen. Formatieren Sie mit Einrückungen für bessere Lesbarkeit oder minimieren Sie für kompakte Payloads. Das Tool läuft vollständig clientseitig und ist schnell sowie datenschutzfreundlich.",
     "categoryId": "developer",
-    "keywords": ["json", "format", "validator", "minify", "pretty", "json formatieren", "json prüfen"],
+    "keywords": [
+      "json",
+      "format",
+      "validator",
+      "minify",
+      "pretty",
+      "json formatieren",
+      "json prüfen"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -734,7 +825,8 @@
   {
     "id": "spring-boot-log-analyzer",
     "component": "SpringBootLogAnalyzer",
-    "title": "Spring-Boot-Log-Analyzer",
+    "name": "Spring-Boot-Log-Analyzer",
+    "title": "Spring-Boot-Log-Analyzer – Java-Logs online debuggen",
     "description": "Spring-Boot-Logs analysieren und wahrscheinliche Ursachen erkennen.",
     "path": "/spring-boot-log-analyzer",
     "ctaLabel": "Logs analysieren",
@@ -742,7 +834,16 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie Spring-Boot-Logs hoch oder fügen Sie sie ein, um wahrscheinliche Erstfehler, Exception-Ketten, Stack-Frame-Stellen und Correlation-ID-Cluster zu erkennen. Exportieren Sie einen strukturierten JSON-Bericht für das Teilen und weitere Debugging-Schritte.",
     "categoryId": "developer",
-    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug", "log analyse", "spring boot logs"],
+    "keywords": [
+      "spring",
+      "boot",
+      "log",
+      "analyzer",
+      "exception",
+      "debug",
+      "log analyse",
+      "spring boot logs"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -779,7 +880,8 @@
   {
     "id": "cron-generator-validator",
     "component": "CronExpressionBuilder",
-    "title": "KI‑Cron‑Generator + Validator",
+    "name": "KI‑Cron‑Generator + Validator",
+    "title": "KI‑Cron‑Ausdruck-Generator & Validator Online",
     "description": "Beschreiben Sie Ihren Zeitplan in einfacher Sprache und lassen Sie KI Cron-Ausdrücke erzeugen.",
     "path": "/cron-generator-validator",
     "ctaLabel": "Cron-Tool öffnen",
@@ -844,7 +946,8 @@
   {
     "id": "jwt-encoder-decoder",
     "component": "JwtTool/JwtTool",
-    "title": "JWT‑Encoder / Decoder",
+    "name": "JWT‑Encoder / Decoder",
+    "title": "JWT‑Encoder & Decoder – JWT-Tokens online analysieren",
     "description": "JWTs decodieren und signierte HS256/HS512‑Tokens erzeugen.",
     "path": "/jwt-decoder-encoder",
     "ctaLabel": "JWT‑Tool öffnen",
@@ -852,7 +955,14 @@
     "authRequired": false,
     "detailedDescription": "Prüfen Sie JWT‑Header und Payload, bearbeiten Sie Claims und erzeugen Sie neue Tokens mit HS256 oder HS512. Ideal für API‑Tests und Debugging von Auth‑Flows. Alles läuft im Browser, Token‑Daten werden nicht an ein Backend gesendet.",
     "categoryId": "developer",
-    "keywords": ["jwt", "token", "encode", "decode", "security", "auth"],
+    "keywords": [
+      "jwt",
+      "token",
+      "encode",
+      "decode",
+      "security",
+      "auth"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -893,7 +1003,8 @@
   {
     "id": "uuid-generator",
     "component": "UuidGenerator",
-    "title": "UUID‑Generator",
+    "name": "UUID‑Generator",
+    "title": "UUID‑Generator – Eindeutige IDs kostenlos online erstellen",
     "description": "UUID‑v4‑Werte schnell in großer Menge erzeugen.",
     "path": "/uuid-generator",
     "ctaLabel": "UUID erzeugen",
@@ -901,7 +1012,14 @@
     "authRequired": false,
     "detailedDescription": "Erstellen Sie eine oder mehrere UUID‑v4‑Kennungen mit Optionen wie Großschreibung oder Entfernen von Bindestrichen. Kopieren Sie alle generierten Werte auf einmal für Entwicklung, Tests und Datenworkflows.",
     "categoryId": "developer",
-    "keywords": ["uuid", "guid", "identifier", "id", "generate", "kennung"],
+    "keywords": [
+      "uuid",
+      "guid",
+      "identifier",
+      "id",
+      "generate",
+      "kennung"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -942,7 +1060,8 @@
   {
     "id": "string-encryptor",
     "component": "StringEncryptor",
-    "title": "String‑Verschlüsseler / Entschlüsseler",
+    "name": "String‑Verschlüsseler / Entschlüsseler",
+    "title": "String‑Verschlüsseler & Entschlüsseler – Text online verschlüsseln",
     "description": "Text mit einem Secret Key per AES ver- und entschlüsseln, inkl. Jasypt‑Workflows.",
     "path": "/string-encryptor",
     "ctaLabel": "Verschlüsselung öffnen",
@@ -1001,7 +1120,8 @@
   {
     "id": "api-forge",
     "component": "ApiForge",
-    "title": "Torensa API Forge",
+    "name": "Torensa API Forge",
+    "title": "Torensa API Forge – REST-APIs online testen & erstellen",
     "description": "API‑Requests direkt im Browser erstellen und testen.",
     "path": "/api-request-builder",
     "ctaLabel": "API Forge öffnen",
@@ -1009,7 +1129,15 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge ermöglicht API‑Requests direkt im Browser, einschließlich JWT‑Bearer‑Auth, benutzerdefinierten Headern, Query/Path‑Parametern sowie JSON‑ oder Raw‑Body.",
     "categoryId": "developer",
-    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
+    "keywords": [
+      "api",
+      "request",
+      "http",
+      "rest",
+      "headers",
+      "json",
+      "test"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1051,7 +1179,8 @@
   {
     "id": "word-to-pdf",
     "component": "WordToPdf",
-    "title": "Word‑zu‑PDF‑Konverter",
+    "name": "Word‑zu‑PDF‑Konverter",
+    "title": "Word‑zu‑PDF‑Konverter – DOCX kostenlos in PDF umwandeln",
     "description": "Word‑Dokumente (.doc, .docx) mit exakter Layouttreue in PDF umwandeln.",
     "path": "/word-to-pdf",
     "ctaLabel": "In PDF umwandeln",
@@ -1059,7 +1188,15 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie ein Word‑Dokument (.doc oder .docx) hoch und wandeln Sie es in Sekunden in ein PDF um. Die Konvertierung läuft serverseitig mit LibreOffice und erhält Schriftarten, Tabellen, Bilder und Formatierung. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
     "categoryId": "utilities",
-    "keywords": ["word", "docx", "doc", "pdf", "convert", "document", "word in pdf"],
+    "keywords": [
+      "word",
+      "docx",
+      "doc",
+      "pdf",
+      "convert",
+      "document",
+      "word in pdf"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1090,7 +1227,8 @@
   {
     "id": "excel-to-pdf",
     "component": "ExcelToPdf",
-    "title": "Excel‑zu‑PDF‑Konverter",
+    "name": "Excel‑zu‑PDF‑Konverter",
+    "title": "Excel‑zu‑PDF‑Konverter – XLSX kostenlos in PDF umwandeln",
     "description": "Excel‑Tabellen (.xls, .xlsx) mit korrektem Layout und Diagrammen in PDF umwandeln.",
     "path": "/excel-to-pdf",
     "ctaLabel": "In PDF umwandeln",
@@ -1138,7 +1276,8 @@
   {
     "id": "pdf-to-word",
     "component": "PdfToWord",
-    "title": "PDF‑zu‑Word‑Konverter",
+    "name": "PDF‑zu‑Word‑Konverter",
+    "title": "PDF‑zu‑Word‑Konverter – PDF kostenlos in DOCX umwandeln",
     "description": "PDF‑Dateien in Sekunden in bearbeitbare Word‑Dokumente (.docx) umwandeln.",
     "path": "/pdf-to-word",
     "ctaLabel": "In Word umwandeln",
@@ -1146,7 +1285,14 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie ein PDF hoch und wandeln Sie es in eine bearbeitbare .docx‑Datei um. Die Konvertierung läuft serverseitig mit LibreOffice und erhält Layout und Text so gut wie möglich. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
     "categoryId": "utilities",
-    "keywords": ["pdf", "word", "docx", "convert", "document", "pdf in word"],
+    "keywords": [
+      "pdf",
+      "word",
+      "docx",
+      "convert",
+      "document",
+      "pdf in word"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1173,7 +1319,8 @@
   {
     "id": "image-generator",
     "component": "AiImageGenerator",
-    "title": "KI‑Bildgenerator",
+    "name": "KI‑Bildgenerator",
+    "title": "KI‑Bildgenerator – Bilder mit KI online erstellen",
     "description": "Beschreiben Sie ein Bild in Alltagssprache und die KI erzeugt es als PNG.",
     "path": "/image-generator",
     "ctaLabel": "Bildgenerator öffnen",
@@ -1228,7 +1375,8 @@
   {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
-    "title": "PDF‑Text‑Extractor (OCR)",
+    "name": "PDF‑Text‑Extractor (OCR)",
+    "title": "PDF‑Text‑Extractor (OCR) – Text aus PDF online extrahieren",
     "description": "Text aus gescannten oder digitalen PDFs per OCR extrahieren.",
     "path": "/pdf-text-extractor",
     "ctaLabel": "Text extrahieren",
@@ -1285,7 +1433,8 @@
   {
     "id": "excel-to-csv",
     "component": "DataFormatConverter",
-    "title": "Datenformat‑Konverter",
+    "name": "Datenformat‑Konverter",
+    "title": "Datenformat‑Konverter – CSV JSON XML kostenlos konvertieren",
     "description": "Excel‑, CSV‑ und JSON‑Dateien direkt im Browser konvertieren.",
     "path": "/data-format-converter",
     "ctaLabel": "Dateien konvertieren",
@@ -1293,7 +1442,15 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie eine Excel‑, CSV‑ oder JSON‑Datei hoch und konvertieren Sie sie in eines der anderen Formate. Parsing und Konvertierung erfolgen vollständig clientseitig – Ihre Dateien bleiben auf Ihrem Gerät.",
     "categoryId": "utilities",
-    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data", "daten konvertieren"],
+    "keywords": [
+      "excel",
+      "csv",
+      "json",
+      "spreadsheet",
+      "convert",
+      "data",
+      "daten konvertieren"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1334,7 +1491,8 @@
   {
     "id": "subtitle-downloader",
     "component": "SubtitleDownloader",
-    "title": "Untertitel‑Downloader",
+    "name": "Untertitel‑Downloader",
+    "title": "Untertitel‑Downloader – Film-Untertitel kostenlos herunterladen",
     "description": "SRT‑Untertitel aus Online‑Videos mit yt‑dlp herunterladen.",
     "path": "/subtitle-downloader",
     "ctaLabel": "Untertitel herunterladen",
@@ -1342,7 +1500,15 @@
     "authRequired": false,
     "detailedDescription": "Fügen Sie eine Video‑URL ein, um Untertitel als SRT zu laden. Das Tool versucht zuerst vorhandene Untertitel und fällt auf automatisch generierte zurück, falls verfügbar. Unterstützt YouTube und andere von yt‑dlp unterstützte Seiten.",
     "categoryId": "utilities",
-    "keywords": ["subtitle", "subtitles", "srt", "captions", "yt-dlp", "video", "untertitel"],
+    "keywords": [
+      "subtitle",
+      "subtitles",
+      "srt",
+      "captions",
+      "yt-dlp",
+      "video",
+      "untertitel"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1369,7 +1535,8 @@
   {
     "id": "speech-to-text",
     "component": "Transcribe",
-    "title": "Sprache‑zu‑Text‑Konverter",
+    "name": "Sprache‑zu‑Text‑Konverter",
+    "title": "Sprache‑zu‑Text‑Konverter – Audio kostenlos transkribieren",
     "description": "Sprache in Audio/Video‑Dateien mit AWS Transcribe in präzisen Text umwandeln.",
     "path": "/speech-to-text",
     "ctaLabel": "Sprache‑zu‑Text öffnen",
@@ -1413,7 +1580,8 @@
   {
     "id": "video-to-audio",
     "component": "VideoToAudio",
-    "title": "Video‑zu‑MP3/WAV",
+    "name": "Video‑zu‑MP3/WAV",
+    "title": "Video‑zu‑MP3/WAV‑Konverter – Audio kostenlos extrahieren",
     "description": "Audio aus Videos extrahieren und als MP3 oder WAV herunterladen.",
     "path": "/video-to-audio",
     "ctaLabel": "Audio extrahieren",
@@ -1421,7 +1589,15 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie eine Videodatei hoch und extrahieren Sie die Audiospur als MP3 oder WAV. Die Konvertierung läuft serverseitig mit FFmpeg. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
     "categoryId": "utilities",
-    "keywords": ["video", "audio", "mp3", "wav", "extract", "convert", "audio extrahieren"],
+    "keywords": [
+      "video",
+      "audio",
+      "mp3",
+      "wav",
+      "extract",
+      "convert",
+      "audio extrahieren"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1448,7 +1624,8 @@
   {
     "id": "voice-changer",
     "component": "VoiceChanger",
-    "title": "Stimmen‑Changer (Charakter‑Presets)",
+    "name": "Stimmen‑Changer (Charakter‑Presets)",
+    "title": "Stimmen‑Changer mit Charakter‑Presets – Kostenlos Online",
     "description": "Audio hochladen und in charakterähnliche Stimmen umwandeln.",
     "path": "/voice-changer",
     "ctaLabel": "Stimme ändern",
@@ -1494,7 +1671,8 @@
   {
     "id": "habit-tracker",
     "component": "HabitTracker",
-    "title": "Gewohnheiten‑Tracker",
+    "name": "Gewohnheiten‑Tracker",
+    "title": "Gewohnheiten‑Tracker – Tägliche Ziele online verfolgen",
     "description": "Tägliche Gewohnheiten verfolgen, Punkte sammeln und Fortschritt visualisieren.",
     "path": "/habit-tracker",
     "ctaLabel": "Gewohnheiten verfolgen",
@@ -1542,7 +1720,8 @@
   {
     "id": "text-to-speech",
     "component": "TextToSpeech",
-    "title": "Text‑zu‑Sprache‑Konverter",
+    "name": "Text‑zu‑Sprache‑Konverter",
+    "title": "Text‑zu‑Sprache‑Konverter – Text in Audio umwandeln",
     "description": "Text in natürliche Sprache umwandeln – mit den integrierten Browser‑Stimmen.",
     "path": "/text-to-speech",
     "ctaLabel": "Text‑zu‑Sprache öffnen",
@@ -1601,7 +1780,8 @@
   {
     "id": "sql-formatter",
     "component": "SqlFormatter",
-    "title": "SQL‑Formatter + Beautifier",
+    "name": "SQL‑Formatter + Beautifier",
+    "title": "SQL‑Formatter & Beautifier – SQL online formatieren",
     "description": "SQL‑Abfragen sofort formatieren, minimieren und bereinigen.",
     "path": "/sql-formatter",
     "ctaLabel": "SQL‑Tool öffnen",
@@ -1658,7 +1838,8 @@
   {
     "id": "bmi-calculator",
     "component": "BmiCalculator",
-    "title": "BMI‑Rechner (kg, cm, lb, ft)",
+    "name": "BMI‑Rechner (kg, cm, lb, ft)",
+    "title": "BMI‑Rechner (kg, cm, lb, ft) – Kostenloser Gesundheitsrechner",
     "description": "Kostenloser BMI‑Rechner für kg/cm oder lb/ft – BMI und Kategorie sofort.",
     "path": "/bmi-calculator",
     "ctaLabel": "BMI berechnen",
@@ -1727,6 +1908,7 @@
   {
     "id": "resume-builder",
     "component": "ResumeBuilder",
+    "name": "Kostenloser Lebenslauf‑Builder – Professionellen CV online erstellen",
     "title": "Kostenloser Lebenslauf‑Builder – Professionellen CV online erstellen",
     "description": "Erstellen Sie einen professionellen Lebenslauf. Wählen Sie eine Vorlage, füllen Sie Ihre Daten aus und laden Sie ein poliertes PDF herunter.",
     "path": "/resume-builder",
