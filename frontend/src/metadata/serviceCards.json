@@ -1620,6 +1620,66 @@
     ]
   },
   {
+    "id": "clearwave",
+    "component": "NoiseRemover",
+    "name": "ClearWave - Audio Noise Remover",
+    "title": "ClearWave - Remove Background Noise from Audio Online",
+    "description": "Remove background noise from audio files or recordings. Get clean, clear audio instantly.",
+    "path": "/clearwave",
+    "ctaLabel": "Clean Audio",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "ClearWave removes unwanted background noise from your audio files. Upload a recording with wind, hum, static, or ambient noise and get back a clean version. Choose from light, medium, or strong noise reduction. Supports MP3, WAV, M4A, AAC, OGG, FLAC, AMR, and WEBM formats. Processing runs on the server using FFmpeg's advanced FFT-based denoiser — no software install needed.",
+    "categoryId": "utilities",
+    "keywords": [
+      "noise remover",
+      "remove background noise",
+      "audio noise reduction",
+      "clean audio",
+      "denoise audio",
+      "remove static",
+      "remove hum",
+      "audio cleanup",
+      "noise cancellation",
+      "clear audio",
+      "clearwave",
+      "noise filter",
+      "reduce noise",
+      "audio enhancer"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload an audio file (MP3, WAV, M4A, AAC, OGG, FLAC, AMR, or WEBM) or record with your microphone.",
+      "Choose a noise reduction strength: Light for subtle cleanup, Medium for balanced results, or Strong for aggressive noise removal.",
+      "Pick MP3 for a smaller file or WAV for lossless output.",
+      "Click Remove Noise and wait for the processing to finish.",
+      "Download or share the cleaned audio file."
+    ],
+    "faqs": [
+      {
+        "q": "What types of noise can ClearWave remove?",
+        "a": "ClearWave removes common background noise including static, hum, wind, fan noise, air conditioning, and general ambient noise. It works best on constant background noise rather than sudden loud sounds."
+      },
+      {
+        "q": "Will removing noise affect the quality of my audio?",
+        "a": "Light and Medium settings preserve audio quality well while removing noise. The Strong setting removes more noise but may slightly affect audio clarity. Start with Medium and adjust if needed."
+      },
+      {
+        "q": "What audio formats are supported?",
+        "a": "Common formats including MP3, WAV, M4A, AAC, OGG, FLAC, AMR, and WEBM."
+      },
+      {
+        "q": "Is my audio stored on the server?",
+        "a": "No. Files are processed in a temporary directory and deleted immediately after processing. Your privacy is fully protected."
+      },
+      {
+        "q": "Can I record audio directly and clean it?",
+        "a": "Yes! Use the Record Mic option to capture audio directly from your microphone, then apply noise reduction to clean it up."
+      }
+    ]
+  },
+  {
     "id": "habit-tracker",
     "component": "HabitTracker",
     "name": "Habit Tracker",

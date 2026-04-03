@@ -1669,6 +1669,72 @@
     ]
   },
   {
+    "id": "clearwave",
+    "component": "NoiseRemover",
+    "name": "ClearWave â€“ Audioâ€‘Rauschunterdrückung",
+    "title": "ClearWave â€“ Hintergrundgeräusche aus Audio entfernen",
+    "description": "Entfernen Sie Hintergrundrauschen aus Audiodateien oder Aufnahmen. Sauberer, klarer Sound in Sekunden.",
+    "path": "/clearwave",
+    "ctaLabel": "Audio reinigen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "ClearWave entfernt unerwünschte Hintergrundgeräusche aus Ihren Audiodateien. Laden Sie eine Aufnahme mit Wind, Brummen, Rauschen oder Umgebungsgeräuschen hoch und erhalten Sie eine saubere Version. Wählen Sie zwischen leichter, mittlerer oder starker Rauschreduzierung. Unterstützt MP3, WAV, M4A, AAC, OGG, FLAC, AMR und WEBM. Die Verarbeitung läuft serverseitig mit FFmpegs fortschrittlichem FFT-basiertem Denoiser â€“ keine Software-Installation nötig.",
+    "categoryId": "utilities",
+    "keywords": [
+      "noise remover",
+      "remove background noise",
+      "audio noise reduction",
+      "clean audio",
+      "denoise audio",
+      "remove static",
+      "remove hum",
+      "audio cleanup",
+      "noise cancellation",
+      "clear audio",
+      "clearwave",
+      "noise filter",
+      "reduce noise",
+      "audio enhancer",
+      "rauschen entfernen",
+      "hintergrundgeräusche entfernen",
+      "audio entrauschen",
+      "geräuschreduzierung",
+      "rauschunterdrückung",
+      "klarer ton"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Laden Sie eine Audiodatei hoch (MP3, WAV, M4A, AAC, OGG, FLAC, AMR oder WEBM) oder nehmen Sie per Mikrofon auf.",
+      "Wählen Sie eine Stärke der Rauschreduzierung: Leicht für dezente Reinigung, Mittel für ausgewogene Ergebnisse oder Stark für aggressive Rauschunterdrückung.",
+      "Wählen Sie MP3 für kleinere Dateien oder WAV für verlustfreie Ausgabe.",
+      "Klicken Sie auf Rauschen entfernen und warten Sie, bis die Verarbeitung abgeschlossen ist.",
+      "Laden Sie die bereinigte Audiodatei herunter oder teilen Sie sie."
+    ],
+    "faqs": [
+      {
+        "q": "Welche Arten von Rauschen kann ClearWave entfernen?",
+        "a": "ClearWave entfernt typische Hintergrundgeräusche wie Rauschen, Brummen, Wind, Lüftergeräusche, Klimaanlagen und allgemeine Umgebungsgeräusche. Am besten funktioniert es bei konstantem Hintergrundrauschen statt bei plötzlichen lauten Geräuschen."
+      },
+      {
+        "q": "Beeinflusst die Rauschreduzierung die Audioqualität?",
+        "a": "Leicht und Mittel bewahren die Audioqualität sehr gut und entfernen dennoch Rauschen. Die starke Einstellung entfernt mehr Störgeräusche, kann aber die Klarheit leicht beeinflussen. Beginnen Sie mit Mittel und passen Sie bei Bedarf an."
+      },
+      {
+        "q": "Welche Audioformate werden unterstützt?",
+        "a": "Gängige Formate wie MP3, WAV, M4A, AAC, OGG, FLAC, AMR und WEBM."
+      },
+      {
+        "q": "Werden meine Audiodaten auf dem Server gespeichert?",
+        "a": "Nein. Dateien werden in einem temporären Verzeichnis verarbeitet und unmittelbar nach der Verarbeitung gelöscht. Ihre Privatsphäre ist geschützt."
+      },
+      {
+        "q": "Kann ich Audio direkt aufnehmen und bereinigen?",
+        "a": "Ja. Nutzen Sie die Mikrofonaufnahme, um Audio direkt aufzunehmen und anschließend zu entrauschen."
+      }
+    ]
+  },
+  {
     "id": "habit-tracker",
     "component": "HabitTracker",
     "name": "Gewohnheiten‑Tracker",
