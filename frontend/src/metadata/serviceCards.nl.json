@@ -1,0 +1,2016 @@
+[
+  {
+    "id": "song-identifier",
+    "component": "SongIdentifier",
+    "name": "Nummer Herkennen – Welk nummer speelt er?",
+    "title": "Nummer Herkennen – Welk nummer speelt er?",
+    "description": "Herken elk nummer in je omgeving direct. Met links naar Spotify, YouTube Music en meer.",
+    "path": "/song-identifier",
+    "ctaLabel": "Nummer herkennen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Benieuwd welk nummer er speelt? Gebruik je microfoon om elk nummer in seconden te herkennen. Deze gratis online nummerherkenner neemt een kort audiofragment op, vergelijkt dit met een database van meer dan 100 miljoen nummers en geeft je de songtitel, artiest, album en genre terug. Ontvang directe streaminglinks naar Spotify, YouTube Music, Apple Music, Amazon Music en Deezer. Werkt met muziek uit luidsprekers, tv, radio of zelfs neuriën – geen app-installatie nodig.",
+    "categoryId": "utilities",
+    "keywords": [
+      "song identifier",
+      "what song is this",
+      "identify song online",
+      "song finder",
+      "what song is playing",
+      "name that song",
+      "song recognition",
+      "music identifier",
+      "find song by sound",
+      "recognize song online",
+      "song detector",
+      "identify music",
+      "shazam online",
+      "song search by listening",
+      "free song identifier",
+      "nummer herkennen",
+      "welk nummer is dit",
+      "lied herkennen",
+      "muziek herkennen",
+      "nummer zoeken",
+      "gratis nummer herkennen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Speel het nummer af dat je wilt herkennen – via luidsprekers, tv, radio, of neuriet/zing het gewoon.",
+      "Klik op de microfoonknop om de opname te starten.",
+      "Het tool neemt tot 10 seconden audio op via je microfoon.",
+      "Je kunt de opname vroeg stoppen zodra je een duidelijk fragment hebt.",
+      "Het audiofragment wordt naar ACRCloud gestuurd voor herkenning.",
+      "De nummergegevens – titel, artiest, album en streaminglinks – verschijnen direct op het scherm."
+    ],
+    "faqs": [
+      {
+        "q": "Hoe herken ik een nummer dat in mijn buurt speelt?",
+        "a": "Klik op de microfoonknop, laat het tool 5–10 seconden luisteren en het nummer wordt automatisch herkend. Je krijgt de songtitel, artiest, het album en links om het te streamen op Spotify, YouTube Music, Apple Music en meer."
+      },
+      {
+        "q": "Kan ik een nummer herkennen door het te neuriën of zingen?",
+        "a": "Ja, het tool ondersteunt herkenning via neuriën en zingen. De beste resultaten krijg je wanneer het originele nummer via een luidspreker wordt afgespeeld, maar neuriën werkt ook voor populaire nummers."
+      },
+      {
+        "q": "Is de nummerherkenner gratis te gebruiken?",
+        "a": "Ja, deze nummerherkenner is volledig gratis. Geen registratie, geen app-download en geen beperkingen. Open het gewoon in je browser en begin met herkennen."
+      },
+      {
+        "q": "Hoe nauwkeurig is de nummerherkenning?",
+        "a": "Het tool doorzoekt een database van meer dan 100 miljoen nummers op Spotify, YouTube, Deezer en andere grote platforms. De herkenning is zeer nauwkeurig voor opgenomen muziek, live optredens en de meeste coverversies."
+      },
+      {
+        "q": "Werkt het op telefoon en desktop?",
+        "a": "Ja, de nummerherkenner werkt op elk apparaat met een microfoon en een moderne browser – inclusief iPhones, Android-telefoons, tablets, laptops en desktops. Geen app-installatie nodig."
+      },
+      {
+        "q": "Wordt mijn audio-opname opgeslagen?",
+        "a": "Nee. Het audiofragment wordt alleen gebruikt voor herkenning en direct daarna verwijderd. Er wordt niets opgeslagen op onze servers. Je privacy is volledig beschermd."
+      },
+      {
+        "q": "Welke streaminglinks krijg ik na het herkennen?",
+        "a": "Na herkenning krijg je directe links om te luisteren op Spotify, YouTube Music, Apple Music, Amazon Music, Deezer en Shazam. Je kunt ook een kort audiofragment beluisteren en downloaden."
+      }
+    ]
+  },
+  {
+    "id": "text-share",
+    "component": "EasyShare",
+    "name": "Easy Share (Tekst + Bestanden)",
+    "title": "Easy Share – Bestanden en tekst snel online delen",
+    "description": "Deel bestanden of tekst tussen apparaten via internet – geen registratie, telefoonnummer of e-mail nodig.",
+    "path": "/easy-share",
+    "ctaLabel": "Easy Share openen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Met Easy Share stuur je tekst en tot 5 bestanden (elk tot 1 GB) tussen apparaten op verschillende netwerken via een 4-cijferige toegangscode over het internet. Geen registratie, geen telefoon en geen e-mail vereist.",
+    "categoryId": "communication",
+    "keywords": [
+      "text",
+      "share",
+      "code",
+      "clipboard",
+      "transfer",
+      "delen",
+      "bestand versturen",
+      "klembord",
+      "bestanden delen online"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Open Easy Share en kies een modus (Verzenden of Ontvangen).",
+      "In de verzendmodus plak je tekst en/of sleep je tot 5 bestanden naar het uploadgebied.",
+      "Elk bestand kan tot 1 GB groot zijn – de upload gaat rechtstreeks via Cloudflare-opslag.",
+      "Orden bestanden via slepen of verwijder een bestand voor het delen.",
+      "Klik op Code genereren om een 4-cijferige toegangscode te krijgen.",
+      "In de ontvangstmodus voer je de 4-cijferige code in of gebruik je de vernieuwen-knop om het laatste gedeelde item in je netwerk te laden.",
+      "Gedeelde bestanden verschijnen in de downloadlijst en gedeelde tekst wordt eronder getoond.",
+      "Gedeelde items verlopen automatisch na ongeveer 1 uur voor privacybescherming."
+    ],
+    "faqs": [
+      {
+        "q": "Heb ik een account nodig om Easy Share te gebruiken?",
+        "a": "Nee, er is geen account nodig. Easy Share is een volledig anoniem tool – open het gewoon en deel direct."
+      },
+      {
+        "q": "Hoeveel bestanden kan ik tegelijk delen?",
+        "a": "Je kunt tot 5 bestanden per code delen. Het ontvangende apparaat kan ze afzonderlijk downloaden in de volgorde die jij hebt ingesteld."
+      },
+      {
+        "q": "Hoe lang blijft de deelcode actief?",
+        "a": "Deelcodes verlopen na ongeveer 1 uur. Daarna werkt de code direct niet meer in de app en worden resterende bestanden automatisch uit de opslag verwijderd."
+      },
+      {
+        "q": "Kan ik de volgorde van bestanden aanpassen voor het delen?",
+        "a": "Ja. Je kunt bestanden slepen om ze te herordenen voordat je de deelcode genereert, en de ontvanger ziet ze in dezelfde volgorde."
+      },
+      {
+        "q": "Is er een bestandsgroottelimiet?",
+        "a": "Ja. Elk bestand kan tot 1 GB groot zijn en je kunt tot 5 bestanden in één deel toevoegen."
+      },
+      {
+        "q": "Wat doet de automatisch laden-functie op hetzelfde netwerk?",
+        "a": "Wanneer twee apparaten op hetzelfde lokale netwerk zitten en één heeft recent iets gedeeld, kan het ontvangende apparaat de vernieuwen-knop gebruiken om het laatste gedeelde item te laden zonder de code in te voeren."
+      },
+      {
+        "q": "Waar zie ik de gedeelde tekst bij ontvangen?",
+        "a": "Na het invoeren van een geldige code verschijnen gedeelde bestanden in de downloadlijst en gedeelde tekst wordt eronder weergegeven."
+      }
+    ]
+  },
+  {
+    "id": "bulk-email",
+    "component": "BulkEmail/BulkEmail",
+    "name": "Bulk e-mail verzenden",
+    "title": "Bulk E-mail Verzenden – Massaberichten gratis versturen",
+    "description": "Verstuur gepersonaliseerde bulk-e-mails via je gekoppelde Gmail-account.",
+    "path": "/bulk-email",
+    "ctaLabel": "Bulk e-mail openen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Stel e-mailcampagnes op en verstuur ze vanuit één plek. Koppel Gmail via OAuth, maak contactgroepen aan, importeer ontvangers uit Excel, personaliseer onderwerp en inhoud en voeg bijlagen toe. Je SMTP-configuratie wordt per account opgeslagen en gebruikt voor verzending via je eigen Gmail-verbinding.",
+    "categoryId": "communication",
+    "keywords": [
+      "email",
+      "mail",
+      "campaign",
+      "newsletter",
+      "gmail",
+      "bulk e-mail",
+      "e-mail versturen",
+      "campagne"
+    ],
+    "isActive": false,
+    "advancedOptionsEnabled": false
+  },
+  {
+    "id": "image-compressor",
+    "component": "ImageCompressor",
+    "name": "Afbeelding verkleinen",
+    "title": "Afbeelding verkleinen – Foto bestandsgrootte online verkleinen",
+    "description": "Comprimeer afbeeldingen lokaal met directe voorvertoning.",
+    "path": "/image-compressor",
+    "ctaLabel": "Afbeeldingen comprimeren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Verklein de bestandsgrootte van afbeeldingen direct in je browser zonder uploads. Bekijk geselecteerde afbeeldingen direct, stel de compressiekwaliteit in en download bestanden afzonderlijk of als ZIP-archief.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "compress",
+      "optimize",
+      "size",
+      "afbeelding comprimeren",
+      "foto verkleinen",
+      "bestandsgrootte verkleinen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep een of meer afbeeldingsbestanden erin (JPG, PNG of WEBP).",
+      "Van elke afbeelding verschijnt direct een voorvertoning samen met de originele bestandsgrootte.",
+      "Pas de kwaliteitsschuifregelaar aan om de verhouding tussen bestandsgrootte en beeldkwaliteit te bepalen. 75–85% wordt aanbevolen voor webgebruik.",
+      "Klik op Comprimeren om alle geüploade afbeeldingen te verwerken.",
+      "Bekijk de gecomprimeerde voorvertoningen en nieuwe bestandsgroottes in het resultatenvenster.",
+      "Download afzonderlijke gecomprimeerde afbeeldingen of klik op Alles downloaden als ZIP om alles in één archief te krijgen."
+    ],
+    "faqs": [
+      {
+        "q": "Worden mijn afbeeldingen naar een server geüpload?",
+        "a": "Nee. Alle compressie gebeurt lokaal in je browser via de Canvas API. Je afbeeldingen worden nooit naar een server gestuurd en blijven volledig privé."
+      },
+      {
+        "q": "Welke afbeeldingsformaten worden ondersteund?",
+        "a": "De compressor ondersteunt JPEG, PNG en WEBP als invoerformaten. De uitvoer wordt opgeslagen als JPEG of WEBP, omdat deze de beste compressieverhouding bieden voor fotografische inhoud."
+      },
+      {
+        "q": "Hoeveel wordt mijn bestandsgrootte verkleind?",
+        "a": "De vermindering hangt af van de originele afbeelding en de kwaliteitsinstelling. Typische JPEG-foto's gecomprimeerd op 80% kwaliteit zien een vermindering van 40–70% in bestandsgrootte met minimaal zichtbaar kwaliteitsverlies."
+      },
+      {
+        "q": "Verslechtert compressie de beeldkwaliteit zichtbaar?",
+        "a": "Bij kwaliteitsinstellingen van 75% en hoger zijn compressie-artefacten over het algemeen niet merkbaar. Voor printgebruik houd je de kwaliteit op 90% of hoger. Voor webminiaturen is 60–75% acceptabel."
+      },
+      {
+        "q": "Kan ik meerdere afbeeldingen tegelijk comprimeren?",
+        "a": "Ja. Je kunt meerdere afbeeldingen in één batch uploaden en ze afzonderlijk of allemaal tegelijk als ZIP-bestand downloaden."
+      },
+      {
+        "q": "Werkt dit tool op mobiel?",
+        "a": "Ja. De compressor werkt in elke moderne mobiele of desktopbrowser en werkt offline zodra de pagina is geladen."
+      }
+    ]
+  },
+  {
+    "id": "image-format-converter",
+    "component": "ImageFormatConverter",
+    "name": "Afbeeldingsformaat omzetten",
+    "title": "Afbeeldingsformaat omzetten – JPG PNG WebP gratis converteren",
+    "description": "Converteer PNG-, JPG-, WEBP- en BMP-afbeeldingen volledig in je browser.",
+    "path": "/image-format-converter",
+    "ctaLabel": "Afbeelding converteren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Converteer een afbeelding tussen PNG, JPG, WEBP en BMP in je browser. Kies bron- en doelformaat en exporteer direct zonder uploads of serververwerking.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "png",
+      "jpg",
+      "webp",
+      "bmp",
+      "convert",
+      "afbeelding converteren",
+      "afbeeldingsformaat wijzigen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep een afbeeldingsbestand erin (PNG, JPG, WEBP of BMP).",
+      "Het tool detecteert automatisch het bronformaat op basis van de bestandsextensie.",
+      "Selecteer het gewenste uitvoerformaat via de formaatkiezer.",
+      "Klik op Converteren. De conversie vindt direct plaats in je browser.",
+      "Bekijk de geconverteerde afbeelding in het resultatenvenster.",
+      "Klik op Downloaden om de afbeelding in het nieuwe formaat op je apparaat op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Tussen welke formaten kan ik converteren?",
+        "a": "Het tool ondersteunt conversie tussen PNG, JPEG (JPG), WEBP en BMP. Je kunt van elk van deze formaten naar elk ander converteren."
+      },
+      {
+        "q": "Heeft converteren naar JPEG invloed op de beeldkwaliteit?",
+        "a": "JPEG gebruikt lossy compressie, dus het converteren van PNG of WEBP naar JPEG kan lichte compressie-artefacten introduceren. Terugconverteren van JPEG naar PNG herstelt de verloren gegevens niet — bewaar dus een origineel als precisie belangrijk is."
+      },
+      {
+        "q": "Waarom zou ik een afbeelding naar WEBP converteren?",
+        "a": "WEBP is een modern formaat ontwikkeld door Google dat aanzienlijk kleinere bestandsgroottes biedt dan JPEG en PNG bij vergelijkbare kwaliteit. Het wordt breed ondersteund in moderne browsers en is het voorkeursformaat voor webafbeeldingen."
+      },
+      {
+        "q": "Blijft transparantie bewaard bij PNG na conversie?",
+        "a": "PNG ondersteunt transparantie (alfakanaal). Als je een transparante PNG naar JPEG of BMP converteert, worden transparante gebieden gevuld met een witte achtergrond. Converteren naar WEBP behoudt transparantie."
+      },
+      {
+        "q": "Wordt mijn afbeelding naar een server gestuurd?",
+        "a": "Nee. Alle conversie wordt client-side gedaan via de browser Canvas API. Je afbeelding verlaat je apparaat nooit."
+      },
+      {
+        "q": "Kan ik meerdere afbeeldingen tegelijk converteren?",
+        "a": "De huidige versie converteert één afbeelding tegelijk. Voor batchconversie upload je bestanden achtereenvolgens."
+      }
+    ]
+  },
+  {
+    "id": "image-pdf-to-pdf",
+    "component": "imagePdfToPdf",
+    "name": "Afbeelding / PDF samenvoegen",
+    "title": "Afbeelding & PDF samenvoegen – Bestanden online gratis combineren",
+    "description": "Voeg afbeeldingen en PDF's samen tot één PDF, herorden pagina's offline.",
+    "path": "/pdf-merger",
+    "ctaLabel": "PDF maken",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Combineer meerdere afbeeldingen en PDF-documenten in één PDF-bestand. Herorden items, roteer afbeeldingen, kies paginagrootte en marges, stel het aanpassingsgedrag in en voeg optioneel paginanummers toe. Gebouwd met client-side verwerking voor privacy en snelheid.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "pdf",
+      "merge",
+      "combine",
+      "join",
+      "pdf samenvoegen",
+      "afbeeldingen samenvoegen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep meerdere bestanden erin — je kunt afbeeldingen (PNG, JPG, WEBP) en bestaande PDF-documenten mengen.",
+      "Alle geüploade items verschijnen als een sorteerbare lijst. Sleep items om de volgorde van pagina's in je uiteindelijke PDF in te stellen.",
+      "Gebruik voor afbeeldingen de rotatieknoppen om de oriëntatie te corrigeren voor het samenvoegen.",
+      "Kies je gewenste paginagrootte (A4, Letter, enz.), marges en hoe afbeeldingen op de pagina moeten passen.",
+      "Schakel optioneel paginanummers in om ze automatisch aan elke pagina toe te voegen.",
+      "Klik op PDF maken om het samengevoegde document te genereren, klik dan op Downloaden om het op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Kan ik zowel afbeeldingen als PDF's in hetzelfde document samenvoegen?",
+        "a": "Ja. Je kunt elke combinatie van afbeeldingen (PNG, JPG, WEBP) en bestaande PDF-bestanden uploaden. Ze worden allemaal samengevoegd in één PDF in de volgorde die je opgeeft."
+      },
+      {
+        "q": "Worden mijn gegevens naar een server geüpload?",
+        "a": "Nee. Alle verwerking gebeurt volledig in je browser. Er worden geen bestanden naar een server geüpload, waardoor dit veilig is voor vertrouwelijke documenten."
+      },
+      {
+        "q": "Kan ik pagina's herordenen voor het samenvoegen?",
+        "a": "Ja. Alle geüploade bestanden verschijnen als een sleepbare lijst. Sleep items gewoon naar de gewenste positie voor het maken van de PDF."
+      },
+      {
+        "q": "Wat gebeurt er met meerdere pagina's tellende PDF's die ik upload?",
+        "a": "Elke pagina van een geüploade PDF wordt een afzonderlijke pagina in het samengevoegde document, ingevoegd op de positie waar je de PDF in de lijst hebt geplaatst."
+      },
+      {
+        "q": "Kan ik afbeeldingen roteren voor het toevoegen aan de PDF?",
+        "a": "Ja. Elke geüploade afbeelding heeft rotatiebesturingselementen zodat je de oriëntatie kunt aanpassen voor het samenvoegen."
+      },
+      {
+        "q": "Welke paginagrootteOpties zijn beschikbaar?",
+        "a": "Het tool ondersteunt veelgebruikte paginagroottes zoals A4, A3, Letter en Legal. Je kunt ook marges instellen en kiezen of afbeeldingen de pagina moeten vullen, binnen marges passen of gecentreerd worden."
+      }
+    ]
+  },
+  {
+    "id": "pdf-splitter",
+    "component": "PdfSplitter",
+    "name": "PDF splitsen",
+    "title": "PDF splitsen – PDF in pagina's opsplitsen online gratis",
+    "description": "Extraheer paginabereiken of splits een PDF in meerdere bestanden.",
+    "path": "/pdf-splitter",
+    "ctaLabel": "PDF splitsen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload een PDF en splits deze lokaal in je browser. Extraheer geselecteerde pagina's in één PDF of genereer één PDF per pagina als ZIP-download. Alle verwerking draait op het apparaat voor privacy en offline gebruik.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf",
+      "split",
+      "extract",
+      "pages",
+      "document",
+      "pdf splitsen",
+      "pagina's extraheren"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep het PDF-bestand dat je wilt splitsen.",
+      "Na het uploaden wordt het totale aantal pagina's weergegeven.",
+      "Kies een splitsingsmodus: extraheer een aangepast paginabereik naar één nieuwe PDF, of splits elke pagina naar een aparte PDF.",
+      "Als je een bereik extraheert, voer je de begin- en eindpaginanummers in (bijvoorbeeld pagina's 3 tot 7).",
+      "Klik op Splitsen om het document in je browser te verwerken.",
+      "Download het resulterende PDF-bestand of — bij splitsen per pagina — alle pagina's als ZIP-archief."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn PDF naar een server geüpload?",
+        "a": "Nee. De PDF wordt volledig in je browser verwerkt met PDF.js en pdf-lib. Er wordt geen inhoud naar een server gestuurd."
+      },
+      {
+        "q": "Kan ik niet-opeenvolgende pagina's extraheren?",
+        "a": "Het huidige tool ondersteunt alleen het extraheren van een aaneengesloten paginabereik (beginpagina tot eindpagina). Voor niet-opeenvolgende selecties voer je meerdere extractiebewerkingen uit."
+      },
+      {
+        "q": "Wat gebeurt er met bladwijzers en annotaties bij het splitsen?",
+        "a": "Pagina-inhoud, tekst en afbeeldingen blijven behouden. Sommige metadata zoals bladwijzers en formuliervelden worden mogelijk niet overgedragen, afhankelijk van de complexiteit van het originele bestand."
+      },
+      {
+        "q": "Is er een limiet op het aantal pagina's?",
+        "a": "Er is geen vaste limiet. Grote PDF's met honderden pagina's worden in de browser verwerkt, maar zeer grote bestanden kunnen enkele seconden langer duren afhankelijk van je apparaat."
+      },
+      {
+        "q": "Kan ik een met wachtwoord beveiligde PDF splitsen?",
+        "a": "Het tool ondersteunt momenteel geen met wachtwoord beveiligde PDF's. Verwijder de wachtwoordbeveiliging eerst met een ander tool voor het uploaden."
+      },
+      {
+        "q": "Wat is het verschil tussen een bereik extraheren en per pagina splitsen?",
+        "a": "Een bereik extraheren produceert één nieuwe PDF met alleen de opgegeven pagina's. Per pagina splitsen produceert één aparte PDF voor elke pagina, verpakt in een ZIP-download."
+      }
+    ]
+  },
+  {
+    "id": "image-crop-tool",
+    "component": "ImageCropTool",
+    "name": "Afbeelding bijsnijden",
+    "title": "Afbeelding bijsnijden – Foto's online bijsnijden en schalen",
+    "description": "Snijd afbeeldingen lokaal bij met live voorvertoning en exportopties.",
+    "path": "/image-crop-tool",
+    "ctaLabel": "Afbeelding bijsnijden",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Selecteer een bijsnijdgebied met pixelnauwkeurige besturingselementen, bekijk het geselecteerde gebied en exporteer als PNG, JPEG of WebP. Alles draait volledig in je browser, zodat afbeeldingen je apparaat nooit verlaten.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "crop",
+      "resize",
+      "edit",
+      "afbeelding bijsnijden",
+      "foto bijsnijden"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep de afbeelding die je wilt bijsnijden (ondersteunt PNG, JPG en WEBP).",
+      "De afbeelding wordt geladen in de bijsnijdeditor met een sleepbare selectie-overlay.",
+      "Sleep de hoeken of randen van de bijsnijdselectie om het gebied te bepalen dat je wilt behouden.",
+      "Verplaats het selectievak door het over de afbeelding te slepen om het te herpositioneren.",
+      "Voer optioneel exacte pixelafmetingen in voor het bijsnijdgebied voor nauwkeurige controle.",
+      "Selecteer het uitvoerformaat (PNG, JPEG of WEBP) en klik op Bijsnijden en downloaden om de bijgesneden afbeelding op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn afbeelding naar een server gestuurd voor bijsnijden?",
+        "a": "Nee. Alle bijsnijden wordt lokaal in je browser uitgevoerd via de Canvas API. Je afbeelding wordt nergens geüpload."
+      },
+      {
+        "q": "Kan ik bijsnijden op een specifieke beeldverhouding?",
+        "a": "Ja. Je kunt de bijsnijdselectie beperken tot gangbare beeldverhoudingen zoals 1:1 (vierkant), 16:9 of 4:3, wat handig is voor sociale media en bannerafbeeldingen."
+      },
+      {
+        "q": "Welke uitvoerformaten zijn beschikbaar?",
+        "a": "Je kunt de bijgesneden afbeelding exporteren als PNG (verliesvrij), JPEG (kleinere bestandsgrootte, geschikt voor foto's) of WEBP (modern formaat met uitstekende kwaliteits-grootteratio)."
+      },
+      {
+        "q": "Kan ik een bijsnijding ongedaan maken en opnieuw proberen?",
+        "a": "Ja. Je kunt de bijsnijdselectie op elk moment aanpassen voordat je op Downloaden klikt. De originele afbeelding blijft gedurende de hele bewerkingssessie ongewijzigd."
+      },
+      {
+        "q": "Verkleint dit tool afbeeldingen?",
+        "a": "Het tool snijdt afbeeldingen bij door delen buiten de selectie te verwijderen. Gebruik een apart tool voor het schalen naar andere afmetingen."
+      },
+      {
+        "q": "Wat is de maximale afbeeldingsgrootte die ik kan bijsnijden?",
+        "a": "Er is geen vaste limiet. Zeer grote afbeeldingen boven 20 megapixels kunnen langzamer laden maar worden correct verwerkt."
+      }
+    ]
+  },
+  {
+    "id": "image-background-editor",
+    "component": "ImageBackgroundEditor",
+    "name": "Achtergrond verwijderen/wijzigen",
+    "title": "Afbeeldingsachtergrond verwijderen & wijzigen – Gratis online",
+    "description": "Verwijder, vervang door een effen kleur, of wissel de achtergrond voor een eigen afbeelding — alles in één tool.",
+    "path": "/image-background-editor",
+    "ctaLabel": "Achtergrond bewerken",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een PNG-, JPG- of WEBP-afbeelding en kies wat er met de achtergrond moet gebeuren: volledig verwijderen voor een transparante PNG, vullen met een effen kleur naar keuze, of het onderwerp plaatsen op een nieuwe achtergrondafbeelding. Alle verwerking gebeurt server-side met AI-segmentatie, met een live voor/na-voorvertoning voor het downloaden.",
+    "categoryId": "utilities",
+    "keywords": [
+      "image",
+      "background",
+      "remove",
+      "replace",
+      "change",
+      "transparent",
+      "cutout",
+      "solid color",
+      "composite",
+      "png",
+      "achtergrond verwijderen",
+      "afbeelding vrijstellen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecteer bovenaan een modus: Achtergrond verwijderen voor een transparante uitsnede, Effen kleur om te vullen met een gekozen kleur, of Eigen achtergrondafbeelding om het onderwerp op een nieuwe foto te plaatsen.",
+      "Als je Effen kleur hebt gekozen, klik je op het kleurveld om een kleur te kiezen.",
+      "Als je Eigen achtergrondafbeelding hebt gekozen, upload je de gewenste achtergrondafbeelding.",
+      "Upload je onderwerpsafbeelding (PNG, JPG of WEBP, tot 10 MB).",
+      "Klik op Achtergrond verwijderen of Achtergrond wijzigen. De afbeelding wordt naar de server gestuurd voor AI-segmentatie.",
+      "Bekijk het voor/na-resultaat naast elkaar en klik op PNG downloaden om de uitvoer op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Welke modi ondersteunt dit tool?",
+        "a": "Drie modi: Achtergrond verwijderen maakt een transparante PNG-uitsnede, Effen kleur vult de achtergrond met een kleur naar keuze, en Eigen achtergrondafbeelding plaatst je onderwerp op een nieuwe achtergrondafbeelding die je uploadt."
+      },
+      {
+        "q": "Welke afbeeldingen werken het best?",
+        "a": "Afbeeldingen met een duidelijk onderscheid tussen het onderwerp en de achtergrond geven de beste resultaten. Hoog contrast en goed gedefinieerde randen zijn ideaal. Complexe gevallen zoals haar, vacht of transparante objecten kunnen iets ruwere randen hebben."
+      },
+      {
+        "q": "Hoe wordt de eigen achtergrondafbeelding ingepast?",
+        "a": "De achtergrondafbeelding wordt geschaald om het canvas van het onderwerp volledig te bedekken (beeldverhouding behouden) en daarna gecentreerd bijgesneden om exact overeen te komen met de onderwerpsgrootte, vergelijkbaar met CSS background-size: cover."
+      },
+      {
+        "q": "In welk formaat is de download?",
+        "a": "De download is altijd een PNG-bestand. Bij het verwijderen van de achtergrond bevat het een alfakanaal (transparantie); bij een effen of afbeeldingsachtergrond is het PNG volledig ondoorzichtig."
+      },
+      {
+        "q": "Is dit tool gratis?",
+        "a": "Ja, de achtergrondeditor is volledig gratis en vereist geen account."
+      },
+      {
+        "q": "Heeft dit tool een internetverbinding nodig?",
+        "a": "Ja. Achtergrondverwerking gebruikt een machine learning-model op de server, dus een actieve internetverbinding is vereist."
+      },
+      {
+        "q": "Wordt mijn afbeelding opgeslagen op de server?",
+        "a": "Afbeeldingen worden in het geheugen op de server verwerkt en het resultaat wordt direct naar je browser teruggestuurd. Er worden geen afbeeldingen opgeslagen of voor andere doeleinden gebruikt."
+      }
+    ]
+  },
+  {
+    "id": "invoice-generator",
+    "component": "InvoiceGenerator",
+    "name": "Factuur / Bon generator",
+    "title": "Factuur & Bon generator – Gratis online maken",
+    "description": "Maak professionele facturen en bonnen direct in je browser.",
+    "path": "/invoice-generator",
+    "ctaLabel": "Factuur maken",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Maak nette facturen of bonnen met verkoper-/kopergegevens, regelitems, belastingen, verzendkosten, kortingen en notities. Totalen worden automatisch berekend en het uiteindelijke document kan als PDF worden geëxporteerd. Gegevens blijven lokaal en kunnen in je browser worden hergebruikt.",
+    "categoryId": "business",
+    "keywords": [
+      "invoice",
+      "receipt",
+      "billing",
+      "payment",
+      "business",
+      "factuur",
+      "bon",
+      "rekening"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Vul de afzendergegevens (jouw bedrijf) in: naam, adres, e-mail en optioneel een logo.",
+      "Vul de ontvangergegevens (klant) in inclusief naam, adres en contactgegevens.",
+      "Voer een factuurnummer, uitgifte- en vervaldatum in.",
+      "Voeg regelitems toe met een omschrijving, hoeveelheid en eenheidsprijs voor elk product of dienst. Totalen worden automatisch berekend.",
+      "Pas belastingen, kortingen of verzendkosten naar behoefte toe. Het totaalbedrag wordt in realtime bijgewerkt.",
+      "Voeg betalingsnotities of voorwaarden toe in het notitieveld en klik op PDF exporteren om de voltooide factuur te downloaden."
+    ],
+    "faqs": [
+      {
+        "q": "Worden mijn factuurgegevens ergens opgeslagen?",
+        "a": "Factuurgegevens worden lokaal in je browser opgeslagen zodat je ze kunt hergebruiken zonder alles opnieuw in te voeren. Er worden geen gegevens naar een server gestuurd."
+      },
+      {
+        "q": "Kan ik een bedrijfslogo aan de factuur toevoegen?",
+        "a": "Ja. Je kunt een logo-afbeelding uploaden die in de koptekst van de factuur-PDF verschijnt."
+      },
+      {
+        "q": "Welke valuta's worden ondersteund?",
+        "a": "Je kunt elk valutasymbool of elke valutacode opgeven in het valutaveld. Het tool werkt met EUR, USD, GBP, INR of elke andere valuta."
+      },
+      {
+        "q": "Kan ik meerdere belastingtarieven toepassen?",
+        "a": "Je kunt een belastingpercentage opgeven dat op het subtotaal wordt toegepast. Voor facturen met meerdere belastingtarieven voer je de belastingen in bij de regelitems of het notitiegedeelte."
+      },
+      {
+        "q": "Is de gegenereerde PDF klaar om naar klanten te sturen?",
+        "a": "Ja. De PDF-uitvoer is professioneel opgemaakt en klaar om direct naar een klant te e-mailen. Bekijk de PDF-voorvertoning voor het verzenden."
+      },
+      {
+        "q": "Kan ik naast facturen ook bonnen maken?",
+        "a": "Ja. Het tool werkt ook prima voor bonnen. Geef het document het label bon in het titelveld en voeg een ontvangstdatum toe in plaats van een vervaldatum."
+      }
+    ]
+  },
+  {
+    "id": "text-diff-checker",
+    "component": "TextDiffChecker",
+    "name": "Tekstverschillen controleren",
+    "title": "Tekstverschillen controleren – Twee teksten online vergelijken",
+    "description": "Vergelijk twee tekstversies en zie wat er is veranderd.",
+    "path": "/text-diff-checker",
+    "ctaLabel": "Tekst vergelijken",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Plak twee versies van tekst en bekijk regel-voor-regel verschillen, inclusief toevoegingen, verwijderingen en gewijzigde blokken. Handig voor het beoordelen van wijzigingen in inhoud, configuraties of codefragmenten. Alles draait lokaal in je browser.",
+    "categoryId": "developer",
+    "keywords": [
+      "text",
+      "diff",
+      "compare",
+      "changes",
+      "checker",
+      "tekstvergelijking",
+      "verschillen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak de originele (voor) tekst in het linker venster.",
+      "Plak de gewijzigde (na) tekst in het rechter venster.",
+      "Het diff-resultaat wordt automatisch bijgewerkt en markeert regels die zijn toegevoegd, verwijderd of gewijzigd.",
+      "Groen markeert toegevoegde regels; rood markeert verwijderde regels.",
+      "Gebruik de diff-samenvatting bovenaan om het aantal wijzigingen in één oogopslag te zien.",
+      "Kopieer of deel specifieke gewijzigde secties indien nodig vanuit het resultatenvenster."
+    ],
+    "faqs": [
+      {
+        "q": "Welke soorten tekst kan ik vergelijken?",
+        "a": "Je kunt elke platte tekst vergelijken: artikelconcepten, configuratiebestanden, codefragmenten, JSON, markdown-documenten, e-mailsjablonen en meer."
+      },
+      {
+        "q": "Is de vergelijking hoofdlettergevoelig?",
+        "a": "Ja, de vergelijking is standaard hoofdlettergevoelig, wat betekent dat 'Hallo' en 'hallo' als verschillend worden gemarkeerd."
+      },
+      {
+        "q": "Hoe groot mag de tekst zijn die ik vergelijk?",
+        "a": "Het tool verwerkt grote teksten goed voor browsergebaseerde verwerking. Documenten met duizenden regels worden snel vergeleken."
+      },
+      {
+        "q": "Toont het inline woordniveau-verschillen?",
+        "a": "Het tool markeert gewijzigde regels. Voor gewijzigde regels toont het de oude en nieuwe versies naast elkaar zodat je precies kunt zien wat binnen de regel is bewerkt."
+      },
+      {
+        "q": "Wordt mijn tekst naar een server gestuurd?",
+        "a": "Nee. Alle diff-berekening draait volledig in je browser. Je tekst wordt nooit naar een externe dienst gestuurd."
+      },
+      {
+        "q": "Kan ik dit tool gebruiken om code te vergelijken?",
+        "a": "Ja. De diff werkt op elke platte tekst, inclusief broncode. Het toont welke regels zijn toegevoegd, verwijderd of gewijzigd, vergelijkbaar met een git diff-uitvoer."
+      }
+    ]
+  },
+  {
+    "id": "json-formatter-validator",
+    "component": "JsonFormatterDiff",
+    "name": "JSON formatter + validator",
+    "title": "JSON formatter & validator – JSON online opmaken",
+    "description": "Valideer, formatteer en verklein JSON direct.",
+    "path": "/json-formatter-validator",
+    "ctaLabel": "JSON-tool openen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Plak JSON en valideer het met leesbare foutmeldingen. Formatteer met inspringing voor leesbaarheid of verklein voor compacte payloads. Dit hulpmiddel is volledig client-side, waardoor het snel en privacyvriendelijk is voor ontwikkelaarsworkflows.",
+    "categoryId": "developer",
+    "keywords": [
+      "json",
+      "format",
+      "validator",
+      "minify",
+      "pretty",
+      "json formatteren",
+      "json valideren"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak je ruwe JSON-tekst in de invoereditor.",
+      "De validator controleert je JSON in realtime en geeft fouten weer met de regel- en tekenpositie als de JSON ongeldig is.",
+      "Klik op Formatteren / Pretty Print om de JSON opnieuw op te maken met juiste inspringing en regelafbrekingen voor eenvoudig lezen.",
+      "Klik op Verkleinen om alle witruimte te verwijderen en de meest compacte versie van de JSON te produceren.",
+      "Kopieer de geformatteerde of verkleinede uitvoer via de Kopieer-knop.",
+      "Gebruik de diff-weergave om twee JSON-objecten naast elkaar te vergelijken."
+    ],
+    "faqs": [
+      {
+        "q": "Wat telt als ongeldige JSON?",
+        "a": "Veelvoorkomende JSON-fouten zijn navolgende komma's na het laatste item in een array of object, enkelvoudig geciteerde strings (JSON vereist dubbele aanhalingstekens), ontbrekende komma's tussen sleutel-waardeparen en niet-geciteerde sleutels. De validator geeft de exacte locatie van de fout aan."
+      },
+      {
+        "q": "Wat is het verschil tussen formatteren en verkleinen?",
+        "a": "Formatteren (pretty-printing) voegt inspringing en nieuwe regels toe om JSON leesbaar te maken. Verkleinen verwijdert alle witruimte om de kleinst mogelijke JSON-string te produceren, handig voor het verkleinen van payloadgrootte in API-reacties."
+      },
+      {
+        "q": "Kan ik twee JSON-objecten vergelijken?",
+        "a": "Ja. Het tool bevat een diff-modus waarin je twee JSON-objecten kunt plakken en een gestructureerde vergelijking van hun verschillen kunt zien, wat handig is bij het debuggen van API-reactiewijzigingen."
+      },
+      {
+        "q": "Is er een groottelimiet voor de JSON die ik kan plakken?",
+        "a": "Er is geen vaste limiet. Het tool verwerkt grote JSON-payloads tot meerdere megabytes zonder problemen in moderne browsers."
+      },
+      {
+        "q": "Wordt mijn JSON naar een server gestuurd?",
+        "a": "Nee. Validatie, formattering en verkleining gebeuren allemaal lokaal in je browser. Je JSON-gegevens verlaten je apparaat nooit."
+      },
+      {
+        "q": "Kan ik dit offline gebruiken?",
+        "a": "Ja. Zodra de pagina is geladen, werkt de JSON-formatter volledig offline zonder internetverbinding."
+      }
+    ]
+  },
+  {
+    "id": "spring-boot-log-analyzer",
+    "component": "SpringBootLogAnalyzer",
+    "name": "Spring Boot log analyzer",
+    "title": "Spring Boot log analyzer – Java-logs online debuggen",
+    "description": "Analyseer Spring Boot-logs en detecteer waarschijnlijke oorzaken.",
+    "path": "/spring-boot-log-analyzer",
+    "ctaLabel": "Logs analyseren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload of plak Spring Boot-logs om waarschijnlijke eerste foutgebeurtenissen, exception-ketens, stack-frame-locaties en correlation-ID-clusters te identificeren. Exporteer een gestructureerd JSON-incidentrapport voor het delen en verdere debugging.",
+    "categoryId": "developer",
+    "keywords": [
+      "spring",
+      "boot",
+      "log",
+      "analyzer",
+      "exception",
+      "debug",
+      "log analyse",
+      "spring boot logs"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak je Spring Boot-loguitvoer direct in het tekstveld, of upload een platte tekstlogbestand.",
+      "Klik op Analyseren. Het tool scant het log op ERROR- en WARN-vermeldingen, exception-ketens en stack traces.",
+      "Het resultatenvenster toont een tijdlijn van fouten met waarschijnlijke oorzaken bovenaan gemarkeerd.",
+      "Klik op een foutvermelding om de volledige stack trace uit te vouwen en de exacte klasse, methode en regelnummer te zien.",
+      "Correlation-ID's en threadnamen worden gegroepeerd zodat je een enkel verzoek door een multi-threaded log kunt volgen.",
+      "Klik op Rapport exporteren om een gestructureerd JSON-incidentrapport te downloaden dat je met je team kunt delen."
+    ],
+    "faqs": [
+      {
+        "q": "Welke logformaten worden ondersteund?",
+        "a": "De analyzer is afgestemd op het standaard Spring Boot-logformaat geproduceerd door Logback (het standaard logging-framework) en verwerkt ook Spring Boot-applicaties met Log4j2 met de standaard patroolopmaak."
+      },
+      {
+        "q": "Wat betekent root cause-detectie?",
+        "a": "Wanneer een Spring Boot-applicatie een keten van verpakte exceptions gooit, is de root cause de diepste originele exception. De analyzer identificeert dit eerste foutpunt om je te helpen debuggen op het werkelijke probleem te richten."
+      },
+      {
+        "q": "Ondersteunt dit tool multi-threaded loguitvoer?",
+        "a": "Ja. De analyzer groepeert logregels op threadnaam en correlation-ID (indien aanwezig), zodat je de levenscyclus van een enkel HTTP-verzoek door een multi-threaded logstream kunt volgen."
+      },
+      {
+        "q": "Worden mijn loggegevens naar een server gestuurd?",
+        "a": "Nee. Alle logparsing en -analyse draait volledig in je browser. Je loggegevens worden nooit naar een server geüpload."
+      },
+      {
+        "q": "Kan ik logs van andere Java-frameworks analyseren?",
+        "a": "Het tool is geoptimaliseerd voor Spring Boot maar kan elk logbestand parsen dat het standaardformaat gebruikt met tijdstempels, logniveaus (ERROR, WARN, INFO), threadnamen en Java stack traces."
+      },
+      {
+        "q": "Wat is opgenomen in het geëxporteerde JSON-rapport?",
+        "a": "Het rapport bevat een samenvatting van het aantal fouten, een lijst van gedetecteerde exceptions met hun root causes, relevante stack frames, threadnamen, tijdstempels en eventuele correlation-ID's in het log."
+      }
+    ]
+  },
+  {
+    "id": "cron-generator-validator",
+    "component": "CronExpressionBuilder",
+    "name": "AI cron generator + validator",
+    "title": "AI cron-expressie generator & validator online",
+    "description": "Beschrijf je planning in gewone taal en laat AI cron-expressies genereren.",
+    "path": "/cron-generator-validator",
+    "ctaLabel": "Cron-tool openen",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Gebruik AI om cron-expressies te genereren vanuit beschrijvingen in gewone taal, of maak ze handmatig. Valideer syntaxis direct, krijg mensvriendelijke interpretaties en bekijk aankomende uitvoeringstijden. Ondersteunt zowel 5-veld- als 6-veld-formaten.",
+    "categoryId": "developer",
+    "keywords": [
+      "cron",
+      "schedule",
+      "expression",
+      "validator",
+      "time",
+      "ai",
+      "generator",
+      "planning",
+      "cron expressie"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Typ in het gedeelte AI cron generator je planning in gewone taal — bijvoorbeeld 'elke werkdag om 9 uur' of 'elke 30 minuten tussen 8 en 18 uur'.",
+      "Kies of je een 5-veld (standaard) of 6-veld (met seconden) expressie wilt via de cron-format-dropdown en klik op Genereren.",
+      "De AI-gegenereerde expressie wordt direct in het cron-invoerveld geplaatst, klaar om te valideren, verklaren of bekijken.",
+      "Klik op Uitleggen om een mensvriendelijke beschrijving van de expressie te krijgen.",
+      "Klik op Volgende uitvoeringspreview om de volgende 5 aankomende uitvoeringstijden te zien.",
+      "Klik op Valideren om de syntaxis van een expressie te controleren — of deze nu AI-gegenereerd is of handmatig is ingevoerd.",
+      "Je kunt ook direct een cron-expressie in het invoerveld typen of plakken en alle tools gebruiken zonder de AI-generator."
+    ],
+    "faqs": [
+      {
+        "q": "Hoe werkt de AI cron generator?",
+        "a": "Je beschrijft je planning in gewone taal en de AI (Claude via AWS Bedrock) zet het om in een geldige cron-expressie. Je kunt het vervolgens valideren, verklaren of bekijken met de ingebouwde tools."
+      },
+      {
+        "q": "Wat is het verschil tussen 5-veld en 6-veld cron-expressies?",
+        "a": "Standaard Unix/Linux cron gebruikt 5 velden: minuut, uur, dag-van-maand, maand, dag-van-week. Java-schedulers (Spring @Scheduled, Quartz) gebruiken een 6-veld-formaat dat een secondenveld aan het begin toevoegt: seconde, minuut, uur, dag-van-maand, maand, dag-van-week."
+      },
+      {
+        "q": "Kan ik dit gebruiken zonder de AI-generator?",
+        "a": "Ja. Je kunt elke cron-expressie direct in het invoerveld typen of plakken en de tools Valideren, Uitleggen en Volgende uitvoeringspreview onafhankelijk gebruiken."
+      },
+      {
+        "q": "Hoe plan ik een taak elke 15 minuten?",
+        "a": "Je kunt 'elke 15 minuten' typen in de AI-generator, of handmatig '*/15 * * * *' invoeren voor een 5-veld-expressie (of '0 */15 * * * *' voor 6-veld)."
+      },
+      {
+        "q": "Kan ik een taak plannen voor specifieke weekdagen?",
+        "a": "Ja. Het dag-van-week-veld accepteert waarden 0-6 (0 = zondag) of typ iets als 'elke maandag en woensdag om 9 uur' in de AI-generator en die regelt het."
+      },
+      {
+        "q": "Wat betekent het sterretje (*) in een cron-expressie?",
+        "a": "Een sterretje betekent elke geldige waarde voor dat veld. Bijvoorbeeld * in het minutenveld betekent elke minuut, en * in het maandenveld betekent elke maand."
+      },
+      {
+        "q": "Is dit tool nuttig voor AWS EventBridge of GitHub Actions-planningen?",
+        "a": "Ja. Zowel AWS EventBridge als GitHub Actions gebruiken cron-achtige expressies. AWS EventBridge gebruikt een 6-veld-formaat met jaar, terwijl GitHub Actions 5-veld-expressies in UTC gebruikt. De AI-generator en validator werken voor beide."
+      }
+    ]
+  },
+  {
+    "id": "jwt-encoder-decoder",
+    "component": "JwtTool/JwtTool",
+    "name": "JWT encoder / decoder",
+    "title": "JWT encoder & decoder – JWT-tokens online analyseren",
+    "description": "Decodeer JWT's en genereer ondertekende HS256/HS512-tokens.",
+    "path": "/jwt-decoder-encoder",
+    "ctaLabel": "JWT-tool openen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Inspecteer JWT-header en payload, bewerk claims en genereer nieuwe tokens met HS256 of HS512. Handig voor API-testen en het debuggen van authenticatieflows. Alles draait in de browser — tokengegevens worden niet naar een backend gestuurd.",
+    "categoryId": "developer",
+    "keywords": ["jwt", "token", "encode", "decode", "security", "auth"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak een bestaand JWT-token in het Decodeer-veld om de inhoud te inspecteren.",
+      "Het tool splitst het token op in drie delen: header, payload en handtekening, elk weergegeven als geformatteerde JSON.",
+      "Bekijk de claims in de payload, zoals sub (subject), iat (uitgegeven op), exp (vervaldatum) en aangepaste claims.",
+      "Om een nieuw token te genereren, schakel je naar het Encodeer-tabblad en vul je de payload-claims in als JSON.",
+      "Voer je HMAC-geheime sleutel in en selecteer het algoritme (HS256 of HS512).",
+      "Klik op Genereren om een ondertekend JWT-token te maken dat je kunt kopiëren."
+    ],
+    "faqs": [
+      {
+        "q": "Wat is een JWT?",
+        "a": "Een JSON Web Token (JWT) is een compact, URL-veilig token dat wordt gebruikt om informatie veilig tussen partijen te verzenden. Het heeft drie Base64-gecodeerde delen gescheiden door punten: de header (algoritme-info), de payload (claims) en de handtekening (gebruikt om te verifiëren dat het token niet is gemanipuleerd)."
+      },
+      {
+        "q": "Kan iedereen een JWT decoderen zonder de geheime sleutel?",
+        "a": "Ja. De header en payload zijn alleen Base64-gecodeerd, niet versleuteld. Iedereen kan de claims erin lezen. Alleen de handtekeningverificatie vereist de geheime sleutel. Zet nooit gevoelige gegevens zoals wachtwoorden direct in een JWT-payload."
+      },
+      {
+        "q": "Wat is het verschil tussen HS256 en HS512?",
+        "a": "Beide zijn HMAC-gebaseerde ondertekeningsalgoritmen. HS256 gebruikt SHA-256 en produceert een 256-bit handtekening, terwijl HS512 SHA-512 gebruikt en een 512-bit handtekening produceert. HS512 is sterker maar produceert een iets langer token."
+      },
+      {
+        "q": "Wordt mijn JWT of geheime sleutel naar een server gestuurd?",
+        "a": "Nee. Alle decodeer- en codeeroperaties vinden volledig in je browser plaats. Je tokens en geheime sleutels worden nergens naartoe verzonden."
+      },
+      {
+        "q": "Hoe verifieer ik een JWT-handtekening?",
+        "a": "Voer het token in op het Decodeer-tabblad en geef de HMAC-geheime sleutel op in het verificatieveld. Het tool bevestigt of de handtekening geldig is of is gemanipuleerd."
+      },
+      {
+        "q": "Kan ik dit tool gebruiken om tokens voor productie te genereren?",
+        "a": "Dit tool is ontworpen voor ontwikkeling, testen en debuggen. Voor productie genereer je JWT's server-side met een vertrouwde bibliotheek en goed geheimenbeheer zoals omgevingsvariabelen of een secrets manager."
+      }
+    ]
+  },
+  {
+    "id": "uuid-generator",
+    "component": "UuidGenerator",
+    "name": "UUID generator",
+    "title": "UUID generator – Unieke ID's online gratis aanmaken",
+    "description": "Genereer snel UUID v4-waarden in bulk.",
+    "path": "/uuid-generator",
+    "ctaLabel": "UUID genereren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Maak één of meerdere UUID v4-identifiers aan met opties zoals hoofdletteruitvoer of het verwijderen van koppeltekens. Kopieer alle gegenereerde waarden tegelijk voor gebruik in ontwikkeling, testen en dataworkflows.",
+    "categoryId": "developer",
+    "keywords": ["uuid", "guid", "identifier", "id", "generate", "unieke id"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Kies hoeveel UUID's je wilt genereren (van 1 tot 100 tegelijk).",
+      "Klik op Genereren om direct een lijst van willekeurige UUID v4-waarden te produceren.",
+      "Schakel de optie Hoofdletters in als je systeem het UUID-formaat in hoofdletters vereist.",
+      "Schakel Koppeltekens verwijderen in als je een compacte 32-tekens hexadecimale string zonder streepjes nodig hebt.",
+      "Klik op Alles kopiëren om de volledige lijst in één actie naar je klembord te kopiëren.",
+      "Genereer zo vaak als nodig — elke set UUID's is uniek."
+    ],
+    "faqs": [
+      {
+        "q": "Wat is een UUID?",
+        "a": "Een Universally Unique Identifier (UUID) is een 128-bit label dat wordt gebruikt om informatie in computersystemen uniek te identificeren. In standaardformaat ziet het er zo uit: 550e8400-e29b-41d4-a716-446655440000. Ze zijn ontworpen om wereldwijd uniek te zijn zonder centrale coördinatie."
+      },
+      {
+        "q": "Wat is UUID versie 4?",
+        "a": "UUID v4 wordt willekeurig gegenereerd. 122 van de 128 bits zijn willekeurige gegevens, waardoor de kans op een botsing astronomisch klein is — ongeveer 1 op 5,3 × 10^36. Het is de meest gebruikte UUID-versie voor applicatie-identifiers."
+      },
+      {
+        "q": "Is UUID hetzelfde als GUID?",
+        "a": "Ja. GUID (Globally Unique Identifier) is Microsofts term voor hetzelfde concept. UUID's en GUID's volgen dezelfde RFC 4122-standaard en zijn uitwisselbaar."
+      },
+      {
+        "q": "Zijn de gegenereerde UUID's echt uniek?",
+        "a": "UUID v4-waarden worden gegenereerd met een cryptografisch willekeurige nummergenerator in je browser. De kans op het genereren van twee identieke UUID's is zo klein dat het verwaarloosbaar is voor praktisch gebruik."
+      },
+      {
+        "q": "Kan ik deze UUID's gebruiken als primaire sleutels in databases?",
+        "a": "Ja. UUID-primaire sleutels worden veel gebruikt in gedistribueerde databases. Let op dat willekeurige UUID-sleutels database-indexen kunnen fragmenteren — voor databases met veel schrijfoperaties heeft een geordende UUID-variant de voorkeur."
+      },
+      {
+        "q": "Worden deze UUID's op de server of client gegenereerd?",
+        "a": "Alle UUID's worden volledig in je browser gegenereerd met de Web Crypto API. Er is geen server betrokken en er wordt niets verzameld of gelogd."
+      }
+    ]
+  },
+  {
+    "id": "string-encryptor",
+    "component": "StringEncryptor",
+    "name": "Tekst versleutelen / ontsleutelen",
+    "title": "Tekst versleutelen & ontsleutelen – Tekst online coderen",
+    "description": "Versleutel en ontsleutel tekst met een geheime sleutel via AES, inclusief Jasypt-workflows.",
+    "path": "/string-encryptor",
+    "ctaLabel": "Versleuteling openen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Versleutel platte tekst naar ciphertext en ontsleutel ciphertext terug naar leesbare tekst met een geheime sleutel via AES (crypto-js). Inclusief een servermodus met PBKDF2-HMAC-SHA512 + AES-256 voor Jasypt-workflows en interoperabiliteitsscenario's.",
+    "categoryId": "developer",
+    "keywords": [
+      "encrypt",
+      "decrypt",
+      "aes",
+      "secret key",
+      "cipher",
+      "crypto",
+      "string",
+      "jasypt",
+      "versleutelen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Kies tussen de modus Versleutelen en Ontsleutelen via de schakelaar bovenaan.",
+      "Voor versleuteling: voer de platte tekst in die je wilt versleutelen in het invoerveld.",
+      "Voer je geheime sleutel in. Deze sleutel moet privé blijven — iedereen met deze sleutel kan de uitvoer ontsleutelen.",
+      "Selecteer de versleutelingsmodus: Standaard AES voor algemeen gebruik, of Server (Jasypt) modus voor Spring Boot-interoperabiliteit.",
+      "Klik op Versleutelen om de ciphertext-uitvoer te produceren en kopieer het resultaat.",
+      "Voor ontsleuteling: plak de ciphertext, voer dezelfde geheime sleutel in, selecteer de overeenkomende modus en klik op Ontsleutelen om de originele tekst te herstellen."
+    ],
+    "faqs": [
+      {
+        "q": "Welk versleutelingsalgoritme wordt gebruikt?",
+        "a": "Het tool gebruikt AES (Advanced Encryption Standard). In de standaardmodus gebruikt het AES met een sleutel afgeleid via crypto-js. In de servermodus gebruikt het PBKDF2-HMAC-SHA512 voor sleutelafleiding en AES-256-CBC voor versleuteling, compatibel met de Jasypt-bibliotheek."
+      },
+      {
+        "q": "Wat is de Jasypt-modus en wanneer moet ik die gebruiken?",
+        "a": "Jasypt is een populaire Java-versleutelingsbibliotheek die in Spring Boot-applicaties wordt gebruikt om configuratie-eigenschappen te versleutelen. Gebruik de Jasypt-modus wanneer je versleutelde waarden moet genereren of verifiëren voor gebruik in een Spring Boot-applicatie met de Jasypt Spring Boot starter."
+      },
+      {
+        "q": "Is AES-versleuteling veilig?",
+        "a": "AES-256 wordt door de Amerikaanse National Security Agency goedgekeurd voor topgeheime informatie en wordt als veilig beschouwd wanneer een sterke en unieke sleutel wordt gebruikt. De veiligheid van je versleutelde gegevens hangt volledig af van de sterkte en geheimhouding van je sleutel."
+      },
+      {
+        "q": "Wordt mijn tekst of sleutel naar een server gestuurd?",
+        "a": "In de servermodus worden versleuteling en ontsleuteling op de server uitgevoerd om de Jasypt-backend-implementatie te matchen, maar je gegevens worden niet opgeslagen. In de standaardmodus zijn alle bewerkingen alleen client-side."
+      },
+      {
+        "q": "Wat maakt een goede versleutelingssleutel?",
+        "a": "Een sterke sleutel moet lang zijn (16+ tekens), willekeurig en een mix van hoofdletters, kleine letters, cijfers en symbolen bevatten. Vermijd woordenboekwoorden, namen of korte numerieke PIN-codes als versleutelingssleutels."
+      },
+      {
+        "q": "Kan ik tekst ontsleutelen die is versleuteld met een ander AES-tool?",
+        "a": "Interoperabiliteit hangt af van de exacte modus, sleutelafleiding en opvullingsschema. De standaardmodus gebruikt crypto-js-standaardinstellingen en de Jasypt-modus richt zich op Spring Boot-compatibiliteit. Versleutelde tekst van een niet-gerelateerde implementatie wordt mogelijk niet correct ontsleuteld."
+      }
+    ]
+  },
+  {
+    "id": "api-forge",
+    "component": "ApiForge",
+    "name": "Torensa API Forge",
+    "title": "Torensa API Forge – REST-API's online testen en bouwen",
+    "description": "Bouw en test API-verzoeken direct in de browser.",
+    "path": "/api-request-builder",
+    "ctaLabel": "API Forge openen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Torensa API Forge laat je API-verzoeken direct in de browser versturen, inclusief JWT Bearer-auth, aangepaste headers, query-/padparameters en JSON/raw body.",
+    "categoryId": "developer",
+    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecteer de HTTP-methode (GET, POST, PUT, PATCH, DELETE) uit het methodekeuzemenu.",
+      "Voer de volledige API-eindpunt-URL in inclusief eventuele padparameters.",
+      "Voeg queryparameters toe via het Params-tabblad — elk sleutel-waardepaar wordt automatisch aan de URL toegevoegd.",
+      "Voeg aangepaste verzoekheaders toe op het Headers-tabblad (bijv. Content-Type, Accept of aangepaste API-headers).",
+      "Voor POST/PUT/PATCH-verzoeken schakel je naar het Body-tabblad en voer je je JSON of raw verzoekbody in.",
+      "Om te authenticeren met een JWT Bearer-token voer je het token in op het Autorisatie-tabblad.",
+      "Klik op Verzenden. De responsstatus, headers en body worden weergegeven in het responsvenster."
+    ],
+    "faqs": [
+      {
+        "q": "Hoe verschilt API Forge van Postman?",
+        "a": "API Forge is een lichtgewicht, browsergebaseerd tool zonder installatie of account vereist. Het dekt de meest voorkomende API-testbehoeften in een snelle, minimale interface. Postman biedt meer geavanceerde functies zoals collections, omgevingen en testscripts voor complexe workflows."
+      },
+      {
+        "q": "Kan ik API's testen die authenticatie vereisen?",
+        "a": "Ja. API Forge ondersteunt JWT Bearer-tokenauthenticatie. Voer je token in het Autorisatie-gedeelte in en het wordt als Bearer-header meegestuurd in het verzoek."
+      },
+      {
+        "q": "Waarom mislukt mijn verzoek met een CORS-fout?",
+        "a": "CORS-fouten treden op wanneer een API-server verzoeken van een andere oorsprong blokkeert. Dit is een browserbeveiliging, geen API Forge-probleem. Om CORS-beperkte API's te testen configureer je de server om de oorsprong toe te staan, of gebruik je een server-side proxy."
+      },
+      {
+        "q": "Slaat API Forge mijn verzoekgeschiedenis op?",
+        "a": "Recente verzoeken kunnen voor het gemak worden opgeslagen in de lokale browseropslag. Er worden geen gegevens naar externe servers gestuurd."
+      },
+      {
+        "q": "Welke content-types worden ondersteund voor de verzoekbody?",
+        "a": "API Forge ondersteunt JSON, platte tekst en raw body-formaten. Stel de Content-Type-header in op application/json, text/plain of een ander type dat je API vereist."
+      },
+      {
+        "q": "Kan ik API Forge gebruiken om GraphQL-API's te testen?",
+        "a": "Ja. GraphQL gebruikt HTTP POST-verzoeken met een JSON-body met de query- en variables-velden. Voer het GraphQL-eindpunt in, stel Content-Type in op application/json en plak je GraphQL-query als verzoekbody."
+      }
+    ]
+  },
+  {
+    "id": "word-to-pdf",
+    "component": "WordToPdf",
+    "name": "Word naar PDF converter",
+    "title": "Word naar PDF converter – DOCX gratis naar PDF omzetten",
+    "description": "Zet Word-documenten (.doc, .docx) om naar PDF met perfecte opmaakgetrouwheid.",
+    "path": "/word-to-pdf",
+    "ctaLabel": "Naar PDF omzetten",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een Word-document (.doc of .docx) en zet het in seconden om naar PDF. De conversie draait op de server met LibreOffice en behoudt lettertypen, tabellen, afbeeldingen en opmaak. Bestanden worden in het geheugen verwerkt en nooit opgeslagen.",
+    "categoryId": "utilities",
+    "keywords": [
+      "word",
+      "docx",
+      "doc",
+      "pdf",
+      "convert",
+      "document",
+      "word naar pdf"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op 'Word-document kiezen' en selecteer een .doc- of .docx-bestand van je apparaat.",
+      "Klik op 'Naar PDF omzetten' om de conversie te starten.",
+      "Wacht een paar seconden terwijl LibreOffice het bestand op de server verwerkt.",
+      "Klik op 'Downloaden' om de resulterende PDF op je apparaat op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn document op de server opgeslagen?",
+        "a": "Nee. Het bestand wordt verwerkt in een tijdelijke map en direct na de conversie verwijderd. Er wordt niets bewaard."
+      },
+      {
+        "q": "Wat is de maximale bestandsgrootte?",
+        "a": "Bestanden tot 20 MB worden ondersteund."
+      },
+      {
+        "q": "Blijft mijn opmaak behouden?",
+        "a": "Ja. De conversie wordt gedaan door LibreOffice, dat lettertypen, tabellen, afbeeldingen, kop- en voetteksten getrouw weergeeft. Complexe documenten met aangepaste lettertypen kunnen kleine afwijkingen hebben als die lettertypen niet op de server zijn geïnstalleerd."
+      },
+      {
+        "q": "Kan ik ook .doc-bestanden (ouder Word-formaat) omzetten?",
+        "a": "Ja, zowel .doc (Word 97-2003) als .docx (Word 2007+) worden geaccepteerd."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-pdf",
+    "component": "ExcelToPdf",
+    "name": "Excel naar PDF converter",
+    "title": "Excel naar PDF converter – XLSX gratis naar PDF omzetten",
+    "description": "Zet Excel-spreadsheets (.xls, .xlsx) om naar PDF met nauwkeurige opmaak en grafieken.",
+    "path": "/excel-to-pdf",
+    "ctaLabel": "Naar PDF omzetten",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een Excel-spreadsheet (.xls, .xlsx of .xlsm) en zet het in seconden om naar PDF. De conversie draait op de server met LibreOffice en behoudt bladopmaak, tabellen en grafieken. Bestanden worden in het geheugen verwerkt en nooit opgeslagen.",
+    "categoryId": "utilities",
+    "keywords": [
+      "excel",
+      "xls",
+      "xlsx",
+      "xlsm",
+      "pdf",
+      "convert",
+      "spreadsheet",
+      "excel naar pdf"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op 'Excel-bestand kiezen' en selecteer een .xls-, .xlsx- of .xlsm-bestand van je apparaat.",
+      "Klik op 'Naar PDF omzetten' om de conversie te starten.",
+      "Wacht een paar seconden terwijl LibreOffice de spreadsheet op de server verwerkt.",
+      "Klik op 'Downloaden' om de resulterende PDF op je apparaat op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn spreadsheet op de server opgeslagen?",
+        "a": "Nee. Het bestand wordt verwerkt in een tijdelijke map en direct na de conversie verwijderd. Er wordt niets bewaard."
+      },
+      {
+        "q": "Wat is de maximale bestandsgrootte?",
+        "a": "Bestanden tot 20 MB worden ondersteund."
+      },
+      {
+        "q": "Blijven formules en grafieken behouden?",
+        "a": "LibreOffice rendert het blad naar PDF, dus formules worden geëvalueerd en grafieken worden bewaard zoals ze in de spreadsheet verschijnen."
+      },
+      {
+        "q": "Kan ik werkmappen met meerdere bladen omzetten?",
+        "a": "Ja. LibreOffice exporteert alle bladen naar één PDF, in dezelfde volgorde als je werkmap."
+      }
+    ]
+  },
+  {
+    "id": "pdf-to-word",
+    "component": "PdfToWord",
+    "name": "PDF naar Word converter",
+    "title": "PDF naar Word converter – PDF gratis naar DOCX omzetten",
+    "description": "Zet PDF-bestanden in seconden om naar bewerkbare Word-documenten (.docx).",
+    "path": "/pdf-to-word",
+    "ctaLabel": "Naar Word omzetten",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een PDF en zet het om naar een bewerkbaar .docx-bestand. De conversie draait op de server met LibreOffice en behoudt opmaak en tekst zo goed mogelijk. Bestanden worden in het geheugen verwerkt en nooit opgeslagen.",
+    "categoryId": "utilities",
+    "keywords": ["pdf", "word", "docx", "convert", "document", "pdf naar word"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op 'PDF-bestand kiezen' en selecteer een .pdf-bestand van je apparaat.",
+      "Klik op 'Naar Word omzetten' om de conversie te starten.",
+      "Wacht een paar seconden terwijl LibreOffice het bestand op de server verwerkt.",
+      "Klik op 'Downloaden' om het resulterende .docx-bestand op je apparaat op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn bestand op de server opgeslagen?",
+        "a": "Nee. Het bestand wordt verwerkt in een tijdelijke map en direct na de conversie verwijderd. Er wordt niets bewaard."
+      },
+      {
+        "q": "Wat is de maximale bestandsgrootte?",
+        "a": "Bestanden tot 20 MB worden ondersteund."
+      },
+      {
+        "q": "Blijft de opmaak behouden?",
+        "a": "LibreOffice doet zijn best om de opmaak te reconstrueren, maar PDF naar Word conversie is inherent onvolmaakt — complexe lay-outs kunnen na de conversie handmatige aanpassingen nodig hebben."
+      }
+    ]
+  },
+  {
+    "id": "text-to-qr",
+    "component": "TextToQr",
+    "name": "Tekst naar QR-code builder",
+    "title": "QR-code generator – Gratis QR-codes online maken",
+    "description": "Genereer QR-codes van tekst of URL's met optionele logoondersteuning.",
+    "path": "/qr-code-generator",
+    "ctaLabel": "QR-code genereren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Maak scanbare QR-codes van platte tekst of links met live voorvertoning. Voeg optioneel een logo toe en voeg een korte tekst toe, download vervolgens het eindresultaat als PNG. Alle verwerking vindt in de browser plaats, dus geen upload vereist.",
+    "categoryId": "business",
+    "keywords": [
+      "qr",
+      "qrcode",
+      "tekst",
+      "link",
+      "qr-code",
+      "qr code",
+      "scannen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": true,
+    "howTo": [
+      "Typ of plak tekst, een website-URL, telefoonnummer of e-mailadres in het invoerveld.",
+      "Een live QR-codevoorvertoning wordt onmiddellijk bijgewerkt terwijl je typt.",
+      "Upload optioneel een logoafbeelding om deze in het midden van de QR-code in te sluiten.",
+      "Voer optioneel een korte tekst in die onder de QR-code in het geëxporteerde afbeelding wordt weergegeven.",
+      "Gebruik de geavanceerde opties om QR-grootte, foutcorrectieniveau of kleuren aan te passen.",
+      "Klik op Downloaden om de QR-code als PNG-afbeelding met hoge resolutie op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Welk soort inhoud kan ik in een QR-code coderen?",
+        "a": "Je kunt platte tekst, website-URL's, e-mailadressen, telefoonnummers, Wi-Fi-instellingen, SMS-berichten en meer coderen. Elke UTF-8 tekststring kan in een QR-code worden opgeslagen."
+      },
+      {
+        "q": "Scant de QR-code nog steeds als ik een logo toevoeg?",
+        "a": "Ja. QR-codes hebben ingebouwde foutcorrectie waarmee tot 30% van de code verduisterd kan worden. Een klein gecentreerd logo gebruikt meestal minder dan 20% van het code-area en blijft volledig scanbaar."
+      },
+      {
+        "q": "Wat is de foutcorrectieniveauinstelling?",
+        "a": "Foutcorrectie bepaalt hoeveel van de QR-code kan worden beschadigd voordat het onleesbaar wordt. Niveau L (7%) is het compactst, terwijl Niveau H (30%) het veerkrachtigst is maar dichter. Gebruik Niveau M of H bij het toevoegen van een logo."
+      },
+      {
+        "q": "Kan ik dit tool offline gebruiken?",
+        "a": "Ja. De QR-code wordt volledig in je browser gegenereerd zonder serververzoeken, dus het werkt offline zodra de pagina is geladen."
+      },
+      {
+        "q": "Wat is de resolutie van de gedownloade PNG?",
+        "a": "De geëxporteerde PNG wordt gegenereerd in de grootte die is ingesteld in de geavanceerde opties (standaard 300x300 px, verstelbaar tot 1000x1000 px), dus geschikt voor digitaal gebruik en afdrukken."
+      },
+      {
+        "q": "Is er een limiet op hoeveel tekst ik kan coderen?",
+        "a": "Een QR-code kan ongeveer 4.296 alfanumerieke tekens opslaan, maar langere inhoud creëert een dichtere code. Voor URL's en korte strings onder 200 tekens is de scankwaliteit altijd uitstekend."
+      }
+    ]
+  },
+  {
+    "id": "barcode-generator",
+    "component": "BarcodeGenerator",
+    "name": "Barcode generator",
+    "title": "Barcode generator – Streepjescodes gratis online maken",
+    "description": "Genereer streepjescodes (Code 128, Code 39, EAN, UPC) en download als PNG.",
+    "path": "/barcode-generator",
+    "ctaLabel": "Barcode genereren",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Maak printable streepjescodes direct in je browser met ondersteuning voor veelgebruikte formaten zoals Code 128, Code 39, EAN-13, EAN-8 en UPC-A. Pas breedte, hoogte en tekstweergave aan en exporteer de barcode als PNG.",
+    "categoryId": "business",
+    "keywords": [
+      "barcode",
+      "code128",
+      "code39",
+      "ean13",
+      "ean8",
+      "upc",
+      "label",
+      "streepjescode"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": true,
+    "howTo": [
+      "Selecteer het barcodeformaat dat aansluit bij je toepassing (Code 128 is standaard het veiligst voor meeste tekst en nummers).",
+      "Typ de waarde die je wilt coderen in het invoerveld. De voorvertoning wordt in realtime bijgewerkt.",
+      "Pas breedte-, hoogte- en tekengrootteinstellingen aan om aan je labelvereis­ten te voldoen.",
+      "Zet de tekstweergaveopcie aan of uit om de leesbare tekst onder de barcode te tonen of verbergen.",
+      "Verifieer dat de barcode er correct uitziet in het live voorvertoning-paneel.",
+      "Klik op Downloaden PNG om de barcodeafbeelding op te slaan, klaar voor afdrukken of insluiten in documenten."
+    ],
+    "faqs": [
+      {
+        "q": "Welk barcodeformaat moet ik gebruiken?",
+        "a": "Code 128 ondersteunt de volledige ASCII-tekenset en variabele lengte, wat ideaal is voor algemene productlabels, verzending en voorraadbeheer. Gebruik EAN-13 of UPC-A voor verkooplabels die in winkels gescand moeten worden. Code 39 is gebruikelijk in industriële en automobiele contexten."
+      },
+      {
+        "q": "Wat is het verschil tussen EAN-13 en EAN-8?",
+        "a": "EAN-13 codeert 13 cijfers en is de wereldwijde standaard voor retailproducten. EAN-8 codeert 8 cijfers en is een compacte versie voor kleine verpakking waar een volledige EAN-13-barcode niet zou passen."
+      },
+      {
+        "q": "Moet ik een controlecijfer opnemen?",
+        "a": "Voor EAN-13, EAN-8 en UPC-A wordt het controlecijfer automatisch berekend en toegevoegd. Voor Code 128 en Code 39 voer je nur je waarde in en de barcode wordt direct gegenereerd."
+      },
+      {
+        "q": "Kan ik deze barcode gebruiken voor retail-scanning?",
+        "a": "Ja, maar EAN- en UPC-streepjescodes die voor commerciële retail worden gebruikt moeten een officieel gelicentieerd GS1-voorvoegsel hebben om wereldwijd uniek te zijn. Voor interne voorraadbeheer of persoonlijk gebruik werkt elke numerieke waarde prima."
+      },
+      {
+        "q": "Met welke resolutie wordt de PNG-uitvoer gegenereerd?",
+        "a": "De PNG wordt gerenderd in de breedte- en hoogteinstellingen die je configureert. Voor afdrukgebruik verhoog je deze waarden om een hogere resolutie te bereiken die geschikt is voor labelprinters."
+      },
+      {
+        "q": "Werkt dit tool offline?",
+        "a": "Ja. Barcodegeneratie is volledig aan de clientzijde zonder serveroproepen vereist. Het werkt zonder internetverbinding zodra de pagina is geladen."
+      }
+    ]
+  },
+  {
+    "id": "image-generator",
+    "component": "AiImageGenerator",
+    "name": "AI-afbeeldingengenerator",
+    "title": "AI-afbeeldingengenerator – Maak kunst met AI online",
+    "description": "Beschrijf elke afbeelding in gewone taal en AI genereert deze voor je. Download als PNG.",
+    "path": "/image-generator",
+    "ctaLabel": "Afbeeldingengenerator openen",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Typ een beschrijving van de afbeelding die je wilt – van een realistisch landschap tot een creatieve illustratie – en AI (Stability AI Stable Image Core via AWS Bedrock) maakt het. Bekijk het resultaat direct en download als PNG met hoge resolutie.",
+    "categoryId": "utilities",
+    "keywords": [
+      "afbeelding",
+      "genereren",
+      "ai",
+      "foto",
+      "kunst",
+      "illustratie",
+      "creëren",
+      "tekst naar afbeelding"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Typ een beschrijving van de afbeelding die je wilt in het tekstveld – wees zo specifiek mogelijk voor beste resultaten.",
+      "Klik op Afbeelding genereren en wacht een paar seconden terwijl de AI je afbeelding maakt.",
+      "De gegenereerde afbeelding verschijnt onder de invoer. Controleer of deze overeenkomt met je beschrijving.",
+      "Klik op PNG downloaden om de afbeelding op je computer op te slaan.",
+      "Als het resultaat niet helemaal klopt, pas je beschrijving aan en genereer opnieuw."
+    ],
+    "faqs": [
+      {
+        "q": "Hoe werkt AI-afbeeldingengeneratie?",
+        "a": "Je tekstbeschrijving wordt naar Stability AI Stable Image Core op AWS Bedrock gestuurd, die een afbeelding van 1024×1024 pixels maakt op basis van je beschrijving."
+      },
+      {
+        "q": "Wat voor soort afbeeldingen kan ik genereren?",
+        "a": "Je kunt bijna alles beschrijven – landschappen, dieren, abstracte kunst, productmockups, illustraties en meer. Hoe specifieker je beschrijving, hoe beter het resultaat."
+      },
+      {
+        "q": "In welk formaat wordt de downloadafbeelding geleverd?",
+        "a": "Afbeeldingen worden gedownload als PNG-bestanden met 1024×1024 pixelresolutie."
+      },
+      {
+        "q": "Wordt mijn beschrijving opgeslagen of gelogd?",
+        "a": "Beschrijvingen worden in real time verwerkt en niet op de server opgeslagen na het genereren van de afbeelding."
+      },
+      {
+        "q": "Hoe lang duurt het om een afbeelding te genereren?",
+        "a": "Meestal een paar seconden, afhankelijk van complexiteit en huidige serverbelasting."
+      }
+    ]
+  },
+  {
+    "id": "pdf-text-extractor",
+    "component": "PdfTextExtractor",
+    "name": "PDF tekstextractor (OCR)",
+    "title": "PDF tekstextractor (OCR) – Tekst uit PDF halen",
+    "description": "Extraheer tekst uit gescande of digitale PDF's met optische tekenherkenning",
+    "path": "/pdf-text-extractor",
+    "ctaLabel": "Tekst extraheren",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een PDF met selecteerbare tekst of gescande afbeeldingen en extraheer alle leesbare tekst. Digitale PDF's worden direct geparset voor perfecte nauwkeurigheid, terwijl gescande pagina's automatisch met Tesseract OCR worden verwerkt. Kopieer het resultaat naar je klembord of download als .txt-bestand.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf",
+      "ocr",
+      "tekst",
+      "extraheren",
+      "scan",
+      "gescand",
+      "lezen",
+      "converteren"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep je PDF-bestand naar de pagina.",
+      "Klik op Tekst extraheren om te starten. Digitale tekst wordt direct geëxtraheerd; gescande pagina's worden automatisch met OCR verwerkt.",
+      "Bekijk de geëxtraheerde tekst in het uitvoerpaneel eronder.",
+      "Klik op Tekst kopiëren om het resultaat naar je klembord te kopiëren, of Download .txt om het als tekstbestand op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Werkt dit tool met gescande PDF's?",
+        "a": "Ja. Pagina's die alleen afbeeldingen bevatten (gescande documenten) worden automatisch met Tesseract OCR verwerkt om de tekst te extraheren. Digitale PDF's met selecteerbare tekst worden direct geparset voor beste nauwkeurigheid."
+      },
+      {
+        "q": "Welke talen worden ondersteund voor OCR?",
+        "a": "De standaard OCR-engine herkent Engelse tekst. Voor de meeste gescande documenten, bonnen, contracten en rapporten in het Engels zijn de resultaten zeer nauwkeurig."
+      },
+      {
+        "q": "Is er een pagina- of bestandsgroottelimiet?",
+        "a": "Bestanden tot 20 MB worden geaccepteerd. Grotere gescande PDF's met veel pagina's kunnen langer duren vanwege OCR-verwerking op elke pagina."
+      },
+      {
+        "q": "Wordt mijn bestand op de server opgeslagen?",
+        "a": "Nee. Het geüploade bestand wordt in een tijdelijke map verwerkt en direct na het extraheren van de tekst verwijderd. Er wordt niets bewaard."
+      },
+      {
+        "q": "Waarom is de geëxtraheerde tekst leeg?",
+        "a": "Wanneer de PDF alleen afbeeldingen bevat zonder herkenbare tekst (bijv. foto's, diagrammen) kan OCR geen leesbare tekens vinden. Zorg ervoor dat het gescande document redelijk duidelijke tekst bevat."
+      },
+      {
+        "q": "Kan ik tekst uit een met wachtwoord beveiligde PDF extraheren?",
+        "a": "Met wachtwoord beveiligde (versleutelde) PDF's moeten eerst worden ontgrendeld voor het uploaden. Het tool vraagt niet naar wachtwoorden."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-csv",
+    "component": "DataFormatConverter",
+    "name": "Gegevensbestanden converter",
+    "title": "Gegevensbestandconverter – CSV JSON gratis omzetten",
+    "description": "Zet bestanden tussen Excel (.xlsx), CSV en JSON direct in je browser om.",
+    "path": "/data-format-converter",
+    "ctaLabel": "Bestanden omzetten",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload een Excel-, CSV- of JSON-bestand en zet het om naar een ander format. Alle parsing en conversie gebeuren aan de clientzijde, dus je bestanden blijven op je apparaat.",
+    "categoryId": "utilities",
+    "keywords": [
+      "excel",
+      "csv",
+      "json",
+      "spreadsheet",
+      "converteren",
+      "gegevens"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klik op het uploadgebied of sleep je Excel (.xlsx)-, CSV- of JSON-bestand naar de pagina.",
+      "Het tool detecteert automatisch het invoerformaat op basis van de bestandsextensie.",
+      "Selecteer je gewenste uitvoerformaat uit de formaatopties (Excel, CSV of JSON).",
+      "Klik op de Omzetten-knop om het conversieproces te starten.",
+      "Bekijk de geconverteerde uitvoer in het resultaatpaneel om te verifiëren dat de gegevens er correct uitzien.",
+      "Klik op Downloaden om het geconverteerde bestand op je apparaat op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Uploadt dit tool mijn bestand naar een server?",
+        "a": "Nee. Alle parsing en conversie happen volledig in je browser met behulp van JavaScript aan de clientzijde. Je bestand wordt nooit naar een server verzonden, wat je gegevens volledig privé houdt."
+      },
+      {
+        "q": "Welke bestandsformaten worden ondersteund?",
+        "a": "De converter ondersteunt Excel (.xlsx), CSV (kommagescheiden waarden) en JSON. Je kunt tussen elke combinatie van deze drie formaten converteren."
+      },
+      {
+        "q": "Blijven mijn Excel-formules in de uitvoer behouden?",
+        "a": "Formules worden geëvalueerd naar hun berekende waarden tijdens conversie. De ruwe formuletekst wordt niet overgedragen naar CSV- of JSON-uitvoer, maar de resulterende gegevenswaarden blijven behouden."
+      },
+      {
+        "q": "Hoe groot mag een bestand zijn dat ik omzet?",
+        "a": "Omdat verwerking in de browser gebeurt, hangen praktische limieten af van het beschikbare geheugen van je apparaat. Bestanden tot enkele honderden MB werken meestal zonder problemen op moderne hardware."
+      },
+      {
+        "q": "Kan ik een Excel-bestand met meerdere bladen omzetten?",
+        "a": "De converter verwerkt standaard het eerste (actieve) blad van het Excel-bestand, wat het overgrote deel van één-bladenwerkboeken en exports dekt."
+      },
+      {
+        "q": "Is dit tool gratis te gebruiken?",
+        "a": "Ja, de gegevensbestanden converter is volledig gratis en vereist geen account. Upload je bestand en zet het direct om."
+      }
+    ]
+  },
+  {
+    "id": "speech-to-text",
+    "component": "Transcribe",
+    "name": "Spreak naar tekst converter",
+    "title": "Taal naar tekst converter – Audio gratis uitwerken",
+    "description": "Zet spraak in audio-/videobestanden om in nauwkeurige tekst met AWS Transcribe.",
+    "path": "/speech-to-text",
+    "ctaLabel": "Spraak naar tekst openen",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Upload een audiobestand en ontvang een schone transcriptie aangestuurd door Amazon Transcribe. Ondersteunt veelgebruikte audioformaten zoals MP3, WAV, MP4, M4A, FLAC, OGG en WEBM.",
+    "categoryId": "utilities",
+    "keywords": [
+      "transcriberen",
+      "spreak",
+      "audio",
+      "spreak naar tekst",
+      "aws",
+      "transcript"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Sleep een audiobestand of klik om er een te selecteren.",
+      "Kies de gesproken taal in de audio.",
+      "Klik op Audio transcriberen en wacht tot de verwerking is voltooid.",
+      "Bekijk het transcript en kopieer of download het als .txt-bestand."
+    ],
+    "faqs": [
+      {
+        "q": "Welke audioformaten worden ondersteund?",
+        "a": "Veelgebruikte formaten inclusief MP3, WAV, MP4/M4A, FLAC, OGG en WEBM worden ondersteund."
+      },
+      {
+        "q": "Hoe lang duurt transcriptie?",
+        "a": "Korte clips worden in seconden voltooid, terwijl langere opnames enkele minuten kunnen duren afhankelijk van grootte en serverbelasting."
+      },
+      {
+        "q": "Wordt mijn audio permanent opgeslagen?",
+        "a": "De server uploadt audio naar een tijdelijke opslaglocatie voor transcriptie en verwijdert deze daarna."
+      }
+    ]
+  },
+  {
+    "id": "video-to-audio",
+    "component": "VideoToAudio",
+    "name": "Video naar audio converter",
+    "title": "Video naar audio converter – MP4 naar MP3 gratis omzetten",
+    "description": "Extraheer audio uit video's en download als MP3 of WAV.",
+    "path": "/video-to-audio",
+    "ctaLabel": "Video naar audio omzetten",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een videobestand (MP4, WebM, Ogg of andere veelgebruikte formaten) en extraheer de audiotrackt als MP3 of WAV. Perfect voor het omzetten van YouTube-videos, opgenomen presentaties of andere videobronnen naar puur audio voor luisteren onderweg.",
+    "categoryId": "utilities",
+    "keywords": [
+      "video",
+      "audio",
+      "converter",
+      "mp4",
+      "mp3",
+      "wav",
+      "extract",
+      "video naar audio"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload een videobestand (MP4, WebM, Ogg of ander videoformaat).",
+      "Kies je gewenste audioformaat: MP3 voor kleinere bestandsgrootte of WAV voor verliesvrij geluid.",
+      "Klik op Video naar audio omzetten en wacht tot de verwerking klaar is.",
+      "Download het audiobestand."
+    ],
+    "faqs": [
+      {
+        "q": "Welke videoformaten worden ondersteund?",
+        "a": "Veelgebruikte videoformaten inclusief MP4, WebM, Ogg, MOV, AVI en anderen worden ondersteund."
+      },
+      {
+        "q": "Hoe lang duurt de omzetting?",
+        "a": "De verwerkingstijd hangt af van de videolengte en serverbelasting. De meeste omzettingen worden in enkele minuten voltooid."
+      },
+      {
+        "q": "Wordt mijn video op de server opgeslagen?",
+        "a": "Nee. De video wordt verwerkt in een tijdelijke map en onmiddellijk daarna verwijderd."
+      }
+    ]
+  },
+  {
+    "id": "clearwave",
+    "component": "NoiseRemover",
+    "name": "ClearWave – Audio ruisfilter",
+    "title": "ClearWave – Achtergrondgeluid verwijderen uit audio online",
+    "description": "Verwijder achtergrondgeluid uit audiobestanden of opnamen. Krijg direct schoon, helder geluid.",
+    "path": "/clearwave",
+    "ctaLabel": "Audio opschonen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "ClearWave verwijdert ongewenst achtergrondgeluid uit je audiobestanden. Upload een opname met wind, gezoem, ruis of omgevingsgeluid en krijg een schone versie terug. Kies uit lichte, gemiddelde of sterke ruisonderdrukking. Ondersteunt MP3, WAV, M4A, AAC, OGG, FLAC, AMR en WEBM-formaten. Verwerking draait op de server met FFmpeg's geavanceerde FFT-gebaseerde denoiser — geen software-installatie nodig.",
+    "categoryId": "utilities",
+    "keywords": [
+      "ruisfilter",
+      "achtergrondgeluid verwijderen",
+      "audio ruisreductie",
+      "schoon geluid",
+      "denoise audio",
+      "ruis verwijderen",
+      "gezoem verwijderen",
+      "audio opschonen",
+      "ruisonderdrukking",
+      "helder geluid",
+      "clearwave",
+      "ruisfilter",
+      "ruis reduceren",
+      "audio verbetering"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload een audiobestand (MP3, WAV, M4A, AAC, OGG, FLAC, AMR of WEBM) of neem op met je microfoon.",
+      "Kies een ruisonderdrukkinginten­siteit: Licht voor subtiele opschoning, Gemiddeld voor evenwichtige resultaten, of Sterk voor agressieve ruisverwijdering.",
+      "Kies MP3 voor een kleiner bestand of WAV voor verliesvrij geluid.",
+      "Klik op Ruis verwijderen en wacht tot de verwerking klaar is.",
+      "Download of deel het schoongestelde audiobestand."
+    ],
+    "faqs": [
+      {
+        "q": "Welke soorten ruis kan ClearWave verwijderen?",
+        "a": "ClearWave verwijdert veelvorkomend achtergrondgeluid waaronder ruis, gezoem, wind, ventilatorruis, airconditioning en algemeen omgevingsgeluid. Het werkt het best op constant achtergrondgeluid in plaats van plotselinge harde geluidenGeluiden."
+      },
+      {
+        "q": "Zal ruisverwijdering de kwaliteit van mijn audio beïnvloeden?",
+        "a": "Lichte en gemiddelde instellingen behouden audiokwaliteit goed terwijl ruis wordt verwijderd. De sterke instelling verwijdert meer ruis maar kan audioduidelijkheid enigszins beïnvloeden. Begin met gemiddeld en pas aan indien nodig."
+      },
+      {
+        "q": "Welke audioformaten worden ondersteund?",
+        "a": "Veelgebruikte formaten inclusief MP3, WAV, M4A, AAC, OGG, FLAC, AMR en WEBM."
+      },
+      {
+        "q": "Wordt mijn audio op de server opgeslagen?",
+        "a": "Nee. Bestanden worden in een tijdelijke map verwerkt en direct na verwerking verwijderd. Je privacy is volledig beschermd."
+      },
+      {
+        "q": "Kan ik audio direct opnemen en opschonen?",
+        "a": "Ja! Gebruik de Microfoon opnemen optie om audio direct van je microfoon vast te leggen, pas vervolgens ruisreductie toe om het op te schonen."
+      }
+    ]
+  },
+  {
+    "id": "habit-tracker",
+    "component": "HabitTracker",
+    "name": "Habittracker",
+    "title": "Habittracker – Dagelijkse doelen & gewoonten online bijhouden",
+    "description": "Houd dagelijks gewoonten bij, verdien punten voor voltooide taken en zie je voortgang in de loop van de tijd.",
+    "path": "/habit-tracker",
+    "ctaLabel": "Gewoonten bijhouden",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Maak een lijst met gewoonten die je elke dag wilt doen, elk met een aangepaste puntwaarde. Vink voltooide gewoonten af om punten te verdienen. Een staafdiagram toont je punten gedurende de afgelopen 14 dagen zodat je je consistentie kunt volgen. Alle gegevens worden lokaal in je browser opgeslagen.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "gewoonte",
+      "tracker",
+      "dagelijks",
+      "routine",
+      "punten",
+      "productiviteit",
+      "doelen",
+      "controlelijst",
+      "welzijn",
+      "gezondheid"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Voer een gewoontenaam en puntwaarde in en klik op Toevoegen.",
+      "Vink elke gewoonte af terwijl je deze gedurende de dag voltooit.",
+      "Je punten voor vandaag worden in realtime bijgewerkt terwijl je gewoonten afvinkt.",
+      "Bekijk het staafdiagram om je puntentrend over de afgelopen 14 dagen te zien.",
+      "Verwijder een gewoonte door op het verwijderpictogram ernaast te klikken."
+    ],
+    "faqs": [
+      {
+        "q": "Waar worden mijn gegevens opgeslagen?",
+        "a": "Alle gewoonten en voltooiingsgegevens worden opgeslagen in de lokale opslag van je browser. Niets wordt naar een server verzonden."
+      },
+      {
+        "q": "Kan ik dit offline gebruiken?",
+        "a": "Ja, de habittracker werkt volledig offline omdat alle verwerking in je browser plaatsvindt."
+      },
+      {
+        "q": "Stelt het diagram in?",
+        "a": "Het diagram toont altijd de afgelopen 14 dagen. Oudere gegevens worden nog steeds opgeslagen en verschijnen als je terugkijkt."
+      }
+    ]
+  },
+  {
+    "id": "text-to-speech",
+    "component": "TextToSpeech",
+    "name": "Tekst naar spraak converter",
+    "title": "Tekst naar spraak converter – Zet tekst om in audio",
+    "description": "Zet tekst om in natuurlijk klinkende spraak met de ingebouwde stemmen van je browser.",
+    "path": "/text-to-speech",
+    "ctaLabel": "Tekst naar spraak openen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Typ of plak elke tekst en hoor deze hardop gelezen met de Web Speech API ingebouwd in je browser. Kies uit tientallen stemmen en talen, pas snelheid, toonhoogte en volume aan en beheer afspeeling met pauze, hervatten en stoppen. Volledig aan de clientzijde — je tekst verlaat je browser nooit.",
+    "categoryId": "utilities",
+    "keywords": [
+      "tekst",
+      "spraak",
+      "tts",
+      "stem",
+      "lezen",
+      "hardop",
+      "audio",
+      "spreken"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Typ of plak de tekst die je wilt horen in het tekstveld.",
+      "Selecteer een stem uit het vervolgkeuze­menu — stemmen variëren per browser en besturingssysteem.",
+      "Pas de schuifregelaars voor snelheid, toonhoogte en volume naar wens aan.",
+      "Klik op Spreken om het afspelen te starten.",
+      "Gebruik Pauze, Hervatten of Stoppen om het afspelen naar behoefte te beheren.",
+      "Klik op Voorbeeldtekst laden om het tool met voorbeeldtekst uit te proberen."
+    ],
+    "faqs": [
+      {
+        "q": "Verzendt dit tool mijn tekst naar een server?",
+        "a": "Nee. Alle spraaksynthese vindt lokaal plaats in je browser met behulp van de Web Speech API. Je tekst verlaat je apparaat nooit."
+      },
+      {
+        "q": "Waarom zie ik verschillende stemmen op verschillende browsers?",
+        "a": "Beschikbare stemmen hangen af van je browser en besturingssysteem. Chrome, Edge, Firefox en Safari bieden elk verschillende stemsets. Sommige browsers bevatten ook online-uitgebreide stemmen wanneer verbonden met internet."
+      },
+      {
+        "q": "Kan ik dit tool offline gebruiken?",
+        "a": "Ja. Zodra de pagina is geladen, werkt tekst-naar-spraak offline met de ingebouwde stemmen van je systeem. Sommige premium of online-alleen stemmen zijn mogelijk offline niet beschikbaar."
+      },
+      {
+        "q": "Welke talen worden ondersteund?",
+        "a": "Het tool ondersteunt alle talen waarvoor je browser stemmen biedt. De meeste systemen bevatten stemmen voor Engels, Spaans, Frans, Duits, Japans, Chinees en vele anderen."
+      },
+      {
+        "q": "Is er een tekstlengtelimiet?",
+        "a": "Er is geen harde limiet in dit tool, maar zeer lange teksten kunnen onderhevig zijn aan browserspecifieke limieten. Voor beste resultaten houd je afzonderlijke passages onder paar duizend woorden."
+      },
+      {
+        "q": "Kan ik de audio downloaden?",
+        "a": "De Web Speech API ondersteunt audio-export niet. De spraak wordt direct via je luidsprekers afgespeeld. Voor downloadbare audio zou een server-side TTS-service nodig zijn."
+      }
+    ]
+  },
+  {
+    "id": "sql-formatter",
+    "component": "SqlFormatter",
+    "name": "SQL formatter + beautifier",
+    "title": "SQL formatter & beautifier – SQL online opmaken",
+    "description": "Formatteer, verklein en schoon SQL-query's direct op.",
+    "path": "/sql-formatter",
+    "ctaLabel": "SQL-tool openen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Plak elke SQL-query en formatteer deze direct met passende inspringing en regelafbrekingen voor leesbaarheid. Verklein queries voor compacte opslag, schakel trefwoordcapitalisatie tussen HOOFDLETTERS en kleine letters om en kies je gewenste inspringingsstijl. Volledig aan de clientzijde — je SQL verlaat je browser nooit.",
+    "categoryId": "developer",
+    "keywords": [
+      "sql",
+      "formaat",
+      "mooier maken",
+      "verklein",
+      "query",
+      "database",
+      "mysql",
+      "postgres",
+      "sqlite"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak je SQL-query in de editor.",
+      "Klik op Formatteer om passende inspringing en regelafbrekingen voor leesbaarheid toe te voegen.",
+      "Klik op Verklein om de query in een compacte enkele regel samen te vouwen.",
+      "Gebruik GROOTLETTERS trefwoorden of kleine letters trefwoorden om de capitalisatie van SQL-trefwoorden te wijzigen.",
+      "Selecteer je voorkeursinspringingsstijl (2 spaties, 4 spaties of tab) uit het vervolgkeuze­menu.",
+      "Klik op Kopiëren om het resultaat naar je klembord te kopiëren.",
+      "Klik op Voorbeeldquery laden om het tool met een voorbeeldquery uit te proberen."
+    ],
+    "faqs": [
+      {
+        "q": "Welke SQL-dialecten worden ondersteund?",
+        "a": "De formatter werkt met standaard SQL-syntaxis en behandelt veelgebruikte dialecten inclusief MySQL, PostgreSQL, SQLite en SQL Server. Het herkent trefwoorden van alle grote SQL-databases."
+      },
+      {
+        "q": "Verandert opmaak het gedrag van mijn query?",
+        "a": "Nee. Opmaak wijzigt alleen witruimte, inspringing en optioneel trefwoordcapitalisatie. De logische betekenis van je query blijft identiek."
+      },
+      {
+        "q": "Zijn tekenreeksen gelden behouden?",
+        "a": "Ja. De formatter tokeniseert je SQL en wijzigt nooit inhoud binnen enkele aanhalingstekens of dubbele aanhalingstekens, backtick-aanhalingstekens of opmerkingen."
+      },
+      {
+        "q": "Wordt mijn SQL naar een server verzonden?",
+        "a": "Nee. Alle opmaak, verkleining en trefwoordcapitalisatie vinden lokaal in je browser plaats. Je SQL-gegevens verlaten je apparaat nooit."
+      },
+      {
+        "q": "Kan ik dit offline gebruiken?",
+        "a": "Ja. Zodra de pagina is geladen, werkt de SQL-formatter volledig offline zonder internetverbinding vereist."
+      }
+    ]
+  },
+  {
+    "id": "bmi-calculator",
+    "component": "BmiCalculator",
+    "name": "BMI-calculator (kg, cm, lb, ft)",
+    "title": "BMI-calculator (kg, cm, lb, ft) – Gratis gezondheidshulpmiddel",
+    "description": "Gratis BMI-calculator voor kg/cm of lb/ft. Krijg je Body Mass Index en categorie direct.",
+    "path": "/bmi-calculator",
+    "ctaLabel": "BMI berekenen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Bereken Body Mass Index (BMI) van je lengte en gewicht in seconden. Gebruik metrische (kg/cm) of imperiale (lb/ft) eenheden en zie je BMI-categorie op een kleurenschaal. Draait volledig in je browser - je gegevens verlaten je apparaat nooit.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "bmi",
+      "bmi-calculator",
+      "body mass index",
+      "rekenmachine",
+      "gewicht",
+      "lengte",
+      "kg",
+      "cm",
+      "lb",
+      "lbs",
+      "ft",
+      "voet",
+      "duimen",
+      "gezondheid",
+      "fitness",
+      "obesitas",
+      "ondergewicht",
+      "overgewicht",
+      "welzijn"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecteer Metrisch (kg/cm) of Imperiaal (lb/ft).",
+      "Voer je gewicht in.",
+      "Voer je lengte in. In imperiale modus voer je voeten en duimen apart in.",
+      "Klik op BMI berekenen om je resultaat te zien.",
+      "Bekijk je BMI-getal en categorie op de schaal."
+    ],
+    "faqs": [
+      {
+        "q": "Wat is BMI?",
+        "a": "Body Mass Index (BMI) is een eenvoudige maat die je lengte en gewicht gebruikt om in te schatten of je ondergewicht, normaal gewicht, overgewicht of obees bent. Het wordt veel gebruikt als snelle screeningsmaatstaf."
+      },
+      {
+        "q": "Hoe wordt BMI berekend?",
+        "a": "Metrisch: BMI = gewicht (kg) / lengte (m)^2. Imperiaal: BMI = (gewicht (lb) / lengte (in)^2) x 703."
+      },
+      {
+        "q": "Is BMI nauwkeurig voor iedereen?",
+        "a": "BMI is een nuttige algemene indicator maar houdt geen rekening met spiermassa, botwelstand, leeftijd of geslacht. Atleten en gespierde personen kunnen een hoge BMI hebben zonder overtollige lichaamsvet. Raadpleeg een medische professional voor een volledige beoordeling."
+      },
+      {
+        "q": "Wat zijn de BMI-categorieën?",
+        "a": "BMI-categorieën voor volwassenen zijn: onder 18,5 (ondergewicht), 18,5 tot 24,9 (normaal), 25 tot 29,9 (overgewicht) en 30+ (obees). Deze bereiken zijn algemene richtlijnen."
+      },
+      {
+        "q": "Wordt mijn data ergens naartoe verzonden?",
+        "a": "Nee. Alle berekeningen gebeuren lokaal in je browser. Je gewicht en lengte worden nooit naar een server verzonden."
+      },
+      {
+        "q": "Kan ik dit offline gebruiken?",
+        "a": "Ja. De BMI-calculator werkt volledig offline zonder internetverbinding vereist."
+      }
+    ]
+  },
+  {
+    "id": "resume-builder",
+    "component": "ResumeBuilder",
+    "name": "Gratis CV-maker – Professionele CV online maken",
+    "title": "Gratis CV-maker – Professionele CV online maken",
+    "description": "Bouw een professionele CV. Kies een template, vul je gegevens in en download een gepolijst PDF-bestand.",
+    "path": "/resume-builder",
+    "ctaLabel": "CV bouwen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Maak in enkele minuten een winnend CV of sollicitatiebrief met deze gratis online CV-maker. Kies uit professionele, moderne of minimalistische templates. Voeg je persoonlijke gegevens, werkervaring, onderwijs, vaardigheden en een professioneel samenvattingStelling toe. Bekijk je CV in realtime en download het als een schoon, ATS-vriendelijk PDF-bestand. Je gegevens worden lokaal in je browser opgeslagen — niets wordt naar een server verzonden. Geen inschrijving, geen watermerk, geen limieten. Werkt ook offline, dus je kunt je CV overal en altijd bouwen.",
+    "categoryId": "business",
+    "keywords": [
+      "cv-maker",
+      "cv-bouwer",
+      "gratis cv-bouwer",
+      "cv-maker",
+      "cv-maker online",
+      "cv online maken",
+      "cv gratis bouwen",
+      "professionele cv-bouwer",
+      "cv-generator",
+      "cv-generator",
+      "cv-template",
+      "cv-template gratis",
+      "ats-vriendelijk cv",
+      "cv pdf download",
+      "online cv-maker",
+      "gratis cv-bouwer geen registratie",
+      "cv-bouwer geen watermerk",
+      "eenvoudige cv-maker",
+      "taak-cv-bouwer",
+      "curriculum vitae-bouwer"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecteer een CV-template: Professioneel, Modern of Minimalistisch.",
+      "Voer je persoonlijke gegevens in — naam, e-mail, telefoonnummer, locatie en website- of LinkedIn-URL.",
+      "Schrijf een professioneel samenvattingStelling dat je ervaring en carrièredoelen benadrukt.",
+      "Voeg je werkervaring toe met functietitels, bedrijven, datums en belangrijke prestaties.",
+      "Voeg je onderwijs toe met graden, instellingen en alle relevante details.",
+      "Vermeld je vaardigheden — technisch, zacht en branchespecifiek.",
+      "Klik op Voorvertoning om te zien hoe je CV eruitziet als PDF.",
+      "Klik op PDF downloaden om je CV op te slaan. Het bestand wordt automatisch met je naam genoemd."
+    ],
+    "faqs": [
+      {
+        "q": "Is deze CV-bouwer echt gratis?",
+        "a": "Ja, 100% gratis. Er is geen inschrijving, geen verborgen kosten, geen watermerk en geen limiet voor hoeveel CV's je kunt maken of downloaden."
+      },
+      {
+        "q": "Welke CV-templates zijn beschikbaar?",
+        "a": "Drie templates zijn beschikbaar: Professioneel (klassiek blauwe koppen met schone lijnen), Modern (vet lettertype met een hedendaags gevoel) en Minimalistisch (eenvoudig en licht voor een eenvoudige CV)."
+      },
+      {
+        "q": "Worden mijn CV-gegevens opgeslagen of naar een server verzonden?",
+        "a": "Nee. Al je gegevens blijven in de lokale opslag van je browser. Niets wordt naar een server geüpload. Je informatie is volledig privé."
+      },
+      {
+        "q": "Kan ik deze CV-bouwer offline gebruiken?",
+        "a": "Ja. Zodra de pagina is geladen, werkt de CV-bouwer volledig offline. Je kunt je gegevens invullen en een PDF downloaden zonder internetverbinding."
+      },
+      {
+        "q": "Is de PDF ATS-vriendelijk?",
+        "a": "Ja. De gegenereerde PDF gebruikt standaard lettertypen (Helvetica) en een schone, enkele-kolom layout die gemakkelijk door Applicant Tracking Systems (ATS) kan worden geparseerd."
+      },
+      {
+        "q": "Kan ik meerdere werkervaring- en onderwijsingangen toevoegen?",
+        "a": "Ja. Je kunt zoveel werkervaring- en onderwijsingangen toevoegen als je nodig hebt. Klik op de knop Toevoegen in elk gedeelte om meer items toe te voegen."
+      },
+      {
+        "q": "Hoe bewerk ik mijn CV later?",
+        "a": "Je CV-gegevens worden automatisch opgeslagen in je browser. Wanneer je teruggaat naar de pagina, zijn je vorige ingangen nog steeds daar. Je kunt ook op Resetten klikken om opnieuw te beginnen."
+      },
+      {
+        "q": "In welk formaat wordt het CV gedownload?",
+        "a": "Het CV wordt gedownload als PDF-bestand. PDF is het meest geaccepteerde formaat voor sollicitaties en zorgt ervoor dat je opmaak op alle apparaten consistent blijft."
+      }
+    ]
+  },
+  {
+    "id": "subtitle-downloader",
+    "component": "SubtitleDownloader",
+    "name": "Ondertiteldownloader",
+    "title": "Ondertiteldownloader – Ondertitels gratis downloaden",
+    "description": "Download SRT-ondertitels van onlinevideo's met yt-dlp.",
+    "path": "/subtitle-downloader",
+    "ctaLabel": "Ondertitels downloaden",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Plak een video-URL om ondertitels als SRT-bestand op te halen. Het tool probeert eerst bestaande bijschriften, dan wordt teruggevallen op automatisch gegenereerde ondertitels als die beschikbaar zijn. Ondersteunt YouTube en andere sites die door yt-dlp worden ondersteund.",
+    "categoryId": "utilities",
+    "keywords": [
+      "ondertitel",
+      "ondertitels",
+      "srt",
+      "bijschriften",
+      "yt-dlp",
+      "video"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak een video-URL in het invoerveld.",
+      "Kies de taal van de ondertitel (bijv. en, es, fr, nl).",
+      "Klik op Ondertitels downloaden.",
+      "Als ondertitels bestaan, wordt een SRT-bestand gegenereerd voor download."
+    ],
+    "faqs": [
+      {
+        "q": "Welke sites worden ondersteund?",
+        "a": "Elke site die door yt-dlp wordt ondersteund kan werken, inclusief YouTube. Beschikbaarheid hangt af van de ondertitelondersteuning van elke site."
+      },
+      {
+        "q": "Wat als een video geen bijschriften heeft?",
+        "a": "Het tool probeert eerst bestaande bijschriften, dan automatisch gegenereerde ondertitels. Wanneer geen van beide beschikbaar zijn, mislukt de download."
+      },
+      {
+        "q": "In welk formaat is de uitvoer?",
+        "a": "Ondertitels worden geleverd in SRT-formaat."
+      }
+    ]
+  },
+  {
+    "id": "voice-changer",
+    "component": "VoiceChanger",
+    "name": "Stemveranderaar (karaktervoorinstellingen)",
+    "title": "Stemveranderaar met karaktervoorinstellingen – Gratis online",
+    "description": "Upload audio en transformeer deze in charakterstijlgeluiden.",
+    "path": "/voice-changer",
+    "ctaLabel": "Stem wijzigen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Upload een audiobestand en pas karaktervoorinstellingen toe zoals diepe verteller, klein alien, rauwe man of oude dame. De conversie draait op de server met FFmpeg-filters en retourneert een downloadbaar MP3- of WAV-bestand.",
+    "categoryId": "utilities",
+    "keywords": [
+      "stemveranderaar",
+      "stemeffecten",
+      "karakterstem",
+      "audio",
+      "toonhoogte",
+      "rauwe stem",
+      "oude vrouw stem",
+      "piepstem"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload een audiobestand (MP3, WAV, M4A, AAC, OGG, FLAC, AMR of WEBM).",
+      "Kies een karaktervoorinstelling zoals Ruimtekaptein, Klein Alien, Rauwe Man of Oude Dame.",
+      "Kies MP3 voor een kleiner bestand of WAV voor verliesvrij geluid.",
+      "Klik op Stem wijzigen en wacht tot de conversie klaar is.",
+      "Download het geconverteerde audiobestand."
+    ],
+    "faqs": [
+      {
+        "q": "Is dit een real-time stemveranderaar?",
+        "a": "Nee. Dit is een tool op bestandsbasis. Upload een audiobestand, kies een voorinstelling en download de geconverteerde audio."
+      },
+      {
+        "q": "Welke audioformaten worden ondersteund?",
+        "a": "Veelgebruikte formaten inclusief MP3, WAV, M4A, AAC, OGG, FLAC, AMR en WEBM."
+      },
+      {
+        "q": "Wordt mijn audio op de server opgeslagen?",
+        "a": "Nee. Bestanden worden in een tijdelijke map verwerkt en direct na conversie verwijderd."
+      }
+    ]
+  }
+]

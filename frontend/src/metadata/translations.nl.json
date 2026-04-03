@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "Over ons",
+    "login": "Inloggen",
+    "signup": "Registreren",
+    "logout": "Uitloggen",
+    "allCategories": "Alle categorieën",
+    "greeting": "Hoi, {{name}}"
+  },
+  "footer": {
+    "about": "Over ons",
+    "privacy": "Privacybeleid",
+    "terms": "Gebruiksvoorwaarden",
+    "rights": "Alle rechten voorbehouden."
+  },
+  "home": {
+    "heroTitle": "Gratis online tools,",
+    "heroHighlight": "zonder gedoe",
+    "heroPillars": {
+      "privacy": "Privacy voorop",
+      "offline": "Werkt offline",
+      "openSource": "Open source",
+      "ai": "AI-gestuurd"
+    },
+    "searchPlaceholder": "Zoek tools op naam, beschrijving of trefwoord",
+    "offlineTitle": "Beperkte offlinemodus",
+    "offlineBody": "Je bent offline. Alleen tools met offline-ondersteuning zijn nu beschikbaar.",
+    "noOfflineMatch": "Geen offline tools gevonden voor jouw zoekopdracht.",
+    "noOfflineTools": "Nog geen tools beschikbaar offline.",
+    "loadMore": "Meer laden",
+    "noToolsInCategory": "Geen tools gevonden voor jouw zoekopdracht in deze categorie.",
+    "noServicesFound": "Geen services gevonden. Voeg vermeldingen toe aan"
+  },
+  "tool": {
+    "showAdvanced": "Geavanceerde opties tonen",
+    "howToUse": "Hoe te gebruiken",
+    "faqs": "Veelgestelde vragen",
+    "back": "Terug"
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "body": "De pagina die je zoekt bestaat niet of is verplaatst.",
+    "backHome": "Terug naar home"
+  },
+  "privacy": {
+    "title": "Privacybeleid",
+    "lastUpdated": "Laatst bijgewerkt: 11 maart 2026",
+    "introduction": "Inleiding",
+    "infoWeCollect": "Informatie die wij verzamelen",
+    "autoCollected": "Automatisch verzamelde informatie",
+    "accountInfo": "Accountgegevens",
+    "toolUsage": "Toolgebruik",
+    "cookies": "Cookies",
+    "essentialCookies": "Essentiële cookies:",
+    "essentialCookiesDesc": "Vereist voor authenticatie en CSRF-beveiliging.",
+    "analyticsCookies": "Analytische cookies:",
+    "analyticsCookiesDesc": "Google Analytics gebruikt cookies om anonieme gebruiksgegevens te verzamelen.",
+    "adCookies": "Advertentiecookies:",
+    "adCookiesDesc": "Google AdSense kan cookies gebruiken om gepersonaliseerde advertenties te tonen op basis van je browsegeschiedenis. Je kunt gepersonaliseerde advertenties uitschakelen via",
+    "googleAdsSettings": "Google Ads-instellingen",
+    "thirdPartyServices": "Diensten van derden",
+    "googleAnalyticsDesc": "voor analyse van websiteverkeer. Zie",
+    "googlePrivacyPolicy": "Privacybeleid van Google",
+    "googleAdSenseDesc": "voor het weergeven van advertenties. Zie",
+    "googleAdSenseLink": "Hoe Google gegevens gebruikt wanneer je sites van onze partners bezoekt",
+    "awsDesc": "voor hosting en serversijdige verwerking.",
+    "dataRetention": "Gegevensbewaring",
+    "yourRights": "Jouw rechten",
+    "childrensPrivacy": "Privacy van kinderen",
+    "changesToPolicy": "Wijzigingen in dit beleid",
+    "contactUs": "Contact"
+  },
+  "about": {
+    "title": "Over ons",
+    "subtitle": "Hoi, ik ben Raj Kiran – een softwareontwikkelaar die open source online tools bouwt met focus op eenvoud voor ontwikkelaars en leerlingen.",
+    "missionLabel": "Missie:",
+    "mission": "Een groeiende verzameling lichte, privacyvriendelijke webtools creëren die mensen helpen alledaagse technische problemen op te lossen – vrij en transparant via open source software. De meeste tools op deze website zijn ontworpen om offline te werken wanneer mogelijk, waardoor onnodig dataverbruik wordt verminderd, de privacy van gebruikers wordt beschermd en een milieuvriendelijker web wordt ondersteund.",
+    "sendMessage": "Bericht sturen",
+    "messageReceived": "Bericht ontvangen! We nemen snel contact met je op.",
+    "sendAnother": "Nog een sturen",
+    "nameLabel": "Naam",
+    "emailLabel": "E-mail",
+    "messageLabel": "Bericht",
+    "sendButton": "Bericht sturen",
+    "sending": "Verzenden\u2026",
+    "networkError": "Netwerkfout. Controleer je verbinding en probeer het opnieuw.",
+    "contactUs": "Contact",
+    "emailIntro": "Neem gerust contact op als je feedback wilt delen, wilt samenwerken of goede ideeën rondom open source tools wilt bespreken.",
+    "openSource": "Open source",
+    "openSourceDesc": "Deze website wordt onderhouden als een open source project, met als doel nuttige tools en goede engineeringpraktijken te delen.",
+    "responseTime": "Reactietijd",
+    "responseTimeDesc": "Ik reageer doorgaans binnen 24 uur op werkdagen."
+  },
+  "terms": {
+    "title": "Gebruiksvoorwaarden",
+    "lastUpdated": "Laatst bijgewerkt: 10 maart 2026",
+    "acceptance": "Acceptatie van voorwaarden",
+    "descriptionOfService": "Beschrijving van de dienst",
+    "userAccounts": "Gebruikersaccounts",
+    "acceptableUse": "Toegestaan gebruik",
+    "acceptableUseItems": [
+      "De dienst gebruiken voor onwettige doeleinden of in strijd met toepasselijke wet- en regelgeving.",
+      "Proberen ongeautoriseerde toegang te verkrijgen tot delen van de dienst, accounts van andere gebruikers of gerelateerde systemen.",
+      "Schadelijke bestanden of inhoud uploaden die bedoeld zijn om de dienst te verstoren, beschadigen of te hinderen.",
+      "De dienst scrapen, crawlen of geautomatiseerde tools gebruiken op een manier die redelijk gebruik overschrijdt.",
+      "De dienst zonder toestemming herverdelen, doorverkopen of commercieel exploiteren."
+    ],
+    "intellectualProperty": "Intellectueel eigendom",
+    "privacy": "Privacy",
+    "disclaimerOfWarranties": "Uitsluiting van garanties",
+    "limitationOfLiability": "Beperking van aansprakelijkheid",
+    "modifications": "Wijzigingen",
+    "termination": "Beëindiging",
+    "contact": "Contact"
+  },
+  "pages": {
+    "home": {
+      "seoText": [
+        "Torensa is een groeiende verzameling gratis online tools die het dagelijks werk sneller, veiliger en betrouwbaarder maken – zonder dat je een account hoeft aan te maken of kosten betaalt. Het platform brengt praktische hulpmiddelen samen voor schrijven, converteren, berekenen, opmaken, organiseren en onderzoeken, met een focus op overzichtelijke interfaces die je direct naar het resultaat brengen. Veel tools zijn gemaakt voor ontwikkelaars, zoals code-formatters, validators en data-utilities, terwijl andere geschikt zijn voor iedereen die snel antwoorden, betere productiviteit of privacyvriendelijke workflows zoekt. Het doel is wrijving te verwijderen en te vervangen door duidelijkheid: open een tool, voer je invoer in en zie het resultaat direct.",
+        "Een groot accent ligt op privacy en controle. Torensa vermijdt zware tracking en houdt de ervaring licht, zodat je tools kunt gebruiken zonder het gevoel te hebben dat je wordt gevolgd of geprofileerd. Veel functies zijn offline-geschikt, wat betekent dat een tool blijft werken zelfs als je verbinding instabiel is of je liever offline blijft. Dit is belangrijk bij reizen, in beveiligde omgevingen, of voor iedereen die gewoon consistente prestaties wil. Wanneer een tool AI-ondersteuning gebruikt, wordt het gedrag duidelijk weergegeven in de interface en zijn de resultaten ontworpen om nuttig te zijn zonder je te binden aan een betaald niveau.",
+        "Torensa is ook volledig open source op GitHub, wat betekent dat de code zichtbaar, controleerbaar en klaar voor bijdragen is. Je kunt bekijken hoe een tool werkt, verbeteringen voorstellen of je eigen zelfgehoste versie bouwen voor je team. Deze transparantie bouwt vertrouwen op en laat de community de roadmap mede vormgeven. Of je nu een student, ontwikkelaar, klein bedrijf of gewoon iemand bent die privacy en eenvoud waardeert – Torensa biedt een betrouwbare set hulpmiddelen die jouw gegevens in jouw handen houden en jouw workflow vooruit helpen."
+      ]
+    },
+    "privacy": {
+      "introduction": "Torensa wordt onafhankelijk beheerd door één persoon via torensa.com. Dit privacybeleid legt uit hoe informatie kan worden verzameld, gebruikt en beschermd wanneer je de website bezoekt.",
+      "automaticallyCollected": "Wanneer je onze website bezoekt, kunnen we automatisch bepaalde informatie verzamelen via Google Analytics, waaronder je IP-adres, browsertype, besturingssysteem, verwijzende URL's, bezochte pagina's en tijdstempels. Deze gegevens helpen ons te begrijpen hoe bezoekers onze site gebruiken en de gebruikerservaring te verbeteren.",
+      "accountInfo": "Als je een account aanmaakt, verzamelen we je gebruikersnaam, e-mailadres en wachtwoord (opgeslagen in gehashte vorm). Deze informatie wordt uitsluitend gebruikt voor authenticatie en toegang tot tools die inloggen vereisen.",
+      "toolUsage": "Veel van onze tools verwerken gegevens volledig in je browser en sturen geen gegevens naar onze servers. Voor tools die serversijdige verwerking vereisen (zoals achtergrondverwijdering of documentconversie), worden bestanden in het geheugen verwerkt en niet opgeslagen na het retourneren van het antwoord.",
+      "cookies": "We gebruiken de volgende soorten cookies:",
+      "thirdPartyServices": "We maken gebruik van de volgende diensten van derden:",
+      "dataRetention": "We slaan geen bestanden of toolverwerking gegevens op. Accountgegevens worden bewaard totdat je om verwijdering verzoekt. Analysegegevens vallen onder het bewaarbeleid van Google Analytics.",
+      "yourRights": "Afhankelijk van je locatie heb je mogelijk het recht om je persoonsgegevens in te zien, te corrigeren of te verwijderen. Om deze rechten uit te oefenen, neem je contact met ons op via admin@torensa.com.",
+      "childrensPrivacy": "Onze website is niet gericht op kinderen onder de 13 jaar. We verzamelen niet bewust persoonsgegevens van kinderen.",
+      "changesToPolicy": "We kunnen dit privacybeleid van tijd tot tijd bijwerken. Wijzigingen worden op deze pagina gepubliceerd met een bijgewerkte revisiedatum.",
+      "contactUs": "Als je vragen hebt over dit privacybeleid, stuur ons dan een e-mail via admin@torensa.com."
+    },
+    "terms": {
+      "acceptance": "Door Torensa (torensa.com) te bezoeken of te gebruiken, ga je akkoord met deze gebruiksvoorwaarden. Als je niet akkoord gaat met deze voorwaarden, gebruik de website dan niet.",
+      "descriptionOfService": "Torensa biedt een verzameling gratis online tools voor productiviteit, documentverwerking, beeldbewerking en ontwikkelaarshulpmiddelen. Veel tools draaien volledig in je browser; sommige vereisen serversijdige verwerking.",
+      "userAccounts": "Bepaalde tools vereisen het aanmaken van een account. Je bent verantwoordelijk voor het vertrouwelijk houden van je inloggegevens en voor alle activiteiten die plaatsvinden onder jouw account. Je moet ons onmiddellijk op de hoogte stellen van ongeautoriseerd gebruik.",
+      "acceptableUse": "Je gaat ermee akkoord het volgende niet te doen:",
+      "intellectualProperty": "Torensa is een open source project. De broncode is beschikbaar onder de respectievelijke licentie op GitHub. Je behoudt het eigendom van alle inhoud die je met onze tools maakt. Wij maken geen aanspraak op bestanden die je uploadt of uitvoer die je genereert.",
+      "privacySection": "Je gebruik van de dienst valt ook onder ons privacybeleid, waarin staat hoe we je informatie verzamelen, gebruiken en beschermen.",
+      "disclaimerOfWarranties": "De dienst wordt geleverd \"zoals het is\" en \"zoals beschikbaar\" zonder garanties van welke aard dan ook, expliciet of impliciet. We garanderen niet dat de dienst ononderbroken, foutloos of vrij van schadelijke componenten zal zijn. Gebruik de tools op eigen risico.",
+      "limitationOfLiability": "Voor zover wettelijk toegestaan zijn Torensa en zijn beheerders niet aansprakelijk voor indirecte, incidentele, bijzondere, gevolgschade of punitieve schade, of voor enig verlies van winst of inkomsten voortvloeiend uit je gebruik van de dienst.",
+      "modifications": "We behouden ons het recht voor om de dienst (of een deel ervan) op elk moment zonder kennisgeving te wijzigen of te beëindigen. We kunnen deze gebruiksvoorwaarden ook van tijd tot tijd bijwerken. Voortgezet gebruik van de dienst na wijzigingen geldt als acceptatie van de bijgewerkte voorwaarden.",
+      "termination": "We kunnen je toegang tot de dienst naar eigen inzicht opschorten of beëindigen, zonder voorafgaande kennisgeving, als je deze voorwaarden schendt of gedrag vertoont dat wij schadelijk achten voor de dienst of andere gebruikers.",
+      "contact": "Als je vragen hebt over deze gebruiksvoorwaarden, stuur ons dan een e-mail via admin@torensa.com."
+    }
+  },
+  "chat": {
+    "title": "AI-toolassistent",
+    "subtitle": "Vraag naar categorie, functie of toolnaam",
+    "placeholder": "Stel een vraag over een tool\u2026",
+    "suggestions": {
+      "one": "Wat doet deze tool?",
+      "two": "Welke tool gebruik ik voor facturen?",
+      "three": "Welke tools werken offline?"
+    },
+    "greeting": "Hoi, ik kan Torensa-tools in eenvoudige termen uitleggen. Stel gerust een vraag.",
+    "unavailable": "Assistent is momenteel niet beschikbaar.",
+    "noAnswer": "Ik kon nu geen antwoord genereren.",
+    "networkError": "Netwerkfout. Probeer het opnieuw."
+  }
+}

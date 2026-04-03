@@ -73,7 +73,9 @@ function RootRoutes({
           <Routes>
             <Route
               path="/"
-              element={<App themeName={themeName} setThemeName={setThemeName} />}
+              element={
+                <App themeName={themeName} setThemeName={setThemeName} />
+              }
             >
               <Route index element={<Home />} />
               <Route path="about" element={<Contact />} />
@@ -109,7 +111,9 @@ function RootRoutes({
 
             <Route
               path="/en"
-              element={<App themeName={themeName} setThemeName={setThemeName} />}
+              element={
+                <App themeName={themeName} setThemeName={setThemeName} />
+              }
             >
               <Route index element={<Home />} />
               <Route path="about" element={<Contact />} />
@@ -147,7 +151,9 @@ function RootRoutes({
 
             <Route
               path="/de"
-              element={<App themeName={themeName} setThemeName={setThemeName} />}
+              element={
+                <App themeName={themeName} setThemeName={setThemeName} />
+              }
             >
               <Route index element={<Home />} />
               <Route path="about" element={<Contact />} />
@@ -168,6 +174,46 @@ function RootRoutes({
                 return (
                   <Route
                     key={`de-${tool.id}`}
+                    path={routePath}
+                    element={
+                      tool.authRequired ? (
+                        <ProtectedRoute>
+                          <Page />
+                        </ProtectedRoute>
+                      ) : (
+                        <Page />
+                      )
+                    }
+                  />
+                );
+              })}
+            </Route>
+
+            <Route
+              path="/nl"
+              element={
+                <App themeName={themeName} setThemeName={setThemeName} />
+              }
+            >
+              <Route index element={<Home />} />
+              <Route path="about" element={<Contact />} />
+              <Route path="privacy" element={<PrivacyPolicy />} />
+              <Route path="terms" element={<TermsOfService />} />
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<Signup />} />
+              <Route path="verify-email" element={<VerifyEmail />} />
+
+              {tools.map((tool) => {
+                const key = tool.id.toLowerCase();
+                const Page = toolComponentMap[key];
+
+                if (!Page) return null;
+
+                const routePath = tool.path.replace(/^\//, "");
+
+                return (
+                  <Route
+                    key={`nl-${tool.id}`}
                     path={routePath}
                     element={
                       tool.authRequired ? (
