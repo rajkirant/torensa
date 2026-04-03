@@ -172,6 +172,17 @@ export default function Home() {
     justifyContent: "center",
     gap: 28,
   };
+  const srOnlyHeadingStyle: CSSProperties = {
+    position: "absolute",
+    width: 1,
+    height: 1,
+    padding: 0,
+    margin: -1,
+    overflow: "hidden",
+    clip: "rect(0, 0, 0, 0)",
+    whiteSpace: "nowrap",
+    border: 0,
+  };
   const cardsMaxWidth = columns * 320 + (columns - 1) * 28;
   const loadMoreWrapperStyle: CSSProperties = {
     width: `min(100%, ${cardsMaxWidth}px)`,
@@ -316,6 +327,7 @@ export default function Home() {
         <h1 style={{ textAlign: "center", marginBottom: 16 }}>
           {t("home.offlineTitle")}
         </h1>
+        <h2 style={srOnlyHeadingStyle}>{t("home.offlineTitle")}</h2>
 
         <p
           style={{
@@ -395,6 +407,10 @@ export default function Home() {
       <div>
         {!showHero && (
           <h2 style={toolsSectionTitle}>{selectedCategoryLabel}</h2>
+        )}
+
+        {showHero && (
+          <h2 style={srOnlyHeadingStyle}>{selectedCategoryLabel}</h2>
         )}
 
         {showHero && (
