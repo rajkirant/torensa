@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "logout": "Abmelden",
+    "allCategories": "Alle Kategorien",
+    "greeting": "Hallo, {{name}}"
+  },
+  "footer": {
+    "about": "Über uns",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "home": {
+    "heroTitle": "Kostenlose Online‑Tools,",
+    "heroHighlight": "ohne Schnickschnack",
+    "heroPillars": {
+      "privacy": "Datenschutz zuerst",
+      "offline": "Offline nutzbar",
+      "openSource": "Open Source",
+      "ai": "KI‑gestützt"
+    },
+    "searchPlaceholder": "Tools nach Name, Beschreibung oder Keyword suchen",
+    "offlineTitle": "Eingeschränkter Offline‑Modus",
+    "offlineBody": "Sie sind offline. Nur Tools mit Offline‑Unterstützung sind verfügbar.",
+    "noOfflineMatch": "Keine Offline‑Tools passen zu Ihrer Suche.",
+    "noOfflineTools": "Noch keine Tools offline verfügbar.",
+    "loadMore": "Mehr laden",
+    "noToolsInCategory": "Keine Tools passen zu Ihrer Suche in dieser Kategorie.",
+    "noServicesFound": "Keine Services gefunden. Fügen Sie Einträge hinzu in"
+  },
+  "tool": {
+    "showAdvanced": "Erweiterte Optionen anzeigen",
+    "howToUse": "So funktioniert's",
+    "faqs": "Häufige Fragen",
+    "back": "Zurück"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Die Seite existiert nicht oder wurde verschoben.",
+    "backHome": "Zur Startseite"
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung",
+    "lastUpdated": "Zuletzt aktualisiert: 11. März 2026",
+    "introduction": "Einführung",
+    "infoWeCollect": "Erhobene Daten",
+    "autoCollected": "Automatisch erfasste Informationen",
+    "accountInfo": "Kontoinformationen",
+    "toolUsage": "Tool‑Nutzung",
+    "cookies": "Cookies",
+    "essentialCookies": "Wesentliche Cookies:",
+    "essentialCookiesDesc": "Erforderlich für Authentifizierung und CSRF‑Schutz.",
+    "analyticsCookies": "Analyse‑Cookies:",
+    "analyticsCookiesDesc": "Google Analytics verwendet Cookies, um anonyme Nutzungsdaten zu erfassen.",
+    "adCookies": "Werbe‑Cookies:",
+    "adCookiesDesc": "Google AdSense kann Cookies verwenden, um personalisierte Werbung basierend auf Ihrem Browserverlauf anzuzeigen. Sie können personalisierte Werbung deaktivieren unter",
+    "googleAdsSettings": "Google Ads‑Einstellungen",
+    "thirdPartyServices": "Drittanbieterdienste",
+    "googleAnalyticsDesc": "zur Analyse des Website‑Traffics. Siehe",
+    "googlePrivacyPolicy": "Datenschutzerklärung von Google",
+    "googleAdSenseDesc": "zur Schaltung von Werbung. Siehe",
+    "googleAdSenseLink": "Wie Google Daten verwendet, wenn Sie Websites unserer Partner nutzen",
+    "awsDesc": "für Hosting und serverseitige Verarbeitung.",
+    "dataRetention": "Datenspeicherung",
+    "yourRights": "Ihre Rechte",
+    "childrensPrivacy": "Datenschutz für Kinder",
+    "changesToPolicy": "Änderungen dieser Richtlinie",
+    "contactUs": "Kontakt"
+  },
+  "about": {
+    "title": "Über uns",
+    "subtitle": "Hallo, ich bin Raj Kiran – ein Softwareentwickler, der Open-Source-Online-Tools mit Fokus auf Einfachheit für Entwickler und Lernende erstellt.",
+    "missionLabel": "Mission:",
+    "mission": "Eine wachsende Sammlung leichtgewichtiger, datenschutzfreundlicher Web-Werkzeuge zu schaffen, die Menschen helfen, alltägliche technische Probleme zu lösen – frei und transparent durch Open-Source-Software. Die meisten Tools auf dieser Website sind so konzipiert, dass sie offline funktionieren, unnötigen Datenverbrauch reduzieren, die Privatsphäre der Nutzer schützen und ein umweltfreundlicheres Web unterstützen.",
+    "sendMessage": "Nachricht senden",
+    "messageReceived": "Nachricht erhalten! Wir melden uns bald bei Ihnen.",
+    "sendAnother": "Weitere senden",
+    "nameLabel": "Name",
+    "emailLabel": "E-Mail",
+    "messageLabel": "Nachricht",
+    "sendButton": "Nachricht senden",
+    "sending": "Wird gesendet\u2026",
+    "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    "contactUs": "Kontakt",
+    "emailIntro": "Melden Sie sich gerne, wenn Sie Feedback teilen, zusammenarbeiten oder gute Ideen rund um Open-Source-Tools besprechen möchten.",
+    "openSource": "Open Source",
+    "openSourceDesc": "Diese Website wird als Open-Source-Projekt gepflegt mit dem Ziel, hilfreiche Tools und saubere Engineering-Praktiken zu teilen.",
+    "responseTime": "Antwortzeit",
+    "responseTimeDesc": "Ich antworte in der Regel innerhalb von 24 Stunden an Werktagen."
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen",
+    "lastUpdated": "Zuletzt aktualisiert: 10. März 2026",
+    "acceptance": "Annahme der Bedingungen",
+    "descriptionOfService": "Beschreibung des Dienstes",
+    "userAccounts": "Benutzerkonten",
+    "acceptableUse": "Zulässige Nutzung",
+    "acceptableUseItems": [
+      "Den Dienst für rechtswidrige Zwecke oder unter Verstoß gegen geltende Gesetze oder Vorschriften zu nutzen.",
+      "Versuchen, unbefugten Zugriff auf Teile des Dienstes, Konten anderer Nutzer oder verwandte Systeme zu erlangen.",
+      "Schädliche Dateien oder Inhalte hochzuladen, die darauf ausgelegt sind, den Dienst zu stören, zu beschädigen oder zu beeinträchtigen.",
+      "Den Dienst mit automatisierten Tools in einer Weise zu crawlen oder zu scrapen, die eine angemessene Nutzung überschreitet.",
+      "Den Dienst ohne Genehmigung weiterzuverteilen, weiterzuverkaufen oder kommerziell zu nutzen."
+    ],
+    "intellectualProperty": "Geistiges Eigentum",
+    "privacy": "Datenschutz",
+    "disclaimerOfWarranties": "Haftungsausschluss für Gewährleistungen",
+    "limitationOfLiability": "Haftungsbeschränkung",
+    "modifications": "Änderungen",
+    "termination": "Kündigung",
+    "contact": "Kontakt"
+  },
+  "pages": {
+    "home": {
+      "seoText": [
+        "Torensa ist eine wachsende Sammlung kostenloser Online-Tools, die den Alltag schneller, sicherer und zuverlässiger machen – ohne dass du ein Konto erstellen oder eine Gebühr bezahlen musst. Die Plattform vereint praktische Werkzeuge zum Schreiben, Konvertieren, Berechnen, Formatieren, Organisieren und Recherchieren, mit dem Fokus auf übersichtliche Oberflächen, die dich direkt zum Ergebnis bringen. Viele Tools sind für Entwickler gedacht, etwa Code-Formatierer, Validatoren und Daten-Werkzeuge, während andere für alle geeignet sind, die schnelle Antworten, bessere Produktivität oder datenschutzfreundliche Arbeitsabläufe suchen. Das Ziel ist, Reibung zu beseitigen und durch Klarheit zu ersetzen: Öffne ein Tool, gib deine Daten ein und sieh das Ergebnis sofort.",
+        "Ein großer Schwerpunkt liegt auf Datenschutz und Kontrolle. Torensa verzichtet auf umfangreiches Tracking und hält das Erlebnis leichtgewichtig, sodass du Tools nutzen kannst, ohne dich beobachtet oder profiliert zu fühlen. Viele Funktionen sind offline-fähig, das heißt ein Tool kann auch dann weiterarbeiten, wenn deine Verbindung instabil ist oder du lieber offline bleiben möchtest. Das ist wichtig auf Reisen, in sicheren Umgebungen oder für alle, die einfach konstante Leistung wollen. Wenn ein Tool KI-Unterstützung nutzt, wird das Verhalten in der Oberfläche klar dargestellt, und die Ergebnisse sind darauf ausgelegt, hilfreich zu sein, ohne dich an eine kostenpflichtige Stufe zu binden.",
+        "Torensa ist außerdem vollständig Open Source auf GitHub, das bedeutet, der Code ist sichtbar, überprüfbar und bereit für Beiträge. Du kannst nachvollziehen, wie ein Tool funktioniert, Verbesserungen vorschlagen oder deine eigene selbst gehostete Version für dein Team erstellen. Diese Transparenz schafft Vertrauen und lässt die Community die Roadmap mitgestalten. Ob du Student, Entwickler, Kleinunternehmer oder einfach jemand bist, der Datenschutz und Einfachheit schätzt – Torensa bietet eine verlässliche Sammlung von Ressourcen, die deine Daten in deinen Händen und deinen Arbeitsablauf in Bewegung halten."
+      ]
+    },
+    "privacy": {
+      "introduction": "Torensa wird unabhängig von einer Einzelperson über torensa.com betrieben und gepflegt. Diese Datenschutzerklärung erläutert, wie Informationen erfasst, verwendet und geschützt werden können, wenn Sie die Website besuchen.",
+      "automaticallyCollected": "Wenn Sie unsere Website besuchen, erfassen wir möglicherweise automatisch bestimmte Informationen über Google Analytics, darunter Ihre IP-Adresse, Ihren Browsertyp, Ihr Betriebssystem, verweisende URLs, besuchte Seiten und Zeitstempel. Diese Daten helfen uns zu verstehen, wie Besucher unsere Website nutzen, und die Benutzererfahrung zu verbessern.",
+      "accountInfo": "Wenn Sie ein Konto erstellen, erfassen wir Ihren Benutzernamen, Ihre E-Mail-Adresse und Ihr Passwort (in gehashter Form gespeichert). Diese Informationen werden ausschließlich zur Authentifizierung und zum Zugriff auf Tools verwendet, die eine Anmeldung erfordern.",
+      "toolUsage": "Viele unserer Tools verarbeiten Daten vollständig in Ihrem Browser und senden keine Daten an unsere Server. Bei Tools, die serverseitige Verarbeitung erfordern (wie Hintergrundentfernung oder Dokumentenkonvertierung), werden Dateien im Arbeitsspeicher verarbeitet und nach Rückgabe der Antwort nicht gespeichert.",
+      "cookies": "Wir verwenden die folgenden Arten von Cookies:",
+      "thirdPartyServices": "Wir nutzen die folgenden Drittanbieterdienste:",
+      "dataRetention": "Wir speichern keine Dateien oder Tool-Verarbeitungsdaten. Kontoinformationen werden aufbewahrt, bis Sie die Löschung beantragen. Analysedaten unterliegen den Aufbewahrungsrichtlinien von Google Analytics.",
+      "yourRights": "Abhängig von Ihrem Standort haben Sie möglicherweise das Recht, auf Ihre personenbezogenen Daten zuzugreifen, diese zu korrigieren oder zu löschen. Um diese Rechte auszuüben, kontaktieren Sie uns unter admin@torensa.com.",
+      "childrensPrivacy": "Unsere Website richtet sich nicht an Kinder unter 13 Jahren. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern.",
+      "changesToPolicy": "Wir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Änderungen werden auf dieser Seite mit einem aktualisierten Überarbeitungsdatum veröffentlicht.",
+      "contactUs": "Wenn Sie Fragen zu dieser Datenschutzerklärung haben, schreiben Sie uns eine E-Mail an admin@torensa.com."
+    },
+    "terms": {
+      "acceptance": "Durch den Zugriff auf oder die Nutzung von Torensa (torensa.com) erklären Sie sich mit diesen Nutzungsbedingungen einverstanden. Wenn Sie diesen Bedingungen nicht zustimmen, nutzen Sie die Website bitte nicht.",
+      "descriptionOfService": "Torensa bietet eine Sammlung kostenloser Online-Tools für Produktivität, Dokumentenverarbeitung, Bildbearbeitung und Entwickler-Werkzeuge. Viele Tools laufen vollständig in Ihrem Browser; einige erfordern serverseitige Verarbeitung.",
+      "userAccounts": "Bestimmte Tools erfordern die Erstellung eines Kontos. Sie sind für die Wahrung der Vertraulichkeit Ihrer Anmeldedaten und für alle Aktivitäten verantwortlich, die unter Ihrem Konto stattfinden. Sie müssen uns unverzüglich über jede unbefugte Nutzung informieren.",
+      "acceptableUse": "Sie verpflichten sich, Folgendes zu unterlassen:",
+      "intellectualProperty": "Torensa ist ein Open-Source-Projekt. Der Quellcode ist unter der jeweiligen Lizenz auf GitHub verfügbar. Sie behalten das Eigentum an allen Inhalten, die Sie mit unseren Tools erstellen. Wir erheben keine Ansprüche auf Dateien, die Sie hochladen, oder Ergebnisse, die Sie generieren.",
+      "privacySection": "Ihre Nutzung des Dienstes unterliegt auch unserer Datenschutzerklärung, die beschreibt, wie wir Ihre Informationen erfassen, verwenden und schützen.",
+      "disclaimerOfWarranties": "Der Dienst wird \u201Ewie besehen\u201C und \u201Ewie verfügbar\u201C ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt. Wir garantieren nicht, dass der Dienst ununterbrochen, fehlerfrei oder frei von schädlichen Komponenten ist. Die Nutzung der Tools erfolgt auf eigenes Risiko.",
+      "limitationOfLiability": "Im größtmöglichen gesetzlich zulässigen Umfang haften Torensa und seine Betreiber nicht für indirekte, zufällige, besondere, Folge- oder Strafschäden oder für entgangene Gewinne oder Einnahmen, die sich aus Ihrer Nutzung des Dienstes ergeben.",
+      "modifications": "Wir behalten uns das Recht vor, den Dienst (oder Teile davon) jederzeit ohne Vorankündigung zu ändern oder einzustellen. Wir können diese Nutzungsbedingungen ebenfalls von Zeit zu Zeit aktualisieren. Die fortgesetzte Nutzung des Dienstes nach Änderungen gilt als Annahme der aktualisierten Bedingungen.",
+      "termination": "Wir können Ihren Zugang zum Dienst nach eigenem Ermessen ohne vorherige Ankündigung aussetzen oder beenden, wenn Sie gegen diese Bedingungen verstoßen oder sich in einer Weise verhalten, die wir als schädlich für den Dienst oder andere Nutzer erachten.",
+      "contact": "Wenn Sie Fragen zu diesen Nutzungsbedingungen haben, schreiben Sie uns eine E-Mail an admin@torensa.com."
+    }
+  },
+  "chat": {
+    "title": "KI‑Tool‑Assistent",
+    "subtitle": "Fragen Sie nach Kategorie, Funktion oder Tool‑Name",
+    "placeholder": "Fragen Sie nach einem Tool…",
+    "suggestions": {
+      "one": "Was macht dieses Tool?",
+      "two": "Welches Tool eignet sich für Rechnungen?",
+      "three": "Welche Tools funktionieren offline?"
+    },
+    "greeting": "Hi, ich erkläre Torensa‑Tools in einfachen Worten. Frag mich gern.",
+    "unavailable": "Assistent ist gerade nicht verfügbar.",
+    "noAnswer": "Ich konnte gerade keine Antwort erzeugen.",
+    "networkError": "Netzwerkfehler. Bitte erneut versuchen."
+  }
+}

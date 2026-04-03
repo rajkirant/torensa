@@ -1,20 +1,12 @@
 import { useState, type FormEvent } from "react";
 import { useTheme } from "@mui/material/styles";
-import missionData from "../metadata/mission.json";
+import { useTranslation } from "react-i18next";
 import contactData from "../metadata/contact.json";
-
-type MissionData = {
-  subtitle: string;
-  mission: string;
-};
 
 type ContactData = {
   email: {
     address: string;
-    intro: string;
   };
-  openSource: string;
-  responseTime: string;
 };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
@@ -22,7 +14,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 export default function Contact() {
   const theme = useTheme();
   const cf = theme.contactForm;
-  const mission = missionData as MissionData;
+  const { t } = useTranslation();
   const contact = contactData as ContactData;
   const [formData, setFormData] = useState({
     name: "",
@@ -74,7 +66,7 @@ export default function Contact() {
       a.click();
       setFormData({ name: "", email: "", message: "" });
     } catch {
-      setError("Network error. Please check your connection and try again.");
+      setError(t("about.networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -109,12 +101,12 @@ export default function Contact() {
           />
         </div>
 
-        <h1>About Us</h1>
+        <h1>{t("about.title")}</h1>
 
-        <p className="subtitle">{mission.subtitle}</p>
+        <p className="subtitle">{t("about.subtitle")}</p>
 
         <p style={{ maxWidth: 700, margin: "0 auto", marginTop: 15 }}>
-          <strong>Mission:</strong> {mission.mission}
+          <strong>{t("about.missionLabel")}</strong> {t("about.mission")}
         </p>
       </header>
 
@@ -129,7 +121,7 @@ export default function Contact() {
         }}
       >
         <h2 style={{ marginBottom: 20, textAlign: "center" }}>
-          Send a Message
+          {t("about.sendMessage")}
         </h2>
 
         {submitted ? (
@@ -142,7 +134,7 @@ export default function Contact() {
             }}
           >
             <p style={{ fontSize: 32, marginBottom: 12 }}>✓</p>
-            <p>Message received! We'll get back to you soon.</p>
+            <p>{t("about.messageReceived")}</p>
             <button
               onClick={() => setSubmitted(false)}
               style={{
@@ -156,7 +148,7 @@ export default function Contact() {
                 fontSize: 14,
               }}
             >
-              Send another
+              {t("about.sendAnother")}
             </button>
           </div>
         ) : (
@@ -174,7 +166,7 @@ export default function Contact() {
                 htmlFor="contact-name"
                 style={{ display: "block", marginBottom: 4, fontSize: 14 }}
               >
-                Name
+                {t("about.nameLabel")}
               </label>
               <input
                 id="contact-name"
@@ -192,7 +184,7 @@ export default function Contact() {
                 htmlFor="contact-email"
                 style={{ display: "block", marginBottom: 4, fontSize: 14 }}
               >
-                Email
+                {t("about.emailLabel")}
               </label>
               <input
                 id="contact-email"
@@ -210,7 +202,7 @@ export default function Contact() {
                 htmlFor="contact-message"
                 style={{ display: "block", marginBottom: 4, fontSize: 14 }}
               >
-                Message
+                {t("about.messageLabel")}
               </label>
               <textarea
                 id="contact-message"
@@ -237,7 +229,7 @@ export default function Contact() {
                 cursor: submitting ? "not-allowed" : "pointer",
               }}
             >
-              {submitting ? "Sending…" : "Send Message"}
+              {submitting ? t("about.sending") : t("about.sendButton")}
             </button>
           </form>
         )}
@@ -246,8 +238,8 @@ export default function Contact() {
       <div className="cards">
         {/* EMAIL CARD */}
         <div className="card">
-          <h3>Contact Us</h3>
-          <p>{contact.email.intro}</p>
+          <h3>{t("about.contactUs")}</h3>
+          <p>{t("about.emailIntro")}</p>
 
           <p>
             <a
@@ -264,12 +256,12 @@ export default function Contact() {
         </div>
 
         <div className="card">
-          <h3>Open Source</h3>
-          <p>{contact.openSource}</p>
+          <h3>{t("about.openSource")}</h3>
+          <p>{t("about.openSourceDesc")}</p>
         </div>
         <div className="card">
-          <h3>Response Time</h3>
-          <p>{contact.responseTime}</p>
+          <h3>{t("about.responseTime")}</h3>
+          <p>{t("about.responseTimeDesc")}</p>
         </div>
       </div>
     </>
