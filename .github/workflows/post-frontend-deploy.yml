@@ -100,13 +100,14 @@ jobs:
           aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap.xml /tmp/current-sitemaps/sitemap.xml || true
           aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap-en.xml /tmp/current-sitemaps/sitemap-en.xml || true
           aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap-de.xml /tmp/current-sitemaps/sitemap-de.xml || true
+          aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/sitemap-nl.xml /tmp/current-sitemaps/sitemap-nl.xml || true
 
       - name: Check for sitemap changes
         id: sitemap_diff
         shell: bash
         run: |
           changed=false
-          for file in frontend/public/sitemap.xml frontend/public/sitemap-en.xml frontend/public/sitemap-de.xml; do
+          for file in frontend/public/sitemap.xml frontend/public/sitemap-en.xml frontend/public/sitemap-de.xml frontend/public/sitemap-nl.xml; do
             filename=$(basename "$file")
             current="/tmp/current-sitemaps/$filename"
             if [ ! -f "$current" ]; then
@@ -135,7 +136,7 @@ jobs:
       - name: Deploy sitemaps to S3
         if: steps.sitemap_diff.outputs.changed == 'true'
         run: |
-          for file in sitemap.xml sitemap-en.xml sitemap-de.xml; do
+          for file in sitemap.xml sitemap-en.xml sitemap-de.xml sitemap-nl.xml; do
             aws s3 cp "frontend/public/$file" "s3://${{ secrets.S3_BUCKET_NAME }}/$file" \
               --content-type "application/xml" \
               --cache-control "public,max-age=3600"
@@ -146,7 +147,7 @@ jobs:
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/sitemap.xml" "/sitemap-en.xml" "/sitemap-de.xml"
+            --paths "/sitemap.xml" "/sitemap-en.xml" "/sitemap-de.xml" "/sitemap-nl.xml"
 
       - name: Submit IndexNow for changed URLs
         if: steps.sitemap_diff.outputs.changed == 'true'
@@ -172,7 +173,7 @@ jobs:
 
           new_urls = set()
           old_urls = set()
-          for lang_file in ["sitemap-en.xml", "sitemap-de.xml"]:
+          for lang_file in ["sitemap-en.xml", "sitemap-de.xml", "sitemap-nl.xml"]:
               new_urls |= parse_urls(new_dir / lang_file)
               old_urls |= parse_urls(old_dir / lang_file)
 
