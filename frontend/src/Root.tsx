@@ -32,6 +32,18 @@ import {
 } from "./utils/routes";
 import { useScrollTop } from "./hooks/useScrollTop";
 
+const STATIC_ROUTES = [
+  { path: "", element: <Home /> },
+  { path: "about", element: <Contact /> },
+  { path: "privacy", element: <PrivacyPolicy /> },
+  { path: "terms", element: <TermsOfService /> },
+  { path: "login", element: <Login /> },
+  { path: "signup", element: <Signup /> },
+  { path: "verify-email", element: <VerifyEmail /> },
+];
+
+const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl"];
+
 export function Root() {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
     return (localStorage.getItem("themeName") as ThemeName) || "light";
@@ -71,163 +83,48 @@ function RootRoutes({
         <SeoManager />
         <Suspense fallback={null}>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <App themeName={themeName} setThemeName={setThemeName} />
-              }
-            >
-              <Route index element={<Home />} />
-              <Route path="about" element={<Contact />} />
-              <Route path="privacy" element={<PrivacyPolicy />} />
-              <Route path="terms" element={<TermsOfService />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<Signup />} />
-              <Route path="verify-email" element={<VerifyEmail />} />
-
-              {tools.map((tool) => {
-                const key = tool.id.toLowerCase();
-                const Page = toolComponentMap[key];
-
-                if (!Page) return null;
-
-                return (
+            {LANGUAGE_PREFIXES.map((prefix) => (
+              <Route
+                key={prefix || "default"}
+                path={prefix || "/"}
+                element={
+                  <App themeName={themeName} setThemeName={setThemeName} />
+                }
+              >
+                {STATIC_ROUTES.map((route) => (
                   <Route
-                    key={tool.id}
-                    path={tool.path}
-                    element={
-                      tool.authRequired ? (
-                        <ProtectedRoute>
-                          <Page />
-                        </ProtectedRoute>
-                      ) : (
-                        <Page />
-                      )
-                    }
+                    key={route.path}
+                    path={route.path}
+                    element={route.element}
                   />
-                );
-              })}
-            </Route>
+                ))}
 
-            <Route
-              path="/en"
-              element={
-                <App themeName={themeName} setThemeName={setThemeName} />
-              }
-            >
-              <Route index element={<Home />} />
-              <Route path="about" element={<Contact />} />
-              <Route path="privacy" element={<PrivacyPolicy />} />
-              <Route path="terms" element={<TermsOfService />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<Signup />} />
-              <Route path="verify-email" element={<VerifyEmail />} />
+                {tools.map((tool) => {
+                  const key = tool.id.toLowerCase();
+                  const Page = toolComponentMap[key];
 
-              {tools.map((tool) => {
-                const key = tool.id.toLowerCase();
-                const Page = toolComponentMap[key];
+                  if (!Page) return null;
 
-                if (!Page) return null;
+                  const routePath = tool.path.replace(/^\//, "");
 
-                const routePath = tool.path.replace(/^\//, "");
-
-                return (
-                  <Route
-                    key={`lang-${tool.id}`}
-                    path={routePath}
-                    element={
-                      tool.authRequired ? (
-                        <ProtectedRoute>
+                  return (
+                    <Route
+                      key={`${prefix}-${tool.id}`}
+                      path={routePath}
+                      element={
+                        tool.authRequired ? (
+                          <ProtectedRoute>
+                            <Page />
+                          </ProtectedRoute>
+                        ) : (
                           <Page />
-                        </ProtectedRoute>
-                      ) : (
-                        <Page />
-                      )
-                    }
-                  />
-                );
-              })}
-            </Route>
-
-            <Route
-              path="/de"
-              element={
-                <App themeName={themeName} setThemeName={setThemeName} />
-              }
-            >
-              <Route index element={<Home />} />
-              <Route path="about" element={<Contact />} />
-              <Route path="privacy" element={<PrivacyPolicy />} />
-              <Route path="terms" element={<TermsOfService />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<Signup />} />
-              <Route path="verify-email" element={<VerifyEmail />} />
-
-              {tools.map((tool) => {
-                const key = tool.id.toLowerCase();
-                const Page = toolComponentMap[key];
-
-                if (!Page) return null;
-
-                const routePath = tool.path.replace(/^\//, "");
-
-                return (
-                  <Route
-                    key={`de-${tool.id}`}
-                    path={routePath}
-                    element={
-                      tool.authRequired ? (
-                        <ProtectedRoute>
-                          <Page />
-                        </ProtectedRoute>
-                      ) : (
-                        <Page />
-                      )
-                    }
-                  />
-                );
-              })}
-            </Route>
-
-            <Route
-              path="/nl"
-              element={
-                <App themeName={themeName} setThemeName={setThemeName} />
-              }
-            >
-              <Route index element={<Home />} />
-              <Route path="about" element={<Contact />} />
-              <Route path="privacy" element={<PrivacyPolicy />} />
-              <Route path="terms" element={<TermsOfService />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<Signup />} />
-              <Route path="verify-email" element={<VerifyEmail />} />
-
-              {tools.map((tool) => {
-                const key = tool.id.toLowerCase();
-                const Page = toolComponentMap[key];
-
-                if (!Page) return null;
-
-                const routePath = tool.path.replace(/^\//, "");
-
-                return (
-                  <Route
-                    key={`nl-${tool.id}`}
-                    path={routePath}
-                    element={
-                      tool.authRequired ? (
-                        <ProtectedRoute>
-                          <Page />
-                        </ProtectedRoute>
-                      ) : (
-                        <Page />
-                      )
-                    }
-                  />
-                );
-              })}
-            </Route>
+                        )
+                      }
+                    />
+                  );
+                })}
+              </Route>
+            ))}
 
             <Route path="*" element={<NotFound />} />
           </Routes>
