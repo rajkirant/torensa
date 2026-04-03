@@ -31,6 +31,7 @@ const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(
 const LANGUAGES = [
   { code: "en", isDefault: true },
   { code: "de", isDefault: false },
+  { code: "nl", isDefault: false },
 ];
 const DEFAULT_LANG = LANGUAGES.find((l) => l.isDefault) ?? LANGUAGES[0];
 
@@ -217,8 +218,7 @@ function stripLangPrefix(pathname) {
     if (lang.isDefault) continue;
     const prefix = `/${lang.code}`;
     if (pathname === prefix) return "/";
-    if (pathname.startsWith(`${prefix}/`))
-      return pathname.slice(prefix.length);
+    if (pathname.startsWith(`${prefix}/`)) return pathname.slice(prefix.length);
   }
   return pathname;
 }
@@ -258,7 +258,12 @@ function getComponentCandidates(component) {
   ];
 }
 
-async function resolveLastmod(route, component, fallbackLastmod, existingDates) {
+async function resolveLastmod(
+  route,
+  component,
+  fallbackLastmod,
+  existingDates,
+) {
   const existingDate = existingDates.get(route);
   for (const candidate of getComponentCandidates(component)) {
     try {
@@ -340,7 +345,9 @@ async function main() {
 
   // Generate sitemap index
   const indexXml = buildSitemapIndexXml();
-  writes.push(writeFile(path.join(publicDir, "sitemap.xml"), indexXml, "utf-8"));
+  writes.push(
+    writeFile(path.join(publicDir, "sitemap.xml"), indexXml, "utf-8"),
+  );
   console.log(
     `Generated sitemap.xml index referencing ${LANGUAGES.length} language sitemaps`,
   );

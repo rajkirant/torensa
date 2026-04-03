@@ -1,17 +1,26 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useLocation } from "react-router-dom";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import serviceCardsEn from "../metadata/serviceCards.json";
 import serviceCardsDe from "../metadata/serviceCards.de.json";
+import serviceCardsNl from "../metadata/serviceCards.nl.json";
 import translationsEn from "../metadata/translations.json";
 import translationsDe from "../metadata/translations.de.json";
+import translationsNl from "../metadata/translations.nl.json";
 import type { ServiceCardConfig } from "./serviceCards";
 
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: translationsEn },
     de: { translation: translationsDe },
+    nl: { translation: translationsNl },
   },
   lng: "en",
   fallbackLng: "en",
@@ -20,7 +29,7 @@ i18n.use(initReactI18next).init({
   },
 });
 
-export type LanguageCode = "en" | "de";
+export type LanguageCode = "en" | "de" | "nl";
 
 const LANGUAGE_STORAGE_KEY = "language";
 const DEFAULT_LANGUAGE: LanguageCode = "en";
@@ -84,6 +93,7 @@ export function getLanguageFromPath(pathname: string): LanguageCode | null {
   if (!pathname) return null;
   const trimmed = pathname.trim();
   if (trimmed === "/de" || trimmed.startsWith("/de/")) return "de";
+  if (trimmed === "/nl" || trimmed.startsWith("/nl/")) return "nl";
   if (trimmed === "/en" || trimmed.startsWith("/en/")) return "en";
   return null;
 }
@@ -91,8 +101,9 @@ export function getLanguageFromPath(pathname: string): LanguageCode | null {
 export function stripLanguagePrefix(pathname: string) {
   if (!pathname) return "/";
   const trimmed = pathname.trim();
-  if (trimmed === "/de" || trimmed === "/en") return "/";
+  if (trimmed === "/de" || trimmed === "/en" || trimmed === "/nl") return "/";
   if (trimmed.startsWith("/de/")) return `/${trimmed.slice(4)}`;
+  if (trimmed.startsWith("/nl/")) return `/${trimmed.slice(4)}`;
   if (trimmed.startsWith("/en/")) return `/${trimmed.slice(4)}`;
   return trimmed;
 }
@@ -103,7 +114,7 @@ export function withLanguagePrefix(
   options: { forcePrefix?: boolean } = {},
 ) {
   const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  if (language !== "de" && !options.forcePrefix) {
+  if (language !== "de" && language !== "nl" && !options.forcePrefix) {
     return stripLanguagePrefix(normalized);
   }
   const stripped = stripLanguagePrefix(normalized);
@@ -111,7 +122,9 @@ export function withLanguagePrefix(
 }
 
 export function getServiceCardsForLanguage(language: LanguageCode) {
-  return (language === "de" ? serviceCardsDe : serviceCardsEn) as ServiceCardConfig[];
+  if (language === "de") return serviceCardsDe as ServiceCardConfig[];
+  if (language === "nl") return serviceCardsNl as ServiceCardConfig[];
+  return serviceCardsEn as ServiceCardConfig[];
 }
 
 export function useServiceCards() {
@@ -120,7 +133,9 @@ export function useServiceCards() {
 }
 
 export function getPageDescriptionsForLanguage(language: LanguageCode) {
-  return (language === "de" ? translationsDe : translationsEn).pages;
+  if (language === "de") return translationsDe.pages;
+  if (language === "nl") return translationsNl.pages;
+  return translationsEn.pages;
 }
 
 export function usePageDescriptions() {

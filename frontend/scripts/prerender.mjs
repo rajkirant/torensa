@@ -13,9 +13,7 @@ const serviceCardsPath = resolve(
   process.cwd(),
   "src/metadata/serviceCards.json",
 );
-const serviceCards = JSON.parse(
-  await readFile(serviceCardsPath, "utf-8"),
-);
+const serviceCards = JSON.parse(await readFile(serviceCardsPath, "utf-8"));
 
 const toolRoutes = serviceCards
   .filter((card) => card && card.isActive !== false)
@@ -30,7 +28,8 @@ function withLangPrefix(route, lang) {
 
 const baseRoutes = Array.from(new Set([...staticRoutes, ...toolRoutes]));
 const deRoutes = baseRoutes.map((route) => withLangPrefix(route, "de"));
-const routes = Array.from(new Set([...baseRoutes, ...deRoutes]));
+const nlRoutes = baseRoutes.map((route) => withLangPrefix(route, "nl"));
+const routes = Array.from(new Set([...baseRoutes, ...deRoutes, ...nlRoutes]));
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",
@@ -47,7 +46,9 @@ const contentTypes = {
 };
 
 function getContentType(filePath) {
-  return contentTypes[extname(filePath).toLowerCase()] || "application/octet-stream";
+  return (
+    contentTypes[extname(filePath).toLowerCase()] || "application/octet-stream"
+  );
 }
 
 async function fileExists(filePath) {
@@ -101,10 +102,14 @@ async function waitForSeoTags(page) {
       () => {
         const canonical = document.querySelector('link[rel="canonical"]');
         const description = document.querySelector('meta[name="description"]');
-        const hasDescription = !!(description && description.getAttribute("content"));
+        const hasDescription = !!(
+          description && description.getAttribute("content")
+        );
         const hasCanonical = !!(canonical && canonical.getAttribute("href"));
         // If Helmet runs, we should get both; otherwise at least keep description.
-        return hasDescription && (hasCanonical || document.location.pathname === "/");
+        return (
+          hasDescription && (hasCanonical || document.location.pathname === "/")
+        );
       },
       { timeout: 60000 },
     );
@@ -164,7 +169,9 @@ try {
     ...(executablePath ? { executablePath } : {}),
   });
 } catch (err) {
-  console.error(`✗ Prerender FAILED – could not launch browser: ${err.message}`);
+  console.error(
+    `✗ Prerender FAILED – could not launch browser: ${err.message}`,
+  );
   await new Promise((resolveClose) => server.close(resolveClose));
   process.exit(1);
 }
