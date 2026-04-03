@@ -1,11 +1,24 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 import serviceCardsEn from "../metadata/serviceCards.json";
 import serviceCardsDe from "../metadata/serviceCards.de.json";
-import pageDescriptionsEn from "../metadata/pageDescriptions.json";
-import pageDescriptionsDe from "../metadata/pageDescriptions.de.json";
+import translationsEn from "../metadata/translations.json";
+import translationsDe from "../metadata/translations.de.json";
 import type { ServiceCardConfig } from "./serviceCards";
-import i18n from "../i18n";
+
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { translation: translationsEn },
+    de: { translation: translationsDe },
+  },
+  lng: "en",
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export type LanguageCode = "en" | "de";
 
@@ -107,7 +120,7 @@ export function useServiceCards() {
 }
 
 export function getPageDescriptionsForLanguage(language: LanguageCode) {
-  return language === "de" ? pageDescriptionsDe : pageDescriptionsEn;
+  return (language === "de" ? translationsDe : translationsEn).pages;
 }
 
 export function usePageDescriptions() {
