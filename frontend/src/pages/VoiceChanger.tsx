@@ -202,21 +202,43 @@ export default function VoiceChanger() {
     anchor.remove();
   };
 
-  const SHARE_URL = `${window.location.origin}/voice-changer`;
-
-  const handleShareWhatsApp = () => {
+  const handleShareWhatsApp = async () => {
     if (!resultBlob) {
       setError("No converted audio available to share.");
       return;
     }
+
     const name = resultName || `voice-${preset}.${outputFormat}`;
-    downloadBlob(resultBlob, name);
-    const text = `Check out my voice-changed audio! Try it yourself at ${SHARE_URL}`;
-    window.open(
-      `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    const mimeType = outputFormat === "wav" ? "audio/wav" : "audio/mpeg";
+
+    try {
+      // Upload to file share to get a public download link
+      const formData = new FormData();
+      formData.append("file", new File([resultBlob], name, { type: mimeType }));
+
+      const res = await apiFetch("/api/text-share/file/", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Failed to create share link.");
+      }
+
+      const { code } = await res.json();
+      const downloadLink = `${window.location.origin}/api/text-share/file/${code}/download/`;
+      const toolLink = `${window.location.origin}/voice-changer`;
+      const text = `Listen to this! 🎙️\n${downloadLink}\n\nMade with ${toolLink}`;
+
+      window.open(
+        `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to share audio.");
+    }
   };
 
   const convertDirect = async () => {
