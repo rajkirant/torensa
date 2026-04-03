@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -7,8 +7,17 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import IconButton from "@mui/material/IconButton";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import DownloadIcon from "@mui/icons-material/Download";
+import MicIcon from "@mui/icons-material/Mic";
+import StopIcon from "@mui/icons-material/Stop";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import Tooltip from "@mui/material/Tooltip";
+import { useTheme } from "@mui/material/styles";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { ActionButton } from "../components/buttons/ActionButton";
@@ -51,7 +60,11 @@ function buildOutputName(
   return `${base}-${preset}.${format}`;
 }
 
+type InputMode = "upload" | "mic";
+
 export default function VoiceChanger() {
+  const theme = useTheme();
+  const [inputMode, setInputMode] = useState<InputMode>("upload");
   const [file, setFile] = useState<File | null>(null);
   const [preset, setPreset] = useState<PresetId>("deep");
   const [outputFormat, setOutputFormat] = useState<OutputFormat>("mp3");
@@ -62,6 +75,15 @@ export default function VoiceChanger() {
   const [downloadUrl, setDownloadUrl] = useState<string>("");
   const [resultName, setResultName] = useState<string>("");
   const [resultSize, setResultSize] = useState<number | null>(null);
+  const [resultBlob, setResultBlob] = useState<Blob | null>(null);
+
+  // Mic recording state
+  const [recording, setRecording] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const onFileSelected = (files: FileList | null) => {
     if (!files?.length) return;
@@ -82,7 +104,91 @@ export default function VoiceChanger() {
     setDownloadUrl("");
     setResultName("");
     setResultSize(null);
+    setResultBlob(null);
   };
+
+  const stopRecording = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    setRecording(false);
+    setElapsed(0);
+  }, []);
+
+  const startRecording = useCallback(async () => {
+    setError(null);
+    setSuccess(null);
+    setDownloadUrl("");
+    setResultName("");
+    setResultSize(null);
+    setFile(null);
+    setLastName(null);
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError("Your browser does not support microphone access.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      chunksRef.current = [];
+
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm; codecs=opus")
+        ? "audio/webm; codecs=opus"
+        : MediaRecorder.isTypeSupported("audio/ogg; codecs=opus")
+          ? "audio/ogg; codecs=opus"
+          : "";
+
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blobType = mediaRecorder.mimeType || "audio/webm";
+        const ext = blobType.includes("ogg") ? "ogg" : "webm";
+        const audioBlob = new Blob(chunksRef.current, { type: blobType });
+        if (audioBlob.size > 0) {
+          const recordedFile = new File([audioBlob], `recording.${ext}`, {
+            type: blobType,
+          });
+          setFile(recordedFile);
+          setLastName(recordedFile.name);
+          setSuccess("Recording saved. Choose a preset and change your voice!");
+        }
+      };
+
+      mediaRecorder.start(1000);
+      setRecording(true);
+      setElapsed(0);
+
+      const start = Date.now();
+      timerRef.current = setInterval(() => {
+        setElapsed(Math.floor((Date.now() - start) / 1000));
+      }, 500);
+    } catch (err: any) {
+      if (err.name === "NotAllowedError") {
+        setError(
+          "Microphone access denied. Please allow microphone access in your browser settings.",
+        );
+      } else {
+        setError("Could not access microphone. Please check your device.");
+      }
+    }
+  }, []);
 
   const handleDownload = () => {
     if (!downloadUrl) return;
@@ -94,6 +200,36 @@ export default function VoiceChanger() {
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
+  };
+
+  const handleShareWhatsApp = async () => {
+    const name = resultName || "audio";
+    const mimeType = outputFormat === "wav" ? "audio/wav" : "audio/mpeg";
+
+    // Try Web Share API with file (works well on mobile)
+    if (resultBlob && navigator.share) {
+      const shareFile = new File([resultBlob], name, { type: mimeType });
+      if (navigator.canShare?.({ files: [shareFile] })) {
+        try {
+          await navigator.share({ files: [shareFile] });
+          return;
+        } catch {
+          // User cancelled or share failed — fall through to URL approach
+        }
+      }
+    }
+
+    // Fallback: open WhatsApp with a message (and download URL if available)
+    const siteUrl = `${window.location.origin}/voice-changer`;
+    let text = `Check out my voice-changed audio! Try it yourself at ${siteUrl}`;
+    if (downloadUrl) {
+      text = `Check out my voice-changed audio!\n${downloadUrl}\n\nTry it yourself at ${siteUrl}`;
+    }
+    window.open(
+      `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   const convertDirect = async () => {
@@ -121,6 +257,8 @@ export default function VoiceChanger() {
 
     const blob = await response.blob();
     const outputName = buildOutputName(file.name, preset, outputFormat);
+    setResultBlob(blob);
+    setResultName(outputName);
     downloadBlob(blob, outputName);
     setSuccess("Voice conversion complete. Your download should start now.");
   };
@@ -134,6 +272,7 @@ export default function VoiceChanger() {
     setDownloadUrl("");
     setResultName("");
     setResultSize(null);
+    setResultBlob(null);
 
     try {
       const initResponse = await apiFetch("/api/voice-change/upload/init/", {
@@ -222,28 +361,124 @@ export default function VoiceChanger() {
       <ToolStatusAlerts error={error ?? ""} success={success ?? ""} />
 
       <Stack spacing={3} sx={{ maxWidth: 620 }}>
-        <Box>
-          <FileDropZone
-            accept={ACCEPT_TYPES}
-            disabled={loading}
-            onFilesSelected={onFileSelected}
-            onClear={clearSelection}
-            clearDisabled={loading || !file}
-            fileType="audio"
-            label={
-              file ? file.name : "Drag & drop an audio file, or tap to browse"
+        {/* Input mode toggle */}
+        <ToggleButtonGroup
+          value={inputMode}
+          exclusive
+          onChange={(_e, val) => {
+            if (val) {
+              setInputMode(val as InputMode);
+              clearSelection();
+              if (recording) stopRecording();
             }
-          />
-          {file && (
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mt: 0.5, display: "block" }}
+          }}
+          size="small"
+        >
+          <ToggleButton value="upload">
+            <UploadFileIcon sx={{ mr: 0.5 }} /> Upload File
+          </ToggleButton>
+          <ToggleButton value="mic">
+            <MicIcon sx={{ mr: 0.5 }} /> Record Mic
+          </ToggleButton>
+        </ToggleButtonGroup>
+
+        {/* Upload mode */}
+        {inputMode === "upload" && (
+          <Box>
+            <FileDropZone
+              accept={ACCEPT_TYPES}
+              disabled={loading}
+              onFilesSelected={onFileSelected}
+              onClear={clearSelection}
+              clearDisabled={loading || !file}
+              fileType="audio"
+              label={
+                file ? file.name : "Drag & drop an audio file, or tap to browse"
+              }
+            />
+            {file && (
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mt: 0.5, display: "block" }}
+              >
+                {file.name} &bull; {formatBytes(file.size)}
+              </Typography>
+            )}
+          </Box>
+        )}
+
+        {/* Mic recording mode */}
+        {inputMode === "mic" && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1.5,
+              py: 2,
+            }}
+          >
+            <IconButton
+              onClick={recording ? stopRecording : startRecording}
+              disabled={loading}
+              sx={{
+                width: 80,
+                height: 80,
+                bgcolor: recording
+                  ? theme.palette.error.main
+                  : theme.palette.primary.main,
+                color: "#fff",
+                "&:hover": {
+                  bgcolor: recording
+                    ? theme.palette.error.dark
+                    : theme.palette.primary.dark,
+                },
+                "&:disabled": {
+                  bgcolor: theme.palette.action.disabledBackground,
+                  color: theme.palette.action.disabled,
+                },
+                transition: "all 0.3s ease",
+                ...(recording
+                  ? {
+                      animation: "mic-pulse 1.5s ease-in-out infinite",
+                      "@keyframes mic-pulse": {
+                        "0%": { boxShadow: `0 0 0 0 ${theme.palette.error.main}88` },
+                        "70%": { boxShadow: `0 0 0 16px ${theme.palette.error.main}00` },
+                        "100%": { boxShadow: `0 0 0 0 ${theme.palette.error.main}00` },
+                      },
+                    }
+                  : {}),
+              }}
             >
-              {file.name} &bull; {formatBytes(file.size)}
+              {recording ? (
+                <StopIcon sx={{ fontSize: 36 }} />
+              ) : (
+                <MicIcon sx={{ fontSize: 36 }} />
+              )}
+            </IconButton>
+
+            <Typography variant="body2" color="text.secondary">
+              {recording
+                ? `Recording... ${elapsed}s — tap to stop`
+                : file
+                  ? `Recording saved (${formatBytes(file.size)})`
+                  : "Tap to start recording"}
             </Typography>
-          )}
-        </Box>
+
+            {file && !recording && (
+              <ActionButton
+                onClick={() => {
+                  clearSelection();
+                }}
+                variant="text"
+                size="small"
+              >
+                Discard & re-record
+              </ActionButton>
+            )}
+          </Box>
+        )}
 
         <Stack direction="row" spacing={2} sx={{ flexWrap: "wrap" }}>
           <FormControl size="small" sx={{ minWidth: 220 }}>
@@ -307,14 +542,27 @@ export default function VoiceChanger() {
           </Typography>
         )}
 
-        {downloadUrl && (
-          <ActionButton
-            onClick={handleDownload}
-            startIcon={<DownloadIcon />}
-            variant="outlined"
-          >
-            Download {resultName || "audio"}
-          </ActionButton>
+        {(downloadUrl || resultBlob) && (
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            {downloadUrl && (
+              <ActionButton
+                onClick={handleDownload}
+                startIcon={<DownloadIcon />}
+                variant="outlined"
+              >
+                Download {resultName || "audio"}
+              </ActionButton>
+            )}
+            <Tooltip title="Share on WhatsApp">
+              <IconButton
+                onClick={handleShareWhatsApp}
+                size="small"
+                sx={{ color: "#25D366" }}
+              >
+                <WhatsAppIcon />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         )}
       </Stack>
     </PageContainer>
