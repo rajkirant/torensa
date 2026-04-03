@@ -202,31 +202,16 @@ export default function VoiceChanger() {
     anchor.remove();
   };
 
-  const handleShareWhatsApp = async () => {
+  const SHARE_URL = `${window.location.origin}/voice-changer`;
+
+  const handleShareWhatsApp = () => {
     if (!resultBlob) {
       setError("No converted audio available to share.");
       return;
     }
-
     const name = resultName || `voice-${preset}.${outputFormat}`;
-    const mimeType = outputFormat === "wav" ? "audio/wav" : "audio/mpeg";
-    const shareFile = new File([resultBlob], name, { type: mimeType });
-
-    if (navigator.share && navigator.canShare?.({ files: [shareFile] })) {
-      try {
-        await navigator.share({ files: [shareFile] });
-        return;
-      } catch (err: any) {
-        if (err.name === "AbortError") return; // user cancelled
-      }
-    }
-
-    // Fallback for browsers that don't support file sharing:
-    // download the file, then open WhatsApp so user can attach manually
     downloadBlob(resultBlob, name);
-    setSuccess("File downloaded. Attach it in the WhatsApp chat that opens.");
-    const siteUrl = `${window.location.origin}/voice-changer`;
-    const text = `Check out my voice-changed audio! Try it yourself at ${siteUrl}`;
+    const text = `Check out my voice-changed audio! Try it yourself at ${SHARE_URL}`;
     window.open(
       `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
       "_blank",
