@@ -24,6 +24,11 @@ from .views.voice_change_views import (
     voice_change_from_r2_view,
     voice_upload_init_view,
 )
+from .views.noise_remove_views import (
+    noise_remove_view,
+    noise_remove_from_r2_view,
+    noise_upload_init_view,
+)
 from .views.song_identify_views import song_identify_view, song_preview_download_view
 from .views.contact_views import submit_contact_message
 from .views.email_verification_views import (
@@ -88,6 +93,10 @@ urlpatterns = [
     path("voice-change/", voice_change_view),
     path("voice-change/upload/init/", voice_upload_init_view),
     path("voice-change/from-r2/", voice_change_from_r2_view),
+    # Noise remover (ClearWave)
+    path("noise-remove/", noise_remove_view),
+    path("noise-remove/upload/init/", noise_upload_init_view),
+    path("noise-remove/from-r2/", noise_remove_from_r2_view),
     path("text-share/latest/", get_latest_text_share),
     path("text-share/uploads/init/", init_text_share_upload),
     path("text-share/uploads/<str:code>/complete/", complete_text_share_upload),
