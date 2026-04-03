@@ -203,28 +203,30 @@ export default function VoiceChanger() {
   };
 
   const handleShareWhatsApp = async () => {
-    const name = resultName || "audio";
-    const mimeType = outputFormat === "wav" ? "audio/wav" : "audio/mpeg";
+    if (!resultBlob) {
+      setError("No converted audio available to share.");
+      return;
+    }
 
-    // Try Web Share API with file (works well on mobile)
-    if (resultBlob && navigator.share) {
-      const shareFile = new File([resultBlob], name, { type: mimeType });
-      if (navigator.canShare?.({ files: [shareFile] })) {
-        try {
-          await navigator.share({ files: [shareFile] });
-          return;
-        } catch {
-          // User cancelled or share failed — fall through to URL approach
-        }
+    const name = resultName || `voice-${preset}.${outputFormat}`;
+    const mimeType = outputFormat === "wav" ? "audio/wav" : "audio/mpeg";
+    const shareFile = new File([resultBlob], name, { type: mimeType });
+
+    if (navigator.share && navigator.canShare?.({ files: [shareFile] })) {
+      try {
+        await navigator.share({ files: [shareFile] });
+        return;
+      } catch (err: any) {
+        if (err.name === "AbortError") return; // user cancelled
       }
     }
 
-    // Fallback: open WhatsApp with a message (and download URL if available)
+    // Fallback for browsers that don't support file sharing:
+    // download the file, then open WhatsApp so user can attach manually
+    downloadBlob(resultBlob, name);
+    setSuccess("File downloaded. Attach it in the WhatsApp chat that opens.");
     const siteUrl = `${window.location.origin}/voice-changer`;
-    let text = `Check out my voice-changed audio! Try it yourself at ${siteUrl}`;
-    if (downloadUrl) {
-      text = `Check out my voice-changed audio!\n${downloadUrl}\n\nTry it yourself at ${siteUrl}`;
-    }
+    const text = `Check out my voice-changed audio! Try it yourself at ${siteUrl}`;
     window.open(
       `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
       "_blank",
@@ -341,11 +343,21 @@ export default function VoiceChanger() {
         throw new Error("Conversion succeeded but no download URL was returned.");
       }
 
-      setDownloadUrl(payload.downloadUrl as string);
+      const dlUrl = payload.downloadUrl as string;
+      setDownloadUrl(dlUrl);
       setResultName((payload.filename as string) || "audio");
       setResultSize(
         typeof payload.size === "number" ? payload.size : null,
       );
+
+      // Fetch the blob so it's available for file sharing
+      try {
+        const blobResp = await fetch(dlUrl);
+        if (blobResp.ok) setResultBlob(await blobResp.blob());
+      } catch {
+        // Non-critical — share will fall back to link
+      }
+
       const sizeLabel =
         typeof payload.size === "number" ? ` - ${formatBytes(payload.size)}` : "";
       setSuccess(`Converted successfully${sizeLabel}`);
