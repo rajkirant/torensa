@@ -118,7 +118,7 @@ function buildCardEntry(card) {
 function buildLlmsTxt(cards) {
   const lines = [];
 
-  lines.push("# Torensa | Smart Online Tools for Work & Productivity");
+  lines.push("# Torensa: Free Video, PDF & Image Tools Online, No Signup Needed");
   lines.push("");
   lines.push(
     "> A comprehensive collection of free, browser-based tools for productivity, image processing, document conversion, file sharing, and developer workflows.",

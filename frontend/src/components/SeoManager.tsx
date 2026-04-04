@@ -19,9 +19,9 @@ type RouteMeta = {
 
 const SITE_URL = "https://torensa.com";
 const DEFAULT_META: RouteMeta = {
-  title: "Torensa | Smart Online Tools for Work & Productivity",
+  title: "Torensa: Free Video, PDF & Image Tools Online, No Signup Needed",
   description:
-    "Torensa offers free online productivity tools: QR code generator, barcode tools, image compressor, file converters, PDF merger, PDF splitter, crop and more.",
+    "Free AI image generator, QR code generator, PDF merger, image compressor, video tools & more. No account needed, works instantly in your browser.",
 };
 
 const STATIC_ROUTE_META: Record<string, RouteMeta> = {
@@ -113,9 +113,7 @@ export default function SeoManager() {
   const isHome = strippedPath === "/";
   const isTool = toolMetaByPath.has(strippedPath);
   const currentTool = isTool
-    ? activeCards.find(
-        (card) => normalizePath(card.path) === strippedPath,
-      )
+    ? activeCards.find((card) => normalizePath(card.path) === strippedPath)
     : null;
 
   const organizationSchema = {
