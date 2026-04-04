@@ -23,16 +23,18 @@ function isCardActive(card: ServiceCardConfig) {
   return card.isActive !== false;
 }
 
-// Generate regex for each offline-enabled route
-const offlineRouteRegexes = typedServiceCards
+const offlinePaths = typedServiceCards
   .filter((card) => isCardActive(card) && card.offlineEnabled)
-  .map(
-    (card) =>
-      new RegExp(`^${card.path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`),
-  );
+  .map((card) => card.path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
 
-// Always allow homepage as fallback
-offlineRouteRegexes.unshift(/^\/$/);
+// Always include homepage
+offlinePaths.unshift("/");
+
+// Combined RegExp for runtimeCaching urlPattern — must be a serializable RegExp,
+// not a closure function. Matches each offline path with optional /de or /nl prefix.
+const offlineNavPattern = new RegExp(
+  `^(/(de|nl))?(${offlinePaths.join("|")})$`,
+);
 
 function componentChunkBase(component?: string) {
   if (!component) return null;
@@ -161,8 +163,11 @@ export default defineConfig({
       },
 
       workbox: {
-        navigateFallback: "/index.html",
-        navigateFallbackAllowlist: offlineRouteRegexes,
+        // navigateFallback serves /index.html (home page HTML) for SW-intercepted
+        // navigations — causing a visible flash. Disabled in favour of NetworkFirst
+        // runtimeCaching below, which fetches the correct pre-rendered HTML online
+        // and falls back to the cached page when offline.
+        navigateFallback: null,
         globIgnores: workboxGlobIgnores,
         manifestTransforms: [
           async (entries) => ({
@@ -173,6 +178,20 @@ export default defineConfig({
           }),
         ],
         cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            // Network-first for HTML navigations on offline-enabled routes.
+            // Online → fetches the correct pre-rendered HTML (no home-page flash).
+            // Offline → serves the cached response from a previous visit.
+            urlPattern: offlineNavPattern,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "html-navigations",
+              networkTimeoutSeconds: 5,
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+        ],
       },
     }),
   ],
