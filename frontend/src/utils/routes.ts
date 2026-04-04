@@ -1,6 +1,6 @@
 import React, { lazy } from "react";
 import serviceCards from "../metadata/serviceCards.json";
-import HomePage from "../pages/Home";
+
 import {
   type ServiceCardConfig,
   getActiveServiceCards,
@@ -8,7 +8,7 @@ import {
 } from "./serviceCards";
 
 /* ===================== APP PAGES ===================== */
-export const Home = HomePage;
+export const Home = lazy(() => import("../pages/Home"));
 export const Contact = lazy(() => import("../pages/Contact"));
 export const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
 export const TermsOfService = lazy(() => import("../pages/TermsOfService"));
