@@ -31,6 +31,7 @@ import {
   NotFound,
 } from "./utils/routes";
 import { useScrollTop } from "./hooks/useScrollTop";
+import { useGeoRedirect } from "./hooks/useGeoRedirect";
 
 const STATIC_ROUTES = [
   { path: "", element: <Home /> },
@@ -138,6 +139,7 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useScrollTop([pathname]);
+  useGeoRedirect();
 
   return null;
 }
