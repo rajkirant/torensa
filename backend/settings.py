@@ -300,8 +300,8 @@ STRIPE_PRICE_STARTER = os.getenv("STRIPE_PRICE_STARTER", "")   # €4.99/mo
 STRIPE_PRICE_PRO = os.getenv("STRIPE_PRICE_PRO", "")            # €14.99/mo
 STRIPE_PRICE_BUSINESS = os.getenv("STRIPE_PRICE_BUSINESS", "")  # €39.99/mo
 
-STRIPE_SUCCESS_URL = os.getenv("STRIPE_SUCCESS_URL", "http://localhost:5173/custom-chatbot-builder?checkout=success")
-STRIPE_CANCEL_URL = os.getenv("STRIPE_CANCEL_URL", "http://localhost:5173/chatbot-plans")
+STRIPE_SUCCESS_URL = os.getenv("STRIPE_SUCCESS_URL", "https://torensa.com/custom-chatbot-builder?checkout=success")
+STRIPE_CANCEL_URL = os.getenv("STRIPE_CANCEL_URL", "https://torensa.com/chatbot-plans")
 
 # ---------- Chatbot plan limits ----------
 CHATBOT_PLANS = {

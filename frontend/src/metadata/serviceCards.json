@@ -8,7 +8,7 @@
     "path": "/custom-chatbot-builder",
     "ctaLabel": "Build Chatbot",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "aiPowered": true,
     "detailedDescription": "Turn any plain-text knowledge base into a fully functional AI chatbot in seconds. Paste your product FAQs, company policies, documentation, or any structured text into the metadata editor. The tool stores your context in the database and uses AWS Bedrock (Claude) to answer user questions strictly based on that content. Supports multiple chatbots, persistent conversation history, editable metadata, and instant responses.",
     "categoryId": "developer",
@@ -199,7 +199,7 @@
     "path": "/bulk-email",
     "ctaLabel": "Open Bulk Email",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
     "keywords": [
@@ -1747,7 +1747,7 @@
     "path": "/habit-tracker",
     "ctaLabel": "Track Habits",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "detailedDescription": "Build a list of habits you want to do every day, each with a custom point value. Check off completed habits daily to earn points. A bar chart shows your points over the last 14 days so you can track your consistency. All data is stored locally in your browser.",
     "categoryId": "health-wellbeing",
     "keywords": [
