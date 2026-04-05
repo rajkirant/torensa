@@ -173,27 +173,48 @@ def _patch_refs(zip_bytes_io, media_images, old_ext, new_ext, new_mime):
 
 
 def _recolor_header(zip_bytes_io: io.BytesIO) -> io.BytesIO:
-    """Find the first row with a colored fill and recolor it to marketdeed orange."""
+    """Recolor the header row to marketdeed orange and clear all other colored fills."""
     from openpyxl import load_workbook
     from openpyxl.styles import PatternFill
 
     ORANGE = "FFE8611A"  # marketdeed orange (ARGB)
+    NO_FILL = PatternFill(fill_type=None)
+    ORANGE_FILL = PatternFill(patternType="solid", fgColor=ORANGE)
+
+    def _has_color(cell):
+        try:
+            return (
+                cell.fill.patternType
+                and cell.fill.patternType != "none"
+                and cell.fill.fgColor.rgb not in ("00000000", "FF000000", "FFFFFFFF", "00FFFFFF")
+            )
+        except Exception:
+            return False
 
     zip_bytes_io.seek(0)
     wb = load_workbook(zip_bytes_io)
 
     for ws in wb.worksheets:
+        header_row_idx = None
+
+        # Find and recolor the first colored row (header)
         for row in ws.iter_rows():
-            row_has_fill = any(
-                cell.fill and cell.fill.fgColor and cell.fill.fgColor.rgb not in ("00000000", "FF000000", "FFFFFFFF", "00FFFFFF")
-                for cell in row
-                if cell.fill.patternType and cell.fill.patternType != "none"
-            )
-            if row_has_fill:
-                orange_fill = PatternFill(patternType="solid", fgColor=ORANGE)
+            if any(_has_color(cell) for cell in row):
+                header_row_idx = row[0].row
                 for cell in row:
-                    cell.fill = orange_fill
-                break  # only recolor the first header row per sheet
+                    cell.fill = ORANGE_FILL
+                break
+
+        # Clear "DATA" text cell (row 2, col 5)
+        if ws.cell(row=2, column=5).value == "DATA":
+            ws.cell(row=2, column=5).value = None
+
+        # Clear all other colored fills in remaining rows
+        if header_row_idx is not None:
+            for row in ws.iter_rows(min_row=header_row_idx + 1):
+                for cell in row:
+                    if _has_color(cell):
+                        cell.fill = NO_FILL
 
     output = io.BytesIO()
     wb.save(output)
