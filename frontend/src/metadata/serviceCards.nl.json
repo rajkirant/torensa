@@ -1,5 +1,64 @@
 [
   {
+    "id": "custom-chatbot-builder",
+    "component": "CustomChatbotBuilder",
+    "name": "Aangepaste Chatbot Builder – Direct een AI-chatbot van tekst",
+    "title": "Aangepaste Chatbot Builder",
+    "description": "Plak willekeurige tekst — FAQ's, documenten, productinfo — en maak direct een AI-chatbot op basis van AWS Bedrock.",
+    "path": "/custom-chatbot-builder",
+    "ctaLabel": "Chatbot bouwen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "aiPowered": true,
+    "detailedDescription": "Zet elke platte tekstbasis in seconden om tot een volledig functionerende AI-chatbot. Plak uw product-FAQ's, bedrijfsbeleid, documentatie of willekeurige gestructureerde tekst in de metadata-editor. De tool slaat uw context op in de database en gebruikt AWS Bedrock (Claude) om vragen uitsluitend te beantwoorden op basis van uw inhoud. Ondersteunt meerdere chatbots, blijvende gespreksgeschiedenis, bewerkbare metadata en directe antwoorden.",
+    "categoryId": "developer",
+    "keywords": [
+      "aangepaste chatbot",
+      "ai chatbot builder",
+      "chatbot van tekst",
+      "directe chatbot",
+      "bedrock chatbot",
+      "faq bot",
+      "kennisbank chatbot",
+      "no-code chatbot",
+      "ai assistent builder",
+      "tekst naar chatbot"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Log in op uw Torensa-account.",
+      "Klik op 'Nieuwe chatbot' en geef deze een naam.",
+      "Plak uw kennistekst — FAQ's, documenten, beleid — in het metadataveld.",
+      "Klik op 'Chatbot aanmaken' om op te slaan.",
+      "Selecteer uw chatbot in het linker paneel en begin met chatten.",
+      "De AI antwoordt uitsluitend op basis van de tekst die u heeft opgegeven.",
+      "Bewerk de metadata of wis de gespreksgeschiedenis op elk moment."
+    ],
+    "faqs": [
+      {
+        "q": "Welke tekst kan ik gebruiken als metadata?",
+        "a": "Elke platte tekst werkt — product-FAQ's, bedrijfsdocumentatie, beleid, handleidingen, gestructureerde gegevens of vrije notities. Hoe meer relevante details u opneemt, hoe beter de antwoorden van de bot."
+      },
+      {
+        "q": "Verzint de chatbot informatie?",
+        "a": "Nee. De bot is getraind om uitsluitend te antwoorden op basis van uw metadata. Als het antwoord niet in uw tekst staat, zal hij dat beleefd melden."
+      },
+      {
+        "q": "Zijn mijn gegevens veilig opgeslagen?",
+        "a": "Ja. Uw chatbot-metadata en gespreksgeschiedenis zijn gekoppeld aan uw account en veilig opgeslagen in de database. Alleen u kunt ze bekijken en beheren."
+      },
+      {
+        "q": "Kan ik meerdere chatbots maken?",
+        "a": "Ja. U kunt zoveel chatbots aanmaken als u wilt, elk met eigen metadata en een aparte gespreksgeschiedenis."
+      },
+      {
+        "q": "Kan ik de metadata bijwerken na het aanmaken van de bot?",
+        "a": "Ja. Klik op het bewerkingspictogram van een chatbot om naam of kennisbasis op elk moment te wijzigen. Wijzigingen zijn van kracht bij het volgende bericht."
+      }
+    ]
+  },
+  {
     "id": "song-identifier",
     "component": "SongIdentifier",
     "name": "Nummer Herkennen – Welk nummer speelt er?",

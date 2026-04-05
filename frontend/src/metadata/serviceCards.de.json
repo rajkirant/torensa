@@ -1,5 +1,64 @@
 [
   {
+    "id": "custom-chatbot-builder",
+    "component": "CustomChatbotBuilder",
+    "name": "Eigener Chatbot-Builder – Sofortiger KI-Chatbot aus Text",
+    "title": "Eigener Chatbot-Builder",
+    "description": "Fügen Sie beliebigen Text ein – FAQs, Dokumente, Produktinfos – und erstellen Sie sofort einen KI-Chatbot auf Basis von AWS Bedrock.",
+    "path": "/custom-chatbot-builder",
+    "ctaLabel": "Chatbot erstellen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "aiPowered": true,
+    "detailedDescription": "Verwandeln Sie jede Textbasis in Sekunden in einen vollwertigen KI-Chatbot. Fügen Sie Ihre Produkt-FAQs, Unternehmensrichtlinien, Dokumentationen oder beliebigen strukturierten Text in den Metadaten-Editor ein. Das Tool speichert Ihren Kontext in der Datenbank und nutzt AWS Bedrock (Claude), um Fragen ausschließlich auf Basis Ihrer Inhalte zu beantworten. Unterstützt mehrere Chatbots, dauerhaften Gesprächsverlauf, bearbeitbare Metadaten und sofortige Antworten.",
+    "categoryId": "developer",
+    "keywords": [
+      "eigener chatbot",
+      "ki chatbot builder",
+      "chatbot aus text",
+      "sofort chatbot",
+      "bedrock chatbot",
+      "faq bot",
+      "wissensdatenbank chatbot",
+      "no-code chatbot",
+      "ki assistent builder",
+      "text zu chatbot"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Melden Sie sich bei Ihrem Torensa-Konto an.",
+      "Klicken Sie auf 'Neuer Chatbot' und geben Sie einen Namen ein.",
+      "Fügen Sie Ihren Wissenstext – FAQs, Dokumente, Richtlinien – in das Metadatenfeld ein.",
+      "Klicken Sie auf 'Chatbot erstellen' zum Speichern.",
+      "Wählen Sie Ihren Chatbot im linken Panel aus und beginnen Sie zu chatten.",
+      "Die KI antwortet ausschließlich auf Basis des von Ihnen bereitgestellten Textes.",
+      "Bearbeiten Sie die Metadaten oder löschen Sie den Gesprächsverlauf jederzeit."
+    ],
+    "faqs": [
+      {
+        "q": "Welchen Text kann ich als Metadaten verwenden?",
+        "a": "Jeder Klartext funktioniert – Produkt-FAQs, Unternehmensdokumentation, Richtlinien, Anleitungen, strukturierte Daten oder Notizen. Je mehr relevante Details Sie einfügen, desto besser die Antworten des Bots."
+      },
+      {
+        "q": "Erfindet der Chatbot Informationen?",
+        "a": "Nein. Der Bot ist angewiesen, ausschließlich auf Basis Ihrer Metadaten zu antworten. Wenn die Antwort nicht im Text enthalten ist, teilt er das höflich mit."
+      },
+      {
+        "q": "Sind meine Daten sicher gespeichert?",
+        "a": "Ja. Ihre Chatbot-Metadaten und der Gesprächsverlauf sind mit Ihrem Konto verknüpft und sicher in der Datenbank gespeichert. Nur Sie können sie einsehen und verwalten."
+      },
+      {
+        "q": "Kann ich mehrere Chatbots erstellen?",
+        "a": "Ja. Sie können beliebig viele Chatbots erstellen, jeder mit eigenen Metadaten und einem separaten Gesprächsverlauf."
+      },
+      {
+        "q": "Kann ich die Metadaten nach der Erstellung aktualisieren?",
+        "a": "Ja. Klicken Sie auf das Bearbeiten-Symbol eines Chatbots, um Name oder Wissensbasis jederzeit zu ändern. Änderungen werden ab der nächsten Nachricht übernommen."
+      }
+    ]
+  },
+  {
     "id": "song-identifier",
     "component": "SongIdentifier",
     "name": "Song-Erkennung – Welcher Song läuft gerade?",
