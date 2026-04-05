@@ -54,12 +54,7 @@ export default function Signup() {
         setCsrfToken(data.csrfToken);
       }
       setUser(data.user); // auto login
-      navigate("/verify-email", {
-        state: {
-          verificationSent: Boolean(data?.verification_sent),
-          verificationError: Boolean(data?.verification_error),
-        },
-      });
+      navigate("/");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
