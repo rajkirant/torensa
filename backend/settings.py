@@ -289,3 +289,24 @@ SES_FROM_EMAIL = os.getenv("SES_FROM_EMAIL", "noreply@torensa.com")
 SES_VERIFICATION_URL = os.getenv(
     "SES_VERIFICATION_URL", "http://localhost:5173/verify-email"
 )
+
+# ---------- Stripe ----------
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
+# Price IDs — create these in your Stripe dashboard and set via env vars
+STRIPE_PRICE_STARTER = os.getenv("STRIPE_PRICE_STARTER", "")   # €4.99/mo
+STRIPE_PRICE_PRO = os.getenv("STRIPE_PRICE_PRO", "")            # €14.99/mo
+STRIPE_PRICE_BUSINESS = os.getenv("STRIPE_PRICE_BUSINESS", "")  # €39.99/mo
+
+STRIPE_SUCCESS_URL = os.getenv("STRIPE_SUCCESS_URL", "http://localhost:5173/custom-chatbot-builder?checkout=success")
+STRIPE_CANCEL_URL = os.getenv("STRIPE_CANCEL_URL", "http://localhost:5173/chatbot-plans")
+
+# ---------- Chatbot plan limits ----------
+CHATBOT_PLANS = {
+    "free":     {"messages": 50,     "bots": 1,  "metadata_chars": 2_000},
+    "starter":  {"messages": 500,    "bots": 3,  "metadata_chars": 8_000},
+    "pro":      {"messages": 5_000,  "bots": 20, "metadata_chars": 32_000},
+    "business": {"messages": 25_000, "bots": 100, "metadata_chars": 64_000},
+}

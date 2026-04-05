@@ -3,7 +3,9 @@
     "allow": [
       "Bash(/c/Users/rajki/Workspace/torensa/backend/venv/Scripts/python.exe -c ':*)",
       "Bash(/c/Users/rajki/Workspace/torensa/backend/venv/Scripts/pip.exe install:*)",
-      "Bash(python -c ':*)"
+      "Bash(python -c ':*)",
+      "Bash(printf '\\\\nstripe>=9.0.0\\\\n')",
+      "Bash(python -c \"print\\(open\\('c:/Users/rajki/Workspace/torensa/backend/requirements.txt'\\).read\\(\\)\\)\")"
     ]
   }
 }

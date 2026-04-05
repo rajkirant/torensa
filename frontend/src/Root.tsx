@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, Suspense } from "react";
+import { useMemo, useState, useEffect, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -29,6 +29,7 @@ import {
   TermsOfService,
   toolComponentMap,
   NotFound,
+  ChatbotPlans,
 } from "./utils/routes";
 import { useScrollTop } from "./hooks/useScrollTop";
 import { useGeoRedirect } from "./hooks/useGeoRedirect";
@@ -41,6 +42,7 @@ const STATIC_ROUTES = [
   { path: "login", element: <Login /> },
   { path: "signup", element: <Signup /> },
   { path: "verify-email", element: <VerifyEmail /> },
+  { path: "chatbot-plans", element: <ChatbotPlans /> },
 ];
 
 const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl"];

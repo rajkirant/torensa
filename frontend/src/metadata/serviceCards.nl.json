@@ -1,7 +1,7 @@
 [
   {
     "id": "custom-chatbot-builder",
-    "component": "CustomChatbotBuilder",
+    "component": "Chatbot/CustomChatbotBuilder",
     "name": "Aangepaste Chatbot Builder – Direct een AI-chatbot van tekst",
     "title": "Aangepaste Chatbot Builder",
     "description": "Plak willekeurige tekst — FAQ's, documenten, productinfo — en maak direct een AI-chatbot op basis van AWS Bedrock.",
