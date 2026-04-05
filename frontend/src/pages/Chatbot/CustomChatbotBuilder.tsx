@@ -95,7 +95,10 @@ export default function CustomChatbotBuilder() {
   const [chatSending, setChatSending] = useState(false);
   const [chatError, setChatError] = useState("");
 
-  const messagesEndRef = useScrollBottom<HTMLDivElement>([messages, chatSending]);
+  const messagesEndRef = useScrollBottom<HTMLDivElement>([
+    messages,
+    chatSending,
+  ]);
 
   /* ── load bots ─────────────────────────────────────────────────────────── */
 
@@ -140,7 +143,7 @@ export default function CustomChatbotBuilder() {
       // Reload bots + plan info so upgraded limits show after webhook processes
       setTimeout(() => void loadBots(), 1500);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* ── create / edit ─────────────────────────────────────────────────────── */
@@ -164,14 +167,22 @@ export default function CustomChatbotBuilder() {
   const handleSaveBot = async () => {
     const name = formName.trim();
     const metadata_text = formMeta.trim();
-    if (!name) { setFormError("Bot name is required."); return; }
-    if (!metadata_text) { setFormError("Metadata text is required."); return; }
+    if (!name) {
+      setFormError("Bot name is required.");
+      return;
+    }
+    if (!metadata_text) {
+      setFormError("Metadata text is required.");
+      return;
+    }
 
     setFormSaving(true);
     setFormError("");
 
     try {
-      const url = editingBot ? `/api/chatbots/${editingBot.id}/` : "/api/chatbots/";
+      const url = editingBot
+        ? `/api/chatbots/${editingBot.id}/`
+        : "/api/chatbots/";
       const method = editingBot ? "PUT" : "POST";
       const res = await apiFetch(url, {
         method,
@@ -202,7 +213,10 @@ export default function CustomChatbotBuilder() {
   /* ── delete ────────────────────────────────────────────────────────────── */
 
   const handleDeleteBot = async (bot: Chatbot) => {
-    if (!window.confirm(`Delete "${bot.name}"? This will erase all its messages.`)) return;
+    if (
+      !window.confirm(`Delete "${bot.name}"? This will erase all its messages.`)
+    )
+      return;
     try {
       await apiFetch(`/api/chatbots/${bot.id}/`, { method: "DELETE" });
       if (activeBot?.id === bot.id) {
@@ -241,7 +255,9 @@ export default function CustomChatbotBuilder() {
 
   const clearHistory = async () => {
     if (!activeBot) return;
-    await apiFetch(`/api/chatbots/${activeBot.id}/messages/`, { method: "DELETE" });
+    await apiFetch(`/api/chatbots/${activeBot.id}/messages/`, {
+      method: "DELETE",
+    });
     setMessages([]);
   };
 
@@ -276,10 +292,17 @@ export default function CustomChatbotBuilder() {
       setMessages((prev) => [...prev, { role: "assistant", content: answer }]);
       // update usage counter in UI
       if (data?.usage && planInfo) {
-        setPlanInfo((prev) => prev ? {
-          ...prev,
-          usage: { ...prev.usage, messages_used: data.usage.messages_used },
-        } : prev);
+        setPlanInfo((prev) =>
+          prev
+            ? {
+                ...prev,
+                usage: {
+                  ...prev.usage,
+                  messages_used: data.usage.messages_used,
+                },
+              }
+            : prev,
+        );
       }
     } catch {
       setChatError("Network error. Please try again.");
@@ -302,7 +325,7 @@ export default function CustomChatbotBuilder() {
     <PageContainer>
       <Stack spacing={3}>
         {/* ── checkout success banner ──────────────────────────────────────── */}
-        {checkoutSuccess && (
+        {checkoutSuccess && planInfo?.plan !== "free" && (
           <Paper
             elevation={0}
             sx={{
@@ -319,32 +342,59 @@ export default function CustomChatbotBuilder() {
             }}
           >
             <Stack direction="row" spacing={1.5} alignItems="flex-start">
-              <CheckCircleIcon sx={{ color: "success.main", mt: 0.2, fontSize: 24, flexShrink: 0 }} />
+              <CheckCircleIcon
+                sx={{
+                  color: "success.main",
+                  mt: 0.2,
+                  fontSize: 24,
+                  flexShrink: 0,
+                }}
+              />
               <Box>
-                <Typography fontWeight={800} sx={{ fontFamily: CHAT_FONT, color: "success.dark" }}>
+                <Typography
+                  fontWeight={800}
+                  sx={{ fontFamily: CHAT_FONT, color: "success.dark" }}
+                >
                   🎉 Plan upgraded successfully!
                 </Typography>
-                <Typography variant="body2" sx={{ color: "success.dark", mt: 0.3, opacity: 0.9 }}>
-                  Your new limits are now active. Create more chatbots, paste larger knowledge bases,
-                  and enjoy more messages per month.
+                <Typography
+                  variant="body2"
+                  sx={{ color: "success.dark", mt: 0.3, opacity: 0.9 }}
+                >
+                  Your new limits are now active. Create more chatbots, paste
+                  larger knowledge bases, and enjoy more messages per month.
                 </Typography>
               </Box>
             </Stack>
-            <IconButton size="small" onClick={() => setCheckoutSuccess(false)}
-              sx={{ color: "success.dark", flexShrink: 0 }}>
+            <IconButton
+              size="small"
+              onClick={() => setCheckoutSuccess(false)}
+              sx={{ color: "success.dark", flexShrink: 0 }}
+            >
               <CloseIcon fontSize="small" />
             </IconButton>
           </Paper>
         )}
 
         {/* ── page header ─────────────────────────────────────────────────── */}
-        <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={1}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          flexWrap="wrap"
+          gap={1}
+        >
           <Box>
-            <Typography variant="h5" fontWeight={800} sx={{ fontFamily: CHAT_FONT }}>
+            <Typography
+              variant="h5"
+              fontWeight={800}
+              sx={{ fontFamily: CHAT_FONT }}
+            >
               Custom Chatbot Builder
             </Typography>
             <Typography variant="body2" color="text.secondary" mt={0.5}>
-              Paste any text metadata below — product FAQs, docs, policies — and get an instant AI chatbot.
+              Paste any text metadata below — product FAQs, docs, policies — and
+              get an instant AI chatbot.
             </Typography>
           </Box>
           <Button
@@ -377,23 +427,36 @@ export default function CustomChatbotBuilder() {
               border: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
             }}
           >
-            <Stack direction={{ xs: "column", sm: "row" }} alignItems={{ sm: "center" }} justifyContent="space-between" gap={1}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              alignItems={{ sm: "center" }}
+              justifyContent="space-between"
+              gap={1}
+            >
               <Stack direction="row" spacing={1.5} alignItems="center">
                 <Chip
-                  label={planInfo.plan.charAt(0).toUpperCase() + planInfo.plan.slice(1)}
+                  label={
+                    planInfo.plan.charAt(0).toUpperCase() +
+                    planInfo.plan.slice(1)
+                  }
                   size="small"
                   sx={{
                     fontWeight: 800,
                     fontSize: 11,
-                    bgcolor: alpha(PLAN_COLORS[planInfo.plan] ?? "#64748b", 0.15),
+                    bgcolor: alpha(
+                      PLAN_COLORS[planInfo.plan] ?? "#64748b",
+                      0.15,
+                    ),
                     color: PLAN_COLORS[planInfo.plan] ?? "#64748b",
                     border: `1px solid ${alpha(PLAN_COLORS[planInfo.plan] ?? "#64748b", 0.3)}`,
                   }}
                 />
                 <Typography variant="body2" color="text.secondary">
-                  <strong>{planInfo.usage.messages_used}</strong> / {planInfo.usage.messages_limit} messages this month
+                  <strong>{planInfo.usage.messages_used}</strong> /{" "}
+                  {planInfo.usage.messages_limit} messages this month
                   &nbsp;·&nbsp;
-                  <strong>{bots.length}</strong> / {planInfo.limits.bots} bot{planInfo.limits.bots !== 1 ? "s" : ""}
+                  <strong>{bots.length}</strong> / {planInfo.limits.bots} bot
+                  {planInfo.limits.bots !== 1 ? "s" : ""}
                 </Typography>
               </Stack>
               {planInfo.plan === "free" && (
@@ -418,23 +481,35 @@ export default function CustomChatbotBuilder() {
                   size="small"
                   variant="outlined"
                   startIcon={<LoginIcon fontSize="small" />}
-                  onClick={() => navigate("/login?redirect=/custom-chatbot-builder")}
+                  onClick={() =>
+                    navigate("/login?redirect=/custom-chatbot-builder")
+                  }
                   sx={{ borderRadius: "9px", fontWeight: 700, fontSize: 12 }}
                 >
                   Log in to upgrade
                 </Button>
               )}
             </Stack>
-            <Tooltip title={`${planInfo.usage.messages_used} of ${planInfo.usage.messages_limit} messages used`}>
+            <Tooltip
+              title={`${planInfo.usage.messages_used} of ${planInfo.usage.messages_limit} messages used`}
+            >
               <LinearProgress
                 variant="determinate"
-                value={Math.min(100, (planInfo.usage.messages_used / planInfo.usage.messages_limit) * 100)}
+                value={Math.min(
+                  100,
+                  (planInfo.usage.messages_used /
+                    planInfo.usage.messages_limit) *
+                    100,
+                )}
                 sx={{
                   mt: 1,
                   height: 5,
                   borderRadius: 3,
                   bgcolor: alpha(theme.palette.primary.main, 0.1),
-                  "& .MuiLinearProgress-bar": { background: headerGradient, borderRadius: 3 },
+                  "& .MuiLinearProgress-bar": {
+                    background: headerGradient,
+                    borderRadius: 3,
+                  },
                 }}
               />
             </Tooltip>
@@ -452,8 +527,15 @@ export default function CustomChatbotBuilder() {
               border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
             }}
           >
-            <Typography variant="subtitle1" fontWeight={700} mb={2} sx={{ fontFamily: CHAT_FONT }}>
-              {editingBot ? `Edit "${editingBot.name}"` : "Create a new chatbot"}
+            <Typography
+              variant="subtitle1"
+              fontWeight={700}
+              mb={2}
+              sx={{ fontFamily: CHAT_FONT }}
+            >
+              {editingBot
+                ? `Edit "${editingBot.name}"`
+                : "Create a new chatbot"}
             </Typography>
 
             <Stack spacing={2}>
@@ -479,7 +561,13 @@ export default function CustomChatbotBuilder() {
                 placeholder={`Paste your knowledge base here in plain text.\n\nExamples:\n- Product FAQs\n- Company policies\n- Documentation\n- Instructions\n- Any structured or unstructured text`}
                 inputProps={{ maxLength: 8000 }}
                 helperText={`${formMeta.length} / 8000 characters`}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px", fontFamily: "monospace", fontSize: 13 } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    fontFamily: "monospace",
+                    fontSize: 13,
+                  },
+                }}
               />
 
               {formError && (
@@ -491,7 +579,9 @@ export default function CustomChatbotBuilder() {
                         size="small"
                         variant="contained"
                         startIcon={<LoginIcon fontSize="small" />}
-                        onClick={() => navigate("/login?redirect=/custom-chatbot-builder")}
+                        onClick={() =>
+                          navigate("/login?redirect=/custom-chatbot-builder")
+                        }
                         sx={{ borderRadius: "9px", fontWeight: 700 }}
                       >
                         Log in
@@ -512,7 +602,11 @@ export default function CustomChatbotBuilder() {
                       variant="outlined"
                       startIcon={<RocketLaunchIcon fontSize="small" />}
                       onClick={() => navigate("/chatbot-plans")}
-                      sx={{ borderRadius: "9px", fontWeight: 700, alignSelf: "flex-start" }}
+                      sx={{
+                        borderRadius: "9px",
+                        fontWeight: 700,
+                        alignSelf: "flex-start",
+                      }}
                     >
                       View plans
                     </Button>
@@ -540,7 +634,13 @@ export default function CustomChatbotBuilder() {
                     "&:hover": { filter: "saturate(1.1)" },
                   }}
                 >
-                  {formSaving ? <CircularProgress size={18} sx={{ color: "#fff" }} /> : editingBot ? "Save changes" : "Create chatbot"}
+                  {formSaving ? (
+                    <CircularProgress size={18} sx={{ color: "#fff" }} />
+                  ) : editingBot ? (
+                    "Save changes"
+                  ) : (
+                    "Create chatbot"
+                  )}
                 </Button>
               </Stack>
             </Stack>
@@ -579,7 +679,12 @@ export default function CustomChatbotBuilder() {
               }}
             >
               <SmartToyOutlinedIcon sx={{ color: "#fff", fontSize: 18 }} />
-              <Typography variant="subtitle2" fontWeight={800} color="#fff" sx={{ fontFamily: CHAT_FONT }}>
+              <Typography
+                variant="subtitle2"
+                fontWeight={800}
+                color="#fff"
+                sx={{ fontFamily: CHAT_FONT }}
+              >
                 My Chatbots
               </Typography>
             </Box>
@@ -591,10 +696,16 @@ export default function CustomChatbotBuilder() {
                 </Stack>
               )}
               {!botsLoading && botsError && (
-                <Box p={2}><ToolStatusAlerts error={botsError} /></Box>
+                <Box p={2}>
+                  <ToolStatusAlerts error={botsError} />
+                </Box>
               )}
               {!botsLoading && !botsError && bots.length === 0 && (
-                <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: "center" }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ p: 2, textAlign: "center" }}
+                >
                   No chatbots yet. Create one to get started.
                 </Typography>
               )}
@@ -610,26 +721,51 @@ export default function CustomChatbotBuilder() {
                       borderRadius: "10px",
                       cursor: "pointer",
                       background: isActive
-                        ? alpha(theme.palette.primary.main, isDark ? 0.25 : 0.12)
+                        ? alpha(
+                            theme.palette.primary.main,
+                            isDark ? 0.25 : 0.12,
+                          )
                         : "transparent",
                       border: `1px solid ${isActive ? alpha(theme.palette.primary.main, 0.45) : "transparent"}`,
                       "&:hover": {
                         background: isActive
-                          ? alpha(theme.palette.primary.main, isDark ? 0.3 : 0.15)
+                          ? alpha(
+                              theme.palette.primary.main,
+                              isDark ? 0.3 : 0.15,
+                            )
                           : alpha(theme.palette.action.hover, 1),
                       },
                     }}
                   >
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Stack direction="row" alignItems="center" spacing={1} minWidth={0}>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        minWidth={0}
+                      >
                         <ChatBubbleOutlineIcon
-                          sx={{ fontSize: 16, color: isActive ? theme.palette.primary.main : "text.secondary", flexShrink: 0 }}
+                          sx={{
+                            fontSize: 16,
+                            color: isActive
+                              ? theme.palette.primary.main
+                              : "text.secondary",
+                            flexShrink: 0,
+                          }}
                         />
                         <Typography
                           variant="body2"
                           fontWeight={isActive ? 700 : 500}
                           noWrap
-                          sx={{ color: isActive ? theme.palette.primary.main : "text.primary" }}
+                          sx={{
+                            color: isActive
+                              ? theme.palette.primary.main
+                              : "text.primary",
+                          }}
                         >
                           {bot.name}
                         </Typography>
@@ -637,21 +773,34 @@ export default function CustomChatbotBuilder() {
                       <Stack direction="row" spacing={0}>
                         <IconButton
                           size="small"
-                          onClick={(e) => { e.stopPropagation(); openEdit(bot); }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEdit(bot);
+                          }}
                           sx={{ opacity: 0.6, "&:hover": { opacity: 1 } }}
                         >
                           <EditIcon sx={{ fontSize: 15 }} />
                         </IconButton>
                         <IconButton
                           size="small"
-                          onClick={(e) => { e.stopPropagation(); void handleDeleteBot(bot); }}
-                          sx={{ opacity: 0.6, "&:hover": { opacity: 1, color: "error.main" } }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void handleDeleteBot(bot);
+                          }}
+                          sx={{
+                            opacity: 0.6,
+                            "&:hover": { opacity: 1, color: "error.main" },
+                          }}
                         >
                           <DeleteOutlineIcon sx={{ fontSize: 15 }} />
                         </IconButton>
                       </Stack>
                     </Stack>
-                    <Typography variant="caption" color="text.secondary" sx={{ pl: 3.2, display: "block" }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ pl: 3.2, display: "block" }}
+                    >
                       {bot.metadata_text.length} chars of context
                     </Typography>
                   </Box>
@@ -683,9 +832,16 @@ export default function CustomChatbotBuilder() {
                 spacing={2}
                 sx={{ p: 4, opacity: 0.6 }}
               >
-                <SmartToyOutlinedIcon sx={{ fontSize: 56, color: "text.secondary" }} />
-                <Typography variant="body1" color="text.secondary" textAlign="center">
-                  Select a chatbot from the list to start chatting,<br />
+                <SmartToyOutlinedIcon
+                  sx={{ fontSize: 56, color: "text.secondary" }}
+                />
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  textAlign="center"
+                >
+                  Select a chatbot from the list to start chatting,
+                  <br />
                   or create a new one with your text metadata.
                 </Typography>
               </Stack>
@@ -703,13 +859,23 @@ export default function CustomChatbotBuilder() {
                   }}
                 >
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <SmartToyOutlinedIcon sx={{ color: "rgba(255,255,255,0.9)", fontSize: 18 }} />
+                    <SmartToyOutlinedIcon
+                      sx={{ color: "rgba(255,255,255,0.9)", fontSize: 18 }}
+                    />
                     <Box>
-                      <Typography variant="subtitle2" fontWeight={800} color="#fff" sx={{ fontFamily: CHAT_FONT }}>
+                      <Typography
+                        variant="subtitle2"
+                        fontWeight={800}
+                        color="#fff"
+                        sx={{ fontFamily: CHAT_FONT }}
+                      >
                         {activeBot.name}
                       </Typography>
-                      <Typography sx={{ fontSize: 11, color: "rgba(255,255,255,0.78)" }}>
-                        {activeBot.metadata_text.length} chars · powered by AWS Bedrock
+                      <Typography
+                        sx={{ fontSize: 11, color: "rgba(255,255,255,0.78)" }}
+                      >
+                        {activeBot.metadata_text.length} chars · powered by AWS
+                        Bedrock
                       </Typography>
                     </Box>
                   </Stack>
@@ -718,7 +884,10 @@ export default function CustomChatbotBuilder() {
                       size="small"
                       onClick={() => void clearHistory()}
                       title="Clear conversation"
-                      sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
+                      sx={{
+                        color: "rgba(255,255,255,0.85)",
+                        "&:hover": { color: "#fff" },
+                      }}
                     >
                       <RefreshIcon fontSize="small" />
                     </IconButton>
@@ -726,7 +895,10 @@ export default function CustomChatbotBuilder() {
                       size="small"
                       onClick={() => openEdit(activeBot)}
                       title="Edit metadata"
-                      sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
+                      sx={{
+                        color: "rgba(255,255,255,0.85)",
+                        "&:hover": { color: "#fff" },
+                      }}
                     >
                       <EditIcon fontSize="small" />
                     </IconButton>
@@ -746,7 +918,10 @@ export default function CustomChatbotBuilder() {
                     "&::-webkit-scrollbar": { width: 6 },
                     "&::-webkit-scrollbar-thumb": {
                       borderRadius: "6px",
-                      background: alpha(theme.palette.primary.main, isDark ? 0.5 : 0.3),
+                      background: alpha(
+                        theme.palette.primary.main,
+                        isDark ? 0.5 : 0.3,
+                      ),
                     },
                   }}
                 >
@@ -765,7 +940,11 @@ export default function CustomChatbotBuilder() {
                         justifyContent: "center",
                       }}
                     >
-                      <Typography variant="body2" color="text.secondary" textAlign="center">
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        textAlign="center"
+                      >
                         Ask me anything about "{activeBot.name}"
                       </Typography>
                     </Box>
@@ -775,29 +954,37 @@ export default function CustomChatbotBuilder() {
                     <Box
                       key={msg.id ?? i}
                       sx={{
-                        alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+                        alignSelf:
+                          msg.role === "user" ? "flex-end" : "flex-start",
                         maxWidth: "82%",
                         px: 1.4,
                         py: 1,
-                        borderRadius: msg.role === "user"
-                          ? "18px 18px 6px 18px"
-                          : "18px 18px 18px 6px",
-                        background: msg.role === "user"
-                          ? isDark
-                            ? "linear-gradient(130deg, #2563eb, #0891b2)"
-                            : "linear-gradient(130deg, #2563eb, #0ea5e9)"
-                          : isDark
-                            ? "linear-gradient(130deg, rgba(51,65,85,0.92), rgba(30,41,59,0.92))"
-                            : "linear-gradient(130deg, rgba(255,255,255,0.97), rgba(241,245,249,0.96))",
-                        color: msg.role === "user" ? "#f8fafc" : theme.palette.text.primary,
-                        border: msg.role === "assistant"
-                          ? `1px solid ${alpha(theme.palette.common.white, isDark ? 0.14 : 0.7)}`
-                          : "none",
-                        boxShadow: msg.role === "user"
-                          ? "0 8px 18px rgba(2,132,199,0.25)"
-                          : isDark
-                            ? "0 6px 14px rgba(2,6,23,0.3)"
-                            : "0 6px 14px rgba(15,23,42,0.07)",
+                        borderRadius:
+                          msg.role === "user"
+                            ? "18px 18px 6px 18px"
+                            : "18px 18px 18px 6px",
+                        background:
+                          msg.role === "user"
+                            ? isDark
+                              ? "linear-gradient(130deg, #2563eb, #0891b2)"
+                              : "linear-gradient(130deg, #2563eb, #0ea5e9)"
+                            : isDark
+                              ? "linear-gradient(130deg, rgba(51,65,85,0.92), rgba(30,41,59,0.92))"
+                              : "linear-gradient(130deg, rgba(255,255,255,0.97), rgba(241,245,249,0.96))",
+                        color:
+                          msg.role === "user"
+                            ? "#f8fafc"
+                            : theme.palette.text.primary,
+                        border:
+                          msg.role === "assistant"
+                            ? `1px solid ${alpha(theme.palette.common.white, isDark ? 0.14 : 0.7)}`
+                            : "none",
+                        boxShadow:
+                          msg.role === "user"
+                            ? "0 8px 18px rgba(2,132,199,0.25)"
+                            : isDark
+                              ? "0 6px 14px rgba(2,6,23,0.3)"
+                              : "0 6px 14px rgba(15,23,42,0.07)",
                         whiteSpace: "pre-wrap",
                         fontSize: 14,
                         lineHeight: 1.5,
@@ -833,12 +1020,21 @@ export default function CustomChatbotBuilder() {
                               width: 7,
                               height: 7,
                               borderRadius: "50%",
-                              bgcolor: alpha(theme.palette.primary.main, isDark ? 0.85 : 0.7),
+                              bgcolor: alpha(
+                                theme.palette.primary.main,
+                                isDark ? 0.85 : 0.7,
+                              ),
                               animation: "dotBounce 1s ease-in-out infinite",
                               animationDelay: `${dot * 0.15}s`,
                               "@keyframes dotBounce": {
-                                "0%, 60%, 100%": { transform: "translateY(0)", opacity: 0.45 },
-                                "30%": { transform: "translateY(-4px)", opacity: 1 },
+                                "0%, 60%, 100%": {
+                                  transform: "translateY(0)",
+                                  opacity: 0.45,
+                                },
+                                "30%": {
+                                  transform: "translateY(-4px)",
+                                  opacity: 1,
+                                },
                               },
                             }}
                           />
@@ -857,14 +1053,34 @@ export default function CustomChatbotBuilder() {
                       <ToolStatusAlerts error={chatError} />
                       {chatError.toLowerCase().includes("log in") && (
                         <Stack direction="row" spacing={1}>
-                          <Button size="small" variant="contained" startIcon={<LoginIcon fontSize="small" />}
-                            onClick={() => navigate("/login?redirect=/custom-chatbot-builder")}
-                            sx={{ borderRadius: "9px", fontWeight: 700, fontSize: 11 }}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            startIcon={<LoginIcon fontSize="small" />}
+                            onClick={() =>
+                              navigate(
+                                "/login?redirect=/custom-chatbot-builder",
+                              )
+                            }
+                            sx={{
+                              borderRadius: "9px",
+                              fontWeight: 700,
+                              fontSize: 11,
+                            }}
+                          >
                             Log in
                           </Button>
-                          <Button size="small" variant="outlined" startIcon={<RocketLaunchIcon fontSize="small" />}
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            startIcon={<RocketLaunchIcon fontSize="small" />}
                             onClick={() => navigate("/chatbot-plans")}
-                            sx={{ borderRadius: "9px", fontWeight: 700, fontSize: 11 }}>
+                            sx={{
+                              borderRadius: "9px",
+                              fontWeight: 700,
+                              fontSize: 11,
+                            }}
+                          >
                             View plans
                           </Button>
                         </Stack>
@@ -890,10 +1106,22 @@ export default function CustomChatbotBuilder() {
                           borderRadius: "12px",
                           fontFamily: CHAT_FONT,
                           fontWeight: 600,
-                          backgroundColor: isDark ? "rgba(15,23,42,0.6)" : "rgba(255,255,255,0.9)",
-                          "& fieldset": { borderColor: alpha(theme.palette.primary.main, isDark ? 0.4 : 0.22) },
-                          "&:hover fieldset": { borderColor: alpha(theme.palette.primary.main, 0.7) },
-                          "&.Mui-focused fieldset": { borderColor: theme.palette.primary.main, borderWidth: 2 },
+                          backgroundColor: isDark
+                            ? "rgba(15,23,42,0.6)"
+                            : "rgba(255,255,255,0.9)",
+                          "& fieldset": {
+                            borderColor: alpha(
+                              theme.palette.primary.main,
+                              isDark ? 0.4 : 0.22,
+                            ),
+                          },
+                          "&:hover fieldset": {
+                            borderColor: alpha(theme.palette.primary.main, 0.7),
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: theme.palette.primary.main,
+                            borderWidth: 2,
+                          },
                         },
                       }}
                     />
@@ -909,18 +1137,25 @@ export default function CustomChatbotBuilder() {
                           : "linear-gradient(135deg, #0ea5e9, #2563eb)",
                         border: `1px solid ${alpha(theme.palette.common.white, 0.35)}`,
                         boxShadow: "0 6px 14px rgba(2,132,199,0.28)",
-                        "&:hover": { filter: "brightness(1.1)", transform: "translateY(-1px)" },
+                        "&:hover": {
+                          filter: "brightness(1.1)",
+                          transform: "translateY(-1px)",
+                        },
                         "&.Mui-disabled": {
                           color: alpha("#fff", 0.65),
-                          background: alpha(theme.palette.text.secondary, isDark ? 0.2 : 0.18),
+                          background: alpha(
+                            theme.palette.text.secondary,
+                            isDark ? 0.2 : 0.18,
+                          ),
                           boxShadow: "none",
                         },
                       }}
                     >
-                      {chatSending
-                        ? <CircularProgress size={16} sx={{ color: "#f8fafc" }} />
-                        : <SendIcon fontSize="small" />
-                      }
+                      {chatSending ? (
+                        <CircularProgress size={16} sx={{ color: "#f8fafc" }} />
+                      ) : (
+                        <SendIcon fontSize="small" />
+                      )}
                     </IconButton>
                   </Stack>
                 </Box>

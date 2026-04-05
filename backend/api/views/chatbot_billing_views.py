@@ -368,15 +368,15 @@ def _sync_subscription(stripe_sub):
     if items:
         price_id = (items[0].get("price") or {}).get("id", "")
 
-    plan_id = "free"
+    matched_plan_id = None
     for p in PLANS:
         if p.get("stripe_price_id") and p["stripe_price_id"] == price_id:
-            plan_id = p["id"]
+            matched_plan_id = p["id"]
             break
 
     # If canceled/unpaid, revert to free
     if stripe_status in ("canceled", "unpaid", "incomplete_expired"):
-        plan_id = "free"
+        matched_plan_id = "free"
 
     try:
         sub = ChatbotSubscription.objects.get(stripe_customer_id=customer_id)
@@ -384,7 +384,12 @@ def _sync_subscription(stripe_sub):
         return
 
     with transaction.atomic():
-        sub.plan = plan_id
+        # Only update the plan if we positively matched a price ID, or if we're
+        # reverting to free due to cancellation. If the price ID didn't match any
+        # known plan (e.g., env vars not configured), preserve the existing plan
+        # so a successful checkout isn't silently downgraded back to free.
+        if matched_plan_id is not None:
+            sub.plan = matched_plan_id
         sub.stripe_subscription_id = sub_id
         sub.stripe_status = stripe_status
         sub.current_period_end = period_end_dt
