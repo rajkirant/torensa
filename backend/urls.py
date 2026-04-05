@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.urls import path, re_path, include
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
+from api.views.excel_logo_swap_views import excel_logo_swap_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/excel/logo-swap/", csrf_exempt(excel_logo_swap_view)),
     path("api/", include("api.urls")),
     path("ai/", include("api.ai_urls")),
 
