@@ -2,8 +2,8 @@ import io
 import logging
 import os
 import zipfile
-from pathlib import Path
 
+from django.conf import settings
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, authentication_classes, parser_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -19,7 +19,22 @@ ALLOWED_EXCEL_MIME_TYPES = {
     "application/vnd.ms-excel",
 }
 
-NEW_LOGO_PATH = Path(__file__).resolve().parent.parent.parent.parent / "frontend" / "public" / "marketdeed_logo.png"
+LOGO_R2_KEY = "marketdeed_logo.png"
+
+
+def _fetch_logo_from_r2() -> bytes:
+    import boto3
+    from botocore.config import Config
+    client = boto3.client(
+        "s3",
+        region_name="auto",
+        endpoint_url=settings.TEXT_SHARE_R2_ENDPOINT,
+        aws_access_key_id=settings.TEXT_SHARE_R2_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.TEXT_SHARE_R2_SECRET_ACCESS_KEY,
+        config=Config(signature_version="s3v4"),
+    )
+    response = client.get_object(Bucket=settings.TEXT_SHARE_R2_BUCKET_NAME, Key=LOGO_R2_KEY)
+    return response["Body"].read()
 
 # Map uploaded image extension/mime to the internal content-type used in [Content_Types].xml
 MIME_BY_EXT = {
@@ -59,12 +74,9 @@ def excel_logo_swap_view(request):
     if content_type not in ALLOWED_EXCEL_MIME_TYPES and not excel_file.name.lower().endswith((".xlsx", ".xls")):
         return Response({"error": "Uploaded file is not a valid Excel file."}, status=400)
 
-    if not NEW_LOGO_PATH.exists():
-        return Response({"error": "Logo asset not found on server."}, status=500)
-
     try:
         excel_bytes = excel_file.read()
-        new_logo_bytes = NEW_LOGO_PATH.read_bytes()
+        new_logo_bytes = _fetch_logo_from_r2()
         new_logo_ext = ".png"
         new_logo_mime = "image/png"
 
