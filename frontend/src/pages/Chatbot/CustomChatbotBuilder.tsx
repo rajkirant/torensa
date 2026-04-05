@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
+import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useTheme, alpha } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
@@ -16,10 +19,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import SendIcon from "@mui/icons-material/Send";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import PageContainer from "../components/PageContainer";
-import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
-import { apiFetch } from "../utils/api";
-import { useScrollBottom } from "../hooks/useScrollTop";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import PageContainer from "../../components/PageContainer";
+import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
+import { apiFetch } from "../../utils/api";
+import { useScrollBottom } from "../../hooks/useScrollTop";
+import { useNavigate } from "react-router-dom";
 
 /* ── types ──────────────────────────────────────────────────────────────── */
 
@@ -37,18 +42,33 @@ interface ChatMessage {
   content: string;
 }
 
+interface PlanInfo {
+  plan: string;
+  usage: { month: string; messages_used: number; messages_limit: number };
+  limits: { bots: number; metadata_chars: number; messages_per_month: number };
+}
+
 /* ── helpers ─────────────────────────────────────────────────────────────── */
 
 const CHAT_FONT = `"Space Grotesk", "Avenir Next", "Segoe UI", sans-serif`;
+
+const PLAN_COLORS: Record<string, string> = {
+  free: "#64748b",
+  starter: "#0ea5e9",
+  pro: "#6366f1",
+  business: "#f59e0b",
+};
 
 /* ── component ───────────────────────────────────────────────────────────── */
 
 export default function CustomChatbotBuilder() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const navigate = useNavigate();
 
   // ── chatbot list ──────────────────────────────────────────────────────────
   const [bots, setBots] = useState<Chatbot[]>([]);
+  const [planInfo, setPlanInfo] = useState<PlanInfo | null>(null);
   const [botsLoading, setBotsLoading] = useState(true);
   const [botsError, setBotsError] = useState("");
 
@@ -82,8 +102,18 @@ export default function CustomChatbotBuilder() {
         setBotsError(data?.error || "Failed to load chatbots.");
         return;
       }
-      const data: Chatbot[] = await res.json();
-      setBots(data);
+      const data = await res.json();
+      // API returns { bots, plan, usage, limits }
+      if (Array.isArray(data)) {
+        setBots(data);
+      } else {
+        setBots(data.bots ?? []);
+        setPlanInfo({
+          plan: data.plan,
+          usage: data.usage,
+          limits: data.limits,
+        });
+      }
     } catch {
       setBotsError("Network error. Please try again.");
     } finally {
@@ -133,6 +163,9 @@ export default function CustomChatbotBuilder() {
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         setFormError(data?.error || "Failed to save chatbot.");
+        if (res.status === 402 && data?.upgrade_required) {
+          // Leave form open so user sees the error + can navigate to plans
+        }
         return;
       }
       setFormOpen(false);
@@ -213,11 +246,24 @@ export default function CustomChatbotBuilder() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
-        setChatError(data?.error || "Request failed.");
+        if (res.status === 402 && data?.upgrade_required) {
+          setChatError(data.error || "Message limit reached. Please upgrade.");
+          // refresh usage display
+          void loadBots();
+        } else {
+          setChatError(data?.error || "Request failed.");
+        }
         return;
       }
       const answer = (data?.answer || "").trim() || "No response.";
       setMessages((prev) => [...prev, { role: "assistant", content: answer }]);
+      // update usage counter in UI
+      if (data?.usage && planInfo) {
+        setPlanInfo((prev) => prev ? {
+          ...prev,
+          usage: { ...prev.usage, messages_used: data.usage.messages_used },
+        } : prev);
+      }
     } catch {
       setChatError("Network error. Please try again.");
     } finally {
@@ -264,6 +310,73 @@ export default function CustomChatbotBuilder() {
           </Button>
         </Stack>
 
+        {/* ── plan usage bar ──────────────────────────────────────────────── */}
+        {planInfo && (
+          <Paper
+            elevation={0}
+            sx={{
+              px: 2,
+              py: 1.25,
+              borderRadius: "12px",
+              background: isDark
+                ? alpha(theme.palette.background.paper, 0.6)
+                : alpha(theme.palette.grey[50], 0.95),
+              border: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+            }}
+          >
+            <Stack direction={{ xs: "column", sm: "row" }} alignItems={{ sm: "center" }} justifyContent="space-between" gap={1}>
+              <Stack direction="row" spacing={1.5} alignItems="center">
+                <Chip
+                  label={planInfo.plan.charAt(0).toUpperCase() + planInfo.plan.slice(1)}
+                  size="small"
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: 11,
+                    bgcolor: alpha(PLAN_COLORS[planInfo.plan] ?? "#64748b", 0.15),
+                    color: PLAN_COLORS[planInfo.plan] ?? "#64748b",
+                    border: `1px solid ${alpha(PLAN_COLORS[planInfo.plan] ?? "#64748b", 0.3)}`,
+                  }}
+                />
+                <Typography variant="body2" color="text.secondary">
+                  <strong>{planInfo.usage.messages_used}</strong> / {planInfo.usage.messages_limit} messages this month
+                  &nbsp;·&nbsp;
+                  <strong>{bots.length}</strong> / {planInfo.limits.bots} bot{planInfo.limits.bots !== 1 ? "s" : ""}
+                </Typography>
+              </Stack>
+              {planInfo.plan === "free" && (
+                <Button
+                  size="small"
+                  variant="contained"
+                  startIcon={<RocketLaunchIcon fontSize="small" />}
+                  onClick={() => navigate("/chatbot-plans")}
+                  sx={{
+                    borderRadius: "9px",
+                    fontWeight: 700,
+                    fontSize: 12,
+                    background: headerGradient,
+                    "&:hover": { filter: "saturate(1.1)" },
+                  }}
+                >
+                  Upgrade plan
+                </Button>
+              )}
+            </Stack>
+            <Tooltip title={`${planInfo.usage.messages_used} of ${planInfo.usage.messages_limit} messages used`}>
+              <LinearProgress
+                variant="determinate"
+                value={Math.min(100, (planInfo.usage.messages_used / planInfo.usage.messages_limit) * 100)}
+                sx={{
+                  mt: 1,
+                  height: 5,
+                  borderRadius: 3,
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                  "& .MuiLinearProgress-bar": { background: headerGradient, borderRadius: 3 },
+                }}
+              />
+            </Tooltip>
+          </Paper>
+        )}
+
         {/* ── create / edit form ──────────────────────────────────────────── */}
         {formOpen && (
           <Paper
@@ -306,7 +419,20 @@ export default function CustomChatbotBuilder() {
               />
 
               {formError && (
-                <ToolStatusAlerts error={formError} />
+                <Stack spacing={1}>
+                  <ToolStatusAlerts error={formError} />
+                  {formError.toLowerCase().includes("upgrade") && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<RocketLaunchIcon fontSize="small" />}
+                      onClick={() => navigate("/chatbot-plans")}
+                      sx={{ borderRadius: "9px", fontWeight: 700, alignSelf: "flex-start" }}
+                    >
+                      View plans
+                    </Button>
+                  )}
+                </Stack>
               )}
 
               <Stack direction="row" spacing={1.5} justifyContent="flex-end">

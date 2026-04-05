@@ -58,6 +58,13 @@ from .views.custom_chatbot_views import (
     chatbot_messages,
     chatbot_chat,
 )
+from .views.chatbot_billing_views import (
+    plans_view,
+    billing_status_view,
+    create_checkout_view,
+    create_portal_view,
+    stripe_webhook_view,
+)
 
 urlpatterns = [
     path("hello/", hello),
@@ -124,4 +131,10 @@ urlpatterns = [
     path("chatbots/<int:chatbot_id>/", chatbot_detail),
     path("chatbots/<int:chatbot_id>/messages/", chatbot_messages),
     path("chatbots/<int:chatbot_id>/chat/", chatbot_chat),
+    # Chatbot billing (Stripe)
+    path("chatbots/billing/plans/", plans_view),
+    path("chatbots/billing/status/", billing_status_view),
+    path("chatbots/billing/checkout/", create_checkout_view),
+    path("chatbots/billing/portal/", create_portal_view),
+    path("chatbots/billing/webhook/", stripe_webhook_view),
 ]

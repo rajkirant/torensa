@@ -1,7 +1,7 @@
 [
   {
     "id": "custom-chatbot-builder",
-    "component": "CustomChatbotBuilder",
+    "component": "Chatbot/CustomChatbotBuilder",
     "name": "Eigener Chatbot-Builder – Sofortiger KI-Chatbot aus Text",
     "title": "Eigener Chatbot-Builder",
     "description": "Fügen Sie beliebigen Text ein – FAQs, Dokumente, Produktinfos – und erstellen Sie sofort einen KI-Chatbot auf Basis von AWS Bedrock.",

@@ -2,12 +2,19 @@ import json
 import os
 
 from django.conf import settings
+from django.db import transaction
+from django.utils import timezone as dj_tz
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..models import CustomChatbot, CustomChatbotMessage
+from ..models import (
+    ChatbotMonthlyUsage,
+    ChatbotSubscription,
+    CustomChatbot,
+    CustomChatbotMessage,
+)
 from .tool_chat_static import (
     BEDROCK_ANTHROPIC_VERSION,
     BEDROCK_MAX_TOKENS,
@@ -19,9 +26,8 @@ from .tool_chat_static import (
 
 # ── constants ────────────────────────────────────────────────────────────────
 
-MAX_METADATA_CHARS = 8_000
 MAX_NAME_CHARS = 200
-MAX_HISTORY_TURNS = 10          # pairs kept in context
+MAX_HISTORY_TURNS = 10
 MAX_MESSAGE_CHARS = 2_000
 
 
@@ -38,7 +44,49 @@ def _model_id():
     )
 
 
-# ── helpers ───────────────────────────────────────────────────────────────────
+# ── plan limit helpers ────────────────────────────────────────────────────────
+
+def _current_month() -> str:
+    return dj_tz.now().strftime("%Y-%m")
+
+
+def _get_plan_limits(user) -> dict:
+    """Return the limits dict for the user's current plan."""
+    plan_id = "free"
+    try:
+        sub = user.chatbot_subscription
+        # Only honour paid plan when Stripe status is active/trialing
+        if sub.plan != "free" and sub.stripe_status in ("active", "trialing"):
+            plan_id = sub.plan
+    except ChatbotSubscription.DoesNotExist:
+        pass
+
+    plan_defaults = getattr(settings, "CHATBOT_PLANS", {})
+    defaults_fallback = {
+        "free":     {"messages": 50,     "bots": 1,  "metadata_chars": 2_000},
+        "starter":  {"messages": 500,    "bots": 3,  "metadata_chars": 8_000},
+        "pro":      {"messages": 5_000,  "bots": 20, "metadata_chars": 32_000},
+        "business": {"messages": 25_000, "bots": 100, "metadata_chars": 64_000},
+    }
+    limits = plan_defaults.get(plan_id) or defaults_fallback.get(plan_id) or defaults_fallback["free"]
+    return {**limits, "plan": plan_id}
+
+
+def _get_usage(user, month: str) -> int:
+    try:
+        return ChatbotMonthlyUsage.objects.get(user=user, month=month).message_count
+    except ChatbotMonthlyUsage.DoesNotExist:
+        return 0
+
+
+def _increment_usage(user, month: str):
+    with transaction.atomic():
+        obj, _ = ChatbotMonthlyUsage.objects.get_or_create(user=user, month=month)
+        obj.message_count += 1
+        obj.save(update_fields=["message_count"])
+
+
+# ── serializers ───────────────────────────────────────────────────────────────
 
 def _chatbot_to_dict(bot: CustomChatbot) -> dict:
     return {
@@ -65,22 +113,65 @@ def _message_to_dict(msg: CustomChatbotMessage) -> dict:
 @permission_classes([IsAuthenticated])
 def chatbot_list_create(request):
     """
-    GET  /api/chatbots/          – list user's chatbots
-    POST /api/chatbots/          – create a new chatbot
+    GET  /api/chatbots/   – list user's chatbots (includes plan context)
+    POST /api/chatbots/   – create a new chatbot (enforces bot + metadata limits)
     """
+    limits = _get_plan_limits(request.user)
+
     if request.method == "GET":
         bots = CustomChatbot.objects.filter(user=request.user)
-        return Response([_chatbot_to_dict(b) for b in bots])
+        month = _current_month()
+        used = _get_usage(request.user, month)
+        return Response({
+            "bots": [_chatbot_to_dict(b) for b in bots],
+            "plan": limits["plan"],
+            "usage": {
+                "month": month,
+                "messages_used": used,
+                "messages_limit": limits["messages"],
+            },
+            "limits": {
+                "bots": limits["bots"],
+                "metadata_chars": limits["metadata_chars"],
+                "messages_per_month": limits["messages"],
+            },
+        })
 
     # POST – create
     payload = request.data if isinstance(request.data, dict) else {}
     name = (payload.get("name") or "").strip()[:MAX_NAME_CHARS]
-    metadata_text = (payload.get("metadata_text") or "").strip()[:MAX_METADATA_CHARS]
+    metadata_text = (payload.get("metadata_text") or "").strip()
 
     if not name:
         return Response({"error": "name is required"}, status=status.HTTP_400_BAD_REQUEST)
     if not metadata_text:
         return Response({"error": "metadata_text is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Enforce bot count limit
+    current_count = CustomChatbot.objects.filter(user=request.user).count()
+    if current_count >= limits["bots"]:
+        return Response(
+            {
+                "error": f"Your {limits['plan']} plan allows {limits['bots']} chatbot(s). "
+                         "Upgrade to create more.",
+                "upgrade_required": True,
+                "current_plan": limits["plan"],
+            },
+            status=status.HTTP_402_PAYMENT_REQUIRED,
+        )
+
+    # Enforce metadata char limit
+    max_chars = limits["metadata_chars"]
+    if len(metadata_text) > max_chars:
+        return Response(
+            {
+                "error": f"Your {limits['plan']} plan allows up to {max_chars:,} characters of metadata. "
+                         "Upgrade for a larger knowledge base.",
+                "upgrade_required": True,
+                "current_plan": limits["plan"],
+            },
+            status=status.HTTP_402_PAYMENT_REQUIRED,
+        )
 
     bot = CustomChatbot.objects.create(
         user=request.user,
@@ -95,7 +186,7 @@ def chatbot_list_create(request):
 def chatbot_detail(request, chatbot_id: int):
     """
     GET    /api/chatbots/<id>/   – retrieve one chatbot
-    PUT    /api/chatbots/<id>/   – update name / metadata
+    PUT    /api/chatbots/<id>/   – update name / metadata (enforces metadata limit)
     DELETE /api/chatbots/<id>/   – delete chatbot + messages
     """
     try:
@@ -111,9 +202,22 @@ def chatbot_detail(request, chatbot_id: int):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     # PUT – update
+    limits = _get_plan_limits(request.user)
     payload = request.data if isinstance(request.data, dict) else {}
     name = (payload.get("name") or "").strip()[:MAX_NAME_CHARS]
-    metadata_text = (payload.get("metadata_text") or "").strip()[:MAX_METADATA_CHARS]
+    metadata_text = (payload.get("metadata_text") or "").strip()
+
+    max_chars = limits["metadata_chars"]
+    if metadata_text and len(metadata_text) > max_chars:
+        return Response(
+            {
+                "error": f"Your {limits['plan']} plan allows up to {max_chars:,} characters. "
+                         "Upgrade for a larger knowledge base.",
+                "upgrade_required": True,
+                "current_plan": limits["plan"],
+            },
+            status=status.HTTP_402_PAYMENT_REQUIRED,
+        )
 
     if name:
         bot.name = name
@@ -148,11 +252,9 @@ def chatbot_messages(request, chatbot_id: int):
 def chatbot_chat(request, chatbot_id: int):
     """
     POST /api/chatbots/<id>/chat/
-
     Body: { "message": "<user text>" }
 
-    Sends the user message to Bedrock (Claude) with the chatbot's metadata as
-    the system prompt, persists both turns, and returns the assistant reply.
+    Enforces monthly message quota before calling Bedrock.
     """
     try:
         bot = CustomChatbot.objects.get(pk=chatbot_id, user=request.user)
@@ -164,6 +266,26 @@ def chatbot_chat(request, chatbot_id: int):
 
     if not user_message:
         return Response({"error": "message is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # ── quota check ───────────────────────────────────────────────────────────
+    limits = _get_plan_limits(request.user)
+    month = _current_month()
+    used = _get_usage(request.user, month)
+
+    if used >= limits["messages"]:
+        return Response(
+            {
+                "error": (
+                    f"You've used all {limits['messages']} messages for this month on the "
+                    f"{limits['plan']} plan. Upgrade to continue chatting."
+                ),
+                "upgrade_required": True,
+                "current_plan": limits["plan"],
+                "messages_used": used,
+                "messages_limit": limits["messages"],
+            },
+            status=status.HTTP_402_PAYMENT_REQUIRED,
+        )
 
     try:
         import boto3  # noqa: PLC0415
@@ -219,12 +341,19 @@ def chatbot_chat(request, chatbot_id: int):
     if not answer:
         answer = "I'm sorry, I couldn't generate a response. Please try again."
 
-    # Persist both turns
+    # Persist both turns and increment usage counter
     CustomChatbotMessage.objects.create(
         chatbot=bot, role=CustomChatbotMessage.ROLE_USER, content=user_message
     )
     CustomChatbotMessage.objects.create(
         chatbot=bot, role=CustomChatbotMessage.ROLE_ASSISTANT, content=answer
     )
+    _increment_usage(request.user, month)
 
-    return Response({"answer": answer})
+    return Response({
+        "answer": answer,
+        "usage": {
+            "messages_used": used + 1,
+            "messages_limit": limits["messages"],
+        },
+    })

@@ -166,6 +166,69 @@ class HabitLog(models.Model):
         return f"{self.user.username} — {self.habit.name} on {self.date}"
 
 
+class ChatbotSubscription(models.Model):
+    """Stripe subscription record for the chatbot feature."""
+
+    PLAN_FREE = "free"
+    PLAN_STARTER = "starter"
+    PLAN_PRO = "pro"
+    PLAN_BUSINESS = "business"
+    PLAN_CHOICES = [
+        (PLAN_FREE, "Free"),
+        (PLAN_STARTER, "Starter"),
+        (PLAN_PRO, "Pro"),
+        (PLAN_BUSINESS, "Business"),
+    ]
+
+    STATUS_ACTIVE = "active"
+    STATUS_CANCELED = "canceled"
+    STATUS_PAST_DUE = "past_due"
+    STATUS_TRIALING = "trialing"
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="chatbot_subscription",
+    )
+    plan = models.CharField(max_length=20, choices=PLAN_CHOICES, default=PLAN_FREE)
+    stripe_customer_id = models.CharField(max_length=128, blank=True)
+    stripe_subscription_id = models.CharField(max_length=128, blank=True)
+    stripe_status = models.CharField(max_length=32, blank=True)
+    current_period_end = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.username} — {self.plan}"
+
+    @property
+    def is_active_paid(self):
+        return self.plan != self.PLAN_FREE and self.stripe_status in (
+            self.STATUS_ACTIVE, self.STATUS_TRIALING
+        )
+
+
+class ChatbotMonthlyUsage(models.Model):
+    """Tracks message count per user per billing month (YYYY-MM)."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="chatbot_usage",
+    )
+    month = models.CharField(max_length=7)   # e.g. "2026-04"
+    message_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ("user", "month")
+
+    def __str__(self):
+        return f"{self.user.username} — {self.month}: {self.message_count}"
+
+
 class CustomChatbot(models.Model):
     """A user-defined chatbot seeded from plain-text metadata."""
 

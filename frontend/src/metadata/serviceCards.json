@@ -1,7 +1,7 @@
 [
   {
     "id": "custom-chatbot-builder",
-    "component": "CustomChatbotBuilder",
+    "component": "Chatbot/CustomChatbotBuilder",
     "name": "Custom Chatbot Builder - Instant AI Chatbot from Text",
     "title": "Custom Chatbot Builder",
     "description": "Paste any text — FAQs, docs, product info — and create an instant AI chatbot powered by AWS Bedrock.",

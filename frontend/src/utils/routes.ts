@@ -16,6 +16,7 @@ export const Login = lazy(() => import("../pages/Login"));
 export const Signup = lazy(() => import("../pages/Signup"));
 export const VerifyEmail = lazy(() => import("../pages/VerifyEmail"));
 export const NotFound = lazy(() => import("../pages/NotFound"));
+export const ChatbotPlans = lazy(() => import("../pages/Chatbot/ChatbotPlans"));
 
 /* ===================== TOOL CONFIG ===================== */
 const tools = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
