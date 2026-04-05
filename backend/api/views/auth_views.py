@@ -85,20 +85,6 @@ def signup_view(request):
         password=password,
     )
 
-    # ---------- Email verification ----------
-    verification_sent = False
-    verification_error = False
-    try:
-        from .email_verification_views import _create_verification
-        _create_verification(user)
-        verification_sent = True
-    except Exception:
-        verification_error = True
-        logger.exception(
-            "Failed to send signup verification email for user %s",
-            user.id,
-        )
-
     # ---------- Auto login ----------
     login(request, user)
 
@@ -106,13 +92,11 @@ def signup_view(request):
         {
             "message": "Signup successful",
             "csrfToken": get_token(request),
-            "verification_sent": verification_sent,
-            "verification_error": verification_error,
             "user": {
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
-                "email_verified": False,
+                "email_verified": True,
             },
         },
         status=status.HTTP_201_CREATED,
