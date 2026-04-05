@@ -14,7 +14,8 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import PageContainer from "../../components/PageContainer";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../utils/auth";
 
 /* ── types ──────────────────────────────────────────────────────────────── */
 
@@ -46,6 +47,19 @@ export default function ChatbotPlans() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+
+  // Auto-trigger checkout if user just logged in and was redirected back with ?plan=
+  useEffect(() => {
+    const planParam = searchParams.get("plan");
+    if (user && planParam && ["starter", "pro", "business"].includes(planParam)) {
+      void handleSubscribe(planParam);
+      // Remove param from URL cleanly
+      navigate("/chatbot-plans", { replace: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const [plans, setPlans] = useState<Plan[]>([]);
   const [billing, setBilling] = useState<BillingStatus | null>(null);
@@ -70,6 +84,11 @@ export default function ChatbotPlans() {
   }, []);
 
   const handleSubscribe = async (planId: string) => {
+    if (!user) {
+      const returnTo = encodeURIComponent(`/chatbot-plans?plan=${planId}`);
+      navigate(`/login?redirect=${returnTo}`);
+      return;
+    }
     setError("");
     setCheckingOut(planId);
     try {
@@ -380,6 +399,8 @@ export default function ChatbotPlans() {
                         <CircularProgress size={20} sx={{ color: "inherit" }} />
                       ) : isCurrent ? (
                         "Your current plan"
+                      ) : !user && plan.id !== "free" ? (
+                        "Log in to subscribe"
                       ) : (
                         plan.cta
                       )}

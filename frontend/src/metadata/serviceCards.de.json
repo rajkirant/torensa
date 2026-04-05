@@ -8,7 +8,7 @@
     "path": "/custom-chatbot-builder",
     "ctaLabel": "Chatbot erstellen",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "aiPowered": true,
     "detailedDescription": "Verwandeln Sie jede Textbasis in Sekunden in einen vollwertigen KI-Chatbot. Fügen Sie Ihre Produkt-FAQs, Unternehmensrichtlinien, Dokumentationen oder beliebigen strukturierten Text in den Metadaten-Editor ein. Das Tool speichert Ihren Kontext in der Datenbank und nutzt AWS Bedrock (Claude), um Fragen ausschließlich auf Basis Ihrer Inhalte zu beantworten. Unterstützt mehrere Chatbots, dauerhaften Gesprächsverlauf, bearbeitbare Metadaten und sofortige Antworten.",
     "categoryId": "developer",
@@ -208,7 +208,7 @@
     "path": "/bulk-email",
     "ctaLabel": "Massen-E-Mail öffnen",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "detailedDescription": "Erstellen und versenden Sie E-Mail-Kampagnen zentral an einem Ort. Verbinden Sie Gmail per OAuth, erstellen Sie Kontaktgruppen, importieren Sie Empfänger aus Excel, personalisieren Sie Betreff und Inhalt und fügen Sie Anhänge hinzu. Ihre SMTP-Konfiguration wird pro Konto gespeichert und für den Versand über Ihre eigene Gmail-Verbindung verwendet.",
     "categoryId": "communication",
     "keywords": [
@@ -1802,7 +1802,7 @@
     "path": "/habit-tracker",
     "ctaLabel": "Gewohnheiten verfolgen",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "detailedDescription": "Erstellen Sie eine Liste täglicher Gewohnheiten mit individuellen Punktwerten. Haken Sie erledigte Gewohnheiten ab, sammeln Sie Punkte und sehen Sie Ihren Verlauf der letzten 14 Tage in einem Balkendiagramm. Alle Daten werden lokal im Browser gespeichert.",
     "categoryId": "health-wellbeing",
     "keywords": [

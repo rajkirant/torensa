@@ -8,7 +8,7 @@
     "path": "/custom-chatbot-builder",
     "ctaLabel": "Chatbot bouwen",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "aiPowered": true,
     "detailedDescription": "Zet elke platte tekstbasis in seconden om tot een volledig functionerende AI-chatbot. Plak uw product-FAQ's, bedrijfsbeleid, documentatie of willekeurige gestructureerde tekst in de metadata-editor. De tool slaat uw context op in de database en gebruikt AWS Bedrock (Claude) om vragen uitsluitend te beantwoorden op basis van uw inhoud. Ondersteunt meerdere chatbots, blijvende gespreksgeschiedenis, bewerkbare metadata en directe antwoorden.",
     "categoryId": "developer",
@@ -209,7 +209,7 @@
     "path": "/bulk-email",
     "ctaLabel": "Bulk e-mail openen",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "detailedDescription": "Stel e-mailcampagnes op en verstuur ze vanuit één plek. Koppel Gmail via OAuth, maak contactgroepen aan, importeer ontvangers uit Excel, personaliseer onderwerp en inhoud en voeg bijlagen toe. Je SMTP-configuratie wordt per account opgeslagen en gebruikt voor verzending via je eigen Gmail-verbinding.",
     "categoryId": "communication",
     "keywords": [
@@ -1678,7 +1678,7 @@
     "path": "/habit-tracker",
     "ctaLabel": "Gewoonten bijhouden",
     "offlineEnabled": false,
-    "authRequired": true,
+    "authRequired": false,
     "detailedDescription": "Maak een lijst met gewoonten die je elke dag wilt doen, elk met een aangepaste puntwaarde. Vink voltooide gewoonten af om punten te verdienen. Een staafdiagram toont je punten gedurende de afgelopen 14 dagen zodat je je consistentie kunt volgen. Alle gegevens worden lokaal in je browser opgeslagen.",
     "categoryId": "health-wellbeing",
     "keywords": [

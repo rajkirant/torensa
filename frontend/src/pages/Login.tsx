@@ -16,6 +16,14 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
+  // If the redirect value itself contains encoded query params, decode it fully
+  const resolvedRedirect = (() => {
+    try {
+      return decodeURIComponent(redirectTo);
+    } catch {
+      return redirectTo;
+    }
+  })();
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -43,7 +51,7 @@ export default function Login() {
       }
 
       setUser(data.user);
-      navigate(redirectTo);
+      navigate(resolvedRedirect);
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {

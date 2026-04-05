@@ -13,9 +13,12 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useTheme, alpha } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
+import LoginIcon from "@mui/icons-material/Login";
 import SendIcon from "@mui/icons-material/Send";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -24,7 +27,7 @@ import PageContainer from "../../components/PageContainer";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
 import { useScrollBottom } from "../../hooks/useScrollTop";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 /* ── types ──────────────────────────────────────────────────────────────── */
 
@@ -65,6 +68,10 @@ export default function CustomChatbotBuilder() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // ── checkout success ──────────────────────────────────────────────────────
+  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   // ── chatbot list ──────────────────────────────────────────────────────────
   const [bots, setBots] = useState<Chatbot[]>([]);
@@ -124,6 +131,17 @@ export default function CustomChatbotBuilder() {
   useEffect(() => {
     void loadBots();
   }, [loadBots]);
+
+  // ── checkout success detection (must be after loadBots is defined) ─────────
+  useEffect(() => {
+    if (searchParams.get("checkout") === "success") {
+      setCheckoutSuccess(true);
+      navigate("/custom-chatbot-builder", { replace: true });
+      // Reload bots + plan info so upgraded limits show after webhook processes
+      setTimeout(() => void loadBots(), 1500);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* ── create / edit ─────────────────────────────────────────────────────── */
 
@@ -248,7 +266,6 @@ export default function CustomChatbotBuilder() {
       if (!res.ok) {
         if (res.status === 402 && data?.upgrade_required) {
           setChatError(data.error || "Message limit reached. Please upgrade.");
-          // refresh usage display
           void loadBots();
         } else {
           setChatError(data?.error || "Request failed.");
@@ -284,6 +301,42 @@ export default function CustomChatbotBuilder() {
   return (
     <PageContainer>
       <Stack spacing={3}>
+        {/* ── checkout success banner ──────────────────────────────────────── */}
+        {checkoutSuccess && (
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2,
+              borderRadius: "14px",
+              background: isDark
+                ? "linear-gradient(135deg, rgba(16,185,129,0.18), rgba(5,150,105,0.12))"
+                : "linear-gradient(135deg, rgba(209,250,229,0.9), rgba(167,243,208,0.7))",
+              border: `1px solid ${alpha(theme.palette.success.main, 0.4)}`,
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              gap: 1.5,
+            }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="flex-start">
+              <CheckCircleIcon sx={{ color: "success.main", mt: 0.2, fontSize: 24, flexShrink: 0 }} />
+              <Box>
+                <Typography fontWeight={800} sx={{ fontFamily: CHAT_FONT, color: "success.dark" }}>
+                  🎉 Plan upgraded successfully!
+                </Typography>
+                <Typography variant="body2" sx={{ color: "success.dark", mt: 0.3, opacity: 0.9 }}>
+                  Your new limits are now active. Create more chatbots, paste larger knowledge bases,
+                  and enjoy more messages per month.
+                </Typography>
+              </Box>
+            </Stack>
+            <IconButton size="small" onClick={() => setCheckoutSuccess(false)}
+              sx={{ color: "success.dark", flexShrink: 0 }}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Paper>
+        )}
+
         {/* ── page header ─────────────────────────────────────────────────── */}
         <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={1}>
           <Box>
@@ -360,6 +413,17 @@ export default function CustomChatbotBuilder() {
                   Upgrade plan
                 </Button>
               )}
+              {!planInfo.plan && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<LoginIcon fontSize="small" />}
+                  onClick={() => navigate("/login?redirect=/custom-chatbot-builder")}
+                  sx={{ borderRadius: "9px", fontWeight: 700, fontSize: 12 }}
+                >
+                  Log in to upgrade
+                </Button>
+              )}
             </Stack>
             <Tooltip title={`${planInfo.usage.messages_used} of ${planInfo.usage.messages_limit} messages used`}>
               <LinearProgress
@@ -421,7 +485,28 @@ export default function CustomChatbotBuilder() {
               {formError && (
                 <Stack spacing={1}>
                   <ToolStatusAlerts error={formError} />
-                  {formError.toLowerCase().includes("upgrade") && (
+                  {formError.toLowerCase().includes("log in") ? (
+                    <Stack direction="row" spacing={1}>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        startIcon={<LoginIcon fontSize="small" />}
+                        onClick={() => navigate("/login?redirect=/custom-chatbot-builder")}
+                        sx={{ borderRadius: "9px", fontWeight: 700 }}
+                      >
+                        Log in
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        startIcon={<RocketLaunchIcon fontSize="small" />}
+                        onClick={() => navigate("/chatbot-plans")}
+                        sx={{ borderRadius: "9px", fontWeight: 700 }}
+                      >
+                        View plans
+                      </Button>
+                    </Stack>
+                  ) : formError.toLowerCase().includes("upgrade") ? (
                     <Button
                       size="small"
                       variant="outlined"
@@ -431,7 +516,7 @@ export default function CustomChatbotBuilder() {
                     >
                       View plans
                     </Button>
-                  )}
+                  ) : null}
                 </Stack>
               )}
 
@@ -767,7 +852,25 @@ export default function CustomChatbotBuilder() {
 
                 {/* input */}
                 <Box sx={{ p: 1.25 }}>
-                  {chatError && <ToolStatusAlerts error={chatError} />}
+                  {chatError && (
+                    <Stack spacing={0.5}>
+                      <ToolStatusAlerts error={chatError} />
+                      {chatError.toLowerCase().includes("log in") && (
+                        <Stack direction="row" spacing={1}>
+                          <Button size="small" variant="contained" startIcon={<LoginIcon fontSize="small" />}
+                            onClick={() => navigate("/login?redirect=/custom-chatbot-builder")}
+                            sx={{ borderRadius: "9px", fontWeight: 700, fontSize: 11 }}>
+                            Log in
+                          </Button>
+                          <Button size="small" variant="outlined" startIcon={<RocketLaunchIcon fontSize="small" />}
+                            onClick={() => navigate("/chatbot-plans")}
+                            sx={{ borderRadius: "9px", fontWeight: 700, fontSize: 11 }}>
+                            View plans
+                          </Button>
+                        </Stack>
+                      )}
+                    </Stack>
+                  )}
                   <Stack direction="row" spacing={1} alignItems="center">
                     <TextField
                       fullWidth
