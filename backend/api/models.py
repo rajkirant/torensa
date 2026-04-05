@@ -164,3 +164,51 @@ class HabitLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} — {self.habit.name} on {self.date}"
+
+
+class CustomChatbot(models.Model):
+    """A user-defined chatbot seeded from plain-text metadata."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="custom_chatbots",
+    )
+    name = models.CharField(max_length=255)
+    metadata_text = models.TextField(
+        help_text="Plain-text context the bot uses to answer questions."
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} ({self.user.username})"
+
+
+class CustomChatbotMessage(models.Model):
+    """One turn in a chatbot conversation (persisted for history)."""
+
+    ROLE_USER = "user"
+    ROLE_ASSISTANT = "assistant"
+    ROLE_CHOICES = [
+        (ROLE_USER, "User"),
+        (ROLE_ASSISTANT, "Assistant"),
+    ]
+
+    chatbot = models.ForeignKey(
+        CustomChatbot,
+        on_delete=models.CASCADE,
+        related_name="messages",
+    )
+    role = models.CharField(max_length=16, choices=ROLE_CHOICES)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"[{self.role}] {self.content[:60]}"

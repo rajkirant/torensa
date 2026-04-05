@@ -52,6 +52,12 @@ from .views.habit_views import (
     habit_toggle_view,
     habit_logs_view,
 )
+from .views.custom_chatbot_views import (
+    chatbot_list_create,
+    chatbot_detail,
+    chatbot_messages,
+    chatbot_chat,
+)
 
 urlpatterns = [
     path("hello/", hello),
@@ -113,4 +119,9 @@ urlpatterns = [
     path("habits/<int:habit_id>/", habit_delete_view),
     path("habits/<int:habit_id>/toggle/", habit_toggle_view),
     path("habits/logs/", habit_logs_view),
+    # Custom chatbot builder
+    path("chatbots/", chatbot_list_create),
+    path("chatbots/<int:chatbot_id>/", chatbot_detail),
+    path("chatbots/<int:chatbot_id>/messages/", chatbot_messages),
+    path("chatbots/<int:chatbot_id>/chat/", chatbot_chat),
 ]
