@@ -120,6 +120,8 @@ def excel_logo_swap_view(request):
         if old_ext != new_logo_ext:
             output = _patch_refs(output, media_images, old_ext, new_logo_ext, new_logo_mime)
 
+        output = _recolor_header(output)
+
         output.seek(0)
         original_name = os.path.splitext(excel_file.name)[0]
         response = HttpResponse(
@@ -166,6 +168,35 @@ def _patch_refs(zip_bytes_io, media_images, old_ext, new_ext, new_mime):
 
                 zout.writestr(item, data)
 
+    output.seek(0)
+    return output
+
+
+def _recolor_header(zip_bytes_io: io.BytesIO) -> io.BytesIO:
+    """Find the first row with a colored fill and recolor it to marketdeed orange."""
+    from openpyxl import load_workbook
+    from openpyxl.styles import PatternFill
+
+    ORANGE = "FFE8611A"  # marketdeed orange (ARGB)
+
+    zip_bytes_io.seek(0)
+    wb = load_workbook(zip_bytes_io)
+
+    for ws in wb.worksheets:
+        for row in ws.iter_rows():
+            row_has_fill = any(
+                cell.fill and cell.fill.fgColor and cell.fill.fgColor.rgb not in ("00000000", "FF000000", "FFFFFFFF", "00FFFFFF")
+                for cell in row
+                if cell.fill.patternType and cell.fill.patternType != "none"
+            )
+            if row_has_fill:
+                orange_fill = PatternFill(patternType="solid", fgColor=ORANGE)
+                for cell in row:
+                    cell.fill = orange_fill
+                break  # only recolor the first header row per sheet
+
+    output = io.BytesIO()
+    wb.save(output)
     output.seek(0)
     return output
 
