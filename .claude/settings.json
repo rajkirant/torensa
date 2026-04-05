@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/Users/rajki/Workspace/torensa/backend/venv/Scripts/python.exe -c ':*)",
+      "Bash(/c/Users/rajki/Workspace/torensa/backend/venv/Scripts/pip.exe install:*)"
+    ]
+  }
+}
