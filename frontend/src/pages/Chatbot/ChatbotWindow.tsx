@@ -31,7 +31,7 @@ interface BotInfo {
 }
 
 export default function ChatbotWindow() {
-  const { id } = useParams<{ id: string }>();
+  const { id: publicId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -57,11 +57,11 @@ export default function ChatbotWindow() {
   }, [messages, chatSending]);
 
   const loadBotInfo = useCallback(async () => {
-    if (!id) return;
+    if (!publicId) return;
     setInfoLoading(true);
     setInfoError("");
     try {
-      const res = await apiFetch(`/api/chatbots/${id}/public/`);
+      const res = await apiFetch(`/api/chatbots/${publicId}/public/`);
       if (!res.ok) {
         const data = await res.json().catch(() => null);
         setInfoError(data?.error || "Chatbot not found.");
@@ -79,7 +79,7 @@ export default function ChatbotWindow() {
     } finally {
       setInfoLoading(false);
     }
-  }, [id]);
+  }, [publicId]);
 
   useEffect(() => {
     void loadBotInfo();
@@ -87,7 +87,7 @@ export default function ChatbotWindow() {
 
   const sendMessage = async () => {
     const text = chatInput.trim();
-    if (!text || chatSending || !id || limitReached) return;
+    if (!text || chatSending || !publicId || limitReached) return;
 
     setChatError("");
     setChatInput("");
@@ -95,7 +95,7 @@ export default function ChatbotWindow() {
     setMessages((prev) => [...prev, { role: "user", content: text }]);
 
     try {
-      const res = await apiFetch(`/api/chatbots/${id}/public/chat/`, {
+      const res = await apiFetch(`/api/chatbots/${publicId}/public/chat/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),

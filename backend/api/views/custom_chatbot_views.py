@@ -98,6 +98,7 @@ def _increment_usage(user, month: str):
 def _chatbot_to_dict(bot: CustomChatbot) -> dict:
     return {
         "id": bot.pk,
+        "public_id": bot.public_id,
         "name": bot.name,
         "metadata_text": bot.metadata_text,
         "created_at": bot.created_at.isoformat(),
@@ -380,13 +381,12 @@ def chatbot_chat(request, chatbot_id: int):
         limits = None
 
     system_prompt = (
-        "You are a helpful assistant. "
-        "Answer questions strictly based on the following knowledge base provided by the user.\n\n"
-        "=== KNOWLEDGE BASE ===\n"
-        f"{metadata_text}\n"
-        "=== END KNOWLEDGE BASE ===\n\n"
-        "If the answer is not contained in the knowledge base, say so politely. "
-        "Be concise and friendly."
+        "You are a helpful assistant with expertise in the topic below. "
+        "Answer as if you already know this information — never say 'according to', 'based on', "
+        "'the information provided', 'the knowledge base', or any similar phrase. "
+        "Just give the answer directly.\n\n"
+        f"{metadata_text}\n\n"
+        "If you don't know the answer, say so briefly. Be concise and friendly."
     )
 
     try:
@@ -440,22 +440,23 @@ SESSION_PUBLIC_KEY_PREFIX = "pub_msg_"  # + str(chatbot_id)
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def chatbot_public_info(request, chatbot_id: int):
+def chatbot_public_info(request, public_id: str):
     """
-    Returns public-safe info (id, name) for a chatbot.
+    Returns public-safe info (id, name) for a chatbot looked up by public_id.
     Used by the standalone ChatbotWindow to display the bot name.
     Does NOT expose metadata_text.
     """
     try:
-        bot = CustomChatbot.objects.get(pk=chatbot_id)
+        bot = CustomChatbot.objects.get(public_id=public_id)
     except CustomChatbot.DoesNotExist:
         return Response({"error": "Chatbot not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{chatbot_id}"
+    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{public_id}"
     visitor_used = request.session.get(session_key, 0)
 
     return Response({
         "id": bot.pk,
+        "public_id": bot.public_id,
         "name": bot.name,
         "visitor_messages_used": visitor_used,
         "visitor_messages_limit": PUBLIC_VISITOR_LIMIT,
@@ -464,7 +465,7 @@ def chatbot_public_info(request, chatbot_id: int):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def chatbot_public_chat(request, chatbot_id: int):
+def chatbot_public_chat(request, public_id: str):
     """
     Public chat endpoint for the standalone chatbot window.
     Visitors can send up to PUBLIC_VISITOR_LIMIT messages per session per bot.
@@ -476,11 +477,11 @@ def chatbot_public_chat(request, chatbot_id: int):
         return Response({"error": "AWS SDK (boto3) is not installed on this server."}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
     try:
-        bot = CustomChatbot.objects.get(pk=chatbot_id)
+        bot = CustomChatbot.objects.get(public_id=public_id)
     except CustomChatbot.DoesNotExist:
         return Response({"error": "Chatbot not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{chatbot_id}"
+    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{public_id}"
     visitor_used = request.session.get(session_key, 0)
 
     if visitor_used >= PUBLIC_VISITOR_LIMIT:
@@ -500,7 +501,7 @@ def chatbot_public_chat(request, chatbot_id: int):
         return Response({"error": "message is required"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Use session-stored history for this visitor (not the owner's DB history)
-    history_key = f"pub_hist_{chatbot_id}"
+    history_key = f"pub_hist_{public_id}"
     history = request.session.get(history_key, [])
     recent = history[-(MAX_HISTORY_TURNS * 2):]
 

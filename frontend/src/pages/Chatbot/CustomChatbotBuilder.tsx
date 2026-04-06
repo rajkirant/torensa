@@ -16,6 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import CodeIcon from "@mui/icons-material/Code";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
@@ -35,6 +36,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface Chatbot {
   id: number;
+  public_id: string;
   name: string;
   metadata_text: string;
   created_at: string;
@@ -89,12 +91,15 @@ export default function CustomChatbotBuilder() {
   const [formSaving, setFormSaving] = useState(false);
   const [formError, setFormError] = useState("");
 
+  // ── chat panel tab ────────────────────────────────────────────────────────
+  const [activeTab, setActiveTab] = useState<"chat" | "api">("chat");
+
   // ── share link ────────────────────────────────────────────────────────────
   const [copiedId, setCopiedId] = useState<number | null>(null);
 
   const copyShareLink = (bot: Chatbot, e: { stopPropagation: () => void }) => {
     e.stopPropagation();
-    const url = `${window.location.origin}/chatbot/${bot.id}`;
+    const url = `${window.location.origin}/chatbot/${bot.public_id}`;
     void navigator.clipboard.writeText(url).then(() => {
       setCopiedId(bot.id);
       setTimeout(() => setCopiedId(null), 2000);
@@ -803,7 +808,7 @@ export default function CustomChatbotBuilder() {
                             size="small"
                             onClick={(e) => {
                               e.stopPropagation();
-                              window.open(`/chatbot/${bot.id}`, "_blank");
+                              window.open(`/chatbot/${bot.public_id}`, "_blank");
                             }}
                             sx={{ opacity: 0.6, "&:hover": { opacity: 1, color: "primary.main" } }}
                           >
@@ -918,33 +923,171 @@ export default function CustomChatbotBuilder() {
                       </Typography>
                     </Box>
                   </Stack>
-                  <Stack direction="row" spacing={0.5}>
-                    <IconButton
-                      size="small"
-                      onClick={() => void clearHistory()}
-                      title="Clear conversation"
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    {/* Chat / API tab toggle */}
+                    <Box
                       sx={{
-                        color: "rgba(255,255,255,0.85)",
-                        "&:hover": { color: "#fff" },
+                        display: "flex",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        border: "1px solid rgba(255,255,255,0.3)",
                       }}
                     >
-                      <RefreshIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => openEdit(activeBot)}
-                      title="Edit metadata"
-                      sx={{
-                        color: "rgba(255,255,255,0.85)",
-                        "&:hover": { color: "#fff" },
-                      }}
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
+                      {(["chat", "api"] as const).map((tab) => (
+                        <Box
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          sx={{
+                            px: 1.2,
+                            py: 0.4,
+                            cursor: "pointer",
+                            fontSize: 11,
+                            fontWeight: 700,
+                            fontFamily: CHAT_FONT,
+                            color: activeTab === tab ? "#fff" : "rgba(255,255,255,0.6)",
+                            background: activeTab === tab ? "rgba(255,255,255,0.2)" : "transparent",
+                            "&:hover": { background: "rgba(255,255,255,0.15)" },
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 0.4,
+                          }}
+                        >
+                          {tab === "api" && <CodeIcon sx={{ fontSize: 12 }} />}
+                          {tab.toUpperCase()}
+                        </Box>
+                      ))}
+                    </Box>
+                    {activeTab === "chat" && (
+                      <>
+                        <IconButton
+                          size="small"
+                          onClick={() => void clearHistory()}
+                          title="Clear conversation"
+                          sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
+                        >
+                          <RefreshIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => openEdit(activeBot)}
+                          title="Edit metadata"
+                          sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </>
+                    )}
                   </Stack>
                 </Box>
 
-                {/* messages */}
+                {/* ── API docs panel ──────────────────────────────────── */}
+                {activeTab === "api" && (() => {
+                  const base = window.location.origin;
+                  const endpoint = `${base}/api/chatbots/${activeBot.public_id}/public/chat/`;
+                  const curlExample = `curl -X POST "${endpoint}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"message": "Your question here"}'`;
+                  const jsExample = `const res = await fetch("${endpoint}", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: "Your question here" }),
+});
+const { answer } = await res.json();
+console.log(answer);`;
+                  const responseExample = `{ "answer": "The maximum timeout is 15 minutes." }`;
+
+                  const codeSx = {
+                    fontFamily: "monospace",
+                    fontSize: 12,
+                    p: 1.5,
+                    borderRadius: "8px",
+                    background: isDark ? "rgba(0,0,0,0.35)" : "rgba(0,0,0,0.06)",
+                    color: isDark ? "#e2e8f0" : "#1e293b",
+                    overflowX: "auto" as const,
+                    whiteSpace: "pre" as const,
+                    border: `1px solid ${alpha(theme.palette.divider, 0.4)}`,
+                  };
+
+                  return (
+                    <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>
+                      <Stack spacing={2.5}>
+                        <Box>
+                          <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 0.8 }}>
+                            Endpoint
+                          </Typography>
+                          <Stack direction="row" alignItems="center" spacing={1} mt={0.5}>
+                            <Box sx={{ ...codeSx, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              POST {endpoint}
+                            </Box>
+                            <Tooltip title="Copy endpoint">
+                              <IconButton size="small" onClick={() => void navigator.clipboard.writeText(endpoint)}>
+                                <ContentCopyIcon sx={{ fontSize: 15 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </Stack>
+                        </Box>
+
+                        <Box>
+                          <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 0.8 }}>
+                            Request body
+                          </Typography>
+                          <Box sx={{ ...codeSx, mt: 0.5 }}>{`{ "message": "string" }`}</Box>
+                        </Box>
+
+                        <Box>
+                          <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 0.8 }}>
+                            Response
+                          </Typography>
+                          <Box sx={{ ...codeSx, mt: 0.5 }}>{responseExample}</Box>
+                        </Box>
+
+                        <Box>
+                          <Stack direction="row" alignItems="center" justifyContent="space-between">
+                            <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 0.8 }}>
+                              cURL example
+                            </Typography>
+                            <Tooltip title="Copy">
+                              <IconButton size="small" onClick={() => void navigator.clipboard.writeText(curlExample)}>
+                                <ContentCopyIcon sx={{ fontSize: 14 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </Stack>
+                          <Box sx={{ ...codeSx, mt: 0.5 }}>{curlExample}</Box>
+                        </Box>
+
+                        <Box>
+                          <Stack direction="row" alignItems="center" justifyContent="space-between">
+                            <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: 0.8 }}>
+                              JavaScript / fetch
+                            </Typography>
+                            <Tooltip title="Copy">
+                              <IconButton size="small" onClick={() => void navigator.clipboard.writeText(jsExample)}>
+                                <ContentCopyIcon sx={{ fontSize: 14 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </Stack>
+                          <Box sx={{ ...codeSx, mt: 0.5 }}>{jsExample}</Box>
+                        </Box>
+
+                        <Box
+                          sx={{
+                            p: 1.5,
+                            borderRadius: "8px",
+                            background: isDark ? alpha(theme.palette.warning.main, 0.1) : alpha(theme.palette.warning.main, 0.08),
+                            border: `1px solid ${alpha(theme.palette.warning.main, 0.3)}`,
+                          }}
+                        >
+                          <Typography variant="caption" color="warning.main" fontWeight={600}>
+                            Rate limit: visitors are limited to 20 messages per session. No API key required.
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </Box>
+                  );
+                })()}
+
+                {/* messages + input */}
+                {activeTab === "chat" && <>
                 <Box
                   ref={messagesEndRef}
                   sx={{
@@ -1198,6 +1341,7 @@ export default function CustomChatbotBuilder() {
                     </IconButton>
                   </Stack>
                 </Box>
+                </>}
               </>
             )}
           </Paper>
