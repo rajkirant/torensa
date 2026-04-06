@@ -30,7 +30,16 @@
       "WebFetch(domain:torensa.com)",
       "Bash(/c/Users/rkiran/AppData/Local/Programs/Python/Python313/python -c ':*)",
       "Bash(/c/Users/rajki/Workspace/torensa/backend/venv/Scripts/python manage.py shell -c ':*)",
-      "Bash(/c/Users/rajki/Workspace/torensa/.venv/Scripts/python manage.py shell -c ':*)"
+      "Bash(/c/Users/rajki/Workspace/torensa/.venv/Scripts/python manage.py shell -c ':*)",
+      "Bash(curl -s https://api.torensa.com/api/chatbots/billing/webhook/ -X POST -H \"Content-Type: application/json\" -d '{}')",
+      "Bash(/c/Users/rajki/Workspace/torensa/.venv/Scripts/python /c/Users/rajki/Workspace/torensa/backend/manage.py shell -c ':*)",
+      "Bash(cmd /c 'aws logs filter-log-events --log-group-name /aws/lambda/torensa-api-image --start-time %EPOCH_MS% --output text')",
+      "Bash(powershell -Command 'aws logs filter-log-events --log-group-name /aws/lambda/torensa-api-image --start-time \\([DateTimeOffset]::UtcNow.AddMinutes\\(-5\\).ToUnixTimeMilliseconds\\(\\)\\) --output text')",
+      "Bash(powershell -Command ':*)",
+      "Bash(aws ecr:*)",
+      "Bash(docker login:*)",
+      "Bash(powershell -Command \"docker version\")",
+      "Bash(powershell -Command \"Get-Command docker -ErrorAction SilentlyContinue; ls 'C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe' -ErrorAction SilentlyContinue\")"
     ]
   }
 }

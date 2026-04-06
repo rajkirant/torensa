@@ -327,9 +327,22 @@ def _handle_event(event):
             _sync_checkout_session(session)
 
 
+def _stripe_get(obj, key, default=None):
+    """Access a Stripe object field whether it's a dict or a StripeObject."""
+    try:
+        return obj[key]
+    except (KeyError, TypeError):
+        pass
+    try:
+        return getattr(obj, key, default)
+    except Exception:
+        return default
+
+
 def _sync_checkout_session(session):
-    user_id = (session.get("metadata") or {}).get("user_id")
-    plan_id = (session.get("metadata") or {}).get("plan", "free")
+    metadata = _stripe_get(session, "metadata") or {}
+    user_id = _stripe_get(metadata, "user_id")
+    plan_id = _stripe_get(metadata, "plan") or "free"
     if not user_id:
         return
 
@@ -342,31 +355,33 @@ def _sync_checkout_session(session):
     with transaction.atomic():
         sub, _ = ChatbotSubscription.objects.get_or_create(user=user)
         sub.plan = plan_id
-        sub.stripe_customer_id = session.get("customer", "") or sub.stripe_customer_id
-        sub.stripe_subscription_id = session.get("subscription", "") or sub.stripe_subscription_id
+        sub.stripe_customer_id = _stripe_get(session, "customer") or sub.stripe_customer_id
+        sub.stripe_subscription_id = _stripe_get(session, "subscription") or sub.stripe_subscription_id
         sub.stripe_status = "active"
         sub.save()
 
 
 def _sync_subscription(stripe_sub):
-    customer_id = stripe_sub.get("customer")
+    customer_id = _stripe_get(stripe_sub, "customer")
     if not customer_id:
         return
 
-    stripe_status = stripe_sub.get("status", "")
-    sub_id = stripe_sub.get("id", "")
+    stripe_status = _stripe_get(stripe_sub, "status") or ""
+    sub_id = _stripe_get(stripe_sub, "id") or ""
 
     # Derive period end
-    period_end = stripe_sub.get("current_period_end")
+    period_end = _stripe_get(stripe_sub, "current_period_end")
     period_end_dt = (
         datetime.fromtimestamp(period_end, tz=timezone.utc) if period_end else None
     )
 
     # Determine plan from price ID
     price_id = ""
-    items = stripe_sub.get("items", {}).get("data", [])
+    items_obj = _stripe_get(stripe_sub, "items") or {}
+    items = _stripe_get(items_obj, "data") or []
     if items:
-        price_id = (items[0].get("price") or {}).get("id", "")
+        price_obj = _stripe_get(items[0], "price") or {}
+        price_id = _stripe_get(price_obj, "id") or ""
 
     matched_plan_id = None
     for p in PLANS:
