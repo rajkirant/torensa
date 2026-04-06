@@ -133,9 +133,9 @@ urlpatterns = [
     path("chatbots/<int:chatbot_id>/", chatbot_detail),
     path("chatbots/<int:chatbot_id>/messages/", chatbot_messages),
     path("chatbots/<int:chatbot_id>/chat/", chatbot_chat),
-    # Public chatbot window (no auth required)
-    path("chatbots/<int:chatbot_id>/public/", chatbot_public_info),
-    path("chatbots/<int:chatbot_id>/public/chat/", chatbot_public_chat),
+    # Public chatbot window (no auth required, keyed by random public_id)
+    path("chatbots/<str:public_id>/public/", chatbot_public_info),
+    path("chatbots/<str:public_id>/public/chat/", chatbot_public_chat),
     # Chatbot billing (Stripe)
     path("chatbots/billing/plans/", plans_view),
     path("chatbots/billing/status/", billing_status_view),

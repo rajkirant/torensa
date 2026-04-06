@@ -1,3 +1,5 @@
+import secrets
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -229,6 +231,10 @@ class ChatbotMonthlyUsage(models.Model):
         return f"{self.user.username} — {self.month}: {self.message_count}"
 
 
+def _generate_public_id():
+    return secrets.token_urlsafe(9)  # 12-char URL-safe random string
+
+
 class CustomChatbot(models.Model):
     """A user-defined chatbot seeded from plain-text metadata."""
 
@@ -240,6 +246,12 @@ class CustomChatbot(models.Model):
     name = models.CharField(max_length=255)
     metadata_text = models.TextField(
         help_text="Plain-text context the bot uses to answer questions."
+    )
+    public_id = models.CharField(
+        max_length=16,
+        unique=True,
+        default=_generate_public_id,
+        help_text="Random URL-safe token used in public share links.",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
