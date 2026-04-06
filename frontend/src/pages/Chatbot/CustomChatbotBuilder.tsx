@@ -790,6 +790,19 @@ export default function CustomChatbotBuilder() {
                         </Typography>
                       </Stack>
                       <Stack direction="row" spacing={0}>
+                        <Tooltip title="View API">
+                          <IconButton
+                            size="small"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              await openChat(bot);
+                              setActiveTab("api");
+                            }}
+                            sx={{ opacity: 0.6, "&:hover": { opacity: 1, color: "primary.main" } }}
+                          >
+                            <CodeIcon sx={{ fontSize: 14 }} />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title={copiedId === bot.id ? "Copied!" : "Copy share link"}>
                           <IconButton
                             size="small"
@@ -884,7 +897,7 @@ export default function CustomChatbotBuilder() {
                   color="text.secondary"
                   textAlign="center"
                 >
-                  Select a chatbot from the list to start chatting,
+                  Select a chatbot to chat with it or view its API endpoint,
                   <br />
                   or create a new one with your text metadata.
                 </Typography>
@@ -923,62 +936,61 @@ export default function CustomChatbotBuilder() {
                       </Typography>
                     </Box>
                   </Stack>
-                  <Stack direction="row" spacing={0.5} alignItems="center">
-                    {/* Chat / API tab toggle */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        borderRadius: "8px",
-                        overflow: "hidden",
-                        border: "1px solid rgba(255,255,255,0.3)",
-                      }}
+                  <Stack direction="row" spacing={0.5}>
+                    <IconButton
+                      size="small"
+                      onClick={() => void clearHistory()}
+                      title="Clear conversation"
+                      sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
                     >
-                      {(["chat", "api"] as const).map((tab) => (
-                        <Box
-                          key={tab}
-                          onClick={() => setActiveTab(tab)}
-                          sx={{
-                            px: 1.2,
-                            py: 0.4,
-                            cursor: "pointer",
-                            fontSize: 11,
-                            fontWeight: 700,
-                            fontFamily: CHAT_FONT,
-                            color: activeTab === tab ? "#fff" : "rgba(255,255,255,0.6)",
-                            background: activeTab === tab ? "rgba(255,255,255,0.2)" : "transparent",
-                            "&:hover": { background: "rgba(255,255,255,0.15)" },
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 0.4,
-                          }}
-                        >
-                          {tab === "api" && <CodeIcon sx={{ fontSize: 12 }} />}
-                          {tab.toUpperCase()}
-                        </Box>
-                      ))}
-                    </Box>
-                    {activeTab === "chat" && (
-                      <>
-                        <IconButton
-                          size="small"
-                          onClick={() => void clearHistory()}
-                          title="Clear conversation"
-                          sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
-                        >
-                          <RefreshIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => openEdit(activeBot)}
-                          title="Edit metadata"
-                          sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                      </>
-                    )}
+                      <RefreshIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => openEdit(activeBot)}
+                      title="Edit metadata"
+                      sx={{ color: "rgba(255,255,255,0.85)", "&:hover": { color: "#fff" } }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
                   </Stack>
                 </Box>
+
+                {/* ── tab bar ─────────────────────────────────────────── */}
+                <Stack
+                  direction="row"
+                  sx={{
+                    borderBottom: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+                  }}
+                >
+                  {([
+                    { key: "chat", label: "Chat", icon: <ChatBubbleOutlineIcon sx={{ fontSize: 13 }} /> },
+                    { key: "api",  label: "API",  icon: <CodeIcon sx={{ fontSize: 13 }} /> },
+                  ] as const).map(({ key, label, icon }) => (
+                    <Box
+                      key={key}
+                      onClick={() => setActiveTab(key)}
+                      sx={{
+                        px: 2,
+                        py: 1,
+                        cursor: "pointer",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        fontFamily: CHAT_FONT,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.6,
+                        color: activeTab === key ? "primary.main" : "text.secondary",
+                        borderBottom: activeTab === key
+                          ? `2px solid ${theme.palette.primary.main}`
+                          : "2px solid transparent",
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      {icon}{label}
+                    </Box>
+                  ))}
+                </Stack>
 
                 {/* ── API docs panel ──────────────────────────────────── */}
                 {activeTab === "api" && (() => {

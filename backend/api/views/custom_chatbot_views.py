@@ -509,13 +509,12 @@ def chatbot_public_chat(request, public_id: str):
     bedrock_messages.append({"role": "user", "content": user_message})
 
     system_prompt = (
-        "You are a helpful assistant. "
-        "Answer questions strictly based on the following knowledge base provided by the user.\n\n"
-        "=== KNOWLEDGE BASE ===\n"
-        f"{bot.metadata_text}\n"
-        "=== END KNOWLEDGE BASE ===\n\n"
-        "If the answer is not contained in the knowledge base, say so politely. "
-        "Be concise and friendly."
+        "You are a helpful assistant with expertise in the topic below. "
+        "Answer as if you already know this information — never say 'according to', 'based on', "
+        "'the information provided', 'the knowledge base', or any similar phrase. "
+        "Just give the answer directly.\n\n"
+        f"{bot.metadata_text}\n\n"
+        "If you don't know the answer, say so briefly. Be concise and friendly."
     )
 
     try:
