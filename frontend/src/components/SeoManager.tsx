@@ -64,10 +64,18 @@ function formatToolTitle(title: string) {
 
 declare function gtag(...args: unknown[]): void;
 
+// Paths that manage their own <Helmet> — SeoManager should not override them
+const SELF_MANAGED_PREFIXES = ["/chatbot/"];
+
 export default function SeoManager() {
   const location = useLocation();
   const normalizedPath = normalizePath(location.pathname);
   const strippedPath = normalizePath(stripLanguagePrefix(location.pathname));
+
+  // Let these pages manage their own title/meta
+  if (SELF_MANAGED_PREFIXES.some((p) => location.pathname.startsWith(p))) {
+    return null;
+  }
   const { language } = useLanguage();
   const serviceCards = useServiceCards();
 

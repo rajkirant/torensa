@@ -30,6 +30,7 @@ import {
   toolComponentMap,
   NotFound,
   ChatbotPlans,
+  ChatbotWindow,
 } from "./utils/routes";
 import { useScrollTop } from "./hooks/useScrollTop";
 import { useGeoRedirect } from "./hooks/useGeoRedirect";
@@ -86,6 +87,9 @@ function RootRoutes({
         <SeoManager />
         <Suspense fallback={null}>
           <Routes>
+            {/* Standalone chatbot window — no App shell, must be before language-prefix routes */}
+            <Route path="/chatbot/:id" element={<ChatbotWindow />} />
+
             {LANGUAGE_PREFIXES.map((prefix) => (
               <Route
                 key={prefix || "default"}

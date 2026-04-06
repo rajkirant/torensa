@@ -39,7 +39,9 @@
       "Bash(aws ecr:*)",
       "Bash(docker login:*)",
       "Bash(powershell -Command \"docker version\")",
-      "Bash(powershell -Command \"Get-Command docker -ErrorAction SilentlyContinue; ls 'C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe' -ErrorAction SilentlyContinue\")"
+      "Bash(powershell -Command \"Get-Command docker -ErrorAction SilentlyContinue; ls 'C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe' -ErrorAction SilentlyContinue\")",
+      "Bash(gh run:*)",
+      "Bash(powershell -Command \"gh run list --limit 5\")"
     ]
   }
 }

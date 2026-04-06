@@ -16,9 +16,11 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import LoginIcon from "@mui/icons-material/Login";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SendIcon from "@mui/icons-material/Send";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -86,6 +88,18 @@ export default function CustomChatbotBuilder() {
   const [formMeta, setFormMeta] = useState("");
   const [formSaving, setFormSaving] = useState(false);
   const [formError, setFormError] = useState("");
+
+  // ── share link ────────────────────────────────────────────────────────────
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+
+  const copyShareLink = (bot: Chatbot, e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}/chatbot/${bot.id}`;
+    void navigator.clipboard.writeText(url).then(() => {
+      setCopiedId(bot.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  };
 
   // ── active chat ───────────────────────────────────────────────────────────
   const [activeBot, setActiveBot] = useState<Chatbot | null>(null);
@@ -771,6 +785,31 @@ export default function CustomChatbotBuilder() {
                         </Typography>
                       </Stack>
                       <Stack direction="row" spacing={0}>
+                        <Tooltip title={copiedId === bot.id ? "Copied!" : "Copy share link"}>
+                          <IconButton
+                            size="small"
+                            onClick={(e) => copyShareLink(bot, e)}
+                            sx={{
+                              opacity: 0.6,
+                              "&:hover": { opacity: 1, color: "primary.main" },
+                              ...(copiedId === bot.id && { opacity: 1, color: "success.main" }),
+                            }}
+                          >
+                            <ContentCopyIcon sx={{ fontSize: 14 }} />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Open chat window">
+                          <IconButton
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(`/chatbot/${bot.id}`, "_blank");
+                            }}
+                            sx={{ opacity: 0.6, "&:hover": { opacity: 1, color: "primary.main" } }}
+                          >
+                            <OpenInNewIcon sx={{ fontSize: 14 }} />
+                          </IconButton>
+                        </Tooltip>
                         <IconButton
                           size="small"
                           onClick={(e) => {
