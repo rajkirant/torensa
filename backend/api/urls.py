@@ -57,6 +57,8 @@ from .views.custom_chatbot_views import (
     chatbot_detail,
     chatbot_messages,
     chatbot_chat,
+    chatbot_public_info,
+    chatbot_public_chat,
 )
 from .views.chatbot_billing_views import (
     plans_view,
@@ -131,6 +133,9 @@ urlpatterns = [
     path("chatbots/<int:chatbot_id>/", chatbot_detail),
     path("chatbots/<int:chatbot_id>/messages/", chatbot_messages),
     path("chatbots/<int:chatbot_id>/chat/", chatbot_chat),
+    # Public chatbot window (no auth required)
+    path("chatbots/<int:chatbot_id>/public/", chatbot_public_info),
+    path("chatbots/<int:chatbot_id>/public/chat/", chatbot_public_chat),
     # Chatbot billing (Stripe)
     path("chatbots/billing/plans/", plans_view),
     path("chatbots/billing/status/", billing_status_view),

@@ -429,3 +429,121 @@ def chatbot_chat(request, chatbot_id: int):
         "answer": answer,
         "usage": {"messages_used": new_used, "messages_limit": msg_limit},
     })
+
+
+# ── public chatbot window ──────────────────────────────────────────────────────
+
+# How many messages a visitor can send per bot per session (no auth required)
+PUBLIC_VISITOR_LIMIT = 20
+SESSION_PUBLIC_KEY_PREFIX = "pub_msg_"  # + str(chatbot_id)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def chatbot_public_info(request, chatbot_id: int):
+    """
+    Returns public-safe info (id, name) for a chatbot.
+    Used by the standalone ChatbotWindow to display the bot name.
+    Does NOT expose metadata_text.
+    """
+    try:
+        bot = CustomChatbot.objects.get(pk=chatbot_id)
+    except CustomChatbot.DoesNotExist:
+        return Response({"error": "Chatbot not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{chatbot_id}"
+    visitor_used = request.session.get(session_key, 0)
+
+    return Response({
+        "id": bot.pk,
+        "name": bot.name,
+        "visitor_messages_used": visitor_used,
+        "visitor_messages_limit": PUBLIC_VISITOR_LIMIT,
+    })
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def chatbot_public_chat(request, chatbot_id: int):
+    """
+    Public chat endpoint for the standalone chatbot window.
+    Visitors can send up to PUBLIC_VISITOR_LIMIT messages per session per bot.
+    Does NOT consume the owner's usage quota.
+    """
+    try:
+        import boto3  # noqa: PLC0415
+    except ImportError:
+        return Response({"error": "AWS SDK (boto3) is not installed on this server."}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    try:
+        bot = CustomChatbot.objects.get(pk=chatbot_id)
+    except CustomChatbot.DoesNotExist:
+        return Response({"error": "Chatbot not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{chatbot_id}"
+    visitor_used = request.session.get(session_key, 0)
+
+    if visitor_used >= PUBLIC_VISITOR_LIMIT:
+        return Response(
+            {
+                "error": f"You've reached the {PUBLIC_VISITOR_LIMIT}-message limit for this demo. Visit the site to create your own chatbot.",
+                "limit_reached": True,
+                "messages_used": visitor_used,
+                "messages_limit": PUBLIC_VISITOR_LIMIT,
+            },
+            status=status.HTTP_429_TOO_MANY_REQUESTS,
+        )
+
+    payload = request.data if isinstance(request.data, dict) else {}
+    user_message = (payload.get("message") or "").strip()[:MAX_MESSAGE_CHARS]
+    if not user_message:
+        return Response({"error": "message is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Use session-stored history for this visitor (not the owner's DB history)
+    history_key = f"pub_hist_{chatbot_id}"
+    history = request.session.get(history_key, [])
+    recent = history[-(MAX_HISTORY_TURNS * 2):]
+
+    bedrock_messages = [{"role": m["role"], "content": m["content"]} for m in recent]
+    bedrock_messages.append({"role": "user", "content": user_message})
+
+    system_prompt = (
+        "You are a helpful assistant. "
+        "Answer questions strictly based on the following knowledge base provided by the user.\n\n"
+        "=== KNOWLEDGE BASE ===\n"
+        f"{bot.metadata_text}\n"
+        "=== END KNOWLEDGE BASE ===\n\n"
+        "If the answer is not contained in the knowledge base, say so politely. "
+        "Be concise and friendly."
+    )
+
+    try:
+        bedrock = _bedrock_client()
+        body = json.dumps({
+            "anthropic_version": BEDROCK_ANTHROPIC_VERSION,
+            "max_tokens": BEDROCK_MAX_TOKENS,
+            "system": system_prompt,
+            "messages": bedrock_messages,
+        })
+        response = bedrock.invoke_model(modelId=_model_id(), body=body)
+        result = json.loads(response["body"].read())
+        answer = (result.get("content", [{}])[0].get("text", "") or "").strip()
+    except Exception as exc:
+        if settings.DEBUG:
+            return Response({"error": "Bedrock call failed.", "details": str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
+        return Response({"error": "Assistant request failed. Please try again."}, status=status.HTTP_502_BAD_GATEWAY)
+
+    if not answer:
+        answer = "I'm sorry, I couldn't generate a response. Please try again."
+
+    # Persist visitor history in session
+    history.append({"role": "user", "content": user_message})
+    history.append({"role": "assistant", "content": answer})
+    request.session[history_key] = history[-(MAX_HISTORY_TURNS * 2):]
+    request.session[session_key] = visitor_used + 1
+    request.session.modified = True
+
+    return Response({
+        "answer": answer,
+        "usage": {"messages_used": visitor_used + 1, "messages_limit": PUBLIC_VISITOR_LIMIT},
+    })

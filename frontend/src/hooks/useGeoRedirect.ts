@@ -41,6 +41,12 @@ export function useGeoRedirect() {
     // Skip if we already redirected this session
     if (sessionStorage.getItem(STORAGE_KEY)) return;
 
+    // Skip for standalone pages that don't use language prefixes
+    if (location.pathname.startsWith("/chatbot/")) {
+      sessionStorage.setItem(STORAGE_KEY, "1");
+      return;
+    }
+
     // Skip if the URL already has an explicit language prefix
     if (getLanguageFromPath(location.pathname) !== null) {
       sessionStorage.setItem(STORAGE_KEY, "1");
