@@ -180,6 +180,7 @@ export default function ChatbotWindow() {
       <Helmet>
         <title>{botTitle}</title>
         <meta name="description" content={botDescription} />
+        <meta name="robots" content="noindex, nofollow" />
         <style>{`body { background: ${panelBg}; margin: 0; }`}</style>
       </Helmet>
       {/* header */}

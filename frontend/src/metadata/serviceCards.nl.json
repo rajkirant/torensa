@@ -2,59 +2,71 @@
   {
     "id": "custom-chatbot-builder",
     "component": "Chatbot/CustomChatbotBuilder",
-    "name": "Aangepaste Chatbot Builder – Direct een AI-chatbot van tekst",
+    "name": "AI Chatbot Builder – Train een chatbot op uw eigen tekst",
     "title": "Aangepaste Chatbot Builder",
-    "description": "Plak willekeurige tekst — FAQ's, documenten, productinfo — en maak direct een AI-chatbot op basis van AWS Bedrock.",
+    "description": "Zet willekeurige tekst om in een werkende AI-chatbot. Plak uw FAQ's, docs of beleid — uw bot antwoordt uitsluitend op basis van wat u aanlevert.",
     "path": "/custom-chatbot-builder",
     "ctaLabel": "Chatbot bouwen",
     "offlineEnabled": false,
     "authRequired": false,
     "aiPowered": true,
-    "detailedDescription": "Zet elke platte tekstbasis in seconden om tot een volledig functionerende AI-chatbot. Plak uw product-FAQ's, bedrijfsbeleid, documentatie of willekeurige gestructureerde tekst in de metadata-editor. De tool slaat uw context op in de database en gebruikt AWS Bedrock (Claude) om vragen uitsluitend te beantwoorden op basis van uw inhoud. Ondersteunt meerdere chatbots, blijvende gespreksgeschiedenis, bewerkbare metadata en directe antwoorden.",
+    "detailedDescription": "Met de Chatbot Builder maakt u in seconden een AI-assistent die is getraind op uw eigen teksten — zonder te programmeren. Plak willekeurige platte tekst (product-FAQ's, supportdocumentatie, bedrijfsbeleid, onboardingsgidsen) in de kennisbasiseditor en uw chatbot is direct klaar voor gebruik. Elke bot gebruikt AWS Bedrock (Claude) en antwoordt uitsluitend op basis van de tekst die u aanlevert — hij verzint geen antwoorden. Deel uw chatbot via een publieke link, integreer hem op uw website via de REST API, of test hem direct in het chatpaneel. Ondersteunt meerdere bots, blijvende gespreksgeschiedenis, bewerkbare kennisbanken en een eigen API-eindpunt per bot.",
     "categoryId": "developer",
     "keywords": [
       "aangepaste chatbot",
       "ai chatbot builder",
-      "chatbot van tekst",
+      "chatbot trainen op tekst",
+      "chatbot van documenten",
       "directe chatbot",
-      "bedrock chatbot",
       "faq bot",
       "kennisbank chatbot",
-      "no-code chatbot",
+      "no-code chatbot builder",
+      "chatbot api",
+      "chatbot website integreren",
       "ai assistent builder",
-      "tekst naar chatbot"
+      "tekst naar chatbot",
+      "bedrock claude chatbot"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Log in op uw Torensa-account.",
-      "Klik op 'Nieuwe chatbot' en geef deze een naam.",
-      "Plak uw kennistekst — FAQ's, documenten, beleid — in het metadataveld.",
-      "Klik op 'Chatbot aanmaken' om op te slaan.",
-      "Selecteer uw chatbot in het linker paneel en begin met chatten.",
-      "De AI antwoordt uitsluitend op basis van de tekst die u heeft opgegeven.",
-      "Bewerk de metadata of wis de gespreksgeschiedenis op elk moment."
+      "Klik op 'Nieuwe chatbot' en geef een naam op (bijv. 'Product Support Bot').",
+      "Plak uw kennisbasis in het tekstveld — FAQ's, docs, beleid of willekeurige platte tekst.",
+      "Klik op 'Chatbot aanmaken' om de bot direct op te slaan en te activeren.",
+      "Selecteer de bot in het linker paneel om het chatpaneel te openen.",
+      "Gebruik het tabblad 'Chat' om uw bot te testen — hij antwoordt alleen op basis van uw tekst.",
+      "Gebruik het tabblad 'API' voor een REST-eindpunt dat u op elke website of app kunt gebruiken.",
+      "Klik op het deel-icoon om een publieke link te kopiëren die u kunt doorsturen.",
+      "Bewerk de kennisbasis of wis de gespreksgeschiedenis via de iconen in de koptekst."
     ],
     "faqs": [
       {
-        "q": "Welke tekst kan ik gebruiken als metadata?",
-        "a": "Elke platte tekst werkt — product-FAQ's, bedrijfsdocumentatie, beleid, handleidingen, gestructureerde gegevens of vrije notities. Hoe meer relevante details u opneemt, hoe beter de antwoorden van de bot."
+        "q": "Welke tekst kan ik gebruiken als kennisbasis?",
+        "a": "Elke platte tekst werkt — product-FAQ's, supportdocumentatie, bedrijfsbeleid, onboardingsgidsen, prijspagina's, handleidingen of vrije notities. Hoe meer relevante details u opneemt, hoe nauwkeuriger de bot antwoordt."
       },
       {
-        "q": "Verzint de chatbot informatie?",
-        "a": "Nee. De bot is getraind om uitsluitend te antwoorden op basis van uw metadata. Als het antwoord niet in uw tekst staat, zal hij dat beleefd melden."
+        "q": "Verzint de chatbot antwoorden die hij niet weet?",
+        "a": "Nee. De bot is ingesteld om uitsluitend te antwoorden op basis van de tekst die u aanlevert. Als een vraag niet in de kennisbasis staat, meldt hij dat beleefd in plaats van te raden."
       },
       {
-        "q": "Zijn mijn gegevens veilig opgeslagen?",
-        "a": "Ja. Uw chatbot-metadata en gespreksgeschiedenis zijn gekoppeld aan uw account en veilig opgeslagen in de database. Alleen u kunt ze bekijken en beheren."
+        "q": "Hoe voeg ik de chatbot toe aan mijn website?",
+        "a": "Selecteer uw bot, klik op het tabblad 'API' en kopieer het REST-eindpunt. Stuur een POST-verzoek met de JSON-body {\"message\": \"uw vraag\"} en u ontvangt {\"answer\": \"...\"}. Geen API-sleutel nodig — bezoekers zijn beperkt tot 20 berichten per sessie."
+      },
+      {
+        "q": "Kan ik de chatbot delen met iemand zonder account?",
+        "a": "Ja. Elke bot heeft een unieke publieke link (bijv. torensa.com/chatbot/abc123). Iedereen met de link kan met uw bot chatten — geen login vereist. Kopieer de link via het deel-icoon naast uw bot."
+      },
+      {
+        "q": "Is mijn kennisbasis veilig opgeslagen?",
+        "a": "Ja. Uw chatbot-kennisbasis en gespreksgeschiedenis zijn gekoppeld aan uw account en veilig opgeslagen. Alleen u kunt ze bekijken, bewerken of verwijderen. Publieke bezoekers zien alleen de antwoorden van de bot — nooit de onderliggende tekst."
       },
       {
         "q": "Kan ik meerdere chatbots maken?",
-        "a": "Ja. U kunt zoveel chatbots aanmaken als u wilt, elk met eigen metadata en een aparte gespreksgeschiedenis."
+        "a": "Ja. Gratis accounts bevatten 1 bot. Betaalde abonnementen ondersteunen 3, 20 of 100 bots — elk met eigen kennisbasis, gespreksgeschiedenis en apart API-eindpunt."
       },
       {
-        "q": "Kan ik de metadata bijwerken na het aanmaken van de bot?",
-        "a": "Ja. Klik op het bewerkingspictogram van een chatbot om naam of kennisbasis op elk moment te wijzigen. Wijzigingen zijn van kracht bij het volgende bericht."
+        "q": "Kan ik de kennisbasis bijwerken na het aanmaken van de bot?",
+        "a": "Ja. Klik op het bewerkingspictogram (potlood) van een bot om naam of kennisbasis op elk moment te wijzigen. Wijzigingen zijn direct van kracht bij het volgende bericht."
       }
     ]
   },
