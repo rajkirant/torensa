@@ -412,8 +412,8 @@ export default function CustomChatbotBuilder() {
               Custom Chatbot Builder
             </Typography>
             <Typography variant="body2" color="text.secondary" mt={0.5}>
-              Paste any text metadata below — product FAQs, docs, policies — and
-              get an instant AI chatbot.
+              Paste your FAQs, docs, or policies — get an AI chatbot that answers
+              strictly from your text. Share it via link or call it from your website via API.
             </Typography>
           </Box>
           <Button

@@ -50,6 +50,11 @@ const STATIC_ROUTE_META: Record<string, RouteMeta> = {
     description:
       "Create your Torensa account to get started with available tools.",
   },
+  "/chatbot-plans": {
+    title: "Chatbot Plans & Pricing | Torensa",
+    description:
+      "Choose a plan for your custom AI chatbot. Free, Starter, Pro, and Business tiers — scale your knowledge base, message limits, and number of bots.",
+  },
 };
 
 function normalizePath(pathname: string) {
