@@ -152,13 +152,7 @@
     "authRequired": false,
     "detailedDescription": "Easy Share lets you send text and up to 5 files (up to 1 GB each) between devices in different networks using a 4-digit access code via internet. No signup, phone, or email is required.",
     "categoryId": "communication",
-    "keywords": [
-      "text",
-      "share",
-      "code",
-      "clipboard",
-      "transfer"
-    ],
+    "keywords": ["text", "share", "code", "clipboard", "transfer"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -214,13 +208,7 @@
     "authRequired": false,
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
-    "keywords": [
-      "email",
-      "mail",
-      "campaign",
-      "newsletter",
-      "gmail"
-    ],
+    "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
     "isActive": false,
     "advancedOptionsEnabled": false
   },
@@ -236,12 +224,7 @@
     "authRequired": false,
     "detailedDescription": "Create scannable QR codes from plain text or links with live preview. Optionally add a logo and short label, then download the final image as PNG. Processing is done in-browser, so no input is uploaded.",
     "categoryId": "business",
-    "keywords": [
-      "qr",
-      "qrcode",
-      "text",
-      "link"
-    ],
+    "keywords": ["qr", "qrcode", "text", "link"],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -349,14 +332,7 @@
     "authRequired": false,
     "detailedDescription": "Reduce image file size directly in your browser with no uploads. Preview selected images immediately, tune compression quality, then compress and download files individually or as a ZIP archive.",
     "categoryId": "utilities",
-    "keywords": [
-      "image",
-      "photo",
-      "picture",
-      "compress",
-      "optimize",
-      "size"
-    ],
+    "keywords": ["image", "photo", "picture", "compress", "optimize", "size"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -523,13 +499,7 @@
     "authRequired": false,
     "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download. All processing runs on-device for privacy and offline use.",
     "categoryId": "utilities",
-    "keywords": [
-      "pdf",
-      "split",
-      "extract",
-      "pages",
-      "document"
-    ],
+    "keywords": ["pdf", "split", "extract", "pages", "document"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -579,14 +549,7 @@
     "authRequired": false,
     "detailedDescription": "Select a crop area with pixel-level controls, preview the selected region, and export as PNG, JPEG, or WebP. Everything runs entirely in your browser, so images never leave your device.",
     "categoryId": "utilities",
-    "keywords": [
-      "image",
-      "photo",
-      "picture",
-      "crop",
-      "resize",
-      "edit"
-    ],
+    "keywords": ["image", "photo", "picture", "crop", "resize", "edit"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -701,13 +664,7 @@
     "authRequired": false,
     "detailedDescription": "Build polished invoices or receipts with seller/buyer details, line items, taxes, shipping, discounts, and notes. Totals are calculated automatically, and the final document can be exported as PDF. Data stays local and can be reused in your browser.",
     "categoryId": "business",
-    "keywords": [
-      "invoice",
-      "receipt",
-      "billing",
-      "payment",
-      "business"
-    ],
+    "keywords": ["invoice", "receipt", "billing", "payment", "business"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -757,13 +714,7 @@
     "authRequired": false,
     "detailedDescription": "Paste two versions of text and view line-by-line differences, including additions, removals, and modified blocks. Useful for reviewing edits in content, configs, or code snippets. Everything runs locally in your browser.",
     "categoryId": "developer",
-    "keywords": [
-      "text",
-      "diff",
-      "compare",
-      "changes",
-      "checker"
-    ],
+    "keywords": ["text", "diff", "compare", "changes", "checker"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -813,13 +764,7 @@
     "authRequired": false,
     "detailedDescription": "Paste JSON and run quick validation with readable error feedback. Format with indentation for readability or minify for compact payloads. This utility is fully client-side, making it fast and privacy-friendly for developer workflows.",
     "categoryId": "developer",
-    "keywords": [
-      "json",
-      "format",
-      "validator",
-      "minify",
-      "pretty"
-    ],
+    "keywords": ["json", "format", "validator", "minify", "pretty"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -869,14 +814,7 @@
     "authRequired": false,
     "detailedDescription": "Upload or paste Spring Boot logs to identify likely first-failure events, exception chains, stack-frame locations, and correlation-id clusters. Export a structured JSON incident report for sharing and follow-up debugging.",
     "categoryId": "developer",
-    "keywords": [
-      "spring",
-      "boot",
-      "log",
-      "analyzer",
-      "exception",
-      "debug"
-    ],
+    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -990,13 +928,7 @@
     "authRequired": false,
     "detailedDescription": "Inspect JWT header and payload, edit claims, and generate new tokens using HS256 or HS512 algorithms. Helpful for API testing and debugging authentication flows. Operations are performed in-browser without sending token data to a backend.",
     "categoryId": "developer",
-    "keywords": [
-      "jwt",
-      "token",
-      "encode",
-      "decode",
-      "security"
-    ],
+    "keywords": ["jwt", "token", "encode", "decode", "security"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1046,13 +978,7 @@
     "authRequired": false,
     "detailedDescription": "Create one or many UUID v4 identifiers with options like uppercase output or hyphen removal. Copy all generated values at once for use in development, testing, and data workflows.",
     "categoryId": "developer",
-    "keywords": [
-      "uuid",
-      "guid",
-      "identifier",
-      "id",
-      "generate"
-    ],
+    "keywords": ["uuid", "guid", "identifier", "id", "generate"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1161,15 +1087,7 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge lets you send API requests directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body.",
     "categoryId": "developer",
-    "keywords": [
-      "api",
-      "request",
-      "http",
-      "rest",
-      "headers",
-      "json",
-      "test"
-    ],
+    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1220,14 +1138,7 @@
     "authRequired": false,
     "detailedDescription": "Upload a Word document (.doc or .docx) and convert it to a PDF in seconds. Conversion runs on the server using LibreOffice, preserving fonts, tables, images, and formatting. Files are processed in memory and never stored.",
     "categoryId": "utilities",
-    "keywords": [
-      "word",
-      "docx",
-      "doc",
-      "pdf",
-      "convert",
-      "document"
-    ],
+    "keywords": ["word", "docx", "doc", "pdf", "convert", "document"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1315,13 +1226,7 @@
     "authRequired": false,
     "detailedDescription": "Upload a PDF and convert it to an editable .docx file. Conversion runs on the server using LibreOffice, preserving layout and text. Files are processed in memory and never stored.",
     "categoryId": "utilities",
-    "keywords": [
-      "pdf",
-      "word",
-      "docx",
-      "convert",
-      "document"
-    ],
+    "keywords": ["pdf", "word", "docx", "convert", "document"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1469,14 +1374,7 @@
     "authRequired": false,
     "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
     "categoryId": "utilities",
-    "keywords": [
-      "excel",
-      "csv",
-      "json",
-      "spreadsheet",
-      "convert",
-      "data"
-    ],
+    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1526,14 +1424,7 @@
     "authRequired": false,
     "detailedDescription": "Paste a video URL to fetch subtitles as an SRT file. The tool tries existing captions first, then falls back to auto-generated subtitles if available. Supports YouTube and other sites supported by yt-dlp.",
     "categoryId": "utilities",
-    "keywords": [
-      "subtitle",
-      "subtitles",
-      "srt",
-      "captions",
-      "yt-dlp",
-      "video"
-    ],
+    "keywords": ["subtitle", "subtitles", "srt", "captions", "yt-dlp", "video"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1613,14 +1504,7 @@
     "authRequired": false,
     "detailedDescription": "Upload a video file and extract the audio track as MP3 or WAV. Conversion runs on the server using FFmpeg. Files are processed in memory and never stored.",
     "categoryId": "utilities",
-    "keywords": [
-      "video",
-      "audio",
-      "mp3",
-      "wav",
-      "extract",
-      "convert"
-    ],
+    "keywords": ["video", "audio", "mp3", "wav", "extract", "convert"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -2061,6 +1945,63 @@
       {
         "q": "What format is the downloaded resume?",
         "a": "The resume is downloaded as a PDF file. PDF is the most widely accepted format for job applications and ensures your formatting stays consistent across all devices."
+      }
+    ]
+  },
+  {
+    "id": "ai-humaniser",
+    "component": "AiHumaniser",
+    "name": "AI Text Humaniser - Make AI Writing Sound Human",
+    "title": "AI Humaniser",
+    "description": "Rewrite AI-generated text so it sounds genuinely human. Choose a tone and get output that reads naturally — no robotic phrasing, no AI giveaways.",
+    "path": "/ai-humaniser",
+    "ctaLabel": "Humanise Text",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "AI Humaniser rewrites AI-generated text so it sounds like a real person wrote it. Paste any ChatGPT, Claude, or AI-generated content, pick your tone — Casual, Conversational, Friendly, Professional, Formal, or Academic — and get back natural human-sounding text. The tool actively avoids AI detection patterns: it varies sentence length and structure, removes robotic transitions, adds natural phrasing, and preserves your original meaning entirely. Ideal for blog posts, emails, essays, social media, and anything else you need to sound authentically human.",
+    "categoryId": "utilities",
+    "keywords": [
+      "ai humaniser",
+      "humanize ai text",
+      "make ai text human",
+      "bypass ai detection",
+      "ai detector bypass",
+      "rewrite ai content",
+      "ai to human text converter",
+      "chatgpt humanizer",
+      "ai writing detector bypass",
+      "undetectable ai",
+      "ai paraphraser",
+      "make chatgpt text sound human",
+      "ai text rewriter",
+      "humanize chatgpt"
+    ],
+    "isActive": false,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Paste your AI-generated text into the left panel.",
+      "Choose a tone that matches your target audience — Casual, Conversational, Friendly, Professional, Formal, or Academic.",
+      "Click 'Humanise' and wait a few seconds.",
+      "Your rewritten, human-sounding text appears in the right panel.",
+      "Click the copy icon to copy the result to your clipboard."
+    ],
+    "faqs": [
+      {
+        "q": "Will this bypass AI detectors like GPTZero or Turnitin?",
+        "a": "The tool is engineered to produce text that reads as naturally human as possible — it varies sentence structure, avoids AI giveaway phrases, and mimics real human writing patterns. Results are strong, but no tool can guarantee 100% bypass of every detector, as detection models constantly evolve."
+      },
+      {
+        "q": "Does it change the meaning of my text?",
+        "a": "No. The tool rewrites the style and phrasing while preserving your original meaning and all factual content exactly."
+      },
+      {
+        "q": "Which tone should I choose?",
+        "a": "Choose Casual or Friendly for social media and informal writing. Conversational works well for blogs and emails. Professional or Formal suits business documents. Academic is best for essays and research papers."
+      },
+      {
+        "q": "Is there a word limit?",
+        "a": "There is no hard limit, but for best results process one section at a time (a few paragraphs). Very long inputs may take a few extra seconds."
       }
     ]
   }
