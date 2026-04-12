@@ -22,7 +22,8 @@ def public_cors(view_func):
             response = view_func(request, *args, **kwargs)
         response["Access-Control-Allow-Origin"] = "*"
         response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        response["Access-Control-Allow-Headers"] = "Content-Type, X-CSRFToken"
+        response["Access-Control-Allow-Headers"] = "Content-Type"
+        response["Access-Control-Allow-Credentials"] = "false"
         return response
     return wrapper
 
