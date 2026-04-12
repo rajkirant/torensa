@@ -1,13 +1,30 @@
 import json
 import os
+import functools
 
 from django.conf import settings
 from django.db import transaction
+from django.http import HttpResponse
 from django.utils import timezone as dj_tz
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+
+
+def public_cors(view_func):
+    """Allow any origin on public chatbot endpoints so they can be embedded on external sites."""
+    @functools.wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.method == "OPTIONS":
+            response = HttpResponse()
+        else:
+            response = view_func(request, *args, **kwargs)
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response["Access-Control-Allow-Headers"] = "Content-Type, X-CSRFToken"
+        return response
+    return wrapper
 
 from ..models import (
     ChatbotMonthlyUsage,
@@ -438,6 +455,7 @@ PUBLIC_VISITOR_LIMIT = 20
 SESSION_PUBLIC_KEY_PREFIX = "pub_msg_"  # + str(chatbot_id)
 
 
+@public_cors
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def chatbot_public_info(request, public_id: str):
@@ -463,6 +481,7 @@ def chatbot_public_info(request, public_id: str):
     })
 
 
+@public_cors
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def chatbot_public_chat(request, public_id: str):
