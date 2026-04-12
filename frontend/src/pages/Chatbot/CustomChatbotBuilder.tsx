@@ -994,8 +994,7 @@ export default function CustomChatbotBuilder() {
 
                 {/* ── API docs panel ──────────────────────────────────── */}
                 {activeTab === "api" && (() => {
-                  const base = window.location.origin;
-                  const endpoint = `${base}/api/chatbots/${activeBot.public_id}/public/chat/`;
+                  const endpoint = `https://api.torensa.com/api/chatbots/${activeBot.public_id}/public/chat/`;
                   const curlExample = `curl -X POST "${endpoint}" \\
   -H "Content-Type: application/json" \\
   -d '{"message": "Your question here"}'`;
