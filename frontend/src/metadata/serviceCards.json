@@ -209,7 +209,7 @@
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
     "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
-    "isActive": false,
+    "isActive": true,
     "advancedOptionsEnabled": false
   },
   {
