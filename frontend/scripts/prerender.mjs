@@ -2,7 +2,6 @@ import { createServer } from "node:http";
 import { existsSync } from "node:fs";
 import { readFile, stat, mkdir, writeFile } from "node:fs/promises";
 import { extname, join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
 import puppeteer from "puppeteer";
 
 const distDir = resolve(process.cwd(), "dist");
@@ -96,22 +95,33 @@ function startStaticServer() {
   });
 }
 
-async function waitForSeoTags(page) {
+async function waitForSeoTags(page, route) {
   try {
     await page.waitForFunction(
-      () => {
+      (expectedPathname) => {
         const canonical = document.querySelector('link[rel="canonical"]');
         const description = document.querySelector('meta[name="description"]');
         const hasDescription = !!(
           description && description.getAttribute("content")
         );
-        const hasCanonical = !!(canonical && canonical.getAttribute("href"));
-        // If Helmet runs, we should get both; otherwise at least keep description.
-        return (
-          hasDescription && (hasCanonical || document.location.pathname === "/")
-        );
+        const canonicalHref = canonical && canonical.getAttribute("href");
+        // Canonical must point to the current route, not a stale route from a
+        // previous page render. Extract the pathname from the absolute canonical URL
+        // and compare it against the route we asked Puppeteer to navigate to.
+        let canonicalMatchesRoute = false;
+        if (canonicalHref) {
+          try {
+            const canonicalPathname = new URL(canonicalHref).pathname;
+            canonicalMatchesRoute = canonicalPathname === expectedPathname;
+          } catch {
+            // If parsing fails, fall back to a substring check.
+            canonicalMatchesRoute = canonicalHref.endsWith(expectedPathname);
+          }
+        }
+        return hasDescription && canonicalMatchesRoute;
       },
       { timeout: 60000 },
+      route === "/" ? "/" : route.replace(/\/$/, "") || "/",
     );
   } catch {
     // Do not fail the build if SEO tags are slow to hydrate.
@@ -121,7 +131,7 @@ async function waitForSeoTags(page) {
 async function renderRoute(page, baseUrl, route) {
   const url = `${baseUrl}${route}`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  await waitForSeoTags(page);
+  await waitForSeoTags(page, route);
   return await page.content();
 }
 
@@ -177,10 +187,14 @@ try {
 }
 
 try {
-  const page = await browser.newPage();
   for (const route of routes) {
-    const html = await renderRoute(page, baseUrl, route);
-    await writeRouteHtml(route, html);
+    const page = await browser.newPage();
+    try {
+      const html = await renderRoute(page, baseUrl, route);
+      await writeRouteHtml(route, html);
+    } finally {
+      await page.close();
+    }
   }
 } finally {
   await browser.close();
