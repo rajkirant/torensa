@@ -263,6 +263,26 @@ class CustomChatbot(models.Model):
         return f"{self.name} ({self.user.username})"
 
 
+class SavedCsv(models.Model):
+    """A CSV file saved by a logged-in user."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="saved_csvs",
+    )
+    name = models.CharField(max_length=255)
+    content = models.TextField(help_text="Raw CSV text.")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    def __str__(self):
+        return f"{self.name} ({self.user.username})"
+
+
 class CustomChatbotMessage(models.Model):
     """One turn in a chatbot conversation (persisted for history)."""
 

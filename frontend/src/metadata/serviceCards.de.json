@@ -2124,5 +2124,67 @@
         "a": "Der Download erfolgt als PDF, dem Standardformat für Bewerbungen."
       }
     ]
+  },
+  {
+    "id": "csv-builder",
+    "component": "CsvBuilder",
+    "name": "CSV-Builder – CSV-Dateien online erstellen und bearbeiten",
+    "title": "CSV-Builder",
+    "description": "CSV-Dateien direkt im Browser erstellen, bearbeiten und herunterladen. Neu anfangen, CSV-Text einfügen oder eine vorhandene Datei hochladen – dann in der Tabellenansicht bearbeiten.",
+    "path": "/csv-builder",
+    "ctaLabel": "CSV erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Mit dem CSV-Builder können Sie CSV-Dateien direkt im Browser erstellen und bearbeiten – ohne Anmeldung und ohne Software-Installation. Starten Sie mit einer leeren Tabelle, fügen Sie rohen CSV-Text ein oder laden Sie eine vorhandene .csv-Datei hoch. Die integrierte Tabellenansicht ermöglicht das Umbenennen von Spalten, das Hinzufügen oder Löschen von Zeilen und Spalten sowie das Bearbeiten einzelner Zellen per Klick. Angemeldete Nutzer können ihre CSVs im Konto speichern und jederzeit wieder laden.",
+    "categoryId": "utilities",
+    "keywords": [
+      "csv builder",
+      "csv editor online",
+      "csv datei erstellen",
+      "csv online bearbeiten",
+      "csv tabelle",
+      "csv aus text",
+      "csv einfügen",
+      "csv maker",
+      "csv generator",
+      "kostenloser csv editor",
+      "online tabelle csv",
+      "csv herunterladen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wählen Sie eine Startoption: neue CSV erstellen, CSV-Text einfügen oder eine vorhandene .csv-Datei hochladen.",
+      "Beim Einfügen von Text: Geben Sie Ihre CSV-Inhalte ein (erste Zeile = Kopfzeile, Spalten durch Komma getrennt) und klicken Sie auf 'Tabelle erstellen'.",
+      "Beim Hochladen: Klicken Sie auf 'Datei auswählen' und wählen Sie eine .csv-Datei von Ihrem Gerät.",
+      "Die Tabellenansicht öffnet sich automatisch – klicken Sie auf eine Zelle, um sie zu bearbeiten.",
+      "Klicken Sie auf das Stift-Symbol einer Spaltenüberschrift, um sie umzubenennen, oder auf das Löschen-Symbol, um die Spalte zu entfernen.",
+      "Verwenden Sie 'Zeile hinzufügen', um neue Zeilen anzuhängen, oder das Löschen-Symbol einer Zeile, um sie zu entfernen.",
+      "Klicken Sie auf das +-Symbol in der Kopfzeile, um eine neue Spalte einzufügen.",
+      "Klicken Sie abschließend auf 'CSV herunterladen', um die Datei zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Welches CSV-Format wird unterstützt?",
+        "a": "Das Tool unterstützt Standard-CSV gemäß RFC 4180: kommagetrennte Spalten, optional in doppelte Anführungszeichen eingeschlossen, wenn Kommas oder Zeilenumbrüche enthalten sind. Sowohl Windows- (\\r\\n) als auch Unix-Zeilenenden (\\n) werden beim Hochladen akzeptiert."
+      },
+      {
+        "q": "Kann ich hier eine Excel-Datei bearbeiten?",
+        "a": "Nicht direkt – dieses Tool unterstützt ausschließlich .csv-Dateien. Wenn Sie eine Excel-Datei haben, öffnen Sie diese in Excel oder Google Tabellen und speichern Sie sie als CSV. Laden Sie anschließend die .csv-Datei hier hoch."
+      },
+      {
+        "q": "Werden meine Daten an einen Server gesendet?",
+        "a": "Nein. Das gesamte Parsen, Bearbeiten und Erstellen der CSV-Datei erfolgt ausschließlich in Ihrem Browser. Ihre Daten verlassen Ihr Gerät nicht – es sei denn, Sie sind angemeldet und speichern eine CSV in Ihrem Konto."
+      },
+      {
+        "q": "Wie füge ich eine neue Spalte hinzu?",
+        "a": "Klicken Sie auf das +-Symbol am rechten Ende der Kopfzeile. Eine neue Spalte mit dem Namen 'Spalte N' wird hinzugefügt. Klicken Sie auf das Stift-Symbol, um sie umzubenennen."
+      },
+      {
+        "q": "Kann ich Daten aus einer Tabellenkalkulation wie Excel oder Google Tabellen einfügen?",
+        "a": "Ja, aber stellen Sie sicher, dass die Daten kommagetrennt sind. Kopieren Sie die Daten aus der Tabellenkalkulation, fügen Sie sie zuerst in einen Texteditor ein, ersetzen Sie Tabulatoren durch Kommas und fügen Sie den Text dann in die Eingabe 'Aus Text' ein."
+      }
+    ]
   }
 ]

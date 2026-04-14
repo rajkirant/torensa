@@ -2083,5 +2083,67 @@
         "a": "Nee. Bestanden worden in een tijdelijke map verwerkt en direct na conversie verwijderd."
       }
     ]
+  },
+  {
+    "id": "csv-builder",
+    "component": "CsvBuilder",
+    "name": "CSV-builder – CSV-bestanden online maken en bewerken",
+    "title": "CSV-builder",
+    "description": "Maak, bewerk en download CSV-bestanden in uw browser. Begin opnieuw, plak CSV-tekst of upload een bestaand bestand – en bewerk het in een spreadsheetweergave.",
+    "path": "/csv-builder",
+    "ctaLabel": "CSV maken",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Met de CSV-builder maakt en bewerkt u CSV-bestanden rechtstreeks in uw browser – zonder aanmelding en zonder software te installeren. Begin met een lege tabel, plak ruwe CSV-tekst of upload een bestaand .csv-bestand om het te bewerken. In de ingebouwde spreadsheetweergave hernoemt u kolommen, voegt u rijen en kolommen toe of verwijdert u ze, en bewerkt u afzonderlijke cellen met een klik. Ingelogde gebruikers kunnen hun CSV's opslaan in hun account en later opnieuw laden.",
+    "categoryId": "utilities",
+    "keywords": [
+      "csv builder",
+      "csv editor online",
+      "csv bestand maken",
+      "csv online bewerken",
+      "csv spreadsheet",
+      "csv van tekst",
+      "csv plakken",
+      "csv maker",
+      "csv generator",
+      "gratis csv editor",
+      "online spreadsheet csv",
+      "csv downloaden"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Kies hoe u wilt beginnen: maak een nieuwe CSV, plak CSV-tekst of upload een bestaand .csv-bestand.",
+      "Bij het plakken van tekst: voer uw CSV-inhoud in met een kopregel op de eerste regel (kolommen gescheiden door komma's) en klik op 'Spreadsheet maken'.",
+      "Bij het uploaden: klik op 'Bestand kiezen' en selecteer een .csv-bestand van uw apparaat.",
+      "De spreadsheetweergave opent automatisch – klik op een cel om deze te bewerken.",
+      "Klik op het potloodpictogram van een kolomkop om deze te hernoemen, of op het verwijderpictogram om de kolom te verwijderen.",
+      "Gebruik 'Rij toevoegen' om nieuwe rijen toe te voegen, of het verwijderpictogram van een rij om deze te verwijderen.",
+      "Klik op het +-pictogram in de kopregel om een nieuwe kolom in te voegen.",
+      "Klik ten slotte op 'CSV downloaden' om het bestand op te slaan."
+    ],
+    "faqs": [
+      {
+        "q": "Welk CSV-formaat wordt ondersteund?",
+        "a": "De tool ondersteunt standaard RFC 4180 CSV: door komma's gescheiden kolommen, optioneel tussen dubbele aanhalingstekens als cellen komma's of regeleinden bevatten. Zowel Windows- (\\r\\n) als Unix-regeleinden (\\n) worden geaccepteerd bij het uploaden."
+      },
+      {
+        "q": "Kan ik hier een Excel-bestand bewerken?",
+        "a": "Niet direct – deze tool werkt alleen met .csv-bestanden. Als u een Excel-bestand heeft, opent u het in Excel of Google Spreadsheets, kiest u Bestand → Opslaan als → CSV en uploadt u dat .csv-bestand hier."
+      },
+      {
+        "q": "Worden mijn gegevens naar een server verzonden?",
+        "a": "Nee. Het volledig verwerken, bewerken en genereren van de CSV gebeurt in uw browser. Uw gegevens verlaten uw apparaat niet – tenzij u bent ingelogd en een CSV opslaat in uw account."
+      },
+      {
+        "q": "Hoe voeg ik een nieuwe kolom toe?",
+        "a": "Klik op het +-pictogram aan het rechteruiteinde van de kopregel. Er wordt een nieuwe kolom met de naam 'Kolom N' toegevoegd. Klik op het potloodpictogram om deze te hernoemen."
+      },
+      {
+        "q": "Kan ik gegevens plakken uit een spreadsheetprogramma zoals Excel of Google Spreadsheets?",
+        "a": "Ja, maar zorg ervoor dat de gegevens door komma's zijn gescheiden. Kopieer de gegevens uit het spreadsheetprogramma, plak ze eerst in een teksteditor, vervang eventuele tabs door komma's en plak de tekst vervolgens in het invoerveld 'Van tekst'."
+      }
+    ]
   }
 ]
