@@ -2095,7 +2095,7 @@
     "offlineEnabled": true,
     "authRequired": false,
     "aiPowered": false,
-    "detailedDescription": "Met de CSV-builder maakt en bewerkt u CSV-bestanden rechtstreeks in uw browser – zonder aanmelding en zonder software te installeren. Begin met een lege tabel, plak ruwe CSV-tekst of upload een bestaand .csv-bestand om het te bewerken. In de ingebouwde spreadsheetweergave hernoemt u kolommen, voegt u rijen en kolommen toe of verwijdert u ze, en bewerkt u afzonderlijke cellen met een klik. Ingelogde gebruikers kunnen hun CSV's opslaan in hun account en later opnieuw laden.",
+    "detailedDescription": "Met de CSV-builder maakt en bewerkt u CSV-bestanden rechtstreeks in uw browser – zonder aanmelding en zonder software te installeren. Begin met een lege tabel, plak ruwe CSV-tekst of upload een bestaand .csv-bestand om het te bewerken. In de ingebouwde spreadsheetweergave hernoemt u kolommen, voegt u rijen en kolommen toe of verwijdert u ze, en bewerkt u afzonderlijke cellen met een klik. Ingelogde gebruikers kunnen hun CSV's opslaan in hun account en ze op elk moment opnieuw laden via 'Mijn CSV's'. Download het afgeronde bestand als een schone, standaardconforme CSV.",
     "categoryId": "utilities",
     "keywords": [
       "csv builder",
@@ -2121,6 +2121,7 @@
       "Klik op het potloodpictogram van een kolomkop om deze te hernoemen, of op het verwijderpictogram om de kolom te verwijderen.",
       "Gebruik 'Rij toevoegen' om nieuwe rijen toe te voegen, of het verwijderpictogram van een rij om deze te verwijderen.",
       "Klik op het +-pictogram in de kopregel om een nieuwe kolom in te voegen.",
+      "Ingelogde gebruikers kunnen op 'Opslaan in account' klikken om de CSV op te slaan en later opnieuw te laden via 'Mijn CSV's'.",
       "Klik ten slotte op 'CSV downloaden' om het bestand op te slaan."
     ],
     "faqs": [
@@ -2135,6 +2136,10 @@
       {
         "q": "Worden mijn gegevens naar een server verzonden?",
         "a": "Nee. Het volledig verwerken, bewerken en genereren van de CSV gebeurt in uw browser. Uw gegevens verlaten uw apparaat niet – tenzij u bent ingelogd en een CSV opslaat in uw account."
+      },
+      {
+        "q": "Hoe sla ik een CSV op in mijn account?",
+        "a": "Log in, open of maak een CSV en klik op 'Opslaan in account'. Geef het bestand een naam en klik op Opslaan. U kunt het op elk moment opnieuw laden via de knop 'Mijn CSV's' of de link 'Opgeslagen CSV openen' op het startscherm. Opslaan met dezelfde naam overschrijft de vorige versie."
       },
       {
         "q": "Hoe voeg ik een nieuwe kolom toe?",

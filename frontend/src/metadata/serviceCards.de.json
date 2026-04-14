@@ -2136,7 +2136,7 @@
     "offlineEnabled": true,
     "authRequired": false,
     "aiPowered": false,
-    "detailedDescription": "Mit dem CSV-Builder können Sie CSV-Dateien direkt im Browser erstellen und bearbeiten – ohne Anmeldung und ohne Software-Installation. Starten Sie mit einer leeren Tabelle, fügen Sie rohen CSV-Text ein oder laden Sie eine vorhandene .csv-Datei hoch. Die integrierte Tabellenansicht ermöglicht das Umbenennen von Spalten, das Hinzufügen oder Löschen von Zeilen und Spalten sowie das Bearbeiten einzelner Zellen per Klick. Angemeldete Nutzer können ihre CSVs im Konto speichern und jederzeit wieder laden.",
+    "detailedDescription": "Mit dem CSV-Builder können Sie CSV-Dateien direkt im Browser erstellen und bearbeiten – ohne Anmeldung und ohne Software-Installation. Starten Sie mit einer leeren Tabelle, fügen Sie rohen CSV-Text ein oder laden Sie eine vorhandene .csv-Datei hoch. Die integrierte Tabellenansicht ermöglicht das Umbenennen von Spalten, das Hinzufügen oder Löschen von Zeilen und Spalten sowie das Bearbeiten einzelner Zellen per Klick. Angemeldete Nutzer können ihre CSVs im Konto speichern und jederzeit über 'Meine CSVs' wieder laden. Laden Sie die fertige Datei als saubere, standardkonforme CSV herunter.",
     "categoryId": "utilities",
     "keywords": [
       "csv builder",
@@ -2162,6 +2162,7 @@
       "Klicken Sie auf das Stift-Symbol einer Spaltenüberschrift, um sie umzubenennen, oder auf das Löschen-Symbol, um die Spalte zu entfernen.",
       "Verwenden Sie 'Zeile hinzufügen', um neue Zeilen anzuhängen, oder das Löschen-Symbol einer Zeile, um sie zu entfernen.",
       "Klicken Sie auf das +-Symbol in der Kopfzeile, um eine neue Spalte einzufügen.",
+      "Angemeldete Nutzer können auf 'Im Konto speichern' klicken, um die CSV zu speichern und später über 'Meine CSVs' wieder zu laden.",
       "Klicken Sie abschließend auf 'CSV herunterladen', um die Datei zu speichern."
     ],
     "faqs": [
@@ -2176,6 +2177,10 @@
       {
         "q": "Werden meine Daten an einen Server gesendet?",
         "a": "Nein. Das gesamte Parsen, Bearbeiten und Erstellen der CSV-Datei erfolgt ausschließlich in Ihrem Browser. Ihre Daten verlassen Ihr Gerät nicht – es sei denn, Sie sind angemeldet und speichern eine CSV in Ihrem Konto."
+      },
+      {
+        "q": "Wie speichere ich eine CSV in meinem Konto?",
+        "a": "Melden Sie sich an, öffnen oder erstellen Sie eine CSV und klicken Sie auf 'Im Konto speichern'. Geben Sie einen Dateinamen ein und klicken Sie auf Speichern. Sie können die Datei jederzeit über die Schaltfläche 'Meine CSVs' oder den Link 'Gespeicherte CSV öffnen' auf dem Startbildschirm wieder laden. Beim Speichern mit demselben Namen wird die vorherige Version überschrieben."
       },
       {
         "q": "Wie füge ich eine neue Spalte hinzu?",

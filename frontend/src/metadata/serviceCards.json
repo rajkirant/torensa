@@ -2016,7 +2016,7 @@
     "offlineEnabled": true,
     "authRequired": false,
     "aiPowered": false,
-    "detailedDescription": "CSV Builder lets you create and edit CSV files directly in your browser — no sign-up, no software to install. Start a blank spreadsheet, paste raw CSV text to convert it instantly, or upload an existing .csv file to edit it. The built-in spreadsheet view lets you rename columns, add or delete rows and columns, and edit individual cells with a click. When you're done, download the finished file as a clean, standards-compliant CSV.",
+    "detailedDescription": "CSV Builder lets you create and edit CSV files directly in your browser — no sign-up, no software to install. Start a blank spreadsheet, paste raw CSV text to convert it instantly, or upload an existing .csv file to edit it. The built-in spreadsheet view lets you rename columns, add or delete rows and columns, and edit individual cells with a click. Logged-in users can save their CSVs to their account and reload them at any time. When you're done, download the finished file as a clean, standards-compliant CSV.",
     "categoryId": "utilities",
     "keywords": [
       "csv builder",
@@ -2042,6 +2042,7 @@
       "Click a column header's edit icon to rename it, or the delete icon to remove the column.",
       "Use 'Add row' to append new rows, or the delete icon on any row to remove it.",
       "Click 'Add column' (the + button in the header row) to insert a new column.",
+      "Logged-in users can click 'Save to account' to store the CSV in their account and reload it later from 'My CSVs'.",
       "When finished, click 'Download CSV' to save the file to your device."
     ],
     "faqs": [
@@ -2055,7 +2056,11 @@
       },
       {
         "q": "Is my data sent to a server?",
-        "a": "No. All parsing, editing, and CSV generation happens entirely in your browser. Your data never leaves your device."
+        "a": "No. All parsing, editing, and CSV generation happens entirely in your browser. Your data never leaves your device — unless you are logged in and choose to save a CSV to your account."
+      },
+      {
+        "q": "How do I save a CSV to my account?",
+        "a": "Log in, open or create a CSV, then click 'Save to account'. Give the file a name and click Save. You can reload it any time from the 'My CSVs' button or the 'Open saved CSV' link on the start screen. Saving with the same name overwrites the previous version."
       },
       {
         "q": "How do I add a new column?",
