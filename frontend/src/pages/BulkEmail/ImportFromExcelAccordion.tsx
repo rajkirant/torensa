@@ -47,9 +47,48 @@ function headerToKey(header: string) {
 }
 
 function ensureSupportedSpreadsheet(file: File) {
-  if (!/\.xlsx$/i.test(file.name)) {
-    throw new Error("Only .xlsx files are supported. Convert .xls to .xlsx first.");
+  if (!/\.(xlsx|csv)$/i.test(file.name)) {
+    throw new Error("Only .xlsx and .csv files are supported.");
   }
+}
+
+function parseCsvFile(file: File): Promise<SpreadsheetRows> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = e.target?.result as string;
+        const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+        const rows: SpreadsheetRows = [];
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          // Handle quoted fields
+          const cells: string[] = [];
+          let current = "";
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            if (ch === '"') {
+              if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
+              else { inQuotes = !inQuotes; }
+            } else if (ch === "," && !inQuotes) {
+              cells.push(current.trim());
+              current = "";
+            } else {
+              current += ch;
+            }
+          }
+          cells.push(current.trim());
+          rows.push(cells);
+        }
+        resolve(rows);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    reader.onerror = () => reject(new Error("Failed to read CSV file"));
+    reader.readAsText(file);
+  });
 }
 
 function parseSpreadsheetCell(value: CellValue): string {
@@ -191,36 +230,47 @@ export default function SendEmailAccordion({
     try {
       ensureSupportedSpreadsheet(file);
 
-      const parsedRows = await readXlsxFile(file, { trim: false });
-      const headerRow = parsedRows[0] || [];
-      const cleanHeaders = headerRow.map((h) => (h == null ? "" : String(h).trim()));
+      let sheetRows: SpreadsheetRows;
 
-      validateHeaders(cleanHeaders);
+      if (/\.csv$/i.test(file.name)) {
+        sheetRows = await parseCsvFile(file);
+        if (sheetRows.length === 0) throw new Error("CSV file is empty.");
+        const cleanHeaders = sheetRows[0].map((h) => String(h ?? "").trim());
+        validateHeaders(cleanHeaders);
+        sheetRows = [cleanHeaders, ...sheetRows.slice(1)];
+      } else {
+        const parsedRows = await readXlsxFile(file, { trim: false });
+        const headerRow = parsedRows[0] || [];
+        const cleanHeaders = headerRow.map((h) => (h == null ? "" : String(h).trim()));
 
-      const { rows: schemaRows, errors } = await readXlsxFile<ExcelRecord>(file, {
-        schema: buildSchema(cleanHeaders),
-        trim: false,
-        schemaPropertyValueForMissingValue: "",
-      });
+        validateHeaders(cleanHeaders);
 
-      if (errors.length > 0) {
-        const firstError = errors[0];
-        throw new Error(
-          `Invalid value at row ${firstError.row}, column "${firstError.column}".`,
-        );
+        const { rows: schemaRows, errors } = await readXlsxFile<ExcelRecord>(file, {
+          schema: buildSchema(cleanHeaders),
+          trim: false,
+          schemaPropertyValueForMissingValue: "",
+        });
+
+        if (errors.length > 0) {
+          const firstError = errors[0];
+          throw new Error(
+            `Invalid value at row ${firstError.row}, column "${firstError.column}".`,
+          );
+        }
+
+        sheetRows = [
+          cleanHeaders,
+          ...schemaRows.map((record) =>
+            cleanHeaders.map((header) => record[header] ?? ""),
+          ),
+        ];
       }
-
-      const sheetRows: SpreadsheetRows = [
-        cleanHeaders,
-        ...schemaRows.map((record) =>
-          cleanHeaders.map((header) => record[header] ?? ""),
-        ),
-      ];
 
       if (sheetRows.length <= 1) {
         throw new Error("No data rows found below the header row.");
       }
 
+      const cleanHeaders = sheetRows[0];
       setFileName(file.name);
       setHeaders(cleanHeaders);
       setRows(sheetRows);
@@ -232,13 +282,13 @@ export default function SendEmailAccordion({
 
       setEmailColumn(autoEmailHeader);
     } catch (err) {
-      console.error("Excel parse error:", err);
+      console.error("File parse error:", err);
       setFileName(null);
       setHeaders([]);
       setRows([]);
       setEmailColumn("");
       setError(
-        err instanceof Error ? err.message : "Failed to read Excel file",
+        err instanceof Error ? err.message : "Failed to read file",
       );
     }
   }
@@ -409,8 +459,8 @@ export default function SendEmailAccordion({
         <FilePickerButton
           variant="outlined"
           type="button"
-          label="Excel to Bulk Email"
-          accept=".xlsx"
+          label="Import Excel / CSV"
+          accept=".xlsx,.csv"
           onFilesSelected={handleExcelChange}
           resetAfterSelect
         />
