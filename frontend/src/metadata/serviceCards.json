@@ -2004,5 +2004,67 @@
         "a": "There is no hard limit, but for best results process one section at a time (a few paragraphs). Very long inputs may take a few extra seconds."
       }
     ]
+  },
+  {
+    "id": "csv-builder",
+    "component": "CsvBuilder",
+    "name": "CSV Builder - Create and Edit CSV Files Online",
+    "title": "CSV Builder",
+    "description": "Build, edit, and download CSV files in your browser. Start from scratch, paste CSV text, or upload an existing file — then edit it in a spreadsheet view.",
+    "path": "/csv-builder",
+    "ctaLabel": "Build CSV",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "CSV Builder lets you create and edit CSV files directly in your browser — no sign-up, no software to install. Start a blank spreadsheet, paste raw CSV text to convert it instantly, or upload an existing .csv file to edit it. The built-in spreadsheet view lets you rename columns, add or delete rows and columns, and edit individual cells with a click. When you're done, download the finished file as a clean, standards-compliant CSV.",
+    "categoryId": "utilities",
+    "keywords": [
+      "csv builder",
+      "csv editor online",
+      "create csv file",
+      "edit csv online",
+      "csv spreadsheet",
+      "csv from text",
+      "paste csv",
+      "csv maker",
+      "csv generator",
+      "free csv editor",
+      "online spreadsheet csv",
+      "csv download"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Choose how to start: create a blank CSV, paste CSV text, or upload an existing .csv file.",
+      "If pasting text, enter your CSV content with a header row on the first line (columns separated by commas), then click 'Build spreadsheet'.",
+      "If uploading, click 'Browse file' and select a .csv file from your device.",
+      "The spreadsheet view opens automatically — click any cell to edit it.",
+      "Click a column header's edit icon to rename it, or the delete icon to remove the column.",
+      "Use 'Add row' to append new rows, or the delete icon on any row to remove it.",
+      "Click 'Add column' (the + button in the header row) to insert a new column.",
+      "When finished, click 'Download CSV' to save the file to your device."
+    ],
+    "faqs": [
+      {
+        "q": "What CSV format does this tool support?",
+        "a": "The tool supports standard RFC 4180 CSV: comma-separated columns, with optional double-quote wrapping for cells that contain commas or newlines. Both Windows (\\r\\n) and Unix (\\n) line endings are accepted on upload."
+      },
+      {
+        "q": "Can I edit an Excel file here?",
+        "a": "Not directly — this tool works with .csv files only. If you have an Excel file, open it in Excel or Google Sheets, choose File → Save As → CSV, and then upload that .csv here."
+      },
+      {
+        "q": "Is my data sent to a server?",
+        "a": "No. All parsing, editing, and CSV generation happens entirely in your browser. Your data never leaves your device."
+      },
+      {
+        "q": "How do I add a new column?",
+        "a": "Click the + button at the right end of the header row. A new column called 'Column N' will be added. Click its edit (pencil) icon to rename it."
+      },
+      {
+        "q": "Can I paste data from a spreadsheet like Excel or Google Sheets?",
+        "a": "Yes, but make sure the data is comma-separated before pasting. Copy your data from the spreadsheet, paste it into a plain-text editor first, replace any tab characters with commas, and then paste it into the 'From text' input."
+      }
+    ]
   }
 ]

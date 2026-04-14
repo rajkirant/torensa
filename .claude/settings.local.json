@@ -42,7 +42,9 @@
       "Bash(powershell -Command \"Get-Command docker -ErrorAction SilentlyContinue; ls 'C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe' -ErrorAction SilentlyContinue\")",
       "Bash(gh run:*)",
       "Bash(powershell -Command \"gh run list --limit 5\")",
-      "Bash(c:/Users/rajki/Workspace/torensa/.venv/Scripts/python.exe -c ':*)"
+      "Bash(c:/Users/rajki/Workspace/torensa/.venv/Scripts/python.exe -c ':*)",
+      "Read(//c/Users/rajki/AppData/Local/Programs/Python/Python38//**)",
+      "Bash(\"/c/Users/rajki/Workspace/torensa/.venv/Scripts/python.exe\" manage.py migrate api 0015_savedcsv)"
     ]
   }
 }

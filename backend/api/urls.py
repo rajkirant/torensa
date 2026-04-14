@@ -60,6 +60,7 @@ from .views.custom_chatbot_views import (
     chatbot_public_info,
     chatbot_public_chat,
 )
+from .views.csv_views import csv_list_create, csv_detail
 from .views.chatbot_billing_views import (
     plans_view,
     billing_status_view,
@@ -128,6 +129,9 @@ urlpatterns = [
     path("habits/<int:habit_id>/", habit_delete_view),
     path("habits/<int:habit_id>/toggle/", habit_toggle_view),
     path("habits/logs/", habit_logs_view),
+    # CSV Builder
+    path("csv/", csv_list_create),
+    path("csv/<int:csv_id>/", csv_detail),
     # Custom chatbot builder
     path("chatbots/", chatbot_list_create),
     path("chatbots/<int:chatbot_id>/", chatbot_detail),
