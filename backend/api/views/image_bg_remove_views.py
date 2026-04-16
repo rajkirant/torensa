@@ -42,13 +42,16 @@ def _safe_base_name(filename: str) -> str:
 
 def _prepare_runtime_model_dir():
     # Lambda /var/task is read-only. rembg/pymatting may create temp files
-    # in model directory, so we ensure U2NET_HOME points to writable /tmp.
-    os.environ.setdefault("NUMBA_DISABLE_JIT", "1")
-    os.environ.setdefault("NUMBA_CACHE_DIR", "/tmp/numba")
-    os.environ.setdefault("XDG_CACHE_HOME", "/tmp/.cache")
+    # in model directory, so we always point U2NET_HOME at writable /tmp.
+    # Use assignment (not setdefault) so we override any read-only path that
+    # may have been baked into the Lambda environment at deploy time.
+    os.environ["NUMBA_DISABLE_JIT"] = "1"
+    os.environ["NUMBA_CACHE_DIR"] = "/tmp/numba"
+    os.environ["XDG_CACHE_HOME"] = "/tmp/.cache"
+    # Always redirect to writable /tmp first so rembg never writes to /var/task.
+    os.environ["U2NET_HOME"] = str(LAMBDA_MODEL_DST)
 
     if LAMBDA_MODEL_DST.exists() and any(LAMBDA_MODEL_DST.rglob("*.onnx")):
-        os.environ["U2NET_HOME"] = str(LAMBDA_MODEL_DST)
         return
 
     if LAMBDA_MODEL_SRC.exists():
@@ -60,15 +63,12 @@ def _prepare_runtime_model_dir():
                 dirs_exist_ok=True,
                 symlinks=True,
             )
-            os.environ["U2NET_HOME"] = str(LAMBDA_MODEL_DST)
             return
         except Exception:
             logger.exception("Failed to sync .u2net model files into /tmp")
-            os.environ["U2NET_HOME"] = str(LAMBDA_MODEL_SRC)
             return
 
     LAMBDA_MODEL_DST.mkdir(parents=True, exist_ok=True)
-    os.environ["U2NET_HOME"] = str(LAMBDA_MODEL_DST)
 
 
 def _parse_hex_color(hex_color: str) -> tuple[int, int, int, int]:
