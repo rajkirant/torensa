@@ -185,10 +185,14 @@ export default function App({ themeName, setThemeName }: AppProps) {
     }
   }, [setUser]);
 
-  const NO_ADS_PATHS = ["/login", "/signup", "/verify-email"];
+  const toolPaths = useMemo(
+    () => new Set(activeCards.map((card) => card.path)),
+    [activeCards],
+  );
   useEffect(() => {
     const stripped = stripLanguagePrefix(location.pathname);
-    if (NO_ADS_PATHS.includes(stripped)) {
+    const isAdsPage = stripped === "/" || toolPaths.has(stripped);
+    if (!isAdsPage) {
       document.getElementById("adsense-script")?.remove();
       return;
     }
@@ -200,7 +204,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7466905660040122";
     script.crossOrigin = "anonymous";
     document.head.appendChild(script);
-  }, [location.pathname]);
+  }, [location.pathname, toolPaths]);
 
   /* ===================== NAV ITEMS ===================== */
   type NavItemsProps = {
