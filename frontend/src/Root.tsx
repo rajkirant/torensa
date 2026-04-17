@@ -35,15 +35,15 @@ import {
 import { useScrollTop } from "./hooks/useScrollTop";
 import { useGeoRedirect } from "./hooks/useGeoRedirect";
 
-const STATIC_ROUTES = [
-  { path: "", element: <Home /> },
-  { path: "about", element: <Contact /> },
-  { path: "privacy", element: <PrivacyPolicy /> },
-  { path: "terms", element: <TermsOfService /> },
-  { path: "login", element: <Login /> },
-  { path: "signup", element: <Signup /> },
-  { path: "verify-email", element: <VerifyEmail /> },
-  { path: "chatbot-plans", element: <ChatbotPlans /> },
+const STATIC_ROUTE_PATHS = [
+  { path: "", component: Home },
+  { path: "about", component: Contact },
+  { path: "privacy", component: PrivacyPolicy },
+  { path: "terms", component: TermsOfService },
+  { path: "login", component: Login },
+  { path: "signup", component: Signup },
+  { path: "verify-email", component: VerifyEmail },
+  { path: "chatbot-plans", component: ChatbotPlans },
 ];
 
 const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl"];
@@ -98,11 +98,11 @@ function RootRoutes({
                   <App themeName={themeName} setThemeName={setThemeName} />
                 }
               >
-                {STATIC_ROUTES.map((route) => (
+                {STATIC_ROUTE_PATHS.map(({ path, component: Component }) => (
                   <Route
-                    key={route.path}
-                    path={route.path}
-                    element={route.element}
+                    key={path}
+                    path={path}
+                    element={<Component />}
                   />
                 ))}
 
