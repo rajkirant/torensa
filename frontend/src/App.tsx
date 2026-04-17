@@ -188,7 +188,10 @@ export default function App({ themeName, setThemeName }: AppProps) {
   const NO_ADS_PATHS = ["/login", "/signup", "/verify-email"];
   useEffect(() => {
     const stripped = stripLanguagePrefix(location.pathname);
-    if (NO_ADS_PATHS.includes(stripped)) return;
+    if (NO_ADS_PATHS.includes(stripped)) {
+      document.getElementById("adsense-script")?.remove();
+      return;
+    }
     if (document.getElementById("adsense-script")) return;
     const script = document.createElement("script");
     script.id = "adsense-script";
