@@ -1,0 +1,35 @@
+name: Cleanup Prerendered HTMLs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Delete all prerendered route HTMLs from S3
+        run: |
+          aws s3 ls "s3://${{ secrets.S3_BUCKET_NAME }}/" --recursive \
+            | awk '{print $4}' \
+            | grep '/index\.html$' \
+            | while read key; do
+                aws s3 rm "s3://${{ secrets.S3_BUCKET_NAME }}/$key"
+                echo "Deleted $key"
+              done
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
