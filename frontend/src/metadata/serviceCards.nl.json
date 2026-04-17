@@ -235,7 +235,43 @@
       "campagne"
     ],
     "isActive": false,
-    "advancedOptionsEnabled": false
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Log in op je Torensa-account en open Bulk e-mail verzenden.",
+      "Verbind je Gmail-account via OAuth in het tabblad 'SMTP-instellingen'.",
+      "Maak een groep aan in het tabblad 'Contactgroepen' en voeg e-mailadressen van ontvangers handmatig toe of importeer ze uit een Excel-bestand.",
+      "Selecteer een contactgroep als ontvangerslijst in het tabblad 'E-mail verzenden'.",
+      "Voer een onderwerpregel in en stel de berichttekst op (ondersteunt platte tekst).",
+      "Voeg optioneel bestanden bij aan je e-mail.",
+      "Klik op 'Verzenden' om de e-mail naar alle ontvangers in de geselecteerde groep te sturen.",
+      "Volg de verzendvoortgang en eventuele bezorgfouten in het statusoverzicht."
+    ],
+    "faqs": [
+      {
+        "q": "Heb ik een Gmail-account nodig voor Bulk e-mail verzenden?",
+        "a": "Ja. Bulk e-mail verzenden maakt verbinding via Gmail OAuth, dus je hebt een Google-account nodig. Je gegevens worden nooit opgeslagen — OAuth-tokens worden gebruikt om via je eigen Gmail-verbinding te verzenden."
+      },
+      {
+        "q": "Hoeveel e-mails kan ik tegelijk versturen?",
+        "a": "Je kunt alle contacten in een groep in één batch versturen. De dagelijkse verzendlimieten van Gmail zijn van toepassing (doorgaans 500 e-mails per dag voor gratis Gmail-accounts)."
+      },
+      {
+        "q": "Kan ik contacten importeren uit een spreadsheet?",
+        "a": "Ja. Gebruik de optie 'Importeren uit Excel' in het tabblad 'Contactgroepen' om een Excel-bestand te uploaden. De eerste kolom moet e-mailadressen bevatten."
+      },
+      {
+        "q": "Worden mijn SMTP-gegevens veilig opgeslagen?",
+        "a": "Je Gmail-verbinding gebruikt OAuth, dus er wordt geen wachtwoord opgeslagen. Het OAuth-token is gekoppeld aan je Torensa-account en kan op elk moment worden ingetrokken via je Google-accountinstellingen."
+      },
+      {
+        "q": "Kan ik e-mails personaliseren per ontvanger?",
+        "a": "Momenteel worden hetzelfde onderwerp en dezelfde inhoud naar alle ontvangers in de groep verzonden. Personalisatie per ontvanger (samenvoegen) staat op de roadmap."
+      },
+      {
+        "q": "Welke bestandstypen kan ik bijvoegen?",
+        "a": "Gangbare bestandstypen worden ondersteund (PDF, afbeeldingen, Word-documenten, enz.). De bijlagegroottelimieten van Gmail zijn van toepassing — afzonderlijke bijlagen mogen niet groter zijn dan 25 MB."
+      }
+    ]
   },
   {
     "id": "image-compressor",
@@ -2081,6 +2117,63 @@
       {
         "q": "Wordt mijn audio op de server opgeslagen?",
         "a": "Nee. Bestanden worden in een tijdelijke map verwerkt en direct na conversie verwijderd."
+      }
+    ]
+  },
+  {
+    "id": "ai-humaniser",
+    "component": "AiHumaniser",
+    "name": "AI-tekst humaniseren – AI-tekst menselijk laten klinken",
+    "title": "AI-humaniseerder",
+    "description": "Herschrijf AI-gegenereerde tekst zodat die echt menselijk klinkt. Kies een toon en ontvang output die natuurlijk leest – geen robotachtige zinnen, geen AI-kenmerken.",
+    "path": "/ai-humaniser",
+    "ctaLabel": "Tekst humaniseren",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "AI-humaniseerder herschrijft AI-gegenereerde tekst zodat deze klinkt alsof het door een echte mens is geschreven. Plak je ChatGPT-, Claude- of andere AI-tekst, kies een toon (Informeel, Conversationeel, Vriendelijk, Professioneel, Formeel of Academisch) en ontvang in seconden natuurlijk klinkende resultaten. Het tool varieert zinsstructuur, vermijdt typische AI-uitdrukkingen en bootst menselijke schrijfpatronen na – ideaal om AI-detectoren zoals GPTZero of Turnitin te omzeilen.",
+    "categoryId": "utilities",
+    "keywords": [
+      "ai humaniseerder",
+      "ai-tekst humaniseren",
+      "ai-tekst menselijk maken",
+      "ai-detectie omzeilen",
+      "ai-detector omzeilen",
+      "ai-inhoud herschrijven",
+      "ai-naar-menselijke tekstconverter",
+      "chatgpt humanizer",
+      "ai-schrijfdetector omzeilen",
+      "niet-detecteerbare ai",
+      "ai-parafraseerder",
+      "chatgpt-tekst menselijk laten klinken",
+      "ai-tekst herschrijver",
+      "chatgpt humaniseren"
+    ],
+    "isActive": false,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Plak je AI-gegenereerde tekst in het linker invoerveld.",
+      "Kies een toon die past bij je doelgroep – Informeel, Conversationeel, Vriendelijk, Professioneel, Formeel of Academisch.",
+      "Klik op 'Humaniseren' en wacht een paar seconden.",
+      "De herschreven, menselijk klinkende tekst verschijnt in het rechtervenster.",
+      "Klik op het kopieer-icoon om het resultaat naar je klembord te kopiëren."
+    ],
+    "faqs": [
+      {
+        "q": "Zal dit AI-detectoren zoals GPTZero of Turnitin omzeilen?",
+        "a": "Het tool is ontworpen om tekst te produceren die zo natuurlijk menselijk mogelijk klinkt — het varieert zinsstructuur, vermijdt AI-kenmerkende uitdrukkingen en bootst echte menselijke schrijfpatronen na. De resultaten zijn sterk, maar geen enkel tool kan 100% omzeiling van elke detector garanderen, omdat detectiemodellen voortdurend evolueren."
+      },
+      {
+        "q": "Verandert het de betekenis van mijn tekst?",
+        "a": "Nee. Het tool herschrijft de stijl en formulering terwijl je oorspronkelijke betekenis en alle feitelijke inhoud exact behouden blijven."
+      },
+      {
+        "q": "Welke toon moet ik kiezen?",
+        "a": "Kies Informeel of Vriendelijk voor social media en informeel schrijven. Conversationeel werkt goed voor blogs en e-mails. Professioneel of Formeel past bij zakelijke documenten. Academisch is het beste voor essays en onderzoekspapers."
+      },
+      {
+        "q": "Is er een woordlimiet?",
+        "a": "Er is geen vaste limiet, maar voor de beste resultaten verwerk je één sectie tegelijk (een paar alinea's). Zeer lange invoer kan een paar extra seconden duren."
       }
     ]
   },

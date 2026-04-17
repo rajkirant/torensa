@@ -210,7 +210,43 @@
     "categoryId": "communication",
     "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
     "isActive": true,
-    "advancedOptionsEnabled": false
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Log in to your Torensa account, then open Bulk Email Sender.",
+      "In the SMTP Settings tab, connect your Gmail account using OAuth.",
+      "In the Contact Groups tab, create a group and add recipient email addresses manually or import them from an Excel file.",
+      "In the Send Email tab, select a contact group as your recipient list.",
+      "Enter a subject line and compose your message body (supports plain text).",
+      "Optionally attach files to your email before sending.",
+      "Click Send to deliver the email to all recipients in the selected group.",
+      "Monitor send progress and any delivery errors in the status panel."
+    ],
+    "faqs": [
+      {
+        "q": "Do I need a Gmail account to use Bulk Email Sender?",
+        "a": "Yes. Bulk Email Sender connects via Gmail OAuth, so you need a Google account. Your credentials are never stored — OAuth tokens are used to send through your own Gmail connection."
+      },
+      {
+        "q": "How many emails can I send at once?",
+        "a": "You can send to all contacts in a group in one batch. Gmail's daily sending limits apply (typically 500 emails/day for free Gmail accounts)."
+      },
+      {
+        "q": "Can I import contacts from a spreadsheet?",
+        "a": "Yes. Use the Import from Excel option in the Contact Groups tab to upload an Excel file. The first column should contain email addresses."
+      },
+      {
+        "q": "Are my SMTP credentials stored securely?",
+        "a": "Your Gmail connection uses OAuth, so no password is stored. The OAuth token is tied to your Torensa account and can be revoked from your Google account settings at any time."
+      },
+      {
+        "q": "Can I personalize emails for each recipient?",
+        "a": "Currently the same subject and body are sent to all recipients in the group. Per-recipient personalization (mail merge) is on the roadmap."
+      },
+      {
+        "q": "What file types can I attach?",
+        "a": "Common file types are supported (PDF, images, Word documents, etc.). Gmail's attachment size limits apply — individual attachments should be under 25 MB."
+      }
+    ]
   },
   {
     "id": "text-to-qr",
