@@ -45,19 +45,6 @@ import {
 import { toolIcons } from "../metadata/toolIcons";
 import { useTranslation } from "react-i18next";
 
-const ADSENSE_CLIENT_ID = "ca-pub-7466905660040122";
-const ADSENSE_SCRIPT_ID = "adsense-script";
-
-function ensureAdSenseScript() {
-  if (document.getElementById(ADSENSE_SCRIPT_ID)) return;
-
-  const script = document.createElement("script");
-  script.id = ADSENSE_SCRIPT_ID;
-  script.async = true;
-  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`;
-  script.crossOrigin = "anonymous";
-  document.head.appendChild(script);
-}
 
 const INITIAL_VISIBLE_CARDS = 9;
 const LOAD_MORE_STEP = 6;
@@ -249,10 +236,6 @@ export default function Home() {
   React.useEffect(() => {
     setVisibleCount(INITIAL_VISIBLE_CARDS);
   }, [selectedCategoryId, isOnline, searchTerm]);
-
-  React.useEffect(() => {
-    ensureAdSenseScript();
-  }, []);
 
   React.useEffect(() => {
     const params = new URLSearchParams(location.search);
