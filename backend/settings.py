@@ -80,6 +80,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://dph88mmllcgzw.cloudfront.net"
 ]
 
+# Public chatbot endpoints must be embeddable on any third-party site.
+# Allow all origins for these paths; credentials are not used here.
+
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
