@@ -1,8 +1,11 @@
 import os
+import re
 import subprocess
 import sys
 
 from mangum import Mangum
+
+_PUBLIC_CHATBOT_RE = re.compile(r"^/api/chatbots/[^/]+/public/")
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -69,7 +72,38 @@ def _prewarm_libreoffice():
 _prewarm_libreoffice()
 
 
+def _public_cors_headers(event):
+    """Return CORS headers for public chatbot paths, or empty dict otherwise."""
+    path = event.get("rawPath") or event.get("path") or ""
+    if not _PUBLIC_CHATBOT_RE.match(path):
+        return {}
+    origin = (event.get("headers") or {}).get("origin") or (event.get("headers") or {}).get("Origin") or "*"
+    return {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Credentials": "false",
+        "Vary": "Origin",
+    }
+
+
 def lambda_handler(event, context):
     if _is_health_check(event):
         return _health_response()
-    return _get_handler()(event, context)
+
+    path = event.get("rawPath") or event.get("path") or ""
+    if _PUBLIC_CHATBOT_RE.match(path) and event.get("requestContext", {}).get("http", {}).get("method") == "OPTIONS":
+        return {
+            "statusCode": 200,
+            "headers": _public_cors_headers(event),
+            "body": "",
+        }
+
+    response = _get_handler()(event, context)
+    cors = _public_cors_headers(event)
+    if cors:
+        if isinstance(response.get("headers"), dict):
+            response["headers"].update(cors)
+        else:
+            response["headers"] = cors
+    return response
