@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
   NavLink,
   Link,
@@ -184,6 +184,20 @@ export default function App({ themeName, setThemeName }: AppProps) {
       setMobileOpen(false);
     }
   }, [setUser]);
+
+  const NO_ADS_PATHS = ["/login", "/signup", "/verify-email"];
+  useEffect(() => {
+    const stripped = stripLanguagePrefix(location.pathname);
+    if (NO_ADS_PATHS.includes(stripped)) return;
+    if (document.getElementById("adsense-script")) return;
+    const script = document.createElement("script");
+    script.id = "adsense-script";
+    script.async = true;
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7466905660040122";
+    script.crossOrigin = "anonymous";
+    document.head.appendChild(script);
+  }, [location.pathname]);
 
   /* ===================== NAV ITEMS ===================== */
   type NavItemsProps = {
