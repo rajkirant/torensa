@@ -72,6 +72,9 @@ declare function gtag(...args: unknown[]): void;
 // Paths that manage their own <Helmet> — SeoManager should not override them
 const SELF_MANAGED_PREFIXES = ["/chatbot/"];
 
+// Utility pages that should not be indexed by search engines or evaluated by ad networks
+const NOINDEX_PATHS = new Set(["/login", "/signup", "/verify-email"]);
+
 export default function SeoManager() {
   const location = useLocation();
   const normalizedPath = normalizePath(location.pathname);
@@ -124,6 +127,7 @@ export default function SeoManager() {
     canonicalPath === "/" ? SITE_URL : `${SITE_URL}${canonicalPath}`;
 
   const isHome = strippedPath === "/";
+  const isNoIndex = NOINDEX_PATHS.has(strippedPath);
   const isTool = toolMetaByPath.has(strippedPath);
   const currentTool = isTool
     ? activeCards.find((card) => normalizePath(card.path) === strippedPath)
@@ -210,6 +214,7 @@ export default function SeoManager() {
       <html lang={language} />
       <title>{meta.title}</title>
       <meta name="description" content={meta.description} />
+      {isNoIndex && <meta name="robots" content="noindex,nofollow" />}
       <link rel="canonical" href={canonical} />
       <meta property="og:title" content={meta.title} />
       <meta property="og:description" content={meta.description} />
