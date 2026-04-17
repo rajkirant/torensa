@@ -68,27 +68,27 @@ jobs:
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
 
-      - name: Install Chromium for prerender
-        working-directory: frontend
-        run: npx puppeteer browsers install chrome
+      # - name: Install Chromium for prerender
+      #   working-directory: frontend
+      #   run: npx puppeteer browsers install chrome
 
-      - name: Build and prerender
-        working-directory: frontend
-        run: |
-          pnpm run build
-          pnpm run prerender
+      # - name: Build and prerender
+      #   working-directory: frontend
+      #   run: |
+      #     pnpm run build
+      #     pnpm run prerender
 
-      - name: Deploy prerendered HTML to S3
-        run: |
-          for file in $(find frontend/dist -name "index.html"); do
-            key="${file#frontend/dist/}"
-            aws s3 cp "$file" "s3://${{ secrets.S3_BUCKET_NAME }}/$key" \
-              --content-type "text/html; charset=utf-8" \
-              --cache-control "public,max-age=0,must-revalidate"
-          done
-          aws s3 cp frontend/dist/llms.txt "s3://${{ secrets.S3_BUCKET_NAME }}/llms.txt" \
-            --content-type "text/plain; charset=utf-8" \
-            --cache-control "public,max-age=3600" || true
+      # - name: Deploy prerendered HTML to S3
+      #   run: |
+      #     for file in $(find frontend/dist -name "index.html"); do
+      #       key="${file#frontend/dist/}"
+      #       aws s3 cp "$file" "s3://${{ secrets.S3_BUCKET_NAME }}/$key" \
+      #         --content-type "text/html; charset=utf-8" \
+      #         --cache-control "public,max-age=0,must-revalidate"
+      #     done
+      #     aws s3 cp frontend/dist/llms.txt "s3://${{ secrets.S3_BUCKET_NAME }}/llms.txt" \
+      #       --content-type "text/plain; charset=utf-8" \
+      #       --cache-control "public,max-age=3600" || true
 
       - name: Generate sitemaps
         working-directory: frontend
