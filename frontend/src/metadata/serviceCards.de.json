@@ -234,7 +234,43 @@
       "kampagne"
     ],
     "isActive": false,
-    "advancedOptionsEnabled": false
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Melden Sie sich bei Ihrem Torensa-Konto an und öffnen Sie den Massen-E-Mail-Versand.",
+      "Verbinden Sie im Tab 'SMTP-Einstellungen' Ihr Gmail-Konto per OAuth.",
+      "Erstellen Sie im Tab 'Kontaktgruppen' eine Gruppe und fügen Sie Empfänger-E-Mail-Adressen manuell hinzu oder importieren Sie sie aus einer Excel-Datei.",
+      "Wählen Sie im Tab 'E-Mail senden' eine Kontaktgruppe als Empfängerliste aus.",
+      "Geben Sie eine Betreffzeile ein und verfassen Sie den Nachrichtentext (unterstützt Nur-Text).",
+      "Hängen Sie optional Dateien an Ihre E-Mail an.",
+      "Klicken Sie auf 'Senden', um die E-Mail an alle Empfänger der ausgewählten Gruppe zu versenden.",
+      "Verfolgen Sie den Sendefortschritt und eventuelle Zustellfehler im Statusbereich."
+    ],
+    "faqs": [
+      {
+        "q": "Benötige ich ein Gmail-Konto für den Massen-E-Mail-Versand?",
+        "a": "Ja. Der Massen-E-Mail-Versand verbindet sich über Gmail OAuth, daher benötigen Sie ein Google-Konto. Ihre Anmeldedaten werden niemals gespeichert – OAuth-Tokens werden verwendet, um den Versand über Ihre eigene Gmail-Verbindung abzuwickeln."
+      },
+      {
+        "q": "Wie viele E-Mails kann ich auf einmal versenden?",
+        "a": "Sie können alle Kontakte einer Gruppe in einem Durchgang versenden. Dabei gelten die täglichen Sendelimits von Gmail (typischerweise 500 E-Mails/Tag für kostenlose Gmail-Konten)."
+      },
+      {
+        "q": "Kann ich Kontakte aus einer Tabelle importieren?",
+        "a": "Ja. Verwenden Sie die Option 'Aus Excel importieren' im Tab 'Kontaktgruppen', um eine Excel-Datei hochzuladen. Die erste Spalte sollte E-Mail-Adressen enthalten."
+      },
+      {
+        "q": "Werden meine SMTP-Zugangsdaten sicher gespeichert?",
+        "a": "Ihre Gmail-Verbindung verwendet OAuth, daher wird kein Passwort gespeichert. Der OAuth-Token ist an Ihr Torensa-Konto gebunden und kann jederzeit über Ihre Google-Kontoeinstellungen widerrufen werden."
+      },
+      {
+        "q": "Kann ich E-Mails für jeden Empfänger personalisieren?",
+        "a": "Derzeit werden Betreff und Inhalt an alle Empfänger der Gruppe identisch gesendet. Empfänger-spezifische Personalisierung (Seriendruck) ist in Planung."
+      },
+      {
+        "q": "Welche Dateitypen kann ich anhängen?",
+        "a": "Gängige Dateitypen werden unterstützt (PDF, Bilder, Word-Dokumente usw.). Es gelten die Anhanggrößenbeschränkungen von Gmail – einzelne Anhänge sollten unter 25 MB liegen."
+      }
+    ]
   },
   {
     "id": "text-to-qr",
@@ -2122,6 +2158,63 @@
       {
         "q": "In welchem Format wird der Lebenslauf heruntergeladen?",
         "a": "Der Download erfolgt als PDF, dem Standardformat für Bewerbungen."
+      }
+    ]
+  },
+  {
+    "id": "ai-humaniser",
+    "component": "AiHumaniser",
+    "name": "KI-Text-Humanisierer – KI-Texte menschlich klingen lassen",
+    "title": "KI-Humanisierer",
+    "description": "KI-generierten Text umschreiben, damit er authentisch menschlich klingt. Ton wählen und natürlich lesbaren Output erhalten – ohne roboterhafte Formulierungen.",
+    "path": "/ai-humaniser",
+    "ctaLabel": "Text humanisieren",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "KI-Humanisierer schreibt KI-generierten Text so um, dass er wie von einem echten Menschen verfasst wirkt. Fügen Sie Ihren ChatGPT-, Claude- oder sonstigen KI-Text ein, wählen Sie einen Ton (Lässig, Gesprächig, Freundlich, Professionell, Förmlich oder Akademisch) und erhalten Sie in Sekunden natürlich klingende Ergebnisse. Das Tool variiert Satzstruktur, vermeidet typische KI-Ausdrücke und ahmt menschliche Schreibmuster nach – ideal zum Umgehen von KI-Detektoren wie GPTZero oder Turnitin.",
+    "categoryId": "utilities",
+    "keywords": [
+      "ki humanisierer",
+      "ki-text humanisieren",
+      "ki-text menschlich machen",
+      "ki-erkennung umgehen",
+      "ki-detektor umgehen",
+      "ki-inhalte umschreiben",
+      "ki-zu-mensch-textkonverter",
+      "chatgpt humanizer",
+      "ki-schreibdetektor umgehen",
+      "nicht erkennbare ki",
+      "ki-paraphrasierer",
+      "chatgpt-text menschlich klingen lassen",
+      "ki-text-umschreiber",
+      "chatgpt humanisieren"
+    ],
+    "isActive": false,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Fügen Sie Ihren KI-generierten Text in das linke Eingabefeld ein.",
+      "Wählen Sie einen Ton, der zu Ihrer Zielgruppe passt – Lässig, Gesprächig, Freundlich, Professionell, Förmlich oder Akademisch.",
+      "Klicken Sie auf 'Humanisieren' und warten Sie einige Sekunden.",
+      "Der umgeschriebene, menschlich klingende Text erscheint im rechten Bereich.",
+      "Klicken Sie auf das Kopieren-Symbol, um das Ergebnis in die Zwischenablage zu kopieren."
+    ],
+    "faqs": [
+      {
+        "q": "Wird dieses Tool KI-Detektoren wie GPTZero oder Turnitin umgehen?",
+        "a": "Das Tool ist darauf ausgelegt, Text zu erzeugen, der so natürlich menschlich wie möglich klingt – es variiert Satzstruktur, vermeidet typische KI-Ausdrücke und ahmt echte menschliche Schreibmuster nach. Die Ergebnisse sind stark, aber kein Tool kann eine 100%ige Umgehung jedes Detektors garantieren, da sich Erkennungsmodelle ständig weiterentwickeln."
+      },
+      {
+        "q": "Verändert es die Bedeutung meines Textes?",
+        "a": "Nein. Das Tool schreibt Stil und Formulierung um, während die ursprüngliche Bedeutung und alle inhaltlichen Informationen exakt erhalten bleiben."
+      },
+      {
+        "q": "Welchen Ton soll ich wählen?",
+        "a": "Wählen Sie Lässig oder Freundlich für Social Media und informelles Schreiben. Gesprächig eignet sich gut für Blogs und E-Mails. Professionell oder Förmlich passt für Geschäftsdokumente. Akademisch ist am besten für Aufsätze und Forschungsarbeiten geeignet."
+      },
+      {
+        "q": "Gibt es ein Wortlimit?",
+        "a": "Es gibt kein festes Limit, aber für beste Ergebnisse verarbeiten Sie jeweils einen Abschnitt (einige Absätze). Sehr lange Eingaben können einige Sekunden länger dauern."
       }
     ]
   },
