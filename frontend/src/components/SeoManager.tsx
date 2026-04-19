@@ -123,8 +123,7 @@ export default function SeoManager() {
     language === "de"
       ? withLanguagePrefix(strippedPath, "de")
       : stripLanguagePrefix(normalizedPath);
-  const canonical =
-    canonicalPath === "/" ? SITE_URL : `${SITE_URL}${canonicalPath}`;
+  const canonical = `${SITE_URL}${canonicalPath}`;
 
   const isHome = strippedPath === "/";
   const isNoIndex = NOINDEX_PATHS.has(strippedPath);
