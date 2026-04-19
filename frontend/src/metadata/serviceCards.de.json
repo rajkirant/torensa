@@ -216,12 +216,12 @@
     "component": "BulkEmail/BulkEmail",
     "name": "Massen-E-Mail-Versand",
     "title": "Massen-E-Mail-Versand – Viele E-Mails kostenlos senden",
-    "description": "Versenden Sie personalisierte Massen-E-Mails über Ihr verbundenes Gmail-Konto.",
+    "description": "Versenden Sie Massen-E-Mails aus einer Excel/CSV-Liste über Ihr verbundenes Gmail-Konto.",
     "path": "/bulk-email",
     "ctaLabel": "Massen-E-Mail öffnen",
     "offlineEnabled": false,
-    "authRequired": false,
-    "detailedDescription": "Erstellen und versenden Sie E-Mail-Kampagnen zentral an einem Ort. Verbinden Sie Gmail per OAuth, erstellen Sie Kontaktgruppen, importieren Sie Empfänger aus Excel, personalisieren Sie Betreff und Inhalt und fügen Sie Anhänge hinzu. Ihre SMTP-Konfiguration wird pro Konto gespeichert und für den Versand über Ihre eigene Gmail-Verbindung verwendet.",
+    "authRequired": true,
+    "detailedDescription": "Erstellen und versenden Sie Massen-E-Mail-Kampagnen an einem Ort. Verbinden Sie Gmail per OAuth, importieren Sie Empfänger aus Excel/CSV, personalisieren Sie Betreff und Nachricht mit Platzhaltern und fügen Sie Anhänge hinzu. Ihre SMTP-Konfiguration wird pro Konto gespeichert und für den Versand über Ihre eigene Gmail-Verbindung verwendet.",
     "categoryId": "communication",
     "keywords": [
       "email",
@@ -233,17 +233,16 @@
       "e-mail versand",
       "kampagne"
     ],
-    "isActive": false,
+    "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Melden Sie sich bei Ihrem Torensa-Konto an und öffnen Sie den Massen-E-Mail-Versand.",
-      "Verbinden Sie im Tab 'SMTP-Einstellungen' Ihr Gmail-Konto per OAuth.",
-      "Erstellen Sie im Tab 'Kontaktgruppen' eine Gruppe und fügen Sie Empfänger-E-Mail-Adressen manuell hinzu oder importieren Sie sie aus einer Excel-Datei.",
-      "Wählen Sie im Tab 'E-Mail senden' eine Kontaktgruppe als Empfängerliste aus.",
-      "Geben Sie eine Betreffzeile ein und verfassen Sie den Nachrichtentext (unterstützt Nur-Text).",
-      "Hängen Sie optional Dateien an Ihre E-Mail an.",
-      "Klicken Sie auf 'Senden', um die E-Mail an alle Empfänger der ausgewählten Gruppe zu versenden.",
-      "Verfolgen Sie den Sendefortschritt und eventuelle Zustellfehler im Statusbereich."
+      "Verbinden Sie Ihr Gmail-Konto per OAuth.",
+      "Öffnen Sie den Bereich 'Excel to Bulk Email' und importieren Sie eine Excel/CSV-Datei mit Empfängern.",
+      "Wählen Sie die Spalte aus, die die Empfänger-E-Mail-Adressen enthält.",
+      "Geben Sie Betreff und Nachricht ein. Klicken Sie auf Spalten-Chips, um Platzhalter einzufügen (z. B. $First_Name).",
+      "Hängen Sie optional Dateien an.",
+      "Klicken Sie auf 'Send', um die E-Mails über Ihre Gmail-Verbindung zu versenden."
     ],
     "faqs": [
       {
@@ -252,11 +251,11 @@
       },
       {
         "q": "Wie viele E-Mails kann ich auf einmal versenden?",
-        "a": "Sie können alle Kontakte einer Gruppe in einem Durchgang versenden. Dabei gelten die täglichen Sendelimits von Gmail (typischerweise 500 E-Mails/Tag für kostenlose Gmail-Konten)."
+        "a": "Sie können alle Empfänger aus Ihrer Tabelle in einem Durchgang versenden. Dabei gelten die täglichen Sendelimits von Gmail (typischerweise 500 E-Mails/Tag für kostenlose Gmail-Konten)."
       },
       {
         "q": "Kann ich Kontakte aus einer Tabelle importieren?",
-        "a": "Ja. Verwenden Sie die Option 'Aus Excel importieren' im Tab 'Kontaktgruppen', um eine Excel-Datei hochzuladen. Die erste Spalte sollte E-Mail-Adressen enthalten."
+        "a": "Ja. Importieren Sie eine Excel/CSV-Datei und wählen Sie anschließend die E-Mail-Spalte aus."
       },
       {
         "q": "Werden meine SMTP-Zugangsdaten sicher gespeichert?",
@@ -264,7 +263,7 @@
       },
       {
         "q": "Kann ich E-Mails für jeden Empfänger personalisieren?",
-        "a": "Derzeit werden Betreff und Inhalt an alle Empfänger der Gruppe identisch gesendet. Empfänger-spezifische Personalisierung (Seriendruck) ist in Planung."
+        "a": "Ja. Verwenden Sie Platzhalter im Betreff/Nachrichtentext (z. B. $First_Name), die zu Ihren Tabellen-Spalten passen."
       },
       {
         "q": "Welche Dateitypen kann ich anhängen?",

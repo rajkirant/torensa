@@ -201,25 +201,24 @@
     "component": "BulkEmail/BulkEmail",
     "name": "Bulk Email Sender",
     "title": "Bulk Email Sender - Send Mass Emails Free Online",
-    "description": "Send personalized bulk emails with your connected Gmail account.",
+    "description": "Send bulk emails from an Excel/CSV list using your connected Gmail account.",
     "path": "/bulk-email",
     "ctaLabel": "Open Bulk Email",
     "offlineEnabled": false,
     "authRequired": true,
-    "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, create contact groups, import recipients from Excel, personalize subject/body content, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
+    "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, import recipients from Excel/CSV, personalize subject/body with placeholders, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
     "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Log in to your Torensa account, then open Bulk Email Sender.",
-      "In the SMTP Settings tab, connect your Gmail account using OAuth.",
-      "In the Contact Groups tab, create a group and add recipient email addresses manually or import them from an Excel file.",
-      "In the Send Email tab, select a contact group as your recipient list.",
-      "Enter a subject line and compose your message body (supports plain text).",
-      "Optionally attach files to your email before sending.",
-      "Click Send to deliver the email to all recipients in the selected group.",
-      "Monitor send progress and any delivery errors in the status panel."
+      "Connect your Gmail account using OAuth.",
+      "Open the Excel to Bulk Email section and import an Excel/CSV file with your recipients.",
+      "Select which column contains the recipient email addresses.",
+      "Enter a subject and message. Click column chips to insert placeholders (like $First_Name).",
+      "Optionally attach files before sending.",
+      "Click Send to process and send the emails through your connected Gmail."
     ],
     "faqs": [
       {
@@ -228,11 +227,11 @@
       },
       {
         "q": "How many emails can I send at once?",
-        "a": "You can send to all contacts in a group in one batch. Gmail's daily sending limits apply (typically 500 emails/day for free Gmail accounts)."
+        "a": "You can send to all recipients in your spreadsheet in one batch. Gmail's daily sending limits apply (typically 500 emails/day for free Gmail accounts)."
       },
       {
         "q": "Can I import contacts from a spreadsheet?",
-        "a": "Yes. Use the Import from Excel option in the Contact Groups tab to upload an Excel file. The first column should contain email addresses."
+        "a": "Yes. Import an Excel/CSV file, then choose which column contains email addresses."
       },
       {
         "q": "Are my SMTP credentials stored securely?",
@@ -240,7 +239,7 @@
       },
       {
         "q": "Can I personalize emails for each recipient?",
-        "a": "Currently the same subject and body are sent to all recipients in the group. Per-recipient personalization (mail merge) is on the roadmap."
+        "a": "Yes. Use placeholders in your subject/message (like $First_Name) that match your spreadsheet headers."
       },
       {
         "q": "What file types can I attach?",

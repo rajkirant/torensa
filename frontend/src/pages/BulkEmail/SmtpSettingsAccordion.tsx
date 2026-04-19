@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import { apiFetch } from "../../utils/api";
 import { formatApiError } from "../../utils/apiError";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
@@ -22,6 +21,7 @@ type Props = {
   defaultSmtpEmail?: string;
   onSmtpEmailRemember?: (email: string) => void;
   smtpConfigs?: SMTPConfig[];
+  showConnect?: boolean;
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,49 +32,30 @@ export default function SmtpSettingsAccordion({
   defaultSmtpEmail = "",
   onSmtpEmailRemember,
   smtpConfigs = [],
+  showConnect = true,
 }: Props) {
-  const [smtpEmail, setSmtpEmail] = useState("");
   const [oauthLoading, setOauthLoading] = useState(false);
   const [disconnectingId, setDisconnectingId] = useState<number | null>(null);
   const [error, setError] = useState("");
 
-  const normalizedInputEmail = smtpEmail.trim().toLowerCase();
-  const isAlreadyConnected =
-    !!normalizedInputEmail &&
-    smtpConfigs.some(
-      (cfg) => cfg.smtp_email.trim().toLowerCase() === normalizedInputEmail,
-    );
-
-  useEffect(() => {
-    if (smtpEmail.trim()) return;
-    if (!defaultSmtpEmail.trim()) return;
-    setSmtpEmail(defaultSmtpEmail);
-  }, [defaultSmtpEmail, smtpEmail]);
+  const normalizedDefaultEmail = defaultSmtpEmail.trim().toLowerCase();
+  const canStartOauth = emailRegex.test(normalizedDefaultEmail);
 
   async function handleConnectGmail(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    const normalizedEmail = normalizedInputEmail;
-
-    if (!emailRegex.test(normalizedEmail)) {
-      setError("Please enter a valid Gmail address");
-      return;
-    }
-
-    if (isAlreadyConnected) {
-      setError(
-        "This Gmail is already connected. Remove the existing connection first.",
-      );
+    if (!canStartOauth) {
+      setError("Unable to resolve your Gmail address. Please re-login and try again.");
       return;
     }
 
     setOauthLoading(true);
 
     try {
-      onSmtpEmailRemember?.(normalizedEmail);
+      onSmtpEmailRemember?.(normalizedDefaultEmail);
 
-      const query = new URLSearchParams({ smtp_email: normalizedEmail });
+      const query = new URLSearchParams({ smtp_email: normalizedDefaultEmail });
       const res = await apiFetch(`/api/auth/google/start/?${query.toString()}`, {
         method: "GET",
         credentials: "include",
@@ -133,51 +114,45 @@ export default function SmtpSettingsAccordion({
     }
   }
 
-  return (
-    <Box component="form" onSubmit={handleConnectGmail}>
-      <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-        Connect your Gmail account with OAuth. App passwords are no longer supported.
-      </Typography>
+  const content = (
+    <>
+      {showConnect ? (
+        <>
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
+            Connect your Gmail account with OAuth. You'll select the account on Google.
+          </Typography>
 
-      <TextField
-        label="Gmail address"
-        type="email"
-        value={smtpEmail}
-        onChange={(e) => setSmtpEmail(e.target.value)}
-        autoComplete="email"
-        fullWidth
-        margin="normal"
-      />
+          <ToolStatusAlerts error={error} sx={{ mt: 2 }} />
 
-      <ToolStatusAlerts error={error} sx={{ mt: 2 }} />
-
-      <Button
-        type="submit"
-        variant="contained"
-        fullWidth
-        disabled={oauthLoading || isAlreadyConnected}
-        sx={{
-          mt: 2,
-          py: 1.4,
-          fontWeight: 700,
-          textTransform: "none",
-          borderRadius: 2,
-        }}
-      >
-        {oauthLoading ? (
-          <>
-            <CircularProgress size={20} sx={{ color: "inherit", mr: 1 }} />
-            Redirecting...
-          </>
-        ) : isAlreadyConnected ? (
-          "Already connected (remove first)"
-        ) : (
-          "Connect Gmail"
-        )}
-      </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={oauthLoading || !canStartOauth}
+            sx={{
+              mt: 2,
+              py: 1.4,
+              fontWeight: 700,
+              textTransform: "none",
+              borderRadius: 2,
+            }}
+          >
+            {oauthLoading ? (
+              <>
+                <CircularProgress size={20} sx={{ color: "inherit", mr: 1 }} />
+                Redirecting...
+              </>
+            ) : (
+              "Connect Gmail"
+            )}
+          </Button>
+        </>
+      ) : (
+        <ToolStatusAlerts error={error} sx={{ mt: 0 }} />
+      )}
 
       {smtpConfigs.length > 0 && (
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ mt: showConnect ? 3 : 0 }}>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             Connected accounts
           </Typography>
@@ -207,6 +182,16 @@ export default function SmtpSettingsAccordion({
           </Stack>
         </Box>
       )}
-    </Box>
+    </>
+  );
+
+  return (
+    showConnect ? (
+      <Box component="form" onSubmit={handleConnectGmail}>
+        {content}
+      </Box>
+    ) : (
+      <Box>{content}</Box>
+    )
   );
 }

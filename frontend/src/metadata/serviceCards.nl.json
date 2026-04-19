@@ -215,61 +215,51 @@
   {
     "id": "bulk-email",
     "component": "BulkEmail/BulkEmail",
-    "name": "Bulk e-mail verzenden",
-    "title": "Bulk E-mail Verzenden – Massaberichten gratis versturen",
-    "description": "Verstuur gepersonaliseerde bulk-e-mails via je gekoppelde Gmail-account.",
+    "name": "Bulk Email Sender",
+    "title": "Bulk Email Sender - Verzend massaal e-mails gratis online",
+    "description": "Verstuur bulk e-mails vanuit een Excel/CSV-lijst met uw gekoppelde Gmail-account.",
     "path": "/bulk-email",
-    "ctaLabel": "Bulk e-mail openen",
+    "ctaLabel": "Bulk Email openen",
     "offlineEnabled": false,
-    "authRequired": false,
-    "detailedDescription": "Stel e-mailcampagnes op en verstuur ze vanuit één plek. Koppel Gmail via OAuth, maak contactgroepen aan, importeer ontvangers uit Excel, personaliseer onderwerp en inhoud en voeg bijlagen toe. Je SMTP-configuratie wordt per account opgeslagen en gebruikt voor verzending via je eigen Gmail-verbinding.",
+    "authRequired": true,
+    "detailedDescription": "Stel bulk e-mailcampagnes op en verstuur ze vanaf één plek. Verbind Gmail via OAuth, importeer ontvangers uit Excel/CSV, personaliseer het onderwerp/bericht met placeholders en voeg bijlagen toe. Uw SMTP-configuratie wordt per account opgeslagen en gebruikt om te verzenden via uw eigen Gmail-verbinding.",
     "categoryId": "communication",
-    "keywords": [
-      "email",
-      "mail",
-      "campaign",
-      "newsletter",
-      "gmail",
-      "bulk e-mail",
-      "e-mail versturen",
-      "campagne"
-    ],
-    "isActive": false,
+    "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
+    "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Log in op je Torensa-account en open Bulk e-mail verzenden.",
-      "Verbind je Gmail-account via OAuth in het tabblad 'SMTP-instellingen'.",
-      "Maak een groep aan in het tabblad 'Contactgroepen' en voeg e-mailadressen van ontvangers handmatig toe of importeer ze uit een Excel-bestand.",
-      "Selecteer een contactgroep als ontvangerslijst in het tabblad 'E-mail verzenden'.",
-      "Voer een onderwerpregel in en stel de berichttekst op (ondersteunt platte tekst).",
-      "Voeg optioneel bestanden bij aan je e-mail.",
-      "Klik op 'Verzenden' om de e-mail naar alle ontvangers in de geselecteerde groep te sturen.",
-      "Volg de verzendvoortgang en eventuele bezorgfouten in het statusoverzicht."
+      "Log in op uw Torensa-account en open Bulk Email Sender.",
+      "Verbind uw Gmail-account via OAuth.",
+      "Open de sectie Excel naar Bulk Email en importeer een Excel/CSV-bestand met uw ontvangers.",
+      "Selecteer welke kolom de e-mailadressen van de ontvangers bevat.",
+      "Voer een onderwerp en bericht in. Klik op kolom-chips om placeholders in te voegen (zoals $First_Name).",
+      "Voeg optioneel bestanden toe voor het verzenden.",
+      "Klik op Verzenden om de e-mails te verwerken en te verzenden via uw verbonden Gmail."
     ],
     "faqs": [
       {
-        "q": "Heb ik een Gmail-account nodig voor Bulk e-mail verzenden?",
-        "a": "Ja. Bulk e-mail verzenden maakt verbinding via Gmail OAuth, dus je hebt een Google-account nodig. Je gegevens worden nooit opgeslagen — OAuth-tokens worden gebruikt om via je eigen Gmail-verbinding te verzenden."
+        "q": "Heb ik een Gmail-account nodig om Bulk Email Sender te gebruiken?",
+        "a": "Ja. Bulk Email Sender maakt verbinding via Gmail OAuth, dus u hebt een Google-account nodig. Uw inloggegevens worden nooit opgeslagen — OAuth-tokens worden gebruikt om via uw eigen Gmail-verbinding te verzenden."
       },
       {
         "q": "Hoeveel e-mails kan ik tegelijk versturen?",
-        "a": "Je kunt alle contacten in een groep in één batch versturen. De dagelijkse verzendlimieten van Gmail zijn van toepassing (doorgaans 500 e-mails per dag voor gratis Gmail-accounts)."
+        "a": "U kunt in één batch naar alle ontvangers in uw spreadsheet verzenden. De dagelijkse verzendlimieten van Gmail zijn van toepassing (meestal 500 e-mails/dag voor gratis Gmail-accounts)."
       },
       {
         "q": "Kan ik contacten importeren uit een spreadsheet?",
-        "a": "Ja. Gebruik de optie 'Importeren uit Excel' in het tabblad 'Contactgroepen' om een Excel-bestand te uploaden. De eerste kolom moet e-mailadressen bevatten."
+        "a": "Ja. Importeer een Excel/CSV-bestand en kies vervolgens welke kolom de e-mailadressen bevat."
       },
       {
-        "q": "Worden mijn SMTP-gegevens veilig opgeslagen?",
-        "a": "Je Gmail-verbinding gebruikt OAuth, dus er wordt geen wachtwoord opgeslagen. Het OAuth-token is gekoppeld aan je Torensa-account en kan op elk moment worden ingetrokken via je Google-accountinstellingen."
+        "q": "Worden mijn SMTP-inloggegevens veilig opgeslagen?",
+        "a": "Uw Gmail-verbinding maakt gebruik van OAuth, dus er wordt geen wachtwoord opgeslagen. Het OAuth-token is gekoppeld aan uw Torensa-account en kan op elk moment worden ingetrokken via uw Google-accountinstellingen."
       },
       {
-        "q": "Kan ik e-mails personaliseren per ontvanger?",
-        "a": "Momenteel worden hetzelfde onderwerp en dezelfde inhoud naar alle ontvangers in de groep verzonden. Personalisatie per ontvanger (samenvoegen) staat op de roadmap."
+        "q": "Kan ik e-mails personaliseren voor elke ontvanger?",
+        "a": "Ja. Gebruik placeholders in uw onderwerp/bericht (zoals $First_Name) die overeenkomen met de koppen van uw spreadsheet."
       },
       {
         "q": "Welke bestandstypen kan ik bijvoegen?",
-        "a": "Gangbare bestandstypen worden ondersteund (PDF, afbeeldingen, Word-documenten, enz.). De bijlagegroottelimieten van Gmail zijn van toepassing — afzonderlijke bijlagen mogen niet groter zijn dan 25 MB."
+        "a": "Veelvoorkomende bestandstypen worden ondersteund (PDF, afbeeldingen, Word-documenten, enz.). De bijlagegroottelimieten van Gmail zijn van toepassing — afzonderlijke bijlagen mogen niet groter zijn dan 25 MB."
       }
     ]
   },
