@@ -7,8 +7,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Box from "@mui/material/Box";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SmtpSettingsAccordion from "./SmtpSettingsAccordion";
-import SendEmailAccordion from "./SendEmailAccordion";
-import ContactGroupsAccordion from "./ContactGroupsAccordion";
+// import SendEmailAccordion from "./SendEmailAccordion";
+// import ContactGroupsAccordion from "./ContactGroupsAccordion";
 import ImportFromExcelAccordion from "./ImportFromExcelAccordion";
 import { apiFetch } from "../../utils/api";
 import PageContainer from "../../components/PageContainer";
@@ -55,14 +55,13 @@ function lastSmtpEmailStorageKey(userId?: number) {
 export default function BulkEmail() {
   const { user } = useAuth();
   const [expanded, setExpanded] = useState({
-    smtp: false,
     contacts: false,
     excel: false,
     send: false,
   });
 
   const toggle =
-    (key: "smtp" | "contacts" | "excel" | "send") =>
+    (key: "contacts" | "excel" | "send") =>
     (_: any, isExpanded: boolean) =>
       setExpanded((prev) => ({ ...prev, [key]: isExpanded }));
 
@@ -71,9 +70,11 @@ export default function BulkEmail() {
   const [preferredSmtpEmail, setPreferredSmtpEmail] = useState("");
   const [loadingGroups, setLoadingGroups] = useState(false);
   const [contactGroups, setContactGroups] = useState<ContactGroup[]>([]);
+  // Temporarily disable Contact Groups + Send accordions (keep state for later).
+  void loadingGroups;
+  void contactGroups;
 
   const [oauthError, setOauthError] = useState("");
-  const [oauthSuccess, setOauthSuccess] = useState("");
 
   const didFetch = useRef(false);
 
@@ -235,168 +236,210 @@ export default function BulkEmail() {
       if (connectedEmail) {
         rememberSmtpEmail(connectedEmail);
       }
-      setOauthSuccess(
-        connectedEmail
-          ? `Gmail connected: ${connectedEmail}`
-          : "Gmail connected successfully",
-      );
       setOauthError("");
       loadSmtpConfigs();
-      setExpanded({ smtp: true, contacts: false, excel: false, send: false });
+      setExpanded({ contacts: false, excel: true, send: false });
     } else {
       const rawError = params.get("error");
       setOauthError(rawError || "Gmail connection failed");
-      setOauthSuccess("");
-      setExpanded({ smtp: true, contacts: false, excel: false, send: false });
+      setExpanded({ contacts: false, excel: false, send: false });
     }
 
     window.history.replaceState({}, "", window.location.pathname);
   }, []);
 
+  const hasConnectedGmail = smtpConfigs.length > 0;
+
+  function handleSmtpDisconnected(disconnectedEmail: string) {
+    const removedEmail = normalizeEmail(disconnectedEmail);
+    const accountEmail = normalizeEmail(user?.email);
+    const nextPreferred =
+      preferredSmtpEmail && preferredSmtpEmail === removedEmail
+        ? accountEmail
+        : preferredSmtpEmail;
+
+    setPreferredSmtpEmail(nextPreferred);
+    setStoredPreferredSmtpEmail(nextPreferred);
+    setOauthError("");
+    loadSmtpConfigs();
+    setExpanded({ contacts: false, excel: false, send: false });
+  }
+
   return (
     <PageContainer maxWidth={820}>
       <Divider sx={{ mb: 3 }} />
 
-      <ToolStatusAlerts error={oauthError} success={oauthSuccess} sx={{ mb: 2 }} />
+      <ToolStatusAlerts error={oauthError} sx={{ mb: 2 }} />
 
-      <Accordion
-        expanded={expanded.smtp}
-        onChange={toggle("smtp")}
-        sx={accordionStyle}
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
-            Gmail Sender Settings
-          </Typography>
-        </AccordionSummary>
-
-        <AccordionDetails>
-          <Box>
+      {!hasConnectedGmail ? (
+        <Box sx={accordionStyle}>
+          <Box
+            sx={{
+              px: 2,
+              py: 1.5,
+              borderBottom: "1px solid rgba(255,255,255,0.10)",
+            }}
+          >
+            <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
+              Connect Gmail
+            </Typography>
+          </Box>
+          <Box sx={{ p: 2 }}>
             <SmtpSettingsAccordion
               smtpConfigs={smtpConfigs}
               defaultSmtpEmail={preferredSmtpEmail}
               onSmtpEmailRemember={rememberSmtpEmail}
-              onDisconnected={(disconnectedEmail) => {
-                const removedEmail = normalizeEmail(disconnectedEmail);
-                const accountEmail = normalizeEmail(user?.email);
-                const nextPreferred =
-                  preferredSmtpEmail && preferredSmtpEmail === removedEmail
-                    ? accountEmail
-                    : preferredSmtpEmail;
-
-                setPreferredSmtpEmail(nextPreferred);
-                setStoredPreferredSmtpEmail(nextPreferred);
-                setOauthSuccess(`Gmail disconnected: ${removedEmail}`);
-                setOauthError("");
-                loadSmtpConfigs();
-              }}
+              onDisconnected={handleSmtpDisconnected}
               onConnected={() => {
                 loadSmtpConfigs();
                 setExpanded({
-                  smtp: false,
-                  contacts: true,
-                  excel: false,
-                  send: false,
-                });
-              }}
-            />
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        expanded={expanded.contacts}
-        onChange={toggle("contacts")}
-        sx={accordionStyle}
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography fontWeight={700} sx={{ color: "#34d399" }}>
-            Contact Groups
-          </Typography>
-        </AccordionSummary>
-
-        <AccordionDetails>
-          <Box>
-            <ContactGroupsAccordion
-              onSaved={() => {
-                loadContactGroups();
-                setExpanded({
-                  smtp: false,
                   contacts: false,
                   excel: true,
                   send: false,
                 });
               }}
             />
+          </Box>
+        </Box>
+      ) : null}
 
-            {loadingGroups ? (
-              <Typography sx={{ mt: 2 }} variant="body2" color="text.secondary">
-                Loading groups...
-              </Typography>
-            ) : contactGroups.length ? (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  Saved groups
+      {!hasConnectedGmail ? (
+        <Typography sx={{ mt: 2 }} variant="body2" color="text.secondary">
+          Connect Gmail to unlock Excel import.
+        </Typography>
+      ) : null}
+
+      {hasConnectedGmail ? (
+        <Box sx={accordionStyle}>
+          <Box
+            sx={{
+              px: 2,
+              py: 1.5,
+              borderBottom: "1px solid rgba(255,255,255,0.10)",
+            }}
+          >
+            <Typography fontWeight={700} sx={{ color: "#60a5fa" }}>
+              Connected Gmail
+            </Typography>
+          </Box>
+          <Box sx={{ p: 2 }}>
+            <SmtpSettingsAccordion
+              smtpConfigs={smtpConfigs}
+              defaultSmtpEmail={preferredSmtpEmail}
+              onSmtpEmailRemember={rememberSmtpEmail}
+              onDisconnected={handleSmtpDisconnected}
+              showConnect={false}
+            />
+          </Box>
+        </Box>
+      ) : null}
+
+      {/*
+        Contact Groups accordion temporarily disabled.
+        Keeping code for easy re-enable.
+      */}
+      {/* {hasConnectedGmail ? (
+        <Accordion
+          expanded={expanded.contacts}
+          onChange={toggle("contacts")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#34d399" }}>
+              Contact Groups
+            </Typography>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <Box>
+              <ContactGroupsAccordion
+                onSaved={() => {
+                  loadContactGroups();
+                  setExpanded({
+                    contacts: false,
+                    excel: true,
+                    send: false,
+                  });
+                }}
+              />
+
+              {loadingGroups ? (
+                <Typography sx={{ mt: 2 }} variant="body2" color="text.secondary">
+                  Loading groups...
                 </Typography>
-                {contactGroups.map((g) => (
-                  <Typography key={g.id} variant="body2" sx={{ color: "text.secondary" }}>
-                    - {g.group_name} ({g.contacts?.length || 0} contacts)
+              ) : contactGroups.length ? (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Saved groups
                   </Typography>
-                ))}
-              </Box>
-            ) : (
-              <Typography sx={{ mt: 2 }} variant="body2" color="text.secondary">
-                No groups yet. Create your first contact group above.
-              </Typography>
-            )}
-          </Box>
-        </AccordionDetails>
-      </Accordion>
+                  {contactGroups.map((g) => (
+                    <Typography
+                      key={g.id}
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      - {g.group_name} ({g.contacts?.length || 0} contacts)
+                    </Typography>
+                  ))}
+                </Box>
+              ) : (
+                <Typography sx={{ mt: 2 }} variant="body2" color="text.secondary">
+                  No groups yet. Create your first contact group above.
+                </Typography>
+              )}
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      ) : null} */}
 
-      <Accordion
-        expanded={expanded.excel}
-        onChange={toggle("excel")}
-        sx={accordionStyle}
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography fontWeight={700} sx={{ color: "#fbbf24" }}>
-            Excel to Bulk Email
-          </Typography>
-        </AccordionSummary>
+      {hasConnectedGmail ? (
+        <Accordion
+          expanded={expanded.excel}
+          onChange={toggle("excel")}
+          sx={accordionStyle}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#fbbf24" }}>
+              Excel to Bulk Email
+            </Typography>
+          </AccordionSummary>
 
-        <AccordionDetails>
-          <Box>
-            <ImportFromExcelAccordion
-              smtpConfigs={smtpConfigs}
-              selectedConfigId={selectedConfigId}
-              setSelectedConfigId={setSelectedConfigId}
-            />
-          </Box>
-        </AccordionDetails>
-      </Accordion>
+          <AccordionDetails>
+            <Box>
+              <ImportFromExcelAccordion
+                smtpConfigs={smtpConfigs}
+                selectedConfigId={selectedConfigId}
+                setSelectedConfigId={setSelectedConfigId}
+              />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
 
-      <Accordion
-        expanded={expanded.send}
-        onChange={toggle("send")}
-        sx={accordionStyle}
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography fontWeight={700} sx={{ color: "#c084fc" }}>
-            Send Bulk Email
-          </Typography>
-        </AccordionSummary>
+      {/*
+        Send Bulk Email accordion temporarily disabled.
+        Keeping code for easy re-enable.
+      */}
+      {/* {hasConnectedGmail ? (
+        <Accordion expanded={expanded.send} onChange={toggle("send")} sx={accordionStyle}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography fontWeight={700} sx={{ color: "#c084fc" }}>
+              Send Bulk Email
+            </Typography>
+          </AccordionSummary>
 
-        <AccordionDetails>
-          <Box>
-            <SendEmailAccordion
-              smtpConfigs={smtpConfigs}
-              contactGroups={contactGroups}
-              selectedConfigId={selectedConfigId}
-              setSelectedConfigId={setSelectedConfigId}
-            />
-          </Box>
-        </AccordionDetails>
-      </Accordion>
+          <AccordionDetails>
+            <Box>
+              <SendEmailAccordion
+                smtpConfigs={smtpConfigs}
+                contactGroups={contactGroups}
+                selectedConfigId={selectedConfigId}
+                setSelectedConfigId={setSelectedConfigId}
+              />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      ) : null} */}
     </PageContainer>
   );
 }
