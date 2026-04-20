@@ -18,6 +18,7 @@ MAX_UPLOAD_BYTES = 20 * 1024 * 1024  # 20 MB
 ALLOWED_MIME_TYPES = {
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "application/msword",
+    "application/vnd.oasis.opendocument.text",
 }
 
 ALLOWED_EXCEL_MIME_TYPES = {
@@ -369,12 +370,12 @@ def word_to_pdf_view(request):
     if content_type not in ALLOWED_MIME_TYPES:
         # Also accept by extension for browsers that send generic MIME types
         name_lower = (doc_file.name or "").lower()
-        if not (name_lower.endswith(".docx") or name_lower.endswith(".doc")):
+        if not (name_lower.endswith(".docx") or name_lower.endswith(".doc") or name_lower.endswith(".odt")):
             return Response(
                 {
                     "error": (
                         f"Unsupported file type '{content_type}'. "
-                        "Please upload a .docx or .doc file."
+                        "Please upload a .docx, .doc, or .odt file."
                     )
                 },
                 status=415,
@@ -388,7 +389,13 @@ def word_to_pdf_view(request):
 
     with tempfile.TemporaryDirectory(prefix="torensa_docconv_") as tmpdir:
         # Use a safe unique input filename to avoid collisions
-        ext = ".docx" if (doc_file.name or "").lower().endswith(".docx") else ".doc"
+        name_lower_ext = (doc_file.name or "").lower()
+        if name_lower_ext.endswith(".docx"):
+            ext = ".docx"
+        elif name_lower_ext.endswith(".odt"):
+            ext = ".odt"
+        else:
+            ext = ".doc"
         input_filename = f"{uuid.uuid4().hex}{ext}"
         input_path = os.path.join(tmpdir, input_filename)
 
