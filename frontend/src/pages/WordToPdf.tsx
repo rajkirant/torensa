@@ -13,7 +13,7 @@ import { apiFetch } from "../utils/api";
 import downloadBlob from "../utils/downloadBlob";
 
 const ACCEPT_TYPES =
-  ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  ".doc,.docx,.odt,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.oasis.opendocument.text";
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -75,7 +75,7 @@ export default function WordToPdf() {
       }
 
       const blob = await response.blob();
-      const outputName = file.name.replace(/\.docx?$/i, ".pdf");
+      const outputName = file.name.replace(/\.(docx?|odt)$/i, ".pdf");
       setResultBlob(blob);
       setResultName(outputName);
       setSuccess(`Converted successfully — ${formatBytes(blob.size)}`);
@@ -107,7 +107,7 @@ export default function WordToPdf() {
             label={
               file
                 ? file.name
-                : "Drag & drop a Word document here, or tap to browse"
+                : "Drag & drop a Word or ODT document here, or tap to browse"
             }
           />
           {file && (
