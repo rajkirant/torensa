@@ -322,6 +322,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
           <MenuItem value="en">English</MenuItem>
           <MenuItem value="de">German</MenuItem>
           <MenuItem value="nl">Dutch</MenuItem>
+          <MenuItem value="hi">हिन्दी</MenuItem>
         </Select>
 
         {shouldShowCategorySelect && (
