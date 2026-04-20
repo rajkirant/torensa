@@ -307,3 +307,25 @@ class CustomChatbotMessage(models.Model):
 
     def __str__(self):
         return f"[{self.role}] {self.content[:60]}"
+
+
+class PublicVisitorSession(models.Model):
+    """Tracks public (unauthenticated) visitor chat history keyed by browser fingerprint."""
+
+    chatbot = models.ForeignKey(
+        CustomChatbot,
+        on_delete=models.CASCADE,
+        related_name="visitor_sessions",
+    )
+    # SHA-256 hex digest (first 32 chars) of IP+UA+headers combo
+    fingerprint = models.CharField(max_length=64, db_index=True)
+    messages_used = models.PositiveIntegerField(default=0)
+    # Stored as JSON list of {"role": ..., "content": ...}
+    history = models.JSONField(default=list)
+    last_seen = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("chatbot", "fingerprint")
+
+    def __str__(self):
+        return f"{self.chatbot.name} / {self.fingerprint[:8]}… ({self.messages_used} msgs)"

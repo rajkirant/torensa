@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 
@@ -15,6 +16,7 @@ from ..models import (
     ChatbotSubscription,
     CustomChatbot,
     CustomChatbotMessage,
+    PublicVisitorSession,
 )
 from .tool_chat_static import (
     BEDROCK_ANTHROPIC_VERSION,
@@ -434,9 +436,33 @@ def chatbot_chat(request, chatbot_id: int):
 
 # ── public chatbot window ──────────────────────────────────────────────────────
 
-# How many messages a visitor can send per bot per session (no auth required)
+# How many messages a visitor can send per bot per fingerprint (no auth required)
 PUBLIC_VISITOR_LIMIT = 20
-SESSION_PUBLIC_KEY_PREFIX = "pub_msg_"  # + str(chatbot_id)
+
+
+def _visitor_fingerprint(request, public_id: str) -> str:
+    """
+    Builds a stable visitor identifier from request headers without cookies.
+    Scoped per bot (public_id) so two bots on the same site don't share history.
+    Weak spot: shared corporate NAT — multiple users on the same IP+browser build
+    will collide. Acceptable trade-off vs session cookies breaking cross-origin iframes.
+    """
+    ip = (
+        request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[0].strip()
+        or request.META.get("REMOTE_ADDR", "")
+    )
+    components = [
+        public_id,
+        ip,
+        request.META.get("HTTP_USER_AGENT", ""),
+        request.META.get("HTTP_SEC_CH_UA", ""),
+        request.META.get("HTTP_SEC_CH_UA_PLATFORM", ""),
+        request.META.get("HTTP_SEC_CH_UA_MOBILE", ""),
+        request.META.get("HTTP_ACCEPT_LANGUAGE", ""),
+        request.META.get("HTTP_ORIGIN", "") or request.META.get("HTTP_REFERER", ""),
+    ]
+    raw = "|".join(components)
+    return hashlib.sha256(raw.encode()).hexdigest()[:32]
 
 
 @api_view(["GET"])
@@ -452,8 +478,9 @@ def chatbot_public_info(request, public_id: str):
     except CustomChatbot.DoesNotExist:
         return Response({"error": "Chatbot not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{public_id}"
-    visitor_used = request.session.get(session_key, 0)
+    fingerprint = _visitor_fingerprint(request, public_id)
+    visitor_session = PublicVisitorSession.objects.filter(chatbot=bot, fingerprint=fingerprint).first()
+    visitor_used = visitor_session.messages_used if visitor_session else 0
 
     return Response({
         "id": bot.pk,
@@ -469,8 +496,9 @@ def chatbot_public_info(request, public_id: str):
 def chatbot_public_chat(request, public_id: str):
     """
     Public chat endpoint for the standalone chatbot window.
-    Visitors can send up to PUBLIC_VISITOR_LIMIT messages per session per bot.
+    Visitors can send up to PUBLIC_VISITOR_LIMIT messages per fingerprint per bot.
     Does NOT consume the owner's usage quota.
+    History is stored in DB keyed by browser fingerprint (IP + UA + headers).
     """
     try:
         import boto3  # noqa: PLC0415
@@ -482,15 +510,19 @@ def chatbot_public_chat(request, public_id: str):
     except CustomChatbot.DoesNotExist:
         return Response({"error": "Chatbot not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    session_key = f"{SESSION_PUBLIC_KEY_PREFIX}{public_id}"
-    visitor_used = request.session.get(session_key, 0)
+    fingerprint = _visitor_fingerprint(request, public_id)
+    visitor_session, _ = PublicVisitorSession.objects.get_or_create(
+        chatbot=bot,
+        fingerprint=fingerprint,
+        defaults={"messages_used": 0, "history": []},
+    )
 
-    if visitor_used >= PUBLIC_VISITOR_LIMIT:
+    if visitor_session.messages_used >= PUBLIC_VISITOR_LIMIT:
         return Response(
             {
                 "error": f"You've reached the {PUBLIC_VISITOR_LIMIT}-message limit for this demo. Visit the site to create your own chatbot.",
                 "limit_reached": True,
-                "messages_used": visitor_used,
+                "messages_used": visitor_session.messages_used,
                 "messages_limit": PUBLIC_VISITOR_LIMIT,
             },
             status=status.HTTP_429_TOO_MANY_REQUESTS,
@@ -501,9 +533,7 @@ def chatbot_public_chat(request, public_id: str):
     if not user_message:
         return Response({"error": "message is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Use session-stored history for this visitor (not the owner's DB history)
-    history_key = f"pub_hist_{public_id}"
-    history = request.session.get(history_key, [])
+    history = visitor_session.history or []
     recent = history[-(MAX_HISTORY_TURNS * 2):]
 
     bedrock_messages = [{"role": m["role"], "content": m["content"]} for m in recent]
@@ -537,14 +567,13 @@ def chatbot_public_chat(request, public_id: str):
     if not answer:
         answer = "I'm sorry, I couldn't generate a response. Please try again."
 
-    # Persist visitor history in session
     history.append({"role": "user", "content": user_message})
     history.append({"role": "assistant", "content": answer})
-    request.session[history_key] = history[-(MAX_HISTORY_TURNS * 2):]
-    request.session[session_key] = visitor_used + 1
-    request.session.modified = True
+    visitor_session.history = history[-(MAX_HISTORY_TURNS * 2):]
+    visitor_session.messages_used += 1
+    visitor_session.save(update_fields=["history", "messages_used", "last_seen"])
 
     return Response({
         "answer": answer,
-        "usage": {"messages_used": visitor_used + 1, "messages_limit": PUBLIC_VISITOR_LIMIT},
+        "usage": {"messages_used": visitor_session.messages_used, "messages_limit": PUBLIC_VISITOR_LIMIT},
     })
