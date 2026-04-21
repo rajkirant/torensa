@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -56,7 +56,6 @@ function execFmt(command: string, value?: string) {
 const PdfBuilderContent: React.FC = () => {
   const editorRef = useRef<HTMLDivElement>(null);
   const colorInputRef = useRef<HTMLInputElement>(null);
-  const highlightInputRef = useRef<HTMLInputElement>(null);
   const { error, success, setError, setSuccess, clear } = useToolStatus();
 
   const [fontSize, setFontSize] = useState("14");
@@ -65,15 +64,21 @@ const PdfBuilderContent: React.FC = () => {
   const [fileName, setFileName] = useState("document");
   const [isExporting, setIsExporting] = useState(false);
 
+  useEffect(() => {
+    if (editorRef.current && !editorRef.current.innerHTML) {
+      editorRef.current.innerHTML = INITIAL_HTML;
+    }
+  }, []);
+
   const applyFontSize = useCallback((size: string) => {
     setFontSize(size);
-    execFmt("fontSize", "7");
     const editor = editorRef.current;
     if (!editor) return;
-    const spans = editor.querySelectorAll<HTMLSpanElement>("font[size='7']");
-    spans.forEach((span) => {
-      span.removeAttribute("size");
-      span.style.fontSize = `${size}px`;
+    execFmt("fontSize", "7");
+    const nodes = editor.querySelectorAll<HTMLElement>("font[size='7']");
+    nodes.forEach((node) => {
+      node.removeAttribute("size");
+      node.style.fontSize = `${size}px`;
     });
   }, []);
 
@@ -198,31 +203,49 @@ const PdfBuilderContent: React.FC = () => {
             border: "1px solid rgba(148,163,184,0.15)",
           }}
         >
-          {/* Font family */}
-          <Select
+          {/* Font family — native select so onMouseDown can preventDefault and keep editor focus */}
+          <select
             value={fontFamily}
-            onChange={(e) => applyFontFamily(e.target.value)}
-            size="small"
-            variant="outlined"
-            sx={{ height: 32, minWidth: 140, fontSize: 13 }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onChange={(e) => { applyFontFamily(e.target.value); editorRef.current?.focus(); }}
+            style={{
+              height: 32,
+              minWidth: 145,
+              fontSize: 13,
+              padding: "0 6px",
+              borderRadius: 4,
+              border: "1px solid rgba(148,163,184,0.4)",
+              background: "rgba(15,23,42,0.6)",
+              color: "#e2e8f0",
+              cursor: "pointer",
+            }}
           >
             {FONT_FAMILIES.map((f) => (
-              <MenuItem key={f} value={f} sx={{ fontFamily: f, fontSize: 13 }}>{f}</MenuItem>
+              <option key={f} value={f}>{f}</option>
             ))}
-          </Select>
+          </select>
 
-          {/* Font size */}
-          <Select
+          {/* Font size — native select so onMouseDown can preventDefault and keep editor focus */}
+          <select
             value={fontSize}
-            onChange={(e) => applyFontSize(e.target.value)}
-            size="small"
-            variant="outlined"
-            sx={{ height: 32, width: 72, fontSize: 13 }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onChange={(e) => { applyFontSize(e.target.value); editorRef.current?.focus(); }}
+            style={{
+              height: 32,
+              width: 68,
+              fontSize: 13,
+              padding: "0 4px",
+              borderRadius: 4,
+              border: "1px solid rgba(148,163,184,0.4)",
+              background: "rgba(15,23,42,0.6)",
+              color: "#e2e8f0",
+              cursor: "pointer",
+            }}
           >
             {FONT_SIZES.map((s) => (
-              <MenuItem key={s} value={s} sx={{ fontSize: 13 }}>{s}</MenuItem>
+              <option key={s} value={s}>{s}</option>
             ))}
-          </Select>
+          </select>
 
           <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
@@ -421,15 +444,6 @@ const PdfBuilderContent: React.FC = () => {
             ref={editorRef}
             contentEditable
             suppressContentEditableWarning
-            dangerouslySetInnerHTML={{ __html: INITIAL_HTML }}
-            onFocus={() => {
-              const editor = editorRef.current;
-              if (editor && editor.innerHTML === INITIAL_HTML) {
-                execFmt("selectAll");
-                execFmt("delete");
-                editor.innerHTML = INITIAL_HTML;
-              }
-            }}
             sx={{
               width: editorWidth,
               minHeight: editorHeight,
@@ -438,8 +452,8 @@ const PdfBuilderContent: React.FC = () => {
               p: "48px 64px",
               boxSizing: "border-box",
               outline: "none",
-              fontFamily: fontFamily,
-              fontSize: `${fontSize}px`,
+              fontFamily: "Arial",
+              fontSize: "14px",
               lineHeight: 1.7,
               "& h1": { fontSize: "2em", fontWeight: 700, margin: "0.5em 0" },
               "& h2": { fontSize: "1.5em", fontWeight: 700, margin: "0.5em 0" },
