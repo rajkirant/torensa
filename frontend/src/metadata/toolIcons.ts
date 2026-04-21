@@ -33,6 +33,7 @@ import GraphicEqIcon from "@mui/icons-material/GraphicEq";
 import VoiceChatIcon from "@mui/icons-material/VoiceChat";
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import DescriptionIcon from "@mui/icons-material/Description";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -71,4 +72,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "voice-changer": VoiceChatIcon,
   "bmi-calculator": MonitorWeightIcon,
   "resume-builder": DescriptionIcon,
+  "pdf-builder": EditNoteIcon,
 };
