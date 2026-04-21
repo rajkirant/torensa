@@ -2,4 +2,5 @@ These are the instructions for AI and Human
 
 1. For any new tool, translations should be added for other languages.
 2. For for descriptions in the serviceCards.json file and translations should be 150 to 160 chars long.
-3. For addeing a new language sitemap file should be added.
+3. for name attributes in the serviceCards and it's translations should be max 30 chars
+4. For addeing a new language sitemap file should be added.

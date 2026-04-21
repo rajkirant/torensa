@@ -2,7 +2,7 @@
   {
     "id": "custom-chatbot-builder",
     "component": "Chatbot/CustomChatbotBuilder",
-    "name": "Custom AI Chatbot Builder - Train a Chatbot on Your Own Text",
+    "name": "Custom AI Chatbot Builder",
     "title": "Custom Chatbot Builder",
     "description": "Turn any text into a working AI chatbot in seconds. Paste your FAQs, docs, or policies — your bot answers questions based only on what you provide.",
     "path": "/custom-chatbot-builder",
@@ -73,7 +73,7 @@
   {
     "id": "song-identifier",
     "component": "SongIdentifier",
-    "name": "Song Identifier - Find What Song Is Playing",
+    "name": "Song Identifier",
     "title": "Song Identifier - Find What Song Is Playing",
     "description": "Identify any song playing around you instantly. Get track details, artist info, and direct streaming links to Spotify, YouTube Music, Apple Music, and more.",
     "path": "/song-identifier",
@@ -152,7 +152,13 @@
     "authRequired": false,
     "detailedDescription": "Easy Share lets you send text and up to 5 files (up to 1 GB each) between devices in different networks using a 4-digit access code via internet. No signup, phone, or email is required.",
     "categoryId": "communication",
-    "keywords": ["text", "share", "code", "clipboard", "transfer"],
+    "keywords": [
+      "text",
+      "share",
+      "code",
+      "clipboard",
+      "transfer"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -208,7 +214,13 @@
     "authRequired": true,
     "detailedDescription": "Compose and send bulk email campaigns from one place. Connect Gmail with OAuth, import recipients from Excel/CSV, personalize subject/body with placeholders, and attach files. Your SMTP configuration is stored per account and used to send through your own Gmail connection.",
     "categoryId": "communication",
-    "keywords": ["email", "mail", "campaign", "newsletter", "gmail"],
+    "keywords": [
+      "email",
+      "mail",
+      "campaign",
+      "newsletter",
+      "gmail"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -259,7 +271,12 @@
     "authRequired": false,
     "detailedDescription": "Create scannable QR codes from plain text or links with live preview. Optionally add a logo and short label, then download the final image as PNG. Processing is done in-browser, so no input is uploaded.",
     "categoryId": "business",
-    "keywords": ["qr", "qrcode", "text", "link"],
+    "keywords": [
+      "qr",
+      "qrcode",
+      "text",
+      "link"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -367,7 +384,14 @@
     "authRequired": false,
     "detailedDescription": "Reduce image file size directly in your browser with no uploads. Preview selected images immediately, tune compression quality, then compress and download files individually or as a ZIP archive.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "compress", "optimize", "size"],
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "compress",
+      "optimize",
+      "size"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -534,7 +558,13 @@
     "authRequired": false,
     "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download. All processing runs on-device for privacy and offline use.",
     "categoryId": "utilities",
-    "keywords": ["pdf", "split", "extract", "pages", "document"],
+    "keywords": [
+      "pdf",
+      "split",
+      "extract",
+      "pages",
+      "document"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -584,7 +614,14 @@
     "authRequired": false,
     "detailedDescription": "Select a crop area with pixel-level controls, preview the selected region, and export as PNG, JPEG, or WebP. Everything runs entirely in your browser, so images never leave your device.",
     "categoryId": "utilities",
-    "keywords": ["image", "photo", "picture", "crop", "resize", "edit"],
+    "keywords": [
+      "image",
+      "photo",
+      "picture",
+      "crop",
+      "resize",
+      "edit"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -625,7 +662,7 @@
   {
     "id": "image-background-editor",
     "component": "ImageBackgroundEditor",
-    "name": "Image Background Remover/Changer",
+    "name": "Image Background Editor",
     "title": "Image Background Remover & Changer - Free Online",
     "description": "Remove backgrounds, replace them with solid colors, or swap in custom images using AI. Get a live before-and-after preview and download your result as a PNG.",
     "path": "/image-background-editor",
@@ -699,7 +736,13 @@
     "authRequired": false,
     "detailedDescription": "Build polished invoices or receipts with seller/buyer details, line items, taxes, shipping, discounts, and notes. Totals are calculated automatically, and the final document can be exported as PDF. Data stays local and can be reused in your browser.",
     "categoryId": "business",
-    "keywords": ["invoice", "receipt", "billing", "payment", "business"],
+    "keywords": [
+      "invoice",
+      "receipt",
+      "billing",
+      "payment",
+      "business"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -749,7 +792,13 @@
     "authRequired": false,
     "detailedDescription": "Paste two versions of text and view line-by-line differences, including additions, removals, and modified blocks. Useful for reviewing edits in content, configs, or code snippets. Everything runs locally in your browser.",
     "categoryId": "developer",
-    "keywords": ["text", "diff", "compare", "changes", "checker"],
+    "keywords": [
+      "text",
+      "diff",
+      "compare",
+      "changes",
+      "checker"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -799,7 +848,13 @@
     "authRequired": false,
     "detailedDescription": "Paste JSON and run quick validation with readable error feedback. Format with indentation for readability or minify for compact payloads. This utility is fully client-side, making it fast and privacy-friendly for developer workflows.",
     "categoryId": "developer",
-    "keywords": ["json", "format", "validator", "minify", "pretty"],
+    "keywords": [
+      "json",
+      "format",
+      "validator",
+      "minify",
+      "pretty"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -849,7 +904,14 @@
     "authRequired": false,
     "detailedDescription": "Upload or paste Spring Boot logs to identify likely first-failure events, exception chains, stack-frame locations, and correlation-id clusters. Export a structured JSON incident report for sharing and follow-up debugging.",
     "categoryId": "developer",
-    "keywords": ["spring", "boot", "log", "analyzer", "exception", "debug"],
+    "keywords": [
+      "spring",
+      "boot",
+      "log",
+      "analyzer",
+      "exception",
+      "debug"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -963,7 +1025,13 @@
     "authRequired": false,
     "detailedDescription": "Inspect JWT header and payload, edit claims, and generate new tokens using HS256 or HS512 algorithms. Helpful for API testing and debugging authentication flows. Operations are performed in-browser without sending token data to a backend.",
     "categoryId": "developer",
-    "keywords": ["jwt", "token", "encode", "decode", "security"],
+    "keywords": [
+      "jwt",
+      "token",
+      "encode",
+      "decode",
+      "security"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1013,7 +1081,13 @@
     "authRequired": false,
     "detailedDescription": "Create one or many UUID v4 identifiers with options like uppercase output or hyphen removal. Copy all generated values at once for use in development, testing, and data workflows.",
     "categoryId": "developer",
-    "keywords": ["uuid", "guid", "identifier", "id", "generate"],
+    "keywords": [
+      "uuid",
+      "guid",
+      "identifier",
+      "id",
+      "generate"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1122,7 +1196,15 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge lets you send API requests directly in the browser, including JWT Bearer auth, custom headers, query/path parameters, and JSON/raw body.",
     "categoryId": "developer",
-    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
+    "keywords": [
+      "api",
+      "request",
+      "http",
+      "rest",
+      "headers",
+      "json",
+      "test"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1173,7 +1255,14 @@
     "authRequired": false,
     "detailedDescription": "Upload a Word document (.doc or .docx) and convert it to a PDF in seconds. Conversion runs on the server using LibreOffice, preserving fonts, tables, images, and formatting. Files are processed in memory and never stored.",
     "categoryId": "utilities",
-    "keywords": ["word", "docx", "doc", "pdf", "convert", "document"],
+    "keywords": [
+      "word",
+      "docx",
+      "doc",
+      "pdf",
+      "convert",
+      "document"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1261,7 +1350,13 @@
     "authRequired": false,
     "detailedDescription": "Upload a PDF and convert it to an editable .docx file. Conversion runs on the server using LibreOffice, preserving layout and text. Files are processed in memory and never stored.",
     "categoryId": "utilities",
-    "keywords": ["pdf", "word", "docx", "convert", "document"],
+    "keywords": [
+      "pdf",
+      "word",
+      "docx",
+      "convert",
+      "document"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1409,7 +1504,14 @@
     "authRequired": false,
     "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
     "categoryId": "utilities",
-    "keywords": ["excel", "csv", "json", "spreadsheet", "convert", "data"],
+    "keywords": [
+      "excel",
+      "csv",
+      "json",
+      "spreadsheet",
+      "convert",
+      "data"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1459,7 +1561,14 @@
     "authRequired": false,
     "detailedDescription": "Paste a video URL to fetch subtitles as an SRT file. The tool tries existing captions first, then falls back to auto-generated subtitles if available. Supports YouTube and other sites supported by yt-dlp.",
     "categoryId": "utilities",
-    "keywords": ["subtitle", "subtitles", "srt", "captions", "yt-dlp", "video"],
+    "keywords": [
+      "subtitle",
+      "subtitles",
+      "srt",
+      "captions",
+      "yt-dlp",
+      "video"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1539,7 +1648,14 @@
     "authRequired": false,
     "detailedDescription": "Upload a video file and extract the audio track as MP3 or WAV. Conversion runs on the server using FFmpeg. Files are processed in memory and never stored.",
     "categoryId": "utilities",
-    "keywords": ["video", "audio", "mp3", "wav", "extract", "convert"],
+    "keywords": [
+      "video",
+      "audio",
+      "mp3",
+      "wav",
+      "extract",
+      "convert"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1566,7 +1682,7 @@
   {
     "id": "voice-changer",
     "component": "VoiceChanger",
-    "name": "Voice Changer (Character Presets)",
+    "name": "Voice Changer",
     "title": "Voice Changer with Character Presets - Free Online",
     "description": "Transform your audio into character-style voices using presets like deep narrator or tiny alien. Apply FFmpeg filters to change pitch and tone instantly.",
     "path": "/voice-changer",
@@ -1612,7 +1728,7 @@
   {
     "id": "clearwave",
     "component": "NoiseRemover",
-    "name": "ClearWave - Audio Noise Remover",
+    "name": "ClearWave Noise Remover",
     "title": "ClearWave - Remove Background Noise from Audio Online",
     "description": "Remove background noise from audio files or recordings instantly. Use AI-powered filters to clean up static, wind, or hum for professional sounding results.",
     "path": "/clearwave",
@@ -1836,7 +1952,7 @@
   {
     "id": "bmi-calculator",
     "component": "BmiCalculator",
-    "name": "BMI Calculator (kg, cm, lb, ft)",
+    "name": "BMI Calculator",
     "title": "BMI Calculator (kg, cm, lb, ft) - Free Health Tool",
     "description": "Calculate your Body Mass Index (BMI) using metric or imperial units. Get your BMI category and health insights instantly with this private online calculator.",
     "path": "/bmi-calculator",
@@ -1905,7 +2021,7 @@
   {
     "id": "resume-builder",
     "component": "ResumeBuilder",
-    "name": "Free Resume Builder - Create a Professional CV Online",
+    "name": "Resume Builder",
     "title": "Free Resume Builder - Create a Professional CV Online",
     "description": "Build a professional, ATS-friendly CV in minutes. Choose from modern templates, fill in your details, and download a polished PDF without any watermarks.",
     "path": "/resume-builder",
@@ -1986,7 +2102,7 @@
   {
     "id": "ai-humaniser",
     "component": "AiHumaniser",
-    "name": "AI Text Humaniser - Make AI Writing Sound Human",
+    "name": "AI Text Humaniser",
     "title": "AI Humaniser",
     "description": "Rewrite AI-generated text so it sounds genuinely human and natural. Choose your preferred tone to remove robotic phrasing and bypass AI detection patterns.",
     "path": "/ai-humaniser",
@@ -2043,7 +2159,7 @@
   {
     "id": "csv-builder",
     "component": "CsvBuilder",
-    "name": "CSV Builder - Create and Edit CSV Files Online",
+    "name": "CSV Builder",
     "title": "CSV Builder",
     "description": "Build, edit, and download CSV files in your browser. Start from scratch, paste CSV text, or upload an existing file — then edit it in a spreadsheet view.",
     "path": "/csv-builder",
@@ -2110,7 +2226,7 @@
   {
     "id": "pdf-builder",
     "component": "PdfBuilder",
-    "name": "PDF Builder - Create & Download PDF Documents Online",
+    "name": "PDF Builder",
     "title": "PDF Builder",
     "description": "Write and style documents in your browser, then download as a PDF instantly. No login, no backend — fully client-side.",
     "path": "/pdf-builder",
