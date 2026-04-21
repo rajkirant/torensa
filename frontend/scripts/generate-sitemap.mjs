@@ -32,6 +32,7 @@ const LANGUAGES = [
   { code: "en", isDefault: true },
   { code: "de", isDefault: false },
   { code: "nl", isDefault: false },
+  { code: "hi", isDefault: false },
 ];
 const DEFAULT_LANG = LANGUAGES.find((l) => l.isDefault) ?? LANGUAGES[0];
 
