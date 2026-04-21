@@ -2106,5 +2106,68 @@
         "a": "Yes, but make sure the data is comma-separated before pasting. Copy your data from the spreadsheet, paste it into a plain-text editor first, replace any tab characters with commas, and then paste it into the 'From text' input."
       }
     ]
+  },
+  {
+    "id": "pdf-builder",
+    "component": "PdfBuilder",
+    "name": "PDF Builder - Create & Download PDF Documents Online",
+    "title": "PDF Builder",
+    "description": "Write and style documents in your browser, then download as a PDF instantly. No login, no backend — fully client-side.",
+    "path": "/pdf-builder",
+    "ctaLabel": "Build PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "PDF Builder is a free, browser-based rich-text editor that lets you write, format, and export documents as PDF files — entirely offline, with no data ever leaving your device. Use the formatting toolbar to apply bold, italic, underline, strikethrough, headings (H1–H3), text alignment, bullet and numbered lists, custom font sizes, font families, and text or highlight colors. Choose between A4, Letter, or Legal page sizes and set a custom file name before downloading. Everything runs in your browser using html2canvas and jsPDF — no account or internet connection required after the page loads.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf builder",
+      "create pdf online",
+      "rich text to pdf",
+      "wysiwyg pdf editor",
+      "pdf writer",
+      "online pdf creator",
+      "document builder",
+      "free pdf maker",
+      "html to pdf",
+      "pdf download",
+      "no login pdf editor",
+      "offline pdf creator"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Type your content directly into the white page canvas.",
+      "Use the toolbar to apply bold, italic, underline, or strikethrough formatting.",
+      "Click H1, H2, H3, or P to set the paragraph style.",
+      "Use the alignment buttons to left-align, center, right-align, or justify text.",
+      "Insert bullet or numbered lists using the list icons.",
+      "Pick a font family and size from the dropdowns in the toolbar.",
+      "Click a color swatch to change the text color, or the BG swatches to highlight text.",
+      "Choose a page size (A4, Letter, or Legal) and enter a file name.",
+      "Click 'Download PDF' to export your document as a PDF file."
+    ],
+    "faqs": [
+      {
+        "q": "Is my document sent to any server?",
+        "a": "No. All editing and PDF generation happens entirely in your browser using html2canvas and jsPDF. Your content never leaves your device."
+      },
+      {
+        "q": "Can I edit an existing PDF here?",
+        "a": "No — this tool is for creating new documents from scratch. To edit an existing PDF, use a dedicated PDF editor."
+      },
+      {
+        "q": "What page sizes are supported?",
+        "a": "A4, US Letter, and US Legal. Select your preferred size before downloading so the exported PDF matches your layout."
+      },
+      {
+        "q": "Do I need to sign in to use PDF Builder?",
+        "a": "No account or sign-in is required. The tool works fully offline after the page has loaded."
+      },
+      {
+        "q": "Can I use keyboard shortcuts for formatting?",
+        "a": "Yes — standard shortcuts work inside the editor: Ctrl+B for bold, Ctrl+I for italic, Ctrl+U for underline, Ctrl+Z to undo, and Ctrl+Y to redo."
+      }
+    ]
   }
 ]
