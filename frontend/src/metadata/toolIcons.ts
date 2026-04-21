@@ -34,6 +34,10 @@ import VoiceChatIcon from "@mui/icons-material/VoiceChat";
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import WavesIcon from "@mui/icons-material/Waves";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -73,4 +77,8 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "bmi-calculator": MonitorWeightIcon,
   "resume-builder": DescriptionIcon,
   "pdf-builder": EditNoteIcon,
+  "ai-humaniser": PsychologyIcon,
+  "clearwave": WavesIcon,
+  "csv-builder": TableChartIcon,
+  "custom-chatbot-builder": SmartToyIcon,
 };
