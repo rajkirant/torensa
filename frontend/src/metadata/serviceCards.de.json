@@ -2283,5 +2283,68 @@
         "a": "Ja, aber stellen Sie sicher, dass die Daten kommagetrennt sind. Kopieren Sie die Daten aus der Tabellenkalkulation, fügen Sie sie zuerst in einen Texteditor ein, ersetzen Sie Tabulatoren durch Kommas und fügen Sie den Text dann in die Eingabe 'Aus Text' ein."
       }
     ]
+  },
+  {
+    "id": "pdf-builder",
+    "component": "PdfBuilder",
+    "name": "PDF-Builder – Dokumente online erstellen und als PDF herunterladen",
+    "title": "PDF-Builder",
+    "description": "Schreiben und formatieren Sie Dokumente im Browser und laden Sie sie sofort als PDF herunter. Ohne Anmeldung, ohne Server – vollständig clientseitig.",
+    "path": "/pdf-builder",
+    "ctaLabel": "PDF erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Der PDF-Builder ist ein kostenloser, browserbasierter Rich-Text-Editor, mit dem Sie Dokumente schreiben, formatieren und als PDF exportieren können – vollständig offline, ohne dass Daten Ihr Gerät verlassen. Nutzen Sie die Formatierungsleiste für Fett, Kursiv, Unterstreichen, Durchstreichen, Überschriften (H1–H3), Textausrichtung, Aufzählungs- und nummerierte Listen, Schriftgrößen, Schriftarten sowie Text- und Hintergrundfarben. Wählen Sie zwischen A4, Letter oder Legal und vergeben Sie einen individuellen Dateinamen vor dem Download. Alles läuft im Browser mit html2canvas und jsPDF – kein Konto, keine Internetverbindung nach dem ersten Laden erforderlich.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf builder",
+      "pdf online erstellen",
+      "rich text zu pdf",
+      "wysiwyg pdf editor",
+      "pdf schreiben",
+      "online pdf ersteller",
+      "dokument erstellen",
+      "kostenloser pdf maker",
+      "html zu pdf",
+      "pdf herunterladen",
+      "pdf editor ohne anmeldung",
+      "offline pdf ersteller"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Geben Sie Ihren Text direkt in den weißen Seitenbereich ein.",
+      "Nutzen Sie die Werkzeugleiste für Fett, Kursiv, Unterstreichen oder Durchstreichen.",
+      "Klicken Sie auf H1, H2, H3 oder P, um den Absatzstil festzulegen.",
+      "Richten Sie Text links, zentriert, rechts oder im Blocksatz aus.",
+      "Fügen Sie Aufzählungs- oder nummerierte Listen über die Listensymbole ein.",
+      "Wählen Sie Schriftart und -größe aus den Dropdowns in der Werkzeugzeile.",
+      "Klicken Sie auf ein Farbfeld, um die Textfarbe zu ändern, oder auf ein HG-Farbfeld zum Markieren.",
+      "Wählen Sie ein Seitenformat (A4, Letter oder Legal) und geben Sie einen Dateinamen ein.",
+      "Klicken Sie auf 'PDF herunterladen', um das Dokument als PDF zu speichern."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein Dokument an einen Server gesendet?",
+        "a": "Nein. Das gesamte Bearbeiten und PDF-Erstellen erfolgt ausschließlich in Ihrem Browser mit html2canvas und jsPDF. Ihre Inhalte verlassen Ihr Gerät nicht."
+      },
+      {
+        "q": "Kann ich hier eine vorhandene PDF bearbeiten?",
+        "a": "Nein – dieses Tool ist zum Erstellen neuer Dokumente von Grund auf gedacht. Für das Bearbeiten bestehender PDFs nutzen Sie bitte einen dedizierten PDF-Editor."
+      },
+      {
+        "q": "Welche Seitenformate werden unterstützt?",
+        "a": "A4, US Letter und US Legal. Wählen Sie das gewünschte Format vor dem Download, damit das exportierte PDF Ihrem Layout entspricht."
+      },
+      {
+        "q": "Muss ich mich anmelden, um den PDF-Builder zu nutzen?",
+        "a": "Nein, kein Konto oder Login erforderlich. Das Tool funktioniert vollständig offline, sobald die Seite geladen ist."
+      },
+      {
+        "q": "Kann ich Tastenkürzel für die Formatierung verwenden?",
+        "a": "Ja – Standardkürzel funktionieren im Editor: Strg+B für Fett, Strg+I für Kursiv, Strg+U für Unterstreichen, Strg+Z zum Rückgängigmachen und Strg+Y zum Wiederholen."
+      }
+    ]
   }
 ]
