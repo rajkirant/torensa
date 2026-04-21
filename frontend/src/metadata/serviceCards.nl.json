@@ -2233,5 +2233,68 @@
         "a": "Ja, maar zorg ervoor dat de gegevens door komma's zijn gescheiden. Kopieer de gegevens uit het spreadsheetprogramma, plak ze eerst in een teksteditor, vervang eventuele tabs door komma's en plak de tekst vervolgens in het invoerveld 'Van tekst'."
       }
     ]
+  },
+  {
+    "id": "pdf-builder",
+    "component": "PdfBuilder",
+    "name": "PDF-Builder – Documenten online maken en als PDF downloaden",
+    "title": "PDF-Builder",
+    "description": "Schrijf en opmaak documenten in uw browser en download ze direct als PDF. Geen login, geen server – volledig in de browser.",
+    "path": "/pdf-builder",
+    "ctaLabel": "PDF maken",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "PDF-Builder is een gratis, browsergebaseerde teksteditor waarmee u documenten kunt schrijven, opmaken en exporteren als PDF — volledig offline, zonder dat gegevens uw apparaat verlaten. Gebruik de opmaakbalk voor vet, cursief, onderstrepen, doorstrepen, koppen (H1–H3), tekstuitlijning, opsommings- en genummerde lijsten, tekengrootten, lettertypen en tekst- of markeringskleuren. Kies tussen A4, Letter of Legal en stel een bestandsnaam in voor het downloaden. Alles draait in de browser met html2canvas en jsPDF — geen account, geen internetverbinding vereist na het laden van de pagina.",
+    "categoryId": "utilities",
+    "keywords": [
+      "pdf builder",
+      "pdf online maken",
+      "rich text naar pdf",
+      "wysiwyg pdf editor",
+      "pdf schrijven",
+      "online pdf maker",
+      "document maken",
+      "gratis pdf maker",
+      "html naar pdf",
+      "pdf downloaden",
+      "pdf editor zonder inloggen",
+      "offline pdf maker"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Typ uw inhoud direct in het witte paginagebied.",
+      "Gebruik de werkbalk voor vet, cursief, onderstrepen of doorstrepen.",
+      "Klik op H1, H2, H3 of P om de alineastijl in te stellen.",
+      "Gebruik de uitlijningsknoppen om tekst links, gecentreerd, rechts of uitgevuld te plaatsen.",
+      "Voeg opsommings- of genummerde lijsten in via de lijstpictogrammen.",
+      "Kies een lettertype en -grootte uit de vervolgkeuzelijsten in de werkbalk.",
+      "Klik op een kleurvak om de tekstkleur te wijzigen, of op een AC-kleurvak om tekst te markeren.",
+      "Kies een paginaformaat (A4, Letter of Legal) en voer een bestandsnaam in.",
+      "Klik op 'PDF downloaden' om het document op te slaan als PDF-bestand."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn document naar een server verzonden?",
+        "a": "Nee. Alle bewerking en PDF-generatie vindt uitsluitend in uw browser plaats met html2canvas en jsPDF. Uw inhoud verlaat uw apparaat niet."
+      },
+      {
+        "q": "Kan ik hier een bestaande PDF bewerken?",
+        "a": "Nee — dit hulpprogramma is bedoeld voor het maken van nieuwe documenten vanaf nul. Gebruik een speciale PDF-editor om bestaande PDF's te bewerken."
+      },
+      {
+        "q": "Welke paginaformaten worden ondersteund?",
+        "a": "A4, US Letter en US Legal. Selecteer het gewenste formaat voor het downloaden, zodat de geëxporteerde PDF overeenkomt met uw indeling."
+      },
+      {
+        "q": "Moet ik inloggen om PDF-Builder te gebruiken?",
+        "a": "Nee, er is geen account of inloggen vereist. Het hulpprogramma werkt volledig offline nadat de pagina is geladen."
+      },
+      {
+        "q": "Kan ik sneltoetsen gebruiken voor opmaak?",
+        "a": "Ja — standaard sneltoetsen werken in de editor: Ctrl+B voor vet, Ctrl+I voor cursief, Ctrl+U voor onderstrepen, Ctrl+Z om ongedaan te maken en Ctrl+Y om opnieuw te doen."
+      }
+    ]
   }
 ]
