@@ -1061,14 +1061,7 @@
     "authRequired": false,
     "detailedDescription": "Prüfen Sie JWT‑Header und Payload, bearbeiten Sie Claims und erzeugen Sie neue Tokens mit HS256 oder HS512. Ideal für API‑Tests und Debugging von Auth‑Flows. Alles läuft im Browser, Token‑Daten werden nicht an ein Backend gesendet.",
     "categoryId": "developer",
-    "keywords": [
-      "jwt",
-      "token",
-      "encode",
-      "decode",
-      "security",
-      "auth"
-    ],
+    "keywords": ["jwt", "token", "encode", "decode", "security", "auth"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1118,14 +1111,7 @@
     "authRequired": false,
     "detailedDescription": "Erstellen Sie eine oder mehrere UUID‑v4‑Kennungen mit Optionen wie Großschreibung oder Entfernen von Bindestrichen. Kopieren Sie alle generierten Werte auf einmal für Entwicklung, Tests und Datenworkflows.",
     "categoryId": "developer",
-    "keywords": [
-      "uuid",
-      "guid",
-      "identifier",
-      "id",
-      "generate",
-      "kennung"
-    ],
+    "keywords": ["uuid", "guid", "identifier", "id", "generate", "kennung"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1235,15 +1221,7 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge ermöglicht API‑Requests direkt im Browser, einschließlich JWT‑Bearer‑Auth, benutzerdefinierten Headern, Query/Path‑Parametern sowie JSON‑ oder Raw‑Body.",
     "categoryId": "developer",
-    "keywords": [
-      "api",
-      "request",
-      "http",
-      "rest",
-      "headers",
-      "json",
-      "test"
-    ],
+    "keywords": ["api", "request", "http", "rest", "headers", "json", "test"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1391,14 +1369,7 @@
     "authRequired": false,
     "detailedDescription": "Laden Sie ein PDF hoch und wandeln Sie es in eine bearbeitbare .docx‑Datei um. Die Konvertierung läuft serverseitig mit LibreOffice und erhält Layout und Text so gut wie möglich. Dateien werden im Arbeitsspeicher verarbeitet und nicht gespeichert.",
     "categoryId": "utilities",
-    "keywords": [
-      "pdf",
-      "word",
-      "docx",
-      "convert",
-      "document",
-      "pdf in word"
-    ],
+    "keywords": ["pdf", "word", "docx", "convert", "document", "pdf in word"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1849,7 +1820,7 @@
     "path": "/habit-tracker",
     "ctaLabel": "Gewohnheiten verfolgen",
     "offlineEnabled": false,
-    "authRequired": false,
+    "authRequired": true,
     "detailedDescription": "Erstellen Sie eine Liste täglicher Gewohnheiten mit individuellen Punktwerten. Haken Sie erledigte Gewohnheiten ab, sammeln Sie Punkte und sehen Sie Ihren Verlauf der letzten 14 Tage in einem Balkendiagramm. Alle Daten werden lokal im Browser gespeichert.",
     "categoryId": "health-wellbeing",
     "keywords": [

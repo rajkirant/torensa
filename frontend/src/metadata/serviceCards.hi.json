@@ -152,13 +152,7 @@
     "authRequired": false,
     "detailedDescription": "आसान शेयर आपको 4-अंकीय एक्सेस कोड के ज़रिए इंटरनेट का उपयोग करके अलग-अलग नेटवर्क पर डिवाइसों के बीच टेक्स्ट और 5 फ़ाइलें (प्रत्येक 1 GB तक) भेजने देता है। कोई साइन-अप, फोन या ईमेल की ज़रूरत नहीं।",
     "categoryId": "communication",
-    "keywords": [
-      "टेक्स्ट",
-      "शेयर",
-      "कोड",
-      "क्लिपबोर्ड",
-      "ट्रांसफर"
-    ],
+    "keywords": ["टेक्स्ट", "शेयर", "कोड", "क्लिपबोर्ड", "ट्रांसफर"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -214,13 +208,7 @@
     "authRequired": true,
     "detailedDescription": "एक जगह से बल्क ईमेल कैंपेन तैयार करें और भेजें। OAuth से Gmail कनेक्ट करें, Excel/CSV से प्राप्तकर्ता आयात करें, प्लेसहोल्डर से विषय/बॉडी को व्यक्तिगत बनाएं, और फ़ाइलें अटैच करें। आपकी SMTP कॉन्फ़िगरेशन प्रति अकाउंट स्टोर होती है और आपके Gmail कनेक्शन के ज़रिए भेजने के लिए उपयोग की जाती है।",
     "categoryId": "communication",
-    "keywords": [
-      "ईमेल",
-      "मेल",
-      "कैंपेन",
-      "न्यूज़लेटर",
-      "gmail"
-    ],
+    "keywords": ["ईमेल", "मेल", "कैंपेन", "न्यूज़लेटर", "gmail"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -271,12 +259,7 @@
     "authRequired": false,
     "detailedDescription": "लाइव प्रीव्यू के साथ सादे टेक्स्ट या लिंक से स्कैन करने योग्य QR कोड बनाएं। वैकल्पिक रूप से लोगो और छोटा लेबल जोड़ें, फिर PNG के रूप में तुरंत डाउनलोड करें। प्रोसेसिंग ब्राउज़र में होती है, इसलिए कोई इनपुट अपलोड नहीं होता।",
     "categoryId": "business",
-    "keywords": [
-      "QR कोड",
-      "qrcode",
-      "टेक्स्ट",
-      "लिंक"
-    ],
+    "keywords": ["QR कोड", "qrcode", "टेक्स्ट", "लिंक"],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -326,15 +309,7 @@
     "authRequired": false,
     "detailedDescription": "Code 128, Code 39, EAN-13, EAN-8 और UPC-A जैसे सामान्य फॉर्मेट के समर्थन के साथ सीधे अपने ब्राउज़र में प्रिंट करने योग्य बारकोड बनाएं। चौड़ाई, ऊंचाई और लेबल डिस्प्ले कस्टमाइज़ करें, फिर बारकोड को PNG के रूप में एक्सपोर्ट करें।",
     "categoryId": "business",
-    "keywords": [
-      "बारकोड",
-      "code128",
-      "code39",
-      "ean13",
-      "ean8",
-      "upc",
-      "लेबल"
-    ],
+    "keywords": ["बारकोड", "code128", "code39", "ean13", "ean8", "upc", "लेबल"],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -384,14 +359,7 @@
     "authRequired": false,
     "detailedDescription": "बिना अपलोड किए सीधे अपने ब्राउज़र में इमेज फ़ाइल साइज़ कम करें। चुनी गई इमेज तुरंत प्रीव्यू करें, कम्प्रेशन गुणवत्ता ट्यून करें, फिर फ़ाइलें व्यक्तिगत रूप से या ZIP आर्काइव के रूप में कम्प्रेस करके डाउनलोड करें।",
     "categoryId": "utilities",
-    "keywords": [
-      "इमेज",
-      "फोटो",
-      "पिक्चर",
-      "कम्प्रेस",
-      "ऑप्टिमाइज़",
-      "साइज़"
-    ],
+    "keywords": ["इमेज", "फोटो", "पिक्चर", "कम्प्रेस", "ऑप्टिमाइज़", "साइज़"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -500,15 +468,7 @@
     "authRequired": false,
     "detailedDescription": "कई इमेज और PDF दस्तावेज़ों को एक PDF फ़ाइल में मिलाएं। आइटम पुनः क्रमबद्ध करें, इमेज घुमाएं, पेज साइज़ और मार्जिन चुनें, फिट व्यवहार सेट करें, और वैकल्पिक रूप से पेज नंबर जोड़ें। गोपनीयता और गति के लिए क्लाइंट-साइड प्रोसेसिंग के साथ बनाया गया।",
     "categoryId": "utilities",
-    "keywords": [
-      "इमेज",
-      "फोटो",
-      "पिक्चर",
-      "pdf",
-      "मर्ज",
-      "मिलाएं",
-      "जॉइन"
-    ],
+    "keywords": ["इमेज", "फोटो", "पिक्चर", "pdf", "मर्ज", "मिलाएं", "जॉइन"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -558,13 +518,7 @@
     "authRequired": false,
     "detailedDescription": "PDF अपलोड करें और इसे अपने ब्राउज़र में लोकली विभाजित करें। चुने गए पेज एक PDF में निकालें, या प्रत्येक पेज के लिए एक PDF जनरेट करें और ZIP डाउनलोड करें। गोपनीयता और ऑफलाइन उपयोग के लिए सभी प्रोसेसिंग डिवाइस पर होती है।",
     "categoryId": "utilities",
-    "keywords": [
-      "pdf",
-      "विभाजित",
-      "निकालें",
-      "पेज",
-      "दस्तावेज़"
-    ],
+    "keywords": ["pdf", "विभाजित", "निकालें", "पेज", "दस्तावेज़"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -614,14 +568,7 @@
     "authRequired": false,
     "detailedDescription": "पिक्सल-स्तरीय नियंत्रण के साथ क्रॉप एरिया चुनें, चुने गए क्षेत्र का प्रीव्यू करें, और PNG, JPEG या WebP के रूप में एक्सपोर्ट करें। सब कुछ पूरी तरह आपके ब्राउज़र में चलता है, इसलिए इमेज कभी आपके डिवाइस से बाहर नहीं जाती।",
     "categoryId": "utilities",
-    "keywords": [
-      "इमेज",
-      "फोटो",
-      "पिक्चर",
-      "क्रॉप",
-      "रिसाइज़",
-      "एडिट"
-    ],
+    "keywords": ["इमेज", "फोटो", "पिक्चर", "क्रॉप", "रिसाइज़", "एडिट"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -734,13 +681,7 @@
     "authRequired": false,
     "detailedDescription": "विक्रेता/खरीदार विवरण, लाइन आइटम, टैक्स, शिपिंग, डिस्काउंट और नोट्स के साथ पॉलिश्ड इनवॉइस या रसीदें बनाएं। टोटल स्वचालित रूप से गणना होते हैं, और अंतिम दस्तावेज़ PDF के रूप में एक्सपोर्ट किया जा सकता है। डेटा लोकल रहता है और आपके ब्राउज़र में पुनः उपयोग किया जा सकता है।",
     "categoryId": "business",
-    "keywords": [
-      "इनवॉइस",
-      "रसीद",
-      "बिलिंग",
-      "भुगतान",
-      "व्यवसाय"
-    ],
+    "keywords": ["इनवॉइस", "रसीद", "बिलिंग", "भुगतान", "व्यवसाय"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -790,13 +731,7 @@
     "authRequired": false,
     "detailedDescription": "टेक्स्ट के दो संस्करण पेस्ट करें और लाइन-दर-लाइन अंतर देखें, जिसमें जोड़े, हटाए और बदले गए ब्लॉक शामिल हैं। सामग्री, कॉन्फ़िग या कोड स्निपेट में बदलावों की समीक्षा के लिए उपयोगी। सब कुछ आपके ब्राउज़र में लोकली चलता है।",
     "categoryId": "developer",
-    "keywords": [
-      "टेक्स्ट",
-      "diff",
-      "तुलना",
-      "बदलाव",
-      "चेकर"
-    ],
+    "keywords": ["टेक्स्ट", "diff", "तुलना", "बदलाव", "चेकर"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -846,13 +781,7 @@
     "authRequired": false,
     "detailedDescription": "JSON पेस्ट करें और पठनीय एरर फीडबैक के साथ त्वरित वैलिडेशन चलाएं। पठनीयता के लिए इंडेंटेशन के साथ फॉर्मेट करें या कॉम्पैक्ट पेलोड के लिए मिनिफाई करें। यह यूटिलिटी पूरी तरह क्लाइंट-साइड है, जो डेवलपर वर्कफ़्लो के लिए तेज़ और प्राइवेसी-फ्रेंडली है।",
     "categoryId": "developer",
-    "keywords": [
-      "json",
-      "फॉर्मेट",
-      "वैलिडेटर",
-      "मिनिफाई",
-      "pretty"
-    ],
+    "keywords": ["json", "फॉर्मेट", "वैलिडेटर", "मिनिफाई", "pretty"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -902,14 +831,7 @@
     "authRequired": false,
     "detailedDescription": "संभावित पहली-विफलता घटनाओं, एक्सेप्शन चेन, स्टैक-फ्रेम लोकेशन और कोरिलेशन-आईडी क्लस्टर पहचानने के लिए Spring Boot लॉग अपलोड या पेस्ट करें। शेयरिंग और फॉलो-अप डीबगिंग के लिए स्ट्रक्चर्ड JSON इंसिडेंट रिपोर्ट एक्सपोर्ट करें।",
     "categoryId": "developer",
-    "keywords": [
-      "spring",
-      "boot",
-      "लॉग",
-      "एनालाइज़र",
-      "exception",
-      "डीबग"
-    ],
+    "keywords": ["spring", "boot", "लॉग", "एनालाइज़र", "exception", "डीबग"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1023,13 +945,7 @@
     "authRequired": false,
     "detailedDescription": "JWT हेडर और पेलोड जांचें, क्लेम एडिट करें, और HS256 या HS512 एल्गोरिदम का उपयोग करके नए टोकन जनरेट करें। API टेस्टिंग और ऑथेंटिकेशन फ्लो डीबग करने के लिए उपयोगी। ऑपरेशन ब्राउज़र में किए जाते हैं बिना टोकन डेटा बैकएंड को भेजे।",
     "categoryId": "developer",
-    "keywords": [
-      "jwt",
-      "टोकन",
-      "एनकोड",
-      "डीकोड",
-      "सुरक्षा"
-    ],
+    "keywords": ["jwt", "टोकन", "एनकोड", "डीकोड", "सुरक्षा"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1079,13 +995,7 @@
     "authRequired": false,
     "detailedDescription": "अपरकेस आउटपुट या हाइफन हटाने जैसे विकल्पों के साथ एक या कई UUID v4 आइडेंटिफायर बनाएं। डेवलपमेंट, टेस्टिंग और डेटा वर्कफ़्लो में उपयोग के लिए एक साथ सभी जनरेट किए गए मान कॉपी करें।",
     "categoryId": "developer",
-    "keywords": [
-      "uuid",
-      "guid",
-      "आइडेंटिफायर",
-      "id",
-      "जनरेट"
-    ],
+    "keywords": ["uuid", "guid", "आइडेंटिफायर", "id", "जनरेट"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1194,15 +1104,7 @@
     "authRequired": false,
     "detailedDescription": "Torensa API Forge आपको JWT Bearer ऑथ, कस्टम हेडर, क्वेरी/पाथ पैरामीटर और JSON/raw बॉडी सहित सीधे ब्राउज़र में API रिक्वेस्ट भेजने देता है।",
     "categoryId": "developer",
-    "keywords": [
-      "api",
-      "रिक्वेस्ट",
-      "http",
-      "rest",
-      "हेडर",
-      "json",
-      "टेस्ट"
-    ],
+    "keywords": ["api", "रिक्वेस्ट", "http", "rest", "हेडर", "json", "टेस्ट"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1253,14 +1155,7 @@
     "authRequired": false,
     "detailedDescription": "Word दस्तावेज़ (.doc या .docx) अपलोड करें और सेकंडों में इसे PDF में कन्वर्ट करें। कन्वर्शन LibreOffice का उपयोग करके सर्वर पर चलती है, फ़ॉन्ट, टेबल, इमेज और फॉर्मेटिंग संरक्षित रखते हुए। फ़ाइलें मेमोरी में प्रोसेस होती हैं और कभी स्टोर नहीं होतीं।",
     "categoryId": "utilities",
-    "keywords": [
-      "word",
-      "docx",
-      "doc",
-      "pdf",
-      "कन्वर्ट",
-      "दस्तावेज़"
-    ],
+    "keywords": ["word", "docx", "doc", "pdf", "कन्वर्ट", "दस्तावेज़"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1348,13 +1243,7 @@
     "authRequired": false,
     "detailedDescription": "PDF अपलोड करें और इसे एडिट करने योग्य .docx फ़ाइल में कन्वर्ट करें। कन्वर्शन LibreOffice का उपयोग करके सर्वर पर चलती है, लेआउट और टेक्स्ट संरक्षित रखते हुए। फ़ाइलें मेमोरी में प्रोसेस होती हैं और कभी स्टोर नहीं होतीं।",
     "categoryId": "utilities",
-    "keywords": [
-      "pdf",
-      "word",
-      "docx",
-      "कन्वर्ट",
-      "दस्तावेज़"
-    ],
+    "keywords": ["pdf", "word", "docx", "कन्वर्ट", "दस्तावेज़"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1501,14 +1390,7 @@
     "authRequired": false,
     "detailedDescription": "Excel, CSV या JSON फ़ाइल अपलोड करें और इसे अन्य दो फॉर्मेट में से किसी में कन्वर्ट करें। सभी पार्सिंग और कन्वर्शन क्लाइंट-साइड होती है, इसलिए आपकी फ़ाइलें आपके डिवाइस पर रहती हैं।",
     "categoryId": "utilities",
-    "keywords": [
-      "excel",
-      "csv",
-      "json",
-      "स्प्रेडशीट",
-      "कन्वर्ट",
-      "डेटा"
-    ],
+    "keywords": ["excel", "csv", "json", "स्प्रेडशीट", "कन्वर्ट", "डेटा"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1558,13 +1440,7 @@
     "authRequired": false,
     "detailedDescription": "SRT फ़ाइल के रूप में सबटाइटल प्राप्त करने के लिए वीडियो URL पेस्ट करें। यह टूल पहले मौजूदा कैप्शन आज़माता है, फिर उपलब्ध होने पर ऑटो-जनरेट सबटाइटल पर जाता है। YouTube और yt-dlp द्वारा समर्थित अन्य साइट सपोर्ट करता है।",
     "categoryId": "utilities",
-    "keywords": [
-      "सबटाइटल",
-      "srt",
-      "कैप्शन",
-      "yt-dlp",
-      "वीडियो"
-    ],
+    "keywords": ["सबटाइटल", "srt", "कैप्शन", "yt-dlp", "वीडियो"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1644,14 +1520,7 @@
     "authRequired": false,
     "detailedDescription": "वीडियो फ़ाइल अपलोड करें और ऑडियो ट्रैक MP3 या WAV के रूप में निकालें। कन्वर्शन FFmpeg का उपयोग करके सर्वर पर चलती है। फ़ाइलें मेमोरी में प्रोसेस होती हैं और कभी स्टोर नहीं होतीं।",
     "categoryId": "utilities",
-    "keywords": [
-      "वीडियो",
-      "ऑडियो",
-      "mp3",
-      "wav",
-      "निकालें",
-      "कन्वर्ट"
-    ],
+    "keywords": ["वीडियो", "ऑडियो", "mp3", "wav", "निकालें", "कन्वर्ट"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1780,7 +1649,7 @@
     "path": "/habit-tracker",
     "ctaLabel": "आदतें ट्रैक करें",
     "offlineEnabled": false,
-    "authRequired": false,
+    "authRequired": true,
     "detailedDescription": "उन आदतों की सूची बनाएं जो आप हर दिन करना चाहते हैं, प्रत्येक के लिए कस्टम अंक मान के साथ। अंक अर्जित करने के लिए रोज़ पूरी की गई आदतें चेक ऑफ करें। एक बार चार्ट पिछले 14 दिनों में आपके अंक दिखाता है ताकि आप अपनी सुसंगतता ट्रैक कर सकें। सभी डेटा आपके ब्राउज़र में लोकली स्टोर होता है।",
     "categoryId": "health-wellbeing",
     "keywords": [

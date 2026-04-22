@@ -1794,7 +1794,7 @@
     "path": "/habit-tracker",
     "ctaLabel": "Track Habits",
     "offlineEnabled": false,
-    "authRequired": false,
+    "authRequired": true,
     "detailedDescription": "Build a list of habits you want to do every day, each with a custom point value. Check off completed habits daily to earn points. A bar chart shows your points over the last 14 days so you can track your consistency. All data is stored locally in your browser.",
     "categoryId": "health-wellbeing",
     "keywords": [
