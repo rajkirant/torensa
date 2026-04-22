@@ -150,15 +150,15 @@
     }
   },
   "chat": {
-    "title": "AI Tool Assistant",
-    "subtitle": "Ask by category, feature, or tool name",
+    "title": "Chat with Tora",
+    "subtitle": "Your Torensa guide — ask about any tool",
     "placeholder": "Ask about a tool...",
     "suggestions": {
       "one": "What does this tool do?",
-      "two": "Which tool should I use for invoices?",
+      "two": "What tools are related to PDF?",
       "three": "Which tools work offline?"
     },
-    "greeting": "Hi, I can explain Torensa tools in simple terms. Ask me anything.",
+    "greeting": "Hi, I'm Tora! I can help you find the right Torensa tool for the job. What are you trying to do?",
     "unavailable": "Assistant is unavailable right now.",
     "noAnswer": "I couldn't generate an answer right now.",
     "networkError": "Network error. Please try again."

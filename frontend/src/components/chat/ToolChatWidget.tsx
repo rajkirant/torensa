@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useTheme, alpha } from "@mui/material/styles";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import CloseIcon from "@mui/icons-material/Close";
+import MinimizeIcon from "@mui/icons-material/Remove";
 import SendIcon from "@mui/icons-material/Send";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
@@ -37,6 +37,8 @@ const DEFAULT_SUGGESTIONS = [
   "chat.suggestions.three",
 ];
 
+const HOME_EXCLUDED_SUGGESTIONS = ["chat.suggestions.one"];
+
 const CHAT_FONT = `"Space Grotesk", "Avenir Next", "Segoe UI", sans-serif`;
 
 export default function ToolChatWidget() {
@@ -45,6 +47,10 @@ export default function ToolChatWidget() {
   const isDark = theme.palette.mode === "dark";
 
   const location = useLocation();
+  const isHome = location.pathname === "/" || location.pathname === "";
+  const suggestions = DEFAULT_SUGGESTIONS.filter(
+    (s) => !isHome || !HOME_EXCLUDED_SUGGESTIONS.includes(s)
+  );
   const serviceCards = useServiceCards();
   const cards = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
 
@@ -234,7 +240,7 @@ export default function ToolChatWidget() {
                 "&:hover": { bgcolor: "rgba(255,255,255,0.24)" },
               }}
             >
-              <CloseIcon fontSize="small" />
+              <MinimizeIcon fontSize="small" />
             </IconButton>
           </Box>
 
@@ -394,7 +400,7 @@ export default function ToolChatWidget() {
 
                 {messages.length <= 1 && (
               <Stack direction="row" flexWrap="wrap" gap={0.8}>
-                {DEFAULT_SUGGESTIONS.map((item) => (
+                {suggestions.map((item) => (
                   <Box
                     key={item}
                     role="button"
@@ -428,7 +434,7 @@ export default function ToolChatWidget() {
                       },
                     }}
                   >
-                    {item}
+                    {t(item)}
                   </Box>
                 ))}
               </Stack>
@@ -529,14 +535,20 @@ export default function ToolChatWidget() {
       )}
 
       {!isOpen && (
-        <IconButton
+        <Box
+          component="button"
           onClick={() => setIsOpen(true)}
+          aria-label="Open tool assistant"
           sx={{
             position: "fixed",
             right: 20,
             bottom: 24,
             zIndex: 1300,
-            bgcolor: "transparent",
+            display: "flex",
+            alignItems: "center",
+            gap: 0.8,
+            px: 2.4,
+            py: 1.4,
             color: "#f8fafc",
             background: isDark
               ? "linear-gradient(135deg, #0f766e 0%, #0369a1 65%, #1d4ed8 100%)"
@@ -548,9 +560,8 @@ export default function ToolChatWidget() {
             "&:hover": {
               transform: "translateY(-2px) scale(1.02)",
               filter: "saturate(1.08)",
+              cursor: "pointer",
             },
-            width: 56,
-            height: 56,
             borderRadius: "18px",
             transition: "all 180ms ease",
             animation: "launcherPulse 2.5s ease-in-out infinite",
@@ -560,10 +571,20 @@ export default function ToolChatWidget() {
               "100%": { boxShadow: "0 0 0 0 rgba(14,165,233,0)" },
             },
           }}
-          aria-label="Open tool assistant"
         >
-          <ChatBubbleOutlineIcon />
-        </IconButton>
+          <ChatBubbleOutlineIcon sx={{ fontSize: 22 }} />
+          <Typography
+            sx={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: "#f8fafc",
+              letterSpacing: 0.3,
+              whiteSpace: "nowrap",
+            }}
+          >
+            Chat with Tora
+          </Typography>
+        </Box>
       )}
     </>
   );
