@@ -129,11 +129,15 @@ def _get_access_token_from_refresh_token(refresh_token: str):
     return token_data.get("access_token")
 
 
-def _fetch_google_account_email(access_token: str):
-    userinfo = _http_get_json(
+def _fetch_google_userinfo(access_token: str):
+    return _http_get_json(
         GOOGLE_USERINFO_URL,
         headers={"Authorization": f"Bearer {access_token}"},
     )
+
+
+def _fetch_google_account_email(access_token: str):
+    userinfo = _fetch_google_userinfo(access_token)
     return (userinfo.get("email") or "").strip().lower()
 
 
@@ -390,8 +394,10 @@ def gmail_oauth_callback(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        account_email = _fetch_google_account_email(access_token) or desired_email
+        userinfo = _fetch_google_userinfo(access_token)
+        account_email = (userinfo.get("email") or "").strip().lower() or desired_email
         smtp_email = account_email or desired_email
+        google_display_name = (userinfo.get("name") or "").strip()
         if not smtp_email:
             return Response(
                 {"error": "Unable to resolve Gmail account email"},
@@ -418,15 +424,19 @@ def gmail_oauth_callback(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+        config_defaults = {
+            "encrypted_refresh_token": encrypted_refresh_token,
+            "provider": "gmail",
+            "is_active": True,
+            "disabled_reason": "",
+        }
+        if google_display_name:
+            config_defaults["display_name"] = google_display_name
+
         UserSMTPConfig.objects.update_or_create(
             user=target_user,
             smtp_email=smtp_email,
-            defaults={
-                "encrypted_refresh_token": encrypted_refresh_token,
-                "provider": "gmail",
-                "is_active": True,
-                "disabled_reason": "",
-            },
+            defaults=config_defaults,
         )
 
         payload = {
@@ -621,7 +631,7 @@ def send_email(request):
     try:
         access_token = _build_sender_backend(smtp_config)
 
-        sender_display_name = request.user.get_full_name() or request.user.username
+        sender_display_name = smtp_config.display_name or request.user.get_full_name() or request.user.username
         sender = f"{sender_display_name} <{smtp_config.smtp_email}>"
 
         if is_new_mode:
