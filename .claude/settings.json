@@ -5,7 +5,22 @@
       "Bash(/c/Users/rajki/Workspace/torensa/backend/venv/Scripts/pip.exe install:*)",
       "Bash(python -c ':*)",
       "Bash(printf '\\\\nstripe>=9.0.0\\\\n')",
-      "Bash(python -c \"print\\(open\\('c:/Users/rajki/Workspace/torensa/backend/requirements.txt'\\).read\\(\\)\\)\")"
+      "Bash(python -c \"print\\(open\\('c:/Users/rajki/Workspace/torensa/backend/requirements.txt'\\).read\\(\\)\\)\")",
+      "Bash(aws lambda get-function *)",
+      "Bash(aws lambda list-functions *)",
+      "Bash(aws lambda get-function-configuration *)",
+      "Bash(aws dynamodb describe-table *)",
+      "Bash(aws dynamodb list-tables *)",
+      "Bash(aws dynamodb scan *)",
+      "Bash(aws dynamodb query *)",
+      "Bash(aws dynamodb get-item *)",
+      "Bash(aws logs describe-log-groups *)",
+      "Bash(aws logs describe-log-streams *)",
+      "Bash(aws logs get-log-events *)",
+      "Bash(aws logs filter-log-events *)",
+      "Bash(aws events list-rules *)",
+      "Bash(aws events describe-rule *)",
+      "Bash(curl *)"
     ]
   }
 }
