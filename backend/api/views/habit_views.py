@@ -102,7 +102,12 @@ def habit_logs_view(request):
     except (TypeError, ValueError):
         days = 14
 
-    since = date.today() - timedelta(days=days - 1)
+    raw_today = request.query_params.get("today")
+    try:
+        anchor = date.fromisoformat(raw_today) if raw_today else date.today()
+    except ValueError:
+        anchor = date.today()
+    since = anchor - timedelta(days=days - 1)
     logs = HabitLog.objects.filter(
         user=request.user, date__gte=since
     ).values_list("habit_id", "date")
