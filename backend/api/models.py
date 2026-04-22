@@ -16,6 +16,7 @@ class UserSMTPConfig(models.Model):
     )
 
     smtp_email = models.EmailField()
+    display_name = models.CharField(max_length=255, blank=True)
     encrypted_refresh_token = models.BinaryField(null=True, blank=True)
 
     provider = models.CharField(
