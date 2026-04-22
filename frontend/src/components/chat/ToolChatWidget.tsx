@@ -558,21 +558,54 @@ export default function ToolChatWidget() {
               ? "0 14px 30px rgba(2,6,23,0.5)"
               : "0 14px 28px rgba(30,64,175,0.22)",
             "&:hover": {
-              transform: "translateY(-2px) scale(1.02)",
-              filter: "saturate(1.08)",
+              transform: "translateY(-4px) scale(1.05)",
+              filter: "saturate(1.15) brightness(1.08)",
               cursor: "pointer",
+              boxShadow: "0 18px 36px rgba(14,165,233,0.45)",
             },
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              borderRadius: "18px",
+              background:
+                "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.22) 50%, transparent 60%)",
+              backgroundSize: "200% 100%",
+              animation: "shimmer 2.4s ease-in-out infinite",
+            },
+            overflow: "hidden",
             borderRadius: "18px",
-            transition: "all 180ms ease",
-            animation: "launcherPulse 2.5s ease-in-out infinite",
+            transition: "all 200ms ease",
+            animation: "launcherFloat 3s ease-in-out infinite, launcherPulse 2.5s ease-in-out infinite",
+            "@keyframes launcherFloat": {
+              "0%":   { transform: "translateY(0px)" },
+              "50%":  { transform: "translateY(-5px)" },
+              "100%": { transform: "translateY(0px)" },
+            },
             "@keyframes launcherPulse": {
-              "0%": { boxShadow: "0 0 0 0 rgba(14,165,233,0.35)" },
-              "70%": { boxShadow: "0 0 0 14px rgba(14,165,233,0)" },
+              "0%":   { boxShadow: "0 0 0 0 rgba(14,165,233,0.55)" },
+              "70%":  { boxShadow: "0 0 0 18px rgba(14,165,233,0)" },
               "100%": { boxShadow: "0 0 0 0 rgba(14,165,233,0)" },
+            },
+            "@keyframes shimmer": {
+              "0%":   { backgroundPosition: "200% 0" },
+              "100%": { backgroundPosition: "-200% 0" },
             },
           }}
         >
-          <ChatBubbleOutlineIcon sx={{ fontSize: 22 }} />
+          <Box
+            sx={{
+              display: "flex",
+              animation: "iconBounce 2s ease-in-out infinite",
+              "@keyframes iconBounce": {
+                "0%,100%": { transform: "rotate(0deg) scale(1)" },
+                "25%":     { transform: "rotate(-12deg) scale(1.15)" },
+                "75%":     { transform: "rotate(12deg) scale(1.15)" },
+              },
+            }}
+          >
+            <ChatBubbleOutlineIcon sx={{ fontSize: 22 }} />
+          </Box>
           <Typography
             sx={{
               fontSize: 15,
