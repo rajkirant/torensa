@@ -39,7 +39,8 @@ type DailyLog = Record<string, number[]>;
 
 /* ── helpers ───────────────────────────────────────────── */
 
-const dateKey = (d: Date) => d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+const dateKey = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const today = () => dateKey(new Date());
 
 /* ── chart colours ─────────────────────────────────────── */
@@ -73,7 +74,7 @@ const HabitTracker: React.FC = () => {
       try {
         const [habitsRes, logsRes] = await Promise.all([
           apiFetch("/api/habits/"),
-          apiFetch("/api/habits/logs/?days=14"),
+          apiFetch(`/api/habits/logs/?days=14&today=${today()}`),
         ]);
         if (cancelled) return;
         if (habitsRes.ok && logsRes.ok) {
