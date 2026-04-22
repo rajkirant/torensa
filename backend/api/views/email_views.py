@@ -621,6 +621,9 @@ def send_email(request):
     try:
         access_token = _build_sender_backend(smtp_config)
 
+        sender_display_name = request.user.get_full_name() or request.user.username
+        sender = f"{sender_display_name} <{smtp_config.smtp_email}>"
+
         if is_new_mode:
             recipients = _parse_json_maybe(recipients_raw, default=[])
 
@@ -657,7 +660,7 @@ def send_email(request):
                     rendered_body = render_dollar_template(body_template, vars_map)
 
                     _send_one_email(
-                        sender=smtp_config.smtp_email,
+                        sender=sender,
                         recipient=recipient,
                         subject=rendered_subject,
                         body=rendered_body,
@@ -724,7 +727,7 @@ def send_email(request):
 
         for recipient in to_emails:
             _send_one_email(
-                sender=smtp_config.smtp_email,
+                sender=sender,
                 recipient=recipient,
                 subject=subject,
                 body=body,
