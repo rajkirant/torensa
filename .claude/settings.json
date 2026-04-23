@@ -20,7 +20,25 @@
       "Bash(aws logs filter-log-events *)",
       "Bash(aws events list-rules *)",
       "Bash(aws events describe-rule *)",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(aws lambda list-event-source-mappings *)",
+      "Bash(aws lambda get-policy *)",
+      "Bash(aws lambda list-aliases *)",
+      "Bash(aws dynamodb list-global-tables *)",
+      "Bash(aws logs tail *)",
+      "Bash(aws ecr describe-repositories *)",
+      "Bash(aws ecr list-images *)",
+      "Bash(aws apigateway get-rest-apis *)",
+      "Bash(aws apigateway get-resources *)",
+      "Bash(aws apigatewayv2 get-apis *)",
+      "Bash(aws apigatewayv2 get-routes *)",
+      "Bash(aws scheduler list-schedules *)",
+      "Bash(aws scheduler get-schedule *)",
+      "Bash(aws configure list *)",
+      "Bash(aws sts get-caller-identity *)",
+      "PowerShell(aws dynamodb *)",
+      "PowerShell(aws lambda *)",
+      "PowerShell(aws logs *)"
     ]
   }
 }
