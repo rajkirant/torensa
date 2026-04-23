@@ -38,6 +38,7 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import WavesIcon from "@mui/icons-material/Waves";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
+import CakeIcon from "@mui/icons-material/Cake";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -81,4 +82,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "clearwave": WavesIcon,
   "csv-builder": TableChartIcon,
   "custom-chatbot-builder": SmartToyIcon,
+  "birthday-cake-generator": CakeIcon,
 };

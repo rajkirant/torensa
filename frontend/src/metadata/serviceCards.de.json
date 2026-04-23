@@ -1450,6 +1450,35 @@
     ]
   },
   {
+    "id": "birthday-cake-generator",
+    "component": "BirthdayCakeGenerator",
+    "name": "Geburtstagstorte Generator",
+    "title": "Geburtstagstorte Generator – Realistische KI-Tortenbilder erstellen",
+    "description": "Erstellen Sie ein fotorealistisches Bild einer Geburtstagstorte per KI. Geben Sie Name, Alter und Thema ein und laden Sie das personalisierte Bild herunter.",
+    "path": "/birthday-cake-generator",
+    "ctaLabel": "Torte generieren",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Erstellen Sie in Sekunden atemberaubende, fotorealistische Geburtstagstorti-Bilder mit KI (Hugging Face FLUX). Name, Alter und Thema eingeben, Torte generieren und als PNG herunterladen oder per WhatsApp teilen.",
+    "categoryId": "utilities",
+    "keywords": ["Geburtstagstorte", "KI Torte", "Torte generieren", "Geburtstagsbild", "personalisierte Torte"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Namen und Alter der Geburtstagsperson eingeben (optional).",
+      "Ein Tortenmotiv aus den Vorschlägen wählen oder eigenes eingeben.",
+      "Auf Geburtstagstorte generieren klicken und 10–30 Sekunden warten.",
+      "PNG herunterladen oder direkt per WhatsApp teilen."
+    ],
+    "faqs": [
+      { "q": "Benötige ich ein Konto?", "a": "Nein, der Generator ist kostenlos ohne Anmeldung nutzbar." },
+      { "q": "Wie realistisch sind die Tortenbilder?", "a": "Die KI verwendet FLUX.1-schnell über Hugging Face und liefert Bilder in Lebensmittelfotografie-Qualität." },
+      { "q": "Wie lange dauert die Generierung?", "a": "Typischerweise 10–30 Sekunden. Beim ersten Laden des Modells kann es etwas länger dauern." },
+      { "q": "Kann ich den Stil anpassen?", "a": "Ja – geben Sie ein beliebiges Thema ein, z. B. Schokolade, Blumen oder Galaxie." }
+    ]
+  },
+  {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "name": "PDF‑Text‑Extractor (OCR)",
