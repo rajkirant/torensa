@@ -1,5 +1,5 @@
 import type React from "react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -17,6 +17,11 @@ import DialogActions from "@mui/material/DialogActions";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import TableChartIcon from "@mui/icons-material/TableChart";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
@@ -40,6 +45,12 @@ type Props = {
 
 type ExcelRecord = Record<string, string>;
 type SpreadsheetRows = string[][];
+
+type SavedCsvMeta = {
+  id: number;
+  name: string;
+  updated_at: string;
+};
 
 // "First Name" -> "First_Name"
 function headerToKey(header: string) {
@@ -218,6 +229,12 @@ export default function SendEmailAccordion({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
 
+  // CSV Builder picker state
+  const [csvPickerOpen, setCsvPickerOpen] = useState(false);
+  const [savedCsvs, setSavedCsvs] = useState<SavedCsvMeta[]>([]);
+  const [csvPickerLoading, setCsvPickerLoading] = useState(false);
+  const [csvPickerError, setCsvPickerError] = useState("");
+
   const hasExcel = !!fileName && headers.length > 0 && rows.length > 0;
 
   async function handleExcelChange(files: FileList | null) {
@@ -292,6 +309,76 @@ export default function SendEmailAccordion({
       );
     }
   }
+
+  const openCsvPicker = useCallback(async () => {
+    setCsvPickerError("");
+    setSavedCsvs([]);
+    setCsvPickerOpen(true);
+    setCsvPickerLoading(true);
+    try {
+      const res = await apiFetch("/api/csv/", { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.detail ?? "Failed to load saved CSVs");
+      setSavedCsvs(data);
+    } catch (err) {
+      setCsvPickerError(err instanceof Error ? err.message : "Failed to load saved CSVs");
+    } finally {
+      setCsvPickerLoading(false);
+    }
+  }, []);
+
+  const handleSelectSavedCsv = useCallback(async (id: number, name: string) => {
+    setCsvPickerError("");
+    setCsvPickerLoading(true);
+    try {
+      const res = await apiFetch(`/api/csv/${id}/`, { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.detail ?? "Failed to load CSV");
+
+      const content: string = data.content;
+      const lines = content.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+      const parseRow = (line: string): string[] => {
+        const cells: string[] = [];
+        let current = "";
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') {
+            if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
+            else { inQuotes = !inQuotes; }
+          } else if (ch === "," && !inQuotes) {
+            cells.push(current.trim());
+            current = "";
+          } else {
+            current += ch;
+          }
+        }
+        cells.push(current.trim());
+        return cells;
+      };
+
+      const nonEmpty = lines.filter((l) => l.trim());
+      if (nonEmpty.length === 0) throw new Error("CSV is empty.");
+      const sheetRows = nonEmpty.map(parseRow);
+      const cleanHeaders = sheetRows[0].map((h) => String(h ?? "").trim());
+      validateHeaders(cleanHeaders);
+      if (sheetRows.length <= 1) throw new Error("No data rows found below the header row.");
+
+      setFileName(name);
+      setHeaders(cleanHeaders);
+      setRows(sheetRows);
+      const autoEmailHeader =
+        cleanHeaders.find((h) => h.toLowerCase().includes("email")) || cleanHeaders[0] || "";
+      setEmailColumn(autoEmailHeader);
+      setError("");
+      setSuccess("");
+      setCsvPickerOpen(false);
+    } catch (err) {
+      setCsvPickerError(err instanceof Error ? err.message : "Failed to load CSV");
+    } finally {
+      setCsvPickerLoading(false);
+    }
+  }, []);
 
   function handleInsertHeader(header: string) {
     const token = `$${headerToKey(header)}`;
@@ -456,20 +543,77 @@ export default function SendEmailAccordion({
     <Box component="form" onSubmit={handleSend}>
       {/* 1) Excel Upload */}
       <Box sx={{ mb: 2 }}>
-        <FilePickerButton
-          variant="outlined"
-          type="button"
-          label="Import Excel / CSV"
-          accept=".xlsx,.csv"
-          onFilesSelected={handleExcelChange}
-          resetAfterSelect
-        />
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <FilePickerButton
+            variant="outlined"
+            type="button"
+            label="Import Excel / CSV"
+            accept=".xlsx,.csv"
+            onFilesSelected={handleExcelChange}
+            resetAfterSelect
+          />
+          <Button
+            variant="outlined"
+            startIcon={<TableChartIcon />}
+            onClick={openCsvPicker}
+            type="button"
+          >
+            Select from CSV Builder
+          </Button>
+        </Stack>
         {fileName && (
           <Typography variant="caption" sx={{ display: "block", mt: 1 }}>
             Selected file: {fileName}
           </Typography>
         )}
       </Box>
+
+      {/* CSV Builder picker dialog */}
+      <Dialog open={csvPickerOpen} onClose={() => setCsvPickerOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          Select a Saved CSV
+          <IconButton
+            onClick={() => setCsvPickerOpen(false)}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers sx={{ p: 0, minHeight: 120 }}>
+          {csvPickerLoading && (
+            <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+              <CircularProgress size={28} />
+            </Box>
+          )}
+          {csvPickerError && !csvPickerLoading && (
+            <Alert severity="error" sx={{ m: 2 }}>{csvPickerError}</Alert>
+          )}
+          {!csvPickerLoading && !csvPickerError && savedCsvs.length === 0 && (
+            <Typography color="text.secondary" sx={{ p: 3, textAlign: "center" }}>
+              No saved CSVs found. Create one in the CSV Builder tool.
+            </Typography>
+          )}
+          {!csvPickerLoading && savedCsvs.length > 0 && (
+            <List disablePadding>
+              {savedCsvs.map((csv, i) => (
+                <Box key={csv.id}>
+                  <ListItemButton onClick={() => handleSelectSavedCsv(csv.id, csv.name)}>
+                    <ListItemText
+                      primary={csv.name}
+                      secondary={`Last updated: ${new Date(csv.updated_at).toLocaleString()}`}
+                    />
+                  </ListItemButton>
+                  {i < savedCsvs.length - 1 && <Divider />}
+                </Box>
+              ))}
+            </List>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCsvPickerOpen(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
 
       {/* 2) Column headers + email column selection */}
       {hasExcel && (
