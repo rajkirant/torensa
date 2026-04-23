@@ -1436,6 +1436,57 @@
     ]
   },
   {
+    "id": "birthday-cake-generator",
+    "component": "BirthdayCakeGenerator",
+    "name": "Birthday Cake Generator",
+    "title": "Birthday Cake Generator - Create Realistic AI Birthday Cakes",
+    "description": "Generate a photorealistic birthday cake image using AI. Enter a name, age, and cake theme to create a beautiful personalised cake — ready to download and share.",
+    "path": "/birthday-cake-generator",
+    "ctaLabel": "Generate Cake",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Create stunning, photorealistic birthday cake images in seconds using AI image generation powered by Hugging Face. Simply enter the birthday person's name and age, choose a theme (chocolate, floral, galaxy, and more), and the AI generates a professional-quality cake photo. Perfect for birthday cards, social media posts, or WhatsApp messages. Download as PNG or share directly.",
+    "categoryId": "utilities",
+    "keywords": [
+      "birthday cake",
+      "ai birthday cake",
+      "cake generator",
+      "birthday image",
+      "personalized cake",
+      "cake photo",
+      "ai image generation",
+      "happy birthday",
+      "cake design"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Enter the birthday person's name (optional) and age (optional).",
+      "Pick a cake theme from the suggestions or type your own.",
+      "Click Generate Birthday Cake and wait 10–30 seconds for the AI to bake it.",
+      "Download the PNG or share it directly to WhatsApp."
+    ],
+    "faqs": [
+      {
+        "q": "Do I need an account to use this?",
+        "a": "No, the Birthday Cake Generator is free to use without signing in."
+      },
+      {
+        "q": "How realistic are the generated cakes?",
+        "a": "The AI uses Stable Diffusion XL via Hugging Face, which produces photorealistic food photography quality images."
+      },
+      {
+        "q": "How long does generation take?",
+        "a": "Typically 10–30 seconds. If the model is loading for the first time it may take up to a minute."
+      },
+      {
+        "q": "Can I customise the cake style?",
+        "a": "Yes — enter any theme you like, such as 'chocolate', 'floral', 'galaxy', or even 'superhero'."
+      }
+    ]
+  },
+  {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "name": "PDF Text Extractor (OCR)",

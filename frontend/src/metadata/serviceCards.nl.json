@@ -1445,6 +1445,35 @@
     ]
   },
   {
+    "id": "birthday-cake-generator",
+    "component": "BirthdayCakeGenerator",
+    "name": "Verjaardagstaart Generator",
+    "title": "Verjaardagstaart Generator – Realistische AI-taartafbeeldingen maken",
+    "description": "Genereer een fotorealistisch verjaardagstaartbeeld met AI. Voer naam, leeftijd en thema in en download of deel het gepersonaliseerde PNG-taartplaatje.",
+    "path": "/birthday-cake-generator",
+    "ctaLabel": "Taart genereren",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Maak in seconden prachtige, fotorealistische verjaardagstaartbeelden met AI (Hugging Face FLUX). Voer naam, leeftijd en thema in, genereer de taart en download als PNG of deel via WhatsApp.",
+    "categoryId": "utilities",
+    "keywords": ["verjaardagstaart", "ai taart", "taart genereren", "verjaardagsafbeelding", "gepersonaliseerde taart"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Voer de naam en leeftijd in van de jarige (optioneel).",
+      "Kies een taartthema uit de suggesties of typ je eigen thema.",
+      "Klik op Verjaardagstaart genereren en wacht 10–30 seconden.",
+      "Download de PNG of deel direct via WhatsApp."
+    ],
+    "faqs": [
+      { "q": "Heb ik een account nodig?", "a": "Nee, de generator is gratis te gebruiken zonder aanmelden." },
+      { "q": "Hoe realistisch zijn de taartafbeeldingen?", "a": "De AI gebruikt FLUX.1-schnell via Hugging Face en produceert beelden van professionele voedingsfotokwaliteit." },
+      { "q": "Hoe lang duurt het genereren?", "a": "Meestal 10–30 seconden. Bij het eerste laden van het model kan het iets langer duren." },
+      { "q": "Kan ik de stijl aanpassen?", "a": "Ja – voer een eigen thema in zoals chocolade, bloemen of galaxy." }
+    ]
+  },
+  {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "name": "PDF tekstextractor (OCR)",
