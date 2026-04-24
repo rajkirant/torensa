@@ -36,8 +36,12 @@ NUM_FRAMES = 18
 FRAME_DURATION_MS = 90    # ~1.6s loop
 SPARKLE_COUNT = 32
 FIREWORK_COUNT = 6        # number of concurrent bursts scattered across the loop
+CONFETTI_COUNT = 45
+BOKEH_COUNT = 14
+DIYA_COUNT = 7
+ROCKET_COUNT = 4
 
-EFFECT_CHOICES = {"sparkles", "fireworks"}
+EFFECT_CHOICES = {"sparkles", "fireworks", "confetti", "bokeh", "diyas", "rockets"}
 
 
 def _resolve_font(size: int):
@@ -178,6 +182,264 @@ def _draw_firework(draw, fw, t: float):
         )
 
 
+def _build_confetti(width: int, height: int, count: int, band_bottom: int):
+    """Colored rectangles that fall from above the band's bottom to the image
+    bottom, wrapping around the loop. Each piece has its own fall speed, sway,
+    rotation rate, and color.
+    """
+    rng = random.Random(17)
+    palette = [
+        (255, 95, 110), (255, 190, 80), (110, 200, 255),
+        (160, 230, 120), (220, 140, 255), (255, 240, 140),
+    ]
+    top = max(0, band_bottom + 4)
+    span = max(1, height - top)
+    pieces = []
+    for _ in range(count):
+        pieces.append({
+            "x": rng.randint(0, width - 1),
+            "y0": rng.randint(top, top + span),
+            "speed": rng.uniform(0.9, 1.6),          # loop fractions travelled
+            "sway_amp": rng.uniform(4, 14),
+            "sway_phase": rng.uniform(0, math.tau),
+            "w": rng.randint(4, 7),
+            "h": rng.randint(6, 10),
+            "rot_speed": rng.uniform(1.5, 3.5) * rng.choice([-1, 1]),
+            "rot0": rng.uniform(0, math.tau),
+            "color": rng.choice(palette),
+            "top": top,
+            "span": span,
+        })
+    return pieces
+
+
+def _draw_confetti(draw, piece, t: float):
+    # Travel distance over the loop — wraps so pieces re-enter at the top
+    travel = (piece["y0"] + piece["speed"] * piece["span"] * t * 1.0)
+    y = piece["top"] + ((travel - piece["top"]) % piece["span"])
+    x = piece["x"] + piece["sway_amp"] * math.sin(piece["sway_phase"] + t * math.tau)
+    angle = piece["rot0"] + piece["rot_speed"] * t * math.tau
+
+    w2 = piece["w"] / 2
+    h2 = piece["h"] / 2
+    cos_a, sin_a = math.cos(angle), math.sin(angle)
+    corners = [(-w2, -h2), (w2, -h2), (w2, h2), (-w2, h2)]
+    pts = [
+        (x + cx * cos_a - cy * sin_a, y + cx * sin_a + cy * cos_a)
+        for cx, cy in corners
+    ]
+    r, g, b = piece["color"]
+    draw.polygon(pts, fill=(r, g, b, 230))
+
+
+def _build_bokeh(width: int, height: int, count: int, band_bottom: int):
+    """Soft translucent orbs drifting slowly upward, pulsing in brightness."""
+    rng = random.Random(29)
+    top = max(0, band_bottom + 8)
+    span = max(1, height - top)
+    palette = [
+        (255, 210, 140), (255, 170, 200), (180, 220, 255),
+        (255, 240, 180), (200, 255, 220),
+    ]
+    orbs = []
+    for _ in range(count):
+        orbs.append({
+            "x": rng.randint(0, width - 1),
+            "y0": rng.randint(top, top + span),
+            "radius": rng.randint(10, 24),
+            "speed": rng.uniform(0.15, 0.4),
+            "pulse_phase": rng.random(),
+            "pulse_speed": rng.uniform(0.6, 1.3),
+            "color": rng.choice(palette),
+            "top": top,
+            "span": span,
+        })
+    return orbs
+
+
+def _draw_bokeh(draw, orb, t: float):
+    # Drift upward (negative direction), wrap around loop
+    y = orb["top"] + ((orb["y0"] - orb["top"] - orb["speed"] * orb["span"] * t) % orb["span"])
+    x = orb["x"]
+    r = orb["radius"]
+
+    phase = (orb["pulse_phase"] + t * orb["pulse_speed"]) % 1.0
+    brightness = (math.sin(phase * math.tau) + 1) / 2  # 0..1
+
+    cr, cg, cb = orb["color"]
+    # Concentric circles from faint outer halo to bright core — simulates glow
+    layers = [
+        (r, int(40 + brightness * 50)),
+        (int(r * 0.7), int(80 + brightness * 90)),
+        (int(r * 0.4), int(140 + brightness * 110)),
+    ]
+    for lr, la in layers:
+        if lr <= 0 or la <= 0:
+            continue
+        draw.ellipse(
+            [x - lr, y - lr, x + lr, y + lr],
+            fill=(cr, cg, cb, la),
+        )
+
+
+def _build_diyas(width: int, height: int, count: int):
+    """Row of oil lamps along the bottom. Each flame flickers independently."""
+    rng = random.Random(53)
+    base_y = int(height * 0.88)
+    # Evenly spaced across the width with a small random jitter
+    step = width / (count + 1)
+    diyas = []
+    for i in range(count):
+        cx = int((i + 1) * step + rng.randint(-6, 6))
+        diyas.append({
+            "cx": cx,
+            "base_y": base_y + rng.randint(-4, 4),
+            "flame_size": rng.randint(7, 11),
+            "flicker_phase": rng.random(),
+            "flicker_speed": rng.uniform(2.5, 4.5),  # fast flicker within the loop
+            "bowl_w": rng.randint(22, 28),
+            "bowl_h": rng.randint(7, 9),
+        })
+    return diyas
+
+
+def _draw_diyas_static(draw, diyas):
+    """Bake the clay bowls once — they never move."""
+    for d in diyas:
+        cx, by = d["cx"], d["base_y"]
+        w, h = d["bowl_w"], d["bowl_h"]
+        # Bowl body (semi-ellipse look using a filled ellipse clipped visually by the flame above)
+        draw.ellipse(
+            [cx - w // 2, by, cx + w // 2, by + h * 2],
+            fill=(120, 55, 20, 255),
+        )
+        # Rim highlight
+        draw.ellipse(
+            [cx - w // 2, by - 2, cx + w // 2, by + 2],
+            fill=(180, 95, 40, 255),
+        )
+
+
+def _draw_diya_flame(draw, diya, t: float):
+    cx, by = diya["cx"], diya["base_y"]
+    phase = (diya["flicker_phase"] + t * diya["flicker_speed"]) % 1.0
+    flicker = 0.7 + 0.3 * math.sin(phase * math.tau)
+    size = diya["flame_size"] * flicker
+    sway = math.sin(phase * math.tau * 2) * 1.5
+
+    flame_top = by - int(size * 2.4)
+    flame_base = by - 1
+    fx = cx + sway
+
+    # Outer halo — warm glow around the flame
+    halo_r = int(size * 2.6)
+    draw.ellipse(
+        [cx - halo_r, by - halo_r, cx + halo_r, by + halo_r // 3],
+        fill=(255, 180, 80, 70),
+    )
+    # Outer flame — orange teardrop approximated with a polygon
+    outer = [
+        (fx, flame_top),
+        (fx + size * 0.9, by - size),
+        (fx + size * 0.5, flame_base),
+        (fx - size * 0.5, flame_base),
+        (fx - size * 0.9, by - size),
+    ]
+    draw.polygon(outer, fill=(255, 140, 40, 240))
+    # Inner flame — yellow core
+    inner_size = size * 0.55
+    inner = [
+        (fx, flame_top + size * 0.6),
+        (fx + inner_size * 0.8, by - inner_size),
+        (fx + inner_size * 0.3, flame_base),
+        (fx - inner_size * 0.3, flame_base),
+        (fx - inner_size * 0.8, by - inner_size),
+    ]
+    draw.polygon(inner, fill=(255, 230, 120, 255))
+
+
+def _build_rockets(width: int, height: int, count: int, band_bottom: int):
+    """Rockets launch from the bottom, trail upward, then burst near the top."""
+    rng = random.Random(91)
+    rockets = []
+    palette = [
+        (255, 180, 80), (255, 120, 160), (140, 220, 255),
+        (200, 255, 160), (255, 220, 140),
+    ]
+    burst_zone_top = max(band_bottom + 20, int(height * 0.25))
+    burst_zone_bottom = int(height * 0.55)
+    if burst_zone_bottom <= burst_zone_top:
+        burst_zone_bottom = burst_zone_top + 10
+
+    for i in range(count):
+        rockets.append({
+            "x": rng.randint(int(width * 0.15), int(width * 0.85)),
+            "start_y": height - 4,
+            "burst_y": rng.randint(burst_zone_top, burst_zone_bottom),
+            "launch": (i / count) + rng.uniform(-0.04, 0.04),
+            "rise_dur": rng.uniform(0.35, 0.45),
+            "burst_dur": rng.uniform(0.25, 0.35),
+            "color": rng.choice(palette),
+            "rays": rng.randint(10, 14),
+            "max_radius": rng.randint(int(width * 0.11), int(width * 0.16)),
+        })
+    return rockets
+
+
+def _draw_rocket(draw, rk, t: float):
+    local = (t - rk["launch"]) % 1.0
+    total = rk["rise_dur"] + rk["burst_dur"]
+    if local > total:
+        return
+
+    if local <= rk["rise_dur"]:
+        # Rising phase — draw a streak from start_y to current y
+        rise_t = local / rk["rise_dur"]
+        cur_y = rk["start_y"] + (rk["burst_y"] - rk["start_y"]) * rise_t
+        # Trail length shrinks near the top for a natural look
+        trail_len = 24 * (1 - rise_t * 0.5)
+        r, g, b = rk["color"]
+        head_alpha = 255
+        # Draw segmented trail for a fading tail
+        segments = 6
+        for i in range(segments):
+            frac_a = i / segments
+            frac_b = (i + 1) / segments
+            ya = cur_y + trail_len * frac_a
+            yb = cur_y + trail_len * frac_b
+            alpha = int(head_alpha * (1 - frac_b))
+            if alpha <= 0:
+                continue
+            draw.line([(rk["x"], ya), (rk["x"], yb)], fill=(r, g, b, alpha), width=3)
+        # Bright head
+        draw.ellipse(
+            [rk["x"] - 3, cur_y - 3, rk["x"] + 3, cur_y + 3],
+            fill=(255, 255, 230, 255),
+        )
+    else:
+        # Burst phase — reuse the firework visual at the burst point
+        burst_t = (local - rk["rise_dur"]) / rk["burst_dur"]
+        radius = rk["max_radius"] * (1 - (1 - burst_t) ** 2)
+        brightness = max(0.0, 1 - burst_t) ** 1.3
+        alpha = int(255 * brightness)
+        if alpha <= 0:
+            return
+        r, g, b = rk["color"]
+        ray_color = (r, g, b, alpha)
+        spark_color = (255, 255, 230, alpha)
+        cx, cy = rk["x"], rk["burst_y"]
+        rays = rk["rays"]
+        inner = radius * 0.55
+        for k in range(rays):
+            angle = math.tau * k / rays
+            x1 = cx + inner * math.cos(angle)
+            y1 = cy + inner * math.sin(angle)
+            x2 = cx + radius * math.cos(angle)
+            y2 = cy + radius * math.sin(angle)
+            draw.line([(x1, y1), (x2, y2)], fill=ray_color, width=2)
+            draw.ellipse([x2 - 2, y2 - 2, x2 + 2, y2 + 2], fill=spark_color)
+
+
 def _draw_sparkle(draw, cx: int, cy: int, size: int, color, alpha: int):
     if alpha <= 0:
         return
@@ -284,6 +546,18 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
         _build_fireworks_outside_band(width, height, FIREWORK_COUNT, band_bottom)
         if effect == "fireworks" else []
     )
+    confetti = _build_confetti(width, height, CONFETTI_COUNT, band_bottom) if effect == "confetti" else []
+    bokeh = _build_bokeh(width, height, BOKEH_COUNT, band_bottom) if effect == "bokeh" else []
+    diyas = _build_diyas(width, height, DIYA_COUNT) if effect == "diyas" else []
+    rockets = _build_rockets(width, height, ROCKET_COUNT, band_bottom) if effect == "rockets" else []
+
+    # Bake static diya bowls into the base so they don't need to be redrawn each frame
+    if diyas:
+        bowl_layer = Image.new("RGBA", base_rgba.size, (0, 0, 0, 0))
+        bowl_draw = ImageDraw.Draw(bowl_layer)
+        _draw_diyas_static(bowl_draw, diyas)
+        base_rgba = Image.alpha_composite(base_rgba, bowl_layer)
+
     frames = []
 
     for i in range(NUM_FRAMES):
@@ -302,6 +576,29 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
                 _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
             for fw in fireworks:
                 _draw_firework(fx_draw, fw, t)
+        elif effect == "confetti":
+            for piece in confetti:
+                _draw_confetti(fx_draw, piece, t)
+        elif effect == "bokeh":
+            for orb in bokeh:
+                _draw_bokeh(fx_draw, orb, t)
+        elif effect == "diyas":
+            for d in diyas:
+                _draw_diya_flame(fx_draw, d, t)
+            # Light shimmer above the lamp row to suggest heat/glow
+            for s in sparkles[: SPARKLE_COUNT // 4]:
+                phase = (s["phase"] + t * s["speed"]) % 1.0
+                brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
+                alpha = int(20 + brightness * 90)
+                _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
+        elif effect == "rockets":
+            for rk in rockets:
+                _draw_rocket(fx_draw, rk, t)
+            for s in sparkles[: SPARKLE_COUNT // 3]:
+                phase = (s["phase"] + t * s["speed"]) % 1.0
+                brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
+                alpha = int(30 + brightness * 120)
+                _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
         else:
             for s in sparkles:
                 phase = (s["phase"] + t * s["speed"]) % 1.0
@@ -394,6 +691,10 @@ def festival_options_view(request):
         "effects": [
             {"id": "sparkles", "label": "Sparkles"},
             {"id": "fireworks", "label": "Fireworks"},
+            {"id": "rockets", "label": "Rockets"},
+            {"id": "confetti", "label": "Confetti"},
+            {"id": "diyas", "label": "Diyas"},
+            {"id": "bokeh", "label": "Bokeh"},
         ],
     }, status=status.HTTP_200_OK)
 
