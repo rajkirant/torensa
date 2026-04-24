@@ -253,6 +253,7 @@ export default function Home() {
 
   const showHero =
     !heroHidden && selectedCategoryId === "all" && !normalizedSearchTerm;
+  const showIntroText = !normalizedSearchTerm;
   const shouldForceEnglishPrefix =
     location.pathname === "/en" || location.pathname.startsWith("/en/");
   const langPath = React.useCallback(
@@ -463,7 +464,7 @@ export default function Home() {
           <h2 style={srOnlyHeadingStyle}>{selectedCategoryLabel}</h2>
         )}
 
-        {showHero && (
+        {showIntroText && (
           <div
             style={{
               ...searchWrapperStyle,
