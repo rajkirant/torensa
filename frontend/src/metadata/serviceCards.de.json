@@ -1479,6 +1479,36 @@
     ]
   },
   {
+    "id": "festival-greeting",
+    "component": "FestivalGreeting",
+    "name": "Festtagsgrüße Generator",
+    "title": "Festtagsgrüße Generator – Animierte Diwali-, Weihnachts- und mehr Grüße",
+    "description": "Erstellen Sie ein personalisiertes animiertes Festtagsgruß-GIF mit Funkeln und einer eigenen Botschaft. Festival auswählen, Nachricht schreiben, Empfängernamen hinzufügen und auf WhatsApp teilen.",
+    "path": "/festival-greeting",
+    "ctaLabel": "Gruß erstellen",
+    "offlineEnabled": false,
+    "aiPowered": false,
+    "authRequired": false,
+    "detailedDescription": "Senden Sie in Sekunden einen wunderschönen animierten Gruß zu jedem Fest. Wählen Sie eine Festvorlage (Diwali zum Start, weitere folgen), eine Nachricht, einen Empfängernamen, und wir erstellen ein animiertes GIF mit funkelnden Sternen und Ihrem Wunsch.",
+    "categoryId": "utilities",
+    "keywords": ["Festtagsgruß", "Diwali Grüße", "animiertes GIF", "personalisierter Gruß", "WhatsApp Gruß"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Festival aus dem Dropdown auswählen.",
+      "Optional Empfängernamen eingeben.",
+      "Eine vorgeschlagene Nachricht wählen oder eigene schreiben.",
+      "Auf Animierten Gruß erstellen klicken und wenige Sekunden warten.",
+      "GIF herunterladen oder direkt auf WhatsApp teilen."
+    ],
+    "faqs": [
+      { "q": "Benötige ich ein Konto?", "a": "Nein, der Generator ist kostenlos ohne Anmeldung nutzbar." },
+      { "q": "Welche Feste werden unterstützt?", "a": "Diwali ist verfügbar. Weitere Feste werden bald hinzugefügt." },
+      { "q": "Spielt das GIF in WhatsApp ab?", "a": "Ja – über die WhatsApp-Schaltfläche auf dem Handy wird die Animation direkt im Chat abgespielt." },
+      { "q": "Kann ich die Nachricht anpassen?", "a": "Ja – wählen Sie eine vorgeschlagene Nachricht oder schreiben Sie Ihre eigene (bis zu 140 Zeichen)." }
+    ]
+  },
+  {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "name": "PDF‑Text‑Extractor (OCR)",

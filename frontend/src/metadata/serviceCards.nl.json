@@ -1474,6 +1474,36 @@
     ]
   },
   {
+    "id": "festival-greeting",
+    "component": "FestivalGreeting",
+    "name": "Festival Wens Generator",
+    "title": "Festival Wens Generator – Geanimeerde Diwali, Kerst & meer wensen",
+    "description": "Maak een persoonlijke geanimeerde festivalwens-GIF met fonkelende effecten en een eigen bericht. Kies een festival, schrijf je bericht, voeg een naam toe en deel via WhatsApp.",
+    "path": "/festival-greeting",
+    "ctaLabel": "Wens maken",
+    "offlineEnabled": false,
+    "aiPowered": false,
+    "authRequired": false,
+    "detailedDescription": "Verstuur in seconden een prachtige geanimeerde wens voor elk festival. Kies een festivalsjabloon (Diwali om mee te beginnen, meer komen eraan), schrijf een persoonlijk bericht, voeg de naam van de ontvanger toe en wij maken een geanimeerde GIF met fonkelende sterren.",
+    "categoryId": "utilities",
+    "keywords": ["festival wens", "diwali wens", "geanimeerde gif", "persoonlijke wens", "whatsapp wens"],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Kies een festival uit het dropdownmenu.",
+      "Voer optioneel de naam van de ontvanger in.",
+      "Kies een voorgesteld bericht of schrijf je eigen.",
+      "Klik op Geanimeerde Wens Maken en wacht enkele seconden.",
+      "Download de GIF of deel direct via WhatsApp."
+    ],
+    "faqs": [
+      { "q": "Heb ik een account nodig?", "a": "Nee, de generator is gratis te gebruiken zonder aanmelden." },
+      { "q": "Welke festivals worden ondersteund?", "a": "Diwali is nu beschikbaar. Meer festivals worden binnenkort toegevoegd." },
+      { "q": "Speelt de GIF in WhatsApp af?", "a": "Ja – via de WhatsApp-knop op een telefoon wordt de animatie direct in de chat afgespeeld." },
+      { "q": "Kan ik het bericht aanpassen?", "a": "Ja – kies een voorgesteld bericht of schrijf je eigen (tot 140 tekens)." }
+    ]
+  },
+  {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "name": "PDF tekstextractor (OCR)",
