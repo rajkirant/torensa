@@ -35,6 +35,9 @@ GIF_WIDTH = 600           # downscaled from 1024 source for size
 NUM_FRAMES = 18
 FRAME_DURATION_MS = 90    # ~1.6s loop
 SPARKLE_COUNT = 32
+FIREWORK_COUNT = 6        # number of concurrent bursts scattered across the loop
+
+EFFECT_CHOICES = {"sparkles", "fireworks"}
 
 
 def _resolve_font(size: int):
@@ -95,6 +98,86 @@ def _build_sparkles_outside_band(width: int, height: int, count: int, band_botto
     return sparkles
 
 
+def _build_fireworks_outside_band(width: int, height: int, count: int, band_bottom: int):
+    """Each firework has a fixed burst center, launch time within the loop, color,
+    ray count, and max radius. Rendering derives per-frame radius/alpha from those.
+    """
+    rng = random.Random(73)
+    safe_top = band_bottom + 20
+    safe_bottom = int(height * 0.75)
+    if safe_bottom <= safe_top:
+        safe_bottom = safe_top + 1
+
+    palettes = [
+        (255, 180, 80),
+        (255, 120, 120),
+        (120, 200, 255),
+        (200, 255, 160),
+        (255, 220, 120),
+        (220, 160, 255),
+    ]
+
+    fireworks = []
+    for i in range(count):
+        fireworks.append({
+            "cx": rng.randint(int(width * 0.08), int(width * 0.92)),
+            "cy": rng.randint(safe_top, safe_bottom),
+            "start": (i / count) + rng.uniform(-0.03, 0.03),  # staggered across the loop
+            "duration": rng.uniform(0.45, 0.6),                # fraction of the loop
+            "rays": rng.randint(10, 14),
+            "max_radius": rng.randint(int(width * 0.12), int(width * 0.18)),
+            "color": rng.choice(palettes),
+            "angle_offset": rng.uniform(0, math.tau),
+        })
+    return fireworks
+
+
+def _draw_firework(draw, fw, t: float):
+    """Render one burst at normalized loop time t ∈ [0, 1)."""
+    # Progress within this firework's own lifetime (wraps around the loop)
+    local = (t - fw["start"]) % 1.0
+    if local > fw["duration"]:
+        return
+    progress = local / fw["duration"]  # 0..1
+
+    # Radius eases out, brightness peaks early then fades
+    radius = fw["max_radius"] * (1 - (1 - progress) ** 2)
+    brightness = max(0.0, 1 - progress) ** 1.3
+    alpha = int(255 * brightness)
+    if alpha <= 0:
+        return
+
+    r, g, b = fw["color"]
+    ray_color = (r, g, b, alpha)
+    spark_color = (255, 255, 230, alpha)
+
+    cx, cy = fw["cx"], fw["cy"]
+    rays = fw["rays"]
+    # Inner gap grows with progress so rays look hollow as the burst expands
+    inner = radius * 0.55
+    for k in range(rays):
+        angle = fw["angle_offset"] + (math.tau * k / rays)
+        x1 = cx + inner * math.cos(angle)
+        y1 = cy + inner * math.sin(angle)
+        x2 = cx + radius * math.cos(angle)
+        y2 = cy + radius * math.sin(angle)
+        draw.line([(x1, y1), (x2, y2)], fill=ray_color, width=2)
+        # Tip spark — small bright dot trailing the ray end
+        draw.ellipse(
+            [x2 - 2, y2 - 2, x2 + 2, y2 + 2],
+            fill=spark_color,
+        )
+
+    # Center flash — strong early, gone by the end
+    core_alpha = int(255 * max(0.0, 1 - progress * 2))
+    if core_alpha > 0:
+        core_r = max(2, int(radius * 0.15))
+        draw.ellipse(
+            [cx - core_r, cy - core_r, cx + core_r, cy + core_r],
+            fill=(255, 240, 200, core_alpha),
+        )
+
+
 def _draw_sparkle(draw, cx: int, cy: int, size: int, color, alpha: int):
     if alpha <= 0:
         return
@@ -132,7 +215,7 @@ def _draw_text_block(base_rgba, lines, font, color, alpha, top_y, line_height):
     return Image.alpha_composite(base_rgba, overlay)
 
 
-def _render_gif(template_path: Path, message: str, recipient: str) -> bytes:
+def _render_gif(template_path: Path, message: str, recipient: str, effect: str = "sparkles") -> bytes:
     from PIL import Image, ImageDraw
 
     base = Image.open(template_path).convert("RGB")
@@ -195,22 +278,38 @@ def _render_gif(template_path: Path, message: str, recipient: str) -> bytes:
         255, msg_top, msg_line_height,
     )
 
-    # Confine sparkles to areas outside the text band
+    # Confine effects to areas outside the text band
     sparkles = _build_sparkles_outside_band(width, height, SPARKLE_COUNT, band_bottom)
+    fireworks = (
+        _build_fireworks_outside_band(width, height, FIREWORK_COUNT, band_bottom)
+        if effect == "fireworks" else []
+    )
     frames = []
 
     for i in range(NUM_FRAMES):
         t = i / NUM_FRAMES
 
-        sparkle_layer = Image.new("RGBA", base_rgba.size, (0, 0, 0, 0))
-        s_draw = ImageDraw.Draw(sparkle_layer)
-        for s in sparkles:
-            phase = (s["phase"] + t * s["speed"]) % 1.0
-            brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
-            alpha = int(50 + brightness * 200)
-            _draw_sparkle(s_draw, s["x"], s["y"], s["size"], s["color"], alpha)
+        fx_layer = Image.new("RGBA", base_rgba.size, (0, 0, 0, 0))
+        fx_draw = ImageDraw.Draw(fx_layer)
 
-        composed = Image.alpha_composite(base_rgba, sparkle_layer)
+        if effect == "fireworks":
+            # Keep a few sparkles as background shimmer so the scene isn't static
+            # between bursts
+            for s in sparkles[: SPARKLE_COUNT // 3]:
+                phase = (s["phase"] + t * s["speed"]) % 1.0
+                brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
+                alpha = int(30 + brightness * 120)
+                _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
+            for fw in fireworks:
+                _draw_firework(fx_draw, fw, t)
+        else:
+            for s in sparkles:
+                phase = (s["phase"] + t * s["speed"]) % 1.0
+                brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
+                alpha = int(50 + brightness * 200)
+                _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
+
+        composed = Image.alpha_composite(base_rgba, fx_layer)
         frames.append(composed.convert("RGB"))
 
     # Shared palette from a mid frame
@@ -242,6 +341,9 @@ def festival_greeting_view(request):
     festival = (payload.get("festival") or "").strip().lower()
     message = (payload.get("message") or "").strip()[:MAX_MESSAGE_LENGTH]
     recipient = (payload.get("recipient") or "").strip()[:MAX_NAME_LENGTH]
+    effect = (payload.get("effect") or "sparkles").strip().lower()
+    if effect not in EFFECT_CHOICES:
+        effect = "sparkles"
 
     if festival not in FESTIVAL_TEMPLATES:
         return Response(
@@ -263,7 +365,7 @@ def festival_greeting_view(request):
         )
 
     try:
-        gif_bytes = _render_gif(template_path, message, recipient)
+        gif_bytes = _render_gif(template_path, message, recipient, effect)
     except Exception as exc:
         return Response(
             {"error": f"Failed to render greeting: {exc}"},
@@ -288,6 +390,10 @@ def festival_options_view(request):
                 "messages": DEFAULT_MESSAGES.get(fid, []),
             }
             for fid in FESTIVAL_TEMPLATES
+        ],
+        "effects": [
+            {"id": "sparkles", "label": "Sparkles"},
+            {"id": "fireworks", "label": "Fireworks"},
         ],
     }, status=status.HTTP_200_OK)
 

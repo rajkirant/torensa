@@ -7,8 +7,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import DownloadIcon from "@mui/icons-material/Download";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import CelebrationIcon from "@mui/icons-material/Celebration";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -22,6 +26,8 @@ type FestivalOption = {
   templateUrl: string;
   messages: string[];
 };
+
+type EffectId = "sparkles" | "fireworks";
 
 const SHARE_URL = "https://torensa.com/festival-greeting";
 
@@ -39,6 +45,7 @@ export default function FestivalGreeting() {
   const [festivalId, setFestivalId] = useState<string>("");
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
+  const [effect, setEffect] = useState<EffectId>("sparkles");
   const [loading, setLoading] = useState(false);
   const [gifData, setGifData] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<{
@@ -97,6 +104,7 @@ export default function FestivalGreeting() {
           festival: festivalId,
           message: message.trim(),
           recipient: recipient.trim(),
+          effect,
         }),
       });
       const data = await response.json();
@@ -115,7 +123,10 @@ export default function FestivalGreeting() {
       setGifData(b64);
       setStatusMessage({ success: "Your greeting is ready!" });
       setTimeout(() => {
-        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        resultRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }, 100);
     } catch {
       setStatusMessage({ error: "Network error. Please try again." });
@@ -190,7 +201,9 @@ export default function FestivalGreeting() {
           fullWidth
           disabled={festivals.length === 0}
           helperText={
-            festivals.length === 0 ? "Loading festivals…" : "More festivals coming soon"
+            festivals.length === 0
+              ? "Loading festivals…"
+              : "More festivals coming soon"
           }
         >
           {festivals.map((f) => (
@@ -219,7 +232,7 @@ export default function FestivalGreeting() {
           label="Recipient name (optional)"
           value={recipient}
           onChange={(e) => setRecipient(e.target.value)}
-          placeholder="e.g. Mani"
+          placeholder="e.g. Raj"
           fullWidth
           inputProps={{ maxLength: 40 }}
         />
@@ -236,7 +249,9 @@ export default function FestivalGreeting() {
           inputProps={{ maxLength: 140 }}
           helperText={
             selectedFestival && selectedFestival.messages.length > 0 ? (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5 }}>
+              <Box
+                sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 0.5 }}
+              >
                 {selectedFestival.messages.map((m) => (
                   <Box
                     key={m}
@@ -267,19 +282,51 @@ export default function FestivalGreeting() {
           }
         />
 
+        <Box>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: "block", mb: 0.75 }}
+          >
+            Animation effect
+          </Typography>
+          <ToggleButtonGroup
+            value={effect}
+            exclusive
+            onChange={(_, val) => {
+              if (val) setEffect(val as EffectId);
+            }}
+            size="small"
+            color="primary"
+          >
+            <ToggleButton value="sparkles">
+              <AutoAwesomeIcon fontSize="small" sx={{ mr: 0.75 }} />
+              Sparkles
+            </ToggleButton>
+            <ToggleButton value="fireworks">
+              <CelebrationIcon fontSize="small" sx={{ mr: 0.75 }} />
+              Fireworks
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
+
         <FlexWrapRow>
           <TransparentButton
             label={loading ? "Creating…" : "Create Animated Greeting"}
             onClick={handleGenerate}
             disabled={!canGenerate}
-            startIcon={loading ? <CircularProgress size={16} color="inherit" /> : undefined}
+            startIcon={
+              loading ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : undefined
+            }
           />
         </FlexWrapRow>
 
         {!loading && !gifData && !statusMessage.error && (
           <Typography variant="caption" color="text.secondary">
-            Pick a festival, optionally add a name, and choose or write a message.
-            Generation takes just a few seconds.
+            Pick a festival, optionally add a name, and choose or write a
+            message. Generation takes just a few seconds.
           </Typography>
         )}
 
@@ -295,7 +342,9 @@ export default function FestivalGreeting() {
           >
             <CircularProgress />
             <Typography variant="body2" color="text.secondary">
-              Animating sparkles… just a few seconds
+              {effect === "fireworks"
+                ? "Lighting up fireworks… just a few seconds"
+                : "Animating sparkles… just a few seconds"}
             </Typography>
           </Box>
         )}
