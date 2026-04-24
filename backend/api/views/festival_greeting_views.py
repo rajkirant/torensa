@@ -62,16 +62,25 @@ def _resolve_font(size: int):
         return ImageFont.load_default()
 
 
-def _wrap_text(draw, text: str, font, max_width: int) -> list[str]:
+def _font_render_scale(draw, font, target_size: int) -> float:
+    bbox = draw.textbbox((0, 0), "Hg", font=font)
+    actual_height = max(1, bbox[3] - bbox[1])
+    if actual_height >= target_size * 0.65:
+        return 1.0
+    return target_size / actual_height
+
+
+def _wrap_text(draw, text: str, font, max_width: int, target_size: int) -> list[str]:
     words = text.split()
     if not words:
         return []
+    font_scale = _font_render_scale(draw, font, target_size)
     lines: list[str] = []
     current = words[0]
     for word in words[1:]:
         candidate = f"{current} {word}"
         bbox = draw.textbbox((0, 0), candidate, font=font)
-        if (bbox[2] - bbox[0]) <= max_width:
+        if (bbox[2] - bbox[0]) * font_scale <= max_width:
             current = candidate
         else:
             lines.append(current)
@@ -482,7 +491,7 @@ def _draw_sparkle(draw, cx: int, cy: int, size: int, color, alpha: int):
     draw.ellipse([cx - 1, cy - 1, cx + 1, cy + 1], fill=(255, 255, 255, alpha))
 
 
-def _draw_text_block(base_rgba, lines, font, color, alpha, top_y, line_height):
+def _draw_text_block(base_rgba, lines, font, color, alpha, top_y, line_height, font_size):
     from PIL import Image, ImageDraw
 
     width = base_rgba.size[0]
@@ -491,16 +500,40 @@ def _draw_text_block(base_rgba, lines, font, color, alpha, top_y, line_height):
     y = top_y
     r, g, b = color
     shadow_alpha = min(230, alpha + 60)
+    font_scale = _font_render_scale(draw, font, font_size)
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font)
         text_w = bbox[2] - bbox[0]
-        x = (width - text_w) // 2
-        # Use Pillow's stroke_width for a clean outline that works on bright/dark backgrounds
-        draw.text(
-            (x, y), line, font=font,
-            fill=(r, g, b, alpha),
-            stroke_width=2, stroke_fill=(0, 0, 0, shadow_alpha),
-        )
+        if font_scale > 1.15:
+            stroke_width = 1
+            line_w = max(1, text_w + stroke_width * 4)
+            line_h = max(1, bbox[3] - bbox[1] + stroke_width * 4)
+            line_layer = Image.new("RGBA", (line_w, line_h), (0, 0, 0, 0))
+            line_draw = ImageDraw.Draw(line_layer)
+            line_draw.text(
+                (stroke_width * 2 - bbox[0], stroke_width * 2 - bbox[1]),
+                line,
+                font=font,
+                fill=(r, g, b, alpha),
+                stroke_width=stroke_width,
+                stroke_fill=(0, 0, 0, shadow_alpha),
+            )
+            scaled_size = (
+                max(1, int(line_w * font_scale)),
+                max(1, int(line_h * font_scale)),
+            )
+            resampling = getattr(Image, "Resampling", Image).BICUBIC
+            line_layer = line_layer.resize(scaled_size, resampling)
+            x = (width - scaled_size[0]) // 2
+            overlay.alpha_composite(line_layer, (x, int(y)))
+        else:
+            x = (width - text_w) // 2
+            # Use Pillow's stroke_width for a clean outline that works on bright/dark backgrounds
+            draw.text(
+                (x, y), line, font=font,
+                fill=(r, g, b, alpha),
+                stroke_width=2, stroke_fill=(0, 0, 0, shadow_alpha),
+            )
         y += line_height
     return Image.alpha_composite(base_rgba, overlay)
 
@@ -516,16 +549,16 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
     width, height = base.size
 
     greeting = f"Dear {recipient}," if recipient else ""
-    msg_font_size = max(28, width // 19)
-    name_font_size = max(24, width // 22)
+    msg_font_size = max(34, width // 16)
+    name_font_size = max(28, width // 18)
     msg_font = _resolve_font(msg_font_size)
     name_font = _resolve_font(name_font_size)
 
     tmp_draw = ImageDraw.Draw(base)
     max_text_width = int(width * 0.82)
-    msg_lines = _wrap_text(tmp_draw, message, msg_font, max_text_width)
-    msg_line_height = int(msg_font_size * 1.3)
-    name_line_height = int(name_font_size * 1.5)
+    msg_lines = _wrap_text(tmp_draw, message, msg_font, max_text_width, msg_font_size)
+    msg_line_height = int(msg_font_size * 1.55)
+    name_line_height = int(name_font_size * 1.6)
 
     text_block_height = (
         (name_line_height if greeting else 0)
@@ -557,7 +590,7 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
     if greeting:
         base_rgba = _draw_text_block(
             base_rgba, [greeting], name_font, name_color,
-            255, text_top_y, name_line_height,
+            255, text_top_y, name_line_height, name_font_size,
         )
         msg_top = text_top_y + name_line_height
     else:
@@ -565,7 +598,7 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
 
     base_rgba = _draw_text_block(
         base_rgba, msg_lines, msg_font, gold,
-        255, msg_top, msg_line_height,
+        255, msg_top, msg_line_height, msg_font_size,
     )
 
     # Confine effects to areas outside the text band
