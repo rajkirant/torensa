@@ -21,7 +21,7 @@ FESTIVAL_TEMPLATES = {
 
 DEFAULT_MESSAGES = {
     "diwali": [
-        "Wishing you a sparkling Diwali filled with light, love and laughter!",
+        "Wishing you and your family a sparkling Diwali filled with light, love and laughter!",
         "May the festival of lights brighten your life with joy and prosperity.",
         "Happy Diwali! May your home glow with happiness this season.",
         "Shubh Deepavali — may every diya light your path to success.",
@@ -37,26 +37,29 @@ FRAME_DURATION_MS = 90    # ~1.6s loop
 SPARKLE_COUNT = 32
 FIREWORK_COUNT = 6        # number of concurrent bursts scattered across the loop
 CONFETTI_COUNT = 45
-BOKEH_COUNT = 14
-DIYA_COUNT = 7
-ROCKET_COUNT = 4
-
-EFFECT_CHOICES = {"sparkles", "fireworks", "confetti", "bokeh", "diyas", "rockets"}
+EFFECT_CHOICES = {"sparkles", "fireworks", "confetti"}
 
 
 def _resolve_font(size: int):
     from PIL import ImageFont
     candidates = [
         "arialbd.ttf", "arial.ttf",
+        "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/dejavu-sans-fonts/DejaVuSans.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/dejavu/DejaVuSans.ttf",
     ]
     for path in candidates:
         try:
             return ImageFont.truetype(path, size)
         except Exception:
             continue
-    return ImageFont.load_default()
+    try:
+        return ImageFont.load_default(size=size)
+    except TypeError:
+        return ImageFont.load_default()
 
 
 def _wrap_text(draw, text: str, font, max_width: int) -> list[str]:
@@ -126,8 +129,11 @@ def _build_fireworks_outside_band(width: int, height: int, count: int, band_bott
         fireworks.append({
             "cx": rng.randint(int(width * 0.08), int(width * 0.92)),
             "cy": rng.randint(safe_top, safe_bottom),
+            "launch_x": rng.randint(int(width * 0.15), int(width * 0.85)),
+            "launch_y": height - 4,
             "start": (i / count) + rng.uniform(-0.03, 0.03),  # staggered across the loop
-            "duration": rng.uniform(0.45, 0.6),                # fraction of the loop
+            "rise_dur": rng.uniform(0.22, 0.28),
+            "burst_dur": rng.uniform(0.38, 0.48),
             "rays": rng.randint(10, 14),
             "max_radius": rng.randint(int(width * 0.12), int(width * 0.18)),
             "color": rng.choice(palettes),
@@ -140,9 +146,32 @@ def _draw_firework(draw, fw, t: float):
     """Render one burst at normalized loop time t ∈ [0, 1)."""
     # Progress within this firework's own lifetime (wraps around the loop)
     local = (t - fw["start"]) % 1.0
-    if local > fw["duration"]:
+    total_duration = fw["rise_dur"] + fw["burst_dur"]
+    if local > total_duration:
         return
-    progress = local / fw["duration"]  # 0..1
+
+    r, g, b = fw["color"]
+
+    if local <= fw["rise_dur"]:
+        progress = local / fw["rise_dur"]
+        start_x, start_y = fw["launch_x"], fw["launch_y"]
+        cx, cy = fw["cx"], fw["cy"]
+        x = start_x + (cx - start_x) * progress
+        y = start_y + (cy - start_y) * progress
+        trail_len = 36 * (1 - progress * 0.35)
+        alpha = int(240 * (1 - progress * 0.25))
+        draw.line(
+            [(x, y), (x, y + trail_len)],
+            fill=(r, g, b, max(30, alpha // 2)),
+            width=3,
+        )
+        draw.ellipse(
+            [x - 3, y - 3, x + 3, y + 3],
+            fill=(255, 255, 230, 255),
+        )
+        return
+
+    progress = (local - fw["rise_dur"]) / fw["burst_dur"]  # 0..1
 
     # Radius eases out, brightness peaks early then fades
     radius = fw["max_radius"] * (1 - (1 - progress) ** 2)
@@ -151,7 +180,6 @@ def _draw_firework(draw, fw, t: float):
     if alpha <= 0:
         return
 
-    r, g, b = fw["color"]
     ray_color = (r, g, b, alpha)
     spark_color = (255, 255, 230, alpha)
 
@@ -488,8 +516,8 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
     width, height = base.size
 
     greeting = f"Dear {recipient}," if recipient else ""
-    msg_font_size = max(22, width // 24)
-    name_font_size = max(18, width // 28)
+    msg_font_size = max(28, width // 19)
+    name_font_size = max(24, width // 22)
     msg_font = _resolve_font(msg_font_size)
     name_font = _resolve_font(name_font_size)
 
@@ -547,16 +575,6 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
         if effect == "fireworks" else []
     )
     confetti = _build_confetti(width, height, CONFETTI_COUNT, band_bottom) if effect == "confetti" else []
-    bokeh = _build_bokeh(width, height, BOKEH_COUNT, band_bottom) if effect == "bokeh" else []
-    diyas = _build_diyas(width, height, DIYA_COUNT) if effect == "diyas" else []
-    rockets = _build_rockets(width, height, ROCKET_COUNT, band_bottom) if effect == "rockets" else []
-
-    # Bake static diya bowls into the base so they don't need to be redrawn each frame
-    if diyas:
-        bowl_layer = Image.new("RGBA", base_rgba.size, (0, 0, 0, 0))
-        bowl_draw = ImageDraw.Draw(bowl_layer)
-        _draw_diyas_static(bowl_draw, diyas)
-        base_rgba = Image.alpha_composite(base_rgba, bowl_layer)
 
     frames = []
 
@@ -579,26 +597,6 @@ def _render_gif(template_path: Path, message: str, recipient: str, effect: str =
         elif effect == "confetti":
             for piece in confetti:
                 _draw_confetti(fx_draw, piece, t)
-        elif effect == "bokeh":
-            for orb in bokeh:
-                _draw_bokeh(fx_draw, orb, t)
-        elif effect == "diyas":
-            for d in diyas:
-                _draw_diya_flame(fx_draw, d, t)
-            # Light shimmer above the lamp row to suggest heat/glow
-            for s in sparkles[: SPARKLE_COUNT // 4]:
-                phase = (s["phase"] + t * s["speed"]) % 1.0
-                brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
-                alpha = int(20 + brightness * 90)
-                _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
-        elif effect == "rockets":
-            for rk in rockets:
-                _draw_rocket(fx_draw, rk, t)
-            for s in sparkles[: SPARKLE_COUNT // 3]:
-                phase = (s["phase"] + t * s["speed"]) % 1.0
-                brightness = (math.sin(phase * 2 * math.pi) + 1) / 2
-                alpha = int(30 + brightness * 120)
-                _draw_sparkle(fx_draw, s["x"], s["y"], s["size"], s["color"], alpha)
         else:
             for s in sparkles:
                 phase = (s["phase"] + t * s["speed"]) % 1.0
@@ -691,10 +689,7 @@ def festival_options_view(request):
         "effects": [
             {"id": "sparkles", "label": "Sparkles"},
             {"id": "fireworks", "label": "Fireworks"},
-            {"id": "rockets", "label": "Rockets"},
             {"id": "confetti", "label": "Confetti"},
-            {"id": "diyas", "label": "Diyas"},
-            {"id": "bokeh", "label": "Bokeh"},
         ],
     }, status=status.HTTP_200_OK)
 

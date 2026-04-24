@@ -2,7 +2,7 @@ FROM public.ecr.aws/lambda/python:3.14
 
 # Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
 RUN dnf install -y \
-      libgomp fontconfig \
+      libgomp fontconfig dejavu-sans-fonts \
       libX11 libXext libXrender libXinerama libX11-xcb \
       cups-libs \
       nss \
