@@ -246,19 +246,11 @@ export default function Home() {
   const canLoadMoreCards = visibleCount < filteredCards.length;
   const canLoadMoreOfflineCards = visibleCount < filteredOfflineCards.length;
 
-  const [hasInteracted, setHasInteracted] = React.useState(
-    () =>
-      selectedCategoryId !== "all" ||
-      new URLSearchParams(window.location.search).has("q"),
-  );
-  React.useEffect(() => {
-    if (normalizedSearchTerm || selectedCategoryId !== "all") {
-      setHasInteracted(true);
-    }
-  }, [normalizedSearchTerm, selectedCategoryId]);
+  const hasSearched = React.useRef(false);
+  if (normalizedSearchTerm) hasSearched.current = true;
 
   const showHero =
-    !hasInteracted && selectedCategoryId === "all" && !normalizedSearchTerm;
+    !hasSearched.current && selectedCategoryId === "all" && !normalizedSearchTerm;
   const shouldForceEnglishPrefix =
     location.pathname === "/en" || location.pathname.startsWith("/en/");
   const langPath = React.useCallback(
