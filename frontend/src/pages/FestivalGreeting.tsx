@@ -13,6 +13,10 @@ import DownloadIcon from "@mui/icons-material/Download";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CelebrationIcon from "@mui/icons-material/Celebration";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import BubbleChartIcon from "@mui/icons-material/BubbleChart";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { TransparentButton } from "../components/buttons/TransparentButton";
@@ -27,7 +31,13 @@ type FestivalOption = {
   messages: string[];
 };
 
-type EffectId = "sparkles" | "fireworks";
+type EffectId =
+  | "sparkles"
+  | "fireworks"
+  | "rockets"
+  | "confetti"
+  | "diyas"
+  | "bokeh";
 
 const SHARE_URL = "https://torensa.com/festival-greeting";
 
@@ -298,6 +308,7 @@ export default function FestivalGreeting() {
             }}
             size="small"
             color="primary"
+            sx={{ flexWrap: "wrap", gap: 0.5 }}
           >
             <ToggleButton value="sparkles">
               <AutoAwesomeIcon fontSize="small" sx={{ mr: 0.75 }} />
@@ -306,6 +317,22 @@ export default function FestivalGreeting() {
             <ToggleButton value="fireworks">
               <CelebrationIcon fontSize="small" sx={{ mr: 0.75 }} />
               Fireworks
+            </ToggleButton>
+            <ToggleButton value="rockets">
+              <RocketLaunchIcon fontSize="small" sx={{ mr: 0.75 }} />
+              Rockets
+            </ToggleButton>
+            <ToggleButton value="confetti">
+              <EmojiEventsIcon fontSize="small" sx={{ mr: 0.75 }} />
+              Confetti
+            </ToggleButton>
+            <ToggleButton value="diyas">
+              <LocalFireDepartmentIcon fontSize="small" sx={{ mr: 0.75 }} />
+              Diyas
+            </ToggleButton>
+            <ToggleButton value="bokeh">
+              <BubbleChartIcon fontSize="small" sx={{ mr: 0.75 }} />
+              Bokeh
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>
@@ -342,9 +369,16 @@ export default function FestivalGreeting() {
           >
             <CircularProgress />
             <Typography variant="body2" color="text.secondary">
-              {effect === "fireworks"
-                ? "Lighting up fireworks… just a few seconds"
-                : "Animating sparkles… just a few seconds"}
+              {
+                {
+                  sparkles: "Animating sparkles… just a few seconds",
+                  fireworks: "Lighting up fireworks… just a few seconds",
+                  rockets: "Launching rockets… just a few seconds",
+                  confetti: "Dropping confetti… just a few seconds",
+                  diyas: "Lighting the diyas… just a few seconds",
+                  bokeh: "Conjuring warm bokeh… just a few seconds",
+                }[effect]
+              }
             </Typography>
           </Box>
         )}
