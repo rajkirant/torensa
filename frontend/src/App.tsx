@@ -78,17 +78,19 @@ type AppProps = {
  * Outlet context provided to pages (e.g. Home)
  * so Root.tsx can keep routes simple: <Home />
  */
+type CategoryConfig = {
+  id: string;
+  label: string;
+};
+
 export type AppOutletContext = {
   secondaryTextColor: string;
   sectionBase: typeof sectionBase;
   cardStyle: typeof cardStyle;
   selectedCategoryId: string;
   selectedCategoryLabel: string;
-};
-
-type CategoryConfig = {
-  id: string;
-  label: string;
+  setSelectedCategoryId: (categoryId: string) => void;
+  visibleCategoryOptions: CategoryConfig[];
 };
 
 export default function App({ themeName, setThemeName }: AppProps) {
@@ -469,6 +471,8 @@ export default function App({ themeName, setThemeName }: AppProps) {
                   cardStyle: themedCardStyle,
                   selectedCategoryId,
                   selectedCategoryLabel,
+                  setSelectedCategoryId,
+                  visibleCategoryOptions,
                 } satisfies AppOutletContext
               }
             />

@@ -133,6 +133,8 @@ export default function Home() {
     cardStyle,
     selectedCategoryId,
     selectedCategoryLabel,
+    setSelectedCategoryId,
+    visibleCategoryOptions,
   } = useOutletContext<AppOutletContext>();
 
   const navigate = useNavigate();
@@ -179,6 +181,32 @@ export default function Home() {
     width: `min(100%, ${cardsMaxWidth}px)`,
     margin: "0 auto 24px",
   };
+  const categoriesWrapperStyle: CSSProperties = {
+    width: `min(100%, ${cardsMaxWidth}px)`,
+    margin: "0 auto 16px",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 8,
+  };
+  const categoryChipBaseStyle: CSSProperties = {
+    padding: "6px 14px",
+    borderRadius: 999,
+    border: `1px solid ${outlinedBorderColor}`,
+    backgroundColor: "transparent",
+    color: secondaryTextColor,
+    fontSize: 13,
+    fontWeight: 600,
+    cursor: "pointer",
+    textTransform: "none",
+    lineHeight: 1.4,
+  };
+  const categoryChipActiveStyle: CSSProperties = {
+    ...categoryChipBaseStyle,
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    borderColor: theme.palette.primary.main,
+  };
   const loadMoreButtonStyle: CSSProperties = {
     width: "100%",
     padding: "10px 14px",
@@ -218,7 +246,19 @@ export default function Home() {
   const canLoadMoreCards = visibleCount < filteredCards.length;
   const canLoadMoreOfflineCards = visibleCount < filteredOfflineCards.length;
 
-  const showHero = selectedCategoryId === "all" && !normalizedSearchTerm;
+  const [hasInteracted, setHasInteracted] = React.useState(
+    () =>
+      selectedCategoryId !== "all" ||
+      new URLSearchParams(window.location.search).has("q"),
+  );
+  React.useEffect(() => {
+    if (normalizedSearchTerm || selectedCategoryId !== "all") {
+      setHasInteracted(true);
+    }
+  }, [normalizedSearchTerm, selectedCategoryId]);
+
+  const showHero =
+    !hasInteracted && selectedCategoryId === "all" && !normalizedSearchTerm;
   const shouldForceEnglishPrefix =
     location.pathname === "/en" || location.pathname.startsWith("/en/");
   const langPath = React.useCallback(
@@ -261,6 +301,37 @@ export default function Home() {
       );
     }
   }, [selectedCategoryId, location.pathname, location.search, navigate]);
+
+  const categoryChips = visibleCategoryOptions.length > 0 && (
+    <div style={categoriesWrapperStyle} role="group" aria-label="Categories">
+      <button
+        type="button"
+        style={
+          selectedCategoryId === "all"
+            ? categoryChipActiveStyle
+            : categoryChipBaseStyle
+        }
+        aria-pressed={selectedCategoryId === "all"}
+        onClick={() => setSelectedCategoryId("all")}
+      >
+        {t("nav.allCategories")}
+      </button>
+      {visibleCategoryOptions.map((category) => {
+        const isActive = category.id === selectedCategoryId;
+        return (
+          <button
+            key={category.id}
+            type="button"
+            style={isActive ? categoryChipActiveStyle : categoryChipBaseStyle}
+            aria-pressed={isActive}
+            onClick={() => setSelectedCategoryId(category.id)}
+          >
+            {category.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 
   const searchInput = (
     <div style={searchWrapperStyle}>
@@ -322,6 +393,8 @@ export default function Home() {
         >
           {t("home.offlineBody")}
         </p>
+
+        {categoryChips}
 
         {searchInput}
 
@@ -418,6 +491,8 @@ export default function Home() {
             </p>
           </div>
         )}
+
+        {categoryChips}
 
         {searchInput}
 
