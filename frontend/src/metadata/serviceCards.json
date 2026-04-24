@@ -1487,6 +1487,58 @@
     ]
   },
   {
+    "id": "festival-greeting",
+    "component": "FestivalGreeting",
+    "name": "Festival Greeting Generator",
+    "title": "Festival Greeting Generator - Animated Diwali, Christmas & More",
+    "description": "Create a personalised animated festival greeting GIF with sparkles and a custom message. Pick a festival, write your message, add a recipient name, and share on WhatsApp.",
+    "path": "/festival-greeting",
+    "ctaLabel": "Create Greeting",
+    "offlineEnabled": false,
+    "aiPowered": false,
+    "authRequired": false,
+    "detailedDescription": "Send a beautiful animated greeting for any festival in seconds. Choose a festival template (Diwali to start, more coming), pick or write a personalised message, add the recipient's name, and we'll generate an animated GIF with twinkling sparkles and your custom greeting. Perfect for sharing in WhatsApp groups, family chats, or social media.",
+    "categoryId": "utilities",
+    "keywords": [
+      "festival greeting",
+      "diwali greeting",
+      "happy diwali",
+      "animated gif greeting",
+      "personalised greeting",
+      "whatsapp greeting",
+      "festival wishes",
+      "diwali wishes",
+      "greeting card maker"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pick a festival from the dropdown.",
+      "Optionally enter the recipient's name.",
+      "Choose a suggested message or write your own.",
+      "Click Create Animated Greeting and wait a few seconds.",
+      "Download the GIF or share it directly on WhatsApp."
+    ],
+    "faqs": [
+      {
+        "q": "Do I need an account to use this?",
+        "a": "No, the Festival Greeting Generator is free to use without signing in."
+      },
+      {
+        "q": "What festivals are supported?",
+        "a": "Diwali is available now. More festivals will be added soon."
+      },
+      {
+        "q": "Will the GIF play in WhatsApp?",
+        "a": "Yes — share via the WhatsApp button on a phone and the animation plays inline. From a desktop browser, you can download the GIF and attach it manually."
+      },
+      {
+        "q": "Can I customise the message?",
+        "a": "Yes — pick one of the suggested messages or write your own (up to 140 characters)."
+      }
+    ]
+  },
+  {
     "id": "pdf-text-extractor",
     "component": "PdfTextExtractor",
     "name": "PDF Text Extractor (OCR)",
