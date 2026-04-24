@@ -95,14 +95,34 @@ export default function BirthdayCakeGenerator() {
     downloadBlob(blob, `${safeName}-birthday-cake.png`);
   };
 
-  const handleShareWhatsApp = () => {
+  const handleShareWhatsApp = async () => {
     if (!imageData) return;
     const blob = base64ToBlob(imageData, "image/png");
     const safeName = name.trim() ? name.trim().replace(/\s+/g, "-") : "birthday-cake";
-    downloadBlob(blob, `${safeName}-birthday-cake.png`);
+    const fileName = `${safeName}-birthday-cake.png`;
     const text = name.trim()
       ? `Happy Birthday ${name.trim()}! 🎂 Generated at https://torensa.com/birthday-cake-generator`
       : `Happy Birthday! 🎂 Generated at https://torensa.com/birthday-cake-generator`;
+
+    const file = new File([blob], fileName, { type: "image/png" });
+    const canShareFiles =
+      typeof navigator !== "undefined" &&
+      typeof navigator.canShare === "function" &&
+      navigator.canShare({ files: [file] });
+
+    if (canShareFiles) {
+      try {
+        await navigator.share({ files: [file], text });
+        return;
+      } catch (err) {
+        if ((err as DOMException)?.name === "AbortError") return;
+      }
+    }
+
+    downloadBlob(blob, fileName);
+    setStatusMessage({
+      success: "Image downloaded — attach it in WhatsApp to share.",
+    });
     window.open(
       `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`,
       "_blank",
