@@ -246,11 +246,13 @@ export default function Home() {
   const canLoadMoreCards = visibleCount < filteredCards.length;
   const canLoadMoreOfflineCards = visibleCount < filteredOfflineCards.length;
 
-  const hasSearched = React.useRef(false);
-  if (normalizedSearchTerm) hasSearched.current = true;
+  const [heroHidden, setHeroHidden] = React.useState(false);
+  React.useEffect(() => {
+    if (normalizedSearchTerm) setHeroHidden(true);
+  }, [normalizedSearchTerm]);
 
   const showHero =
-    !hasSearched.current && selectedCategoryId === "all" && !normalizedSearchTerm;
+    !heroHidden && selectedCategoryId === "all" && !normalizedSearchTerm;
   const shouldForceEnglishPrefix =
     location.pathname === "/en" || location.pathname.startsWith("/en/");
   const langPath = React.useCallback(
