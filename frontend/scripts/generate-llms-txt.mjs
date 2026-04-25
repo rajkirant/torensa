@@ -20,6 +20,8 @@ const siteUrl = (process.env.SITE_URL || "https://torensa.com").replace(
 
 const categoryOrder = [
   "business",
+  "documents",
+  "entertainment",
   "communication",
   "utilities",
   "developer",
@@ -27,24 +29,21 @@ const categoryOrder = [
 
 const categoryLabels = {
   business: "Business Tools",
+  documents: "Document Tools",
+  entertainment: "Entertainment Tools",
   communication: "Communication Tools",
   utilities: "Image Tools",
   developer: "Developer Tools",
 };
 
 // Some utilities are better grouped under more specific headings.
-// Cards whose id starts with "image" or whose categoryId is "utilities" but are
-// document/PDF/data/media oriented get a different heading.
+// Cards whose id starts with "image" are shown before the remaining
+// data/media utilities.
 const utilitiesSubgroups = [
   {
     label: "Image Tools",
     test: (card) =>
       card.id.startsWith("image-") || card.id === "image-generator",
-  },
-  {
-    label: "PDF & Document Tools",
-    test: (card) =>
-      /pdf|word|excel/.test(card.id) || /pdf|word|excel|doc/.test((card.keywords || []).join(" ")),
   },
   {
     label: "Data & Media Tools",
