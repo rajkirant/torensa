@@ -251,8 +251,7 @@ export default function Home() {
     if (normalizedSearchTerm) setHeroHidden(true);
   }, [normalizedSearchTerm]);
 
-  const showHero =
-    !heroHidden && selectedCategoryId === "all" && !normalizedSearchTerm;
+  const showHero = !heroHidden && !normalizedSearchTerm;
   const showIntroText = !normalizedSearchTerm;
   const shouldForceEnglishPrefix =
     location.pathname === "/en" || location.pathname.startsWith("/en/");
