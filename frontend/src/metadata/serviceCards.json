@@ -499,7 +499,7 @@
     "offlineEnabled": true,
     "authRequired": false,
     "detailedDescription": "Combine multiple images and PDF documents into a single PDF file. Reorder items, rotate images, choose page size and margins, set fit behavior, and optionally add page numbers. Built with client-side processing for privacy and speed.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "image",
       "photo",
@@ -557,7 +557,7 @@
     "offlineEnabled": true,
     "authRequired": false,
     "detailedDescription": "Upload a PDF and split it locally in your browser. Extract selected pages into a single PDF, or generate one PDF per page as a ZIP download. All processing runs on-device for privacy and offline use.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "pdf",
       "split",
@@ -1254,7 +1254,7 @@
     "offlineEnabled": false,
     "authRequired": false,
     "detailedDescription": "Upload a Word document (.doc or .docx) and convert it to a PDF in seconds. Conversion runs on the server using LibreOffice, preserving fonts, tables, images, and formatting. Files are processed in memory and never stored.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "word",
       "docx",
@@ -1301,7 +1301,7 @@
     "offlineEnabled": false,
     "authRequired": false,
     "detailedDescription": "Upload an Excel spreadsheet (.xls, .xlsx, or .xlsm) and convert it to a PDF in seconds. Conversion runs on the server using LibreOffice, preserving sheet formatting, tables, and charts. Files are processed in memory and never stored.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "excel",
       "xls",
@@ -1349,7 +1349,7 @@
     "offlineEnabled": false,
     "authRequired": false,
     "detailedDescription": "Upload a PDF and convert it to an editable .docx file. Conversion runs on the server using LibreOffice, preserving layout and text. Files are processed in memory and never stored.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "pdf",
       "word",
@@ -1447,7 +1447,7 @@
     "aiPowered": true,
     "authRequired": false,
     "detailedDescription": "Create stunning, photorealistic birthday cake images in seconds using AI image generation powered by Hugging Face. Simply enter the birthday person's name and age, choose a theme (chocolate, floral, galaxy, and more), and the AI generates a professional-quality cake photo. Perfect for birthday cards, social media posts, or WhatsApp messages. Download as PNG or share directly.",
-    "categoryId": "utilities",
+    "categoryId": "entertainment",
     "keywords": [
       "birthday cake",
       "ai birthday cake",
@@ -1498,7 +1498,7 @@
     "aiPowered": false,
     "authRequired": false,
     "detailedDescription": "Send a beautiful animated greeting for any festival in seconds. Choose a festival template (Diwali to start, more coming), pick or write a personalised message, add the recipient's name, and we'll generate an animated GIF with twinkling sparkles and your custom greeting. Perfect for sharing in WhatsApp groups, family chats, or social media.",
-    "categoryId": "utilities",
+    "categoryId": "entertainment",
     "keywords": [
       "festival greeting",
       "diwali greeting",
@@ -1549,7 +1549,7 @@
     "offlineEnabled": false,
     "authRequired": false,
     "detailedDescription": "Upload any PDF — whether it contains selectable text or scanned images — and extract all readable text. Digital PDFs are parsed directly for perfect accuracy, while scanned pages are processed with Tesseract OCR. Copy the result to your clipboard or download as a .txt file.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "pdf",
       "ocr",
@@ -1606,7 +1606,7 @@
     "offlineEnabled": true,
     "authRequired": false,
     "detailedDescription": "Upload an Excel, CSV, or JSON file and convert it to either of the other two formats. All parsing and conversion happen client-side, so your files stay on your device.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "excel",
       "csv",
@@ -2338,7 +2338,7 @@
     "authRequired": false,
     "aiPowered": false,
     "detailedDescription": "PDF Builder is a free, browser-based rich-text editor that lets you write, format, and export documents as PDF files — entirely offline, with no data ever leaving your device. Use the formatting toolbar to apply bold, italic, underline, strikethrough, headings (H1–H3), text alignment, bullet and numbered lists, custom font sizes, font families, and text or highlight colors. Choose between A4, Letter, or Legal page sizes and set a custom file name before downloading. Everything runs in your browser using html2canvas and jsPDF — no account or internet connection required after the page loads.",
-    "categoryId": "utilities",
+    "categoryId": "documents",
     "keywords": [
       "pdf builder",
       "create pdf online",

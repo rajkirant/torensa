@@ -24,6 +24,22 @@
     "enabled": true
   },
   {
+    "id": "documents",
+    "label": "Documents",
+    "description": "PDF, Word, spreadsheet, and document conversion tools",
+    "icon": "description",
+    "sortOrder": 32,
+    "enabled": true
+  },
+  {
+    "id": "entertainment",
+    "label": "Entertainment",
+    "description": "Creative and celebratory tools",
+    "icon": "celebration",
+    "sortOrder": 34,
+    "enabled": true
+  },
+  {
     "id": "health-wellbeing",
     "label": "Health & Wellbeing",
     "description": "Tools for wellness, fitness, and daily motivation",
