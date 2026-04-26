@@ -317,6 +317,28 @@ class CustomChatbotMessage(models.Model):
         return f"[{self.role}] {self.content[:60]}"
 
 
+class ToolReview(models.Model):
+    """A user review and star rating for a tool (identified by its URL path)."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="tool_reviews",
+    )
+    tool_path = models.CharField(max_length=255, db_index=True)
+    rating = models.PositiveSmallIntegerField()  # 1–5
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "tool_path")
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.username} — {self.tool_path} ({self.rating}★)"
+
+
 class PublicVisitorSession(models.Model):
     """Tracks public (unauthenticated) visitor chat history keyed by browser fingerprint."""
 
