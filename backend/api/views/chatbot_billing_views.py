@@ -305,10 +305,10 @@ def create_checkout_view(request):
             },
             "theme": {"color": settings.RAZORPAY_THEME_COLOR},
         })
-    except Exception:
+    except Exception as e:
         logger.exception("Razorpay checkout error for user %s", request.user.pk)
         return Response(
-            {"error": "Could not create Razorpay checkout. Please try again."},
+            {"error": "Could not create Razorpay checkout. Please try again.", "detail": str(e)},
             status=status.HTTP_502_BAD_GATEWAY,
         )
 

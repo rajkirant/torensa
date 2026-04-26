@@ -38,7 +38,18 @@
       "Bash(aws sts get-caller-identity *)",
       "PowerShell(aws dynamodb *)",
       "PowerShell(aws lambda *)",
-      "PowerShell(aws logs *)"
+      "PowerShell(aws logs *)",
+      "Bash(python ' *)",
+      "Bash(python -c ' *)",
+      "Bash(ls *.txt)",
+      "Bash(ls requirements*)",
+      "Bash(ls .venv/Scripts/python*)",
+      "Bash(ls env/Scripts/python*)",
+      "Bash(ls ../venv/Scripts/python*)",
+      "Bash(venv/Scripts/python.exe -c ' *)",
+      "Bash(.venv/Scripts/python.exe -c \"import django; print\\(django.__version__\\); import yt_dlp; print\\(yt_dlp.version.__version__\\)\")",
+      "Bash(.venv/Scripts/python.exe -c ' *)",
+      "Bash(.venv/Scripts/python.exe -c \"import yt_dlp; print\\(yt_dlp.version.__version__\\)\")"
     ]
   }
 }

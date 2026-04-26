@@ -27,15 +27,17 @@ def _safe_filename(name: str) -> str:
 
 
 def _find_subtitle_file(tmpdir: str, language: str | None) -> Path | None:
-    candidates = sorted(Path(tmpdir).glob("*.srt"))
-    if not candidates:
-        return None
-    if language:
-        lang = language.lower()
-        for candidate in candidates:
-            if f".{lang}." in candidate.name.lower():
-                return candidate
-    return candidates[0]
+    for ext in ("srt", "vtt"):
+        candidates = sorted(Path(tmpdir).glob(f"*.{ext}"))
+        if not candidates:
+            continue
+        if language:
+            lang = language.lower()
+            for candidate in candidates:
+                if f".{lang}." in candidate.name.lower():
+                    return candidate
+        return candidates[0]
+    return None
 
 
 def _download_subtitles(url: str, tmpdir: str, language: str, auto: bool):
@@ -86,7 +88,10 @@ def subtitle_download_view(request):
                 logger.info("Subtitle download: existing captions not available")
 
             if not subtitle_path:
-                info = _download_subtitles(url, tmpdir, language, auto=True)
+                try:
+                    info = _download_subtitles(url, tmpdir, language, auto=True)
+                except Exception:
+                    logger.info("Subtitle download: auto-generated captions not available")
                 subtitle_path = _find_subtitle_file(tmpdir, language)
 
             if not subtitle_path:
@@ -97,9 +102,11 @@ def subtitle_download_view(request):
 
             title = _safe_filename((info or {}).get("title") or "subtitles")
             lang_suffix = language or "sub"
-            output_name = f"{title}.{lang_suffix}.srt"
+            file_ext = subtitle_path.suffix.lstrip(".")
+            output_name = f"{title}.{lang_suffix}.{file_ext}"
 
-            response = HttpResponse(subtitle_bytes, content_type="application/x-subrip")
+            content_type = "application/x-subrip" if file_ext == "srt" else "text/vtt"
+            response = HttpResponse(subtitle_bytes, content_type=content_type)
             response["Content-Disposition"] = f'attachment; filename="{output_name}"'
             response["Content-Length"] = str(len(subtitle_bytes))
             return response
