@@ -170,7 +170,7 @@ class HabitLog(models.Model):
 
 
 class ChatbotSubscription(models.Model):
-    """Stripe subscription record for the chatbot feature."""
+    """Subscription record for the chatbot feature."""
 
     PLAN_FREE = "free"
     PLAN_STARTER = "starter"
@@ -187,6 +187,7 @@ class ChatbotSubscription(models.Model):
     STATUS_CANCELED = "canceled"
     STATUS_PAST_DUE = "past_due"
     STATUS_TRIALING = "trialing"
+    RAZORPAY_ACTIVE_STATUSES = ("active", "authenticated")
 
     user = models.OneToOneField(
         User,
@@ -194,9 +195,13 @@ class ChatbotSubscription(models.Model):
         related_name="chatbot_subscription",
     )
     plan = models.CharField(max_length=20, choices=PLAN_CHOICES, default=PLAN_FREE)
+    billing_provider = models.CharField(max_length=32, blank=True)
     stripe_customer_id = models.CharField(max_length=128, blank=True)
     stripe_subscription_id = models.CharField(max_length=128, blank=True)
     stripe_status = models.CharField(max_length=32, blank=True)
+    razorpay_customer_id = models.CharField(max_length=128, blank=True)
+    razorpay_subscription_id = models.CharField(max_length=128, blank=True)
+    razorpay_status = models.CharField(max_length=32, blank=True)
     current_period_end = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -209,9 +214,11 @@ class ChatbotSubscription(models.Model):
 
     @property
     def is_active_paid(self):
-        return self.plan != self.PLAN_FREE and self.stripe_status in (
-            self.STATUS_ACTIVE, self.STATUS_TRIALING
-        )
+        if self.plan == self.PLAN_FREE:
+            return False
+        if self.billing_provider == "razorpay":
+            return self.razorpay_status in self.RAZORPAY_ACTIVE_STATUSES
+        return self.stripe_status in (self.STATUS_ACTIVE, self.STATUS_TRIALING)
 
 
 class ChatbotMonthlyUsage(models.Model):

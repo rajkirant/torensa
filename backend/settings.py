@@ -308,6 +308,26 @@ STRIPE_PRICE_BUSINESS = os.getenv("STRIPE_PRICE_BUSINESS", "")  # €39.99/mo
 STRIPE_SUCCESS_URL = os.getenv("STRIPE_SUCCESS_URL", "https://torensa.com/custom-chatbot-builder?checkout=success")
 STRIPE_CANCEL_URL = os.getenv("STRIPE_CANCEL_URL", "https://torensa.com/chatbot-plans")
 
+# ---------- Razorpay ----------
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_WEBHOOK_SECRET = os.getenv("RAZORPAY_WEBHOOK_SECRET", "")
+
+# Plan IDs - create these in Razorpay Subscriptions and set via env vars.
+RAZORPAY_PLAN_STARTER = os.getenv("RAZORPAY_PLAN_STARTER", "")
+RAZORPAY_PLAN_PRO = os.getenv("RAZORPAY_PLAN_PRO", "")
+RAZORPAY_PLAN_BUSINESS = os.getenv("RAZORPAY_PLAN_BUSINESS", "")
+
+RAZORPAY_BUSINESS_NAME = os.getenv("RAZORPAY_BUSINESS_NAME", "Torensa")
+RAZORPAY_LOGO_URL = os.getenv("RAZORPAY_LOGO_URL", "")
+RAZORPAY_THEME_COLOR = os.getenv("RAZORPAY_THEME_COLOR", "#2563eb")
+RAZORPAY_SUCCESS_URL = os.getenv(
+    "RAZORPAY_SUCCESS_URL",
+    "https://torensa.com/custom-chatbot-builder?checkout=success",
+)
+RAZORPAY_CANCEL_URL = os.getenv("RAZORPAY_CANCEL_URL", "https://torensa.com/chatbot-plans")
+RAZORPAY_SUBSCRIPTION_TOTAL_COUNT = _env_int("RAZORPAY_SUBSCRIPTION_TOTAL_COUNT", 1200)
+
 # ---------- Chatbot plan limits ----------
 CHATBOT_PLANS = {
     "free":     {"messages": 50,     "bots": 1,  "metadata_chars": 2_000},

@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { useTheme, alpha } from "@mui/material/styles";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import PageContainer from "../../components/PageContainer";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
@@ -30,18 +30,81 @@ interface Plan {
   features: string[];
   cta: string;
   highlight: boolean;
-  stripe_price_id: string | null;
+  razorpay_plan_id: string | null;
 }
 
 interface BillingStatus {
   plan: string;
-  stripe_status: string;
+  provider: string;
+  billing_status: string;
+  stripe_status?: string;
+  razorpay_status?: string;
   current_period_end: string | null;
   usage: { month: string; messages_used: number; messages_limit: number };
   limits: { bots: number; metadata_chars: number; messages_per_month: number };
 }
 
+interface RazorpayResponse {
+  razorpay_payment_id: string;
+  razorpay_subscription_id: string;
+  razorpay_signature: string;
+}
+
+interface RazorpayCheckoutOptions {
+  key: string;
+  subscription_id: string;
+  name: string;
+  description: string;
+  image?: string;
+  prefill?: { name?: string; email?: string; contact?: string };
+  theme?: { color?: string };
+  handler: (response: RazorpayResponse) => void;
+  modal?: { ondismiss?: () => void };
+}
+
+interface RazorpayCheckoutPayload {
+  provider: "razorpay";
+  key_id: string;
+  subscription_id: string;
+  checkout_url?: string;
+  name: string;
+  description: string;
+  image?: string;
+  success_url?: string;
+  prefill?: { name?: string; email?: string; contact?: string };
+  theme?: { color?: string };
+}
+
+declare global {
+  interface Window {
+    Razorpay?: new (options: RazorpayCheckoutOptions) => { open: () => void };
+  }
+}
+
 const CHAT_FONT = `"Space Grotesk", "Avenir Next", "Segoe UI", sans-serif`;
+const RAZORPAY_SCRIPT_URL = "https://checkout.razorpay.com/v1/checkout.js";
+
+function loadRazorpayScript() {
+  if (window.Razorpay) return Promise.resolve(true);
+
+  return new Promise<boolean>((resolve) => {
+    const existing = document.querySelector<HTMLScriptElement>(
+      `script[src="${RAZORPAY_SCRIPT_URL}"]`,
+    );
+    if (existing) {
+      existing.addEventListener("load", () => resolve(true), { once: true });
+      existing.addEventListener("error", () => resolve(false), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = RAZORPAY_SCRIPT_URL;
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
 
 export default function ChatbotPlans() {
   const theme = useTheme();
@@ -67,6 +130,7 @@ export default function ChatbotPlans() {
   const [checkingOut, setCheckingOut] = useState<string | null>(null);
   const [openingPortal, setOpeningPortal] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     void (async () => {
@@ -90,6 +154,7 @@ export default function ChatbotPlans() {
       return;
     }
     setError("");
+    setSuccess("");
     setCheckingOut(planId);
     try {
       const res = await apiFetch("/api/chatbots/billing/checkout/", {
@@ -102,7 +167,15 @@ export default function ChatbotPlans() {
         setError(data?.error || "Could not start checkout.");
         return;
       }
-      window.location.href = data.checkout_url;
+      if (data?.provider === "razorpay") {
+        await openRazorpayCheckout(data as RazorpayCheckoutPayload);
+        return;
+      }
+      if (data?.checkout_url) {
+        window.location.href = data.checkout_url;
+        return;
+      }
+      setError("Checkout did not return a payment link.");
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -110,17 +183,77 @@ export default function ChatbotPlans() {
     }
   };
 
-  const handlePortal = async () => {
-    setError("");
-    setOpeningPortal(true);
-    try {
-      const res = await apiFetch("/api/chatbots/billing/portal/", { method: "POST" });
-      const data = await res.json().catch(() => null);
-      if (!res.ok) {
-        setError(data?.error || "Could not open billing portal.");
+  const openRazorpayCheckout = async (payload: RazorpayCheckoutPayload) => {
+    const loaded = await loadRazorpayScript();
+    if (!loaded || !window.Razorpay) {
+      if (payload.checkout_url) {
+        window.location.href = payload.checkout_url;
         return;
       }
-      window.open(data.portal_url, "_blank", "noopener");
+      setError("Could not load Razorpay Checkout. Please try again.");
+      return;
+    }
+
+    const checkout = new window.Razorpay({
+      key: payload.key_id,
+      subscription_id: payload.subscription_id,
+      name: payload.name,
+      description: payload.description,
+      image: payload.image || undefined,
+      prefill: payload.prefill,
+      theme: payload.theme,
+      modal: {
+        ondismiss: () => setCheckingOut(null),
+      },
+      handler: async (response) => {
+        setError("");
+        setCheckingOut(payload.subscription_id);
+        try {
+          const verifyRes = await apiFetch("/api/chatbots/billing/verify/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response),
+          });
+          const verifyData = await verifyRes.json().catch(() => null);
+          if (!verifyRes.ok) {
+            setError(verifyData?.error || "Payment verification failed.");
+            return;
+          }
+          window.location.href =
+            verifyData?.redirect_url ||
+            payload.success_url ||
+            "/custom-chatbot-builder?checkout=success";
+        } catch {
+          setError("Payment completed, but verification failed. Please refresh in a moment.");
+        } finally {
+          setCheckingOut(null);
+        }
+      },
+    });
+    checkout.open();
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!window.confirm("Cancel your current chatbot subscription at the end of this billing cycle?")) {
+      return;
+    }
+    setError("");
+    setSuccess("");
+    setOpeningPortal(true);
+    try {
+      const res = await apiFetch("/api/chatbots/billing/cancel/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cancel_at_cycle_end: true }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setError(data?.error || "Could not cancel subscription.");
+        return;
+      }
+      setSuccess("Cancellation scheduled. Your plan remains active until the current cycle ends.");
+      const statusRes = await apiFetch("/api/chatbots/billing/status/");
+      if (statusRes.ok) setBilling(await statusRes.json());
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -133,6 +266,7 @@ export default function ChatbotPlans() {
     : "linear-gradient(110deg, #0ea5e9 0%, #6366f1 58%, #8b5cf6 100%)";
 
   const activePlan = billing?.plan ?? "free";
+  const billingStatus = billing?.billing_status || billing?.stripe_status || "";
 
   return (
     <PageContainer>
@@ -176,11 +310,11 @@ export default function ChatbotPlans() {
                     <Typography variant="h6" fontWeight={800} sx={{ fontFamily: CHAT_FONT, textTransform: "capitalize" }}>
                       {activePlan}
                     </Typography>
-                    {billing.stripe_status && billing.stripe_status !== "" && (
+                    {billingStatus && (
                       <Chip
-                        label={billing.stripe_status}
+                        label={billingStatus}
                         size="small"
-                        color={billing.stripe_status === "active" ? "success" : "warning"}
+                        color={["active", "authenticated"].includes(billingStatus) ? "success" : "warning"}
                         sx={{ fontWeight: 700, height: 20, fontSize: 11 }}
                       />
                     )}
@@ -198,12 +332,12 @@ export default function ChatbotPlans() {
                 <Button
                   variant="outlined"
                   size="small"
-                  endIcon={openingPortal ? <CircularProgress size={14} /> : <OpenInNewIcon fontSize="small" />}
-                  onClick={() => void handlePortal()}
+                  endIcon={openingPortal ? <CircularProgress size={14} /> : <CancelOutlinedIcon fontSize="small" />}
+                  onClick={() => void handleCancelSubscription()}
                   disabled={openingPortal}
                   sx={{ borderRadius: "10px", fontWeight: 700 }}
                 >
-                  Manage billing
+                  Cancel plan
                 </Button>
               )}
             </Stack>
@@ -232,7 +366,7 @@ export default function ChatbotPlans() {
           </Paper>
         )}
 
-        {error && <ToolStatusAlerts error={error} />}
+        {(error || success) && <ToolStatusAlerts error={error} success={success} />}
 
         {/* ── plan cards ────────────────────────────────────────────────────── */}
         {loadingPlans ? (
@@ -444,7 +578,7 @@ export default function ChatbotPlans() {
           {[
             {
               q: "Can I cancel at any time?",
-              a: "Yes. Cancel from the Manage billing portal. Your plan stays active until the end of the billing period.",
+              a: "Yes. Use Cancel plan to schedule cancellation at the end of the billing period.",
             },
             {
               q: "What happens when I hit the monthly message limit?",
@@ -452,7 +586,7 @@ export default function ChatbotPlans() {
             },
             {
               q: "Can I switch plans mid-month?",
-              a: "Yes. Stripe prorates the charge automatically.",
+              a: "Yes. Choose another plan and complete Razorpay checkout. Your new limits apply after verification.",
             },
             {
               q: "Is there a free trial?",
