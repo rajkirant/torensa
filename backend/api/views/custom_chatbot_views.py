@@ -66,7 +66,7 @@ def _get_plan_limits(user) -> dict:
     plan_id = "free"
     try:
         sub = user.chatbot_subscription
-        if sub.plan != "free" and sub.stripe_status in ("active", "trialing"):
+        if sub.is_active_paid:
             plan_id = sub.plan
     except ChatbotSubscription.DoesNotExist:
         pass

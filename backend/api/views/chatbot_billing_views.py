@@ -1,18 +1,20 @@
 """
-Stripe billing views for the Custom Chatbot Builder feature.
+Razorpay billing views for the Custom Chatbot Builder feature.
 
 Endpoints
-─────────
-GET  /api/chatbots/billing/status/          – current plan, usage, limits
-POST /api/chatbots/billing/checkout/        – create Stripe Checkout session
-POST /api/chatbots/billing/portal/          – create Stripe Customer Portal session
-POST /api/chatbots/billing/webhook/         – Stripe webhook (CSRF-exempt)
-GET  /api/chatbots/billing/plans/           – public plan listing (no auth)
+GET  /api/chatbots/billing/status/       - current plan, usage, limits
+POST /api/chatbots/billing/checkout/     - create Razorpay subscription checkout payload
+POST /api/chatbots/billing/verify/       - verify Razorpay checkout response
+POST /api/chatbots/billing/cancel/       - cancel current Razorpay subscription
+POST /api/chatbots/billing/webhook/      - Razorpay webhook (CSRF-exempt)
+GET  /api/chatbots/billing/plans/        - public plan listing (no auth)
 """
 
+import hmac
 import json
 import logging
 from datetime import datetime, timezone
+from hashlib import sha256
 
 from django.conf import settings
 from django.db import transaction
@@ -27,14 +29,16 @@ from ..models import ChatbotMonthlyUsage, ChatbotSubscription
 
 logger = logging.getLogger(__name__)
 
-# ── plan catalogue ────────────────────────────────────────────────────────────
+RAZORPAY_ACTIVE_STATUSES = ("active", "authenticated")
+RAZORPAY_INACTIVE_STATUSES = ("cancelled", "completed", "expired", "halted")
+
 
 PLANS = [
     {
         "id": "free",
         "name": "Free",
         "price_eur": 0,
-        "price_display": "£0 / month",
+        "price_display": "GBP 0 / month",
         "messages_per_month": 50,
         "bots": 1,
         "metadata_chars": 2_000,
@@ -46,13 +50,13 @@ PLANS = [
         ],
         "cta": "Get started free",
         "highlight": False,
-        "stripe_price_id": None,
+        "razorpay_plan_id": None,
     },
     {
         "id": "starter",
         "name": "Starter",
         "price_eur": 4.99,
-        "price_display": "£4.99 / month",
+        "price_display": "GBP 4.99 / month",
         "messages_per_month": 500,
         "bots": 3,
         "metadata_chars": 8_000,
@@ -65,13 +69,13 @@ PLANS = [
         ],
         "cta": "Start Starter",
         "highlight": False,
-        "stripe_price_id": settings.STRIPE_PRICE_STARTER,
+        "razorpay_plan_id": settings.RAZORPAY_PLAN_STARTER,
     },
     {
         "id": "pro",
         "name": "Pro",
         "price_eur": 14.99,
-        "price_display": "£14.99 / month",
+        "price_display": "GBP 14.99 / month",
         "messages_per_month": 5_000,
         "bots": 20,
         "metadata_chars": 32_000,
@@ -85,13 +89,13 @@ PLANS = [
         ],
         "cta": "Go Pro",
         "highlight": True,
-        "stripe_price_id": settings.STRIPE_PRICE_PRO,
+        "razorpay_plan_id": settings.RAZORPAY_PLAN_PRO,
     },
     {
         "id": "business",
         "name": "Business",
         "price_eur": 39.99,
-        "price_display": "£39.99 / month",
+        "price_display": "GBP 39.99 / month",
         "messages_per_month": 25_000,
         "bots": 100,
         "metadata_chars": 64_000,
@@ -106,14 +110,12 @@ PLANS = [
         ],
         "cta": "Go Business",
         "highlight": False,
-        "stripe_price_id": settings.STRIPE_PRICE_BUSINESS,
+        "razorpay_plan_id": settings.RAZORPAY_PLAN_BUSINESS,
     },
 ]
 
 _PLAN_LIMITS = {p["id"]: p for p in PLANS}
 
-
-# ── helpers ───────────────────────────────────────────────────────────────────
 
 def _current_month() -> str:
     return dj_tz.now().strftime("%Y-%m")
@@ -135,38 +137,81 @@ def _plan_limits(plan_id: str) -> dict:
     return _PLAN_LIMITS.get(plan_id, _PLAN_LIMITS["free"])
 
 
-def _stripe():
+def _razorpay():
     try:
-        import stripe as _stripe_lib  # noqa: PLC0415
-        _stripe_lib.api_key = settings.STRIPE_SECRET_KEY
-        return _stripe_lib
+        import razorpay  # noqa: PLC0415
     except ImportError:
         return None
+    if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
+        return None
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    try:
+        client.set_app_details({"title": "Torensa", "version": "1.0"})
+    except Exception:
+        pass
+    return client
 
 
-# ── public: plan listing ──────────────────────────────────────────────────────
+def _rzp_get(obj, key, default=None):
+    try:
+        return obj[key]
+    except (KeyError, TypeError):
+        pass
+    try:
+        return getattr(obj, key, default)
+    except Exception:
+        return default
+
+
+def _timestamp_to_datetime(value):
+    if not value:
+        return None
+    return datetime.fromtimestamp(int(value), tz=timezone.utc)
+
+
+def _billing_status(sub: ChatbotSubscription) -> str:
+    if sub.billing_provider == "razorpay":
+        return sub.razorpay_status
+    return sub.stripe_status
+
+
+def _match_plan_by_razorpay_plan_id(razorpay_plan_id: str | None) -> str | None:
+    if not razorpay_plan_id:
+        return None
+    for plan in PLANS:
+        if plan.get("razorpay_plan_id") == razorpay_plan_id:
+            return plan["id"]
+    return None
+
+
+def _verify_signature(message: str, signature: str, secret: str) -> bool:
+    expected = hmac.new(secret.encode("utf-8"), message.encode("utf-8"), sha256).hexdigest()
+    return hmac.compare_digest(expected, signature or "")
+
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def plans_view(request):
-    """Return the plan catalogue (no auth needed — used on pricing page)."""
     return Response(PLANS)
 
-
-# ── authenticated: billing status ────────────────────────────────────────────
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def billing_status_view(request):
-    """Return the user's current plan, usage this month, and limits."""
     sub = _get_or_create_subscription(request.user)
     month = _current_month()
     used = _get_usage(request.user, month)
-    limits = _plan_limits(sub.plan)
+    effective_plan = sub.plan if sub.is_active_paid else "free"
+    limits = _plan_limits(effective_plan)
+    billing_status = _billing_status(sub)
 
     return Response({
-        "plan": sub.plan,
-        "stripe_status": sub.stripe_status,
+        "plan": effective_plan,
+        "configured_plan": sub.plan,
+        "provider": sub.billing_provider or "razorpay",
+        "billing_status": billing_status,
+        "stripe_status": billing_status,
+        "razorpay_status": sub.razorpay_status,
         "current_period_end": sub.current_period_end.isoformat() if sub.current_period_end else None,
         "usage": {
             "month": month,
@@ -181,19 +226,17 @@ def billing_status_view(request):
     })
 
 
-# ── create checkout session ───────────────────────────────────────────────────
-
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_checkout_view(request):
     """
     POST { "plan": "starter" | "pro" | "business" }
-    Returns { "checkout_url": "https://checkout.stripe.com/..." }
+    Returns Razorpay Checkout options for a subscription authentication payment.
     """
-    stripe = _stripe()
-    if not stripe or not settings.STRIPE_SECRET_KEY:
+    client = _razorpay()
+    if not client:
         return Response(
-            {"error": "Stripe is not configured on this server."},
+            {"error": "Razorpay is not configured on this server."},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
 
@@ -204,208 +247,232 @@ def create_checkout_view(request):
         return Response({"error": "Invalid plan."}, status=status.HTTP_400_BAD_REQUEST)
 
     plan_info = _PLAN_LIMITS[plan_id]
-    price_id = plan_info.get("stripe_price_id", "")
-    if not price_id:
+    razorpay_plan_id = plan_info.get("razorpay_plan_id", "")
+    if not razorpay_plan_id:
         return Response(
-            {"error": f"Stripe price for '{plan_id}' is not configured."},
+            {"error": f"Razorpay plan for '{plan_id}' is not configured."},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
 
-    sub = _get_or_create_subscription(request.user)
+    subscription_payload = {
+        "plan_id": razorpay_plan_id,
+        "total_count": settings.RAZORPAY_SUBSCRIPTION_TOTAL_COUNT,
+        "quantity": 1,
+        "customer_notify": 1,
+        "notes": {
+            "user_id": str(request.user.pk),
+            "plan": plan_id,
+            "source": "torensa_chatbot",
+        },
+    }
+    if request.user.email:
+        subscription_payload["notify_info"] = {"notify_email": request.user.email}
 
     try:
-        # Retrieve or create Stripe customer
-        if sub.stripe_customer_id:
-            customer_id = sub.stripe_customer_id
-        else:
-            customer = stripe.Customer.create(
-                email=request.user.email,
-                name=request.user.get_full_name() or request.user.username,
-                metadata={"user_id": str(request.user.pk)},
-            )
-            customer_id = customer["id"]
-            sub.stripe_customer_id = customer_id
-            sub.save(update_fields=["stripe_customer_id", "updated_at"])
+        razorpay_sub = client.subscription.create(subscription_payload)
+        razorpay_subscription_id = _rzp_get(razorpay_sub, "id", "")
+        razorpay_status = _rzp_get(razorpay_sub, "status", "created")
 
-        session = stripe.checkout.Session.create(
-            customer=customer_id,
-            payment_method_types=["card"],
-            line_items=[{"price": price_id, "quantity": 1}],
-            mode="subscription",
-            success_url=settings.STRIPE_SUCCESS_URL,
-            cancel_url=settings.STRIPE_CANCEL_URL,
-            metadata={"user_id": str(request.user.pk), "plan": plan_id},
-        )
-        return Response({"checkout_url": session["url"]})
+        sub = _get_or_create_subscription(request.user)
+        sub.billing_provider = "razorpay"
+        sub.plan = plan_id
+        sub.razorpay_subscription_id = razorpay_subscription_id
+        sub.razorpay_customer_id = _rzp_get(razorpay_sub, "customer_id", "") or sub.razorpay_customer_id
+        sub.razorpay_status = razorpay_status
+        sub.current_period_end = _timestamp_to_datetime(_rzp_get(razorpay_sub, "current_end"))
+        sub.save(update_fields=[
+            "billing_provider",
+            "plan",
+            "razorpay_subscription_id",
+            "razorpay_customer_id",
+            "razorpay_status",
+            "current_period_end",
+            "updated_at",
+        ])
 
-    except Exception as exc:
-        logger.exception("Stripe checkout error for user %s", request.user.pk)
+        return Response({
+            "provider": "razorpay",
+            "key_id": settings.RAZORPAY_KEY_ID,
+            "subscription_id": razorpay_subscription_id,
+            "checkout_url": _rzp_get(razorpay_sub, "short_url", ""),
+            "name": settings.RAZORPAY_BUSINESS_NAME,
+            "description": f"{plan_info['name']} chatbot plan",
+            "image": settings.RAZORPAY_LOGO_URL,
+            "success_url": settings.RAZORPAY_SUCCESS_URL,
+            "prefill": {
+                "name": request.user.get_full_name() or request.user.username,
+                "email": request.user.email,
+            },
+            "theme": {"color": settings.RAZORPAY_THEME_COLOR},
+        })
+    except Exception:
+        logger.exception("Razorpay checkout error for user %s", request.user.pk)
         return Response(
-            {"error": "Could not create checkout session. Please try again."},
+            {"error": "Could not create Razorpay checkout. Please try again."},
             status=status.HTTP_502_BAD_GATEWAY,
         )
 
-
-# ── customer portal ───────────────────────────────────────────────────────────
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def create_portal_view(request):
-    """Returns a Stripe Customer Portal URL for managing/cancelling subscription."""
-    stripe = _stripe()
-    if not stripe or not settings.STRIPE_SECRET_KEY:
+def verify_checkout_view(request):
+    payload = request.data if isinstance(request.data, dict) else {}
+    payment_id = (payload.get("razorpay_payment_id") or "").strip()
+    returned_subscription_id = (payload.get("razorpay_subscription_id") or "").strip()
+    signature = (payload.get("razorpay_signature") or "").strip()
+
+    if not payment_id or not returned_subscription_id or not signature:
+        return Response({"error": "Missing Razorpay verification fields."}, status=status.HTTP_400_BAD_REQUEST)
+
+    sub = _get_or_create_subscription(request.user)
+    subscription_id = sub.razorpay_subscription_id
+    if not subscription_id or returned_subscription_id != subscription_id:
+        return Response({"error": "Razorpay subscription mismatch."}, status=status.HTTP_400_BAD_REQUEST)
+
+    message = f"{payment_id}|{subscription_id}"
+    if not _verify_signature(message, signature, settings.RAZORPAY_KEY_SECRET):
+        return Response({"error": "Invalid Razorpay signature."}, status=status.HTTP_400_BAD_REQUEST)
+
+    client = _razorpay()
+    razorpay_sub = None
+    if client:
+        try:
+            razorpay_sub = client.subscription.fetch(subscription_id)
+        except Exception:
+            logger.exception("Could not fetch Razorpay subscription %s", subscription_id)
+
+    with transaction.atomic():
+        if razorpay_sub:
+            _sync_razorpay_subscription(razorpay_sub, user=request.user)
+        else:
+            sub.billing_provider = "razorpay"
+            sub.razorpay_status = "authenticated"
+            sub.save(update_fields=["billing_provider", "razorpay_status", "updated_at"])
+
+    refreshed = _get_or_create_subscription(request.user)
+    if (
+        refreshed.billing_provider == "razorpay"
+        and refreshed.plan != "free"
+        and refreshed.razorpay_status not in RAZORPAY_ACTIVE_STATUSES
+    ):
+        refreshed.razorpay_status = "authenticated"
+        refreshed.save(update_fields=["razorpay_status", "updated_at"])
+
+    return Response({
+        "ok": True,
+        "plan": refreshed.plan,
+        "billing_status": _billing_status(refreshed),
+        "redirect_url": settings.RAZORPAY_SUCCESS_URL,
+    })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def cancel_subscription_view(request):
+    client = _razorpay()
+    if not client:
         return Response(
-            {"error": "Stripe is not configured on this server."},
+            {"error": "Razorpay is not configured on this server."},
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
 
     sub = _get_or_create_subscription(request.user)
-    if not sub.stripe_customer_id:
-        return Response(
-            {"error": "No active subscription found."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if sub.billing_provider != "razorpay" or not sub.razorpay_subscription_id:
+        return Response({"error": "No Razorpay subscription found."}, status=status.HTTP_400_BAD_REQUEST)
+
+    payload = request.data if isinstance(request.data, dict) else {}
+    cancel_at_cycle_end = bool(payload.get("cancel_at_cycle_end", False))
 
     try:
-        session = stripe.billing_portal.Session.create(
-            customer=sub.stripe_customer_id,
-            return_url=settings.STRIPE_CANCEL_URL,
+        razorpay_sub = client.subscription.cancel(
+            sub.razorpay_subscription_id,
+            {"cancel_at_cycle_end": cancel_at_cycle_end},
         )
-        return Response({"portal_url": session["url"]})
+    except TypeError:
+        razorpay_sub = client.subscription.cancel(sub.razorpay_subscription_id)
     except Exception:
-        logger.exception("Stripe portal error for user %s", request.user.pk)
+        logger.exception("Razorpay cancel error for user %s", request.user.pk)
         return Response(
-            {"error": "Could not open billing portal. Please try again."},
+            {"error": "Could not cancel subscription. Please try again."},
             status=status.HTTP_502_BAD_GATEWAY,
         )
 
+    _sync_razorpay_subscription(razorpay_sub, user=request.user)
+    refreshed = _get_or_create_subscription(request.user)
+    return Response({
+        "ok": True,
+        "plan": refreshed.plan,
+        "billing_status": _billing_status(refreshed),
+    })
 
-# ── webhook ───────────────────────────────────────────────────────────────────
 
 @csrf_exempt
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def stripe_webhook_view(request):
-    """
-    Handles Stripe webhook events to keep subscription records in sync.
-    Must be registered as a CSRF-exempt endpoint.
-    """
-    stripe = _stripe()
-    if not stripe:
-        return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
-
+def razorpay_webhook_view(request):
     payload = request.body
-    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
-    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+    webhook_secret = settings.RAZORPAY_WEBHOOK_SECRET
+    signature = request.META.get("HTTP_X_RAZORPAY_SIGNATURE", "")
+
+    if webhook_secret:
+        expected = hmac.new(webhook_secret.encode("utf-8"), payload, sha256).hexdigest()
+        if not hmac.compare_digest(expected, signature or ""):
+            logger.warning("Razorpay webhook signature mismatch")
+            return Response({"error": "Invalid signature."}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        if webhook_secret:
-            event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
-        else:
-            event = stripe.Event.construct_from(json.loads(payload), stripe.api_key)
-    except Exception as exc:
-        logger.warning("Stripe webhook signature error: %s", exc)
-        return Response({"error": "Invalid signature."}, status=status.HTTP_400_BAD_REQUEST)
+        event = json.loads(payload.decode("utf-8"))
+    except json.JSONDecodeError:
+        return Response({"error": "Invalid webhook payload."}, status=status.HTTP_400_BAD_REQUEST)
 
-    _handle_event(event)
+    event_name = event.get("event", "")
+    if event_name.startswith("subscription."):
+        razorpay_sub = (
+            event.get("payload", {})
+            .get("subscription", {})
+            .get("entity")
+        )
+        if razorpay_sub:
+            _sync_razorpay_subscription(razorpay_sub)
+
     return Response({"received": True})
 
 
-def _handle_event(event):
-    event_type = event["type"]
-
-    if event_type in (
-        "customer.subscription.created",
-        "customer.subscription.updated",
-        "customer.subscription.deleted",
-    ):
-        _sync_subscription(event["data"]["object"])
-
-    elif event_type == "checkout.session.completed":
-        session = event["data"]["object"]
-        if session.get("mode") == "subscription":
-            _sync_checkout_session(session)
-
-
-def _stripe_get(obj, key, default=None):
-    """Access a Stripe object field whether it's a dict or a StripeObject."""
-    try:
-        return obj[key]
-    except (KeyError, TypeError):
-        pass
-    try:
-        return getattr(obj, key, default)
-    except Exception:
-        return default
-
-
-def _sync_checkout_session(session):
-    metadata = _stripe_get(session, "metadata") or {}
-    user_id = _stripe_get(metadata, "user_id")
-    plan_id = _stripe_get(metadata, "plan") or "free"
-    if not user_id:
+def _sync_razorpay_subscription(razorpay_sub, user=None):
+    subscription_id = _rzp_get(razorpay_sub, "id", "")
+    if not subscription_id:
         return
 
-    from django.contrib.auth.models import User  # noqa: PLC0415
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        return
-
-    with transaction.atomic():
-        sub, _ = ChatbotSubscription.objects.get_or_create(user=user)
-        sub.plan = plan_id
-        sub.stripe_customer_id = _stripe_get(session, "customer") or sub.stripe_customer_id
-        sub.stripe_subscription_id = _stripe_get(session, "subscription") or sub.stripe_subscription_id
-        sub.stripe_status = "active"
-        sub.save()
-
-
-def _sync_subscription(stripe_sub):
-    customer_id = _stripe_get(stripe_sub, "customer")
-    if not customer_id:
-        return
-
-    stripe_status = _stripe_get(stripe_sub, "status") or ""
-    sub_id = _stripe_get(stripe_sub, "id") or ""
-
-    # Derive period end
-    period_end = _stripe_get(stripe_sub, "current_period_end")
-    period_end_dt = (
-        datetime.fromtimestamp(period_end, tz=timezone.utc) if period_end else None
-    )
-
-    # Determine plan from price ID
-    price_id = ""
-    items_obj = _stripe_get(stripe_sub, "items") or {}
-    items = _stripe_get(items_obj, "data") or []
-    if items:
-        price_obj = _stripe_get(items[0], "price") or {}
-        price_id = _stripe_get(price_obj, "id") or ""
-
-    matched_plan_id = None
-    for p in PLANS:
-        if p.get("stripe_price_id") and p["stripe_price_id"] == price_id:
-            matched_plan_id = p["id"]
-            break
-
-    # If canceled/unpaid, revert to free
-    if stripe_status in ("canceled", "unpaid", "incomplete_expired"):
+    notes = _rzp_get(razorpay_sub, "notes", {}) or {}
+    user_id = _rzp_get(notes, "user_id")
+    status_value = _rzp_get(razorpay_sub, "status", "") or ""
+    matched_plan_id = _match_plan_by_razorpay_plan_id(_rzp_get(razorpay_sub, "plan_id"))
+    if not matched_plan_id:
+        matched_plan_id = _rzp_get(notes, "plan")
+    if status_value in RAZORPAY_INACTIVE_STATUSES:
         matched_plan_id = "free"
 
+    if user is None and user_id:
+        from django.contrib.auth.models import User  # noqa: PLC0415
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            user = None
+
     try:
-        sub = ChatbotSubscription.objects.get(stripe_customer_id=customer_id)
+        if user is not None:
+            sub, _ = ChatbotSubscription.objects.get_or_create(user=user)
+        else:
+            sub = ChatbotSubscription.objects.get(razorpay_subscription_id=subscription_id)
     except ChatbotSubscription.DoesNotExist:
         return
 
     with transaction.atomic():
-        # Only update the plan if we positively matched a price ID, or if we're
-        # reverting to free due to cancellation. If the price ID didn't match any
-        # known plan (e.g., env vars not configured), preserve the existing plan
-        # so a successful checkout isn't silently downgraded back to free.
-        if matched_plan_id is not None:
+        sub.billing_provider = "razorpay"
+        if matched_plan_id in _PLAN_LIMITS:
             sub.plan = matched_plan_id
-        sub.stripe_subscription_id = sub_id
-        sub.stripe_status = stripe_status
-        sub.current_period_end = period_end_dt
+        sub.razorpay_subscription_id = subscription_id
+        sub.razorpay_customer_id = _rzp_get(razorpay_sub, "customer_id", "") or sub.razorpay_customer_id
+        sub.razorpay_status = status_value
+        sub.current_period_end = _timestamp_to_datetime(_rzp_get(razorpay_sub, "current_end"))
         sub.save()
