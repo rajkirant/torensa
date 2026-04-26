@@ -69,6 +69,7 @@ from .views.chatbot_billing_views import (
     cancel_subscription_view,
     razorpay_webhook_view,
 )
+from .views.review_views import reviews_view, review_delete_view
 
 urlpatterns = [
     path("hello/", hello),
@@ -148,4 +149,7 @@ urlpatterns = [
     path("chatbots/billing/verify/", verify_checkout_view),
     path("chatbots/billing/cancel/", cancel_subscription_view),
     path("chatbots/billing/webhook/", razorpay_webhook_view),
+    # Tool reviews
+    path("reviews/", reviews_view),
+    path("reviews/<int:review_id>/", review_delete_view),
 ]

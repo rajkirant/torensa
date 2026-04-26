@@ -21,6 +21,7 @@ import {
   findServiceCardByPath,
 } from "../utils/serviceCards";
 import { useTranslation } from "react-i18next";
+import ReviewSection from "./ReviewSection";
 
 
 type PageContainerProps = {
@@ -245,6 +246,9 @@ export default function PageContainer({
                   </Box>
                 )}
               </Box>
+            )}
+            {meta && (
+              <ReviewSection toolPath={stripLanguagePrefix(currentPath)} />
             )}
             <Stack direction="row" justifyContent="flex-end">
               <BackButton />
