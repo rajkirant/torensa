@@ -64,10 +64,7 @@ from .views.csv_views import csv_list_create, csv_detail
 from .views.chatbot_billing_views import (
     plans_view,
     billing_status_view,
-    create_checkout_view,
-    verify_checkout_view,
     cancel_subscription_view,
-    razorpay_webhook_view,
     paypal_webhook_view,
     paypal_capture_view,
 )
@@ -144,13 +141,10 @@ urlpatterns = [
     # Public chatbot window (no auth required, keyed by random public_id)
     path("chatbots/<str:public_id>/public/", chatbot_public_info),
     path("chatbots/<str:public_id>/public/chat/", chatbot_public_chat),
-    # Chatbot billing
+    # Chatbot billing (PayPal)
     path("chatbots/billing/plans/", plans_view),
     path("chatbots/billing/status/", billing_status_view),
-    path("chatbots/billing/checkout/", create_checkout_view),
-    path("chatbots/billing/verify/", verify_checkout_view),
     path("chatbots/billing/cancel/", cancel_subscription_view),
-    path("chatbots/billing/webhook/", razorpay_webhook_view),
     path("chatbots/billing/paypal/capture/", paypal_capture_view),
     path("chatbots/billing/paypal/webhook/", paypal_webhook_view),
     # Tool reviews
