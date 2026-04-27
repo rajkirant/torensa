@@ -2418,7 +2418,7 @@
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Paste the suspicious message or a quote of what the caller said.",
+      "Paste the suspicious message — or click 'Record' to speak it and have it transcribed automatically (you can also upload an audio file).",
       "Click 'Analyze' and wait a moment.",
       "Read the scam-likelihood score and verdict on the right.",
       "Review the detected features (urgency, authority, evasion, etc.) with their intensity bars and the short evidence quote for each.",
