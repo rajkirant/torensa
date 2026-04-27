@@ -22,7 +22,7 @@ import { useAuth } from "../../utils/auth";
 interface Plan {
   id: string;
   name: string;
-  price_gbp: number;
+  price_usd: number;
   price_display: string;
   messages_per_month: number;
   bots: number;
@@ -30,75 +30,46 @@ interface Plan {
   features: string[];
   cta: string;
   highlight: boolean;
-  razorpay_plan_id: string | null;
+  paypal_plan_id: string | null;
 }
 
 interface BillingStatus {
   plan: string;
   provider: string;
   billing_status: string;
-  stripe_status?: string;
-  razorpay_status?: string;
   current_period_end: string | null;
   usage: { month: string; messages_used: number; messages_limit: number };
   limits: { bots: number; metadata_chars: number; messages_per_month: number };
 }
 
-interface RazorpayResponse {
-  razorpay_payment_id: string;
-  razorpay_subscription_id: string;
-  razorpay_signature: string;
-}
-
-interface RazorpayCheckoutOptions {
-  key: string;
-  subscription_id: string;
-  name: string;
-  description: string;
-  image?: string;
-  prefill?: { name?: string; email?: string; contact?: string };
-  theme?: { color?: string };
-  handler: (response: RazorpayResponse) => void;
-  modal?: { ondismiss?: () => void };
-}
-
-interface RazorpayCheckoutPayload {
-  provider: "razorpay";
-  key_id: string;
-  subscription_id: string;
-  checkout_url?: string;
-  name: string;
-  description: string;
-  image?: string;
-  success_url?: string;
-  prefill?: { name?: string; email?: string; contact?: string };
-  theme?: { color?: string };
-}
-
 declare global {
   interface Window {
-    Razorpay?: new (options: RazorpayCheckoutOptions) => { open: () => void };
+    paypal?: {
+      Buttons: (options: {
+        style?: object;
+        createSubscription: (data: unknown, actions: { subscription: { create: (o: { plan_id: string }) => Promise<string> } }) => Promise<string>;
+        onApprove: (data: { subscriptionID: string }) => void;
+        onError?: (err: unknown) => void;
+      }) => { render: (selector: string) => void };
+    };
   }
 }
 
 const CHAT_FONT = `"Space Grotesk", "Avenir Next", "Segoe UI", sans-serif`;
-const RAZORPAY_SCRIPT_URL = "https://checkout.razorpay.com/v1/checkout.js";
+const PAYPAL_CLIENT_ID = "AROz8-sfDnlhsKHX5NhFksfnines_qGL0OlNQRB1jT-hzrPouDyPdItofBI_59Q-zQbNzs8EFEqrAmX1";
+const PAYPAL_SCRIPT_URL = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
 
-function loadRazorpayScript() {
-  if (window.Razorpay) return Promise.resolve(true);
-
+function loadPayPalScript(): Promise<boolean> {
+  if (window.paypal) return Promise.resolve(true);
   return new Promise<boolean>((resolve) => {
-    const existing = document.querySelector<HTMLScriptElement>(
-      `script[src="${RAZORPAY_SCRIPT_URL}"]`,
-    );
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${PAYPAL_SCRIPT_URL}"]`);
     if (existing) {
       existing.addEventListener("load", () => resolve(true), { once: true });
       existing.addEventListener("error", () => resolve(false), { once: true });
       return;
     }
-
     const script = document.createElement("script");
-    script.src = RAZORPAY_SCRIPT_URL;
+    script.src = PAYPAL_SCRIPT_URL;
     script.async = true;
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
@@ -117,7 +88,8 @@ export default function ChatbotPlans() {
   useEffect(() => {
     const planParam = searchParams.get("plan");
     if (user && planParam && ["starter", "pro", "business"].includes(planParam)) {
-      void handleSubscribe(planParam);
+      const matchedPlan = plans.find((p) => p.id === planParam);
+      if (matchedPlan?.paypal_plan_id) void handleSubscribe(planParam, matchedPlan.paypal_plan_id);
       // Remove param from URL cleanly
       navigate("/chatbot-plans", { replace: true });
     }
@@ -147,7 +119,7 @@ export default function ChatbotPlans() {
     })();
   }, []);
 
-  const handleSubscribe = async (planId: string) => {
+  const handleSubscribe = async (planId: string, paypalPlanId: string) => {
     if (!user) {
       const returnTo = encodeURIComponent(`/chatbot-plans?plan=${planId}`);
       navigate(`/login?redirect=${returnTo}`);
@@ -156,81 +128,53 @@ export default function ChatbotPlans() {
     setError("");
     setSuccess("");
     setCheckingOut(planId);
-    try {
-      const res = await apiFetch("/api/chatbots/billing/checkout/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
-      });
-      const data = await res.json().catch(() => null);
-      if (!res.ok) {
-        setError(data?.error || "Could not start checkout.");
-        return;
-      }
-      if (data?.provider === "razorpay") {
-        await openRazorpayCheckout(data as RazorpayCheckoutPayload);
-        return;
-      }
-      if (data?.checkout_url) {
-        window.location.href = data.checkout_url;
-        return;
-      }
-      setError("Checkout did not return a payment link.");
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setCheckingOut(null);
-    }
-  };
 
-  const openRazorpayCheckout = async (payload: RazorpayCheckoutPayload) => {
-    const loaded = await loadRazorpayScript();
-    if (!loaded || !window.Razorpay) {
-      if (payload.checkout_url) {
-        window.location.href = payload.checkout_url;
-        return;
-      }
-      setError("Could not load Razorpay Checkout. Please try again.");
+    const loaded = await loadPayPalScript();
+    if (!loaded || !window.paypal) {
+      setError("Could not load PayPal. Please try again.");
+      setCheckingOut(null);
       return;
     }
 
-    const checkout = new window.Razorpay({
-      key: payload.key_id,
-      subscription_id: payload.subscription_id,
-      name: payload.name,
-      description: payload.description,
-      image: payload.image || undefined,
-      prefill: payload.prefill,
-      theme: payload.theme,
-      modal: {
-        ondismiss: () => setCheckingOut(null),
+    const containerId = `paypal-btn-${planId}`;
+    const container = document.getElementById(containerId);
+    if (!container) {
+      setError("PayPal button container not found.");
+      setCheckingOut(null);
+      return;
+    }
+    container.innerHTML = "";
+
+    window.paypal.Buttons({
+      style: { shape: "rect", color: "gold", layout: "vertical", label: "subscribe" },
+      createSubscription: (_data, actions) => {
+        return actions.subscription.create({ plan_id: paypalPlanId });
       },
-      handler: async (response) => {
-        setError("");
-        setCheckingOut(payload.subscription_id);
+      onApprove: async (data) => {
+        setCheckingOut(planId);
         try {
-          const verifyRes = await apiFetch("/api/chatbots/billing/verify/", {
+          const res = await apiFetch("/api/chatbots/billing/paypal/capture/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
+            body: JSON.stringify({ subscriptionID: data.subscriptionID, plan: planId }),
           });
-          const verifyData = await verifyRes.json().catch(() => null);
-          if (!verifyRes.ok) {
-            setError(verifyData?.error || "Payment verification failed.");
+          const result = await res.json().catch(() => null);
+          if (!res.ok) {
+            setError(result?.error || "Could not activate subscription.");
             return;
           }
-          window.location.href =
-            verifyData?.redirect_url ||
-            payload.success_url ||
-            "/custom-chatbot-builder?checkout=success";
+          window.location.href = result?.redirect_url || "/custom-chatbot-builder?checkout=success";
         } catch {
-          setError("Payment completed, but verification failed. Please refresh in a moment.");
+          setError("Payment completed but activation failed. Please refresh.");
         } finally {
           setCheckingOut(null);
         }
       },
-    });
-    checkout.open();
+      onError: () => {
+        setError("PayPal encountered an error. Please try again.");
+        setCheckingOut(null);
+      },
+    }).render(`#${containerId}`);
   };
 
   const handleCancelSubscription = async () => {
@@ -266,7 +210,7 @@ export default function ChatbotPlans() {
     : "linear-gradient(110deg, #0ea5e9 0%, #6366f1 58%, #8b5cf6 100%)";
 
   const activePlan = billing?.plan ?? "free";
-  const billingStatus = billing?.billing_status || billing?.stripe_status || "";
+  const billingStatus = billing?.billing_status || "";
 
   return (
     <PageContainer>
@@ -488,7 +432,7 @@ export default function ChatbotPlans() {
                       variant="caption"
                       sx={{ color: isHighlight ? "rgba(255,255,255,0.8)" : "text.secondary" }}
                     >
-                      Powered by AWS Bedrock · billed monthly in GBP
+                      Powered by AWS Bedrock · billed monthly in USD
                     </Typography>
                   </Box>
 
@@ -508,37 +452,52 @@ export default function ChatbotPlans() {
 
                   {/* CTA */}
                   <Box sx={{ p: 2.5, pt: 0 }}>
-                    <Button
-                      fullWidth
-                      variant={isHighlight || isCurrent ? "contained" : "outlined"}
-                      disabled={isCurrent || isLoading}
-                      onClick={() => {
-                        if (plan.id === "free") {
-                          navigate("/custom-chatbot-builder");
-                        } else {
-                          void handleSubscribe(plan.id);
-                        }
-                      }}
-                      sx={{
-                        borderRadius: "12px",
-                        fontWeight: 800,
-                        py: 1.2,
-                        fontFamily: CHAT_FONT,
-                        ...(isHighlight && !isCurrent
-                          ? { background: headerGradient, color: "#fff", "&:hover": { filter: "saturate(1.1)" } }
-                          : {}),
-                      }}
-                    >
-                      {isLoading ? (
-                        <CircularProgress size={20} sx={{ color: "inherit" }} />
-                      ) : isCurrent ? (
-                        "Your current plan"
-                      ) : !user && plan.id !== "free" ? (
-                        "Log in to subscribe"
-                      ) : (
-                        plan.cta
-                      )}
-                    </Button>
+                    {plan.id === "free" ? (
+                      <Button
+                        fullWidth
+                        variant={isCurrent ? "contained" : "outlined"}
+                        disabled={isCurrent}
+                        onClick={() => navigate("/custom-chatbot-builder")}
+                        sx={{ borderRadius: "12px", fontWeight: 800, py: 1.2, fontFamily: CHAT_FONT }}
+                      >
+                        {isCurrent ? "Your current plan" : plan.cta}
+                      </Button>
+                    ) : !user ? (
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={() => navigate(`/login?redirect=${encodeURIComponent(`/chatbot-plans?plan=${plan.id}`)}`)}
+                        sx={{ borderRadius: "12px", fontWeight: 800, py: 1.2, fontFamily: CHAT_FONT }}
+                      >
+                        Log in to subscribe
+                      </Button>
+                    ) : isCurrent ? (
+                      <Button fullWidth variant="contained" disabled sx={{ borderRadius: "12px", fontWeight: 800, py: 1.2, fontFamily: CHAT_FONT }}>
+                        Your current plan
+                      </Button>
+                    ) : (
+                      <Box id={`paypal-btn-${plan.id}`} sx={{ minHeight: 45 }}>
+                        {isLoading && !checkingOut?.startsWith("paypal") && (
+                          <Stack alignItems="center" py={1}><CircularProgress size={24} /></Stack>
+                        )}
+                        {!isLoading && (
+                          <Button
+                            fullWidth
+                            variant={isHighlight ? "contained" : "outlined"}
+                            onClick={() => plan.paypal_plan_id && void handleSubscribe(plan.id, plan.paypal_plan_id)}
+                            sx={{
+                              borderRadius: "12px",
+                              fontWeight: 800,
+                              py: 1.2,
+                              fontFamily: CHAT_FONT,
+                              ...(isHighlight ? { background: headerGradient, color: "#fff", "&:hover": { filter: "saturate(1.1)" } } : {}),
+                            }}
+                          >
+                            {plan.cta}
+                          </Button>
+                        )}
+                      </Box>
+                    )}
                   </Box>
                 </Paper>
               );

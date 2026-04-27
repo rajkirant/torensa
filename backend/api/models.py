@@ -202,6 +202,8 @@ class ChatbotSubscription(models.Model):
     razorpay_customer_id = models.CharField(max_length=128, blank=True)
     razorpay_subscription_id = models.CharField(max_length=128, blank=True)
     razorpay_status = models.CharField(max_length=32, blank=True)
+    paypal_subscription_id = models.CharField(max_length=128, blank=True)
+    paypal_status = models.CharField(max_length=32, blank=True)
     current_period_end = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -216,6 +218,8 @@ class ChatbotSubscription(models.Model):
     def is_active_paid(self):
         if self.plan == self.PLAN_FREE:
             return False
+        if self.billing_provider == "paypal":
+            return self.paypal_status == "active"
         if self.billing_provider == "razorpay":
             return self.razorpay_status in self.RAZORPAY_ACTIVE_STATUSES
         return self.stripe_status in (self.STATUS_ACTIVE, self.STATUS_TRIALING)

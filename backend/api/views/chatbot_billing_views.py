@@ -37,8 +37,8 @@ PLANS = [
     {
         "id": "free",
         "name": "Free",
-        "price_eur": 0,
-        "price_display": "GBP 0 / month",
+        "price_usd": 0,
+        "price_display": "USD 0 / month",
         "messages_per_month": 50,
         "bots": 1,
         "metadata_chars": 2_000,
@@ -51,12 +51,13 @@ PLANS = [
         "cta": "Get started free",
         "highlight": False,
         "razorpay_plan_id": None,
+        "paypal_plan_id": None,
     },
     {
         "id": "starter",
         "name": "Starter",
-        "price_eur": 4.99,
-        "price_display": "GBP 4.99 / month",
+        "price_usd": 4.99,
+        "price_display": "USD 4.99 / month",
         "messages_per_month": 500,
         "bots": 3,
         "metadata_chars": 8_000,
@@ -70,12 +71,13 @@ PLANS = [
         "cta": "Start Starter",
         "highlight": False,
         "razorpay_plan_id": settings.RAZORPAY_PLAN_STARTER,
+        "paypal_plan_id": settings.PAYPAL_PLAN_STARTER,
     },
     {
         "id": "pro",
         "name": "Pro",
-        "price_eur": 14.99,
-        "price_display": "GBP 14.99 / month",
+        "price_usd": 14.99,
+        "price_display": "USD 14.99 / month",
         "messages_per_month": 5_000,
         "bots": 20,
         "metadata_chars": 32_000,
@@ -90,12 +92,13 @@ PLANS = [
         "cta": "Go Pro",
         "highlight": True,
         "razorpay_plan_id": settings.RAZORPAY_PLAN_PRO,
+        "paypal_plan_id": settings.PAYPAL_PLAN_PRO,
     },
     {
         "id": "business",
         "name": "Business",
-        "price_eur": 39.99,
-        "price_display": "GBP 39.99 / month",
+        "price_usd": 39.99,
+        "price_display": "USD 39.99 / month",
         "messages_per_month": 25_000,
         "bots": 100,
         "metadata_chars": 64_000,
@@ -111,6 +114,7 @@ PLANS = [
         "cta": "Go Business",
         "highlight": False,
         "razorpay_plan_id": settings.RAZORPAY_PLAN_BUSINESS,
+        "paypal_plan_id": settings.PAYPAL_PLAN_BUSINESS,
     },
 ]
 
@@ -436,6 +440,84 @@ def razorpay_webhook_view(request):
             _sync_razorpay_subscription(razorpay_sub)
 
     return Response({"received": True})
+
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def paypal_webhook_view(request):
+    """
+    Handles PayPal subscription lifecycle webhooks.
+    Set this URL in PayPal Developer Dashboard > Webhooks.
+    Events: BILLING.SUBSCRIPTION.ACTIVATED, BILLING.SUBSCRIPTION.CANCELLED,
+            BILLING.SUBSCRIPTION.SUSPENDED, PAYMENT.SALE.COMPLETED
+    """
+    try:
+        event = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return Response({"error": "Invalid payload."}, status=status.HTTP_400_BAD_REQUEST)
+
+    event_type = event.get("event_type", "")
+    resource = event.get("resource", {})
+    subscription_id = resource.get("id", "")
+    plan_id = resource.get("plan_id", "")
+
+    matched_plan = None
+    for plan in PLANS:
+        if plan.get("paypal_plan_id") and plan["paypal_plan_id"] == plan_id:
+            matched_plan = plan["id"]
+            break
+
+    if event_type == "BILLING.SUBSCRIPTION.ACTIVATED":
+        if subscription_id and matched_plan:
+            try:
+                sub = ChatbotSubscription.objects.get(paypal_subscription_id=subscription_id)
+                sub.billing_provider = "paypal"
+                sub.plan = matched_plan
+                sub.paypal_status = "active"
+                sub.save(update_fields=["billing_provider", "plan", "paypal_status", "updated_at"])
+            except ChatbotSubscription.DoesNotExist:
+                pass
+
+    elif event_type in ("BILLING.SUBSCRIPTION.CANCELLED", "BILLING.SUBSCRIPTION.SUSPENDED", "BILLING.SUBSCRIPTION.EXPIRED"):
+        if subscription_id:
+            try:
+                sub = ChatbotSubscription.objects.get(paypal_subscription_id=subscription_id)
+                sub.plan = "free"
+                sub.paypal_status = event_type.split(".")[-1].lower()
+                sub.save(update_fields=["plan", "paypal_status", "updated_at"])
+            except ChatbotSubscription.DoesNotExist:
+                pass
+
+    return Response({"received": True})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def paypal_capture_view(request):
+    """
+    POST { "subscriptionID": "I-XXXXX", "plan": "starter" }
+    Called from frontend onApprove — records the PayPal subscription and activates the plan.
+    """
+    payload = request.data if isinstance(request.data, dict) else {}
+    subscription_id = (payload.get("subscriptionID") or "").strip()
+    plan_id = (payload.get("plan") or "").strip().lower()
+
+    if not subscription_id or plan_id not in ("starter", "pro", "business"):
+        return Response({"error": "Invalid payload."}, status=status.HTTP_400_BAD_REQUEST)
+
+    sub = _get_or_create_subscription(request.user)
+    sub.billing_provider = "paypal"
+    sub.plan = plan_id
+    sub.paypal_subscription_id = subscription_id
+    sub.paypal_status = "active"
+    sub.save(update_fields=["billing_provider", "plan", "paypal_subscription_id", "paypal_status", "updated_at"])
+
+    return Response({
+        "ok": True,
+        "plan": plan_id,
+        "redirect_url": "/custom-chatbot-builder?checkout=success",
+    })
 
 
 def _sync_razorpay_subscription(razorpay_sub, user=None):
