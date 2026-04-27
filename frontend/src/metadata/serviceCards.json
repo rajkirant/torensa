@@ -2388,5 +2388,59 @@
         "a": "Yes — standard shortcuts work inside the editor: Ctrl+B for bold, Ctrl+I for italic, Ctrl+U for underline, Ctrl+Z to undo, and Ctrl+Y to redo."
       }
     ]
+  },
+  {
+    "id": "scam-detector",
+    "component": "ScamDetector",
+    "name": "Scam Message Detector",
+    "title": "Scam Detector",
+    "description": "Paste a phone-call quote or suspicious message and get a scam-likelihood score, the manipulation tactics it uses (urgency, authority, evasion), and a suggested response.",
+    "path": "/scam-detector",
+    "ctaLabel": "Analyze Message",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "Scam Message Detector analyzes a single message — usually something a caller said on the phone — and tells you how likely it is to be a scam. It returns a 0–100 scam-likelihood score, a verdict (Legitimate, Neutral, Suspicious, Likely Scam, Scam), and a list of detected manipulation features such as urgency, authority impersonation, vague details, evasion of verification, guilt inducement, requests for sensitive information, requests for payment, and tech-support or charity-style scam patterns. Each feature comes with an intensity score and a short quote from your input as evidence. The tool also returns a brief reasoning paragraph and a recommended one-sentence response your assistant could give back to the caller.",
+    "categoryId": "utilities",
+    "keywords": [
+      "scam detector",
+      "scam message detector",
+      "phone scam analyzer",
+      "phishing detector",
+      "scam call analysis",
+      "fraud detection",
+      "social engineering detector",
+      "scam likelihood score",
+      "is this a scam",
+      "scam features",
+      "urgency detection"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Paste the suspicious message or a quote of what the caller said.",
+      "Click 'Analyze' and wait a moment.",
+      "Read the scam-likelihood score and verdict on the right.",
+      "Review the detected features (urgency, authority, evasion, etc.) with their intensity bars and the short evidence quote for each.",
+      "Use the recommended response as a guide for what to say back."
+    ],
+    "faqs": [
+      {
+        "q": "What kinds of messages can I analyze?",
+        "a": "Anything text-based: a quote of what a caller said on the phone, a voicemail transcript, an SMS, an email body, or a chat message. The tool was tuned on phone-scam transcripts but works on any short message."
+      },
+      {
+        "q": "What does the score mean?",
+        "a": "0–20 reads as legitimate, 21–40 neutral, 41–60 suspicious, 61–80 likely scam, and 81–100 scam. The verdict label matches the score band."
+      },
+      {
+        "q": "What are 'features'?",
+        "a": "Features are the manipulation tactics the message uses — for example urgency, authority impersonation, requests for sensitive information, vague details, or guilt inducement. Each one comes with an intensity score and a short quote from your input as evidence."
+      },
+      {
+        "q": "Is my message stored?",
+        "a": "No. The message is sent to the analysis model for a single response and is not saved on our servers."
+      }
+    ]
   }
 ]
