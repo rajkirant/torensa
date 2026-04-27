@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
@@ -8,10 +8,14 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useTheme, alpha } from "@mui/material/styles";
 import GppMaybeIcon from "@mui/icons-material/GppMaybe";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import MicIcon from "@mui/icons-material/Mic";
+import StopIcon from "@mui/icons-material/Stop";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import PageContainer from "../components/PageContainer";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import { apiFetch } from "../utils/api";
@@ -79,6 +83,95 @@ export default function ScamDetector() {
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ success?: string; error?: string }>({});
 
+  const [recording, setRecording] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const transcribeBlob = async (blob: Blob, filename: string) => {
+    setTranscribing(true);
+    setStatusMessage({});
+    try {
+      const form = new FormData();
+      form.append("file", blob, filename);
+      const response = await apiFetch("/ai/transcribe/", {
+        method: "POST",
+        body: form,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setStatusMessage({ error: data.error || "Failed to transcribe audio." });
+        return;
+      }
+      const text = (data.text || "").trim();
+      if (!text) {
+        setStatusMessage({ error: "No speech detected in the audio." });
+        return;
+      }
+      setInputText((prev) => (prev ? `${prev}\n${text}` : text));
+      setStatusMessage({ success: "Audio transcribed. Click Analyze to score it." });
+    } catch {
+      setStatusMessage({ error: "Network error during transcription." });
+    } finally {
+      setTranscribing(false);
+    }
+  };
+
+  const startRecording = async () => {
+    if (recording || transcribing || loading) return;
+    if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") {
+      setStatusMessage({ error: "Audio recording is not supported in this browser." });
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm")
+        ? "audio/webm"
+        : "";
+      const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+      chunksRef.current = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      recorder.onstop = async () => {
+        const type = recorder.mimeType || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type });
+        chunksRef.current = [];
+        mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
+        mediaStreamRef.current = null;
+        if (blob.size === 0) {
+          setStatusMessage({ error: "No audio captured." });
+          return;
+        }
+        const ext = type.includes("webm") ? "webm" : type.includes("mp4") ? "m4a" : "wav";
+        await transcribeBlob(blob, `recording.${ext}`);
+      };
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+      setRecording(true);
+      setStatusMessage({});
+    } catch {
+      setStatusMessage({ error: "Microphone permission denied or unavailable." });
+    }
+  };
+
+  const stopRecording = () => {
+    if (!recording) return;
+    const recorder = mediaRecorderRef.current;
+    if (recorder && recorder.state !== "inactive") {
+      recorder.stop();
+    }
+    setRecording(false);
+  };
+
+  const handleAudioFile = async (file: File | undefined) => {
+    if (!file) return;
+    await transcribeBlob(file, file.name);
+  };
+
   const handleAnalyze = async () => {
     const trimmed = inputText.trim();
     if (!trimmed || loading) return;
@@ -132,9 +225,10 @@ export default function ScamDetector() {
             </Typography>
           </Stack>
           <Typography variant="body2" color="text.secondary">
-            Paste a message or quote from a phone call. The tool returns a scam-likelihood
-            score, the manipulation tactics it detected (urgency, authority, evasion, etc.),
-            and a suggested response.
+            Paste text — or click <strong>Record</strong> to speak the message and have it
+            transcribed automatically. The tool returns a scam-likelihood score, the
+            manipulation tactics it detected (urgency, authority, evasion, etc.), and a
+            suggested response.
           </Typography>
         </Box>
 
@@ -168,17 +262,65 @@ export default function ScamDetector() {
                 inputProps={{ maxLength: 4000 }}
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
               />
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1}>
                 <Typography variant="caption" color="text.secondary">
                   {charCount} / 4000 characters
                 </Typography>
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="audio/*"
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      void handleAudioFile(f);
+                      e.target.value = "";
+                    }}
+                  />
+                  <Tooltip title="Upload an audio file (mp3, wav, m4a, webm…)">
+                    <span>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        startIcon={<UploadFileIcon />}
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={recording || transcribing || loading}
+                        sx={{ borderRadius: "10px" }}
+                      >
+                        Audio
+                      </Button>
+                    </span>
+                  </Tooltip>
+                  <Tooltip title={recording ? "Stop recording" : "Record audio from your mic"}>
+                    <span>
+                      <Button
+                        size="small"
+                        variant={recording ? "contained" : "outlined"}
+                        color={recording ? "error" : "primary"}
+                        startIcon={
+                          transcribing ? (
+                            <CircularProgress size={14} />
+                          ) : recording ? (
+                            <StopIcon />
+                          ) : (
+                            <MicIcon />
+                          )
+                        }
+                        onClick={recording ? stopRecording : startRecording}
+                        disabled={transcribing || loading}
+                        sx={{ borderRadius: "10px", fontWeight: 700 }}
+                      >
+                        {transcribing ? "Transcribing…" : recording ? "Stop" : "Record"}
+                      </Button>
+                    </span>
+                  </Tooltip>
                   <Button
                     size="small"
                     variant="outlined"
                     startIcon={<DeleteOutlineIcon />}
                     onClick={handleClear}
-                    disabled={loading || (!inputText && !result)}
+                    disabled={loading || recording || transcribing || (!inputText && !result)}
                     sx={{ borderRadius: "10px" }}
                   >
                     Clear
@@ -186,7 +328,7 @@ export default function ScamDetector() {
                   <Button
                     variant="contained"
                     onClick={handleAnalyze}
-                    disabled={loading || !inputText.trim()}
+                    disabled={loading || recording || transcribing || !inputText.trim()}
                     sx={{ borderRadius: "10px", fontWeight: 700 }}
                   >
                     {loading ? <CircularProgress size={18} sx={{ color: "#fff" }} /> : "Analyze"}
