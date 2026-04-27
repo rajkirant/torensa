@@ -102,6 +102,7 @@ export default function ReviewSection({ toolPath }: { toolPath: string }) {
   const [formComment, setFormComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
+  const [showTrustpilotNudge, setShowTrustpilotNudge] = useState(false);
 
   const fetchReviews = useCallback(async () => {
     setLoading(true);
@@ -142,6 +143,7 @@ export default function ReviewSection({ toolPath }: { toolPath: string }) {
       });
       if (res.ok) {
         await fetchReviews();
+        if (formRating === 5) setShowTrustpilotNudge(true);
       } else {
         const data = await res.json().catch(() => ({}));
         setFormError(data.error || "Failed to submit review.");
@@ -247,6 +249,39 @@ export default function ReviewSection({ toolPath }: { toolPath: string }) {
               </Tooltip>
             )}
           </Stack>
+
+          {showTrustpilotNudge && (
+            <Box
+              sx={{
+                mt: 2,
+                p: 1.5,
+                borderRadius: 2,
+                border: "1px solid rgba(0,182,122,0.35)",
+                background: "rgba(0,182,122,0.07)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 1,
+              }}
+            >
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Thanks for your review! Enjoying Torensa? Share it on{" "}
+                <Box
+                  component="a"
+                  href="https://www.trustpilot.com/evaluate/torensa.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "#00b67a", fontWeight: 600, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                >
+                  Trustpilot
+                </Box>{" "}
+                too.
+              </Typography>
+              <IconButton size="small" onClick={() => setShowTrustpilotNudge(false)} sx={{ color: "text.secondary", flexShrink: 0 }}>
+                <Box component="span" sx={{ fontSize: "1rem", lineHeight: 1 }}>×</Box>
+              </IconButton>
+            </Box>
+          )}
         </Box>
       ) : (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
