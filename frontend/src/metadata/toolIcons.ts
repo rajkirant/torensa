@@ -40,6 +40,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import CakeIcon from "@mui/icons-material/Cake";
 import CelebrationIcon from "@mui/icons-material/Celebration";
+import GppMaybeIcon from "@mui/icons-material/GppMaybe";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -85,4 +86,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "custom-chatbot-builder": SmartToyIcon,
   "birthday-cake-generator": CakeIcon,
   "festival-greeting": CelebrationIcon,
+  "scam-detector": GppMaybeIcon,
 };
