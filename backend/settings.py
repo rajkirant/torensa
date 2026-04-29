@@ -310,14 +310,16 @@ STRIPE_CANCEL_URL = os.getenv("STRIPE_CANCEL_URL", "https://torensa.com/chatbot-
 
 
 # ---------- PayPal ----------
-PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID", "AROz8-sfDnlhsKHX5NhFksfnines_qGL0OlNQRB1jT-hzrPouDyPdItofBI_59Q-zQbNzs8EFEqrAmX1")
+# All credentials live in backend/.env (and backend/.env.example for the schema).
+# PAYPAL_MODE = "sandbox" or "live".
+PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID", "")
 PAYPAL_CLIENT_SECRET = os.getenv("PAYPAL_CLIENT_SECRET", "")
 PAYPAL_WEBHOOK_ID = os.getenv("PAYPAL_WEBHOOK_ID", "")
-PAYPAL_MODE = os.getenv("PAYPAL_MODE", "live")  # "sandbox" or "live"
+PAYPAL_MODE = os.getenv("PAYPAL_MODE", "sandbox")
 
-PAYPAL_PLAN_STARTER = os.getenv("PAYPAL_PLAN_STARTER", "P-8H719347ST590783HNHXTOOA")
-PAYPAL_PLAN_PRO = os.getenv("PAYPAL_PLAN_PRO", "P-43X014718W354120YNHXTRFA")
-PAYPAL_PLAN_BUSINESS = os.getenv("PAYPAL_PLAN_BUSINESS", "P-7X397240EN318082RNHXTR5A")
+PAYPAL_PLAN_STARTER = os.getenv("PAYPAL_PLAN_STARTER", "")
+PAYPAL_PLAN_PRO = os.getenv("PAYPAL_PLAN_PRO", "")
+PAYPAL_PLAN_BUSINESS = os.getenv("PAYPAL_PLAN_BUSINESS", "")
 
 # ---------- Chatbot plan limits ----------
 CHATBOT_PLANS = {
