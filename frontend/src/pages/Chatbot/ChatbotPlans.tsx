@@ -11,6 +11,9 @@ import { useTheme, alpha } from "@mui/material/styles";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PageContainer from "../../components/PageContainer";
 import ToolStatusAlerts from "../../components/alerts/ToolStatusAlerts";
 import { apiFetch } from "../../utils/api";
@@ -50,26 +53,35 @@ declare global {
         createSubscription: (data: unknown, actions: { subscription: { create: (o: { plan_id: string }) => Promise<string> } }) => Promise<string>;
         onApprove: (data: { subscriptionID: string }) => void;
         onError?: (err: unknown) => void;
-      }) => { render: (selector: string) => void };
+        onCancel?: () => void;
+      }) => { render: (selector: string) => Promise<void> };
     };
   }
 }
 
 const CHAT_FONT = `"Space Grotesk", "Avenir Next", "Segoe UI", sans-serif`;
-const PAYPAL_CLIENT_ID = "AROz8-sfDnlhsKHX5NhFksfnines_qGL0OlNQRB1jT-hzrPouDyPdItofBI_59Q-zQbNzs8EFEqrAmX1";
-const PAYPAL_SCRIPT_URL = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
 
-function loadPayPalScript(): Promise<boolean> {
+interface PayPalConfig {
+  client_id: string;
+  mode: "sandbox" | "live";
+  currency: string;
+}
+
+function buildPayPalScriptUrl(config: PayPalConfig): string {
+  return `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(config.client_id)}&vault=true&intent=subscription&currency=${encodeURIComponent(config.currency)}`;
+}
+
+function loadPayPalScript(scriptUrl: string): Promise<boolean> {
   if (window.paypal) return Promise.resolve(true);
   return new Promise<boolean>((resolve) => {
-    const existing = document.querySelector<HTMLScriptElement>(`script[src="${PAYPAL_SCRIPT_URL}"]`);
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${scriptUrl}"]`);
     if (existing) {
       existing.addEventListener("load", () => resolve(true), { once: true });
       existing.addEventListener("error", () => resolve(false), { once: true });
       return;
     }
     const script = document.createElement("script");
-    script.src = PAYPAL_SCRIPT_URL;
+    script.src = scriptUrl;
     script.async = true;
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
@@ -98,8 +110,10 @@ export default function ChatbotPlans() {
 
   const [plans, setPlans] = useState<Plan[]>([]);
   const [billing, setBilling] = useState<BillingStatus | null>(null);
+  const [paypalConfig, setPaypalConfig] = useState<PayPalConfig | null>(null);
   const [loadingPlans, setLoadingPlans] = useState(true);
   const [checkingOut, setCheckingOut] = useState<string | null>(null);
+  const [paypalActive, setPaypalActive] = useState<string | null>(null);
   const [openingPortal, setOpeningPortal] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -107,12 +121,14 @@ export default function ChatbotPlans() {
   useEffect(() => {
     void (async () => {
       try {
-        const [plansRes, statusRes] = await Promise.all([
+        const [plansRes, statusRes, configRes] = await Promise.all([
           apiFetch("/api/chatbots/billing/plans/"),
           apiFetch("/api/chatbots/billing/status/"),
+          apiFetch("/api/chatbots/billing/paypal/config/"),
         ]);
         if (plansRes.ok) setPlans(await plansRes.json());
         if (statusRes.ok) setBilling(await statusRes.json());
+        if (configRes.ok) setPaypalConfig(await configRes.json());
       } finally {
         setLoadingPlans(false);
       }
@@ -128,19 +144,31 @@ export default function ChatbotPlans() {
     setError("");
     setSuccess("");
     setCheckingOut(planId);
+    setPaypalActive(planId);
 
-    const loaded = await loadPayPalScript();
+    if (!paypalConfig?.client_id || paypalConfig.client_id.startsWith("REPLACE_WITH_")) {
+      setError("PayPal is not configured. Please contact support.");
+      setCheckingOut(null);
+      setPaypalActive(null);
+      return;
+    }
+
+    const loaded = await loadPayPalScript(buildPayPalScriptUrl(paypalConfig));
     if (!loaded || !window.paypal) {
       setError("Could not load PayPal. Please try again.");
       setCheckingOut(null);
+      setPaypalActive(null);
       return;
     }
 
     const containerId = `paypal-btn-${planId}`;
+    // Wait a tick so React has rendered the container for this plan.
+    await new Promise((r) => setTimeout(r, 0));
     const container = document.getElementById(containerId);
     if (!container) {
       setError("PayPal button container not found.");
       setCheckingOut(null);
+      setPaypalActive(null);
       return;
     }
     container.innerHTML = "";
@@ -173,8 +201,18 @@ export default function ChatbotPlans() {
       onError: () => {
         setError("PayPal encountered an error. Please try again.");
         setCheckingOut(null);
+        setPaypalActive(null);
       },
-    }).render(`#${containerId}`);
+      onCancel: () => {
+        setCheckingOut(null);
+      },
+    }).render(`#${containerId}`).then(() => {
+      setCheckingOut(null);
+    }).catch(() => {
+      setError("Could not render PayPal buttons.");
+      setCheckingOut(null);
+      setPaypalActive(null);
+    });
   };
 
   const handleCancelSubscription = async () => {
@@ -475,28 +513,29 @@ export default function ChatbotPlans() {
                       <Button fullWidth variant="contained" disabled sx={{ borderRadius: "12px", fontWeight: 800, py: 1.2, fontFamily: CHAT_FONT }}>
                         Your current plan
                       </Button>
-                    ) : (
-                      <Box id={`paypal-btn-${plan.id}`} sx={{ minHeight: 45 }}>
-                        {isLoading && !checkingOut?.startsWith("paypal") && (
+                    ) : paypalActive === plan.id ? (
+                      <Box>
+                        {isLoading && (
                           <Stack alignItems="center" py={1}><CircularProgress size={24} /></Stack>
                         )}
-                        {!isLoading && (
-                          <Button
-                            fullWidth
-                            variant={isHighlight ? "contained" : "outlined"}
-                            onClick={() => plan.paypal_plan_id && void handleSubscribe(plan.id, plan.paypal_plan_id)}
-                            sx={{
-                              borderRadius: "12px",
-                              fontWeight: 800,
-                              py: 1.2,
-                              fontFamily: CHAT_FONT,
-                              ...(isHighlight ? { background: headerGradient, color: "#fff", "&:hover": { filter: "saturate(1.1)" } } : {}),
-                            }}
-                          >
-                            {plan.cta}
-                          </Button>
-                        )}
+                        <Box id={`paypal-btn-${plan.id}`} sx={{ minHeight: 45 }} />
                       </Box>
+                    ) : (
+                      <Button
+                        fullWidth
+                        variant={isHighlight ? "contained" : "outlined"}
+                        disabled={isLoading}
+                        onClick={() => plan.paypal_plan_id && void handleSubscribe(plan.id, plan.paypal_plan_id)}
+                        sx={{
+                          borderRadius: "12px",
+                          fontWeight: 800,
+                          py: 1.2,
+                          fontFamily: CHAT_FONT,
+                          ...(isHighlight ? { background: headerGradient, color: "#fff", "&:hover": { filter: "saturate(1.1)" } } : {}),
+                        }}
+                      >
+                        {isLoading ? <CircularProgress size={20} /> : plan.cta}
+                      </Button>
                     )}
                   </Box>
                 </Paper>
@@ -558,6 +597,56 @@ export default function ChatbotPlans() {
             </Box>
           ))}
         </Stack>
+
+        {/* ── Support ─────────────────────────────────────────────────────── */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 2.5,
+            borderRadius: "14px",
+            background: isDark
+              ? alpha(theme.palette.background.paper, 0.5)
+              : alpha(theme.palette.grey[50], 0.9),
+            border: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+          }}
+        >
+          <Typography variant="subtitle2" fontWeight={800} gutterBottom sx={{ fontFamily: CHAT_FONT }}>
+            Need help?
+          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={2}>
+            Got a question about billing, your plan, or anything else? Reach out — we usually reply within a few hours.
+          </Typography>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} flexWrap="wrap">
+            <Button
+              variant="outlined"
+              startIcon={<WhatsAppIcon />}
+              href="https://wa.me/447796908235"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ borderRadius: "10px", fontWeight: 700, justifyContent: "flex-start" }}
+            >
+              WhatsApp: +44 7796 908235
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<FacebookIcon />}
+              href="https://www.facebook.com/tryTorensa/"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ borderRadius: "10px", fontWeight: 700, justifyContent: "flex-start" }}
+            >
+              Facebook Messenger
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<EmailOutlinedIcon />}
+              href="mailto:admin@torensa.com"
+              sx={{ borderRadius: "10px", fontWeight: 700, justifyContent: "flex-start" }}
+            >
+              admin@torensa.com
+            </Button>
+          </Stack>
+        </Paper>
 
       </Stack>
     </PageContainer>

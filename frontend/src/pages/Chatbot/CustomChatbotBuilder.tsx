@@ -495,6 +495,20 @@ export default function CustomChatbotBuilder() {
                   Upgrade plan
                 </Button>
               )}
+              {planInfo.plan && planInfo.plan !== "free" && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => navigate("/chatbot-plans")}
+                  sx={{
+                    borderRadius: "9px",
+                    fontWeight: 700,
+                    fontSize: 12,
+                  }}
+                >
+                  Manage plan
+                </Button>
+              )}
               {!planInfo.plan && (
                 <Button
                   size="small"

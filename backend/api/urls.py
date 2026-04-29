@@ -67,6 +67,7 @@ from .views.chatbot_billing_views import (
     cancel_subscription_view,
     paypal_webhook_view,
     paypal_capture_view,
+    paypal_config_view,
 )
 from .views.review_views import reviews_view, review_delete_view
 
@@ -145,6 +146,7 @@ urlpatterns = [
     path("chatbots/billing/plans/", plans_view),
     path("chatbots/billing/status/", billing_status_view),
     path("chatbots/billing/cancel/", cancel_subscription_view),
+    path("chatbots/billing/paypal/config/", paypal_config_view),
     path("chatbots/billing/paypal/capture/", paypal_capture_view),
     path("chatbots/billing/paypal/webhook/", paypal_webhook_view),
     # Tool reviews

@@ -11,8 +11,9 @@ POST /api/chatbots/billing/cancel/             - cancel current subscription
 
 import json
 import logging
-from datetime import timezone
+import time
 
+import requests
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone as dj_tz
@@ -25,6 +26,90 @@ from rest_framework.response import Response
 from ..models import ChatbotMonthlyUsage, ChatbotSubscription
 
 logger = logging.getLogger(__name__)
+
+
+def _paypal_api_base() -> str:
+    return (
+        "https://api-m.sandbox.paypal.com"
+        if settings.PAYPAL_MODE == "sandbox"
+        else "https://api-m.paypal.com"
+    )
+
+
+# Module-level token cache — PayPal tokens last ~9 hours, no point re-fetching.
+_token_cache = {"access_token": None, "expires_at": 0.0}
+
+
+def _get_paypal_access_token() -> str | None:
+    """Fetch (and cache) an OAuth2 access token. Returns None on failure."""
+    now = time.time()
+    if _token_cache["access_token"] and _token_cache["expires_at"] > now + 60:
+        return _token_cache["access_token"]
+
+    if not settings.PAYPAL_CLIENT_ID or not settings.PAYPAL_CLIENT_SECRET:
+        logger.error("PayPal credentials not configured")
+        return None
+
+    try:
+        resp = requests.post(
+            f"{_paypal_api_base()}/v1/oauth2/token",
+            auth=(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET),
+            data={"grant_type": "client_credentials"},
+            headers={"Accept": "application/json"},
+            timeout=10,
+        )
+    except requests.RequestException as exc:
+        logger.error("PayPal token request failed: %s", exc)
+        return None
+
+    if resp.status_code != 200:
+        logger.error("PayPal token request returned %s: %s", resp.status_code, resp.text[:300])
+        return None
+
+    data = resp.json()
+    _token_cache["access_token"] = data.get("access_token")
+    _token_cache["expires_at"] = now + int(data.get("expires_in", 0))
+    return _token_cache["access_token"]
+
+
+def _cancel_paypal_subscription(subscription_id: str, reason: str = "User requested cancellation") -> tuple[bool, str]:
+    """Call PayPal's cancel endpoint. Returns (ok, error_message)."""
+    token = _get_paypal_access_token()
+    if not token:
+        return False, "Could not authenticate with PayPal."
+
+    try:
+        resp = requests.post(
+            f"{_paypal_api_base()}/v1/billing/subscriptions/{subscription_id}/cancel",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
+            json={"reason": reason[:128]},
+            timeout=10,
+        )
+    except requests.RequestException as exc:
+        logger.error("PayPal cancel request failed for %s: %s", subscription_id, exc)
+        return False, "Could not reach PayPal. Please try again."
+
+    # 204 = cancelled, 422 with ALREADY_CANCELLED is also fine
+    if resp.status_code == 204:
+        return True, ""
+
+    if resp.status_code == 422:
+        try:
+            details = resp.json().get("details", [])
+            for d in details:
+                if d.get("issue") in ("SUBSCRIPTION_STATUS_INVALID", "ALREADY_CANCELLED"):
+                    return True, ""  # already cancelled — treat as success
+        except ValueError:
+            pass
+
+    logger.error(
+        "PayPal cancel returned %s for %s: %s",
+        resp.status_code, subscription_id, resp.text[:300],
+    )
+    return False, "PayPal could not cancel the subscription."
 
 
 PLANS = [
@@ -138,6 +223,18 @@ def plans_view(request):
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
+def paypal_config_view(request):
+    """Public PayPal SDK config so the frontend can build the script URL without
+    hardcoding credentials. Flipping PAYPAL_MODE on the backend flips the stack."""
+    return Response({
+        "client_id": settings.PAYPAL_CLIENT_ID,
+        "mode": settings.PAYPAL_MODE,
+        "currency": "USD",
+    })
+
+
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def billing_status_view(request):
     sub = _get_or_create_subscription(request.user)
@@ -199,6 +296,16 @@ def cancel_subscription_view(request):
     if not sub.paypal_subscription_id:
         return Response({"error": "No active subscription found."}, status=status.HTTP_400_BAD_REQUEST)
 
+    if sub.paypal_status == "cancelled":
+        return Response({"error": "Subscription is already cancelled."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 1. Cancel at PayPal first. If that fails, do NOT touch local state.
+    ok, error = _cancel_paypal_subscription(sub.paypal_subscription_id)
+    if not ok:
+        return Response({"error": error}, status=status.HTTP_502_BAD_GATEWAY)
+
+    # 2. PayPal accepted the cancellation — flip local state.
+    # The BILLING.SUBSCRIPTION.CANCELLED webhook will also fire and is idempotent.
     with transaction.atomic():
         sub.plan = "free"
         sub.paypal_status = "cancelled"
