@@ -27,7 +27,7 @@ const DEFAULT_META: RouteMeta = {
 const STATIC_ROUTE_META: Record<string, RouteMeta> = {
   "/": DEFAULT_META,
   "/about": {
-    title: "About Us | Torensa",
+    title: "About Torensa | Free Open-Source Productivity Tools",
     description:
       "Learn about Torensa, our mission to build free open-source productivity tools for everyone, the team behind the project, and how to get in touch with us.",
   },
@@ -42,12 +42,12 @@ const STATIC_ROUTE_META: Record<string, RouteMeta> = {
       "Read the Terms of Service for using Torensa tools, including acceptable use, intellectual property, and liability.",
   },
   "/login": {
-    title: "Login | Torensa",
+    title: "Login to Torensa | Access Your Free Online Tools",
     description:
       "Sign in to your Torensa account to access protected tools, save your preferences, manage your custom AI chatbots, and continue where you left off.",
   },
   "/signup": {
-    title: "Sign Up | Torensa",
+    title: "Sign Up for Torensa | Create a Free Account Today",
     description:
       "Create your free Torensa account to get started with all available tools, build custom AI chatbots, save preferences, and unlock additional features.",
   },
