@@ -1629,7 +1629,7 @@
     "component": "SubtitleDownloader",
     "name": "Untertitel‑Downloader",
     "title": "Untertitel‑Downloader – Film-Untertitel kostenlos herunterladen",
-    "description": "SRT‑Untertitel aus Online‑Videos mit yt‑dlp herunterladen.",
+    "description": "Laden Sie kostenlos SRT‑Untertitel von Online‑Videos mit yt‑dlp herunter. Holen Sie vorhandene Captions oder automatisch generierte Untertitel von YouTube.",
     "path": "/subtitle-downloader",
     "ctaLabel": "Untertitel herunterladen",
     "offlineEnabled": false,
