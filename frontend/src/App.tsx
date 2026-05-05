@@ -187,27 +187,6 @@ export default function App({ themeName, setThemeName }: AppProps) {
     }
   }, [setUser]);
 
-  const toolPaths = useMemo(
-    () => new Set(activeCards.map((card) => card.path)),
-    [activeCards],
-  );
-  useEffect(() => {
-    const stripped = stripLanguagePrefix(location.pathname);
-    const isAdsPage = stripped === "/" || toolPaths.has(stripped);
-    if (!isAdsPage) {
-      document.getElementById("adsense-script")?.remove();
-      return;
-    }
-    if (document.getElementById("adsense-script")) return;
-    const script = document.createElement("script");
-    script.id = "adsense-script";
-    script.async = true;
-    script.src =
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7466905660040122";
-    script.crossOrigin = "anonymous";
-    document.head.appendChild(script);
-  }, [location.pathname, toolPaths]);
-
   /* ===================== NAV ITEMS ===================== */
   type NavItemsProps = {
     onClick?: () => void;

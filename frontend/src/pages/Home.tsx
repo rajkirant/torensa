@@ -272,6 +272,20 @@ export default function Home() {
   }, [selectedCategoryId, isOnline, searchTerm]);
 
   React.useEffect(() => {
+    if (document.getElementById("adsense-script")) return;
+    const script = document.createElement("script");
+    script.id = "adsense-script";
+    script.async = true;
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7466905660040122";
+    script.crossOrigin = "anonymous";
+    document.head.appendChild(script);
+    return () => {
+      document.getElementById("adsense-script")?.remove();
+    };
+  }, []);
+
+  React.useEffect(() => {
     const params = new URLSearchParams(location.search);
 
     if (selectedCategoryId === "all") {
