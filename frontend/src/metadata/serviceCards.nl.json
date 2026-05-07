@@ -2170,6 +2170,58 @@
     ]
   },
   {
+    "id": "cover-letter-tailor",
+    "component": "CoverLetterTailor",
+    "name": "Cover Letter Tailor",
+    "title": "Cover Letter Tailor - Update DOCX Cover Letters for Jobs",
+    "description": "Upload a .docx cover letter, paste a job description, and generate a tailored Word document that highlights relevant skills from the role.",
+    "path": "/cover-letter-tailor",
+    "ctaLabel": "Tailor Letter",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "Cover Letter Tailor updates an existing .docx cover letter for a specific job. Upload your Word document, paste the job description, and the tool rewrites the letter to emphasize relevant skills, responsibilities, and keywords while keeping your original facts intact. The result downloads as a new .docx file.",
+    "categoryId": "documents",
+    "keywords": [
+      "cover letter tailor",
+      "cover letter generator",
+      "job application cover letter",
+      "docx cover letter editor",
+      "ai cover letter",
+      "custom cover letter",
+      "tailor cover letter to job description",
+      "cover letter updater",
+      "word cover letter"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Upload your existing cover letter as a .docx file.",
+      "Paste the job description into the text box.",
+      "Click Update Cover Letter.",
+      "Download the tailored .docx file when it is ready.",
+      "Review the final document before sending it with your job application."
+    ],
+    "faqs": [
+      {
+        "q": "Will the tool invent experience I do not have?",
+        "a": "No. The model is instructed to keep your original facts intact and only emphasize skills that are reasonably supported by your existing cover letter."
+      },
+      {
+        "q": "What file format can I upload?",
+        "a": "Upload a .docx Word document. Older .doc files are not supported for this tool."
+      },
+      {
+        "q": "Does the output stay editable?",
+        "a": "Yes. The tailored cover letter downloads as a new .docx file that you can open and edit in Microsoft Word, Google Docs, or another compatible editor."
+      },
+      {
+        "q": "Should I review the generated cover letter?",
+        "a": "Yes. Always review the final document to confirm the tone, details, and claims are accurate before submitting it."
+      }
+    ]
+  },
+  {
     "id": "ai-humaniser",
     "component": "AiHumaniser",
     "name": "AI-tekst humaniseren – AI-tekst menselijk laten klinken",
