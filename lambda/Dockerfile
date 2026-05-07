@@ -1,5 +1,7 @@
 FROM public.ecr.aws/lambda/python:3.14
 
+ARG LIBREOFFICE_VERSION=25.8.6
+
 # Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
 RUN dnf install -y \
       libgomp fontconfig dejavu-sans-fonts \
@@ -12,7 +14,7 @@ RUN dnf install -y \
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
 RUN curl -fsSL \
-      "https://download.documentfoundation.org/libreoffice/stable/25.8.5/rpm/x86_64/LibreOffice_25.8.5_Linux_x86-64_rpm.tar.gz" \
+      "https://download.documentfoundation.org/libreoffice/stable/${LIBREOFFICE_VERSION}/rpm/x86_64/LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz" \
       | tar xz -C /tmp/ \
     && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
     && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
