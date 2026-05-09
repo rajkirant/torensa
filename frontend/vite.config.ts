@@ -257,6 +257,10 @@ export default defineConfig({
             return "pdf-lib";
           }
 
+          if (fromPkg(id, "pdfjs-dist")) {
+            return "pdfjs-dist";
+          }
+
           if (fromPkg(id, "jszip")) {
             return "jszip";
           }
