@@ -603,6 +603,65 @@
     ]
   },
   {
+    "id": "pdf-to-image",
+    "component": "PdfToImage",
+    "name": "PDF to Image",
+    "title": "PDF to Image Converter - Convert PDF Pages to PNG, JPEG, or WebP",
+    "description": "Convert PDF pages to PNG, JPEG, or WebP images locally in your browser. Choose a page range, output resolution, and quality without uploading any files.",
+    "path": "/pdf-to-image",
+    "ctaLabel": "Convert PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Upload a PDF and render selected pages as image files. Pick PNG, JPEG, or WebP, choose the resolution from 1x to 4x, and download a single image or a ZIP of all pages. Everything runs on your device using PDF.js — no uploads.",
+    "categoryId": "documents",
+    "keywords": [
+      "pdf",
+      "image",
+      "png",
+      "jpeg",
+      "webp",
+      "convert",
+      "rasterize"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click the upload area or drag and drop the PDF file you want to convert.",
+      "Enter the page range you want to convert (for example, 1-3,5,8-10) or leave the default to convert every page.",
+      "Pick an output format: PNG (lossless), JPEG (smaller files), or WebP.",
+      "Choose a resolution (1x to 4x). Higher values produce sharper images and larger files.",
+      "For JPEG and WebP, optionally adjust the quality slider.",
+      "Click Convert to render the pages in your browser.",
+      "Download a single image, or a ZIP archive when multiple pages are selected."
+    ],
+    "faqs": [
+      {
+        "q": "Is my PDF uploaded to a server?",
+        "a": "No. The PDF is rendered entirely within your browser using Mozilla's PDF.js. No content leaves your device."
+      },
+      {
+        "q": "Which image formats are supported?",
+        "a": "PNG, JPEG, and WebP. PNG is lossless and supports transparency, JPEG produces smaller files, and WebP balances quality and size."
+      },
+      {
+        "q": "How does the resolution setting affect the output?",
+        "a": "The resolution is a multiplier of the PDF's native page size (roughly 72 DPI at 1x). 2x ≈ 144 DPI is a good default for screens; 3x or 4x is suitable for print."
+      },
+      {
+        "q": "Can I convert specific pages instead of the whole document?",
+        "a": "Yes. Enter ranges and individual page numbers separated by commas, for example 1-3,5,8-10."
+      },
+      {
+        "q": "What happens when I select multiple pages?",
+        "a": "Each selected page is rendered to its own image file, and all images are packaged into a ZIP for a single download."
+      },
+      {
+        "q": "Can I convert a password-protected PDF?",
+        "a": "Password-protected PDFs are not supported. Remove the password using another tool first."
+      }
+    ]
+  },
+  {
     "id": "image-crop-tool",
     "component": "ImageCropTool",
     "name": "Image Crop Tool",

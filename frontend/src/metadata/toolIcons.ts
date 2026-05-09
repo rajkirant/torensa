@@ -68,6 +68,7 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "pdf-to-word": TextSnippetIcon,
   "image-generator": AutoAwesomeIcon,
   "pdf-text-extractor": FindInPageIcon,
+  "pdf-to-image": PictureAsPdfIcon,
   "excel-to-csv": TableViewIcon,
   "subtitle-downloader": SubtitlesIcon,
   "speech-to-text": MicIcon,
