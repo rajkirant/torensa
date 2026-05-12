@@ -11,6 +11,26 @@ const COUNTRY_TO_LANGUAGE: Record<string, LanguageCode> = {
   CH: "de", // Switzerland (German-speaking)
   NL: "nl",
   BE: "nl", // Belgium (Dutch-speaking)
+  ES: "es",
+  MX: "es",
+  AR: "es",
+  CO: "es",
+  CL: "es",
+  PE: "es",
+  VE: "es",
+  EC: "es",
+  GT: "es",
+  CU: "es",
+  BO: "es",
+  DO: "es",
+  HN: "es",
+  PY: "es",
+  SV: "es",
+  NI: "es",
+  CR: "es",
+  PA: "es",
+  UY: "es",
+  PR: "es",
 };
 
 async function fetchCountryCode(): Promise<string | null> {
@@ -28,7 +48,7 @@ async function fetchCountryCode(): Promise<string | null> {
 
 /**
  * Detects the user's country via IP geolocation and redirects to the
- * appropriate language prefix (/nl, /de) if they are visiting for the
+ * appropriate language prefix (/nl, /de, /es) if they are visiting for the
  * first time without an explicit language in the URL.
  *
  * Only runs once per browser session (stored in sessionStorage).

@@ -1,0 +1,2557 @@
+[
+  {
+    "id": "custom-chatbot-builder",
+    "component": "Chatbot/CustomChatbotBuilder",
+    "name": "Generador de chatbot de IA personalizado",
+    "title": "Generador de chatbot personalizado",
+    "description": "Convierte cualquier texto en un chatbot de IA funcional en segundos. Pega tus preguntas frecuentes, documentos o políticas: tu bot responderá basándose solo en lo que tú proporciones.",
+    "path": "/custom-chatbot-builder",
+    "ctaLabel": "Crear chatbot",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "El Generador de chatbot personalizado te permite crear un asistente de IA entrenado con tu propio texto en segundos, sin programación. Pega cualquier texto plano (preguntas frecuentes de productos, documentación de soporte, políticas de empresa, guías de bienvenida) en el editor de base de conocimiento y tu chatbot estará listo para responder preguntas de inmediato. Cada bot funciona con AWS Bedrock (Claude) y responde estrictamente a partir del texto que proporciones; nunca adivina ni inventa nada. Comparte tu chatbot mediante un enlace público, intégralo en tu sitio web a través de la API REST o pruébalo directamente en el panel de chat. Admite varios bots, historial de conversación persistente, bases de conocimiento editables y endpoints de API individuales por bot.",
+    "categoryId": "developer",
+    "keywords": [
+      "chatbot personalizado",
+      "generador de chatbot con IA",
+      "entrenar chatbot con texto",
+      "chatbot a partir de documentos",
+      "chatbot instantáneo",
+      "bot de preguntas frecuentes",
+      "chatbot de base de conocimiento",
+      "generador de chatbot sin código",
+      "api de chatbot",
+      "integrar chatbot en sitio web",
+      "generador de asistente de IA",
+      "texto a chatbot",
+      "chatbot bedrock claude"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en 'Nuevo chatbot' y dale un nombre a tu bot (por ejemplo, 'Bot de soporte de producto').",
+      "Pega tu base de conocimiento en el campo de texto: preguntas frecuentes, documentos, políticas o cualquier texto plano.",
+      "Haz clic en 'Crear chatbot' para guardar y entrenar el bot al instante.",
+      "Selecciona el bot en el panel izquierdo para abrir el panel de chat.",
+      "Usa la pestaña 'Chat' para probar tu bot: responde únicamente con tu texto.",
+      "Usa la pestaña 'API' para obtener un endpoint REST que puedes invocar desde cualquier sitio web o aplicación.",
+      "Haz clic en el icono de compartir para copiar un enlace público y enviarlo a quien quieras.",
+      "Edita la base de conocimiento o borra el historial de conversación en cualquier momento con los iconos del encabezado."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué tipo de texto puedo usar como base de conocimiento?",
+        "a": "Cualquier texto plano funciona: preguntas frecuentes de productos, documentación de soporte, políticas de empresa, guías de bienvenida, páginas de precios, instrucciones paso a paso o notas libres. Cuanto más detalle relevante incluyas, con mayor precisión responderá el bot."
+      },
+      {
+        "q": "¿El chatbot inventará respuestas que no conoce?",
+        "a": "No. Las instrucciones del bot lo obligan a responder únicamente con el texto que tú proporciones. Si una pregunta no está cubierta por tu base de conocimiento, lo dirá amablemente en lugar de adivinar."
+      },
+      {
+        "q": "¿Cómo añado el chatbot a mi propio sitio web?",
+        "a": "Selecciona tu bot, haz clic en la pestaña API y copia el endpoint REST. Envía una solicitud POST con un cuerpo JSON {\"message\": \"your question\"} y recibirás {\"answer\": \"...\"}. No se requiere clave de API: los visitantes tienen un límite de 20 mensajes por sesión."
+      },
+      {
+        "q": "¿Puedo compartir el chatbot con alguien que no tenga cuenta?",
+        "a": "Sí. Cada bot tiene un enlace público único (por ejemplo, torensa.com/chatbot/abc123). Cualquiera con el enlace puede chatear con tu bot sin iniciar sesión. Copia el enlace con el icono de compartir junto a tu bot."
+      },
+      {
+        "q": "¿Mi texto de la base de conocimiento se almacena de forma segura?",
+        "a": "Sí. La base de conocimiento de tu chatbot y el historial de conversación están vinculados a tu cuenta y se guardan de forma segura. Solo tú puedes verlos, editarlos o eliminarlos. Los visitantes públicos solo ven las respuestas del bot, nunca el texto subyacente."
+      },
+      {
+        "q": "¿Puedo tener varios chatbots?",
+        "a": "Sí. Las cuentas gratuitas incluyen 1 bot. Los planes de pago admiten 3, 20 o 100 bots, cada uno con su propia base de conocimiento, historial de conversación y endpoint de API independiente."
+      },
+      {
+        "q": "¿Puedo actualizar la base de conocimiento después de crear el bot?",
+        "a": "Sí. Haz clic en el icono de editar (lápiz) de cualquier bot para actualizar su nombre o el texto de la base de conocimiento en cualquier momento. Los cambios se aplican de inmediato en el siguiente mensaje."
+      }
+    ]
+  },
+  {
+    "id": "song-identifier",
+    "component": "SongIdentifier",
+    "name": "Identificador de canciones",
+    "title": "Identificador de canciones - Descubre qué canción está sonando",
+    "description": "Identifica al instante cualquier canción que esté sonando a tu alrededor. Obtén los datos de la pista, información del artista y enlaces directos a Spotify, YouTube Music, Apple Music y más.",
+    "path": "/song-identifier",
+    "ctaLabel": "Identificar canción",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "¿Te preguntas qué canción está sonando? Usa tu micrófono para identificar cualquier canción en segundos. Este buscador de canciones online gratuito graba un breve clip de audio, lo reconoce contra una base de datos de más de 100 millones de pistas y devuelve el título, el artista, el álbum y el género. Consigue enlaces directos a Spotify, YouTube Music, Apple Music, Amazon Music y Deezer. Funciona con música procedente de altavoces, TV, radio o incluso tarareando: no requiere instalar ninguna aplicación.",
+    "categoryId": "utilities",
+    "keywords": [
+      "identificador de canciones",
+      "qué canción es esta",
+      "identificar canción online",
+      "buscador de canciones",
+      "qué canción está sonando",
+      "adivina la canción",
+      "reconocimiento de canciones",
+      "identificador de música",
+      "encontrar canción por sonido",
+      "reconocer canción online",
+      "detector de canciones",
+      "identificar música",
+      "shazam online",
+      "buscar canción escuchando",
+      "identificador de canciones gratis"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Reproduce la canción que quieres identificar desde cualquier fuente: altavoces, TV, radio, o incluso tararéala o cántala.",
+      "Haz clic en el botón del micrófono para empezar a escuchar.",
+      "La herramienta graba hasta 10 segundos de audio desde tu micrófono.",
+      "Puedes pulsar Detener antes si ya tienes un fragmento claro.",
+      "El audio se envía a ACRCloud para su identificación.",
+      "Los datos de la canción, incluidos título, artista, álbum y enlaces de streaming, aparecen en pantalla."
+    ],
+    "faqs": [
+      {
+        "q": "¿Cómo identifico una canción que está sonando a mi alrededor?",
+        "a": "Haz clic en el botón del micrófono, deja que la herramienta escuche durante 5-10 segundos y reconocerá la canción automáticamente. Obtendrás el título, el artista, el álbum y enlaces para escucharla en Spotify, YouTube Music, Apple Music y más."
+      },
+      {
+        "q": "¿Puedo identificar una canción tarareando o cantando?",
+        "a": "Sí, la herramienta admite reconocimiento por tarareo y canto. Los resultados son más precisos cuando la canción original suena desde un altavoz o fuente de audio, pero el tarareo puede funcionar con canciones populares."
+      },
+      {
+        "q": "¿Es gratuito este identificador de canciones?",
+        "a": "Sí, este identificador de canciones es completamente gratuito. Sin registro, sin descargar aplicaciones y sin límites. Solo ábrelo en tu navegador y empieza a identificar canciones."
+      },
+      {
+        "q": "¿Qué tan preciso es el reconocimiento?",
+        "a": "La herramienta consulta una base de datos de más de 100 millones de pistas de Spotify, YouTube, Deezer y otras plataformas importantes. El reconocimiento es muy preciso para música grabada, actuaciones en directo y la mayoría de versiones."
+      },
+      {
+        "q": "¿Funciona en móvil y ordenador?",
+        "a": "Sí, el identificador de canciones funciona en cualquier dispositivo con micrófono y un navegador moderno: iPhones, móviles Android, tabletas, portátiles y ordenadores. No requiere instalar ninguna app."
+      },
+      {
+        "q": "¿Se guarda mi grabación de audio?",
+        "a": "No. El clip de audio se usa únicamente para el reconocimiento y se descarta inmediatamente después de obtener el resultado. No se almacena nada en nuestros servidores. Tu privacidad está totalmente protegida."
+      },
+      {
+        "q": "¿Qué enlaces de streaming obtengo tras identificar una canción?",
+        "a": "Después de la identificación, obtienes enlaces directos para escuchar en Spotify, YouTube Music, Apple Music, Amazon Music, Deezer y Shazam. También puedes previsualizar y descargar un breve clip de audio."
+      }
+    ]
+  },
+  {
+    "id": "text-share",
+    "component": "EasyShare",
+    "name": "Compartir fácil (texto + archivo)",
+    "title": "Compartir fácil de archivos y texto - Herramienta rápida online",
+    "description": "Comparte archivos o texto entre varios dispositivos a través de internet de forma segura. Sin registro, número de teléfono ni correo. Simple, rápido y totalmente anónimo.",
+    "path": "/easy-share",
+    "ctaLabel": "Abrir Compartir fácil",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Compartir fácil te permite enviar texto y hasta 5 archivos (de hasta 1 GB cada uno) entre dispositivos en redes distintas mediante un código de acceso de 4 dígitos a través de internet. No se necesita registro, teléfono ni correo.",
+    "categoryId": "communication",
+    "keywords": [
+      "texto",
+      "compartir",
+      "código",
+      "portapapeles",
+      "transferir"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Abre Compartir fácil y elige un modo (Enviar o Recibir).",
+      "En modo Enviar, pega texto y/o arrastra hasta 5 archivos a la zona de subida.",
+      "Cada archivo puede tener hasta 1 GB y se suben directamente al almacenamiento basado en Cloudflare.",
+      "Reordena los archivos arrastrándolos o quita alguno antes de compartir.",
+      "Haz clic en Generar código para obtener un código de acceso de 4 dígitos.",
+      "En modo Recibir, introduce el código de 4 dígitos o usa actualizar para cargar el último envío en tu red.",
+      "Los archivos compartidos aparecen en la lista de descargas y el texto compartido se muestra debajo.",
+      "Los envíos caducan automáticamente al cabo de aproximadamente 1 hora por privacidad."
+    ],
+    "faqs": [
+      {
+        "q": "¿Necesito una cuenta para usar Compartir fácil?",
+        "a": "No se necesita ninguna cuenta. Compartir fácil es una herramienta totalmente anónima: ábrela y comparte al instante."
+      },
+      {
+        "q": "¿Cuántos archivos puedo compartir a la vez?",
+        "a": "Puedes compartir hasta 5 archivos por código. El dispositivo receptor puede descargarlos individualmente en el mismo orden en que los organizaste antes de compartir."
+      },
+      {
+        "q": "¿Cuánto tiempo permanece activo el código?",
+        "a": "Los códigos caducan al cabo de aproximadamente 1 hora. Tras la caducidad, el código deja de funcionar de inmediato en la aplicación y los archivos restantes se eliminan automáticamente del almacenamiento."
+      },
+      {
+        "q": "¿Puedo reordenar los archivos antes de compartirlos?",
+        "a": "Sí. Puedes arrastrar los archivos para reordenarlos antes de generar el código, y el receptor los verá en ese mismo orden."
+      },
+      {
+        "q": "¿Hay un límite de tamaño de archivo?",
+        "a": "Sí. Cada archivo puede tener hasta 1 GB y puedes adjuntar hasta 5 archivos en un mismo envío."
+      },
+      {
+        "q": "¿Qué hace la función de carga automática en la misma red?",
+        "a": "Cuando dos dispositivos están en la misma red local y uno ha compartido recientemente, el dispositivo receptor puede usar el botón de actualizar para cargar el último envío sin escribir el código."
+      },
+      {
+        "q": "¿Dónde veo el texto compartido al recibir?",
+        "a": "Tras introducir un código válido, los archivos compartidos aparecen en la lista de descargas y el texto compartido se muestra debajo de esa lista."
+      }
+    ]
+  },
+  {
+    "id": "bulk-email",
+    "component": "BulkEmail/BulkEmail",
+    "name": "Envío masivo de correos",
+    "title": "Envío masivo de correos - Envía correos en masa gratis online",
+    "description": "Envía campañas masivas de correo desde una lista de Excel o CSV usando tu propia cuenta de Gmail vía OAuth. Personaliza los mensajes con marcadores e incluye archivos adjuntos.",
+    "path": "/bulk-email",
+    "ctaLabel": "Abrir envío masivo",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Redacta y envía campañas masivas de correo desde un único lugar. Conecta Gmail con OAuth, importa destinatarios desde Excel/CSV, personaliza el asunto y el cuerpo con marcadores y adjunta archivos. Tu configuración SMTP se guarda por cuenta y se usa para enviar a través de tu propia conexión de Gmail.",
+    "categoryId": "communication",
+    "keywords": [
+      "correo",
+      "email",
+      "campaña",
+      "boletín",
+      "gmail"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Inicia sesión en tu cuenta de Torensa y abre Envío masivo de correos.",
+      "Conecta tu cuenta de Gmail mediante OAuth.",
+      "Abre la sección Excel a correo masivo e importa un archivo Excel/CSV con tus destinatarios.",
+      "Selecciona qué columna contiene las direcciones de correo de los destinatarios.",
+      "Introduce un asunto y un mensaje. Haz clic en los chips de columna para insertar marcadores (como $First_Name).",
+      "Opcionalmente adjunta archivos antes de enviar.",
+      "Haz clic en Enviar para procesar y enviar los correos a través de tu Gmail conectado."
+    ],
+    "faqs": [
+      {
+        "q": "¿Necesito una cuenta de Gmail para usar el envío masivo?",
+        "a": "Sí. El envío masivo se conecta vía Gmail OAuth, así que necesitas una cuenta de Google. Tus credenciales nunca se almacenan: se usan tokens OAuth para enviar a través de tu propia conexión de Gmail."
+      },
+      {
+        "q": "¿Cuántos correos puedo enviar a la vez?",
+        "a": "Puedes enviar a todos los destinatarios de tu hoja en un único lote. Se aplican los límites diarios de envío de Gmail (normalmente 500 correos al día para cuentas gratuitas)."
+      },
+      {
+        "q": "¿Puedo importar contactos desde una hoja de cálculo?",
+        "a": "Sí. Importa un archivo Excel/CSV y elige qué columna contiene las direcciones de correo."
+      },
+      {
+        "q": "¿Mis credenciales SMTP se guardan de forma segura?",
+        "a": "Tu conexión de Gmail utiliza OAuth, por lo que no se almacena ninguna contraseña. El token OAuth está vinculado a tu cuenta de Torensa y puedes revocarlo desde la configuración de tu cuenta de Google en cualquier momento."
+      },
+      {
+        "q": "¿Puedo personalizar los correos para cada destinatario?",
+        "a": "Sí. Usa marcadores en tu asunto o mensaje (como $First_Name) que coincidan con los encabezados de tu hoja de cálculo."
+      },
+      {
+        "q": "¿Qué tipos de archivo puedo adjuntar?",
+        "a": "Se admiten los tipos de archivo más comunes (PDF, imágenes, documentos de Word, etc.). Se aplican los límites de tamaño de adjuntos de Gmail: los archivos individuales deben pesar menos de 25 MB."
+      }
+    ]
+  },
+  {
+    "id": "text-to-qr",
+    "component": "TextToQr",
+    "name": "Generador de QR a partir de texto",
+    "title": "Generador de códigos QR a partir de texto - Generador QR gratis online",
+    "description": "Genera códigos QR personalizados a partir de cualquier texto o URL al instante. Añade un logo, incluye una etiqueta corta y personaliza el diseño antes de descargar como PNG de alta resolución.",
+    "path": "/qr-code-generator",
+    "ctaLabel": "Generar QR",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Crea códigos QR escaneables a partir de texto plano o enlaces con vista previa en directo. Añade opcionalmente un logo y una etiqueta corta y descarga la imagen final como PNG. El procesamiento se realiza en el navegador, por lo que no se sube nada.",
+    "categoryId": "business",
+    "keywords": [
+      "qr",
+      "qrcode",
+      "texto",
+      "enlace"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": true,
+    "howTo": [
+      "Escribe o pega cualquier texto, URL, número de teléfono o dirección de correo en el campo de entrada.",
+      "Una vista previa del código QR se actualiza al instante mientras escribes.",
+      "Sube opcionalmente una imagen de logo para incrustarla en el centro del código QR.",
+      "Introduce opcionalmente una etiqueta corta que aparecerá debajo del QR en la imagen exportada.",
+      "Usa las opciones avanzadas para ajustar el tamaño del QR, el nivel de corrección de errores o los colores.",
+      "Haz clic en Descargar para guardar el código QR como una imagen PNG de alta resolución."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué tipos de contenido puedo codificar en un código QR?",
+        "a": "Puedes codificar texto plano, URLs de sitios web, direcciones de correo, números de teléfono, credenciales Wi-Fi, mensajes SMS y más. Cualquier cadena de texto UTF-8 puede almacenarse en un código QR."
+      },
+      {
+        "q": "¿El QR seguirá escaneándose si añado un logo?",
+        "a": "Sí. Los códigos QR incluyen corrección de errores que permite oscurecer hasta el 30 % del código. Añadir un pequeño logo centrado normalmente ocupa menos del 20 % del área y se mantiene totalmente escaneable."
+      },
+      {
+        "q": "¿Para qué sirve el ajuste de nivel de corrección de errores?",
+        "a": "La corrección de errores controla cuánto puede dañarse el QR antes de volverse ilegible. El nivel L (7 %) es el más compacto, mientras que el nivel H (30 %) es el más resistente pero más denso. Usa el nivel M o H cuando añadas un logo."
+      },
+      {
+        "q": "¿Puedo usar esta herramienta sin conexión?",
+        "a": "Sí. El código QR se genera totalmente en tu navegador sin solicitudes al servidor, por lo que funciona offline una vez cargada la página."
+      },
+      {
+        "q": "¿Qué resolución tiene el PNG descargado?",
+        "a": "El PNG exportado se genera al tamaño definido en las opciones avanzadas (por defecto 300x300 px, ajustable hasta 1000x1000 px), lo que lo hace adecuado tanto para uso digital como para impresión."
+      },
+      {
+        "q": "¿Hay un límite de cuánto texto puedo codificar?",
+        "a": "Un código QR puede almacenar hasta unos 4.296 caracteres alfanuméricos, pero los contenidos más largos crean un código más denso. Para URLs y cadenas cortas de menos de 200 caracteres la calidad de escaneo es siempre excelente."
+      }
+    ]
+  },
+  {
+    "id": "barcode-generator",
+    "component": "BarcodeGenerator",
+    "name": "Generador de códigos de barras",
+    "title": "Generador de códigos de barras gratuito - Crea códigos online",
+    "description": "Crea códigos de barras imprimibles en formatos como Code 128, Code 39, EAN y UPC. Personaliza dimensiones y etiquetas y descarga tu código como PNG de alta calidad.",
+    "path": "/barcode-generator",
+    "ctaLabel": "Generar código de barras",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Crea códigos de barras imprimibles directamente en tu navegador con soporte para formatos comunes como Code 128, Code 39, EAN-13, EAN-8 y UPC-A. Personaliza el ancho, la altura y la visualización de la etiqueta y exporta el código de barras como PNG.",
+    "categoryId": "business",
+    "keywords": [
+      "código de barras",
+      "code128",
+      "code39",
+      "ean13",
+      "ean8",
+      "upc",
+      "etiqueta"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": true,
+    "howTo": [
+      "Selecciona el formato de código de barras que se ajuste a tu uso (Code 128 es la opción segura por defecto para la mayoría de textos y números).",
+      "Escribe el valor que quieres codificar en el campo de entrada. La vista previa se actualiza en tiempo real.",
+      "Ajusta el ancho, la altura y el tamaño de la fuente para adaptarlos a tus requisitos de etiquetado.",
+      "Activa o desactiva la opción de texto visible para mostrar u ocultar el texto legible debajo del código.",
+      "Comprueba que el código se ve correcto en el panel de vista previa en directo.",
+      "Haz clic en Descargar PNG para guardar la imagen lista para imprimir o incrustar en documentos."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué formato de código de barras debo usar?",
+        "a": "Code 128 admite todo el conjunto ASCII y longitud variable, ideal para etiquetas de producto generales, envíos e inventario. Usa EAN-13 o UPC-A para códigos minoristas que requieren escaneo en punto de venta. Code 39 es habitual en entornos industriales y automotrices."
+      },
+      {
+        "q": "¿Cuál es la diferencia entre EAN-13 y EAN-8?",
+        "a": "EAN-13 codifica 13 dígitos y es el estándar mundial para productos minoristas. EAN-8 codifica 8 dígitos y es una versión compacta para envases pequeños donde no cabría un EAN-13 completo."
+      },
+      {
+        "q": "¿Necesito incluir un dígito de control?",
+        "a": "Para EAN-13, EAN-8 y UPC-A, el dígito de control se calcula y se añade automáticamente. Para Code 128 y Code 39, basta con introducir tu valor y el código se genera directamente."
+      },
+      {
+        "q": "¿Puedo usar este código de barras para venta minorista?",
+        "a": "Sí, pero los códigos EAN y UPC para uso comercial requieren un prefijo GS1 con licencia oficial para ser únicos a nivel mundial. Para inventario interno o uso personal, cualquier valor numérico funciona."
+      },
+      {
+        "q": "¿Qué resolución tiene el PNG generado?",
+        "a": "El PNG se renderiza con el ancho y alto que configures. Para impresión, aumenta estos valores para obtener una resolución mayor adecuada para impresoras de etiquetas."
+      },
+      {
+        "q": "¿Funciona sin conexión?",
+        "a": "Sí. La generación del código de barras se realiza enteramente en el cliente, sin llamadas al servidor. Funciona sin conexión a internet una vez cargada la página."
+      }
+    ]
+  },
+  {
+    "id": "image-compressor",
+    "component": "ImageCompressor",
+    "name": "Compresor de imágenes",
+    "title": "Compresor de imágenes - Reduce el tamaño de fotos online",
+    "description": "Comprime imágenes localmente en tu navegador con vistas previas instantáneas. Reduce el tamaño de archivos JPG, PNG y WebP manteniendo una alta calidad visual para la web.",
+    "path": "/image-compressor",
+    "ctaLabel": "Comprimir imágenes",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Reduce el tamaño de tus imágenes directamente en el navegador sin subirlas. Previsualiza las imágenes seleccionadas al instante, ajusta la calidad de compresión y comprime y descarga los archivos individualmente o como un archivo ZIP.",
+    "categoryId": "utilities",
+    "keywords": [
+      "imagen",
+      "foto",
+      "imagen",
+      "comprimir",
+      "optimizar",
+      "tamaño"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra y suelta uno o varios archivos de imagen (JPG, PNG o WEBP).",
+      "Aparece al instante una vista previa de cada imagen junto a su tamaño original.",
+      "Ajusta el deslizador de calidad para controlar el equilibrio entre tamaño y calidad visual. Un valor del 75-85 % es lo recomendable para web.",
+      "Haz clic en Comprimir para procesar todas las imágenes subidas.",
+      "Revisa las vistas previas comprimidas y los nuevos tamaños en el panel de resultados.",
+      "Descarga las imágenes comprimidas individualmente o haz clic en Descargar todo como ZIP para obtener todo en un único archivo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mis imágenes se suben a un servidor?",
+        "a": "No. Toda la compresión se realiza localmente en tu navegador mediante la API Canvas. Tus imágenes nunca se envían a ningún servidor, por lo que se mantienen totalmente privadas."
+      },
+      {
+        "q": "¿Qué formatos de imagen se admiten?",
+        "a": "El compresor admite entrada en JPEG, PNG y WEBP. La salida se guarda como JPEG o WEBP, que ofrecen las mejores tasas de compresión para contenido fotográfico."
+      },
+      {
+        "q": "¿Cuánto se reducirá mi archivo?",
+        "a": "La reducción depende de la imagen original y del ajuste de calidad. Las fotos JPEG típicas comprimidas al 80 % de calidad muestran una reducción del 40-70 % con una pérdida de calidad apenas perceptible."
+      },
+      {
+        "q": "¿La compresión degradará visiblemente mi imagen?",
+        "a": "Con ajustes de calidad del 75 % o superiores, los artefactos de compresión suelen ser imperceptibles. Para impresión, mantén la calidad al 90 % o más. Para miniaturas web, un 60-75 % es aceptable."
+      },
+      {
+        "q": "¿Puedo comprimir varias imágenes a la vez?",
+        "a": "Sí. Puedes subir varias imágenes en un lote y descargarlas individualmente o todas a la vez en un archivo ZIP."
+      },
+      {
+        "q": "¿Funciona en móvil?",
+        "a": "Sí. El compresor funciona en cualquier navegador moderno de móvil o escritorio y funciona sin conexión una vez cargada la página."
+      }
+    ]
+  },
+  {
+    "id": "image-format-converter",
+    "component": "ImageFormatConverter",
+    "name": "Conversor de formato de imágenes",
+    "title": "Conversor de formato de imágenes - JPG, PNG y WebP gratis",
+    "description": "Convierte entre PNG, JPG, WebP y BMP totalmente en tu navegador. Procesamiento rápido y seguro sin subir archivos a servidores, garantizando privacidad total.",
+    "path": "/image-format-converter",
+    "ctaLabel": "Convertir imagen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Convierte una sola imagen entre los formatos PNG, JPG, WEBP y BMP en tu navegador. Elige los formatos de origen y destino y exporta al instante sin subidas ni procesamiento en servidor.",
+    "categoryId": "utilities",
+    "keywords": [
+      "imagen",
+      "foto",
+      "imagen",
+      "png",
+      "jpg",
+      "webp",
+      "bmp",
+      "convertir"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra y suelta un archivo de imagen (PNG, JPG, WEBP o BMP).",
+      "La herramienta detecta automáticamente el formato de origen a partir de la extensión.",
+      "Selecciona el formato de salida al que quieres convertir desde el selector.",
+      "Haz clic en Convertir. La conversión se realiza al instante en tu navegador.",
+      "Previsualiza la imagen convertida en el panel de resultados.",
+      "Haz clic en Descargar para guardar la imagen en el nuevo formato."
+    ],
+    "faqs": [
+      {
+        "q": "¿Entre qué formatos puedo convertir?",
+        "a": "La herramienta admite la conversión entre PNG, JPEG (JPG), WEBP y BMP. Puedes convertir desde cualquiera de estos formatos a cualquier otro."
+      },
+      {
+        "q": "¿Convertir a JPEG afecta la calidad?",
+        "a": "JPEG usa compresión con pérdida, por lo que convertir un PNG o WEBP a JPEG puede introducir pequeños artefactos. Volver a convertir a PNG desde JPEG no recupera los datos perdidos, así que conserva un original si la precisión es importante."
+      },
+      {
+        "q": "¿Por qué convertir una imagen a WEBP?",
+        "a": "WEBP es un formato moderno desarrollado por Google que ofrece tamaños de archivo bastante menores que JPEG y PNG con calidad comparable. Está ampliamente soportado en navegadores modernos y es el formato preferido para imágenes web."
+      },
+      {
+        "q": "¿PNG conserva la transparencia tras la conversión?",
+        "a": "PNG admite transparencia (canal alfa). Si conviertes un PNG transparente a JPEG o BMP, las zonas transparentes se rellenarán con un fondo blanco. Al convertir a WEBP se conserva la transparencia."
+      },
+      {
+        "q": "¿Se envía mi imagen a un servidor?",
+        "a": "No. Toda la conversión se hace en el cliente mediante la API Canvas del navegador. Tu imagen nunca sale de tu dispositivo."
+      },
+      {
+        "q": "¿Puedo convertir varias imágenes a la vez?",
+        "a": "La versión actual convierte una imagen cada vez. Para conversión por lotes, sube los archivos de forma secuencial."
+      }
+    ]
+  },
+  {
+    "id": "image-pdf-to-pdf",
+    "component": "imagePdfToPdf",
+    "name": "Combinador de imágenes y PDF",
+    "title": "Combinador de imágenes y PDF - Une archivos online gratis",
+    "description": "Combina varias imágenes y documentos PDF en un único PDF pulido. Reordena páginas, rota imágenes y ajusta los márgenes totalmente sin conexión en tu navegador.",
+    "path": "/pdf-merger",
+    "ctaLabel": "Crear PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Combina varias imágenes y documentos PDF en un único archivo PDF. Reordena los elementos, rota imágenes, elige el tamaño y los márgenes de página, configura el ajuste y añade opcionalmente números de página. Procesamiento en el cliente para garantizar privacidad y velocidad.",
+    "categoryId": "documents",
+    "keywords": [
+      "imagen",
+      "foto",
+      "imagen",
+      "pdf",
+      "combinar",
+      "unir",
+      "fusionar"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra varios archivos: puedes mezclar imágenes (PNG, JPG, WEBP) y documentos PDF existentes.",
+      "Todos los elementos subidos aparecen en una lista ordenable. Arrástralos para reordenar las páginas del PDF final.",
+      "Para las imágenes, usa los botones de rotación para corregir la orientación antes de combinarlas.",
+      "Elige el tamaño de página preferido (A4, Carta, etc.), los márgenes y cómo deben encajar las imágenes en la página.",
+      "Activa opcionalmente los números de página para que se añadan automáticamente a cada página.",
+      "Haz clic en Crear PDF para generar el documento combinado y luego en Descargar para guardarlo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Puedo combinar imágenes y PDFs en el mismo documento?",
+        "a": "Sí. Puedes subir cualquier combinación de imágenes (PNG, JPG, WEBP) y archivos PDF existentes. Todos se combinarán en un único PDF en el orden que especifiques."
+      },
+      {
+        "q": "¿Mis datos se suben a un servidor?",
+        "a": "No. Todo el procesamiento se realiza enteramente en tu navegador. No se sube ningún archivo, lo que lo hace seguro para documentos confidenciales."
+      },
+      {
+        "q": "¿Puedo reordenar las páginas antes de combinar?",
+        "a": "Sí. Todos los archivos subidos aparecen como una lista arrastrable. Solo tienes que arrastrarlos para definir el orden de páginas antes de crear el PDF."
+      },
+      {
+        "q": "¿Qué pasa con los PDFs de varias páginas que subo?",
+        "a": "Cada página de un PDF subido se convierte en una página separada en el documento combinado, insertada en la posición donde colocaste el PDF en la lista."
+      },
+      {
+        "q": "¿Puedo rotar las imágenes antes de añadirlas al PDF?",
+        "a": "Sí. Cada imagen subida tiene controles de rotación para que ajustes la orientación antes de la combinación."
+      },
+      {
+        "q": "¿Qué tamaños de página están disponibles?",
+        "a": "La herramienta admite tamaños habituales como A4, A3, Carta y Legal. También puedes controlar los márgenes y elegir si las imágenes deben llenar la página, ajustarse a los márgenes o centrarse."
+      }
+    ]
+  },
+  {
+    "id": "pdf-splitter",
+    "component": "PdfSplitter",
+    "name": "Divisor de PDF",
+    "title": "Divisor de PDF - Divide PDF en páginas online gratis",
+    "description": "Extrae rangos de páginas concretos o divide un PDF entero en páginas individuales localmente. Procesa tus documentos de forma segura en el navegador sin subir archivos.",
+    "path": "/pdf-splitter",
+    "ctaLabel": "Dividir PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Sube un PDF y divídelo localmente en tu navegador. Extrae páginas seleccionadas en un único PDF o genera un PDF por página descargable en un ZIP. Todo el procesamiento se ejecuta en el dispositivo para privacidad y uso sin conexión.",
+    "categoryId": "documents",
+    "keywords": [
+      "pdf",
+      "dividir",
+      "extraer",
+      "páginas",
+      "documento"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra el archivo PDF que quieres dividir.",
+      "El número total de páginas del PDF se muestra tras la subida.",
+      "Elige un modo de división: extraer un rango personalizado a un nuevo PDF, o dividir cada página en un PDF independiente.",
+      "Si vas a extraer un rango, introduce las páginas de inicio y fin (por ejemplo, páginas 3 a 7).",
+      "Haz clic en Dividir para procesar el documento en tu navegador.",
+      "Descarga el PDF resultante o, si divides por página, descarga todas las páginas en un archivo ZIP."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mi PDF se sube a un servidor?",
+        "a": "No. El PDF se procesa enteramente en tu navegador con PDF.js y pdf-lib. No se envía contenido a ningún servidor."
+      },
+      {
+        "q": "¿Puedo extraer páginas no consecutivas?",
+        "a": "La herramienta actual admite extraer un rango continuo de páginas (página inicial a final). Para selecciones no consecutivas, realiza varias operaciones de extracción."
+      },
+      {
+        "q": "¿Qué ocurre con los marcadores y anotaciones del PDF al dividir?",
+        "a": "Se conservan el contenido, el texto y las imágenes de las páginas. Algunos metadatos como marcadores y campos de formulario pueden no trasladarse según la complejidad del archivo original."
+      },
+      {
+        "q": "¿Hay un límite de páginas?",
+        "a": "No hay un límite estricto. Se manejan en el navegador PDFs grandes con cientos de páginas, aunque los archivos muy grandes pueden tardar algunos segundos extra según tu dispositivo."
+      },
+      {
+        "q": "¿Puedo dividir un PDF protegido con contraseña?",
+        "a": "La herramienta no admite actualmente PDFs protegidos con contraseña. Quita primero la protección con otra herramienta antes de subirlo."
+      },
+      {
+        "q": "¿Cuál es la diferencia entre extraer un rango y dividir por página?",
+        "a": "Extraer un rango produce un nuevo PDF con solo las páginas especificadas. Dividir por página produce un PDF independiente por cada página, todos empaquetados en un ZIP."
+      }
+    ]
+  },
+  {
+    "id": "pdf-to-image",
+    "component": "PdfToImage",
+    "name": "PDF a imagen",
+    "title": "Conversor de PDF a imagen - Convierte páginas PDF a PNG, JPEG o WebP",
+    "description": "Convierte páginas de PDF a imágenes PNG, JPEG o WebP localmente en tu navegador. Elige rango de páginas, resolución y calidad sin subir archivos.",
+    "path": "/pdf-to-image",
+    "ctaLabel": "Convertir PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Sube un PDF y renderiza las páginas seleccionadas como archivos de imagen. Elige PNG, JPEG o WebP, la resolución de 1x a 4x y descarga una imagen única o un ZIP con todas las páginas. Todo se ejecuta en tu dispositivo con PDF.js, sin subidas.",
+    "categoryId": "documents",
+    "keywords": [
+      "pdf",
+      "imagen",
+      "png",
+      "jpeg",
+      "webp",
+      "convertir",
+      "rasterizar"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra el PDF que quieres convertir.",
+      "Introduce el rango de páginas que quieres convertir (por ejemplo, 1-3,5,8-10) o deja el valor por defecto para convertir todas.",
+      "Elige un formato de salida: PNG (sin pérdida), JPEG (archivos más pequeños) o WebP.",
+      "Elige una resolución (de 1x a 4x). Valores mayores producen imágenes más nítidas y archivos más grandes.",
+      "Para JPEG y WebP, ajusta opcionalmente el deslizador de calidad.",
+      "Haz clic en Convertir para renderizar las páginas en tu navegador.",
+      "Descarga una sola imagen o un archivo ZIP cuando selecciones varias páginas."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mi PDF se sube a un servidor?",
+        "a": "No. El PDF se renderiza enteramente en tu navegador con PDF.js de Mozilla. Ningún contenido sale de tu dispositivo."
+      },
+      {
+        "q": "¿Qué formatos de imagen se admiten?",
+        "a": "PNG, JPEG y WebP. PNG es sin pérdida y admite transparencia, JPEG genera archivos más pequeños y WebP equilibra calidad y tamaño."
+      },
+      {
+        "q": "¿Cómo afecta el ajuste de resolución al resultado?",
+        "a": "La resolución es un multiplicador del tamaño de página nativo del PDF (aproximadamente 72 DPI a 1x). 2x ≈ 144 DPI es un buen valor por defecto para pantallas; 3x o 4x son adecuados para impresión."
+      },
+      {
+        "q": "¿Puedo convertir páginas concretas en lugar del documento entero?",
+        "a": "Sí. Introduce rangos y números de página separados por comas, por ejemplo 1-3,5,8-10."
+      },
+      {
+        "q": "¿Qué ocurre cuando selecciono varias páginas?",
+        "a": "Cada página seleccionada se renderiza en su propio archivo de imagen y todas se empaquetan en un ZIP para una única descarga."
+      },
+      {
+        "q": "¿Puedo convertir un PDF protegido con contraseña?",
+        "a": "No se admiten PDFs protegidos con contraseña. Quita primero la contraseña con otra herramienta."
+      }
+    ]
+  },
+  {
+    "id": "image-crop-tool",
+    "component": "ImageCropTool",
+    "name": "Herramienta de recorte de imágenes",
+    "title": "Herramienta de recorte de imágenes - Recorta y redimensiona online",
+    "description": "Recorta tus imágenes localmente con precisión de píxel y vistas previas en vivo. Exporta tus fotos editadas como PNG, JPEG o WebP sin subirlas a un servidor.",
+    "path": "/image-crop-tool",
+    "ctaLabel": "Recortar imagen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Selecciona un área de recorte con controles a nivel de píxel, previsualiza la región seleccionada y expórtala como PNG, JPEG o WebP. Todo se ejecuta enteramente en tu navegador, por lo que las imágenes nunca salen de tu dispositivo.",
+    "categoryId": "utilities",
+    "keywords": [
+      "imagen",
+      "foto",
+      "imagen",
+      "recortar",
+      "redimensionar",
+      "editar"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra la imagen que quieres recortar (admite PNG, JPG y WEBP).",
+      "La imagen se carga en el editor de recorte con una capa de selección arrastrable.",
+      "Arrastra las esquinas o los bordes de la selección para definir el área que quieres conservar.",
+      "Mueve la caja de selección arrastrándola por la imagen para reposicionarla.",
+      "Introduce opcionalmente dimensiones exactas en píxeles para un control preciso.",
+      "Selecciona el formato de salida (PNG, JPEG o WEBP) y haz clic en Recortar y descargar para guardar la imagen recortada."
+    ],
+    "faqs": [
+      {
+        "q": "¿Se envía mi imagen a un servidor para recortarla?",
+        "a": "No. Todo el recorte se realiza localmente en tu navegador con la API Canvas. Tu imagen nunca se sube a ningún lugar."
+      },
+      {
+        "q": "¿Puedo recortar a una relación de aspecto específica?",
+        "a": "Sí. Puedes restringir la selección a relaciones de aspecto comunes como 1:1 (cuadrado), 16:9 o 4:3, útiles para redes sociales y banners."
+      },
+      {
+        "q": "¿Qué formatos de salida están disponibles?",
+        "a": "Puedes exportar la imagen recortada como PNG (sin pérdida), JPEG (menor tamaño, ideal para fotos) o WEBP (formato moderno con excelente relación calidad-tamaño)."
+      },
+      {
+        "q": "¿Puedo deshacer un recorte y volver a intentarlo?",
+        "a": "Sí. Puedes ajustar la selección de recorte en cualquier momento antes de hacer clic en Descargar. La imagen original permanece intacta durante toda la sesión de edición."
+      },
+      {
+        "q": "¿Esta herramienta redimensiona imágenes?",
+        "a": "La herramienta recorta imágenes eliminando lo que queda fuera de la selección. Para redimensionar toda la imagen a otras dimensiones, usa una herramienta dedicada de redimensionamiento o compresión."
+      },
+      {
+        "q": "¿Cuál es el tamaño máximo de imagen que puedo recortar?",
+        "a": "No hay un límite estricto. Las imágenes muy grandes, por encima de 20 megapíxeles, pueden cargarse más lentamente pero se procesan correctamente."
+      }
+    ]
+  },
+  {
+    "id": "image-background-editor",
+    "component": "ImageBackgroundEditor",
+    "name": "Editor de fondo de imágenes",
+    "title": "Eliminador y cambiador de fondo de imágenes - Gratis online",
+    "description": "Elimina fondos, sustitúyelos por colores sólidos o cambia por imágenes personalizadas usando IA. Obtén una vista previa antes/después en vivo y descarga el resultado como PNG.",
+    "path": "/image-background-editor",
+    "ctaLabel": "Editar fondo",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube cualquier imagen PNG, JPG o WEBP y elige qué hacer con su fondo: eliminarlo por completo para obtener un PNG transparente, rellenarlo con un color sólido a tu elección o componerlo sobre una imagen de fondo nueva. Todo el procesamiento se realiza en el servidor con segmentación por IA, con vista previa en vivo antes/después antes de descargar.",
+    "categoryId": "utilities",
+    "keywords": [
+      "imagen",
+      "fondo",
+      "eliminar",
+      "reemplazar",
+      "cambiar",
+      "transparente",
+      "recorte",
+      "color sólido",
+      "compuesta",
+      "png"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecciona un modo arriba: Eliminar fondo para obtener un recorte transparente, Fondo de color sólido para rellenar con un color elegido, o Fondo de imagen personalizada para colocar el sujeto sobre una nueva foto de fondo.",
+      "Si elegiste Fondo de color sólido, haz clic en la muestra de color para elegir cualquier color con el selector.",
+      "Si elegiste Fondo de imagen personalizada, sube la imagen de fondo que quieras usar.",
+      "Sube la imagen del sujeto (PNG, JPG o WEBP, hasta 10 MB).",
+      "Haz clic en Eliminar fondo o Cambiar fondo. La imagen se envía al servidor para la segmentación por IA.",
+      "Previsualiza el resultado antes/después lado a lado y haz clic en Descargar PNG para guardar la salida."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué modos admite esta herramienta?",
+        "a": "Tres modos: Eliminar fondo produce un PNG recortado con transparencia, Fondo de color sólido rellena el fondo con cualquier color hex que elijas y Fondo de imagen personalizada compone tu sujeto sobre una nueva imagen de fondo que subas."
+      },
+      {
+        "q": "¿Qué tipos de imágenes funcionan mejor?",
+        "a": "Las imágenes con una clara distinción entre sujeto y fondo dan los mejores resultados. Las escenas con alto contraste y bordes bien definidos son ideales. Casos complejos como cabello, pelo u objetos transparentes pueden tener bordes algo más ásperos."
+      },
+      {
+        "q": "¿Cómo se ajusta la imagen de fondo personalizada?",
+        "a": "La imagen de fondo se escala para cubrir el lienzo del sujeto (manteniendo su relación de aspecto) y luego se recorta al centro para coincidir exactamente con el tamaño del sujeto, similar a CSS background-size: cover."
+      },
+      {
+        "q": "¿Qué formato tiene la salida descargada?",
+        "a": "La descarga es siempre un archivo PNG. Al eliminar el fondo contiene un canal alfa (transparencia); al usar un fondo de color o de imagen, el resultado es un PNG totalmente opaco."
+      },
+      {
+        "q": "¿Esta herramienta es gratuita?",
+        "a": "Sí, el editor de fondo es completamente gratuito y no requiere cuenta."
+      },
+      {
+        "q": "¿Esta herramienta requiere conexión a internet?",
+        "a": "Sí. El procesamiento de fondo usa un modelo de aprendizaje automático ejecutado en el servidor, por lo que se requiere conexión a internet activa."
+      },
+      {
+        "q": "¿Mi imagen se almacena en el servidor?",
+        "a": "Las imágenes se procesan en memoria en el servidor y el resultado se devuelve directamente a tu navegador. No se almacena ninguna imagen ni se usa para otros fines."
+      }
+    ]
+  },
+  {
+    "id": "invoice-generator",
+    "component": "InvoiceGenerator",
+    "name": "Generador de facturas y recibos",
+    "title": "Generador de facturas y recibos - Herramienta gratuita online",
+    "description": "Crea facturas y recibos profesionales directamente en tu navegador. Añade conceptos, impuestos y descuentos, y exporta el documento como un PDF limpio.",
+    "path": "/invoice-generator",
+    "ctaLabel": "Crear factura",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Crea facturas o recibos profesionales con datos del vendedor y comprador, líneas de detalle, impuestos, envío, descuentos y notas. Los totales se calculan automáticamente y el documento final puede exportarse como PDF. Los datos se mantienen en local y pueden reutilizarse en tu navegador.",
+    "categoryId": "business",
+    "keywords": [
+      "factura",
+      "recibo",
+      "facturación",
+      "pago",
+      "negocio"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Rellena los datos del emisor (tu negocio): nombre, dirección, correo y opcionalmente un logo.",
+      "Rellena los datos del destinatario (cliente), incluyendo nombre, dirección e información de contacto.",
+      "Introduce un número de factura, fecha de emisión y fecha de vencimiento del pago.",
+      "Añade líneas con descripción, cantidad y precio unitario de cada producto o servicio. Los totales se calculan automáticamente.",
+      "Aplica impuestos, descuentos o gastos de envío según necesites. El total general se actualiza en tiempo real.",
+      "Añade notas o términos de pago en el campo de notas y haz clic en Exportar PDF para descargar la factura terminada."
+    ],
+    "faqs": [
+      {
+        "q": "¿Se guardan los datos de mi factura en algún sitio?",
+        "a": "Los datos de la factura se guardan localmente en tu navegador para que puedas volver y reutilizarlos sin tener que introducirlo todo de nuevo. No se envía nada a ningún servidor."
+      },
+      {
+        "q": "¿Puedo añadir un logo de empresa a la factura?",
+        "a": "Sí. Puedes subir una imagen de logo que aparecerá en la cabecera del PDF de la factura."
+      },
+      {
+        "q": "¿Qué monedas se admiten?",
+        "a": "Puedes especificar cualquier símbolo o código de moneda en el campo correspondiente. La herramienta funciona con USD, EUR, GBP, INR o cualquier otra moneda."
+      },
+      {
+        "q": "¿Puedo aplicar varias tasas de impuesto?",
+        "a": "Puedes indicar un porcentaje de impuesto sobre el subtotal. Para facturas que requieran varias tasas, introduce los impuestos individuales en las líneas o en la sección de notas."
+      },
+      {
+        "q": "¿El PDF generado está listo para enviar al cliente?",
+        "a": "Sí. La salida en PDF tiene un formato profesional y está lista para enviarse directamente por correo a un cliente. Revisa la vista previa antes de enviar."
+      },
+      {
+        "q": "¿Puedo crear recibos además de facturas?",
+        "a": "Sí. La herramienta funciona igual de bien para recibos. Etiqueta el documento como recibo en el campo de título y añade una fecha de pago recibido en lugar de fecha de vencimiento."
+      }
+    ]
+  },
+  {
+    "id": "text-diff-checker",
+    "component": "TextDiffChecker",
+    "name": "Comparador de diferencias de texto",
+    "title": "Comparador de diferencias de texto - Compara dos textos online",
+    "description": "Compara dos versiones de texto para resaltar adiciones, eliminaciones y cambios. Visualiza las diferencias línea a línea para código o contenido de forma segura en tu navegador.",
+    "path": "/text-diff-checker",
+    "ctaLabel": "Comparar texto",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Pega dos versiones de texto y ve las diferencias línea a línea, incluyendo adiciones, eliminaciones y bloques modificados. Útil para revisar cambios en contenido, archivos de configuración o fragmentos de código. Todo se ejecuta localmente en tu navegador.",
+    "categoryId": "developer",
+    "keywords": [
+      "texto",
+      "diff",
+      "comparar",
+      "cambios",
+      "comprobador"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega el texto original (antes) en el panel izquierdo.",
+      "Pega el texto modificado (después) en el panel derecho.",
+      "El resultado del diff se actualiza automáticamente, resaltando líneas añadidas, eliminadas o modificadas.",
+      "Los resaltados en verde indican líneas añadidas; los rojos, eliminadas.",
+      "Usa el resumen del diff de la parte superior para ver los conteos de cambios de un vistazo.",
+      "Copia o comparte las secciones cambiadas que necesites desde el panel de resultados."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué tipos de texto puedo comparar?",
+        "a": "Puedes comparar cualquier texto plano: borradores de artículos, archivos de configuración, fragmentos de código, JSON, documentos markdown, plantillas de correo y mucho más."
+      },
+      {
+        "q": "¿La comparación distingue mayúsculas y minúsculas?",
+        "a": "Sí, la comparación es sensible a mayúsculas por defecto, por lo que 'Hello' y 'hello' se marcarán como diferentes. Es el comportamiento estándar de las herramientas de diff."
+      },
+      {
+        "q": "¿Qué tan grande puede ser el texto a comparar?",
+        "a": "La herramienta maneja textos grandes para procesamiento en navegador. Documentos con miles de líneas se comparan rápidamente."
+      },
+      {
+        "q": "¿Muestra diferencias a nivel de palabra dentro de la línea?",
+        "a": "La herramienta resalta las líneas modificadas. Para las líneas cambiadas, muestra las versiones antigua y nueva una al lado de la otra para ver exactamente lo que se editó dentro de la línea."
+      },
+      {
+        "q": "¿Mi texto se envía a un servidor?",
+        "a": "No. Todo el cálculo del diff se ejecuta enteramente en tu navegador. Tu texto nunca se envía a ningún servicio externo."
+      },
+      {
+        "q": "¿Puedo usar esta herramienta para comparar código?",
+        "a": "Sí. El diff funciona con cualquier texto plano, incluido el código fuente. Muestra qué líneas se añadieron, eliminaron o modificaron, similar a la salida de git diff."
+      }
+    ]
+  },
+  {
+    "id": "json-formatter-validator",
+    "component": "JsonFormatterDiff",
+    "name": "Formateador y validador JSON",
+    "title": "Formateador y validador JSON - Embellece JSON online",
+    "description": "Valida, formatea y minifica datos JSON al instante con mensajes de error claros. Limpia tu código para mejorar la legibilidad o compáctalo para cargas de API.",
+    "path": "/json-formatter-validator",
+    "ctaLabel": "Abrir herramienta JSON",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Pega JSON y ejecuta una validación rápida con mensajes de error legibles. Formatea con indentación para mejorar la legibilidad o minifica para cargas compactas. Esta utilidad es totalmente cliente, lo que la hace rápida y respetuosa con la privacidad para flujos de trabajo de desarrollo.",
+    "categoryId": "developer",
+    "keywords": [
+      "json",
+      "formato",
+      "validador",
+      "minificar",
+      "embellecer"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega tu JSON en el editor de entrada.",
+      "El validador comprueba tu JSON en tiempo real y muestra errores con la línea y la posición de carácter si el JSON no es válido.",
+      "Haz clic en Formato / Pretty Print para reformatear el JSON con la indentación y los saltos de línea adecuados.",
+      "Haz clic en Minificar para eliminar todos los espacios en blanco y generar la versión más compacta del JSON.",
+      "Copia la salida formateada o minificada con el botón Copiar.",
+      "Usa la vista de diff para comparar dos objetos JSON lado a lado."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué se considera JSON no válido?",
+        "a": "Los errores comunes de JSON incluyen comas finales tras el último elemento de un array u objeto, cadenas con comillas simples (JSON requiere comillas dobles), comas omitidas entre pares clave-valor y claves sin comillas. El validador señala la ubicación exacta del error."
+      },
+      {
+        "q": "¿Cuál es la diferencia entre formatear y minificar?",
+        "a": "Formatear (pretty-print) añade indentación y saltos de línea para que el JSON sea legible para humanos. Minificar elimina todos los espacios en blanco para producir la cadena JSON más pequeña posible, útil para reducir el tamaño de la carga útil en respuestas de API."
+      },
+      {
+        "q": "¿Puedo comparar dos objetos JSON?",
+        "a": "Sí. La herramienta incluye un modo diff donde puedes pegar dos objetos JSON y ver una comparación estructurada de sus diferencias, lo que ayuda al depurar cambios en respuestas de API."
+      },
+      {
+        "q": "¿Hay un límite de tamaño para el JSON que puedo pegar?",
+        "a": "No hay un límite estricto. La herramienta maneja cargas útiles JSON grandes de varios megabytes sin problemas en navegadores modernos."
+      },
+      {
+        "q": "¿Mi JSON se envía a algún servidor?",
+        "a": "No. La validación, el formato y la minificación se realizan localmente en tu navegador. Tus datos JSON nunca salen de tu dispositivo."
+      },
+      {
+        "q": "¿Puedo usarlo trabajando sin conexión?",
+        "a": "Sí. Una vez cargada la página, el formateador JSON funciona totalmente sin conexión, sin necesidad de internet."
+      }
+    ]
+  },
+  {
+    "id": "spring-boot-log-analyzer",
+    "component": "SpringBootLogAnalyzer",
+    "name": "Analizador de logs de Spring Boot",
+    "title": "Analizador de logs de Spring Boot - Depura logs Java online",
+    "description": "Analiza logs de Spring Boot para detectar errores raíz y cadenas de excepciones. Agrupa por hilo o ID de correlación y exporta informes de incidentes estructurados en JSON.",
+    "path": "/spring-boot-log-analyzer",
+    "ctaLabel": "Analizar logs",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Sube o pega logs de Spring Boot para identificar eventos probables de primer fallo, cadenas de excepciones, ubicaciones de marcos de pila y agrupaciones por ID de correlación. Exporta un informe de incidente JSON estructurado para compartir y depurar.",
+    "categoryId": "developer",
+    "keywords": [
+      "spring",
+      "boot",
+      "log",
+      "analizador",
+      "excepción",
+      "depuración"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega la salida de logs de Spring Boot directamente en el área de texto, o sube un archivo de log de texto plano.",
+      "Haz clic en Analizar. La herramienta escanea el log buscando entradas ERROR y WARN, cadenas de excepciones y trazas de pila.",
+      "El panel de resultados muestra una cronología de fallos con los eventos probables de causa raíz resaltados arriba.",
+      "Haz clic en cualquier entrada de error para expandir la traza de pila completa y ver la clase, el método y el número de línea exactos.",
+      "Los IDs de correlación y los nombres de hilo se agrupan para que puedas rastrear una sola petición a través de un log multihilo.",
+      "Haz clic en Exportar informe para descargar un informe de incidente JSON estructurado que puedes compartir con tu equipo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué formatos de log se admiten?",
+        "a": "El analizador está optimizado para el formato estándar de Spring Boot producido por Logback (el framework de logging por defecto) y también maneja aplicaciones Spring Boot que usen Log4j2 con el patrón estándar."
+      },
+      {
+        "q": "¿Qué significa detección de causa raíz?",
+        "a": "Cuando una aplicación Spring Boot lanza una cadena de excepciones envueltas, la causa raíz es la excepción original más profunda. El analizador identifica este punto de primer fallo para ayudarte a centrar la depuración en el problema real."
+      },
+      {
+        "q": "¿Esta herramienta admite logs multihilo?",
+        "a": "Sí. El analizador agrupa las líneas de log por nombre de hilo y por ID de correlación (cuando está presente), permitiéndote rastrear el ciclo de vida de una petición HTTP a través de un flujo de log multihilo."
+      },
+      {
+        "q": "¿Mis datos de log se envían a un servidor?",
+        "a": "No. Todo el análisis de logs se ejecuta enteramente en tu navegador. Tus datos de log nunca se suben a ningún servidor."
+      },
+      {
+        "q": "¿Puedo analizar logs de otros frameworks Java?",
+        "a": "La herramienta está optimizada para Spring Boot, pero puede analizar cualquier archivo de log que use un formato estándar con marcas de tiempo, niveles (ERROR, WARN, INFO), nombres de hilo y trazas de pila Java."
+      },
+      {
+        "q": "¿Qué incluye el informe JSON exportado?",
+        "a": "El informe incluye un resumen de recuentos de errores, una lista de excepciones detectadas con sus causas raíz, marcos de pila relevantes, nombres de hilo, marcas de tiempo y cualquier ID de correlación encontrado en el log."
+      }
+    ]
+  },
+  {
+    "id": "cron-generator-validator",
+    "component": "CronExpressionBuilder",
+    "name": "Generador y validador de cron con IA",
+    "title": "Generador y validador de expresiones cron con IA online",
+    "description": "Describe tu programación en lenguaje natural y deja que la IA genere la expresión cron por ti. Valida la sintaxis y previsualiza próximas ejecuciones con precisión.",
+    "path": "/cron-generator-validator",
+    "ctaLabel": "Abrir herramienta cron",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Usa IA para generar expresiones cron a partir de descripciones en lenguaje natural, o créalas manualmente. Valida la sintaxis al instante, obtén interpretaciones legibles para humanos y previsualiza los próximos tiempos de ejecución. Admite formatos de 5 y 6 campos.",
+    "categoryId": "developer",
+    "keywords": [
+      "cron",
+      "programación",
+      "expresión",
+      "validador",
+      "tiempo",
+      "ia",
+      "generador"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "En la sección Generador de cron con IA, escribe tu programación en lenguaje natural, por ejemplo 'todos los días laborables a las 9 AM' o 'cada 30 minutos entre las 8 AM y las 6 PM'.",
+      "Elige si quieres una expresión de 5 campos (estándar) o 6 campos (con segundos) en el desplegable de formato de cron y haz clic en Generar.",
+      "La expresión generada por IA se coloca directamente en el campo de cron de abajo, lista para validar, explicar o previsualizar.",
+      "Haz clic en Explicar para obtener una descripción legible de la expresión, confirmando que coincide con la programación que querías.",
+      "Haz clic en Vista previa próxima ejecución para ver las 5 próximas ejecuciones y verificar que el horario es exactamente el correcto.",
+      "Haz clic en Validar para comprobar la sintaxis de cualquier expresión, ya sea generada por IA o escrita manualmente.",
+      "También puedes escribir o pegar una expresión cron directamente en el campo de entrada y usar las mismas herramientas sin el generador con IA."
+    ],
+    "faqs": [
+      {
+        "q": "¿Cómo funciona el generador de cron con IA?",
+        "a": "Describes tu programación en lenguaje natural y la IA (Claude vía AWS Bedrock) la convierte en una expresión cron válida. Luego puedes validarla, explicarla o previsualizarla con las herramientas integradas."
+      },
+      {
+        "q": "¿Cuál es la diferencia entre expresiones cron de 5 y 6 campos?",
+        "a": "El cron estándar de Unix/Linux usa 5 campos: minuto, hora, día del mes, mes y día de la semana. Los planificadores Java (Spring @Scheduled, Quartz) usan un formato de 6 campos que añade un campo de segundos al principio: segundo, minuto, hora, día del mes, mes y día de la semana."
+      },
+      {
+        "q": "¿Puedo usarlo sin el generador con IA?",
+        "a": "Sí. Puedes escribir o pegar cualquier expresión cron directamente en el campo de entrada y usar las herramientas Validar, Explicar y Vista previa próxima ejecución de forma independiente."
+      },
+      {
+        "q": "¿Cómo ejecuto una tarea cada 15 minutos?",
+        "a": "Puedes escribir 'cada 15 minutos' en el generador de IA, o introducir '*/15 * * * *' manualmente para una expresión de 5 campos (o '0 */15 * * * *' para 6 campos)."
+      },
+      {
+        "q": "¿Puedo programar una tarea para días específicos de la semana?",
+        "a": "Sí. El campo de día de la semana acepta valores de 0 a 6 (0 = domingo), o escribe algo como 'cada lunes y miércoles a las 9 AM' en el generador de IA y lo calculará por ti."
+      },
+      {
+        "q": "¿Qué significa el asterisco (*) en una expresión cron?",
+        "a": "Un asterisco significa cada valor válido para ese campo. Por ejemplo, * en el campo de minutos significa cada minuto, y * en el campo de meses significa cada mes."
+      },
+      {
+        "q": "¿Sirve para programaciones de AWS EventBridge o GitHub Actions?",
+        "a": "Sí. Tanto AWS EventBridge como GitHub Actions usan expresiones de estilo cron. AWS EventBridge usa un formato de 6 campos con año, mientras que GitHub Actions usa expresiones de 5 campos en UTC. El generador de IA y el validador funcionan para ambos."
+      }
+    ]
+  },
+  {
+    "id": "jwt-encoder-decoder",
+    "component": "JwtTool/JwtTool",
+    "name": "Codificador / decodificador JWT",
+    "title": "Codificador y decodificador JWT - Analiza tokens JWT online",
+    "description": "Decodifica tokens JWT para inspeccionar cabeceras y payloads o genera nuevos tokens firmados HS256/HS512. Depura flujos de autenticación de forma segura sin enviar datos.",
+    "path": "/jwt-decoder-encoder",
+    "ctaLabel": "Abrir herramienta JWT",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Inspecciona la cabecera y el payload de JWT, edita reclamaciones y genera nuevos tokens con los algoritmos HS256 o HS512. Útil para pruebas de API y depuración de flujos de autenticación. Las operaciones se realizan en el navegador sin enviar datos de token a un backend.",
+    "categoryId": "developer",
+    "keywords": [
+      "jwt",
+      "token",
+      "codificar",
+      "decodificar",
+      "seguridad"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega un token JWT existente en el campo Decodificar para inspeccionar su contenido.",
+      "La herramienta divide el token en sus tres partes: cabecera, payload y firma, cada una mostrada como JSON formateado.",
+      "Revisa las reclamaciones del payload, como sub (sujeto), iat (emitido en), exp (expiración) y cualquier reclamación personalizada.",
+      "Para generar un nuevo token, cambia a la pestaña Codificar y rellena las reclamaciones del payload como JSON.",
+      "Introduce tu clave secreta HMAC y selecciona el algoritmo (HS256 o HS512).",
+      "Haz clic en Generar para producir un token JWT firmado que puedes copiar y usar en peticiones a API."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué es un JWT?",
+        "a": "Un JSON Web Token (JWT) es un token compacto y seguro para URL usado para transmitir información entre partes. Tiene tres partes codificadas en Base64 separadas por puntos: la cabecera (info de algoritmo), el payload (reclamaciones) y la firma (utilizada para verificar que el token no ha sido manipulado)."
+      },
+      {
+        "q": "¿Cualquiera puede decodificar un JWT sin la clave secreta?",
+        "a": "Sí. La cabecera y el payload solo están codificadas en Base64, no cifradas. Cualquiera puede decodificarlos y leer las reclamaciones. Solo la verificación de la firma requiere la clave secreta. Nunca pongas datos sensibles como contraseñas directamente en el payload de un JWT."
+      },
+      {
+        "q": "¿Cuál es la diferencia entre HS256 y HS512?",
+        "a": "Ambos son algoritmos de firma basados en HMAC. HS256 usa SHA-256 produciendo una firma de 256 bits, mientras que HS512 usa SHA-512 produciendo una firma de 512 bits. HS512 es más fuerte pero produce un token ligeramente más largo. Ambos están ampliamente soportados."
+      },
+      {
+        "q": "¿Mi JWT o clave secreta se envía a un servidor?",
+        "a": "No. Todas las operaciones de codificación y decodificación se realizan enteramente en tu navegador. Tus tokens y claves secretas nunca se transmiten a ningún lugar."
+      },
+      {
+        "q": "¿Cómo verifico la firma de un JWT?",
+        "a": "Introduce el token en la pestaña Decodificar y proporciona la clave secreta HMAC en el campo de verificación. La herramienta confirmará si la firma es válida o ha sido manipulada."
+      },
+      {
+        "q": "¿Puedo usar esta herramienta para generar tokens de producción?",
+        "a": "Esta herramienta está pensada para desarrollo, pruebas y depuración. Para producción, genera los JWT en el servidor usando una biblioteca confiable y una gestión adecuada de secretos, como variables de entorno o un gestor de secretos."
+      }
+    ]
+  },
+  {
+    "id": "uuid-generator",
+    "component": "UuidGenerator",
+    "name": "Generador de UUID",
+    "title": "Generador de UUID - Crea IDs únicos online gratis",
+    "description": "Genera identificadores únicos UUID v4 rápidamente y en lote. Personaliza la salida con opciones de mayúsculas o sin guiones para flujos de desarrollo.",
+    "path": "/uuid-generator",
+    "ctaLabel": "Generar UUID",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Crea uno o varios identificadores UUID v4 con opciones como salida en mayúsculas o sin guiones. Copia todos los valores generados de una vez para usarlos en desarrollo, pruebas y flujos de datos.",
+    "categoryId": "developer",
+    "keywords": [
+      "uuid",
+      "guid",
+      "identificador",
+      "id",
+      "generar"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Elige cuántos UUID quieres generar (de 1 a 100 cada vez).",
+      "Haz clic en Generar para producir al instante una lista de valores UUID v4 aleatorios.",
+      "Activa la opción Mayúsculas si tu sistema requiere formato UUID en mayúsculas.",
+      "Activa Quitar guiones si necesitas una cadena hexadecimal compacta de 32 caracteres sin los guiones estándar.",
+      "Haz clic en Copiar todo para copiar la lista completa al portapapeles de una sola vez.",
+      "Regenera tantas veces como necesites: cada conjunto de UUIDs es único."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué es un UUID?",
+        "a": "Un identificador único universal (UUID) es una etiqueta de 128 bits usada para identificar información en sistemas informáticos. En formato estándar tiene este aspecto: 550e8400-e29b-41d4-a716-446655440000. Están diseñados para ser globalmente únicos sin coordinación central."
+      },
+      {
+        "q": "¿Qué es UUID versión 4?",
+        "a": "UUID v4 se genera de forma aleatoria. 122 de los 128 bits son datos aleatorios, lo que hace que la probabilidad de colisión sea astronómicamente baja: alrededor de 1 entre 5,3 x 10^36. Es la versión de UUID más usada para identificadores de aplicaciones."
+      },
+      {
+        "q": "¿UUID es lo mismo que GUID?",
+        "a": "Sí. GUID (identificador globalmente único) es el término de Microsoft para el mismo concepto. UUIDs y GUIDs siguen el mismo estándar RFC 4122 y son intercambiables."
+      },
+      {
+        "q": "¿Los UUIDs generados son verdaderamente únicos?",
+        "a": "Los valores UUID v4 se generan usando un generador de números aleatorios criptográfico en tu navegador. La probabilidad de generar dos UUIDs idénticos es tan pequeña que es insignificante en la práctica."
+      },
+      {
+        "q": "¿Puedo usar estos UUIDs como claves primarias de base de datos?",
+        "a": "Sí. Las claves primarias UUID se usan ampliamente en bases de datos distribuidas. Ten en cuenta que las claves UUID aleatorias pueden fragmentar los índices: para bases de datos con mucha escritura, se prefiere una variante UUID ordenada."
+      },
+      {
+        "q": "¿Los UUIDs se generan en el servidor o en el cliente?",
+        "a": "Todos los UUIDs se generan enteramente en tu navegador usando la Web Crypto API. No interviene ningún servidor y no se recopila ni se registra nada."
+      }
+    ]
+  },
+  {
+    "id": "string-encryptor",
+    "component": "StringEncryptor",
+    "name": "Cifrador / descifrador de cadenas",
+    "title": "Cifrador y descifrador de cadenas - Cifra texto online",
+    "description": "Cifra y descifra texto con una clave secreta usando AES-256. Admite flujos al estilo Jasypt para Spring Boot y cifrado estándar para manejo seguro de datos.",
+    "path": "/string-encryptor",
+    "ctaLabel": "Abrir cifrador",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Cifra texto plano en texto cifrado y descífralo de vuelta a texto legible usando una clave secreta con AES (crypto-js). Incluye un modo servidor con PBKDF2-HMAC-SHA512 + AES-256 para flujos al estilo Jasypt y escenarios de interoperabilidad.",
+    "categoryId": "developer",
+    "keywords": [
+      "cifrar",
+      "descifrar",
+      "aes",
+      "clave secreta",
+      "cifra",
+      "cripto",
+      "cadena",
+      "jasypt"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Elige entre los modos Cifrar y Descifrar con el conmutador de la parte superior.",
+      "Para cifrar: introduce el texto plano que quieres cifrar en el campo de entrada.",
+      "Introduce tu clave secreta. Esta clave debe mantenerse en privado: cualquiera con ella puede descifrar la salida.",
+      "Selecciona el modo de cifrado: AES estándar para uso general o modo Servidor (Jasypt) para interoperabilidad con Spring Boot.",
+      "Haz clic en Cifrar para producir el texto cifrado y copia el resultado.",
+      "Para descifrar: pega el texto cifrado, introduce la misma clave secreta, selecciona el modo correspondiente y haz clic en Descifrar para recuperar el texto original."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué algoritmo de cifrado se usa?",
+        "a": "La herramienta usa AES (Advanced Encryption Standard). En modo estándar utiliza AES con una clave derivada vía crypto-js. En modo servidor usa PBKDF2-HMAC-SHA512 para la derivación de clave y AES-256-CBC para el cifrado, compatible con la biblioteca Jasypt."
+      },
+      {
+        "q": "¿Qué es el modo Jasypt y cuándo debo usarlo?",
+        "a": "Jasypt es una popular biblioteca de cifrado de Java usada en aplicaciones Spring Boot para cifrar propiedades de configuración. Usa el modo Jasypt cuando necesites generar o verificar valores cifrados para una aplicación Spring Boot con el starter de Jasypt Spring Boot."
+      },
+      {
+        "q": "¿Es seguro el cifrado AES?",
+        "a": "AES-256 está aprobado por la Agencia de Seguridad Nacional de EE. UU. para información ultrasecreta y se considera seguro cuando se usa una clave fuerte y única. La seguridad de tus datos cifrados depende totalmente de la fortaleza y secreto de tu clave."
+      },
+      {
+        "q": "¿Mi texto o clave se envían a un servidor?",
+        "a": "En modo servidor, el cifrado y descifrado se realizan en el servidor para coincidir con la implementación de Jasypt, pero tus datos no se almacenan. En modo estándar, todas las operaciones se realizan solo en el cliente."
+      },
+      {
+        "q": "¿Qué hace que una clave de cifrado sea buena?",
+        "a": "Una clave fuerte debe ser larga (16+ caracteres), aleatoria y contener una mezcla de mayúsculas, minúsculas, números y símbolos. Evita palabras de diccionario, nombres o PINs numéricos cortos como claves de cifrado."
+      },
+      {
+        "q": "¿Puedo descifrar texto cifrado con otra herramienta AES?",
+        "a": "La interoperabilidad depende del modo exacto, el método de derivación de clave y el esquema de relleno. El modo estándar usa los valores por defecto de crypto-js y el modo Jasypt apunta a la compatibilidad con Spring Boot. El texto cifrado de una implementación no relacionada puede no descifrarse correctamente."
+      }
+    ]
+  },
+  {
+    "id": "api-forge",
+    "component": "ApiForge",
+    "name": "Torensa API Forge",
+    "title": "Torensa API Forge - Prueba y construye APIs REST online",
+    "description": "Forja y prueba peticiones REST directamente en tu navegador. Soporte para autenticación JWT Bearer, cabeceras personalizadas, parámetros de consulta y cuerpos JSON.",
+    "path": "/api-request-builder",
+    "ctaLabel": "Abrir API Forge",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Torensa API Forge te permite enviar peticiones a APIs directamente en el navegador, incluyendo autenticación JWT Bearer, cabeceras personalizadas, parámetros de consulta o ruta y cuerpo JSON o sin formato.",
+    "categoryId": "developer",
+    "keywords": [
+      "api",
+      "petición",
+      "http",
+      "rest",
+      "cabeceras",
+      "json",
+      "prueba"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecciona el método HTTP (GET, POST, PUT, PATCH, DELETE) del desplegable.",
+      "Introduce la URL completa del endpoint, incluidos los parámetros de ruta.",
+      "Añade parámetros de consulta en la pestaña Params: cada par clave-valor se añade automáticamente a la URL.",
+      "Añade cabeceras personalizadas en la pestaña Headers (por ejemplo, Content-Type, Accept o cualquier cabecera de API).",
+      "Para peticiones POST/PUT/PATCH, cambia a la pestaña Body e introduce tu cuerpo JSON o sin formato.",
+      "Para autenticarte con un token JWT Bearer, introdúcelo en la pestaña Authorization.",
+      "Haz clic en Enviar para realizar la petición. El estado, las cabeceras y el cuerpo de la respuesta se muestran en el panel de respuesta."
+    ],
+    "faqs": [
+      {
+        "q": "¿En qué se diferencia API Forge de Postman?",
+        "a": "API Forge es una herramienta ligera basada en navegador, sin instalación ni cuenta. Cubre las necesidades más comunes de pruebas de API con una interfaz rápida y minimalista. Postman ofrece funciones más avanzadas como colecciones, entornos y scripts de prueba para flujos complejos."
+      },
+      {
+        "q": "¿Puedo probar APIs que requieren autenticación?",
+        "a": "Sí. API Forge admite autenticación con token JWT Bearer. Introduce tu token en la sección Authorization y se incluirá como cabecera Bearer en la petición."
+      },
+      {
+        "q": "¿Por qué falla mi petición con un error CORS?",
+        "a": "Los errores CORS ocurren cuando un servidor de API bloquea peticiones de un origen distinto. Es una restricción de seguridad del navegador, no un problema de API Forge. Para probar APIs con restricciones CORS, configura el servidor para permitir el origen o usa un proxy del lado del servidor."
+      },
+      {
+        "q": "¿API Forge guarda mi historial de peticiones?",
+        "a": "Las peticiones recientes pueden guardarse en el almacenamiento local del navegador por comodidad. No se envía ningún dato a un servidor externo."
+      },
+      {
+        "q": "¿Qué tipos de contenido se admiten para el cuerpo?",
+        "a": "API Forge admite cuerpos JSON, texto plano y sin formato. Define la cabecera Content-Type a application/json, text/plain o cualquier otro tipo que requiera tu API."
+      },
+      {
+        "q": "¿Puedo usar API Forge para probar APIs GraphQL?",
+        "a": "Sí. GraphQL usa peticiones HTTP POST con un cuerpo JSON que contiene los campos query y variables. Introduce el endpoint de GraphQL, define Content-Type como application/json y pega tu consulta GraphQL en el cuerpo."
+      }
+    ]
+  },
+  {
+    "id": "word-to-pdf",
+    "component": "WordToPdf",
+    "name": "Conversor de Word a PDF",
+    "title": "Conversor de Word a PDF - Convierte DOCX a PDF gratis",
+    "description": "Convierte documentos de Word como .doc y .docx a PDF con fidelidad perfecta del diseño. El procesamiento seguro en servidor asegura que las fuentes y el formato se mantengan.",
+    "path": "/word-to-pdf",
+    "ctaLabel": "Convertir a PDF",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube un documento de Word (.doc o .docx) y conviértelo a PDF en segundos. La conversión se ejecuta en el servidor usando LibreOffice, preservando fuentes, tablas, imágenes y formato. Los archivos se procesan en memoria y nunca se almacenan.",
+    "categoryId": "documents",
+    "keywords": [
+      "word",
+      "docx",
+      "doc",
+      "pdf",
+      "convertir",
+      "documento"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en 'Elegir documento de Word' y selecciona un archivo .doc o .docx de tu dispositivo.",
+      "Haz clic en 'Convertir a PDF' para iniciar la conversión.",
+      "Espera unos segundos mientras LibreOffice procesa el archivo en el servidor.",
+      "Haz clic en 'Descargar' para guardar el PDF resultante en tu dispositivo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mi documento se almacena en el servidor?",
+        "a": "No. El archivo se procesa en un directorio temporal y se elimina inmediatamente después de la conversión. Nada se conserva."
+      },
+      {
+        "q": "¿Cuál es el tamaño máximo de archivo?",
+        "a": "Se admiten archivos de hasta 20 MB."
+      },
+      {
+        "q": "¿Se preservará mi formato?",
+        "a": "Sí. La conversión la realiza LibreOffice, que renderiza fielmente fuentes, tablas, imágenes, encabezados y pies de página. Documentos complejos con fuentes personalizadas pueden tener pequeñas diferencias si esas fuentes no están instaladas en el servidor."
+      },
+      {
+        "q": "¿Puedo convertir archivos .doc (formato antiguo de Word)?",
+        "a": "Sí, se aceptan tanto los formatos .doc (Word 97-2003) como .docx (Word 2007+)."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-pdf",
+    "component": "ExcelToPdf",
+    "name": "Conversor de Excel a PDF",
+    "title": "Conversor de Excel a PDF - Convierte XLSX a PDF gratis",
+    "description": "Convierte hojas de cálculo de Excel, incluidos .xls y .xlsx, a PDF con diseño preciso. Conserva tus hojas, tablas y gráficos perfectamente durante la conversión.",
+    "path": "/excel-to-pdf",
+    "ctaLabel": "Convertir a PDF",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube una hoja de cálculo de Excel (.xls, .xlsx o .xlsm) y conviértela a PDF en segundos. La conversión se ejecuta en el servidor usando LibreOffice, conservando el formato de las hojas, tablas y gráficos. Los archivos se procesan en memoria y nunca se almacenan.",
+    "categoryId": "documents",
+    "keywords": [
+      "excel",
+      "xls",
+      "xlsx",
+      "xlsm",
+      "pdf",
+      "convertir",
+      "hoja de cálculo"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en 'Elegir archivo de Excel' y selecciona un archivo .xls, .xlsx o .xlsm de tu dispositivo.",
+      "Haz clic en 'Convertir a PDF' para iniciar la conversión.",
+      "Espera unos segundos mientras LibreOffice procesa la hoja de cálculo en el servidor.",
+      "Haz clic en 'Descargar' para guardar el PDF resultante en tu dispositivo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mi hoja de cálculo se almacena en el servidor?",
+        "a": "No. El archivo se procesa en un directorio temporal y se elimina inmediatamente después de la conversión. Nada se conserva."
+      },
+      {
+        "q": "¿Cuál es el tamaño máximo de archivo?",
+        "a": "Se admiten archivos de hasta 20 MB."
+      },
+      {
+        "q": "¿Se conservarán las fórmulas y los gráficos?",
+        "a": "LibreOffice renderiza la hoja en PDF, por lo que las fórmulas se evalúan y los gráficos se conservan tal como aparecen en la hoja de cálculo."
+      },
+      {
+        "q": "¿Puedo convertir libros con varias hojas?",
+        "a": "Sí. LibreOffice exporta todas las hojas a un único PDF, en el mismo orden que tu libro."
+      }
+    ]
+  },
+  {
+    "id": "pdf-to-word",
+    "component": "PdfToWord",
+    "name": "Conversor de PDF a Word",
+    "title": "Conversor de PDF a Word - Convierte PDF a DOCX gratis",
+    "description": "Convierte archivos PDF en documentos de Word editables (.docx) en segundos. La conversión de alta fidelidad preserva tu texto y diseño para facilitar la edición.",
+    "path": "/pdf-to-word",
+    "ctaLabel": "Convertir a Word",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube un PDF y conviértelo a un archivo .docx editable. La conversión se ejecuta en el servidor usando LibreOffice, preservando diseño y texto. Los archivos se procesan en memoria y nunca se almacenan.",
+    "categoryId": "documents",
+    "keywords": [
+      "pdf",
+      "word",
+      "docx",
+      "convertir",
+      "documento"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en 'Elegir archivo PDF' y selecciona un archivo .pdf de tu dispositivo.",
+      "Haz clic en 'Convertir a Word' para iniciar la conversión.",
+      "Espera unos segundos mientras LibreOffice procesa el archivo en el servidor.",
+      "Haz clic en 'Descargar' para guardar el archivo .docx resultante."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mi archivo se almacena en el servidor?",
+        "a": "No. El archivo se procesa en un directorio temporal y se elimina inmediatamente después de la conversión. Nada se conserva."
+      },
+      {
+        "q": "¿Cuál es el tamaño máximo de archivo?",
+        "a": "Se admiten archivos de hasta 20 MB."
+      },
+      {
+        "q": "¿Se preservará el formato?",
+        "a": "LibreOffice hace todo lo posible por reconstruir el diseño, pero la conversión de PDF a Word es intrínsecamente imperfecta: los diseños complejos pueden requerir alguna limpieza manual."
+      }
+    ]
+  },
+  {
+    "id": "image-generator",
+    "component": "AiImageGenerator",
+    "name": "Generador de imágenes con IA",
+    "title": "Generador de imágenes con IA - Crea arte con IA online",
+    "description": "Describe cualquier imagen en lenguaje natural y deja que la IA la genere al instante. Crea arte único, fotos realistas o ilustraciones y descárgalas como PNG.",
+    "path": "/image-generator",
+    "ctaLabel": "Abrir generador de imágenes",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Escribe una descripción de la imagen que quieres, desde un paisaje realista hasta una ilustración creativa, y la IA (Stability AI Stable Image Core vía AWS Bedrock) la creará. Previsualiza el resultado al instante y descárgalo como PNG de alta resolución.",
+    "categoryId": "utilities",
+    "keywords": [
+      "imagen",
+      "generar",
+      "ia",
+      "foto",
+      "arte",
+      "ilustración",
+      "crear",
+      "texto a imagen"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Escribe una descripción de la imagen que quieres en el campo de texto: sé lo más específico posible para obtener mejores resultados.",
+      "Haz clic en Generar imagen y espera unos segundos a que la IA cree tu imagen.",
+      "La imagen generada aparecerá debajo del campo. Revísala para comprobar que coincide con tu descripción.",
+      "Haz clic en Descargar PNG para guardar la imagen en tu equipo.",
+      "Si el resultado no es del todo lo que querías, ajusta tu descripción y vuelve a generar."
+    ],
+    "faqs": [
+      {
+        "q": "¿Cómo funciona la generación de imágenes con IA?",
+        "a": "Tu descripción de texto se envía a Stability AI Stable Image Core en AWS Bedrock, que crea una imagen de 1024×1024 basada en tu prompt."
+      },
+      {
+        "q": "¿Qué tipo de imágenes puedo generar?",
+        "a": "Puedes describir casi cualquier cosa: paisajes, animales, arte abstracto, maquetas de producto, ilustraciones y mucho más. Cuanto más específico seas, mejor será el resultado."
+      },
+      {
+        "q": "¿En qué formato se descarga la imagen?",
+        "a": "Las imágenes se descargan como archivos PNG a una resolución de 1024×1024."
+      },
+      {
+        "q": "¿Se almacena o registra mi prompt?",
+        "a": "Los prompts se procesan en tiempo real y no se almacenan en el servidor después de generar la imagen."
+      },
+      {
+        "q": "¿Cuánto tarda en generarse una imagen?",
+        "a": "Normalmente unos segundos, dependiendo de la complejidad y la carga actual del servidor."
+      }
+    ]
+  },
+  {
+    "id": "birthday-cake-generator",
+    "component": "BirthdayCakeGenerator",
+    "name": "Generador de tartas de cumpleaños",
+    "title": "Generador de tartas de cumpleaños - Crea tartas realistas con IA",
+    "description": "Genera una imagen fotorrealista de una tarta de cumpleaños con IA. Introduce un nombre, edad y tema para crear una tarta personalizada lista para descargar y compartir.",
+    "path": "/birthday-cake-generator",
+    "ctaLabel": "Generar tarta",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Crea imágenes impresionantes y fotorrealistas de tartas de cumpleaños en segundos con generación de imágenes por IA impulsada por Hugging Face. Solo tienes que introducir el nombre y la edad de la persona del cumpleaños, elegir un tema (chocolate, floral, galaxia y más) y la IA generará una foto de tarta con calidad profesional. Perfecto para tarjetas de cumpleaños, redes sociales o mensajes de WhatsApp. Descárgala como PNG o compártela directamente.",
+    "categoryId": "entertainment",
+    "keywords": [
+      "tarta de cumpleaños",
+      "tarta de cumpleaños con ia",
+      "generador de tartas",
+      "imagen de cumpleaños",
+      "tarta personalizada",
+      "foto de tarta",
+      "generación de imágenes con ia",
+      "feliz cumpleaños",
+      "diseño de tartas"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Introduce el nombre de la persona del cumpleaños (opcional) y la edad (opcional).",
+      "Elige un tema de tarta entre las sugerencias o escribe el tuyo.",
+      "Haz clic en Generar tarta de cumpleaños y espera 10–30 segundos a que la IA la hornee.",
+      "Descarga el PNG o compártelo directamente en WhatsApp."
+    ],
+    "faqs": [
+      {
+        "q": "¿Necesito una cuenta para usar esto?",
+        "a": "No, el generador de tartas de cumpleaños es gratuito y no requiere iniciar sesión."
+      },
+      {
+        "q": "¿Qué tan realistas son las tartas generadas?",
+        "a": "La IA usa Stable Diffusion XL vía Hugging Face, que produce imágenes con calidad de fotografía gastronómica fotorrealista."
+      },
+      {
+        "q": "¿Cuánto tarda en generarse?",
+        "a": "Normalmente entre 10 y 30 segundos. Si el modelo se está cargando por primera vez puede tardar hasta un minuto."
+      },
+      {
+        "q": "¿Puedo personalizar el estilo de la tarta?",
+        "a": "Sí: introduce cualquier tema que te guste, como 'chocolate', 'floral', 'galaxia' o incluso 'superhéroe'."
+      }
+    ]
+  },
+  {
+    "id": "festival-greeting",
+    "component": "FestivalGreeting",
+    "name": "Generador de saludos festivos",
+    "title": "Generador de saludos festivos - GIFs animados de Diwali, Navidad y más",
+    "description": "Crea un GIF animado personalizado para festividades con destellos y un mensaje a medida. Elige una festividad, escribe tu mensaje, añade un nombre y compártelo en WhatsApp.",
+    "path": "/festival-greeting",
+    "ctaLabel": "Crear saludo",
+    "offlineEnabled": false,
+    "aiPowered": false,
+    "authRequired": false,
+    "detailedDescription": "Envía un hermoso saludo animado para cualquier festividad en segundos. Elige una plantilla de festividad (Diwali para empezar, más por venir), selecciona o escribe un mensaje personalizado, añade el nombre del destinatario y generaremos un GIF animado con destellos parpadeantes y tu saludo a medida. Perfecto para compartir en grupos de WhatsApp, chats familiares o redes sociales.",
+    "categoryId": "entertainment",
+    "keywords": [
+      "saludo festivo",
+      "saludo de diwali",
+      "feliz diwali",
+      "saludo gif animado",
+      "saludo personalizado",
+      "saludo whatsapp",
+      "deseos festivos",
+      "deseos de diwali",
+      "creador de tarjetas de saludo"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Elige una festividad en el desplegable.",
+      "Opcionalmente introduce el nombre del destinatario.",
+      "Elige un mensaje sugerido o escribe el tuyo.",
+      "Haz clic en Crear saludo animado y espera unos segundos.",
+      "Descarga el GIF o compártelo directamente en WhatsApp."
+    ],
+    "faqs": [
+      {
+        "q": "¿Necesito una cuenta para usar esto?",
+        "a": "No, el generador de saludos festivos es gratuito y no requiere iniciar sesión."
+      },
+      {
+        "q": "¿Qué festividades se admiten?",
+        "a": "Diwali está disponible ahora. Pronto se añadirán más festividades."
+      },
+      {
+        "q": "¿El GIF se reproducirá en WhatsApp?",
+        "a": "Sí: comparte mediante el botón de WhatsApp en un móvil y la animación se reproduce en línea. Desde un navegador de escritorio puedes descargar el GIF y adjuntarlo manualmente."
+      },
+      {
+        "q": "¿Puedo personalizar el mensaje?",
+        "a": "Sí: elige uno de los mensajes sugeridos o escribe el tuyo (hasta 140 caracteres)."
+      }
+    ]
+  },
+  {
+    "id": "pdf-text-extractor",
+    "component": "PdfTextExtractor",
+    "name": "Extractor de texto de PDF (OCR)",
+    "title": "Extractor de texto de PDF (OCR) - Extrae texto desde PDF",
+    "description": "Extrae texto de PDFs escaneados o digitales con tecnología OCR. Copia el texto al portapapeles o descárgalo como un archivo .txt de forma segura sin almacenar datos.",
+    "path": "/pdf-text-extractor",
+    "ctaLabel": "Extraer texto",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube cualquier PDF, ya contenga texto seleccionable o imágenes escaneadas, y extrae todo el texto legible. Los PDFs digitales se analizan directamente con precisión perfecta, mientras que las páginas escaneadas se procesan con OCR de Tesseract. Copia el resultado al portapapeles o descárgalo como archivo .txt.",
+    "categoryId": "documents",
+    "keywords": [
+      "pdf",
+      "ocr",
+      "texto",
+      "extraer",
+      "escaneo",
+      "escaneado",
+      "leer",
+      "convertir"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra tu archivo PDF a la página.",
+      "Haz clic en Extraer texto para iniciar el procesamiento. El texto digital se extrae al instante; las páginas escaneadas se procesan con OCR automáticamente.",
+      "Revisa el texto extraído en el panel de salida.",
+      "Haz clic en Copiar texto para copiar el resultado al portapapeles, o en Descargar .txt para guardarlo como archivo de texto."
+    ],
+    "faqs": [
+      {
+        "q": "¿Esta herramienta funciona con PDFs escaneados?",
+        "a": "Sí. Las páginas que solo contienen imágenes (documentos escaneados) se procesan automáticamente con OCR de Tesseract para extraer el texto. Los PDFs digitales con texto seleccionable se analizan directamente para mayor precisión."
+      },
+      {
+        "q": "¿Qué idiomas se admiten para el OCR?",
+        "a": "El motor OCR por defecto reconoce texto en inglés. Para la mayoría de documentos escaneados, recibos, contratos e informes en inglés los resultados son muy precisos."
+      },
+      {
+        "q": "¿Hay un límite de páginas o tamaño?",
+        "a": "Se aceptan archivos de hasta 20 MB. Los PDFs escaneados grandes con muchas páginas pueden tardar más debido al OCR de cada página."
+      },
+      {
+        "q": "¿Mi archivo se almacena en el servidor?",
+        "a": "No. El archivo subido se procesa en un directorio temporal y se elimina inmediatamente después de completar la extracción de texto. Nada se almacena."
+      },
+      {
+        "q": "¿Por qué el texto extraído está vacío?",
+        "a": "Si el PDF solo contiene imágenes sin texto reconocible (por ejemplo, fotos o diagramas), el OCR puede no encontrar caracteres legibles. Asegúrate de que el documento escaneado tenga texto razonablemente claro."
+      },
+      {
+        "q": "¿Puedo extraer texto de un PDF protegido con contraseña?",
+        "a": "Los PDFs cifrados o protegidos con contraseña deben desbloquearse antes de subirlos. La herramienta no solicita contraseñas."
+      }
+    ]
+  },
+  {
+    "id": "excel-to-csv",
+    "component": "DataFormatConverter",
+    "name": "Conversor de archivos de datos",
+    "title": "Conversor de archivos de datos - Convierte CSV, JSON y XML gratis",
+    "description": "Convierte entre archivos Excel, CSV y JSON directamente en tu navegador. Todo el procesamiento de datos ocurre localmente para que tu información sensible siga siendo privada.",
+    "path": "/data-format-converter",
+    "ctaLabel": "Convertir archivos",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Sube un archivo Excel, CSV o JSON y conviértelo a cualquiera de los otros dos formatos. Todo el análisis y la conversión ocurren en el cliente, por lo que tus archivos permanecen en tu dispositivo.",
+    "categoryId": "documents",
+    "keywords": [
+      "excel",
+      "csv",
+      "json",
+      "hoja de cálculo",
+      "convertir",
+      "datos"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en la zona de subida o arrastra tu archivo Excel (.xlsx), CSV o JSON a la página.",
+      "La herramienta detecta automáticamente el formato de entrada según su extensión.",
+      "Selecciona el formato de salida deseado entre las opciones (Excel, CSV o JSON).",
+      "Haz clic en el botón Convertir para iniciar el proceso.",
+      "Previsualiza la salida en el panel de resultados para verificar que los datos se ven correctamente.",
+      "Haz clic en Descargar para guardar el archivo convertido en tu dispositivo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Esta herramienta sube mi archivo a un servidor?",
+        "a": "No. Todo el análisis y la conversión ocurren enteramente en tu navegador con JavaScript del lado del cliente. Tu archivo nunca se envía a ningún servidor, lo que mantiene tus datos totalmente privados."
+      },
+      {
+        "q": "¿Qué formatos de archivo se admiten?",
+        "a": "El conversor admite Excel (.xlsx), CSV (valores separados por comas) y JSON. Puedes convertir entre cualquier combinación de estos tres formatos."
+      },
+      {
+        "q": "¿Se conservarán mis fórmulas de Excel en la salida?",
+        "a": "Las fórmulas se evalúan a sus valores calculados durante la conversión. El texto de fórmula original no se traslada a la salida CSV o JSON, pero los valores resultantes sí se preservan."
+      },
+      {
+        "q": "¿Qué tamaño de archivo puedo convertir?",
+        "a": "Como el procesamiento ocurre en el navegador, los límites prácticos dependen de la memoria disponible de tu dispositivo. Archivos de hasta unos cientos de MB normalmente funcionan sin problemas en hardware moderno."
+      },
+      {
+        "q": "¿Puedo convertir un archivo de Excel con varias hojas?",
+        "a": "El conversor procesa por defecto la primera hoja (activa) del archivo Excel, lo que cubre la mayoría de libros y exportaciones de una sola hoja."
+      },
+      {
+        "q": "¿Esta herramienta es gratuita?",
+        "a": "Sí, el Conversor de archivos de datos es completamente gratuito y no requiere cuenta. Solo sube tu archivo y conviértelo al instante."
+      }
+    ]
+  },
+  {
+    "id": "subtitle-downloader",
+    "component": "SubtitleDownloader",
+    "name": "Descargador de subtítulos",
+    "title": "Descargador de subtítulos - Descarga subtítulos de películas gratis",
+    "description": "Descarga subtítulos SRT desde vídeos online con la potencia de yt-dlp. Obtén subtítulos existentes o autogenerados de YouTube y otras plataformas.",
+    "path": "/subtitle-downloader",
+    "ctaLabel": "Descargar subtítulos",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Pega la URL de un vídeo para obtener subtítulos en un archivo SRT. La herramienta intenta primero con los subtítulos existentes y, si no hay, recurre a los autogenerados. Compatible con YouTube y otros sitios soportados por yt-dlp.",
+    "categoryId": "utilities",
+    "keywords": [
+      "subtítulo",
+      "subtítulos",
+      "srt",
+      "leyendas",
+      "yt-dlp",
+      "vídeo"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega la URL del vídeo en el campo de entrada.",
+      "Elige el código de idioma de los subtítulos (por ejemplo, en, es, fr).",
+      "Haz clic en Descargar subtítulos.",
+      "Si existen subtítulos, se generará un archivo SRT para descargar."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué sitios se admiten?",
+        "a": "Cualquier sitio compatible con yt-dlp puede funcionar, incluido YouTube. La disponibilidad depende del soporte de subtítulos de cada sitio."
+      },
+      {
+        "q": "¿Qué pasa si un vídeo no tiene subtítulos?",
+        "a": "La herramienta intenta primero con los subtítulos existentes y luego con los autogenerados. Si no hay ninguno disponible, la descarga falla."
+      },
+      {
+        "q": "¿En qué formato se entrega la salida?",
+        "a": "Los subtítulos se entregan en formato SRT."
+      }
+    ]
+  },
+  {
+    "id": "speech-to-text",
+    "component": "Transcribe",
+    "name": "Conversor de voz a texto",
+    "title": "Conversor de voz a texto - Transcribe audio gratis",
+    "description": "Convierte voz de audio o vídeo en texto preciso usando AWS Transcribe. Admite MP3, WAV, MP4 y más para una transcripción rápida con IA.",
+    "path": "/speech-to-text",
+    "ctaLabel": "Abrir voz a texto",
+    "offlineEnabled": false,
+    "aiPowered": true,
+    "authRequired": false,
+    "detailedDescription": "Sube un archivo de audio y recibe una transcripción limpia con Amazon Transcribe. Admite formatos de audio comunes como MP3, WAV, MP4, M4A, FLAC, OGG y WEBM.",
+    "categoryId": "utilities",
+    "keywords": [
+      "transcribir",
+      "voz",
+      "audio",
+      "voz a texto",
+      "aws",
+      "transcripción"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Suelta un archivo de audio o haz clic para buscar uno.",
+      "Elige el idioma hablado en el audio.",
+      "Haz clic en Transcribir audio y espera a que termine el procesamiento.",
+      "Revisa la transcripción y cópiala o descárgala como archivo .txt."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué formatos de audio se admiten?",
+        "a": "Se admiten formatos comunes como MP3, WAV, MP4/M4A, FLAC, OGG y WEBM."
+      },
+      {
+        "q": "¿Cuánto tarda la transcripción?",
+        "a": "Los clips cortos terminan en segundos, mientras que las grabaciones más largas pueden tardar varios minutos según el tamaño y la carga del servidor."
+      },
+      {
+        "q": "¿Mi audio se almacena de forma permanente?",
+        "a": "El servidor sube el audio a una ubicación de almacenamiento temporal para la transcripción y luego lo elimina tras el procesamiento."
+      }
+    ]
+  },
+  {
+    "id": "video-to-audio",
+    "component": "VideoToAudio",
+    "name": "Vídeo a MP3/WAV",
+    "title": "Conversor de vídeo a MP3 y WAV - Extrae audio gratis",
+    "description": "Extrae audio de alta calidad de archivos de vídeo y descárgalo como MP3 o WAV. Conversión rápida para formatos MP4, MOV y MKV sin almacenar archivos.",
+    "path": "/video-to-audio",
+    "ctaLabel": "Extraer audio",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube un archivo de vídeo y extrae la pista de audio como MP3 o WAV. La conversión se ejecuta en el servidor usando FFmpeg. Los archivos se procesan en memoria y nunca se almacenan.",
+    "categoryId": "utilities",
+    "keywords": [
+      "vídeo",
+      "audio",
+      "mp3",
+      "wav",
+      "extraer",
+      "convertir"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Sube un archivo de vídeo (MP4, MOV, MKV, WEBM, AVI y más).",
+      "Elige MP3 para un archivo más pequeño o WAV para audio sin pérdida.",
+      "Haz clic en Extraer audio para iniciar la conversión.",
+      "Descarga el archivo de audio convertido."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué formatos de vídeo se admiten?",
+        "a": "Se admiten formatos comunes como MP4, MOV, MKV, WEBM, AVI, M4V, MPG, MPEG, 3GP, WMV, FLV y OGV."
+      },
+      {
+        "q": "¿Cuál es el tamaño máximo de archivo?",
+        "a": "Por defecto se admiten archivos de hasta 100 MB. Pueden configurarse límites mayores en el servidor."
+      },
+      {
+        "q": "¿Mi archivo se almacena en el servidor?",
+        "a": "No. Los archivos se procesan en un directorio temporal y se eliminan inmediatamente después de la conversión."
+      }
+    ]
+  },
+  {
+    "id": "voice-changer",
+    "component": "VoiceChanger",
+    "name": "Modificador de voz",
+    "title": "Modificador de voz con voces de personajes - Gratis online",
+    "description": "Transforma tu audio en voces estilo personaje con preajustes como narrador profundo o alien diminuto. Aplica filtros FFmpeg para cambiar tono y altura al instante.",
+    "path": "/voice-changer",
+    "ctaLabel": "Cambiar voz",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "Sube un archivo de audio y aplica preajustes de personaje como narrador profundo, alien diminuto, hombre ronco o señora mayor. La conversión se ejecuta en el servidor usando filtros FFmpeg y devuelve un archivo MP3 o WAV descargable.",
+    "categoryId": "utilities",
+    "keywords": [
+      "modificador de voz",
+      "efectos de voz",
+      "voz de personaje",
+      "audio",
+      "tono",
+      "voz ronca",
+      "voz de señora mayor",
+      "voz de ardilla"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Sube un archivo de audio (MP3, WAV, M4A, AAC, OGG, FLAC, AMR o WEBM).",
+      "Elige un preajuste de personaje como Capitán Espacial, Alien Diminuto, Hombre Ronco o Señora Mayor.",
+      "Elige MP3 para un archivo más pequeño o WAV para salida sin pérdida.",
+      "Haz clic en Cambiar voz y espera a que termine la conversión.",
+      "Descarga el archivo de audio convertido."
+    ],
+    "faqs": [
+      {
+        "q": "¿Es un modificador de voz en tiempo real?",
+        "a": "No. Es una herramienta basada en archivos. Sube un audio, elige un preajuste y descarga el audio convertido."
+      },
+      {
+        "q": "¿Qué formatos de audio se admiten?",
+        "a": "Formatos comunes como MP3, WAV, M4A, AAC, OGG, FLAC, AMR y WEBM."
+      },
+      {
+        "q": "¿Mi audio se almacena en el servidor?",
+        "a": "No. Los archivos se procesan en un directorio temporal y se eliminan inmediatamente después de la conversión."
+      }
+    ]
+  },
+  {
+    "id": "clearwave",
+    "component": "NoiseRemover",
+    "name": "ClearWave - Eliminador de ruido",
+    "title": "ClearWave - Elimina el ruido de fondo del audio online",
+    "description": "Elimina el ruido de fondo de archivos de audio o grabaciones al instante. Usa filtros con IA para limpiar estática, viento o zumbidos y obtener un sonido profesional.",
+    "path": "/clearwave",
+    "ctaLabel": "Limpiar audio",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "detailedDescription": "ClearWave elimina el ruido de fondo no deseado de tus archivos de audio. Sube una grabación con viento, zumbido, estática o ruido ambiental y obtén una versión limpia. Elige entre reducción de ruido ligera, media o fuerte. Admite formatos MP3, WAV, M4A, AAC, OGG, FLAC, AMR y WEBM. El procesamiento se ejecuta en el servidor usando el avanzado denoiser basado en FFT de FFmpeg, sin necesidad de instalar software.",
+    "categoryId": "utilities",
+    "keywords": [
+      "eliminador de ruido",
+      "eliminar ruido de fondo",
+      "reducción de ruido en audio",
+      "limpiar audio",
+      "denoise audio",
+      "eliminar estática",
+      "eliminar zumbido",
+      "limpieza de audio",
+      "cancelación de ruido",
+      "audio limpio",
+      "clearwave",
+      "filtro de ruido",
+      "reducir ruido",
+      "mejorador de audio"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Sube un archivo de audio (MP3, WAV, M4A, AAC, OGG, FLAC, AMR o WEBM) o graba con tu micrófono.",
+      "Elige la intensidad de reducción de ruido: Ligera para limpieza sutil, Media para resultados equilibrados o Fuerte para una eliminación agresiva.",
+      "Elige MP3 para un archivo más pequeño o WAV para salida sin pérdida.",
+      "Haz clic en Eliminar ruido y espera a que termine el procesamiento.",
+      "Descarga o comparte el archivo de audio limpio."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué tipos de ruido puede eliminar ClearWave?",
+        "a": "ClearWave elimina ruidos de fondo comunes como estática, zumbidos, viento, ruido de ventiladores, aire acondicionado y ruido ambiental general. Funciona mejor con ruidos de fondo constantes que con sonidos fuertes repentinos."
+      },
+      {
+        "q": "¿Eliminar el ruido afectará la calidad de mi audio?",
+        "a": "Los ajustes Ligero y Medio conservan bien la calidad del audio a la vez que eliminan ruido. El ajuste Fuerte elimina más ruido pero puede afectar ligeramente la claridad. Empieza con Medio y ajusta si es necesario."
+      },
+      {
+        "q": "¿Qué formatos de audio se admiten?",
+        "a": "Formatos comunes como MP3, WAV, M4A, AAC, OGG, FLAC, AMR y WEBM."
+      },
+      {
+        "q": "¿Mi audio se almacena en el servidor?",
+        "a": "No. Los archivos se procesan en un directorio temporal y se eliminan inmediatamente después del procesamiento. Tu privacidad está totalmente protegida."
+      },
+      {
+        "q": "¿Puedo grabar audio directamente y limpiarlo?",
+        "a": "¡Sí! Usa la opción Grabar micrófono para capturar audio directamente desde tu micrófono y luego aplica la reducción de ruido para limpiarlo."
+      }
+    ]
+  },
+  {
+    "id": "habit-tracker",
+    "component": "HabitTracker",
+    "name": "Seguimiento de hábitos",
+    "title": "Seguimiento de hábitos - Rastrea metas y hábitos diarios online",
+    "description": "Registra hábitos diarios, gana puntos por tareas completadas y visualiza tu progreso con gráficos. Mantén tu rutina con esta herramienta de salud privada.",
+    "path": "/habit-tracker",
+    "ctaLabel": "Rastrear hábitos",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Crea una lista de hábitos que quieras realizar cada día, cada uno con un valor de puntos personalizado. Marca los hábitos completados diariamente para ganar puntos. Un gráfico de barras muestra tus puntos de los últimos 14 días para que puedas medir tu constancia. Todos los datos se almacenan localmente en tu navegador.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "hábito",
+      "seguimiento",
+      "diario",
+      "rutina",
+      "puntos",
+      "productividad",
+      "metas",
+      "lista",
+      "bienestar",
+      "salud"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Introduce un nombre de hábito y un valor de puntos y haz clic en Añadir.",
+      "Marca cada hábito al completarlo a lo largo del día.",
+      "Tus puntos de hoy se actualizan en tiempo real conforme marcas hábitos.",
+      "Mira el gráfico de barras para ver la tendencia de tus puntos en los últimos 14 días.",
+      "Elimina un hábito haciendo clic en el icono de papelera junto a él."
+    ],
+    "faqs": [
+      {
+        "q": "¿Dónde se almacenan mis datos?",
+        "a": "Todos los hábitos y datos de finalización se guardan en el almacenamiento local de tu navegador. Nada se envía a un servidor."
+      },
+      {
+        "q": "¿Puedo usarlo sin conexión?",
+        "a": "Sí, el seguimiento de hábitos funciona totalmente sin conexión, ya que todo el procesamiento ocurre en tu navegador."
+      },
+      {
+        "q": "¿El gráfico se reinicia?",
+        "a": "El gráfico siempre muestra los últimos 14 días. Los datos más antiguos siguen almacenados y aparecerán si retrocedes."
+      }
+    ]
+  },
+  {
+    "id": "text-to-speech",
+    "component": "TextToSpeech",
+    "name": "Conversor de texto a voz",
+    "title": "Conversor de texto a voz - Convierte texto en audio",
+    "description": "Convierte texto en voz con sonido natural usando las voces integradas del navegador. Ajusta velocidad, tono y volumen para una reproducción personalizada en tu navegador.",
+    "path": "/text-to-speech",
+    "ctaLabel": "Abrir texto a voz",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Escribe o pega cualquier texto y escúchalo en voz alta usando la Web Speech API integrada en tu navegador. Elige entre decenas de voces e idiomas, ajusta velocidad, tono y volumen y controla la reproducción con pausa, reanudar y detener. Totalmente en el cliente: tu texto nunca sale del navegador.",
+    "categoryId": "utilities",
+    "keywords": [
+      "texto",
+      "voz",
+      "tts",
+      "narrador",
+      "leer",
+      "en voz alta",
+      "audio",
+      "hablar"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Escribe o pega el texto que quieres oír en el área de texto.",
+      "Selecciona una voz en el desplegable: las voces varían según el navegador y el sistema operativo.",
+      "Ajusta los deslizadores de velocidad, tono y volumen a tu gusto.",
+      "Haz clic en Hablar para iniciar la reproducción.",
+      "Usa Pausa, Reanudar o Detener para controlar la reproducción según necesites.",
+      "Haz clic en Cargar ejemplo para probar la herramienta con texto de muestra."
+    ],
+    "faqs": [
+      {
+        "q": "¿Esta herramienta envía mi texto a un servidor?",
+        "a": "No. Toda la síntesis de voz se realiza localmente en tu navegador con la Web Speech API. Tu texto nunca sale de tu dispositivo."
+      },
+      {
+        "q": "¿Por qué veo voces distintas en navegadores distintos?",
+        "a": "Las voces disponibles dependen de tu navegador y sistema operativo. Chrome, Edge, Firefox y Safari ofrecen distintos conjuntos. Algunos navegadores incluyen voces mejoradas online cuando hay conexión."
+      },
+      {
+        "q": "¿Puedo usar esta herramienta sin conexión?",
+        "a": "Sí. Una vez cargada la página, la conversión de texto a voz funciona sin conexión usando las voces integradas de tu sistema. Algunas voces premium o solo online pueden no estar disponibles offline."
+      },
+      {
+        "q": "¿Qué idiomas se admiten?",
+        "a": "La herramienta admite cualquier idioma para el que tu navegador proporcione voces. La mayoría de sistemas incluyen voces para inglés, español, francés, alemán, japonés, chino y muchos otros."
+      },
+      {
+        "q": "¿Hay un límite de longitud de texto?",
+        "a": "No hay un límite estricto en esta herramienta, pero textos muy largos pueden estar sujetos a límites específicos del navegador. Para mejores resultados, mantén los pasajes individuales por debajo de unas pocas miles de palabras."
+      },
+      {
+        "q": "¿Puedo descargar el audio?",
+        "a": "La Web Speech API no admite exportación de audio. La voz se reproduce directamente por los altavoces. Para audio descargable se necesitaría un servicio TTS del lado del servidor."
+      }
+    ]
+  },
+  {
+    "id": "sql-formatter",
+    "component": "SqlFormatter",
+    "name": "Formateador y embellecedor de SQL",
+    "title": "Formateador y embellecedor de SQL - Formatea SQL online",
+    "description": "Formatea, minifica y limpia consultas SQL al instante. Embellece tu código con indentación y mayúsculas en palabras clave para MySQL, Postgres y SQLite.",
+    "path": "/sql-formatter",
+    "ctaLabel": "Abrir herramienta SQL",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Pega cualquier consulta SQL y formatéala al instante con la indentación y los saltos de línea apropiados para mejorar la legibilidad. Minifica consultas para almacenamiento compacto, alterna entre MAYÚSCULAS y minúsculas en palabras clave y elige tu estilo de indentación preferido. Totalmente en el cliente: tu SQL nunca sale del navegador.",
+    "categoryId": "developer",
+    "keywords": [
+      "sql",
+      "formato",
+      "embellecer",
+      "minificar",
+      "consulta",
+      "base de datos",
+      "mysql",
+      "postgres",
+      "sqlite"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega tu consulta SQL en el editor.",
+      "Haz clic en Formato para añadir la indentación y los saltos de línea adecuados.",
+      "Haz clic en Minificar para colapsar la consulta en una única línea compacta.",
+      "Usa Palabras clave en MAYÚSCULAS o en minúsculas para cambiar el formato de las palabras clave SQL.",
+      "Elige tu estilo de indentación preferido (2 espacios, 4 espacios o tabulador) en el desplegable.",
+      "Haz clic en Copiar para copiar el resultado al portapapeles.",
+      "Haz clic en Cargar ejemplo para probar la herramienta con una consulta de muestra."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué dialectos de SQL se admiten?",
+        "a": "El formateador funciona con sintaxis SQL estándar y maneja dialectos comunes como MySQL, PostgreSQL, SQLite y SQL Server. Reconoce palabras clave de las principales bases de datos SQL."
+      },
+      {
+        "q": "¿Formatear cambia el comportamiento de mi consulta?",
+        "a": "No. El formato solo cambia los espacios en blanco, la indentación y opcionalmente el formato de las palabras clave. El significado lógico de tu consulta permanece idéntico."
+      },
+      {
+        "q": "¿Se conservan los literales de cadena?",
+        "a": "Sí. El formateador tokeniza tu SQL y nunca modifica el contenido dentro de cadenas con comillas simples o dobles, identificadores entre acentos graves ni comentarios."
+      },
+      {
+        "q": "¿Mi SQL se envía a algún servidor?",
+        "a": "No. El formato, la minificación y el ajuste de mayúsculas/minúsculas se realizan localmente en tu navegador. Tus datos SQL nunca salen de tu dispositivo."
+      },
+      {
+        "q": "¿Puedo usarlo sin conexión?",
+        "a": "Sí. Una vez cargada la página, el formateador SQL funciona completamente sin conexión, sin necesidad de internet."
+      }
+    ]
+  },
+  {
+    "id": "bmi-calculator",
+    "component": "BmiCalculator",
+    "name": "Calculadora de IMC",
+    "title": "Calculadora de IMC (kg, cm, lb, ft) - Herramienta de salud gratuita",
+    "description": "Calcula tu Índice de Masa Corporal (IMC) usando unidades métricas o imperiales. Obtén tu categoría e información de salud al instante con esta calculadora privada online.",
+    "path": "/bmi-calculator",
+    "ctaLabel": "Calcular IMC",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Calcula tu Índice de Masa Corporal (IMC) a partir de tu estatura y peso en segundos. Usa unidades métricas (kg/cm) o imperiales (lb/ft) y consulta tu categoría de IMC en una escala de colores. Funciona totalmente en tu navegador: tus datos nunca salen de tu dispositivo.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "imc",
+      "calculadora de imc",
+      "índice de masa corporal",
+      "calculadora",
+      "peso",
+      "altura",
+      "kg",
+      "cm",
+      "lb",
+      "lbs",
+      "ft",
+      "pies",
+      "pulgadas",
+      "salud",
+      "fitness",
+      "obesidad",
+      "bajo peso",
+      "sobrepeso",
+      "bienestar"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecciona Métrico (kg/cm) o Imperial (lb/ft).",
+      "Introduce tu peso.",
+      "Introduce tu altura. En modo imperial, introduce pies y pulgadas por separado.",
+      "Haz clic en Calcular IMC para ver el resultado.",
+      "Revisa tu IMC y tu categoría en la escala."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué es el IMC?",
+        "a": "El Índice de Masa Corporal (IMC) es una medida sencilla que usa tu estatura y peso para estimar si tienes bajo peso, peso normal, sobrepeso u obesidad. Se utiliza ampliamente como herramienta rápida de cribado."
+      },
+      {
+        "q": "¿Cómo se calcula el IMC?",
+        "a": "En métrico: IMC = peso (kg) / altura (m)^2. En imperial: IMC = (peso (lb) / altura (in)^2) x 703."
+      },
+      {
+        "q": "¿Es el IMC preciso para todos?",
+        "a": "El IMC es un indicador general útil pero no tiene en cuenta la masa muscular, la densidad ósea, la edad ni el sexo. Las personas atléticas o muy musculadas pueden tener un IMC alto sin exceso de grasa corporal. Consulta a un profesional sanitario para una evaluación completa."
+      },
+      {
+        "q": "¿Cuáles son las categorías de IMC?",
+        "a": "Las categorías de IMC en adultos son: menos de 18,5 (bajo peso), 18,5 a 24,9 (normal), 25 a 29,9 (sobrepeso) y 30+ (obesidad). Son rangos orientativos generales."
+      },
+      {
+        "q": "¿Mis datos se envían a algún sitio?",
+        "a": "No. Todos los cálculos se realizan localmente en tu navegador. Tu peso y altura nunca se envían a ningún servidor."
+      },
+      {
+        "q": "¿Puedo usarlo sin conexión?",
+        "a": "Sí. La calculadora de IMC funciona completamente sin conexión, sin necesidad de internet."
+      }
+    ]
+  },
+  {
+    "id": "resume-builder",
+    "component": "ResumeBuilder",
+    "name": "Generador de currículums",
+    "title": "Generador de currículums gratis - Crea un CV profesional online",
+    "description": "Crea un CV profesional y compatible con sistemas ATS en minutos. Elige entre plantillas modernas, rellena tus datos y descarga un PDF pulido sin marcas de agua.",
+    "path": "/resume-builder",
+    "ctaLabel": "Crear currículum",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "detailedDescription": "Crea un currículum o CV que destaque en minutos con este generador online gratuito. Elige entre plantillas profesionales, modernas o minimalistas. Añade tus datos personales, experiencia laboral, formación, habilidades y un resumen profesional. Previsualiza tu currículum en tiempo real y descárgalo como un PDF limpio y compatible con ATS. Tus datos se guardan localmente en tu navegador; no se envía nada a ningún servidor. Sin registro, sin marca de agua, sin límites. Funciona también sin conexión, para que puedas crear tu CV en cualquier lugar.",
+    "categoryId": "business",
+    "keywords": [
+      "generador de currículums",
+      "generador de cv",
+      "generador de currículums gratis",
+      "creador de currículums",
+      "creador de cv online",
+      "crear currículum online",
+      "construir cv gratis",
+      "generador de currículum profesional",
+      "creador de currículum",
+      "creador de cv",
+      "plantilla de currículum",
+      "plantilla de cv gratis",
+      "currículum compatible con ats",
+      "descargar currículum pdf",
+      "creador de cv online",
+      "generador de cv gratis sin registro",
+      "generador de currículum sin marca de agua",
+      "creador de currículum simple",
+      "generador de currículum para empleo",
+      "creador de curriculum vitae"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Selecciona una plantilla de currículum: Profesional, Moderna o Minimalista.",
+      "Introduce tu información personal: nombre, correo, teléfono, ubicación y sitio web o URL de LinkedIn.",
+      "Escribe un resumen profesional que destaque tu experiencia y objetivos.",
+      "Añade tu experiencia laboral con cargos, empresas, fechas y logros principales.",
+      "Añade tu formación con titulaciones, instituciones y cualquier detalle relevante.",
+      "Lista tus habilidades: técnicas, blandas y específicas del sector.",
+      "Haz clic en Vista previa para ver cómo queda tu currículum en PDF.",
+      "Haz clic en Descargar PDF para guardar tu currículum. El archivo se nombra automáticamente con tu nombre."
+    ],
+    "faqs": [
+      {
+        "q": "¿Este generador de currículums es realmente gratis?",
+        "a": "Sí, 100 % gratis. Sin registro, sin tarifas ocultas, sin marca de agua y sin límites en el número de currículums que puedes crear o descargar."
+      },
+      {
+        "q": "¿Qué plantillas de currículum hay disponibles?",
+        "a": "Hay tres plantillas: Profesional (cabeceras clásicas en azul con líneas limpias), Moderna (tipografía atrevida con un toque contemporáneo) y Minimalista (sencilla y ligera para un CV sin adornos)."
+      },
+      {
+        "q": "¿Se almacenan o envían a un servidor los datos de mi currículum?",
+        "a": "No. Todos tus datos permanecen en el almacenamiento local del navegador. No se sube nada a ningún servidor. Tu información es completamente privada."
+      },
+      {
+        "q": "¿Puedo usar este generador sin conexión?",
+        "a": "Sí. Una vez cargada la página, el generador funciona totalmente sin conexión. Puedes rellenar tus datos y descargar un PDF sin internet."
+      },
+      {
+        "q": "¿El PDF es compatible con sistemas ATS?",
+        "a": "Sí. El PDF generado usa fuentes estándar (Helvetica) y un diseño limpio de una sola columna fácilmente procesable por los sistemas de seguimiento de candidatos (ATS)."
+      },
+      {
+        "q": "¿Puedo añadir varias experiencias laborales y formaciones?",
+        "a": "Sí. Puedes añadir tantas entradas de experiencia laboral y formación como necesites. Haz clic en el botón Añadir de cada sección para crear más entradas."
+      },
+      {
+        "q": "¿Cómo edito mi currículum más tarde?",
+        "a": "Los datos de tu currículum se guardan automáticamente en el navegador. Cuando vuelvas a la página, tus entradas previas seguirán ahí. También puedes hacer clic en Restablecer para empezar de nuevo."
+      },
+      {
+        "q": "¿En qué formato se descarga el currículum?",
+        "a": "El currículum se descarga como archivo PDF. El PDF es el formato más aceptado para solicitudes de empleo y garantiza que el formato se mantenga consistente en todos los dispositivos."
+      }
+    ]
+  },
+  {
+    "id": "cover-letter-tailor",
+    "component": "CoverLetterTailor",
+    "name": "Adaptador de carta de presentación",
+    "title": "Adaptador de carta de presentación - Personaliza cartas DOCX para ofertas",
+    "description": "Sube una carta de presentación .docx, pega la descripción del puesto y genera un Word adaptado que destaque las habilidades relevantes para esa oferta.",
+    "path": "/cover-letter-tailor",
+    "ctaLabel": "Adaptar carta",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "Adaptador de carta de presentación actualiza una carta .docx existente para un puesto específico. Sube tu documento de Word, pega la descripción del puesto y la herramienta reescribirá la carta para enfatizar las habilidades, responsabilidades y palabras clave relevantes, manteniendo intactos tus datos originales. El resultado se descarga como un nuevo archivo .docx.",
+    "categoryId": "documents",
+    "keywords": [
+      "adaptador de carta de presentación",
+      "generador de carta de presentación",
+      "carta de presentación para empleo",
+      "editor de carta de presentación docx",
+      "carta de presentación con ia",
+      "carta de presentación personalizada",
+      "adaptar carta de presentación a oferta",
+      "actualizador de carta de presentación",
+      "carta de presentación en word"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Sube tu carta de presentación existente como archivo .docx.",
+      "Pega la descripción del puesto en el cuadro de texto.",
+      "Haz clic en Actualizar carta de presentación.",
+      "Descarga el archivo .docx adaptado cuando esté listo.",
+      "Revisa el documento final antes de enviarlo con tu solicitud."
+    ],
+    "faqs": [
+      {
+        "q": "¿La herramienta inventará experiencia que no tengo?",
+        "a": "No. El modelo tiene instrucciones de mantener intactos tus datos originales y solo enfatizar habilidades que estén razonablemente respaldadas por tu carta de presentación existente."
+      },
+      {
+        "q": "¿Qué formato de archivo puedo subir?",
+        "a": "Sube un documento Word .docx. Los archivos .doc más antiguos no son compatibles con esta herramienta."
+      },
+      {
+        "q": "¿El resultado sigue siendo editable?",
+        "a": "Sí. La carta adaptada se descarga como un nuevo archivo .docx que puedes abrir y editar en Microsoft Word, Google Docs u otro editor compatible."
+      },
+      {
+        "q": "¿Debo revisar la carta generada?",
+        "a": "Sí. Revisa siempre el documento final para confirmar que el tono, los datos y las afirmaciones son correctos antes de enviarlo."
+      }
+    ]
+  },
+  {
+    "id": "ai-humaniser",
+    "component": "AiHumaniser",
+    "name": "Humanizador de texto con IA",
+    "title": "Humanizador de IA",
+    "description": "Reescribe textos generados por IA para que suenen genuinamente humanos y naturales. Elige tu tono preferido para eliminar frases robóticas y evitar los patrones de detección de IA.",
+    "path": "/ai-humaniser",
+    "ctaLabel": "Humanizar texto",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "Humanizador de IA reescribe textos generados por IA para que suenen como si los hubiera escrito una persona real. Pega cualquier contenido de ChatGPT, Claude o cualquier otra IA, elige tu tono (Informal, Conversacional, Amigable, Profesional, Formal o Académico) y recibe textos con sonido humano y natural. La herramienta evita activamente los patrones de detección de IA: varía la longitud y estructura de las frases, elimina transiciones robóticas, añade frases naturales y conserva por completo el significado original. Ideal para entradas de blog, correos, ensayos, redes sociales y cualquier otro texto que necesites que suene auténticamente humano.",
+    "categoryId": "utilities",
+    "keywords": [
+      "humanizador de ia",
+      "humanizar texto de ia",
+      "hacer humano texto de ia",
+      "evitar detección de ia",
+      "evitar detector de ia",
+      "reescribir contenido de ia",
+      "convertidor de ia a texto humano",
+      "humanizador de chatgpt",
+      "evitar detector de escritura de ia",
+      "ia indetectable",
+      "parafraseador de ia",
+      "hacer que texto de chatgpt suene humano",
+      "reescritor de texto de ia",
+      "humanizar chatgpt"
+    ],
+    "isActive": false,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega tu texto generado por IA en el panel izquierdo.",
+      "Elige un tono que se ajuste a tu público objetivo: Informal, Conversacional, Amigable, Profesional, Formal o Académico.",
+      "Haz clic en 'Humanizar' y espera unos segundos.",
+      "Tu texto reescrito y con sonido humano aparecerá en el panel derecho.",
+      "Haz clic en el icono de copiar para copiar el resultado al portapapeles."
+    ],
+    "faqs": [
+      {
+        "q": "¿Esto evita detectores de IA como GPTZero o Turnitin?",
+        "a": "La herramienta está diseñada para producir texto que se lea de la forma más natural y humana posible: varía la estructura de las frases, evita expresiones típicas de IA y emula los patrones de escritura humana. Los resultados son sólidos, pero ninguna herramienta puede garantizar el 100 % de éxito frente a todos los detectores, ya que los modelos de detección evolucionan constantemente."
+      },
+      {
+        "q": "¿Cambia el significado de mi texto?",
+        "a": "No. La herramienta reescribe el estilo y la formulación, pero preserva por completo tu significado original y todo el contenido factual."
+      },
+      {
+        "q": "¿Qué tono debo elegir?",
+        "a": "Elige Informal o Amigable para redes sociales y escritura distendida. Conversacional va bien para blogs y correos. Profesional o Formal encaja con documentos de negocio. Académico es lo mejor para ensayos y artículos de investigación."
+      },
+      {
+        "q": "¿Hay un límite de palabras?",
+        "a": "No hay un límite estricto, pero para mejores resultados procesa una sección cada vez (unos pocos párrafos). Las entradas muy largas pueden tardar unos segundos extra."
+      }
+    ]
+  },
+  {
+    "id": "csv-builder",
+    "component": "CsvBuilder",
+    "name": "Generador de CSV",
+    "title": "Generador de CSV",
+    "description": "Crea, edita y descarga archivos CSV en tu navegador. Empieza desde cero, pega texto CSV o sube un archivo existente y edítalo en una vista de hoja de cálculo.",
+    "path": "/csv-builder",
+    "ctaLabel": "Crear CSV",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "El Generador de CSV te permite crear y editar archivos CSV directamente en tu navegador: sin registro, sin software que instalar. Empieza con una hoja en blanco, pega texto CSV en bruto para convertirlo al instante o sube un archivo .csv existente para editarlo. La vista de hoja de cálculo integrada te permite renombrar columnas, añadir o eliminar filas y columnas y editar celdas individuales con un clic. Los usuarios con sesión iniciada pueden guardar sus CSVs en su cuenta y recargarlos en cualquier momento. Cuando termines, descarga el archivo como un CSV limpio y conforme al estándar.",
+    "categoryId": "utilities",
+    "keywords": [
+      "generador de csv",
+      "editor de csv online",
+      "crear archivo csv",
+      "editar csv online",
+      "hoja de cálculo csv",
+      "csv desde texto",
+      "pegar csv",
+      "creador de csv",
+      "creador de csv",
+      "editor de csv gratis",
+      "hoja de cálculo online csv",
+      "descarga csv"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Elige cómo empezar: crea un CSV en blanco, pega texto CSV o sube un archivo .csv existente.",
+      "Si pegas texto, introduce tu contenido CSV con una fila de cabecera en la primera línea (columnas separadas por comas) y haz clic en 'Crear hoja de cálculo'.",
+      "Si subes un archivo, haz clic en 'Buscar archivo' y selecciona un .csv de tu dispositivo.",
+      "La vista de hoja de cálculo se abre automáticamente: haz clic en cualquier celda para editarla.",
+      "Haz clic en el icono de editar de una cabecera de columna para renombrarla, o en el icono de eliminar para quitar la columna.",
+      "Usa 'Añadir fila' para añadir nuevas filas, o el icono de eliminar de cualquier fila para quitarla.",
+      "Haz clic en 'Añadir columna' (el botón + en la fila de cabeceras) para insertar una nueva columna.",
+      "Los usuarios con sesión iniciada pueden hacer clic en 'Guardar en cuenta' para almacenar el CSV en su cuenta y recargarlo más tarde desde 'Mis CSVs'.",
+      "Cuando termines, haz clic en 'Descargar CSV' para guardar el archivo en tu dispositivo."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué formato CSV admite esta herramienta?",
+        "a": "La herramienta admite el CSV estándar RFC 4180: columnas separadas por comas, con comillas dobles opcionales para celdas que contengan comas o saltos de línea. Se aceptan tanto finales de línea Windows (\\r\\n) como Unix (\\n) al subir archivos."
+      },
+      {
+        "q": "¿Puedo editar un archivo de Excel aquí?",
+        "a": "No directamente: esta herramienta solo trabaja con archivos .csv. Si tienes un archivo de Excel, ábrelo en Excel o Google Sheets, elige Archivo → Guardar como → CSV y luego sube ese .csv aquí."
+      },
+      {
+        "q": "¿Mis datos se envían a un servidor?",
+        "a": "No. Todo el análisis, la edición y la generación de CSV ocurren enteramente en tu navegador. Tus datos nunca salen de tu dispositivo, a menos que tengas sesión iniciada y elijas guardar un CSV en tu cuenta."
+      },
+      {
+        "q": "¿Cómo guardo un CSV en mi cuenta?",
+        "a": "Inicia sesión, abre o crea un CSV y haz clic en 'Guardar en cuenta'. Asigna un nombre al archivo y haz clic en Guardar. Puedes recargarlo en cualquier momento desde el botón 'Mis CSVs' o el enlace 'Abrir CSV guardado' en la pantalla de inicio. Guardar con el mismo nombre sobrescribe la versión anterior."
+      },
+      {
+        "q": "¿Cómo añado una nueva columna?",
+        "a": "Haz clic en el botón + al final derecho de la fila de cabeceras. Se añadirá una nueva columna llamada 'Columna N'. Haz clic en su icono de editar (lápiz) para renombrarla."
+      },
+      {
+        "q": "¿Puedo pegar datos desde una hoja de cálculo como Excel o Google Sheets?",
+        "a": "Sí, pero asegúrate de que los datos estén separados por comas antes de pegarlos. Copia los datos de la hoja, pégalos primero en un editor de texto plano, reemplaza cualquier tabulación por comas y luego pégalo en la entrada 'Desde texto'."
+      }
+    ]
+  },
+  {
+    "id": "pdf-builder",
+    "component": "PdfBuilder",
+    "name": "Generador de PDF",
+    "title": "Generador de PDF",
+    "description": "Escribe y da estilo a documentos en tu navegador y descárgalos como PDF al instante. Sin inicio de sesión, sin backend: totalmente en el cliente.",
+    "path": "/pdf-builder",
+    "ctaLabel": "Crear PDF",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Generador de PDF es un editor de texto enriquecido gratuito y basado en el navegador que te permite escribir, formatear y exportar documentos como archivos PDF, totalmente sin conexión y sin que tus datos salgan de tu dispositivo. Usa la barra de formato para aplicar negrita, cursiva, subrayado, tachado, encabezados (H1–H3), alineación, listas con viñetas y numeradas, tamaños y familias de fuente personalizados y colores de texto o resaltado. Elige entre tamaños de página A4, Letter o Legal y define un nombre de archivo personalizado antes de descargar. Todo se ejecuta en tu navegador con html2canvas y jsPDF: no se necesita cuenta ni conexión a internet tras cargar la página.",
+    "categoryId": "documents",
+    "keywords": [
+      "generador de pdf",
+      "crear pdf online",
+      "texto enriquecido a pdf",
+      "editor pdf wysiwyg",
+      "escritor de pdf",
+      "creador de pdf online",
+      "generador de documentos",
+      "creador de pdf gratis",
+      "html a pdf",
+      "descarga pdf",
+      "editor pdf sin registro",
+      "creador pdf sin conexión"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Escribe tu contenido directamente en el lienzo blanco de la página.",
+      "Usa la barra de herramientas para aplicar negrita, cursiva, subrayado o tachado.",
+      "Haz clic en H1, H2, H3 o P para definir el estilo de párrafo.",
+      "Usa los botones de alineación para alinear a la izquierda, centrar, alinear a la derecha o justificar.",
+      "Inserta listas con viñetas o numeradas con los iconos de lista.",
+      "Elige una familia y tamaño de fuente en los desplegables de la barra.",
+      "Haz clic en una muestra de color para cambiar el color del texto, o en las muestras de BG para resaltar texto.",
+      "Elige un tamaño de página (A4, Letter o Legal) e introduce un nombre de archivo.",
+      "Haz clic en 'Descargar PDF' para exportar tu documento como archivo PDF."
+    ],
+    "faqs": [
+      {
+        "q": "¿Mi documento se envía a algún servidor?",
+        "a": "No. Toda la edición y la generación del PDF ocurren enteramente en tu navegador usando html2canvas y jsPDF. Tu contenido nunca sale de tu dispositivo."
+      },
+      {
+        "q": "¿Puedo editar un PDF existente aquí?",
+        "a": "No: esta herramienta es para crear documentos nuevos desde cero. Para editar un PDF existente, usa un editor de PDF dedicado."
+      },
+      {
+        "q": "¿Qué tamaños de página se admiten?",
+        "a": "A4, US Letter y US Legal. Selecciona el tamaño preferido antes de descargar para que el PDF exportado coincida con tu diseño."
+      },
+      {
+        "q": "¿Necesito iniciar sesión para usar el Generador de PDF?",
+        "a": "No se necesita cuenta ni iniciar sesión. La herramienta funciona totalmente sin conexión una vez cargada la página."
+      },
+      {
+        "q": "¿Puedo usar atajos de teclado para el formato?",
+        "a": "Sí: los atajos estándar funcionan dentro del editor: Ctrl+B para negrita, Ctrl+I para cursiva, Ctrl+U para subrayado, Ctrl+Z para deshacer y Ctrl+Y para rehacer."
+      }
+    ]
+  },
+  {
+    "id": "scam-detector",
+    "component": "ScamDetector",
+    "name": "Detector de mensajes de estafa",
+    "title": "Detector de estafas",
+    "description": "Pega una cita de una llamada o un mensaje sospechoso y obtén una puntuación de probabilidad de estafa, las tácticas de manipulación usadas (urgencia, autoridad, evasión) y una respuesta sugerida.",
+    "path": "/scam-detector",
+    "ctaLabel": "Analizar mensaje",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "El Detector de mensajes de estafa analiza un mensaje único, normalmente algo que un interlocutor dijo por teléfono, y te indica qué tan probable es que sea una estafa. Devuelve una puntuación de probabilidad de 0 a 100, un veredicto (Legítimo, Neutral, Sospechoso, Probable estafa, Estafa) y una lista de tácticas de manipulación detectadas, como urgencia, suplantación de autoridad, detalles vagos, evasión de verificación, generación de culpa, peticiones de información sensible, peticiones de pago y patrones de estafa de soporte técnico o de organizaciones benéficas. Cada característica viene con una puntuación de intensidad y una cita breve de tu texto como evidencia. La herramienta también devuelve un breve párrafo de razonamiento y una respuesta recomendada de una sola frase que podrías dar al interlocutor.",
+    "categoryId": "utilities",
+    "keywords": [
+      "detector de estafas",
+      "detector de mensajes de estafa",
+      "analizador de estafas telefónicas",
+      "detector de phishing",
+      "análisis de llamadas de estafa",
+      "detección de fraude",
+      "detector de ingeniería social",
+      "puntuación de probabilidad de estafa",
+      "¿es esto una estafa?",
+      "características de estafa",
+      "detección de urgencia"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Pega el mensaje sospechoso, o haz clic en 'Grabar' para hablarlo y que se transcriba automáticamente (también puedes subir un archivo de audio).",
+      "Haz clic en 'Analizar' y espera un momento.",
+      "Lee la puntuación de probabilidad de estafa y el veredicto a la derecha.",
+      "Revisa las características detectadas (urgencia, autoridad, evasión, etc.) con sus barras de intensidad y la cita breve de evidencia para cada una.",
+      "Usa la respuesta recomendada como guía sobre qué responder."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué tipo de mensajes puedo analizar?",
+        "a": "Cualquier cosa basada en texto: una cita de lo que un interlocutor dijo por teléfono, la transcripción de un buzón de voz, un SMS, el cuerpo de un correo o un mensaje de chat. La herramienta se afinó con transcripciones de estafas telefónicas, pero funciona con cualquier mensaje breve."
+      },
+      {
+        "q": "¿Qué significa la puntuación?",
+        "a": "De 0 a 20 se interpreta como legítimo, 21–40 neutral, 41–60 sospechoso, 61–80 probable estafa y 81–100 estafa. La etiqueta de veredicto coincide con el rango de puntuación."
+      },
+      {
+        "q": "¿Qué son las 'características'?",
+        "a": "Las características son las tácticas de manipulación que utiliza el mensaje, por ejemplo urgencia, suplantación de autoridad, peticiones de información sensible, detalles vagos o inducción de culpa. Cada una viene con una puntuación de intensidad y una cita breve de tu texto como evidencia."
+      },
+      {
+        "q": "¿Mi mensaje se almacena?",
+        "a": "No. El mensaje se envía al modelo de análisis para una respuesta única y no se guarda en nuestros servidores."
+      }
+    ]
+  }
+]
