@@ -28,7 +28,10 @@ function withLangPrefix(route, lang) {
 const baseRoutes = Array.from(new Set([...staticRoutes, ...toolRoutes]));
 const deRoutes = baseRoutes.map((route) => withLangPrefix(route, "de"));
 const nlRoutes = baseRoutes.map((route) => withLangPrefix(route, "nl"));
-const routes = Array.from(new Set([...baseRoutes, ...deRoutes, ...nlRoutes]));
+const esRoutes = baseRoutes.map((route) => withLangPrefix(route, "es"));
+const routes = Array.from(
+  new Set([...baseRoutes, ...deRoutes, ...nlRoutes, ...esRoutes]),
+);
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",

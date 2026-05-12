@@ -121,8 +121,8 @@ export default function SeoManager() {
     };
 
   const canonicalPath =
-    language === "de"
-      ? withLanguagePrefix(strippedPath, "de")
+    language === "de" || language === "nl" || language === "es"
+      ? withLanguagePrefix(strippedPath, language)
       : stripLanguagePrefix(normalizedPath);
   const canonical = `${SITE_URL}${canonicalPath}`;
 

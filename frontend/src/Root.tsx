@@ -46,7 +46,7 @@ const STATIC_ROUTE_PATHS = [
   { path: "chatbot-plans", component: ChatbotPlans },
 ];
 
-const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl", "/hi"];
+const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl", "/es"];
 
 export function Root() {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
