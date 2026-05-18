@@ -24,6 +24,42 @@ import { useTranslation } from "react-i18next";
 import ReviewSection from "./ReviewSection";
 
 
+function EffectiveCpmAd() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.setAttribute("data-cfasync", "false");
+    script.src =
+      "https://pl29269083.effectivecpmnetwork.com/741870d7f741a8e7443a550e57f6e0f0/invoke.js";
+    container.appendChild(script);
+
+    return () => {
+      if (script.parentNode === container) {
+        container.removeChild(script);
+      }
+    };
+  }, []);
+
+  return (
+    <Box
+      ref={containerRef}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        width: "100%",
+        mt: 2,
+      }}
+    >
+      <div id="container-741870d7f741a8e7443a550e57f6e0f0" />
+    </Box>
+  );
+}
+
 function HighPerformanceAd() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -188,7 +224,7 @@ export default function PageContainer({
             <Typography variant="body2" color="text.secondary">
               {meta?.detailedDescription}
             </Typography>
-            <HighPerformanceAd />
+            {meta?.showAds !== false && <HighPerformanceAd />}
             <PageOptionsContext.Provider
               value={{
                 showAdvancedOptions,
@@ -294,6 +330,7 @@ export default function PageContainer({
             {meta && (
               <ReviewSection toolPath={stripLanguagePrefix(currentPath)} />
             )}
+            {meta?.showAds !== false && <EffectiveCpmAd />}
             <Stack direction="row" justifyContent="flex-end">
               <BackButton />
             </Stack>
