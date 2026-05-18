@@ -17,8 +17,11 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useLocation } from "react-router-dom";
-import { useServiceCards, stripLanguagePrefix } from "../utils/language";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import Button from "@mui/material/Button";
+import { alpha, useTheme } from "@mui/material/styles";
+import { useServiceCards, stripLanguagePrefix, withLanguagePrefix, useLanguage } from "../utils/language";
 import OfflineChip from "./chips/OfflineChip";
 import AiPoweredChip from "./chips/AiPoweredChip";
 import BackButton from "./buttons/BackButton";
@@ -101,6 +104,9 @@ export default function PageContainer({
   const location = useLocation();
   const currentPath = location.pathname;
   const serviceCards = useServiceCards();
+  const muiTheme = useTheme();
+  const { language } = useLanguage();
+  const donatePath = withLanguagePrefix("/donate", language);
 
   const meta = findServiceCardByPath(
     serviceCards as ServiceCardConfig[],
@@ -298,6 +304,44 @@ export default function PageContainer({
             )}
             {meta && (
               <ReviewSection toolPath={stripLanguagePrefix(currentPath)} />
+            )}
+            {stripLanguagePrefix(currentPath) !== "/donate" && (
+              <Box
+                sx={{
+                  mt: 1,
+                  p: 2,
+                  borderRadius: 2,
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  alignItems: { xs: "stretch", sm: "center" },
+                  justifyContent: "space-between",
+                  gap: 1.5,
+                  background: alpha(muiTheme.palette.error.main, 0.08),
+                  border: `1px solid ${alpha(muiTheme.palette.error.main, 0.25)}`,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
+                  <FavoriteIcon sx={{ color: muiTheme.palette.error.main }} />
+                  <Box>
+                    <Typography variant="body2" fontWeight={700}>
+                      Enjoying Torensa?
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      A one-time donation keeps these tools free and ad-light for everyone.
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  component={RouterLink}
+                  to={donatePath}
+                  variant="contained"
+                  color="error"
+                  startIcon={<FavoriteIcon />}
+                  sx={{ borderRadius: "10px", fontWeight: 800, whiteSpace: "nowrap" }}
+                >
+                  Donate
+                </Button>
+              </Box>
             )}
             <Stack direction="row" justifyContent="flex-end">
               <BackButton />

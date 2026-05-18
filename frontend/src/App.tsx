@@ -30,6 +30,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import {
   brandLinkStyle,
@@ -243,6 +244,16 @@ export default function App({ themeName, setThemeName }: AppProps) {
           sx={sx}
         >
           {t("nav.about")}
+        </NavButton>
+
+        <NavButton
+          component={NavLink}
+          to={langPath("/donate")}
+          startIcon={<FavoriteIcon />}
+          onClick={onClick}
+          sx={sx}
+        >
+          Donate
         </NavButton>
 
         <Select
@@ -527,6 +538,16 @@ export default function App({ themeName, setThemeName }: AppProps) {
               }}
             >
               {t("footer.terms")}
+            </Link>
+            <Link
+              to={langPath("/donate")}
+              style={{
+                fontSize: 13,
+                color: theme.header.textMuted,
+                textDecoration: "none",
+              }}
+            >
+              Donate
             </Link>
           </div>
           <div

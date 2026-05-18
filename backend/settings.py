@@ -321,6 +321,13 @@ PAYPAL_PLAN_STARTER = os.getenv("PAYPAL_PLAN_STARTER", "")
 PAYPAL_PLAN_PRO = os.getenv("PAYPAL_PLAN_PRO", "")
 PAYPAL_PLAN_BUSINESS = os.getenv("PAYPAL_PLAN_BUSINESS", "")
 
+# ---------- Donations ----------
+# Hosted PayPal donate URL. Examples:
+#   https://www.paypal.com/donate?hosted_button_id=XXXXXXXX
+#   https://www.paypal.com/paypalme/your-handle
+# The frontend appends amount/currency as query params where supported.
+PAYPAL_DONATE_URL = os.getenv("PAYPAL_DONATE_URL", "https://www.paypal.com/donate")
+
 # ---------- Chatbot plan limits ----------
 CHATBOT_PLANS = {
     "free":     {"messages": 50,     "bots": 1,  "metadata_chars": 2_000},

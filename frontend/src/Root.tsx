@@ -31,6 +31,7 @@ import {
   NotFound,
   ChatbotPlans,
   ChatbotWindow,
+  Donate,
 } from "./utils/routes";
 import { useScrollTop } from "./hooks/useScrollTop";
 import { useGeoRedirect } from "./hooks/useGeoRedirect";
@@ -44,6 +45,7 @@ const STATIC_ROUTE_PATHS = [
   { path: "signup", component: Signup },
   { path: "verify-email", component: VerifyEmail },
   { path: "chatbot-plans", component: ChatbotPlans },
+  { path: "donate", component: Donate },
 ];
 
 const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl", "/es"];
