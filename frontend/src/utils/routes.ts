@@ -18,6 +18,7 @@ export const VerifyEmail = lazy(() => import("../pages/VerifyEmail"));
 export const NotFound = lazy(() => import("../pages/NotFound"));
 export const ChatbotPlans = lazy(() => import("../pages/Chatbot/ChatbotPlans"));
 export const ChatbotWindow = lazy(() => import("../pages/Chatbot/ChatbotWindow"));
+export const Donate = lazy(() => import("../pages/Donate"));
 
 /* ===================== TOOL CONFIG ===================== */
 const tools = getActiveServiceCards(serviceCards as ServiceCardConfig[]);
@@ -35,6 +36,7 @@ const pageModules = import.meta.glob([
   "!../pages/Signup.tsx",
   "!../pages/NotFound.tsx",
   "!../pages/ProtectedRoute.tsx",
+  "!../pages/Donate.tsx",
 ]);
 
 function toModuleKey(component: string) {

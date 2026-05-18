@@ -70,6 +70,7 @@ from .views.chatbot_billing_views import (
     paypal_config_view,
 )
 from .views.review_views import reviews_view, review_delete_view
+from .views.donation_views import donation_config_view, donation_intent_view
 
 urlpatterns = [
     path("hello/", hello),
@@ -152,4 +153,7 @@ urlpatterns = [
     # Tool reviews
     path("reviews/", reviews_view),
     path("reviews/<int:review_id>/", review_delete_view),
+    # Donations
+    path("donations/config/", donation_config_view),
+    path("donations/intent/", donation_intent_view),
 ]
