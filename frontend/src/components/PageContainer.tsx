@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -23,6 +23,49 @@ import {
 import { useTranslation } from "react-i18next";
 import ReviewSection from "./ReviewSection";
 
+
+function HighPerformanceAd() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const optionsScript = document.createElement("script");
+    optionsScript.type = "text/javascript";
+    optionsScript.text =
+      "atOptions = { 'key' : '839c1185dae2e1af9bbc18047cea051a', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };";
+
+    const invokeScript = document.createElement("script");
+    invokeScript.type = "text/javascript";
+    invokeScript.src =
+      "https://www.highperformanceformat.com/839c1185dae2e1af9bbc18047cea051a/invoke.js";
+    invokeScript.async = true;
+
+    container.appendChild(optionsScript);
+    container.appendChild(invokeScript);
+
+    return () => {
+      container.innerHTML = "";
+    };
+  }, []);
+
+  return (
+    <Box
+      ref={containerRef}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: 60,
+        width: "100%",
+        overflow: "hidden",
+      }}
+    />
+  );
+}
 
 type PageContainerProps = {
   children: React.ReactNode;
@@ -145,6 +188,7 @@ export default function PageContainer({
             <Typography variant="body2" color="text.secondary">
               {meta?.detailedDescription}
             </Typography>
+            <HighPerformanceAd />
             <PageOptionsContext.Provider
               value={{
                 showAdvancedOptions,
