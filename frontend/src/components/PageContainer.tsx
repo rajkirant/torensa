@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -22,7 +28,6 @@ import {
 } from "../utils/serviceCards";
 import { useTranslation } from "react-i18next";
 import ReviewSection from "./ReviewSection";
-
 
 function HighPerformanceAd() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -294,7 +299,6 @@ export default function PageContainer({
             {meta && (
               <ReviewSection toolPath={stripLanguagePrefix(currentPath)} />
             )}
-            {meta?.showAds !== false && <HighPerformanceAd />}
             <Stack direction="row" justifyContent="flex-end">
               <BackButton />
             </Stack>
