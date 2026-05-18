@@ -2511,6 +2511,7 @@
     "offlineEnabled": false,
     "authRequired": false,
     "aiPowered": true,
+    "showAds": false,
     "detailedDescription": "Scam Message Detector analyzes a single message — usually something a caller said on the phone — and tells you how likely it is to be a scam. It returns a 0–100 scam-likelihood score, a verdict (Legitimate, Neutral, Suspicious, Likely Scam, Scam), and a list of detected manipulation features such as urgency, authority impersonation, vague details, evasion of verification, guilt inducement, requests for sensitive information, requests for payment, and tech-support or charity-style scam patterns. Each feature comes with an intensity score and a short quote from your input as evidence. The tool also returns a brief reasoning paragraph and a recommended one-sentence response your assistant could give back to the caller.",
     "categoryId": "utilities",
     "keywords": [

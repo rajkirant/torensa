@@ -21,6 +21,7 @@ export type ServiceCardConfig = {
   aiPowered?: boolean;
   howTo?: string[];
   faqs?: Faq[];
+  showAds?: boolean;
 };
 
 type ActiveFlag = {
