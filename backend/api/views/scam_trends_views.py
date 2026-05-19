@@ -55,11 +55,12 @@ ENV_TAVILY_API_KEY = "TAVILY_API_KEY"
 TAVILY_ENDPOINT = "https://api.tavily.com/search"
 
 # Override which Bedrock model the scam-trend pipeline uses for the LLM steps.
-# Defaults to Haiku (cheap + fast). Set to a Sonnet model id for higher accuracy.
+# Must be an inference profile id available in the deployment region. Sonnet 4.5 by default for accuracy;
+# override to a Haiku profile for lower cost / faster runs.
 ENV_SCAM_TRENDS_MODEL_ID = "SCAM_TRENDS_MODEL_ID"
-DEFAULT_SCAM_TRENDS_MODEL_ID = "anthropic.claude-3-5-sonnet-20240620-v1:0"
+DEFAULT_SCAM_TRENDS_MODEL_ID = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
-CACHE_KEY = "scam_trends:v3"
+CACHE_KEY = "scam_trends:v4"
 CACHE_TTL_SECONDS = 6 * 60 * 60  # 6 hours
 
 QUERIES = [
@@ -237,8 +238,13 @@ def _strip_code_fence(text: str) -> str:
     return text.strip()
 
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 def _bedrock_call(bedrock, model_id: str, system_prompt: str, user_prompt: str, max_tokens: int) -> dict | None:
-    """Generic single-shot Bedrock invoke returning the parsed JSON object, or None on any failure."""
+    """Generic single-shot Bedrock invoke returning the parsed JSON object, or None on any failure.
+    Logs the underlying exception so model-access issues surface in CloudWatch."""
     body = json.dumps({
         "anthropic_version": BEDROCK_ANTHROPIC_VERSION,
         "max_tokens": max_tokens,
@@ -260,7 +266,8 @@ def _bedrock_call(bedrock, model_id: str, system_prompt: str, user_prompt: str, 
                 return None
             parsed = json.loads(m.group(0))
         return parsed if isinstance(parsed, dict) else None
-    except Exception:
+    except Exception as exc:
+        logger.warning("scam_trends.bedrock_call_failed model_id=%s error=%s", model_id, exc)
         return None
 
 
@@ -569,9 +576,21 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
                 records.append(rec)
 
     if not records:
+        # All extraction attempts failed -- almost always a Bedrock model access / id issue.
+        logger.error(
+            "scam_trends.extraction_total_failure model_id=%s sources_considered=%s sources_attempted=%s",
+            model_id, len(raw_sources), len(sources_to_extract),
+        )
         return {
             "trends": [],
             "sources_considered": len(raw_sources),
+            "records_extracted": 0,
+            "clusters_found": 0,
+            "extraction_error": (
+                "All AI extraction calls failed. Most likely the Bedrock model is not accessible "
+                "in this region/account. Check CloudWatch for the underlying exception."
+            ),
+            "model_id_used": model_id,
             "last_updated": datetime.now(timezone.utc).isoformat(),
         }
 
@@ -684,6 +703,7 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
         "clusters_found": len(clusters),
         "consolidation_applied": consolidation_applied,
         "validation_applied": validation_applied,
+        "model_id_used": model_id,
         "last_updated": now.isoformat(),
         "method": {
             "retrieve": f"Tavily news search across {len(QUERIES)} queries, last 7 days, up to {MAX_RESULTS_PER_QUERY} results each",
