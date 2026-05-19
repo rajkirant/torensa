@@ -54,7 +54,12 @@ from .tool_chat_static import (
 ENV_TAVILY_API_KEY = "TAVILY_API_KEY"
 TAVILY_ENDPOINT = "https://api.tavily.com/search"
 
-CACHE_KEY = "scam_trends:v2"
+# Override which Bedrock model the scam-trend pipeline uses for the LLM steps.
+# Defaults to Haiku (cheap + fast). Set to a Sonnet model id for higher accuracy.
+ENV_SCAM_TRENDS_MODEL_ID = "SCAM_TRENDS_MODEL_ID"
+DEFAULT_SCAM_TRENDS_MODEL_ID = "anthropic.claude-3-5-sonnet-20240620-v1:0"
+
+CACHE_KEY = "scam_trends:v3"
 CACHE_TTL_SECONDS = 6 * 60 * 60  # 6 hours
 
 QUERIES = [
@@ -72,7 +77,10 @@ MAX_SOURCES_TO_EXTRACT = 30  # hard cap, even if Tavily returns more
 TAVILY_PARALLELISM = 7
 EXTRACT_PARALLELISM = 10
 EXTRACT_MAX_TOKENS = 400
+CONSOLIDATE_MAX_TOKENS = 1500
+VALIDATE_MAX_TOKENS = 800
 TOP_N = 5
+RERANK_CANDIDATES = 10        # top-N candidates re-validated by LLM
 MIN_CLUSTER_SIZE = 2          # require >=2 sources for a real "trend"
 CLUSTER_THRESHOLD = 0.30      # looser merging
 RECENCY_HALF_LIFE_DAYS = 5.0  # freshness penalty is steeper
@@ -117,6 +125,63 @@ different victims of the same scam pattern must produce the same pattern_name so
 Examples of GOOD pattern_names: 'Parcel delivery impersonation scam', 'Bank refund phone scam',
 'AI voice clone family emergency scam', 'Crypto investment pig butchering scam'.
 """
+
+
+CONSOLIDATE_SYSTEM = """You are a scam-pattern taxonomy expert. You are given a list of scam descriptions,
+each from a different web article. Multiple descriptions may describe the same underlying scam pattern
+(e.g. two articles about different victims of the same bank-impersonation scam).
+
+Group them into canonical patterns. Return ONLY a JSON object with this exact shape:
+
+{
+  "groups": [
+    {
+      "canonical_name": "<3-6 word generic pattern name, sentence case>",
+      "canonical_channel": "<sms | email | phone | social | web | in_person | unknown>",
+      "indices": [<list of integer indices from the input list that belong to this group>]
+    }
+  ]
+}
+
+Rules:
+- Every index from the input MUST appear in exactly one group.
+- A group can have just one index if the pattern is truly unique.
+- Use the most generic, repeatable canonical_name (good: 'Parcel delivery impersonation scam'.
+  bad: 'FedEx scam targeting comedian').
+- If two descriptions share the same scam mechanic (same channel, same lure, same payload type),
+  group them even if the wording differs.
+
+Return ONLY the JSON object, no preamble, no markdown."""
+
+
+VALIDATE_SYSTEM = """You are a scam-trend curator. You are given a list of candidate scam trends,
+each with a pattern description and the headlines of the source articles supporting it. Decide which
+candidates are genuinely *emerging trends this week* and which are not.
+
+A candidate IS a trend if:
+- The supporting articles are about an active, currently-spreading scam pattern.
+- Multiple sources or recent activity make it newsworthy this week.
+
+A candidate is NOT a trend if:
+- It is a retrospective / "top scams of the year" digest.
+- It is a single old incident being re-reported without new activity.
+- The articles are commentary, opinion, or general fraud-awareness without a specific pattern.
+- The "pattern" is too vague to act on (e.g. just 'online scam', 'financial fraud').
+
+Return ONLY a JSON object with this exact shape:
+
+{
+  "verdicts": [
+    {
+      "id": <integer id from the input>,
+      "is_trend": <true | false>,
+      "confidence": <integer 0-100>,
+      "reason": "<one short sentence>"
+    }
+  ]
+}
+
+Return ONLY the JSON, no preamble, no markdown."""
 
 
 # ---------------------------------------------------------------------------
@@ -172,15 +237,12 @@ def _strip_code_fence(text: str) -> str:
     return text.strip()
 
 
-def _bedrock_extract(bedrock, model_id: str, title: str, snippet: str) -> dict | None:
-    user_prompt = (
-        "Extract the scam pattern from the following web snippet. Return ONLY the JSON object.\n\n"
-        f"TITLE: {title}\n\nSNIPPET:\n\"\"\"\n{snippet}\n\"\"\""
-    )
+def _bedrock_call(bedrock, model_id: str, system_prompt: str, user_prompt: str, max_tokens: int) -> dict | None:
+    """Generic single-shot Bedrock invoke returning the parsed JSON object, or None on any failure."""
     body = json.dumps({
         "anthropic_version": BEDROCK_ANTHROPIC_VERSION,
-        "max_tokens": EXTRACT_MAX_TOKENS,
-        "system": EXTRACT_SYSTEM,
+        "max_tokens": max_tokens,
+        "system": system_prompt,
         "messages": [{"role": "user", "content": user_prompt}],
     })
     try:
@@ -200,6 +262,96 @@ def _bedrock_extract(bedrock, model_id: str, title: str, snippet: str) -> dict |
         return parsed if isinstance(parsed, dict) else None
     except Exception:
         return None
+
+
+def _bedrock_extract(bedrock, model_id: str, title: str, snippet: str) -> dict | None:
+    user_prompt = (
+        "Extract the scam pattern from the following web snippet. Return ONLY the JSON object.\n\n"
+        f"TITLE: {title}\n\nSNIPPET:\n\"\"\"\n{snippet}\n\"\"\""
+    )
+    return _bedrock_call(bedrock, model_id, EXTRACT_SYSTEM, user_prompt, EXTRACT_MAX_TOKENS)
+
+
+def _bedrock_consolidate(bedrock, model_id: str, records: list[dict]) -> list[dict] | None:
+    """Returns a list of {indices, canonical_name, canonical_channel}, or None on failure."""
+    if not records:
+        return None
+    lines: list[str] = []
+    for i, rec in enumerate(records):
+        lines.append(
+            f"{i}. [{rec.get('channel', 'unknown')}] {rec.get('pattern_name', '')} "
+            f"- lure: {rec.get('lure', '')} - payload: {rec.get('payload', '')}"
+        )
+    user_prompt = "Scam descriptions to group:\n\n" + "\n".join(lines)
+    parsed = _bedrock_call(bedrock, model_id, CONSOLIDATE_SYSTEM, user_prompt, CONSOLIDATE_MAX_TOKENS)
+    if not parsed:
+        return None
+    groups_raw = parsed.get("groups")
+    if not isinstance(groups_raw, list):
+        return None
+    out: list[dict] = []
+    seen: set[int] = set()
+    for g in groups_raw:
+        if not isinstance(g, dict):
+            continue
+        idxs_raw = g.get("indices")
+        if not isinstance(idxs_raw, list):
+            continue
+        idxs: list[int] = []
+        for x in idxs_raw:
+            try:
+                i = int(x)
+            except (TypeError, ValueError):
+                continue
+            if 0 <= i < len(records) and i not in seen:
+                idxs.append(i)
+                seen.add(i)
+        if idxs:
+            out.append({
+                "indices": idxs,
+                "canonical_name": str(g.get("canonical_name") or "").strip(),
+                "canonical_channel": str(g.get("canonical_channel") or "").strip().lower(),
+            })
+    # Place any indices the model dropped into their own singleton groups so nothing is lost.
+    for i in range(len(records)):
+        if i not in seen:
+            out.append({"indices": [i], "canonical_name": "", "canonical_channel": ""})
+    return out
+
+
+def _bedrock_validate_trends(bedrock, model_id: str, candidates: list[dict]) -> dict[int, dict] | None:
+    """Given candidate trends (each with id, pattern_name, channel, lure, payload, sample_titles),
+    returns id -> {is_trend, confidence, reason}, or None on failure (caller skips validation)."""
+    if not candidates:
+        return None
+    lines: list[str] = []
+    for c in candidates:
+        titles = "; ".join((c.get("sample_titles") or [])[:3])
+        lines.append(
+            f"id={c['id']}: [{c.get('channel', 'unknown')}] {c.get('pattern_name', '')} "
+            f"- lure: {c.get('lure', '')} - payload: {c.get('payload', '')} - sample headlines: {titles}"
+        )
+    user_prompt = "Candidate trends to validate:\n\n" + "\n".join(lines)
+    parsed = _bedrock_call(bedrock, model_id, VALIDATE_SYSTEM, user_prompt, VALIDATE_MAX_TOKENS)
+    if not parsed:
+        return None
+    verdicts_raw = parsed.get("verdicts")
+    if not isinstance(verdicts_raw, list):
+        return None
+    out: dict[int, dict] = {}
+    for v in verdicts_raw:
+        if not isinstance(v, dict):
+            continue
+        try:
+            vid = int(v.get("id"))
+        except (TypeError, ValueError):
+            continue
+        out[vid] = {
+            "is_trend": bool(v.get("is_trend")),
+            "confidence": max(0, min(100, int(v.get("confidence") or 0))) if str(v.get("confidence", "")).isdigit() or isinstance(v.get("confidence"), (int, float)) else 0,
+            "reason": str(v.get("reason") or "").strip()[:200],
+        }
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -423,8 +575,28 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
             "last_updated": datetime.now(timezone.utc).isoformat(),
         }
 
-    # ---- cluster ----
+    # ---- cluster (stage 1: deterministic Jaccard) ----
     clusters = _cluster(records)
+
+    # ---- cluster (stage 2: LLM consolidation) ----
+    # If we have enough records, ask the model to merge clusters that describe the same pattern.
+    consolidation_applied = False
+    if len(records) >= 4:
+        groups = _bedrock_consolidate(bedrock, model_id, records)
+        if groups:
+            new_clusters: list[list[dict]] = []
+            for g in groups:
+                items = [dict(records[i]) for i in g["indices"]]
+                if g["canonical_name"]:
+                    for it in items:
+                        it["pattern_name"] = g["canonical_name"]
+                if g["canonical_channel"] and g["canonical_channel"] != "unknown":
+                    for it in items:
+                        if not it.get("channel") or it["channel"] == "unknown":
+                            it["channel"] = g["canonical_channel"]
+                new_clusters.append(items)
+            clusters = new_clusters
+            consolidation_applied = True
 
     # ---- rank ----
     now = datetime.now(timezone.utc)
@@ -438,7 +610,47 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
     # only if we don't have enough multi-source clusters to fill TOP_N.
     multi = [s for s in scored if len(s[1]) >= MIN_CLUSTER_SIZE]
     single = [s for s in scored if len(s[1]) < MIN_CLUSTER_SIZE]
-    top = (multi + single)[:TOP_N] if len(multi) < TOP_N else multi[:TOP_N]
+    pre_validate = (multi + single)[:RERANK_CANDIDATES] if len(multi) < TOP_N else multi[:RERANK_CANDIDATES]
+
+    # ---- LLM validation: filter out non-trends from the top candidates ----
+    validation_applied = False
+    if len(pre_validate) > 0:
+        candidates_for_validation: list[dict] = []
+        for idx, (score, items, breakdown) in enumerate(pre_validate):
+            canonical = sorted(items, key=lambda it: (
+                {"government": 0, "news": 1, "blog": 2, "forum": 3, "other": 4}.get(it.get("source_type", "other"), 4),
+                -(_parse_date(it.get("published") or "") or datetime(1970, 1, 1, tzinfo=timezone.utc)).timestamp(),
+            ))[0]
+            candidates_for_validation.append({
+                "id": idx,
+                "pattern_name": canonical.get("pattern_name", ""),
+                "channel": canonical.get("channel", ""),
+                "lure": canonical.get("lure", ""),
+                "payload": canonical.get("payload", ""),
+                "sample_titles": [it.get("title", "") for it in items[:3]],
+            })
+        verdicts = _bedrock_validate_trends(bedrock, model_id, candidates_for_validation)
+        if verdicts:
+            validation_applied = True
+            kept: list[tuple[float, list[dict], dict]] = []
+            dropped: list[tuple[float, list[dict], dict]] = []
+            for idx, scored_item in enumerate(pre_validate):
+                v = verdicts.get(idx)
+                if v and v.get("is_trend") and v.get("confidence", 0) >= 40:
+                    # Stash validator reason into breakdown for transparency
+                    scored_item[2]["validator_reason"] = v.get("reason", "")
+                    scored_item[2]["validator_confidence"] = v.get("confidence", 0)
+                    kept.append(scored_item)
+                else:
+                    scored_item[2]["validator_reason"] = (v or {}).get("reason", "")
+                    scored_item[2]["validator_confidence"] = (v or {}).get("confidence", 0)
+                    dropped.append(scored_item)
+            # If validator was too strict and we don't have enough trends, top up from dropped (best-scoring first)
+            top = kept[:TOP_N] if len(kept) >= TOP_N else (kept + dropped)[:TOP_N]
+        else:
+            top = pre_validate[:TOP_N]
+    else:
+        top = []
     trends_out = []
     for rank, (score, items, breakdown) in enumerate(top, start=1):
         summary = _summarize_cluster(items)
@@ -470,12 +682,16 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
         "sources_considered": len(raw_sources),
         "records_extracted": len(records),
         "clusters_found": len(clusters),
+        "consolidation_applied": consolidation_applied,
+        "validation_applied": validation_applied,
         "last_updated": now.isoformat(),
         "method": {
             "retrieve": f"Tavily news search across {len(QUERIES)} queries, last 7 days, up to {MAX_RESULTS_PER_QUERY} results each",
-            "extract": f"Bedrock Claude ({model_id}) structured extraction (parallel, severity-aware)",
-            "cluster": f"Weighted Jaccard on (pattern_name x3 + payload x2 + channel) tokens, threshold {CLUSTER_THRESHOLD}; channels do not cross-merge",
+            "extract": f"Bedrock Claude ({model_id}) per-source structured extraction (parallel, severity-aware)",
+            "cluster_stage1": f"Weighted Jaccard on (pattern_name x3 + payload x2 + channel) tokens, threshold {CLUSTER_THRESHOLD}; channels do not cross-merge",
+            "cluster_stage2": "LLM consolidation: Claude regroups Jaccard clusters by underlying pattern (one extra call total)",
             "rank": "log(1 + source_count) * log(1 + diversity_weight) * (0.2 + recency_factor) * (0.5 + avg_severity)",
+            "validate": f"Top {RERANK_CANDIDATES} candidates re-scored by Claude as 'genuine emerging trend?'; non-trends dropped (with backfill if <{TOP_N} remain)",
             "filter": f"Multi-source clusters (>={MIN_CLUSTER_SIZE} sources) preferred for top {TOP_N}; falls back to single-source clusters only if needed",
         },
     }
@@ -502,7 +718,12 @@ def scam_trends_view(request):
         )
 
     region = os.getenv(ENV_AWS_REGION, DEFAULT_AWS_REGION).strip() or DEFAULT_AWS_REGION
-    model_id = os.getenv(ENV_BEDROCK_MODEL_ID, DEFAULT_BEDROCK_MODEL_ID).strip() or DEFAULT_BEDROCK_MODEL_ID
+    # Use a dedicated (typically Sonnet) model for the trend pipeline; falls back to the default chat model.
+    model_id = (
+        os.getenv(ENV_SCAM_TRENDS_MODEL_ID, "").strip()
+        or os.getenv(ENV_BEDROCK_MODEL_ID, "").strip()
+        or DEFAULT_SCAM_TRENDS_MODEL_ID
+    )
 
     try:
         import boto3  # noqa: F401
