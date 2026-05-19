@@ -60,7 +60,7 @@ TAVILY_ENDPOINT = "https://api.tavily.com/search"
 ENV_SCAM_TRENDS_MODEL_ID = "SCAM_TRENDS_MODEL_ID"
 DEFAULT_SCAM_TRENDS_MODEL_ID = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
 
-CACHE_KEY = "scam_trends:v5"
+CACHE_KEY = "scam_trends:v6"
 CACHE_TTL_SECONDS = 6 * 60 * 60  # 6 hours
 
 QUERIES = [
@@ -73,11 +73,11 @@ QUERIES = [
     "action fraud FTC scam advisory this week",
 ]
 
-MAX_RESULTS_PER_QUERY = 8
-MAX_SOURCES_TO_EXTRACT = 20  # 2 parallel batches of Sonnet calls fit comfortably in latency budget
+MAX_RESULTS_PER_QUERY = 5
+MAX_SOURCES_TO_EXTRACT = 10  # single parallel batch of Sonnet calls -- keeps cold runtime ~15s
 TAVILY_PARALLELISM = 7
 EXTRACT_PARALLELISM = 10
-EXTRACT_MAX_TOKENS = 300    # extracted JSON is small; trim to reduce Sonnet output latency
+EXTRACT_MAX_TOKENS = 220    # extracted JSON is ~150 tokens; trim output for Sonnet latency
 CONSOLIDATE_MAX_TOKENS = 1500
 VALIDATE_MAX_TOKENS = 800
 TOP_N = 5
