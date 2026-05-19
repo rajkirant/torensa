@@ -25,6 +25,7 @@ import math
 import os
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from typing import Any
 
@@ -57,17 +58,16 @@ CACHE_KEY = "scam_trends:v1"
 CACHE_TTL_SECONDS = 6 * 60 * 60  # 6 hours
 
 QUERIES = [
-    "latest scam reports this week",
-    "new phishing scam tactics 2026",
-    "emerging text message smishing scam",
-    "AI voice clone phone scam victims",
-    "investment cryptocurrency scam reported this week",
-    "romance scam new pattern victims",
-    "fake delivery courier scam UK US",
+    "latest scam reports this week phishing smishing",
+    "AI voice clone phone scam victims this week",
+    "investment cryptocurrency romance delivery scam reported",
 ]
 
-MAX_RESULTS_PER_QUERY = 8
-EXTRACT_MAX_TOKENS = 400
+MAX_RESULTS_PER_QUERY = 4
+MAX_SOURCES_TO_EXTRACT = 18  # hard cap, even if Tavily returns more
+TAVILY_PARALLELISM = 5
+EXTRACT_PARALLELISM = 8
+EXTRACT_MAX_TOKENS = 350
 TOP_N = 5
 CLUSTER_THRESHOLD = 0.45
 RECENCY_HALF_LIFE_DAYS = 7.0
@@ -308,44 +308,50 @@ def _summarize_cluster(items: list[dict]) -> dict:
 # ---------------------------------------------------------------------------
 
 def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
-    # ---- retrieve ----
+    # ---- retrieve (parallel Tavily calls) ----
+    def _fetch_one(q: str) -> tuple[str, list[dict]]:
+        try:
+            return q, _tavily_search(tavily_key, q)
+        except Exception:
+            return q, []
+
     seen_urls: set[str] = set()
     raw_sources: list[dict] = []
-    for q in QUERIES:
-        try:
-            results = _tavily_search(tavily_key, q)
-        except Exception:
-            continue
-        for r in results:
-            url = (r.get("url") or "").strip()
-            if not url or url in seen_urls:
-                continue
-            seen_urls.add(url)
-            raw_sources.append({
-                "title": (r.get("title") or "").strip(),
-                "url": url,
-                "content": (r.get("content") or "").strip(),
-                "published": (r.get("published_date") or "").strip(),
-                "source_type": _classify_source(url),
-                "query": q,
-            })
+    with ThreadPoolExecutor(max_workers=min(TAVILY_PARALLELISM, len(QUERIES))) as ex:
+        for q, results in ex.map(_fetch_one, QUERIES):
+            for r in results:
+                url = (r.get("url") or "").strip()
+                if not url or url in seen_urls:
+                    continue
+                seen_urls.add(url)
+                raw_sources.append({
+                    "title": (r.get("title") or "").strip(),
+                    "url": url,
+                    "content": (r.get("content") or "").strip(),
+                    "published": (r.get("published_date") or "").strip(),
+                    "source_type": _classify_source(url),
+                    "query": q,
+                })
 
     if not raw_sources:
         return {"trends": [], "sources_considered": 0, "last_updated": datetime.now(timezone.utc).isoformat()}
 
-    # ---- extract ----
+    # Cap how many sources we extract (cost + latency guard).
+    # Prefer government -> news -> blog -> forum so we don't waste budget on low-quality ones.
+    type_rank = {"government": 0, "news": 1, "blog": 2, "forum": 3, "other": 4}
+    raw_sources.sort(key=lambda s: type_rank.get(s["source_type"], 4))
+    sources_to_extract = [s for s in raw_sources if len(s["content"]) >= 60][:MAX_SOURCES_TO_EXTRACT]
+
+    # ---- extract (parallel Bedrock calls) ----
     import boto3  # imported here so cache-hit path doesn't need it
     bedrock = boto3.client("bedrock-runtime", region_name=region)
 
-    records: list[dict] = []
-    for src in raw_sources:
+    def _extract_one(src: dict) -> dict | None:
         snippet = src["content"][:1500]
-        if len(snippet) < 60:
-            continue
         extracted = _bedrock_extract(bedrock, model_id, src["title"], snippet)
         if not extracted or not extracted.get("is_scam_pattern"):
-            continue
-        records.append({
+            return None
+        return {
             "pattern_name": str(extracted.get("pattern_name") or "").strip(),
             "channel": str(extracted.get("channel") or "unknown").strip().lower(),
             "lure": str(extracted.get("lure") or "").strip(),
@@ -355,7 +361,13 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
             "url": src["url"],
             "published": src["published"],
             "source_type": src["source_type"],
-        })
+        }
+
+    records: list[dict] = []
+    with ThreadPoolExecutor(max_workers=min(EXTRACT_PARALLELISM, len(sources_to_extract) or 1)) as ex:
+        for rec in ex.map(_extract_one, sources_to_extract):
+            if rec is not None:
+                records.append(rec)
 
     if not records:
         return {
