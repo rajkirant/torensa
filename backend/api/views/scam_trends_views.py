@@ -54,23 +54,28 @@ from .tool_chat_static import (
 ENV_TAVILY_API_KEY = "TAVILY_API_KEY"
 TAVILY_ENDPOINT = "https://api.tavily.com/search"
 
-CACHE_KEY = "scam_trends:v1"
+CACHE_KEY = "scam_trends:v2"
 CACHE_TTL_SECONDS = 6 * 60 * 60  # 6 hours
 
 QUERIES = [
     "latest scam reports this week phishing smishing",
-    "AI voice clone phone scam victims this week",
-    "investment cryptocurrency romance delivery scam reported",
+    "AI voice clone deepfake phone scam victims",
+    "investment cryptocurrency scam this week",
+    "romance scam new pattern victims report",
+    "delivery courier impersonation scam consumer warning",
+    "bank impersonation refund scam customers",
+    "action fraud FTC scam advisory this week",
 ]
 
-MAX_RESULTS_PER_QUERY = 4
-MAX_SOURCES_TO_EXTRACT = 18  # hard cap, even if Tavily returns more
-TAVILY_PARALLELISM = 5
-EXTRACT_PARALLELISM = 8
-EXTRACT_MAX_TOKENS = 350
+MAX_RESULTS_PER_QUERY = 8
+MAX_SOURCES_TO_EXTRACT = 30  # hard cap, even if Tavily returns more
+TAVILY_PARALLELISM = 7
+EXTRACT_PARALLELISM = 10
+EXTRACT_MAX_TOKENS = 400
 TOP_N = 5
-CLUSTER_THRESHOLD = 0.45
-RECENCY_HALF_LIFE_DAYS = 7.0
+MIN_CLUSTER_SIZE = 2          # require >=2 sources for a real "trend"
+CLUSTER_THRESHOLD = 0.30      # looser merging
+RECENCY_HALF_LIFE_DAYS = 5.0  # freshness penalty is steeper
 
 # Source-type credibility weights (govt advisories > established news > forum chatter).
 SOURCE_TYPE_WEIGHT = {
@@ -96,19 +101,21 @@ EXTRACT_SYSTEM = """You are an information-extraction engine. Given a short web 
 about a scam, return ONE JSON object describing the scam pattern. Return ONLY the JSON,
 no preamble, no markdown.
 
-Schema (all fields required, use empty string if unknown):
+Schema (all fields required, use empty string / 0 if unknown):
 {
-  "pattern_name": "<short label, 3-7 words, sentence case>",
+  "pattern_name": "<short generic label of the pattern itself, 3-6 words, sentence case. Use the GENERIC name, not the specific case (good: 'Parcel delivery impersonation scam'. bad: 'FedEx scam targeting Indian comedian')>",
   "channel": "<one of: sms | email | phone | social | web | in_person | unknown>",
   "lure": "<one short sentence: how victims are first contacted / hooked>",
   "payload": "<one short sentence: what the scammer ultimately wants (money, credentials, access, etc.)>",
   "victim_profile": "<one short phrase: who is targeted, e.g. 'elderly mobile users', 'small business owners'>",
-  "is_scam_pattern": <true if the snippet describes a real scam pattern, false if it is a general article/opinion>
+  "severity": <integer 0-100: how serious / financially damaging. 0=minor annoyance, 50=typical scam, 80=organized fraud with large losses, 100=widespread campaign with major losses>,
+  "is_scam_pattern": <true ONLY if the snippet describes a concrete scam pattern with a clear lure and payload. false if it is a general opinion piece, an unrelated story, a list-style 'top scams of 2025' digest, or just boilerplate>
 }
 
-If the snippet does not describe a concrete scam pattern (e.g. it is a general opinion piece,
-unrelated news, or duplicate boilerplate), set is_scam_pattern to false and leave other fields
-as empty strings.
+CRITICAL: pattern_name must describe the *type* of scam, not the *specific incident*. Two articles about
+different victims of the same scam pattern must produce the same pattern_name so they can cluster.
+Examples of GOOD pattern_names: 'Parcel delivery impersonation scam', 'Bank refund phone scam',
+'AI voice clone family emergency scam', 'Crypto investment pig butchering scam'.
 """
 
 
@@ -221,22 +228,50 @@ def _jaccard(a: set[str], b: set[str]) -> float:
     return inter / union if union else 0.0
 
 
+def _cluster_signature(rec: dict) -> set[str]:
+    """Build a weighted token set: tokens from high-signal fields (channel, payload, pattern_name)
+    appear multiple times (with a positional suffix) so they dominate Jaccard similarity over
+    incidental words from the lure."""
+    parts: list[str] = []
+    name = rec.get("pattern_name", "")
+    payload = rec.get("payload", "")
+    channel = rec.get("channel", "")
+    lure = rec.get("lure", "")
+    # weight by repetition (each repeat suffixed to keep tokens distinct from other fields)
+    parts.append(f"{name} {name} {name}")           # pattern_name x3
+    parts.append(f"{payload} {payload}")             # payload x2
+    parts.append(f"channel_{channel}")               # channel as a single distinguishing token
+    parts.append(lure)
+    return _tokenize(" ".join(parts))
+
+
 def _cluster(records: list[dict]) -> list[list[dict]]:
-    clusters: list[dict] = []  # each: {"tokens": set, "items": [record]}
+    clusters: list[dict] = []  # each: {"tokens": set, "channel": str, "items": [record]}
     for rec in records:
-        sig = " ".join([rec.get("pattern_name", ""), rec.get("payload", ""), rec.get("channel", ""), rec.get("lure", "")])
-        tokens = _tokenize(sig)
+        tokens = _cluster_signature(rec)
         if not tokens:
             continue
+        rec_channel = rec.get("channel", "")
         placed = False
-        for c in clusters:
-            if _jaccard(tokens, c["tokens"]) >= CLUSTER_THRESHOLD:
-                c["items"].append(rec)
-                c["tokens"] = c["tokens"] | tokens
-                placed = True
-                break
+        best_idx = -1
+        best_sim = 0.0
+        for i, c in enumerate(clusters):
+            # Don't merge across channels (except 'unknown' which matches anything)
+            if rec_channel and c["channel"] and rec_channel != "unknown" and c["channel"] != "unknown" and rec_channel != c["channel"]:
+                continue
+            sim = _jaccard(tokens, c["tokens"])
+            if sim > best_sim:
+                best_sim = sim
+                best_idx = i
+        if best_idx >= 0 and best_sim >= CLUSTER_THRESHOLD:
+            c = clusters[best_idx]
+            c["items"].append(rec)
+            c["tokens"] = c["tokens"] | tokens
+            if c["channel"] == "unknown" and rec_channel and rec_channel != "unknown":
+                c["channel"] = rec_channel
+            placed = True
         if not placed:
-            clusters.append({"tokens": tokens, "items": [rec]})
+            clusters.append({"tokens": tokens, "channel": rec_channel or "unknown", "items": [rec]})
     return [c["items"] for c in clusters]
 
 
@@ -275,12 +310,18 @@ def _score_cluster(items: list[dict], now: datetime) -> tuple[float, dict]:
     newest = max(dates) if dates else None
     recency = _recency_factor(newest, now)
 
-    score = math.log(1 + source_count) * math.log(1 + diversity_weight) * (0.2 + recency)
+    severities = [int(it.get("severity") or 0) for it in items]
+    avg_severity = (sum(severities) / len(severities) / 100.0) if severities else 0.5
+    severity_factor = 0.5 + avg_severity  # range [0.5, 1.5]
+
+    score = math.log(1 + source_count) * math.log(1 + diversity_weight) * (0.2 + recency) * severity_factor
     breakdown = {
         "source_count": source_count,
         "distinct_source_types": sorted(source_types),
         "diversity_weight": round(diversity_weight, 3),
         "recency_factor": round(recency, 3),
+        "severity_factor": round(severity_factor, 3),
+        "avg_severity": round(avg_severity * 100, 1),
         "newest_published": newest.isoformat() if newest else None,
     }
     return score, breakdown
@@ -351,12 +392,18 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
         extracted = _bedrock_extract(bedrock, model_id, src["title"], snippet)
         if not extracted or not extracted.get("is_scam_pattern"):
             return None
+        try:
+            sev = int(extracted.get("severity") or 0)
+        except (TypeError, ValueError):
+            sev = 0
+        sev = max(0, min(100, sev))
         return {
             "pattern_name": str(extracted.get("pattern_name") or "").strip(),
             "channel": str(extracted.get("channel") or "unknown").strip().lower(),
             "lure": str(extracted.get("lure") or "").strip(),
             "payload": str(extracted.get("payload") or "").strip(),
             "victim_profile": str(extracted.get("victim_profile") or "").strip(),
+            "severity": sev,
             "title": src["title"],
             "url": src["url"],
             "published": src["published"],
@@ -387,7 +434,11 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
         scored.append((score, items, breakdown))
     scored.sort(key=lambda x: x[0], reverse=True)
 
-    top = scored[:TOP_N]
+    # Prefer multi-source clusters (real "trends"); fall back to single-source ones
+    # only if we don't have enough multi-source clusters to fill TOP_N.
+    multi = [s for s in scored if len(s[1]) >= MIN_CLUSTER_SIZE]
+    single = [s for s in scored if len(s[1]) < MIN_CLUSTER_SIZE]
+    top = (multi + single)[:TOP_N] if len(multi) < TOP_N else multi[:TOP_N]
     trends_out = []
     for rank, (score, items, breakdown) in enumerate(top, start=1):
         summary = _summarize_cluster(items)
@@ -400,6 +451,7 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
             }
             for it in items
         ]
+        avg_sev = round(sum(int(it.get("severity") or 0) for it in items) / max(1, len(items)), 1)
         trends_out.append({
             "rank": rank,
             "score": round(score, 3),
@@ -408,6 +460,7 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
             "lure": summary["lure"],
             "payload": summary["payload"],
             "victim_profile": summary["victim_profile"],
+            "severity": avg_sev,
             "sources": sources,
             "scoring_breakdown": breakdown,
         })
@@ -419,10 +472,11 @@ def _build_trends(tavily_key: str, region: str, model_id: str) -> dict:
         "clusters_found": len(clusters),
         "last_updated": now.isoformat(),
         "method": {
-            "retrieve": f"Tavily news search across {len(QUERIES)} queries, last 7 days",
-            "extract": f"Bedrock Claude ({model_id}) structured extraction",
-            "cluster": f"Jaccard similarity on token sets, threshold {CLUSTER_THRESHOLD}",
-            "rank": "log(1 + source_count) * log(1 + diversity_weight) * (0.2 + recency_factor)",
+            "retrieve": f"Tavily news search across {len(QUERIES)} queries, last 7 days, up to {MAX_RESULTS_PER_QUERY} results each",
+            "extract": f"Bedrock Claude ({model_id}) structured extraction (parallel, severity-aware)",
+            "cluster": f"Weighted Jaccard on (pattern_name x3 + payload x2 + channel) tokens, threshold {CLUSTER_THRESHOLD}; channels do not cross-merge",
+            "rank": "log(1 + source_count) * log(1 + diversity_weight) * (0.2 + recency_factor) * (0.5 + avg_severity)",
+            "filter": f"Multi-source clusters (>={MIN_CLUSTER_SIZE} sources) preferred for top {TOP_N}; falls back to single-source clusters only if needed",
         },
     }
 
