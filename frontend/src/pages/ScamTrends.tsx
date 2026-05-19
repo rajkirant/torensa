@@ -47,6 +47,7 @@ interface Trend {
   lure: string;
   payload: string;
   victim_profile: string;
+  severity: number;
   sources: TrendSource[];
   scoring_breakdown: ScoringBreakdown;
 }
@@ -310,6 +311,26 @@ export default function ScamTrends() {
                           variant="outlined"
                           sx={{ fontWeight: 600 }}
                         />
+                        {trend.severity > 0 && (
+                          <Tooltip title="Average severity reported across sources (0-100)">
+                            <Chip
+                              label={`Severity ${Math.round(trend.severity)}`}
+                              size="small"
+                              sx={{
+                                fontWeight: 700,
+                                bgcolor: alpha(
+                                  trend.severity >= 70 ? "#dc2626" : trend.severity >= 40 ? "#f59e0b" : "#64748b",
+                                  0.15,
+                                ),
+                                color: trend.severity >= 70 ? "#dc2626" : trend.severity >= 40 ? "#f59e0b" : "#64748b",
+                                border: `1px solid ${alpha(
+                                  trend.severity >= 70 ? "#dc2626" : trend.severity >= 40 ? "#f59e0b" : "#64748b",
+                                  0.4,
+                                )}`,
+                              }}
+                            />
+                          </Tooltip>
+                        )}
                         {trend.scoring_breakdown.distinct_source_types.includes("government") && (
                           <Tooltip title="Corroborated by a government advisory">
                             <Chip
