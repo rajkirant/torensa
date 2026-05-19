@@ -2554,5 +2554,59 @@
         "a": "No. The message is sent to the analysis model for a single response and is not saved on our servers."
       }
     ]
+  },
+  {
+    "id": "scam-trends",
+    "component": "ScamTrends",
+    "name": "Scam Trend Tracker",
+    "title": "Scam Trends",
+    "description": "See the top 5 emerging scam patterns from the last 7 days, drawn from news, government advisories, and consumer-protection sites, then clustered and ranked.",
+    "path": "/scam-trends",
+    "ctaLabel": "View Latest Trends",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "showAds": false,
+    "detailedDescription": "Scam Trend Tracker monitors the open web for reports of emerging scam patterns and surfaces the five trends with the strongest current evidence. Each refresh queries multiple curated topics (phishing, smishing, voice-clone scams, romance scams, investment fraud and more) across the last 7 days, extracts a structured pattern record from each source using Claude, then clusters semantically similar reports together using Jaccard token similarity. The ranking favours patterns corroborated by multiple independent sources, weighted by source-type credibility (government advisories rank higher than blogs) and by how recently they were reported. For each trend you see the hook (how victims are first contacted), the payload (what the scammer ultimately wants), a typical victim profile, and every cited source with a publish date and a link.",
+    "categoryId": "utilities",
+    "keywords": [
+      "scam trends",
+      "emerging scams",
+      "latest scam reports",
+      "scam tracker",
+      "phishing trends",
+      "smishing trends",
+      "voice clone scam",
+      "romance scam latest",
+      "weekly scam digest",
+      "scam advisory"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Open the tool — the latest cached trend report loads automatically.",
+      "Read each trend card: the pattern name, how victims are hooked, what the scammer wants, and the typical target.",
+      "Expand 'Sources' on any card to see the cited news or government articles with publish dates.",
+      "Click 'Refresh' to force a fresh fetch from the web (otherwise the report is cached for 6 hours).",
+      "Cross-check any suspicious message you received with Scam Message Detector for a per-message score."
+    ],
+    "faqs": [
+      {
+        "q": "Where do the trends come from?",
+        "a": "From a curated set of news and consumer-protection queries run against the Tavily web-search API, restricted to the last 7 days. Each result is then extracted into a structured pattern record."
+      },
+      {
+        "q": "How are the top 5 chosen?",
+        "a": "Similar reports are merged into clusters using Jaccard similarity on token sets. Each cluster is scored as corroboration (number of sources) × source-type diversity weight × recency factor. Government advisories weigh more than blog posts."
+      },
+      {
+        "q": "How fresh is the data?",
+        "a": "Results are cached for 6 hours to keep API costs low. Click Refresh to force a new fetch from the web at any time."
+      },
+      {
+        "q": "Is this advice tailored to my country?",
+        "a": "The default queries are global with a UK/US emphasis. We will add per-region tracking in a future release."
+      }
+    ]
   }
 ]
