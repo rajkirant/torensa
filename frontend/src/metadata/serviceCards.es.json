@@ -99,7 +99,7 @@
       "buscar canción escuchando",
       "identificador de canciones gratis"
     ],
-    "isActive": true,
+    "isActive": false,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Reproduce la canción que quieres identificar desde cualquier fuente: altavoces, TV, radio, o incluso tararéala o cántala.",
@@ -152,13 +152,7 @@
     "authRequired": false,
     "detailedDescription": "Compartir fácil te permite enviar texto y hasta 5 archivos (de hasta 1 GB cada uno) entre dispositivos en redes distintas mediante un código de acceso de 4 dígitos a través de internet. No se necesita registro, teléfono ni correo.",
     "categoryId": "communication",
-    "keywords": [
-      "texto",
-      "compartir",
-      "código",
-      "portapapeles",
-      "transferir"
-    ],
+    "keywords": ["texto", "compartir", "código", "portapapeles", "transferir"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -214,13 +208,7 @@
     "authRequired": true,
     "detailedDescription": "Redacta y envía campañas masivas de correo desde un único lugar. Conecta Gmail con OAuth, importa destinatarios desde Excel/CSV, personaliza el asunto y el cuerpo con marcadores y adjunta archivos. Tu configuración SMTP se guarda por cuenta y se usa para enviar a través de tu propia conexión de Gmail.",
     "categoryId": "communication",
-    "keywords": [
-      "correo",
-      "email",
-      "campaña",
-      "boletín",
-      "gmail"
-    ],
+    "keywords": ["correo", "email", "campaña", "boletín", "gmail"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -271,12 +259,7 @@
     "authRequired": false,
     "detailedDescription": "Crea códigos QR escaneables a partir de texto plano o enlaces con vista previa en directo. Añade opcionalmente un logo y una etiqueta corta y descarga la imagen final como PNG. El procesamiento se realiza en el navegador, por lo que no se sube nada.",
     "categoryId": "business",
-    "keywords": [
-      "qr",
-      "qrcode",
-      "texto",
-      "enlace"
-    ],
+    "keywords": ["qr", "qrcode", "texto", "enlace"],
     "isActive": true,
     "advancedOptionsEnabled": true,
     "howTo": [
@@ -558,13 +541,7 @@
     "authRequired": false,
     "detailedDescription": "Sube un PDF y divídelo localmente en tu navegador. Extrae páginas seleccionadas en un único PDF o genera un PDF por página descargable en un ZIP. Todo el procesamiento se ejecuta en el dispositivo para privacidad y uso sin conexión.",
     "categoryId": "documents",
-    "keywords": [
-      "pdf",
-      "dividir",
-      "extraer",
-      "páginas",
-      "documento"
-    ],
+    "keywords": ["pdf", "dividir", "extraer", "páginas", "documento"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -795,13 +772,7 @@
     "authRequired": false,
     "detailedDescription": "Crea facturas o recibos profesionales con datos del vendedor y comprador, líneas de detalle, impuestos, envío, descuentos y notas. Los totales se calculan automáticamente y el documento final puede exportarse como PDF. Los datos se mantienen en local y pueden reutilizarse en tu navegador.",
     "categoryId": "business",
-    "keywords": [
-      "factura",
-      "recibo",
-      "facturación",
-      "pago",
-      "negocio"
-    ],
+    "keywords": ["factura", "recibo", "facturación", "pago", "negocio"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -851,13 +822,7 @@
     "authRequired": false,
     "detailedDescription": "Pega dos versiones de texto y ve las diferencias línea a línea, incluyendo adiciones, eliminaciones y bloques modificados. Útil para revisar cambios en contenido, archivos de configuración o fragmentos de código. Todo se ejecuta localmente en tu navegador.",
     "categoryId": "developer",
-    "keywords": [
-      "texto",
-      "diff",
-      "comparar",
-      "cambios",
-      "comprobador"
-    ],
+    "keywords": ["texto", "diff", "comparar", "cambios", "comprobador"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -907,13 +872,7 @@
     "authRequired": false,
     "detailedDescription": "Pega JSON y ejecuta una validación rápida con mensajes de error legibles. Formatea con indentación para mejorar la legibilidad o minifica para cargas compactas. Esta utilidad es totalmente cliente, lo que la hace rápida y respetuosa con la privacidad para flujos de trabajo de desarrollo.",
     "categoryId": "developer",
-    "keywords": [
-      "json",
-      "formato",
-      "validador",
-      "minificar",
-      "embellecer"
-    ],
+    "keywords": ["json", "formato", "validador", "minificar", "embellecer"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1084,13 +1043,7 @@
     "authRequired": false,
     "detailedDescription": "Inspecciona la cabecera y el payload de JWT, edita reclamaciones y genera nuevos tokens con los algoritmos HS256 o HS512. Útil para pruebas de API y depuración de flujos de autenticación. Las operaciones se realizan en el navegador sin enviar datos de token a un backend.",
     "categoryId": "developer",
-    "keywords": [
-      "jwt",
-      "token",
-      "codificar",
-      "decodificar",
-      "seguridad"
-    ],
+    "keywords": ["jwt", "token", "codificar", "decodificar", "seguridad"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1140,13 +1093,7 @@
     "authRequired": false,
     "detailedDescription": "Crea uno o varios identificadores UUID v4 con opciones como salida en mayúsculas o sin guiones. Copia todos los valores generados de una vez para usarlos en desarrollo, pruebas y flujos de datos.",
     "categoryId": "developer",
-    "keywords": [
-      "uuid",
-      "guid",
-      "identificador",
-      "id",
-      "generar"
-    ],
+    "keywords": ["uuid", "guid", "identificador", "id", "generar"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1314,14 +1261,7 @@
     "authRequired": false,
     "detailedDescription": "Sube un documento de Word (.doc o .docx) y conviértelo a PDF en segundos. La conversión se ejecuta en el servidor usando LibreOffice, preservando fuentes, tablas, imágenes y formato. Los archivos se procesan en memoria y nunca se almacenan.",
     "categoryId": "documents",
-    "keywords": [
-      "word",
-      "docx",
-      "doc",
-      "pdf",
-      "convertir",
-      "documento"
-    ],
+    "keywords": ["word", "docx", "doc", "pdf", "convertir", "documento"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1409,13 +1349,7 @@
     "authRequired": false,
     "detailedDescription": "Sube un PDF y conviértelo a un archivo .docx editable. La conversión se ejecuta en el servidor usando LibreOffice, preservando diseño y texto. Los archivos se procesan en memoria y nunca se almacenan.",
     "categoryId": "documents",
-    "keywords": [
-      "pdf",
-      "word",
-      "docx",
-      "convertir",
-      "documento"
-    ],
+    "keywords": ["pdf", "word", "docx", "convertir", "documento"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1810,14 +1744,7 @@
     "authRequired": false,
     "detailedDescription": "Sube un archivo de vídeo y extrae la pista de audio como MP3 o WAV. La conversión se ejecuta en el servidor usando FFmpeg. Los archivos se procesan en memoria y nunca se almacenan.",
     "categoryId": "utilities",
-    "keywords": [
-      "vídeo",
-      "audio",
-      "mp3",
-      "wav",
-      "extraer",
-      "convertir"
-    ],
+    "keywords": ["vídeo", "audio", "mp3", "wav", "extraer", "convertir"],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [

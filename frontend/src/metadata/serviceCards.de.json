@@ -105,7 +105,7 @@
       "song finden",
       "kostenlos song erkennen"
     ],
-    "isActive": true,
+    "isActive": false,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Spielen Sie den Song ab, den Sie erkennen möchten – aus Lautsprechern, TV, Radio, oder summen bzw. singen Sie ihn einfach.",
@@ -1462,7 +1462,13 @@
     "authRequired": false,
     "detailedDescription": "Erstellen Sie in Sekunden atemberaubende, fotorealistische Geburtstagstorti-Bilder mit KI (Hugging Face FLUX). Name, Alter und Thema eingeben, Torte generieren und als PNG herunterladen oder per WhatsApp teilen.",
     "categoryId": "entertainment",
-    "keywords": ["Geburtstagstorte", "KI Torte", "Torte generieren", "Geburtstagsbild", "personalisierte Torte"],
+    "keywords": [
+      "Geburtstagstorte",
+      "KI Torte",
+      "Torte generieren",
+      "Geburtstagsbild",
+      "personalisierte Torte"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1472,10 +1478,22 @@
       "PNG herunterladen oder direkt per WhatsApp teilen."
     ],
     "faqs": [
-      { "q": "Benötige ich ein Konto?", "a": "Nein, der Generator ist kostenlos ohne Anmeldung nutzbar." },
-      { "q": "Wie realistisch sind die Tortenbilder?", "a": "Die KI verwendet FLUX.1-schnell über Hugging Face und liefert Bilder in Lebensmittelfotografie-Qualität." },
-      { "q": "Wie lange dauert die Generierung?", "a": "Typischerweise 10–30 Sekunden. Beim ersten Laden des Modells kann es etwas länger dauern." },
-      { "q": "Kann ich den Stil anpassen?", "a": "Ja – geben Sie ein beliebiges Thema ein, z. B. Schokolade, Blumen oder Galaxie." }
+      {
+        "q": "Benötige ich ein Konto?",
+        "a": "Nein, der Generator ist kostenlos ohne Anmeldung nutzbar."
+      },
+      {
+        "q": "Wie realistisch sind die Tortenbilder?",
+        "a": "Die KI verwendet FLUX.1-schnell über Hugging Face und liefert Bilder in Lebensmittelfotografie-Qualität."
+      },
+      {
+        "q": "Wie lange dauert die Generierung?",
+        "a": "Typischerweise 10–30 Sekunden. Beim ersten Laden des Modells kann es etwas länger dauern."
+      },
+      {
+        "q": "Kann ich den Stil anpassen?",
+        "a": "Ja – geben Sie ein beliebiges Thema ein, z. B. Schokolade, Blumen oder Galaxie."
+      }
     ]
   },
   {
@@ -1491,7 +1509,13 @@
     "authRequired": false,
     "detailedDescription": "Senden Sie in Sekunden einen wunderschönen animierten Gruß zu jedem Fest. Wählen Sie eine Festvorlage (Diwali zum Start, weitere folgen), eine Nachricht, einen Empfängernamen, und wir erstellen ein animiertes GIF mit funkelnden Sternen und Ihrem Wunsch.",
     "categoryId": "entertainment",
-    "keywords": ["Festtagsgruß", "Diwali Grüße", "animiertes GIF", "personalisierter Gruß", "WhatsApp Gruß"],
+    "keywords": [
+      "Festtagsgruß",
+      "Diwali Grüße",
+      "animiertes GIF",
+      "personalisierter Gruß",
+      "WhatsApp Gruß"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1502,10 +1526,22 @@
       "GIF herunterladen oder direkt auf WhatsApp teilen."
     ],
     "faqs": [
-      { "q": "Benötige ich ein Konto?", "a": "Nein, der Generator ist kostenlos ohne Anmeldung nutzbar." },
-      { "q": "Welche Feste werden unterstützt?", "a": "Diwali ist verfügbar. Weitere Feste werden bald hinzugefügt." },
-      { "q": "Spielt das GIF in WhatsApp ab?", "a": "Ja – über die WhatsApp-Schaltfläche auf dem Handy wird die Animation direkt im Chat abgespielt." },
-      { "q": "Kann ich die Nachricht anpassen?", "a": "Ja – wählen Sie eine vorgeschlagene Nachricht oder schreiben Sie Ihre eigene (bis zu 140 Zeichen)." }
+      {
+        "q": "Benötige ich ein Konto?",
+        "a": "Nein, der Generator ist kostenlos ohne Anmeldung nutzbar."
+      },
+      {
+        "q": "Welche Feste werden unterstützt?",
+        "a": "Diwali ist verfügbar. Weitere Feste werden bald hinzugefügt."
+      },
+      {
+        "q": "Spielt das GIF in WhatsApp ab?",
+        "a": "Ja – über die WhatsApp-Schaltfläche auf dem Handy wird die Animation direkt im Chat abgespielt."
+      },
+      {
+        "q": "Kann ich die Nachricht anpassen?",
+        "a": "Ja – wählen Sie eine vorgeschlagene Nachricht oder schreiben Sie Ihre eigene (bis zu 140 Zeichen)."
+      }
     ]
   },
   {

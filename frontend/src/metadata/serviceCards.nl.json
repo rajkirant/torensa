@@ -105,7 +105,7 @@
       "nummer zoeken",
       "gratis nummer herkennen"
     ],
-    "isActive": true,
+    "isActive": false,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Speel het nummer af dat je wilt herkennen – via luidsprekers, tv, radio, of neuriet/zing het gewoon.",
@@ -1457,7 +1457,13 @@
     "authRequired": false,
     "detailedDescription": "Maak in seconden prachtige, fotorealistische verjaardagstaartbeelden met AI (Hugging Face FLUX). Voer naam, leeftijd en thema in, genereer de taart en download als PNG of deel via WhatsApp.",
     "categoryId": "entertainment",
-    "keywords": ["verjaardagstaart", "ai taart", "taart genereren", "verjaardagsafbeelding", "gepersonaliseerde taart"],
+    "keywords": [
+      "verjaardagstaart",
+      "ai taart",
+      "taart genereren",
+      "verjaardagsafbeelding",
+      "gepersonaliseerde taart"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1467,10 +1473,22 @@
       "Download de PNG of deel direct via WhatsApp."
     ],
     "faqs": [
-      { "q": "Heb ik een account nodig?", "a": "Nee, de generator is gratis te gebruiken zonder aanmelden." },
-      { "q": "Hoe realistisch zijn de taartafbeeldingen?", "a": "De AI gebruikt FLUX.1-schnell via Hugging Face en produceert beelden van professionele voedingsfotokwaliteit." },
-      { "q": "Hoe lang duurt het genereren?", "a": "Meestal 10–30 seconden. Bij het eerste laden van het model kan het iets langer duren." },
-      { "q": "Kan ik de stijl aanpassen?", "a": "Ja – voer een eigen thema in zoals chocolade, bloemen of galaxy." }
+      {
+        "q": "Heb ik een account nodig?",
+        "a": "Nee, de generator is gratis te gebruiken zonder aanmelden."
+      },
+      {
+        "q": "Hoe realistisch zijn de taartafbeeldingen?",
+        "a": "De AI gebruikt FLUX.1-schnell via Hugging Face en produceert beelden van professionele voedingsfotokwaliteit."
+      },
+      {
+        "q": "Hoe lang duurt het genereren?",
+        "a": "Meestal 10–30 seconden. Bij het eerste laden van het model kan het iets langer duren."
+      },
+      {
+        "q": "Kan ik de stijl aanpassen?",
+        "a": "Ja – voer een eigen thema in zoals chocolade, bloemen of galaxy."
+      }
     ]
   },
   {
@@ -1486,7 +1504,13 @@
     "authRequired": false,
     "detailedDescription": "Verstuur in seconden een prachtige geanimeerde wens voor elk festival. Kies een festivalsjabloon (Diwali om mee te beginnen, meer komen eraan), schrijf een persoonlijk bericht, voeg de naam van de ontvanger toe en wij maken een geanimeerde GIF met fonkelende sterren.",
     "categoryId": "entertainment",
-    "keywords": ["festival wens", "diwali wens", "geanimeerde gif", "persoonlijke wens", "whatsapp wens"],
+    "keywords": [
+      "festival wens",
+      "diwali wens",
+      "geanimeerde gif",
+      "persoonlijke wens",
+      "whatsapp wens"
+    ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
@@ -1497,10 +1521,22 @@
       "Download de GIF of deel direct via WhatsApp."
     ],
     "faqs": [
-      { "q": "Heb ik een account nodig?", "a": "Nee, de generator is gratis te gebruiken zonder aanmelden." },
-      { "q": "Welke festivals worden ondersteund?", "a": "Diwali is nu beschikbaar. Meer festivals worden binnenkort toegevoegd." },
-      { "q": "Speelt de GIF in WhatsApp af?", "a": "Ja – via de WhatsApp-knop op een telefoon wordt de animatie direct in de chat afgespeeld." },
-      { "q": "Kan ik het bericht aanpassen?", "a": "Ja – kies een voorgesteld bericht of schrijf je eigen (tot 140 tekens)." }
+      {
+        "q": "Heb ik een account nodig?",
+        "a": "Nee, de generator is gratis te gebruiken zonder aanmelden."
+      },
+      {
+        "q": "Welke festivals worden ondersteund?",
+        "a": "Diwali is nu beschikbaar. Meer festivals worden binnenkort toegevoegd."
+      },
+      {
+        "q": "Speelt de GIF in WhatsApp af?",
+        "a": "Ja – via de WhatsApp-knop op een telefoon wordt de animatie direct in de chat afgespeeld."
+      },
+      {
+        "q": "Kan ik het bericht aanpassen?",
+        "a": "Ja – kies een voorgesteld bericht of schrijf je eigen (tot 140 tekens)."
+      }
     ]
   },
   {
