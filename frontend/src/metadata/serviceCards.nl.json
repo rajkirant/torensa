@@ -105,7 +105,7 @@
       "nummer zoeken",
       "gratis nummer herkennen"
     ],
-    "isActive": false,
+    "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
       "Speel het nummer af dat je wilt herkennen – via luidsprekers, tv, radio, of neuriet/zing het gewoon.",

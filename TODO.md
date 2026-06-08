@@ -1,0 +1,9 @@
+- [ ] Confirm stock recommender design: deterministic screening via public market data.
+- [ ] Pick initial “strong buy / sell signal” heuristic implementation (v1): decide exact metrics & thresholds.
+- [ ] Add backend endpoint: `backend/api/views/stock_recommend_views.py` (or similar).
+- [ ] Wire route in `backend/api/urls.py`.
+- [ ] Implement public-data fetch layer (avoid paid APIs): choose a free source (e.g., Stooq/Yahoo chart scrape) and normalize results.
+- [ ] Add frontend page `frontend/src/pages/StockRecommender.tsx` (or under appropriate folder) and UI.
+- [ ] Add tool config entry to `frontend/src/metadata/serviceCards.json` + ensure `categories.json` category exists.
+- [ ] Run basic lint/build/tests: `python manage.py check`, `npm/pnpm build`.
+- [ ] Verify endpoint response shape and frontend rendering end-to-end.
