@@ -21,7 +21,6 @@ from ..models import EmailVerification
 
 logger = logging.getLogger(__name__)
 
-
 def _enforce_csrf(request):
     check = CSRFCheck(lambda _request: None)
     check.process_request(request)
