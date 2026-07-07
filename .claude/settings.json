@@ -4,7 +4,8 @@
       "Bash(*)",
       "PowerShell(aws dynamodb *)",
       "PowerShell(aws lambda *)",
-      "PowerShell(aws logs *)"
+      "PowerShell(aws logs *)",
+      "Bash(node \"C:\\\\Users\\\\rajki\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-rajki-Workspace-torensa\\\\32c4ecae-100b-451b-983e-60ba29021f10\\\\scratchpad\\\\move.js\" --apply)"
     ]
   }
 }

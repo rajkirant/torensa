@@ -1,76 +1,5 @@
 [
   {
-    "id": "custom-chatbot-builder",
-    "component": "Chatbot/CustomChatbotBuilder",
-    "name": "Generador de chatbot de IA personalizado",
-    "title": "Generador de chatbot personalizado",
-    "description": "Convierte cualquier texto en un chatbot de IA funcional en segundos. Pega tus preguntas frecuentes, documentos o políticas: tu bot responderá basándose solo en lo que tú proporciones.",
-    "path": "/custom-chatbot-builder",
-    "ctaLabel": "Crear chatbot",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "aiPowered": true,
-    "detailedDescription": "El Generador de chatbot personalizado te permite crear un asistente de IA entrenado con tu propio texto en segundos, sin programación. Pega cualquier texto plano (preguntas frecuentes de productos, documentación de soporte, políticas de empresa, guías de bienvenida) en el editor de base de conocimiento y tu chatbot estará listo para responder preguntas de inmediato. Cada bot funciona con AWS Bedrock (Claude) y responde estrictamente a partir del texto que proporciones; nunca adivina ni inventa nada. Comparte tu chatbot mediante un enlace público, intégralo en tu sitio web a través de la API REST o pruébalo directamente en el panel de chat. Admite varios bots, historial de conversación persistente, bases de conocimiento editables y endpoints de API individuales por bot.",
-    "categoryId": "developer",
-    "keywords": [
-      "chatbot personalizado",
-      "generador de chatbot con IA",
-      "entrenar chatbot con texto",
-      "chatbot a partir de documentos",
-      "chatbot instantáneo",
-      "bot de preguntas frecuentes",
-      "chatbot de base de conocimiento",
-      "generador de chatbot sin código",
-      "api de chatbot",
-      "integrar chatbot en sitio web",
-      "generador de asistente de IA",
-      "texto a chatbot",
-      "chatbot bedrock claude"
-    ],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Haz clic en 'Nuevo chatbot' y dale un nombre a tu bot (por ejemplo, 'Bot de soporte de producto').",
-      "Pega tu base de conocimiento en el campo de texto: preguntas frecuentes, documentos, políticas o cualquier texto plano.",
-      "Haz clic en 'Crear chatbot' para guardar y entrenar el bot al instante.",
-      "Selecciona el bot en el panel izquierdo para abrir el panel de chat.",
-      "Usa la pestaña 'Chat' para probar tu bot: responde únicamente con tu texto.",
-      "Usa la pestaña 'API' para obtener un endpoint REST que puedes invocar desde cualquier sitio web o aplicación.",
-      "Haz clic en el icono de compartir para copiar un enlace público y enviarlo a quien quieras.",
-      "Edita la base de conocimiento o borra el historial de conversación en cualquier momento con los iconos del encabezado."
-    ],
-    "faqs": [
-      {
-        "q": "¿Qué tipo de texto puedo usar como base de conocimiento?",
-        "a": "Cualquier texto plano funciona: preguntas frecuentes de productos, documentación de soporte, políticas de empresa, guías de bienvenida, páginas de precios, instrucciones paso a paso o notas libres. Cuanto más detalle relevante incluyas, con mayor precisión responderá el bot."
-      },
-      {
-        "q": "¿El chatbot inventará respuestas que no conoce?",
-        "a": "No. Las instrucciones del bot lo obligan a responder únicamente con el texto que tú proporciones. Si una pregunta no está cubierta por tu base de conocimiento, lo dirá amablemente en lugar de adivinar."
-      },
-      {
-        "q": "¿Cómo añado el chatbot a mi propio sitio web?",
-        "a": "Selecciona tu bot, haz clic en la pestaña API y copia el endpoint REST. Envía una solicitud POST con un cuerpo JSON {\"message\": \"your question\"} y recibirás {\"answer\": \"...\"}. No se requiere clave de API: los visitantes tienen un límite de 20 mensajes por sesión."
-      },
-      {
-        "q": "¿Puedo compartir el chatbot con alguien que no tenga cuenta?",
-        "a": "Sí. Cada bot tiene un enlace público único (por ejemplo, torensa.com/chatbot/abc123). Cualquiera con el enlace puede chatear con tu bot sin iniciar sesión. Copia el enlace con el icono de compartir junto a tu bot."
-      },
-      {
-        "q": "¿Mi texto de la base de conocimiento se almacena de forma segura?",
-        "a": "Sí. La base de conocimiento de tu chatbot y el historial de conversación están vinculados a tu cuenta y se guardan de forma segura. Solo tú puedes verlos, editarlos o eliminarlos. Los visitantes públicos solo ven las respuestas del bot, nunca el texto subyacente."
-      },
-      {
-        "q": "¿Puedo tener varios chatbots?",
-        "a": "Sí. Las cuentas gratuitas incluyen 1 bot. Los planes de pago admiten 3, 20 o 100 bots, cada uno con su propia base de conocimiento, historial de conversación y endpoint de API independiente."
-      },
-      {
-        "q": "¿Puedo actualizar la base de conocimiento después de crear el bot?",
-        "a": "Sí. Haz clic en el icono de editar (lápiz) de cualquier bot para actualizar su nombre o el texto de la base de conocimiento en cualquier momento. Los cambios se aplican de inmediato en el siguiente mensaje."
-      }
-    ]
-  },
-  {
     "id": "song-identifier",
     "component": "SongIdentifier",
     "name": "Identificador de canciones",
@@ -244,6 +173,77 @@
       {
         "q": "¿Qué tipos de archivo puedo adjuntar?",
         "a": "Se admiten los tipos de archivo más comunes (PDF, imágenes, documentos de Word, etc.). Se aplican los límites de tamaño de adjuntos de Gmail: los archivos individuales deben pesar menos de 25 MB."
+      }
+    ]
+  },
+  {
+    "id": "custom-chatbot-builder",
+    "component": "Chatbot/CustomChatbotBuilder",
+    "name": "Generador de chatbot de IA personalizado",
+    "title": "Generador de chatbot personalizado",
+    "description": "Convierte cualquier texto en un chatbot de IA funcional en segundos. Pega tus preguntas frecuentes, documentos o políticas: tu bot responderá basándose solo en lo que tú proporciones.",
+    "path": "/custom-chatbot-builder",
+    "ctaLabel": "Crear chatbot",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "El Generador de chatbot personalizado te permite crear un asistente de IA entrenado con tu propio texto en segundos, sin programación. Pega cualquier texto plano (preguntas frecuentes de productos, documentación de soporte, políticas de empresa, guías de bienvenida) en el editor de base de conocimiento y tu chatbot estará listo para responder preguntas de inmediato. Cada bot funciona con AWS Bedrock (Claude) y responde estrictamente a partir del texto que proporciones; nunca adivina ni inventa nada. Comparte tu chatbot mediante un enlace público, intégralo en tu sitio web a través de la API REST o pruébalo directamente en el panel de chat. Admite varios bots, historial de conversación persistente, bases de conocimiento editables y endpoints de API individuales por bot.",
+    "categoryId": "developer",
+    "keywords": [
+      "chatbot personalizado",
+      "generador de chatbot con IA",
+      "entrenar chatbot con texto",
+      "chatbot a partir de documentos",
+      "chatbot instantáneo",
+      "bot de preguntas frecuentes",
+      "chatbot de base de conocimiento",
+      "generador de chatbot sin código",
+      "api de chatbot",
+      "integrar chatbot en sitio web",
+      "generador de asistente de IA",
+      "texto a chatbot",
+      "chatbot bedrock claude"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Haz clic en 'Nuevo chatbot' y dale un nombre a tu bot (por ejemplo, 'Bot de soporte de producto').",
+      "Pega tu base de conocimiento en el campo de texto: preguntas frecuentes, documentos, políticas o cualquier texto plano.",
+      "Haz clic en 'Crear chatbot' para guardar y entrenar el bot al instante.",
+      "Selecciona el bot en el panel izquierdo para abrir el panel de chat.",
+      "Usa la pestaña 'Chat' para probar tu bot: responde únicamente con tu texto.",
+      "Usa la pestaña 'API' para obtener un endpoint REST que puedes invocar desde cualquier sitio web o aplicación.",
+      "Haz clic en el icono de compartir para copiar un enlace público y enviarlo a quien quieras.",
+      "Edita la base de conocimiento o borra el historial de conversación en cualquier momento con los iconos del encabezado."
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué tipo de texto puedo usar como base de conocimiento?",
+        "a": "Cualquier texto plano funciona: preguntas frecuentes de productos, documentación de soporte, políticas de empresa, guías de bienvenida, páginas de precios, instrucciones paso a paso o notas libres. Cuanto más detalle relevante incluyas, con mayor precisión responderá el bot."
+      },
+      {
+        "q": "¿El chatbot inventará respuestas que no conoce?",
+        "a": "No. Las instrucciones del bot lo obligan a responder únicamente con el texto que tú proporciones. Si una pregunta no está cubierta por tu base de conocimiento, lo dirá amablemente en lugar de adivinar."
+      },
+      {
+        "q": "¿Cómo añado el chatbot a mi propio sitio web?",
+        "a": "Selecciona tu bot, haz clic en la pestaña API y copia el endpoint REST. Envía una solicitud POST con un cuerpo JSON {\"message\": \"your question\"} y recibirás {\"answer\": \"...\"}. No se requiere clave de API: los visitantes tienen un límite de 20 mensajes por sesión."
+      },
+      {
+        "q": "¿Puedo compartir el chatbot con alguien que no tenga cuenta?",
+        "a": "Sí. Cada bot tiene un enlace público único (por ejemplo, torensa.com/chatbot/abc123). Cualquiera con el enlace puede chatear con tu bot sin iniciar sesión. Copia el enlace con el icono de compartir junto a tu bot."
+      },
+      {
+        "q": "¿Mi texto de la base de conocimiento se almacena de forma segura?",
+        "a": "Sí. La base de conocimiento de tu chatbot y el historial de conversación están vinculados a tu cuenta y se guardan de forma segura. Solo tú puedes verlos, editarlos o eliminarlos. Los visitantes públicos solo ven las respuestas del bot, nunca el texto subyacente."
+      },
+      {
+        "q": "¿Puedo tener varios chatbots?",
+        "a": "Sí. Las cuentas gratuitas incluyen 1 bot. Los planes de pago admiten 3, 20 o 100 bots, cada uno con su propia base de conocimiento, historial de conversación y endpoint de API independiente."
+      },
+      {
+        "q": "¿Puedo actualizar la base de conocimiento después de crear el bot?",
+        "a": "Sí. Haz clic en el icono de editar (lápiz) de cualquier bot para actualizar su nombre o el texto de la base de conocimiento en cualquier momento. Los cambios se aplican de inmediato en el siguiente mensaje."
       }
     ]
   },

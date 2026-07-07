@@ -1,76 +1,5 @@
 [
   {
-    "id": "custom-chatbot-builder",
-    "component": "Chatbot/CustomChatbotBuilder",
-    "name": "Custom AI Chatbot Builder",
-    "title": "Custom Chatbot Builder",
-    "description": "Turn any text into a working AI chatbot in seconds. Paste your FAQs, docs, or policies — your bot answers questions based only on what you provide.",
-    "path": "/custom-chatbot-builder",
-    "ctaLabel": "Build Chatbot",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "aiPowered": true,
-    "detailedDescription": "Custom Chatbot Builder lets you create an AI assistant trained on your own text in seconds — no coding required. Paste any plain text (product FAQs, support docs, company policies, onboarding guides) into the knowledge base editor and your chatbot is ready to answer questions immediately. Each bot is powered by AWS Bedrock (Claude) and answers strictly from the text you provide — it never guesses or makes things up. Share your chatbot with a public link, embed it on your website via the REST API, or test it directly in the chat panel. Supports multiple bots, persistent conversation history, editable knowledge bases, and per-bot API endpoints.",
-    "categoryId": "developer",
-    "keywords": [
-      "custom chatbot",
-      "ai chatbot builder",
-      "train chatbot on text",
-      "chatbot from documents",
-      "instant chatbot",
-      "faq bot",
-      "knowledge base chatbot",
-      "no-code chatbot builder",
-      "chatbot api",
-      "embed chatbot website",
-      "ai assistant builder",
-      "text to chatbot",
-      "bedrock claude chatbot"
-    ],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Click 'New Chatbot' and give your bot a name (e.g. 'Product Support Bot').",
-      "Paste your knowledge base into the text field — FAQs, docs, policies, or any plain text.",
-      "Click 'Create chatbot' to save and train the bot instantly.",
-      "Select the bot from the left panel to open the chat panel.",
-      "Use the Chat tab to test your bot — it answers only from your text.",
-      "Use the API tab to get a REST endpoint you can call from any website or app.",
-      "Click the share icon to copy a public link you can send to anyone.",
-      "Edit the knowledge base or clear conversation history at any time using the icons in the header."
-    ],
-    "faqs": [
-      {
-        "q": "What kind of text can I use as the knowledge base?",
-        "a": "Any plain text works — product FAQs, support documentation, company policies, onboarding guides, pricing pages, how-to instructions, or free-form notes. The more relevant detail you include, the more accurately the bot can answer."
-      },
-      {
-        "q": "Will the chatbot make up answers it doesn't know?",
-        "a": "No. The bot is instructed to answer strictly from the text you provide. If a question isn't covered by your knowledge base, it will say so politely instead of guessing."
-      },
-      {
-        "q": "How do I add the chatbot to my own website?",
-        "a": "Select your bot, click the API tab, and copy the REST endpoint. Send a POST request with a JSON body of {\"message\": \"your question\"} and you'll get back {\"answer\": \"...\"}. No API key required — visitors are rate-limited to 20 messages per session."
-      },
-      {
-        "q": "Can I share the chatbot with someone without an account?",
-        "a": "Yes. Each bot has a unique public link (e.g. torensa.com/chatbot/abc123). Anyone with the link can chat with your bot — no login needed. Copy the link using the share icon next to your bot."
-      },
-      {
-        "q": "Is my knowledge base text stored securely?",
-        "a": "Yes. Your chatbot knowledge base and conversation history are tied to your account and stored securely. Only you can view, edit, or delete them. Public visitors only see the bot's answers — never the underlying text."
-      },
-      {
-        "q": "Can I have multiple chatbots?",
-        "a": "Yes. Free accounts include 1 bot. Paid plans support 3, 20, or 100 bots — each with its own knowledge base, conversation history, and separate API endpoint."
-      },
-      {
-        "q": "Can I update the knowledge base after creating the bot?",
-        "a": "Yes. Click the edit (pencil) icon on any bot to update its name or knowledge base text at any time. The changes take effect immediately on the next message."
-      }
-    ]
-  },
-  {
     "id": "song-identifier",
     "component": "SongIdentifier",
     "name": "Song Identifier",
@@ -244,6 +173,77 @@
       {
         "q": "What file types can I attach?",
         "a": "Common file types are supported (PDF, images, Word documents, etc.). Gmail's attachment size limits apply — individual attachments should be under 25 MB."
+      }
+    ]
+  },
+  {
+    "id": "custom-chatbot-builder",
+    "component": "Chatbot/CustomChatbotBuilder",
+    "name": "Custom AI Chatbot Builder",
+    "title": "Custom Chatbot Builder",
+    "description": "Turn any text into a working AI chatbot in seconds. Paste your FAQs, docs, or policies — your bot answers questions based only on what you provide.",
+    "path": "/custom-chatbot-builder",
+    "ctaLabel": "Build Chatbot",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "Custom Chatbot Builder lets you create an AI assistant trained on your own text in seconds — no coding required. Paste any plain text (product FAQs, support docs, company policies, onboarding guides) into the knowledge base editor and your chatbot is ready to answer questions immediately. Each bot is powered by AWS Bedrock (Claude) and answers strictly from the text you provide — it never guesses or makes things up. Share your chatbot with a public link, embed it on your website via the REST API, or test it directly in the chat panel. Supports multiple bots, persistent conversation history, editable knowledge bases, and per-bot API endpoints.",
+    "categoryId": "developer",
+    "keywords": [
+      "custom chatbot",
+      "ai chatbot builder",
+      "train chatbot on text",
+      "chatbot from documents",
+      "instant chatbot",
+      "faq bot",
+      "knowledge base chatbot",
+      "no-code chatbot builder",
+      "chatbot api",
+      "embed chatbot website",
+      "ai assistant builder",
+      "text to chatbot",
+      "bedrock claude chatbot"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Click 'New Chatbot' and give your bot a name (e.g. 'Product Support Bot').",
+      "Paste your knowledge base into the text field — FAQs, docs, policies, or any plain text.",
+      "Click 'Create chatbot' to save and train the bot instantly.",
+      "Select the bot from the left panel to open the chat panel.",
+      "Use the Chat tab to test your bot — it answers only from your text.",
+      "Use the API tab to get a REST endpoint you can call from any website or app.",
+      "Click the share icon to copy a public link you can send to anyone.",
+      "Edit the knowledge base or clear conversation history at any time using the icons in the header."
+    ],
+    "faqs": [
+      {
+        "q": "What kind of text can I use as the knowledge base?",
+        "a": "Any plain text works — product FAQs, support documentation, company policies, onboarding guides, pricing pages, how-to instructions, or free-form notes. The more relevant detail you include, the more accurately the bot can answer."
+      },
+      {
+        "q": "Will the chatbot make up answers it doesn't know?",
+        "a": "No. The bot is instructed to answer strictly from the text you provide. If a question isn't covered by your knowledge base, it will say so politely instead of guessing."
+      },
+      {
+        "q": "How do I add the chatbot to my own website?",
+        "a": "Select your bot, click the API tab, and copy the REST endpoint. Send a POST request with a JSON body of {\"message\": \"your question\"} and you'll get back {\"answer\": \"...\"}. No API key required — visitors are rate-limited to 20 messages per session."
+      },
+      {
+        "q": "Can I share the chatbot with someone without an account?",
+        "a": "Yes. Each bot has a unique public link (e.g. torensa.com/chatbot/abc123). Anyone with the link can chat with your bot — no login needed. Copy the link using the share icon next to your bot."
+      },
+      {
+        "q": "Is my knowledge base text stored securely?",
+        "a": "Yes. Your chatbot knowledge base and conversation history are tied to your account and stored securely. Only you can view, edit, or delete them. Public visitors only see the bot's answers — never the underlying text."
+      },
+      {
+        "q": "Can I have multiple chatbots?",
+        "a": "Yes. Free accounts include 1 bot. Paid plans support 3, 20, or 100 bots — each with its own knowledge base, conversation history, and separate API endpoint."
+      },
+      {
+        "q": "Can I update the knowledge base after creating the bot?",
+        "a": "Yes. Click the edit (pencil) icon on any bot to update its name or knowledge base text at any time. The changes take effect immediately on the next message."
       }
     ]
   },

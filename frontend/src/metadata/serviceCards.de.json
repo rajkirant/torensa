@@ -1,76 +1,5 @@
 [
   {
-    "id": "custom-chatbot-builder",
-    "component": "Chatbot/CustomChatbotBuilder",
-    "name": "KI-Chatbot-Builder – Chatbot aus eigenem Text trainieren",
-    "title": "Eigener Chatbot-Builder",
-    "description": "Verwandeln Sie beliebigen Text in einen funktionierenden KI-Chatbot. Fügen Sie FAQs, Docs oder Richtlinien ein – Ihr Bot antwortet ausschließlich auf Basis Ihrer Inhalte.",
-    "path": "/custom-chatbot-builder",
-    "ctaLabel": "Chatbot erstellen",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "aiPowered": true,
-    "detailedDescription": "Mit dem Chatbot-Builder erstellen Sie in Sekunden einen KI-Assistenten, der auf Ihren eigenen Texten basiert – ganz ohne Programmierkenntnisse. Fügen Sie beliebigen Klartext (Produkt-FAQs, Support-Dokumentation, Unternehmensrichtlinien, Onboarding-Leitfäden) in den Wissensbasis-Editor ein, und Ihr Chatbot ist sofort einsatzbereit. Jeder Bot nutzt AWS Bedrock (Claude) und antwortet ausschließlich auf Basis des von Ihnen bereitgestellten Textes – er erfindet keine Antworten. Teilen Sie Ihren Chatbot per öffentlichem Link, binden Sie ihn über die REST-API auf Ihrer Website ein oder testen Sie ihn direkt im Chat-Panel. Unterstützt mehrere Bots, dauerhaften Gesprächsverlauf, bearbeitbare Wissensbasis und eigene API-Endpunkte pro Bot.",
-    "categoryId": "developer",
-    "keywords": [
-      "eigener chatbot",
-      "ki chatbot builder",
-      "chatbot aus text trainieren",
-      "chatbot aus dokumenten",
-      "sofort chatbot",
-      "faq bot",
-      "wissensdatenbank chatbot",
-      "no-code chatbot builder",
-      "chatbot api",
-      "chatbot auf website einbinden",
-      "ki assistent builder",
-      "text zu chatbot",
-      "bedrock claude chatbot"
-    ],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Klicken Sie auf 'Neuer Chatbot' und vergeben Sie einen Namen (z. B. 'Produkt-Support-Bot').",
-      "Fügen Sie Ihre Wissensbasis in das Textfeld ein – FAQs, Docs, Richtlinien oder beliebiger Klartext.",
-      "Klicken Sie auf 'Chatbot erstellen', um den Bot sofort zu speichern und zu aktivieren.",
-      "Wählen Sie den Bot im linken Panel aus, um das Chat-Panel zu öffnen.",
-      "Nutzen Sie den Tab 'Chat', um Ihren Bot zu testen – er antwortet nur auf Basis Ihres Textes.",
-      "Nutzen Sie den Tab 'API', um einen REST-Endpunkt zu erhalten, den Sie auf jeder Website verwenden können.",
-      "Klicken Sie auf das Teilen-Symbol, um einen öffentlichen Link zu kopieren und weiterzugeben.",
-      "Bearbeiten Sie die Wissensbasis oder löschen Sie den Gesprächsverlauf jederzeit über die Icons in der Kopfzeile."
-    ],
-    "faqs": [
-      {
-        "q": "Welchen Text kann ich als Wissensbasis verwenden?",
-        "a": "Jeder Klartext funktioniert – Produkt-FAQs, Support-Dokumentation, Unternehmensrichtlinien, Onboarding-Leitfäden, Preisseiten, Anleitungen oder freie Notizen. Je mehr relevante Details Sie einfügen, desto präziser antwortet der Bot."
-      },
-      {
-        "q": "Erfindet der Chatbot Antworten, die er nicht kennt?",
-        "a": "Nein. Der Bot ist angewiesen, ausschließlich auf Basis des von Ihnen bereitgestellten Textes zu antworten. Wenn eine Frage nicht in der Wissensbasis enthalten ist, teilt er das höflich mit, anstatt zu raten."
-      },
-      {
-        "q": "Wie binde ich den Chatbot auf meiner Website ein?",
-        "a": "Wählen Sie Ihren Bot aus, klicken Sie auf den Tab 'API' und kopieren Sie den REST-Endpunkt. Senden Sie eine POST-Anfrage mit dem JSON-Body {\"message\": \"Ihre Frage\"} und Sie erhalten {\"answer\": \"...\"}. Kein API-Schlüssel erforderlich – Besucher sind auf 20 Nachrichten pro Sitzung begrenzt."
-      },
-      {
-        "q": "Kann ich den Chatbot mit jemandem ohne Konto teilen?",
-        "a": "Ja. Jeder Bot hat einen eindeutigen öffentlichen Link (z. B. torensa.com/chatbot/abc123). Jeder mit dem Link kann mit Ihrem Bot chatten – ohne Login. Kopieren Sie den Link über das Teilen-Symbol neben Ihrem Bot."
-      },
-      {
-        "q": "Ist meine Wissensbasis sicher gespeichert?",
-        "a": "Ja. Ihre Chatbot-Wissensbasis und der Gesprächsverlauf sind mit Ihrem Konto verknüpft und sicher gespeichert. Nur Sie können sie einsehen, bearbeiten oder löschen. Öffentliche Besucher sehen nur die Antworten des Bots – niemals den zugrunde liegenden Text."
-      },
-      {
-        "q": "Kann ich mehrere Chatbots erstellen?",
-        "a": "Ja. Kostenlose Konten beinhalten 1 Bot. Bezahlte Pläne unterstützen 3, 20 oder 100 Bots – jeweils mit eigener Wissensbasis, Gesprächsverlauf und separatem API-Endpunkt."
-      },
-      {
-        "q": "Kann ich die Wissensbasis nach der Erstellung aktualisieren?",
-        "a": "Ja. Klicken Sie auf das Bearbeiten-Symbol (Stift) eines Bots, um Name oder Wissensbasis jederzeit zu ändern. Änderungen werden sofort bei der nächsten Nachricht wirksam."
-      }
-    ]
-  },
-  {
     "id": "song-identifier",
     "component": "SongIdentifier",
     "name": "Song-Erkennung – Welcher Song läuft gerade?",
@@ -268,6 +197,77 @@
       {
         "q": "Welche Dateitypen kann ich anhängen?",
         "a": "Gängige Dateitypen werden unterstützt (PDF, Bilder, Word-Dokumente usw.). Es gelten die Anhanggrößenbeschränkungen von Gmail – einzelne Anhänge sollten unter 25 MB liegen."
+      }
+    ]
+  },
+  {
+    "id": "custom-chatbot-builder",
+    "component": "Chatbot/CustomChatbotBuilder",
+    "name": "KI-Chatbot-Builder – Chatbot aus eigenem Text trainieren",
+    "title": "Eigener Chatbot-Builder",
+    "description": "Verwandeln Sie beliebigen Text in einen funktionierenden KI-Chatbot. Fügen Sie FAQs, Docs oder Richtlinien ein – Ihr Bot antwortet ausschließlich auf Basis Ihrer Inhalte.",
+    "path": "/custom-chatbot-builder",
+    "ctaLabel": "Chatbot erstellen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": true,
+    "detailedDescription": "Mit dem Chatbot-Builder erstellen Sie in Sekunden einen KI-Assistenten, der auf Ihren eigenen Texten basiert – ganz ohne Programmierkenntnisse. Fügen Sie beliebigen Klartext (Produkt-FAQs, Support-Dokumentation, Unternehmensrichtlinien, Onboarding-Leitfäden) in den Wissensbasis-Editor ein, und Ihr Chatbot ist sofort einsatzbereit. Jeder Bot nutzt AWS Bedrock (Claude) und antwortet ausschließlich auf Basis des von Ihnen bereitgestellten Textes – er erfindet keine Antworten. Teilen Sie Ihren Chatbot per öffentlichem Link, binden Sie ihn über die REST-API auf Ihrer Website ein oder testen Sie ihn direkt im Chat-Panel. Unterstützt mehrere Bots, dauerhaften Gesprächsverlauf, bearbeitbare Wissensbasis und eigene API-Endpunkte pro Bot.",
+    "categoryId": "developer",
+    "keywords": [
+      "eigener chatbot",
+      "ki chatbot builder",
+      "chatbot aus text trainieren",
+      "chatbot aus dokumenten",
+      "sofort chatbot",
+      "faq bot",
+      "wissensdatenbank chatbot",
+      "no-code chatbot builder",
+      "chatbot api",
+      "chatbot auf website einbinden",
+      "ki assistent builder",
+      "text zu chatbot",
+      "bedrock claude chatbot"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Klicken Sie auf 'Neuer Chatbot' und vergeben Sie einen Namen (z. B. 'Produkt-Support-Bot').",
+      "Fügen Sie Ihre Wissensbasis in das Textfeld ein – FAQs, Docs, Richtlinien oder beliebiger Klartext.",
+      "Klicken Sie auf 'Chatbot erstellen', um den Bot sofort zu speichern und zu aktivieren.",
+      "Wählen Sie den Bot im linken Panel aus, um das Chat-Panel zu öffnen.",
+      "Nutzen Sie den Tab 'Chat', um Ihren Bot zu testen – er antwortet nur auf Basis Ihres Textes.",
+      "Nutzen Sie den Tab 'API', um einen REST-Endpunkt zu erhalten, den Sie auf jeder Website verwenden können.",
+      "Klicken Sie auf das Teilen-Symbol, um einen öffentlichen Link zu kopieren und weiterzugeben.",
+      "Bearbeiten Sie die Wissensbasis oder löschen Sie den Gesprächsverlauf jederzeit über die Icons in der Kopfzeile."
+    ],
+    "faqs": [
+      {
+        "q": "Welchen Text kann ich als Wissensbasis verwenden?",
+        "a": "Jeder Klartext funktioniert – Produkt-FAQs, Support-Dokumentation, Unternehmensrichtlinien, Onboarding-Leitfäden, Preisseiten, Anleitungen oder freie Notizen. Je mehr relevante Details Sie einfügen, desto präziser antwortet der Bot."
+      },
+      {
+        "q": "Erfindet der Chatbot Antworten, die er nicht kennt?",
+        "a": "Nein. Der Bot ist angewiesen, ausschließlich auf Basis des von Ihnen bereitgestellten Textes zu antworten. Wenn eine Frage nicht in der Wissensbasis enthalten ist, teilt er das höflich mit, anstatt zu raten."
+      },
+      {
+        "q": "Wie binde ich den Chatbot auf meiner Website ein?",
+        "a": "Wählen Sie Ihren Bot aus, klicken Sie auf den Tab 'API' und kopieren Sie den REST-Endpunkt. Senden Sie eine POST-Anfrage mit dem JSON-Body {\"message\": \"Ihre Frage\"} und Sie erhalten {\"answer\": \"...\"}. Kein API-Schlüssel erforderlich – Besucher sind auf 20 Nachrichten pro Sitzung begrenzt."
+      },
+      {
+        "q": "Kann ich den Chatbot mit jemandem ohne Konto teilen?",
+        "a": "Ja. Jeder Bot hat einen eindeutigen öffentlichen Link (z. B. torensa.com/chatbot/abc123). Jeder mit dem Link kann mit Ihrem Bot chatten – ohne Login. Kopieren Sie den Link über das Teilen-Symbol neben Ihrem Bot."
+      },
+      {
+        "q": "Ist meine Wissensbasis sicher gespeichert?",
+        "a": "Ja. Ihre Chatbot-Wissensbasis und der Gesprächsverlauf sind mit Ihrem Konto verknüpft und sicher gespeichert. Nur Sie können sie einsehen, bearbeiten oder löschen. Öffentliche Besucher sehen nur die Antworten des Bots – niemals den zugrunde liegenden Text."
+      },
+      {
+        "q": "Kann ich mehrere Chatbots erstellen?",
+        "a": "Ja. Kostenlose Konten beinhalten 1 Bot. Bezahlte Pläne unterstützen 3, 20 oder 100 Bots – jeweils mit eigener Wissensbasis, Gesprächsverlauf und separatem API-Endpunkt."
+      },
+      {
+        "q": "Kann ich die Wissensbasis nach der Erstellung aktualisieren?",
+        "a": "Ja. Klicken Sie auf das Bearbeiten-Symbol (Stift) eines Bots, um Name oder Wissensbasis jederzeit zu ändern. Änderungen werden sofort bei der nächsten Nachricht wirksam."
       }
     ]
   },
