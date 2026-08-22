@@ -9,6 +9,7 @@ import {
 import { Suspense } from "react";
 
 import { NavButton } from "./components/buttons/NavButton";
+import FooterBadges from "./components/layout/FooterBadges";
 import { useAuth } from "./utils/auth";
 import { clearCsrfToken } from "./utils/csrf";
 import { apiFetch } from "./utils/api";
@@ -550,6 +551,7 @@ export default function App({ themeName, setThemeName }: AppProps) {
               Donate
             </Link>
           </div>
+          <FooterBadges theme={theme} />
           <div
             style={{
               fontSize: 13,

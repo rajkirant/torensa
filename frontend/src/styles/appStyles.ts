@@ -279,3 +279,12 @@ export const searchBarIconSx = (theme: Theme) => ({
 export const searchBarClearIconSx = (theme: Theme) => ({
   color: theme.home.searchBar.iconColor,
 });
+
+export const footerBadgesRow: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  flexWrap: "wrap",
+  gap: 12,
+  marginTop: 18,
+};
