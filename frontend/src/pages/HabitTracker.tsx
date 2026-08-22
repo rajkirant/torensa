@@ -63,7 +63,7 @@ const HabitTracker: React.FC = () => {
   const [log, setLog] = useState<DailyLog>({});
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
-  const [newPoints, setNewPoints] = useState<number | "">(10);
+  const [newPoints, setNewPoints] = useState<number | "">(1);
   const { error, success, setError, setSuccess, clear } = useToolStatus();
 
   /* ── fetch habits + logs on mount ── */
@@ -123,7 +123,7 @@ const HabitTracker: React.FC = () => {
       }
       setHabits((prev) => [...prev, data]);
       setNewName("");
-      setNewPoints(10);
+      setNewPoints(1);
       setSuccess(`Added "${name}" (+${pts} pts).`);
     } catch {
       setError("Network error.");
