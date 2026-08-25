@@ -2464,5 +2464,62 @@
         "a": "Ja – Standardkürzel funktionieren im Editor: Strg+B für Fett, Strg+I für Kursiv, Strg+U für Unterstreichen, Strg+Z zum Rückgängigmachen und Strg+Y zum Wiederholen."
       }
     ]
+  },
+  {
+    "id": "timer-stopwatch",
+    "component": "TimerStopwatch",
+    "path": "/timer-stopwatch",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "categoryId": "utilities",
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "name": "Timer & Stoppuhr",
+    "title": "Online-Timer & Stoppuhr – Kostenloser Countdown mit Rundenzeiten",
+    "description": "Präzise Online-Stoppuhr mit Rundenzeiten oder Countdown-Timer mit Signalton. Läuft vollständig offline im Browser.",
+    "ctaLabel": "Zeit messen",
+    "detailedDescription": "Eine präzise Stoppuhr und ein Countdown-Timer in einem Werkzeug. Nehmen Sie Rundenzeiten auf – die schnellste und die langsamste Runde werden hervorgehoben –, kopieren Sie sie in die Zwischenablage oder starten Sie einen Countdown mit Schnellauswahl und Signalton. Alles läuft im Browser und bleibt auch dann genau, wenn der Tab im Hintergrund gedrosselt wird.",
+    "keywords": [
+      "timer",
+      "stoppuhr",
+      "countdown",
+      "rundenzeit",
+      "pomodoro",
+      "zeitmessung"
+    ],
+    "howTo": [
+      "Wählen Sie den Reiter Stoppuhr, um verstrichene Zeit zu messen, oder Countdown-Timer, um rückwärts zu zählen.",
+      "Drücken Sie bei der Stoppuhr auf Starten und auf Runde, um nach jedem Abschnitt eine Zwischenzeit festzuhalten.",
+      "Sehen Sie sich die Rundenzeiten in der Tabelle an – die schnellste und die langsamste Runde werden automatisch markiert.",
+      "Klicken Sie auf Runden kopieren, um alle Zwischen- und Gesamtzeiten in die Zwischenablage zu übernehmen.",
+      "Geben Sie beim Timer Stunden, Minuten und Sekunden ein oder wählen Sie eine Schnellauswahl wie 5 Min. oder 25 Min.",
+      "Starten Sie den Countdown – nach Ablauf ertönt ein Signalton, sofern Sie ihn nicht deaktiviert haben."
+    ],
+    "faqs": [
+      {
+        "q": "Bleibt die Zeit korrekt, wenn ich den Tab wechsle?",
+        "a": "Ja. Stoppuhr und Countdown werden aus der Uhr Ihres Geräts berechnet und nicht Takt für Takt hochgezählt. Eine Drosselung im Hintergrund führt daher nicht zu Abweichungen; die Anzeige holt beim Zurückwechseln sofort auf."
+      },
+      {
+        "q": "Funktionieren Timer und Stoppuhr auch offline?",
+        "a": "Ja. Das Tool läuft vollständig in Ihrem Browser und steht nach dem ersten Laden auch ohne Internetverbindung zur Verfügung."
+      },
+      {
+        "q": "Ertönt der Signalton auch bei einem Tab im Hintergrund?",
+        "a": "In den meisten Desktop-Browsern ja, sofern Sie den Countdown selbst in diesem Tab gestartet haben. Manche mobilen Browser pausieren die Audiowiedergabe im Hintergrund – lassen Sie den Tab in diesem Fall geöffnet."
+      },
+      {
+        "q": "Wie genau ist die Stoppuhr?",
+        "a": "Die Stoppuhr zeigt Hundertstelsekunden und aktualisiert sich rund 25-mal pro Sekunde. Jeder Wert stammt aus der Systemuhr, sodass die aufgezeichneten Runden genau bleiben."
+      },
+      {
+        "q": "Kann ich das Tool als Pomodoro-Timer nutzen?",
+        "a": "Ja. Nutzen Sie die Schnellauswahl 25 Min. für eine Fokusphase und 5 Min. für eine kurze Pause. Der Countdown meldet sich am Ende jedes Intervalls."
+      },
+      {
+        "q": "Werden meine Zeiten an einen Server gesendet?",
+        "a": "Nein. Rundenzeiten, Dauern und Einstellungen verlassen Ihr Gerät nicht – es wird nichts hochgeladen, gespeichert oder protokolliert."
+      }
+    ]
   }
 ]

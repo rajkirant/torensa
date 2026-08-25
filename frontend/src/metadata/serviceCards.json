@@ -2484,5 +2484,62 @@
         "a": "The default queries are global with a UK/US emphasis. We will add per-region tracking in a future release."
       }
     ]
+  },
+  {
+    "id": "timer-stopwatch",
+    "component": "TimerStopwatch",
+    "path": "/timer-stopwatch",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "categoryId": "utilities",
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "name": "Timer & Stopwatch",
+    "title": "Online Timer & Stopwatch - Free Countdown Timer with Laps",
+    "description": "Run a precise online stopwatch with lap splits or set a countdown timer with a sound alert. Everything works offline in your browser.",
+    "ctaLabel": "Start timing",
+    "detailedDescription": "A precise stopwatch and countdown timer in one tool. Record lap splits with the fastest and slowest laps highlighted, copy them to your clipboard, or run a countdown with quick presets and an audible alert when time is up. Everything runs in your browser and stays accurate even when the tab is throttled.",
+    "keywords": [
+      "timer",
+      "stopwatch",
+      "countdown",
+      "lap timer",
+      "pomodoro",
+      "interval"
+    ],
+    "howTo": [
+      "Pick the Stopwatch tab to measure elapsed time, or the Countdown timer tab to count down to zero.",
+      "On the stopwatch, press Start and use Lap to record a split each time you finish a segment.",
+      "Review your splits in the table below - the fastest and slowest laps are highlighted automatically.",
+      "Press Copy laps to put every split and total time on your clipboard.",
+      "On the timer, enter hours, minutes, and seconds, or tap a quick preset such as 5 min or 25 min.",
+      "Press Start to begin the countdown - a sound alert plays when time is up unless you switch it off."
+    ],
+    "faqs": [
+      {
+        "q": "Does the timer keep accurate time if I switch tabs?",
+        "a": "Yes. Both the stopwatch and the countdown are calculated from your device clock rather than counted tick by tick, so background tab throttling does not cause drift. The display catches up as soon as you return to the tab."
+      },
+      {
+        "q": "Can I use the timer and stopwatch offline?",
+        "a": "Yes. The tool runs entirely in your browser and stays available offline once the page has been loaded, so it keeps working with no network connection."
+      },
+      {
+        "q": "Will the alarm sound play if the tab is in the background?",
+        "a": "In most desktop browsers it will, as long as you started the countdown yourself in that tab. Some mobile browsers suspend audio for background tabs, so keep the tab open if the alert matters."
+      },
+      {
+        "q": "How precise is the stopwatch?",
+        "a": "The stopwatch shows hundredths of a second and refreshes about 25 times per second. Each reading is derived from the system clock, so recorded laps stay accurate."
+      },
+      {
+        "q": "Can I use it as a Pomodoro timer?",
+        "a": "Yes. Use the 25 min preset for a focus block and the 5 min preset for a short break. The countdown alerts you at the end of every interval."
+      },
+      {
+        "q": "Is any of my timing data sent to a server?",
+        "a": "No. Laps, durations, and settings never leave your device - nothing is uploaded, stored, or logged."
+      }
+    ]
   }
 ]

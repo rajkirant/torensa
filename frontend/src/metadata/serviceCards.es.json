@@ -2480,5 +2480,62 @@
         "a": "No. El mensaje se envía al modelo de análisis para una respuesta única y no se guarda en nuestros servidores."
       }
     ]
+  },
+  {
+    "id": "timer-stopwatch",
+    "component": "TimerStopwatch",
+    "path": "/timer-stopwatch",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "categoryId": "utilities",
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "name": "Temporizador y cronómetro",
+    "title": "Temporizador y cronómetro online – Cuenta atrás gratis con vueltas",
+    "description": "Usa un cronómetro online preciso con tiempos por vuelta o configura una cuenta atrás con alerta sonora. Funciona sin conexión en tu navegador.",
+    "ctaLabel": "Empezar a medir",
+    "detailedDescription": "Un cronómetro preciso y un temporizador de cuenta atrás en una sola herramienta. Registra tiempos por vuelta con la vuelta más rápida y la más lenta destacadas, cópialos al portapapeles o inicia una cuenta atrás con ajustes rápidos y una alerta sonora al terminar. Todo se ejecuta en tu navegador y mantiene la precisión incluso si la pestaña queda en segundo plano.",
+    "keywords": [
+      "temporizador",
+      "cronómetro",
+      "cuenta atrás",
+      "vueltas",
+      "pomodoro",
+      "tiempo"
+    ],
+    "howTo": [
+      "Elige la pestaña Cronómetro para medir el tiempo transcurrido o Temporizador para contar hacia atrás.",
+      "En el cronómetro, pulsa Iniciar y usa Vuelta para registrar un parcial cada vez que completes un tramo.",
+      "Revisa los parciales en la tabla inferior: la vuelta más rápida y la más lenta se destacan automáticamente.",
+      "Pulsa Copiar vueltas para llevar todos los parciales y tiempos totales al portapapeles.",
+      "En el temporizador, introduce horas, minutos y segundos o toca un ajuste rápido como 5 min o 25 min.",
+      "Pulsa Iniciar para comenzar la cuenta atrás: sonará una alerta al terminar salvo que la desactives."
+    ],
+    "faqs": [
+      {
+        "q": "¿El tiempo sigue siendo exacto si cambio de pestaña?",
+        "a": "Sí. Tanto el cronómetro como la cuenta atrás se calculan a partir del reloj de tu dispositivo en lugar de contarse paso a paso, así que la limitación de las pestañas en segundo plano no provoca desfases. La pantalla se pone al día en cuanto vuelves."
+      },
+      {
+        "q": "¿Puedo usar el temporizador y el cronómetro sin conexión?",
+        "a": "Sí. La herramienta se ejecuta por completo en tu navegador y queda disponible sin conexión una vez cargada la página, por lo que sigue funcionando sin red."
+      },
+      {
+        "q": "¿Sonará la alarma si la pestaña está en segundo plano?",
+        "a": "En la mayoría de navegadores de escritorio sí, siempre que hayas iniciado tú la cuenta atrás en esa pestaña. Algunos navegadores móviles suspenden el audio en segundo plano, así que deja la pestaña abierta si la alerta es importante."
+      },
+      {
+        "q": "¿Qué precisión tiene el cronómetro?",
+        "a": "El cronómetro muestra centésimas de segundo y se actualiza unas 25 veces por segundo. Cada lectura procede del reloj del sistema, de modo que las vueltas registradas se mantienen exactas."
+      },
+      {
+        "q": "¿Puedo usarlo como temporizador Pomodoro?",
+        "a": "Sí. Usa el ajuste de 25 min para un bloque de concentración y el de 5 min para un descanso corto. La cuenta atrás te avisa al final de cada intervalo."
+      },
+      {
+        "q": "¿Se envían mis tiempos a un servidor?",
+        "a": "No. Las vueltas, las duraciones y los ajustes nunca salen de tu dispositivo: no se sube, guarda ni registra nada."
+      }
+    ]
   }
 ]

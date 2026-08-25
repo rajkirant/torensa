@@ -50,6 +50,13 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - All processing runs on-device for privacy and offline use.
 - [Split PDF](https://torensa.com/pdf-splitter)
 
+### PDF to Image Converter - Convert PDF Pages to PNG, JPEG, or WebP
+- Upload a PDF and render selected pages as image files.
+- Pick PNG, JPEG, or WebP, choose the resolution from 1x to 4x, and download a single image or a ZIP of all pages.
+- Everything runs on your device using PDF.js — no uploads.
+- Works fully offline once loaded.
+- [Convert PDF](https://torensa.com/pdf-to-image)
+
 ### Word to PDF Converter - Convert DOCX to PDF Free
 - Upload a Word document (.doc or .docx) and convert it to a PDF in seconds.
 - Conversion runs on the server using LibreOffice, preserving fonts, tables, images, and formatting.
@@ -79,6 +86,13 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - All parsing and conversion happen client-side, so your files stay on your device.
 - Works fully offline once loaded.
 - [Convert Files](https://torensa.com/data-format-converter)
+
+### Cover Letter Tailor - Update DOCX Cover Letters for Jobs
+- Cover Letter Tailor updates an existing .docx cover letter for a specific job.
+- Upload your Word document, paste the job description, and the tool rewrites the letter to emphasize relevant skills, responsibilities, and keywords while keeping your original facts intact.
+- The result downloads as a new .docx file.
+- AI-powered.
+- [Tailor Letter](https://torensa.com/cover-letter-tailor)
 
 ### PDF Builder
 - PDF Builder is a free, browser-based rich-text editor that lets you write, format, and export documents as PDF files — entirely offline, with no data ever leaving your device. Use the formatting toolbar to apply bold, italic, underline, strikethrough, headings (H1–H3), text alignment, bullet and numbered lists, custom font sizes, font families, and text or highlight colors.
@@ -146,12 +160,6 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 
 ## Data & Media Tools
 
-### Song Identifier - Find What Song Is Playing
-- Wondering what song is playing? Use your microphone to identify any song in seconds. This free online song finder records a short audio clip, recognizes it against a database of over 100 million tracks, and returns the song title, artist, album, and genre.
-- Get direct streaming links to Spotify, YouTube Music, Apple Music, Amazon Music, and Deezer.
-- Works with music from speakers, TV, radio, or even humming — no app install required.
-- [Identify Song](https://torensa.com/song-identifier)
-
 ### Subtitle Downloader - Download Movie Subtitles Free
 - Paste a video URL to fetch subtitles as an SRT file.
 - The tool tries existing captions first, then falls back to auto-generated subtitles if available.
@@ -196,6 +204,27 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - When you're done, download the finished file as a clean, standards-compliant CSV.
 - Works fully offline once loaded.
 - [Build CSV](https://torensa.com/csv-builder)
+
+### Scam Detector
+- Scam Message Detector analyzes a single message — usually something a caller said on the phone — and tells you how likely it is to be a scam. It returns a 0–100 scam-likelihood score, a verdict (Legitimate, Neutral, Suspicious, Likely Scam, Scam), and a list of detected manipulation features such as urgency, authority impersonation, vague details, evasion of verification, guilt inducement, requests for sensitive information, requests for payment, and tech-support or charity-style scam patterns.
+- Each feature comes with an intensity score and a short quote from your input as evidence.
+- The tool also returns a brief reasoning paragraph and a recommended one-sentence response your assistant could give back to the caller.
+- AI-powered.
+- [Analyze Message](https://torensa.com/scam-detector)
+
+### Scam Trends
+- Scam Trend Tracker monitors the open web for reports of emerging scam patterns and surfaces the five trends with the strongest current evidence. Each refresh queries multiple curated topics (phishing, smishing, voice-clone scams, romance scams, investment fraud and more) across the last 7 days, extracts a structured pattern record from each source using Claude, then clusters semantically similar reports together using Jaccard token similarity.
+- The ranking favours patterns corroborated by multiple independent sources, weighted by source-type credibility (government advisories rank higher than blogs) and by how recently they were reported.
+- For each trend you see the hook (how victims are first contacted), the payload (what the scammer ultimately wants), a typical victim profile, and every cited source with a publish date and a link.
+- AI-powered.
+- [View Latest Trends](https://torensa.com/scam-trends)
+
+### Online Timer & Stopwatch - Free Countdown Timer with Laps
+- A precise stopwatch and countdown timer in one tool.
+- Record lap splits with the fastest and slowest laps highlighted, copy them to your clipboard, or run a countdown with quick presets and an audible alert when time is up.
+- Everything runs in your browser and stays accurate even when the tab is throttled.
+- Works fully offline once loaded.
+- [Start timing](https://torensa.com/timer-stopwatch)
 
 ## Developer Tools
 

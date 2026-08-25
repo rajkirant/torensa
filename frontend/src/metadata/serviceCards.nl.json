@@ -2443,5 +2443,62 @@
         "a": "Ja — standaard sneltoetsen werken in de editor: Ctrl+B voor vet, Ctrl+I voor cursief, Ctrl+U voor onderstrepen, Ctrl+Z om ongedaan te maken en Ctrl+Y om opnieuw te doen."
       }
     ]
+  },
+  {
+    "id": "timer-stopwatch",
+    "component": "TimerStopwatch",
+    "path": "/timer-stopwatch",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "categoryId": "utilities",
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "name": "Timer & stopwatch",
+    "title": "Online timer & stopwatch – Gratis afteltimer met rondetijden",
+    "description": "Gebruik een nauwkeurige online stopwatch met rondetijden of stel een afteltimer in met geluidssignaal. Werkt volledig offline in je browser.",
+    "ctaLabel": "Tijd meten",
+    "detailedDescription": "Een nauwkeurige stopwatch en afteltimer in één tool. Leg rondetijden vast met de snelste en langzaamste ronde gemarkeerd, kopieer ze naar je klembord of start een aftelling met snelkeuzes en een geluidssignaal als de tijd om is. Alles draait in je browser en blijft nauwkeurig, ook wanneer het tabblad op de achtergrond wordt vertraagd.",
+    "keywords": [
+      "timer",
+      "stopwatch",
+      "aftellen",
+      "rondetijd",
+      "pomodoro",
+      "tijdmeting"
+    ],
+    "howTo": [
+      "Kies het tabblad Stopwatch om verstreken tijd te meten, of Afteltimer om terug te tellen naar nul.",
+      "Druk bij de stopwatch op Starten en gebruik Ronde om na elk onderdeel een tussentijd vast te leggen.",
+      "Bekijk je rondetijden in de tabel hieronder – de snelste en langzaamste ronde worden automatisch gemarkeerd.",
+      "Klik op Rondes kopiëren om alle tussentijden en totale tijden naar je klembord te kopiëren.",
+      "Vul bij de timer uren, minuten en seconden in of kies een snelkeuze zoals 5 min of 25 min.",
+      "Druk op Starten om de aftelling te beginnen – er klinkt een signaal als de tijd om is, tenzij je dat uitschakelt."
+    ],
+    "faqs": [
+      {
+        "q": "Blijft de tijd kloppen als ik van tabblad wissel?",
+        "a": "Ja. Zowel de stopwatch als de aftelling wordt berekend op basis van de klok van je apparaat in plaats van tik voor tik geteld, dus vertraging van achtergrondtabbladen veroorzaakt geen afwijking. De weergave loopt direct bij zodra je terugkeert."
+      },
+      {
+        "q": "Kan ik de timer en stopwatch offline gebruiken?",
+        "a": "Ja. De tool draait volledig in je browser en blijft na het eerste laden offline beschikbaar, dus hij werkt ook zonder internetverbinding."
+      },
+      {
+        "q": "Klinkt het alarm ook als het tabblad op de achtergrond staat?",
+        "a": "In de meeste desktopbrowsers wel, mits je de aftelling zelf in dat tabblad hebt gestart. Sommige mobiele browsers pauzeren audio op de achtergrond, dus houd het tabblad open als het signaal belangrijk is."
+      },
+      {
+        "q": "Hoe nauwkeurig is de stopwatch?",
+        "a": "De stopwatch toont honderdsten van een seconde en ververst ongeveer 25 keer per seconde. Elke waarde komt uit de systeemklok, zodat de vastgelegde rondes nauwkeurig blijven."
+      },
+      {
+        "q": "Kan ik het als pomodorotimer gebruiken?",
+        "a": "Ja. Gebruik de snelkeuze van 25 min voor een focusblok en 5 min voor een korte pauze. De aftelling waarschuwt je aan het einde van elk interval."
+      },
+      {
+        "q": "Worden mijn tijden naar een server gestuurd?",
+        "a": "Nee. Rondetijden, duren en instellingen verlaten je apparaat niet – er wordt niets geüpload, opgeslagen of gelogd."
+      }
+    ]
   }
 ]
