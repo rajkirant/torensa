@@ -1,5 +1,45 @@
 [
   {
+    "id": "positive-news",
+    "component": "PositiveNews",
+    "name": "Positive News Near You",
+    "title": "Positive News Near You",
+    "description": "See recent uplifting local news based on your detected location from request headers or IP.",
+    "path": "/positive-news",
+    "ctaLabel": "Read Good News",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": false,
+    "showAds": false,
+    "detailedDescription": "Positive News Near You detects your approximate place from location headers or your public IP, then shows a short list of recent positive news stories for that area.",
+    "categoryId": "health-wellbeing",
+    "keywords": [
+      "positive news",
+      "good news",
+      "local news",
+      "uplifting news",
+      "happy news"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Open the app and let it detect your approximate location.",
+      "Read the short list of recent positive stories.",
+      "Click Open to read the full article from the source.",
+      "Use Refresh to fetch the latest results."
+    ],
+    "faqs": [
+      {
+        "q": "How is my location detected?",
+        "a": "The server checks common hosting and CDN location headers first, then falls back to a public IP lookup when available."
+      },
+      {
+        "q": "Where does the news come from?",
+        "a": "The app uses NewsData.io and asks for recent articles with positive sentiment near the detected place."
+      }
+    ]
+  },
+  {
     "id": "song-identifier",
     "component": "SongIdentifier",
     "name": "Nummer Herkennen – Welk nummer speelt er?",
