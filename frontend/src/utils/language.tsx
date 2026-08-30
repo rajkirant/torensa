@@ -12,10 +12,12 @@ import serviceCardsEn from "../metadata/serviceCards.json";
 import serviceCardsDe from "../metadata/serviceCards.de.json";
 import serviceCardsNl from "../metadata/serviceCards.nl.json";
 import serviceCardsEs from "../metadata/serviceCards.es.json";
+import serviceCardsRu from "../metadata/serviceCards.ru.json";
 import translationsEn from "../metadata/translations.json";
 import translationsDe from "../metadata/translations.de.json";
 import translationsNl from "../metadata/translations.nl.json";
 import translationsEs from "../metadata/translations.es.json";
+import translationsRu from "../metadata/translations.ru.json";
 import type { ServiceCardConfig } from "./serviceCards";
 
 i18n.use(initReactI18next).init({
@@ -24,6 +26,7 @@ i18n.use(initReactI18next).init({
     de: { translation: translationsDe },
     nl: { translation: translationsNl },
     es: { translation: translationsEs },
+    ru: { translation: translationsRu },
   },
   lng: "en",
   fallbackLng: "en",
@@ -32,7 +35,7 @@ i18n.use(initReactI18next).init({
   },
 });
 
-export type LanguageCode = "en" | "de" | "nl" | "es";
+export type LanguageCode = "en" | "de" | "nl" | "es" | "ru";
 
 const LANGUAGE_STORAGE_KEY = "language";
 const DEFAULT_LANGUAGE: LanguageCode = "en";
@@ -98,6 +101,7 @@ export function getLanguageFromPath(pathname: string): LanguageCode | null {
   if (trimmed === "/de" || trimmed.startsWith("/de/")) return "de";
   if (trimmed === "/nl" || trimmed.startsWith("/nl/")) return "nl";
   if (trimmed === "/es" || trimmed.startsWith("/es/")) return "es";
+  if (trimmed === "/ru" || trimmed.startsWith("/ru/")) return "ru";
   if (trimmed === "/en" || trimmed.startsWith("/en/")) return "en";
   return null;
 }
@@ -109,12 +113,14 @@ export function stripLanguagePrefix(pathname: string) {
     trimmed === "/de" ||
     trimmed === "/en" ||
     trimmed === "/nl" ||
-    trimmed === "/es"
+    trimmed === "/es" ||
+    trimmed === "/ru"
   )
     return "/";
   if (trimmed.startsWith("/de/")) return `/${trimmed.slice(4)}`;
   if (trimmed.startsWith("/nl/")) return `/${trimmed.slice(4)}`;
   if (trimmed.startsWith("/es/")) return `/${trimmed.slice(4)}`;
+  if (trimmed.startsWith("/ru/")) return `/${trimmed.slice(4)}`;
   if (trimmed.startsWith("/en/")) return `/${trimmed.slice(4)}`;
   return trimmed;
 }
@@ -129,6 +135,7 @@ export function withLanguagePrefix(
     language !== "de" &&
     language !== "nl" &&
     language !== "es" &&
+    language !== "ru" &&
     !options.forcePrefix
   ) {
     return stripLanguagePrefix(normalized);
@@ -141,6 +148,7 @@ export function getServiceCardsForLanguage(language: LanguageCode) {
   if (language === "de") return serviceCardsDe as ServiceCardConfig[];
   if (language === "nl") return serviceCardsNl as ServiceCardConfig[];
   if (language === "es") return serviceCardsEs as ServiceCardConfig[];
+  if (language === "ru") return serviceCardsRu as ServiceCardConfig[];
   return serviceCardsEn as ServiceCardConfig[];
 }
 
@@ -153,6 +161,7 @@ export function getPageDescriptionsForLanguage(language: LanguageCode) {
   if (language === "de") return translationsDe.pages;
   if (language === "nl") return translationsNl.pages;
   if (language === "es") return translationsEs.pages;
+  if (language === "ru") return translationsRu.pages;
   return translationsEn.pages;
 }
 

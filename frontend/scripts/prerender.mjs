@@ -29,8 +29,9 @@ const baseRoutes = Array.from(new Set([...staticRoutes, ...toolRoutes]));
 const deRoutes = baseRoutes.map((route) => withLangPrefix(route, "de"));
 const nlRoutes = baseRoutes.map((route) => withLangPrefix(route, "nl"));
 const esRoutes = baseRoutes.map((route) => withLangPrefix(route, "es"));
+const ruRoutes = baseRoutes.map((route) => withLangPrefix(route, "ru"));
 const routes = Array.from(
-  new Set([...baseRoutes, ...deRoutes, ...nlRoutes, ...esRoutes]),
+  new Set([...baseRoutes, ...deRoutes, ...nlRoutes, ...esRoutes, ...ruRoutes]),
 );
 
 const contentTypes = {

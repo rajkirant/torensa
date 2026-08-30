@@ -31,6 +31,15 @@ const COUNTRY_TO_LANGUAGE: Record<string, LanguageCode> = {
   PA: "es",
   UY: "es",
   PR: "es",
+  RU: "ru",
+  BY: "ru", // Belarus
+  KZ: "ru", // Kazakhstan
+  KG: "ru", // Kyrgyzstan
+  TJ: "ru", // Tajikistan
+  TM: "ru", // Turkmenistan
+  UZ: "ru", // Uzbekistan
+  UA: "ru", // Ukraine
+  MD: "ru", // Moldova
 };
 
 async function fetchCountryCode(): Promise<string | null> {

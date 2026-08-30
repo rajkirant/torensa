@@ -48,7 +48,7 @@ const STATIC_ROUTE_PATHS = [
   { path: "donate", component: Donate },
 ];
 
-const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl", "/es"];
+const LANGUAGE_PREFIXES = ["", "/en", "/de", "/nl", "/es", "/ru"];
 
 export function Root() {
   const [themeName, setThemeName] = useState<ThemeName>(() => {
@@ -101,11 +101,7 @@ function RootRoutes({
                 }
               >
                 {STATIC_ROUTE_PATHS.map(({ path, component: Component }) => (
-                  <Route
-                    key={path}
-                    path={path}
-                    element={<Component />}
-                  />
+                  <Route key={path} path={path} element={<Component />} />
                 ))}
 
                 {tools.map((tool) => {
