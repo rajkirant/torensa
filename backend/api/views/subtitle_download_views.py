@@ -91,6 +91,7 @@ def _download_subtitles(url: str, tmpdir: str, language: str, auto: bool):
         "quiet": True,
         "no_warnings": True,
         "retries": 3,
+        "js_runtimes": {"deno": "/usr/local/bin/deno"},
     }
     if language:
         opts["subtitleslangs"] = [language]
