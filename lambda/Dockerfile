@@ -16,10 +16,17 @@ RUN dnf install -y \
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
 RUN curl -fsSL \
       "https://download.documentfoundation.org/libreoffice/stable/${LIBREOFFICE_VERSION}/rpm/x86_64/LibreOffice_${LIBREOFFICE_VERSION}_Linux_x86-64_rpm.tar.gz" \
-      | tar xz -C /tmp/ \
+            --retry 10 \
+            --retry-all-errors \
+            --retry-delay 5 \
+            --connect-timeout 30 \
+            --max-time 1200 \
+            --continue-at - \
+            -o /tmp/libreoffice.tar.gz \
+        && tar xzf /tmp/libreoffice.tar.gz -C /tmp/ \
     && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
     && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
-    && rm -rf /tmp/LibreOffice_*
+    && rm -rf /tmp/LibreOffice_* /tmp/libreoffice.tar.gz
 
 # yt-dlp uses Deno and its EJS scripts to solve YouTube's JavaScript challenges.
 RUN curl -fsSL \
