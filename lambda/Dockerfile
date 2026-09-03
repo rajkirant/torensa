@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/python:3.14
 
-ARG LIBREOFFICE_VERSION=25.8.6
+ARG LIBREOFFICE_VERSION=25.8.7
 
 # Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
 RUN dnf install -y \
