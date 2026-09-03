@@ -3,7 +3,22 @@ import os
 
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
+from .views.subtitle_download_views import _vtt_to_srt
 from .views.tool_chat_views import _build_context
+
+
+class SubtitleDownloadTests(TestCase):
+    def test_vtt_is_converted_to_srt_without_vtt_settings(self):
+        contents = (
+            "WEBVTT\n\n"
+            "00:00:01.000 --> 00:00:02.500 align:start\n"
+            "Hello world\n"
+        )
+
+        self.assertEqual(
+            _vtt_to_srt(contents),
+            "1\n00:00:01,000 --> 00:00:02,500\nHello world\n",
+        )
 
 
 class AuthCsrfTests(TestCase):

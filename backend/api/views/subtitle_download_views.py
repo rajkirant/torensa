@@ -27,17 +27,54 @@ def _safe_filename(name: str) -> str:
 
 
 def _find_subtitle_file(tmpdir: str, language: str | None) -> Path | None:
-    for ext in ("srt", "vtt"):
-        candidates = sorted(Path(tmpdir).glob(f"*.{ext}"))
-        if not candidates:
-            continue
-        if language:
-            lang = language.lower()
-            for candidate in candidates:
-                if f".{lang}." in candidate.name.lower():
-                    return candidate
+    candidates = sorted(Path(tmpdir).glob("*.vtt"))
+    if language:
+        lang = language.lower()
+        for candidate in candidates:
+            if f".{lang}." in candidate.name.lower():
+                return candidate
+    if candidates:
         return candidates[0]
     return None
+
+
+def _vtt_to_srt(contents: str) -> str:
+    """Convert WebVTT cues to the SRT format exposed by this endpoint."""
+    srt_cues = []
+    cue_lines = []
+    cue_number = 1
+
+    def flush_cue():
+        nonlocal cue_number, cue_lines
+        if not cue_lines:
+            return
+        timestamp_index = next(
+            (index for index, line in enumerate(cue_lines) if "-->" in line),
+            None,
+        )
+        if timestamp_index is None:
+            cue_lines = []
+            return
+        timestamp = cue_lines[timestamp_index].split(" --> ", 2)
+        if len(timestamp) != 2:
+            cue_lines = []
+            return
+        timestamp = " --> ".join(part.split()[0].replace(".", ",") for part in timestamp)
+        text = cue_lines[timestamp_index + 1 :]
+        if text:
+            srt_cues.append(f"{cue_number}\n{timestamp}\n" + "\n".join(text))
+            cue_number += 1
+        cue_lines = []
+
+    for line in contents.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        if line.strip():
+            if not cue_lines and (line.startswith("WEBVTT") or line.startswith("NOTE")):
+                continue
+            cue_lines.append(line)
+        else:
+            flush_cue()
+    flush_cue()
+    return "\n\n".join(srt_cues) + ("\n" if srt_cues else "")
 
 
 def _download_subtitles(url: str, tmpdir: str, language: str, auto: bool):
@@ -47,7 +84,8 @@ def _download_subtitles(url: str, tmpdir: str, language: str, auto: bool):
         "skip_download": True,
         "writesubtitles": True,
         "writeautomaticsub": auto,
-        "subtitlesformat": "srt",
+        # Providers commonly expose VTT only; convert it after download.
+        "subtitlesformat": "vtt",
         "outtmpl": os.path.join(tmpdir, "subs.%(id)s.%(ext)s"),
         "noplaylist": True,
         "quiet": True,
@@ -97,16 +135,15 @@ def subtitle_download_view(request):
             if not subtitle_path:
                 return Response({"error": ERROR_SUBTITLES_NOT_FOUND}, status=404)
 
-            with open(subtitle_path, "rb") as fh:
-                subtitle_bytes = fh.read()
+            with open(subtitle_path, "r", encoding="utf-8-sig") as fh:
+                subtitle_text = fh.read()
+            subtitle_bytes = _vtt_to_srt(subtitle_text).encode("utf-8")
 
             title = _safe_filename((info or {}).get("title") or "subtitles")
             lang_suffix = language or "sub"
-            file_ext = subtitle_path.suffix.lstrip(".")
-            output_name = f"{title}.{lang_suffix}.{file_ext}"
+            output_name = f"{title}.{lang_suffix}.srt"
 
-            content_type = "application/x-subrip" if file_ext == "srt" else "text/vtt"
-            response = HttpResponse(subtitle_bytes, content_type=content_type)
+            response = HttpResponse(subtitle_bytes, content_type="application/x-subrip")
             response["Content-Disposition"] = f'attachment; filename="{output_name}"'
             response["Content-Length"] = str(len(subtitle_bytes))
             return response
