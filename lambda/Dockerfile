@@ -1,6 +1,7 @@
 FROM public.ecr.aws/lambda/python:3.14
 
 ARG LIBREOFFICE_VERSION=25.8.7
+ARG DENO_VERSION=2.3.3
 
 # Runtime lib used by onnxruntime/numba wheels + LibreOffice system deps.
 RUN dnf install -y \
@@ -9,7 +10,7 @@ RUN dnf install -y \
       cups-libs \
       nss \
       libxslt \
-      tar gzip xz \
+            tar gzip xz unzip \
     && dnf clean all
 
 # LibreOffice is not in the AL2023 DNF repos — download RPMs directly.
@@ -19,6 +20,14 @@ RUN curl -fsSL \
     && rpm -ivh --nodeps /tmp/LibreOffice_*/RPMS/*.rpm \
     && ln -sf $(ls -d /opt/libreoffice*/program/soffice | head -1) /usr/local/bin/soffice \
     && rm -rf /tmp/LibreOffice_*
+
+# yt-dlp uses Deno and its EJS scripts to solve YouTube's JavaScript challenges.
+RUN curl -fsSL \
+            "https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip" \
+            -o /tmp/deno.zip \
+        && unzip -q /tmp/deno.zip -d /usr/local/bin \
+        && chmod +x /usr/local/bin/deno \
+        && rm -f /tmp/deno.zip
 
 # FFmpeg (static build) for video/audio conversions.
 RUN curl -fsSL "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz" \

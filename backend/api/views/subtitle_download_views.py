@@ -119,20 +119,25 @@ def subtitle_download_view(request):
         try:
             info = None
             subtitle_path = None
+            download_errors = []
             try:
                 info = _download_subtitles(url, tmpdir, language, auto=False)
                 subtitle_path = _find_subtitle_file(tmpdir, language)
-            except Exception:
-                logger.info("Subtitle download: existing captions not available")
+            except Exception as exc:
+                download_errors.append(exc)
+                logger.warning("Subtitle download: existing captions failed", exc_info=True)
 
             if not subtitle_path:
                 try:
                     info = _download_subtitles(url, tmpdir, language, auto=True)
-                except Exception:
-                    logger.info("Subtitle download: auto-generated captions not available")
+                except Exception as exc:
+                    download_errors.append(exc)
+                    logger.warning("Subtitle download: auto-generated captions failed", exc_info=True)
                 subtitle_path = _find_subtitle_file(tmpdir, language)
 
             if not subtitle_path:
+                if download_errors:
+                    raise download_errors[-1]
                 return Response({"error": ERROR_SUBTITLES_NOT_FOUND}, status=404)
 
             with open(subtitle_path, "r", encoding="utf-8-sig") as fh:
