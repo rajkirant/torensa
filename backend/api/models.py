@@ -169,6 +169,40 @@ class HabitLog(models.Model):
         return f"{self.user.username} — {self.habit.name} on {self.date}"
 
 
+class TodoCategory(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="todo_categories",
+    )
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        unique_together = ("user", "name")
+
+    def __str__(self):
+        return f"{self.name} ({self.user.username})"
+
+
+class TodoItem(models.Model):
+    category = models.ForeignKey(
+        TodoCategory,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    text = models.CharField(max_length=500)
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"{self.text} ({self.category.name})"
+
+
 class ChatbotSubscription(models.Model):
     """Subscription record for the chatbot feature."""
 

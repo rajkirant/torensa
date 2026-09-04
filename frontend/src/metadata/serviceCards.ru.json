@@ -1,5 +1,21 @@
 [
   {
+    "id": "to-do",
+    "component": "ToDo",
+    "name": "Задачи",
+    "title": "Список задач - Организуйте свои дела",
+    "description": "Создавайте категории, добавляйте и удаляйте пункты и отмечайте выполненные задачи.",
+    "path": "/to-do",
+    "ctaLabel": "Открыть задачи",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Организуйте задачи в собственных категориях. Список сохраняется в вашей учетной записи.",
+    "categoryId": "utilities",
+    "keywords": ["задачи", "todo", "список", "чеклист", "организация"],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "positive-news",
     "component": "PositiveNews",
     "name": "Позитивные новости рядом с вами",

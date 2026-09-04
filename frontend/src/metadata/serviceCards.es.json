@@ -1,5 +1,21 @@
 [
   {
+    "id": "to-do",
+    "component": "ToDo",
+    "name": "Tareas",
+    "title": "Lista de tareas - Organiza tus tareas",
+    "description": "Crea categorías, añade tareas, elimina elementos y marca las tareas terminadas.",
+    "path": "/to-do",
+    "ctaLabel": "Abrir tareas",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Organiza tus tareas en categorías personalizadas. Tu lista se guarda en tu cuenta.",
+    "categoryId": "utilities",
+    "keywords": ["tareas", "todo", "lista", "checklist", "organizar"],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "positive-news",
     "component": "PositiveNews",
     "name": "Positive News Near You",

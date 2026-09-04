@@ -1,5 +1,21 @@
 [
   {
+    "id": "to-do",
+    "component": "ToDo",
+    "name": "Takenlijst",
+    "title": "Takenlijst - Organiseer je taken",
+    "description": "Maak categorieën, voeg taken toe, verwijder items en vink afgeronde taken af.",
+    "path": "/to-do",
+    "ctaLabel": "Takenlijst openen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Organiseer je taken in eigen categorieën. Je lijst wordt in je account opgeslagen.",
+    "categoryId": "utilities",
+    "keywords": ["taken", "todo", "checklist", "lijst", "organiseren"],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "positive-news",
     "component": "PositiveNews",
     "name": "Positive News Near You",

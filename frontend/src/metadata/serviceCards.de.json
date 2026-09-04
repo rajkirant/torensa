@@ -1,5 +1,21 @@
 [
   {
+    "id": "to-do",
+    "component": "ToDo",
+    "name": "Aufgaben",
+    "title": "Aufgabenliste - Aufgaben organisieren",
+    "description": "Erstelle Kategorien, füge Aufgaben hinzu, entferne Elemente und hake erledigte Aufgaben ab.",
+    "path": "/to-do",
+    "ctaLabel": "Aufgaben öffnen",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Organisiere deine Aufgaben in eigenen Kategorien. Deine Liste bleibt in deinem Konto gespeichert.",
+    "categoryId": "utilities",
+    "keywords": ["aufgaben", "todo", "checkliste", "liste", "organisieren"],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "positive-news",
     "component": "PositiveNews",
     "name": "Positive News Near You",

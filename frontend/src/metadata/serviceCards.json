@@ -1,5 +1,21 @@
 [
   {
+    "id": "to-do",
+    "component": "ToDo",
+    "name": "To Do",
+    "title": "To Do List - Organize Your Tasks",
+    "description": "Create categories, add tasks, remove items, and cross off completed work in a simple private checklist.",
+    "path": "/to-do",
+    "ctaLabel": "Open To Do",
+    "offlineEnabled": false,
+    "authRequired": true,
+    "detailedDescription": "Keep your tasks organized in custom categories. Add, remove, and complete items while your list stays saved to your account.",
+    "categoryId": "utilities",
+    "keywords": ["todo", "to do", "tasks", "checklist", "list", "organize"],
+    "isActive": true,
+    "advancedOptionsEnabled": false
+  },
+  {
     "id": "positive-news",
     "component": "PositiveNews",
     "name": "Positive News Near You",

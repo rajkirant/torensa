@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from .views.subtitle_download_views import _vtt_to_srt
 from .views.tool_chat_views import _build_context
+from .models import TodoCategory, TodoItem
 
 
 class SubtitleDownloadTests(TestCase):
@@ -19,6 +20,62 @@ class SubtitleDownloadTests(TestCase):
             _vtt_to_srt(contents),
             "1\n00:00:01,000 --> 00:00:02,500\nHello world\n",
         )
+
+
+class TodoApiTests(TestCase):
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=True)
+        self.user = User.objects.create_user(username="todo-user", password="StrongPass123!")
+        self.other_user = User.objects.create_user(username="other-user", password="StrongPass123!")
+        self.client.force_login(self.user)
+
+    def _csrf(self):
+        return self.client.get("/api/me/").json()["csrfToken"]
+
+    def test_todo_crud_is_persistent_and_user_scoped(self):
+        token = self._csrf()
+        category_response = self.client.post(
+            "/api/todo/categories/",
+            data=json.dumps({"name": "Work"}),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(category_response.status_code, 201)
+        category_id = category_response.json()["id"]
+
+        item_response = self.client.post(
+            f"/api/todo/categories/{category_id}/items/",
+            data=json.dumps({"text": "Ship feature"}),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(item_response.status_code, 201)
+        item_id = item_response.json()["id"]
+
+        toggle_response = self.client.patch(
+            f"/api/todo/items/{item_id}/",
+            data=json.dumps({"completed": True}),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(toggle_response.status_code, 200)
+        self.assertTrue(toggle_response.json()["completed"])
+
+        self.assertEqual(self.client.get("/api/todo/categories/").json()[0]["items"][0]["text"], "Ship feature")
+        self.client.logout()
+        self.client.force_login(self.other_user)
+        self.assertEqual(self.client.get("/api/todo/categories/").json(), [])
+
+    def test_deleting_category_cascades_items(self):
+        category = TodoCategory.objects.create(user=self.user, name="Home")
+        TodoItem.objects.create(category=category, text="Clean")
+        token = self._csrf()
+        response = self.client.delete(
+            f"/api/todo/categories/{category.id}/",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(TodoItem.objects.filter(category=category).exists())
 
 
 class AuthCsrfTests(TestCase):

@@ -52,6 +52,12 @@ from .views.habit_views import (
     habit_toggle_view,
     habit_logs_view,
 )
+from .views.todo_views import (
+    todo_categories_view,
+    todo_category_delete_view,
+    todo_item_create_view,
+    todo_item_detail_view,
+)
 from .views.custom_chatbot_views import (
     chatbot_list_create,
     chatbot_detail,
@@ -132,6 +138,11 @@ urlpatterns = [
     path("habits/<int:habit_id>/", habit_delete_view),
     path("habits/<int:habit_id>/toggle/", habit_toggle_view),
     path("habits/logs/", habit_logs_view),
+    # To Do list
+    path("todo/categories/", todo_categories_view),
+    path("todo/categories/<int:category_id>/", todo_category_delete_view),
+    path("todo/categories/<int:category_id>/items/", todo_item_create_view),
+    path("todo/items/<int:item_id>/", todo_item_detail_view),
     # CSV Builder
     path("csv/", csv_list_create),
     path("csv/<int:csv_id>/", csv_detail),
