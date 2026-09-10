@@ -17,6 +17,9 @@ ERROR_SUBTITLES_NOT_FOUND = "No subtitles were found for this video."
 ERROR_YTDLP_MISSING = "yt-dlp is not installed on the server."
 ERROR_DOWNLOAD_FAILED = "Subtitle download failed."
 
+# Installed by lambda/Dockerfile; elsewhere let yt-dlp find deno on PATH.
+DENO_PATH = "/usr/local/bin/deno"
+
 
 def _safe_filename(name: str) -> str:
     if not name:
@@ -91,7 +94,8 @@ def _download_subtitles(url: str, tmpdir: str, language: str, auto: bool):
         "quiet": True,
         "no_warnings": True,
         "retries": 3,
-        "js_runtimes": {"deno": "/usr/local/bin/deno"},
+        # yt-dlp expects {runtime: {config}}, not {runtime: path}.
+        "js_runtimes": {"deno": {"path": DENO_PATH} if os.path.isfile(DENO_PATH) else {}},
     }
     if language:
         opts["subtitleslangs"] = [language]
