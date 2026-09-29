@@ -2588,6 +2588,7 @@
       "Typ of plak je LaTeX in de editor, kies een voorbeeld in het menu Sjabloon of klik op ‘Open .tex file’ om een document van je apparaat te laden.",
       "Met ‘Live preview’ aan wordt het document automatisch bijgewerkt kort nadat je stopt met typen. Zet het uit en gebruik ‘Render’ om handmatig bij te werken.",
       "Wat het voorbeeld niet kan tekenen, zoals TikZ-diagrammen of afbeeldingen, verschijnt als tijdelijke aanduiding en staat in een melding boven het voorbeeld.",
+      "Gebruik ‘Pages’ om het document op pagina's op papierformaat te zien met dezelfde kolommen als de PDF (bijvoorbeeld twee kolommen bij acmart sigconf of IEEEtran), of ‘Continuous’ om het als één doorlopende kolom te lezen.",
       "Klik op ‘Fullscreen’ om het document zonder afleiding te lezen.",
       "Gebruik ‘Download .tex’ om je bron op te slaan, ‘Download HTML’ om een zelfstandige webpagina te exporteren of ‘Print / Save as PDF’ om via het afdrukvenster een PDF te maken."
     ],
