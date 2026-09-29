@@ -17,10 +17,7 @@ import FilePickerButton from "../components/inputs/FilePickerButton";
 import FlexWrapRow from "../components/layout/FlexWrapRow";
 import useToolStatus from "../hooks/useToolStatus";
 import downloadBlob from "../utils/downloadBlob";
-
-// latex.js ships its stylesheets and fonts separately from the parser; they are
-// loaded from a CDN pinned to the installed version so the preview matches it.
-const LATEXJS_ASSETS_BASE = "https://cdn.jsdelivr.net/npm/latex.js@0.12.6/dist/";
+import katexCss from "katex/dist/katex.min.css?inline";
 
 const STORAGE_KEY = "torensa_tex_viewer_source";
 const RENDER_DELAY_MS = 500;
@@ -35,6 +32,8 @@ const TEMPLATES: Record<TemplateId, { label: string; source: string }> = {
   article: {
     label: "Sample article",
     source: String.raw`\documentclass{article}
+\usepackage{amsmath}
+\usepackage{booktabs}
 
 \title{A Short Guide to \LaTeX}
 \author{Torensa}
@@ -45,15 +44,17 @@ const TEMPLATES: Record<TemplateId, { label: string; source: string }> = {
 \maketitle
 
 \begin{abstract}
-This document shows how the TeX Viewer renders sections, lists,
-text formatting and mathematics directly in your browser.
+This document shows how the TeX Viewer renders sections, lists, tables,
+citations and mathematics directly in your browser.
 \end{abstract}
 
 \section{Introduction}
+\label{sec:intro}
 \LaTeX{} is a document preparation system used for scientific papers,
-theses and books. You can write \textbf{bold}, \textit{italic},
+theses and books~\cite{lamport}. You can write \textbf{bold}, \textit{italic},
 \underline{underlined} and \texttt{monospaced} text, or change the
-size from {\small small} to {\large large}.
+size from {\small small} to {\large large}.\footnote{Footnotes are collected
+at the end of the preview.}
 
 \subsection{Lists}
 \begin{itemize}
@@ -72,9 +73,10 @@ display math gets its own line:
   \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}
 \]
 
-The quadratic formula is
+The quadratic formula is given in Equation~\ref{eq:quadratic}:
 \begin{equation}
   x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.
+  \label{eq:quadratic}
 \end{equation}
 
 Multi-line derivations use \texttt{align}:
@@ -83,10 +85,30 @@ Multi-line derivations use \texttt{align}:
           &= a^2 + 2ab + b^2.
 \end{align*}
 
-\section{Quotes}
-\begin{quote}
-  Simplicity is prerequisite for reliability.
-\end{quote}
+\section{Tables}
+Table~\ref{tab:classes} lists common document classes, as described in
+Section~\ref{sec:intro}.
+
+\begin{table}[h]
+\caption{Common document classes.}
+\label{tab:classes}
+\begin{tabular}{@{}l l r@{}}
+\toprule
+Class & Typical use & Levels \\
+\midrule
+article & Papers and reports & 3 \\
+report  & Theses            & 4 \\
+book    & Books             & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{thebibliography}{9}
+\bibitem{lamport}
+L. Lamport.
+\newblock \emph{\LaTeX: A Document Preparation System}.
+\newblock Addison-Wesley, 2nd edition, 1994.
+\end{thebibliography}
 
 \end{document}
 `,
@@ -127,13 +149,83 @@ $\alpha, \beta, \gamma, \delta, \epsilon, \theta, \lambda, \mu, \pi,
   },
 };
 
-type LatexModule = typeof import("latex.js");
+type RendererModule = typeof import("../utils/texToHtml");
 
-type RenderError = {
-  message: string;
-  line?: number;
-  column?: number;
-};
+// Styles for the rendered document inside the preview frame.
+const DOCUMENT_CSS = `
+:root{--tex-serif:"Latin Modern Roman","CMU Serif",Georgia,Cambria,"Times New Roman",serif;--tex-sans:"Helvetica Neue",Arial,sans-serif;--tex-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+html{background:#fff;color:#111}
+body{margin:0 auto;max-width:46em;padding:2.5rem 2rem;font-family:var(--tex-serif);font-size:17px;line-height:1.5;text-align:justify;hyphens:auto;overflow-wrap:break-word}
+a{color:#1a4fb5}
+code{font-family:var(--tex-mono);font-size:.88em}
+h1.tex-title{font-size:1.75em;line-height:1.25;text-align:center;margin:0 0 .6em}
+.tex-titleblock{margin-bottom:1.8em}
+.tex-authors{display:flex;flex-wrap:wrap;justify-content:center;gap:.6em 2.5em;text-align:center}
+.tex-author{display:flex;flex-direction:column}
+.tex-affiliation,.tex-email{font-size:.9em}
+.tex-aff-part+.tex-aff-part::before{content:", "}
+.tex-date{text-align:center;margin-top:.6em}
+.tex-abstract{margin:1.2em 2em;font-size:.95em}
+.tex-abstract h2{font-size:1em;text-align:center;margin:0 0 .4em}
+h2,h3,h4,h1.tex-part{text-align:left;line-height:1.3;margin:1.4em 0 .6em}
+h2{font-size:1.3em}h3{font-size:1.12em}h4{font-size:1em}
+.tex-secnum{margin-right:.8em}
+.tex-par{display:block;height:.7em}
+.tex-display{margin:.8em 0;overflow-x:auto;overflow-y:hidden}
+.katex-display{margin:0}
+.tex-float{margin:1.5em 0;text-align:center}
+figcaption{margin:.6em auto;font-size:.92em;text-align:left;max-width:40em}
+.tex-table-wrap{overflow-x:auto}
+table.tex-tabular{border-collapse:collapse;margin:.5em auto;font-size:.95em;text-align:left}
+.tex-tabular td{padding:.25em .6em;vertical-align:top}
+.tex-rule-top-heavy td{border-top:2px solid #111}
+.tex-rule-top-light td{border-top:1px solid #111}
+.tex-rule-bottom-heavy td{border-bottom:2px solid #111}
+.tex-rule-bottom-light td{border-bottom:1px solid #111}
+.tex-placeholder{display:inline-block;padding:1em 1.5em;border:1px dashed #999;color:#666;background:#fafafa;font-family:var(--tex-sans);font-size:.8em}
+blockquote{margin:1em 2.5em}
+pre.tex-verbatim{font-family:var(--tex-mono);font-size:.85em;background:#f6f6f6;padding:.8em;overflow-x:auto;text-align:left}
+ul,ol{padding-left:1.8em}
+li.tex-custom-label{list-style:none}
+.tex-item-label{font-weight:bold;margin-left:-1.2em}
+dl.tex-description dt{font-weight:bold;float:left;margin-right:.5em}
+dl.tex-description dd{margin:0 0 .4em 1.5em}
+.tex-theorem,.tex-proof{margin:1em 0}
+.tex-qed{float:right}
+.tex-keywords,.tex-ccs{font-size:.92em}
+.tex-bibliography ol{list-style:none;padding:0}
+.tex-bibliography li{position:relative;padding-left:3em;margin:.4em 0;text-align:left;font-size:.95em}
+.tex-bib-label{position:absolute;left:0}
+.tex-footnotes{font-size:.85em;margin-top:2em}
+.tex-fbox{border:1px solid #111;padding:0 .2em}
+sup.tex-a{font-size:.75em;vertical-align:.3em;margin:0 -.15em 0 -.36em}
+sub.tex-e{font-size:1em;vertical-align:-.5ex;margin:0 -.1em 0 -.15em}
+@media (max-width:600px){body{padding:1.25rem 1rem;font-size:16px}.tex-abstract{margin:1em 0}}
+@media print{body{padding:0;max-width:none}}
+`;
+
+/** Wraps rendered body HTML in a standalone, styled HTML document. */
+function buildHtmlDocument(body: string, title: string, forDownload: boolean) {
+  // KaTeX font URLs are root-relative; make them absolute for downloaded files.
+  const css = forDownload
+    ? katexCss.replace(/url\((['"]?)\//g, `url($1${window.location.origin}/`)
+    : katexCss;
+  const escapedTitle = title
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${escapedTitle || "LaTeX document"}</title>
+<base target="_blank">
+<style>${css}${DOCUMENT_CSS}</style>
+</head>
+<body>${body}</body>
+</html>`;
+}
 
 function loadSource(): string {
   try {
@@ -153,72 +245,6 @@ function saveSource(source: string) {
   }
 }
 
-// amsmath display environments that latex.js does not know, mapped to the
-// KaTeX environment used inside \[ ... \] (null keeps the body as-is).
-const DISPLAY_MATH_ENVS: Record<string, string | null> = {
-  equation: null,
-  align: "aligned",
-  gather: "gathered",
-  multline: "gathered",
-};
-
-const DISPLAY_MATH_ENV_PATTERN =
-  /\\begin\{(equation|align|gather|multline)(\*?)\}([\s\S]*?)\\end\{\1\2\}/g;
-
-/**
- * Rewrites amsmath display environments into \[ ... \] blocks that latex.js
- * renders with KaTeX. Line breaks are preserved so error positions still match
- * the editor. Equation numbers and labels are dropped.
- */
-function rewriteDisplayMath(source: string): string {
-  return source.replace(
-    DISPLAY_MATH_ENV_PATTERN,
-    (_match, env: string, _star: string, body: string) => {
-      const inner = body.replace(/\\(label\{[^}]*\}|nonumber|notag)/g, "");
-      const katexEnv = DISPLAY_MATH_ENVS[env];
-      return katexEnv
-        ? `\\[\\begin{${katexEnv}}${inner}\\end{${katexEnv}}\\]`
-        : `\\[${inner}\\]`;
-    },
-  );
-}
-
-/** Renders LaTeX source into a complete standalone HTML document string. */
-function renderLatexToHtml(latex: LatexModule, source: string): string {
-  const generator = new latex.HtmlGenerator({ hyphenate: false });
-  const doc = latex.parse(rewriteDisplayMath(source), { generator }).htmlDocument(
-    LATEXJS_ASSETS_BASE,
-  );
-
-  // The preview iframe does not run scripts, so drop latex.js's helper script.
-  doc.querySelectorAll("script").forEach((script) => script.remove());
-
-  // Open links in a new tab instead of navigating the preview frame.
-  const base = doc.createElement("base");
-  base.target = "_blank";
-  doc.head.prepend(base);
-
-  const style = doc.createElement("style");
-  style.textContent =
-    "html{background:#fff;color:#000}body{margin:0 auto;padding:2rem 1.5rem}" +
-    "@media print{body{padding:0}}";
-  doc.head.appendChild(style);
-
-  return `<!DOCTYPE html>\n${doc.documentElement.outerHTML}`;
-}
-
-function toRenderError(err: unknown): RenderError {
-  const location = (err as { location?: RenderError & { start?: RenderError } })
-    ?.location?.start;
-  const message =
-    err instanceof Error ? err.message : String(err ?? "Unknown error");
-  return {
-    message,
-    line: location?.line,
-    column: location?.column,
-  };
-}
-
 function baseFileName(name: string) {
   return name.replace(/\.[^.]+$/, "") || "document";
 }
@@ -229,13 +255,14 @@ export default function TexViewer() {
   const [fileName, setFileName] = useState("document");
   const [autoRender, setAutoRender] = useState(true);
   const [html, setHtml] = useState("");
-  const [renderError, setRenderError] = useState<RenderError | null>(null);
+  const [notes, setNotes] = useState<string[]>([]);
+  const [renderError, setRenderError] = useState<string | null>(null);
   const [rendering, setRendering] = useState(false);
   const [renderMs, setRenderMs] = useState<number | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { error, success, setError, setSuccess, clear } = useToolStatus();
 
-  const latexRef = useRef<LatexModule | null>(null);
+  const rendererRef = useRef<RendererModule | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const previewRootRef = useRef<HTMLDivElement | null>(null);
   const renderIdRef = useRef(0);
@@ -244,6 +271,7 @@ export default function TexViewer() {
     const renderId = ++renderIdRef.current;
     if (!latexSource.trim()) {
       setHtml("");
+      setNotes([]);
       setRenderError(null);
       setRenderMs(null);
       setRendering(false);
@@ -251,18 +279,21 @@ export default function TexViewer() {
     }
     setRendering(true);
     try {
-      if (!latexRef.current) {
-        latexRef.current = await import("latex.js");
+      if (!rendererRef.current) {
+        rendererRef.current = await import("../utils/texToHtml");
       }
       const started = performance.now();
-      const output = renderLatexToHtml(latexRef.current, latexSource);
+      const result = rendererRef.current.texToHtml(latexSource);
       if (renderId !== renderIdRef.current) return;
-      setHtml(output);
+      setHtml(buildHtmlDocument(result.html, result.title, false));
+      setNotes(result.notes);
       setRenderError(null);
       setRenderMs(Math.round(performance.now() - started));
     } catch (err) {
       if (renderId !== renderIdRef.current) return;
-      setRenderError(toRenderError(err));
+      setRenderError(
+        err instanceof Error ? err.message : "Could not render this document.",
+      );
     } finally {
       if (renderId === renderIdRef.current) setRendering(false);
     }
@@ -328,12 +359,14 @@ export default function TexViewer() {
 
   const handleDownloadHtml = () => {
     clear();
-    if (!html || renderError) {
-      setError("Fix the errors in your document before downloading HTML.");
+    const result = rendererRef.current?.texToHtml(source);
+    if (!result || !source.trim()) {
+      setError("Render the document before downloading HTML.");
       return;
     }
+    const documentHtml = buildHtmlDocument(result.html, result.title, true);
     downloadBlob(
-      new Blob([html], { type: "text/html;charset=utf-8" }),
+      new Blob([documentHtml], { type: "text/html;charset=utf-8" }),
       `${fileName}.html`,
     );
   };
@@ -342,7 +375,7 @@ export default function TexViewer() {
     clear();
     const frameWindow = iframeRef.current?.contentWindow;
     if (!html || renderError || !frameWindow) {
-      setError("Fix the errors in your document before printing.");
+      setError("Render the document before printing.");
       return;
     }
     frameWindow.focus();
@@ -370,6 +403,7 @@ export default function TexViewer() {
     setTemplate("");
     setFileName("document");
     setHtml("");
+    setNotes([]);
     setRenderError(null);
     setRenderMs(null);
   };
@@ -468,15 +502,14 @@ export default function TexViewer() {
                 "&:fullscreen": { p: 2, bgcolor: "background.default" },
               }}
             >
-              {renderError && (
-                <ToolStatusAlerts
-                  error={
-                    renderError.line
-                      ? `Line ${renderError.line}, column ${renderError.column}: ${renderError.message}`
-                      : renderError.message
-                  }
-                />
-              )}
+              <ToolStatusAlerts
+                error={renderError ?? ""}
+                info={
+                  notes.length && !renderError
+                    ? `Not everything could be shown in the preview: ${notes.join("; ")}.`
+                    : ""
+                }
+              />
               <Box
                 sx={{
                   position: "relative",
@@ -545,11 +578,12 @@ export default function TexViewer() {
         </Stack>
 
         <Typography variant="caption" color="text.secondary">
-          Rendering happens in your browser with latex.js. It supports common
-          LaTeX (sections, lists, formatting and KaTeX math, including equation and
-          align blocks) but not every package - documents that need tables,
-          footnotes, TikZ, BibTeX or custom classes should be compiled with a
-          full TeX distribution.
+          The preview is rendered in your browser and math is typeset with
+          KaTeX. It understands the structure most papers use - title block,
+          sections, lists, tables, figures, citations and cross-references -
+          and skips what it cannot show, such as TikZ drawings and images. For
+          the exact PDF layout, compile the document with a full TeX
+          distribution.
         </Typography>
       </Stack>
     </PageContainer>

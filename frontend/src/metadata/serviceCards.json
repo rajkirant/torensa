@@ -2606,10 +2606,10 @@
     "description": "Write or open a .tex file and see it rendered instantly. Free online LaTeX viewer with live preview, math support, and HTML or PDF export in your browser.",
     "path": "/tex-viewer",
     "ctaLabel": "View LaTeX",
-    "offlineEnabled": false,
+    "offlineEnabled": true,
     "authRequired": false,
     "aiPowered": false,
-    "detailedDescription": "TeX Viewer is a free online LaTeX editor and previewer. Type or paste LaTeX, or open an existing .tex file, and see the typeset document update live beside your source. Sections, lists, text formatting, quotes, and inline or display math, including equation and align blocks rendered with KaTeX, are supported. Download your source as .tex, export the result as a standalone HTML page, or print it to PDF. Rendering runs entirely in your browser with latex.js, so your document is never uploaded.",
+    "detailedDescription": "TeX Viewer is a free online LaTeX editor and previewer. Type or paste LaTeX, or open an existing .tex file, and see the document update live beside your source. It handles the structure most papers use, including title and author blocks, abstracts, numbered sections, lists, tables, figures and captions, footnotes, citations with a bibliography, cross-references, and numbered equations typeset with KaTeX, and it works with classes such as article, acmart and IEEEtran. Download your source as .tex, export the result as a standalone HTML page, or print it to PDF. Everything runs in your browser, so your document is never uploaded.",
     "categoryId": "documents",
     "keywords": [
       "tex viewer",
@@ -2630,30 +2630,30 @@
     "howTo": [
       "Type or paste your LaTeX into the editor, pick a sample from the Template menu, or click 'Open .tex file' to load a document from your device.",
       "With 'Live preview' switched on, the rendered document updates automatically a moment after you stop typing. Switch it off and use 'Render' to update manually.",
-      "If the document has a syntax error, the preview shows the line and column where parsing failed so you can fix it quickly.",
+      "Anything the preview cannot draw, such as TikZ diagrams or images, is shown as a placeholder and listed in a note above the preview.",
       "Click 'Fullscreen' to read the rendered document without distractions.",
       "Use 'Download .tex' to save your source, 'Download HTML' to export a standalone web page, or 'Print / Save as PDF' to create a PDF with your browser's print dialog."
     ],
     "faqs": [
       {
         "q": "Is my LaTeX document uploaded to a server?",
-        "a": "No. Parsing and rendering happen entirely in your browser using latex.js. Your source is only stored in your browser's local storage so it is still there when you come back."
+        "a": "No. Parsing and rendering happen entirely in your browser. Your source is only stored in your browser's local storage so it is still there when you come back."
       },
       {
         "q": "Which LaTeX features are supported?",
-        "a": "Common document features work: \\documentclass article, book and report, sections, lists, text styles and sizes, quotes, \\maketitle, and inline or display math rendered with KaTeX, including equation and align blocks (without numbering). Tables, footnotes, TikZ, BibTeX bibliographies, and custom classes are not supported."
+        "a": "Title blocks, abstracts, sections, lists, tables (including booktabs rules and \\multicolumn), figure and table captions, footnotes, theorems, \\cite with thebibliography, \\ref and \\label, \\newcommand macros, and inline or numbered display math with KaTeX. Unknown commands are shown as plain text instead of stopping the preview."
       },
       {
         "q": "How do I convert my .tex file to PDF?",
-        "a": "Render the document, then click 'Print / Save as PDF' and choose 'Save as PDF' as the destination in your browser's print dialog."
+        "a": "Render the document, then click 'Print / Save as PDF' and choose 'Save as PDF' as the destination in your browser's print dialog. For the exact journal layout, compile the file with a full TeX distribution."
       },
       {
-        "q": "Why does my document show an error?",
-        "a": "The viewer reports the line and column where the LaTeX parser stopped. Common causes are unbalanced braces, a missing \\end{...}, or a command or package that latex.js does not support."
+        "q": "Why is part of my document missing from the preview?",
+        "a": "The viewer is not a full TeX engine. TikZ drawings and images appear as placeholders, and BibTeX bibliographies loaded with \\bibliography are not included. A note above the preview lists anything that was skipped."
       },
       {
         "q": "Can I use the TeX Viewer offline?",
-        "a": "The parser runs in your browser, but the fonts and styles used by the preview are loaded from a CDN, so an internet connection is needed for the preview to look right."
+        "a": "Yes. The renderer and the math fonts are part of the site, so once the page has loaded it keeps working without an internet connection."
       }
     ]
   }
