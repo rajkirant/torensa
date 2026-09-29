@@ -2630,7 +2630,7 @@
     "howTo": [
       "Type or paste your LaTeX into the editor, pick a sample from the Template menu, or click 'Open .tex file' to load a document from your device.",
       "With 'Live preview' switched on, the rendered document updates automatically a moment after you stop typing. Switch it off and use 'Render' to update manually.",
-      "Anything the preview cannot draw, such as TikZ diagrams or images, is shown as a placeholder and listed in a note above the preview.",
+      "TikZ diagrams are drawn by a TeX engine that runs in your browser; the first one takes a few seconds while the engine loads. Images, which are not part of the .tex file, are shown as placeholders and listed in a note above the preview.",
       "Use 'Pages' to see the document on paper-sized pages with the same columns as the PDF (for example two columns for acmart sigconf or IEEEtran), or 'Continuous' to read it as one scrolling column.",
       "Click 'Fullscreen' to read the rendered document without distractions.",
       "Use 'Download .tex' to save your source, 'Download HTML' to export a standalone web page, or 'Print / Save as PDF' to create a PDF with your browser's print dialog."
@@ -2642,7 +2642,7 @@
       },
       {
         "q": "Which LaTeX features are supported?",
-        "a": "Title blocks, abstracts, sections, lists, tables (including booktabs rules and \\multicolumn), figure and table captions, footnotes, theorems, \\cite with thebibliography, \\ref and \\label, \\newcommand macros, and inline or numbered display math with KaTeX. Unknown commands are shown as plain text instead of stopping the preview."
+        "a": "Title blocks, abstracts, sections, lists, tables (including booktabs rules and \\multicolumn), figure and table captions, footnotes, theorems, \\cite with thebibliography, \\ref and \\label, \\newcommand macros, inline or numbered display math with KaTeX, and TikZ pictures, which are compiled by a real TeX engine in your browser. Unknown commands are shown as plain text instead of stopping the preview."
       },
       {
         "q": "How do I convert my .tex file to PDF?",
@@ -2650,7 +2650,7 @@
       },
       {
         "q": "Why is part of my document missing from the preview?",
-        "a": "The viewer is not a full TeX engine. TikZ drawings and images appear as placeholders, and BibTeX bibliographies loaded with \\bibliography are not included. A note above the preview lists anything that was skipped."
+        "a": "Images loaded with \\includegraphics are separate files, so they appear as placeholders, and BibTeX bibliographies loaded with \\bibliography are not included. A TikZ picture that needs a package the in-browser TeX engine does not have is also shown as a placeholder. A note above the preview lists anything that was skipped."
       },
       {
         "q": "Can I use the TeX Viewer offline?",

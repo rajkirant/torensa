@@ -24,7 +24,22 @@ export type TexRenderResult = {
   notes: string[];
   /** Page geometry derived from \documentclass options and geometry. */
   layout: DocLayout;
+  /** TikZ pictures to compile; the HTML holds a placeholder for each. */
+  tikz: TikzJob[];
 };
+
+/** A TikZ picture ready for TikZJax (see tikzRender.ts). */
+export type TikzJob = {
+  key: string;
+  source: string;
+  dataset: { tikzLibraries?: string; texPackages?: string; addToPreamble?: string };
+};
+
+// Packages TikZJax can load in addition to tikz and xcolor.
+const TIKZJAX_PACKAGES = new Set([
+  "amsbsy", "amsfonts", "amsgen", "amsmath", "amsopn", "amssymb", "amstext",
+  "array", "etoolbox", "hf-tikz", "pgfplots", "tikz-3dplot", "tikz-cd", "xparse",
+]);
 
 /** Page geometry in TeX points (1in = 72pt). */
 export type DocLayout = {
@@ -610,10 +625,68 @@ class TexRenderer {
   private notes = new Map<string, number>();
   private unknownMacros = new Set<string>();
   private docClass: string;
+  private source: string;
+  private tikzJobs: TikzJob[] = [];
+  private tikzLibraries = new Set<string>();
+  private tikzPackages = new Map<string, string>();
+  private tikzPreamble: string[] = [];
+  private macroDefinitions = new Map<string, string>();
 
-  constructor(parser: ReturnType<typeof getParser>, docClass: string) {
+  constructor(parser: ReturnType<typeof getParser>, docClass: string, source: string) {
     this.parser = parser;
     this.docClass = docClass;
+    this.source = source;
+  }
+
+  /** The node's original source text (before ligature and accent processing). */
+  private sourceOf(node: Ast.Node): string {
+    const pos = (node as { position?: { start: { offset: number }; end: { offset: number } } })
+      .position;
+    return pos ? this.source.slice(pos.start.offset, pos.end.offset) : printRaw(node);
+  }
+
+  /** Records preamble commands TikZ pictures may depend on. */
+  private recordTikzContext(node: Ast.Macro): boolean {
+    const name = node.content;
+    if (name === "usetikzlibrary") {
+      rawText(lastRequiredArg(node))
+        .split(",")
+        .map((lib) => lib.trim())
+        .filter(Boolean)
+        .forEach((lib) => this.tikzLibraries.add(lib));
+      return true;
+    }
+    if (name === "usepackage" || name === "RequirePackage") {
+      const options = rawText(optionalArg(node));
+      for (const pkg of rawText(lastRequiredArg(node)).split(",")) {
+        const trimmed = pkg.trim();
+        if (TIKZJAX_PACKAGES.has(trimmed)) this.tikzPackages.set(trimmed, options);
+      }
+      return true;
+    }
+    if (["tikzset", "tikzstyle", "definecolor", "pgfplotsset", "colorlet"].includes(name)) {
+      this.tikzPreamble.push(this.sourceOf(node));
+      return true;
+    }
+    return false;
+  }
+
+  private renderTikz(node: Ast.Environment, env: string) {
+    const source = this.sourceOf(node);
+    const packages = Object.fromEntries(this.tikzPackages);
+    if (env === "tikzcd") packages["tikz-cd"] = packages["tikz-cd"] ?? "";
+    // Include user macros the picture uses.
+    const macros = [...this.macroDefinitions]
+      .filter(([name]) => new RegExp(`\\\\${name}(?![A-Za-z])`).test(source))
+      .map(([, def]) => def);
+    const dataset: TikzJob["dataset"] = {};
+    if (this.tikzLibraries.size) dataset.tikzLibraries = [...this.tikzLibraries].join(",");
+    if (Object.keys(packages).length) dataset.texPackages = JSON.stringify(packages);
+    const preamble = [...this.tikzPreamble, ...macros].join("\n");
+    if (preamble) dataset.addToPreamble = preamble;
+    const index = this.tikzJobs.length;
+    this.tikzJobs.push({ key: JSON.stringify([source, dataset]), source, dataset });
+    return `<div class="tex-tikz" data-tikz="${index}"></div>`;
   }
 
   render(root: Ast.Root): Omit<TexRenderResult, "layout"> {
@@ -664,7 +737,7 @@ class TexRenderer {
         }`,
       );
     }
-    return { html, title: this.titleText, notes };
+    return { html, title: this.titleText, notes, tikz: this.tikzJobs };
   }
 
   private note(message: string) {
@@ -849,6 +922,7 @@ class TexRenderer {
       return open + this.renderNodes(lastRequiredArg(node)) + close;
     }
     if (name in SECTION_LEVELS) return this.renderSection(node);
+    if (this.recordTikzContext(node)) return "";
     if (IGNORED_MACROS.has(name)) {
       if (name === "label") this.recordLabel(node);
       return "";
@@ -1023,7 +1097,13 @@ class TexRenderer {
         this.note("Images (\\includegraphics) are shown as placeholders");
         return `<span class="tex-placeholder">Image: ${esc(file)}</span>`;
       }
-      case "resizebox":
+      case "resizebox": {
+        const width = rawText(requiredArgs(node)[0]);
+        const inner = this.renderNodes(lastRequiredArg(node));
+        return /^\\(columnwidth|linewidth|textwidth|hsize)$/.test(width)
+          ? `<div class="tex-fullwidth">${inner}</div>`
+          : inner;
+      }
       case "scalebox":
       case "rotatebox":
       case "adjustbox":
@@ -1078,6 +1158,7 @@ class TexRenderer {
       (a) => a.openMark === "[" && /^\d$/.test(rawText(a.content)),
     );
     const nargs = nargsRaw ? Number(rawText(nargsRaw.content)) : 0;
+    this.macroDefinitions.set(nameNode.content, this.sourceOf(node));
     const body = printRaw(req[req.length - 1]).replace(
       new RegExp(ESCAPED_AMP, "g"),
       "\\&",
@@ -1244,12 +1325,13 @@ class TexRenderer {
       case "supertabular":
         return this.renderTabular(node);
       case "tikzpicture":
+      case "tikzcd":
+        return this.renderTikz(node, base);
       case "pgfpicture":
       case "picture":
-      case "tikzcd":
       case "forest":
-        this.note("TikZ/PGF pictures are shown as placeholders");
-        return '<div class="tex-placeholder">Diagram (TikZ) - not rendered in the preview</div>';
+        this.note(`${base} pictures are shown as placeholders`);
+        return `<div class="tex-placeholder">${esc(base)} picture - not rendered in the preview</div>`;
       case "thebibliography":
         return this.renderBibliography(node);
       case "proof":
@@ -1629,6 +1711,6 @@ export function texToHtml(source: string): TexRenderResult {
   const tree = parser.parse(cleaned);
   prepareTree(tree);
   const layout = detectLayout(cleaned);
-  return { ...new TexRenderer(parser, layout.docClass).render(tree), layout };
+  return { ...new TexRenderer(parser, layout.docClass, cleaned).render(tree), layout };
 }
 

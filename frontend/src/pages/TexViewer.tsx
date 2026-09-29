@@ -20,7 +20,8 @@ import FlexWrapRow from "../components/layout/FlexWrapRow";
 import useToolStatus from "../hooks/useToolStatus";
 import downloadBlob from "../utils/downloadBlob";
 import { fitPagesToWidth, paginate } from "../utils/texPaginate";
-import type { DocLayout } from "../utils/texToHtml";
+import type { DocLayout, TikzJob } from "../utils/texToHtml";
+import { renderTikz } from "../utils/tikzRender";
 import katexCss from "katex/dist/katex.min.css?inline";
 import libertinusSerif400 from "@fontsource/libertinus-serif/400.css?inline";
 import libertinusSerif400Italic from "@fontsource/libertinus-serif/400-italic.css?inline";
@@ -224,6 +225,9 @@ dl.tex-description dd{margin:0 0 .4em 1.5em}
 hr.tex-fn-rule{width:30%;margin:1.2em 0 .3em;border:0;border-top:1px solid #111}
 .tex-footnote{font-size:.8em;line-height:1.25;text-indent:0}
 .tex-fbox{border:1px solid #111;padding:0 .2em}
+.tex-tikz{text-align:center;margin:.3em 0;line-height:1;text-indent:0}
+.tex-tikz svg{max-width:100%;height:auto;overflow:visible}
+.tex-fullwidth .tex-tikz svg{width:100%}
 sup.tex-a{font-size:.75em;vertical-align:.3em;margin:0 -.15em 0 -.36em}
 sub.tex-e{font-size:1em;vertical-align:-.5ex;margin:0 -.1em 0 -.15em}
 /* acmart */
@@ -275,12 +279,32 @@ const FONT_CSS = [
 
 type ViewMode = "pages" | "continuous";
 
+type TikzSvgs = Record<string, string | null>;
+
+/** Replaces TikZ placeholders with compiled SVGs, or a status box. */
+function insertTikz(body: string, jobs: TikzJob[], svgs: TikzSvgs) {
+  return body.replace(
+    /<div class="tex-tikz" data-tikz="(\d+)"><\/div>/g,
+    (match, index: string) => {
+      const job = jobs[Number(index)];
+      if (!job) return match;
+      const svg = svgs[job.key];
+      if (svg) return `<div class="tex-tikz">${svg}</div>`;
+      if (svg === null) {
+        return '<div class="tex-placeholder">TikZ diagram could not be rendered</div>';
+      }
+      return '<div class="tex-placeholder tex-tikz-loading">Rendering TikZ diagram\u2026</div>';
+    },
+  );
+}
+
 /** Wraps rendered body HTML in a standalone, styled HTML document. */
 function buildHtmlDocument(
   body: string,
   title: string,
   layout: DocLayout,
   mode: ViewMode,
+  hasTikz = false,
 ) {
   const escapedTitle = title
     .replace(/&/g, "&amp;")
@@ -296,6 +320,7 @@ function buildHtmlDocument(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapedTitle || "LaTeX document"}</title>
 <base target="_blank">
+${hasTikz ? `<link rel="stylesheet" href="${window.location.origin}/tikzjax/fonts.css">` : ""}
 <style>${FONT_CSS}${katexCss}${DOCUMENT_CSS}</style>
 </head>
 <body class="${bodyClass}${paged ? " tex-pending" : ""}" style="${bodyStyle}">${body}</body>
@@ -351,6 +376,7 @@ export default function TexViewer() {
   const [result, setResult] = useState<RenderResult | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>(loadViewMode);
   const [pageCount, setPageCount] = useState<number | null>(null);
+  const [tikzSvgs, setTikzSvgs] = useState<TikzSvgs>({});
   const [renderError, setRenderError] = useState<string | null>(null);
   const [rendering, setRendering] = useState(false);
   const [renderMs, setRenderMs] = useState<number | null>(null);
@@ -367,10 +393,36 @@ export default function TexViewer() {
   const html = useMemo(
     () =>
       result
-        ? buildHtmlDocument(result.html, result.title, result.layout, viewMode)
+        ? buildHtmlDocument(
+            insertTikz(result.html, result.tikz, tikzSvgs),
+            result.title,
+            result.layout,
+            viewMode,
+            result.tikz.length > 0,
+          )
         : "",
-    [result, viewMode],
+    [result, viewMode, tikzSvgs],
   );
+  const pendingDiagrams = result
+    ? new Set(result.tikz.filter((job) => !(job.key in tikzSvgs)).map((job) => job.key)).size
+    : 0;
+
+  // Compile TikZ pictures in the background; the preview updates as each
+  // one finishes.
+  useEffect(() => {
+    if (!result) return;
+    let cancelled = false;
+    for (const job of result.tikz) {
+      if (job.key in tikzSvgs) continue;
+      void renderTikz(job).then((svg) => {
+        if (cancelled) return;
+        setTikzSvgs((prev) => (job.key in prev ? prev : { ...prev, [job.key]: svg }));
+      });
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [result, tikzSvgs]);
   const notes = result?.notes ?? [];
 
   const render = useCallback(async (latexSource: string) => {
@@ -749,6 +801,10 @@ export default function TexViewer() {
                         viewMode === "pages" && pageCount
                           ? ` · ${pageCount} page${pageCount === 1 ? "" : "s"}`
                           : ""
+                      }${
+                        pendingDiagrams
+                          ? ` · rendering ${pendingDiagrams} diagram${pendingDiagrams === 1 ? "" : "s"}…`
+                          : ""
                       }`
                     : ""}
                 </Typography>
@@ -778,8 +834,10 @@ export default function TexViewer() {
           KaTeX. The page view follows the document class - paper size,
           margins, one or two columns and fonts close to acmart, IEEEtran and
           article - but line and page breaks can differ slightly from pdfLaTeX.
-          TikZ drawings and images are shown as placeholders. For the exact
-          PDF, compile the document with a full TeX distribution.
+          TikZ pictures are compiled by TikZJax, a TeX engine that runs in
+          your browser; the first diagram takes a few seconds while it loads.
+          Images are shown as placeholders. For the exact PDF, compile the
+          document with a full TeX distribution.
         </Typography>
       </Stack>
     </PageContainer>

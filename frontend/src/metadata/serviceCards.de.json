@@ -2608,7 +2608,7 @@
     "howTo": [
       "Tippen oder fügen Sie Ihr LaTeX in den Editor ein, wählen Sie ein Beispiel im Menü Vorlage oder klicken Sie auf „Open .tex file“, um ein Dokument von Ihrem Gerät zu laden.",
       "Bei aktivierter „Live preview“ aktualisiert sich das Dokument automatisch kurz nachdem Sie aufhören zu tippen. Schalten Sie sie aus und nutzen Sie „Render“ für manuelle Aktualisierungen.",
-      "Was die Vorschau nicht darstellen kann, etwa TikZ-Diagramme oder Bilder, erscheint als Platzhalter und wird in einem Hinweis über der Vorschau aufgeführt.",
+      "TikZ-Diagramme zeichnet eine TeX-Engine, die in Ihrem Browser läuft; das erste dauert einige Sekunden, während die Engine lädt. Bilder gehören nicht zur .tex-Datei, erscheinen als Platzhalter und werden in einem Hinweis über der Vorschau aufgeführt.",
       "Mit „Pages“ sehen Sie das Dokument auf Seiten im Papierformat mit denselben Spalten wie im PDF (etwa zweispaltig bei acmart sigconf oder IEEEtran), mit „Continuous“ als eine durchgehende Spalte.",
       "Klicken Sie auf „Fullscreen“, um das Dokument ohne Ablenkung zu lesen.",
       "Mit „Download .tex“ speichern Sie den Quelltext, mit „Download HTML“ exportieren Sie eine eigenständige Webseite und mit „Print / Save as PDF“ erstellen Sie über den Druckdialog ein PDF."
@@ -2620,7 +2620,7 @@
       },
       {
         "q": "Welche LaTeX-Funktionen werden unterstützt?",
-        "a": "Titelblöcke, Abstracts, Abschnitte, Listen, Tabellen (inklusive booktabs-Linien und \\multicolumn), Beschriftungen von Abbildungen und Tabellen, Fußnoten, Theoreme, \\cite mit thebibliography, \\ref und \\label, \\newcommand-Makros sowie Inline- und nummerierte abgesetzte Formeln mit KaTeX. Unbekannte Befehle werden als Text angezeigt, statt die Vorschau anzuhalten."
+        "a": "Titelblöcke, Abstracts, Abschnitte, Listen, Tabellen (inklusive booktabs-Linien und \\multicolumn), Beschriftungen von Abbildungen und Tabellen, Fußnoten, Theoreme, \\cite mit thebibliography, \\ref und \\label, \\newcommand-Makros, Inline- und nummerierte abgesetzte Formeln mit KaTeX sowie TikZ-Bilder, die eine echte TeX-Engine in Ihrem Browser übersetzt. Unbekannte Befehle werden als Text angezeigt, statt die Vorschau anzuhalten."
       },
       {
         "q": "Wie wandle ich meine .tex-Datei in ein PDF um?",
@@ -2628,7 +2628,7 @@
       },
       {
         "q": "Warum fehlt ein Teil meines Dokuments in der Vorschau?",
-        "a": "Der Viewer ist keine vollständige TeX-Engine. TikZ-Zeichnungen und Bilder erscheinen als Platzhalter, und mit \\bibliography geladene BibTeX-Verzeichnisse werden nicht eingebunden. Ein Hinweis über der Vorschau listet alles Ausgelassene auf."
+        "a": "Mit \\includegraphics geladene Bilder sind eigene Dateien und erscheinen daher als Platzhalter; mit \\bibliography geladene BibTeX-Verzeichnisse werden nicht eingebunden. Ein TikZ-Bild, das ein Paket benötigt, das die TeX-Engine im Browser nicht hat, erscheint ebenfalls als Platzhalter. Ein Hinweis über der Vorschau listet alles Ausgelassene auf."
       },
       {
         "q": "Funktioniert der TeX-Viewer offline?",

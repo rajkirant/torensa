@@ -1,7 +1,15 @@
 // vite.config.ts
-import { readdirSync, statSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { extname, join, resolve } from "node:path";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import serviceCards from "./src/metadata/serviceCards.json";
@@ -136,8 +144,42 @@ function fromPkg(id: string, pkg: string) {
   );
 }
 
+/**
+ * Copies the TikZJax worker, TeX core, fonts and TeX files used by the TeX
+ * Viewer into public/tikzjax (git-ignored). Source maps and the unused
+ * bakoma fonts are skipped.
+ */
+function copyTikzJax(): Plugin {
+  return {
+    name: "copy-tikzjax",
+    buildStart() {
+      const pkgDir = resolve(process.cwd(), "node_modules/@drgrice1/tikzjax");
+      const from = join(pkgDir, "dist");
+      const to = resolve(process.cwd(), "public/tikzjax");
+      const version = JSON.parse(readFileSync(join(pkgDir, "package.json"), "utf8")).version;
+      const stamp = join(to, "VERSION");
+      const copyWorker = () =>
+        cpSync(resolve(process.cwd(), "scripts/tikzjax-worker.js"), join(to, "worker.js"));
+      if (existsSync(stamp) && readFileSync(stamp, "utf8") === version) {
+        copyWorker();
+        return;
+      }
+      rmSync(to, { recursive: true, force: true });
+      cpSync(from, to, {
+        recursive: true,
+        filter: (src) => !src.endsWith(".map") && !src.includes("/bakoma"),
+      });
+      // TikZJax is GPL-3.0; ship its README (licence and source links) with it.
+      cpSync(join(pkgDir, "README.md"), join(to, "README.md"));
+      copyWorker();
+      writeFileSync(stamp, version);
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
+    copyTikzJax(),
     react(),
     VitePWA({
       registerType: "autoUpdate",
@@ -168,7 +210,8 @@ export default defineConfig({
         // runtimeCaching below, which fetches the correct pre-rendered HTML online
         // and falls back to the cached page when offline.
         navigateFallback: null,
-        globIgnores: workboxGlobIgnores,
+        // TikZJax (~9 MB) is only fetched when a document has a diagram.
+        globIgnores: [...workboxGlobIgnores, "**/tikzjax/**"],
         manifestTransforms: [
           async (entries) => ({
             manifest: entries.filter((entry) =>
@@ -188,6 +231,17 @@ export default defineConfig({
             options: {
               cacheName: "html-navigations",
               networkTimeoutSeconds: 5,
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+          {
+            // TikZJax worker, TeX core and fonts (TeX Viewer diagrams) are
+            // cached on first use so diagrams also render offline.
+            urlPattern: /\/tikzjax\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "tikzjax",
+              expiration: { maxEntries: 400 },
               cacheableResponse: { statuses: [200] },
             },
           },
