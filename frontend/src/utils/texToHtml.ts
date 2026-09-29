@@ -22,7 +22,153 @@ export type TexRenderResult = {
   title: string;
   /** Human-readable notes about content the preview could not show. */
   notes: string[];
+  /** Page geometry derived from \documentclass options and geometry. */
+  layout: DocLayout;
 };
+
+/** Page geometry in TeX points (1in = 72pt). */
+export type DocLayout = {
+  /** Lower-case class name, e.g. "acmart", "ieeetran", "article". */
+  docClass: string;
+  /** Font family preset used for the page view. */
+  family: "acm" | "times" | "cm";
+  columns: 1 | 2;
+  paperWidth: number;
+  paperHeight: number;
+  marginLeft: number;
+  marginTop: number;
+  textWidth: number;
+  textHeight: number;
+  columnSep: number;
+  fontSize: number;
+  baselineSkip: number;
+};
+
+const PAPER_SIZES: Record<string, [number, number]> = {
+  letterpaper: [612, 792],
+  a4paper: [595.28, 841.89],
+  a5paper: [419.53, 595.28],
+  b5paper: [498.9, 708.66],
+  legalpaper: [612, 1008],
+  executivepaper: [522, 756],
+};
+
+function lengthToPt(value: string): number | null {
+  const match = value.trim().match(/^(-?[\d.]+)\s*(pt|bp|in|cm|mm|pc|em)?$/);
+  if (!match) return null;
+  const n = Number(match[1]);
+  const unit = match[2] ?? "pt";
+  const factor: Record<string, number> = {
+    pt: 1, bp: 72 / 72.27, in: 72, cm: 72 / 2.54, mm: 72 / 25.4, pc: 12, em: 10,
+  };
+  return Number.isFinite(n) ? n * factor[unit] : null;
+}
+
+function parseKeyValues(options: string) {
+  const map = new Map<string, string>();
+  for (const part of options.split(",")) {
+    const [key, ...rest] = part.split("=");
+    if (key.trim()) map.set(key.trim(), rest.join("=").trim());
+  }
+  return map;
+}
+
+/**
+ * Approximates the page geometry LaTeX would use, from the document class,
+ * its options and the geometry package. Values are in points.
+ */
+export function detectLayout(source: string): DocLayout {
+  const cls = source.match(
+    /\\documentclass\s*(?:\[([^\]]*)\])?\s*\{\s*([^}\s]+)\s*\}/,
+  );
+  const docClass = (cls?.[2] ?? "article").toLowerCase();
+  const options = (cls?.[1] ?? "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+  const has = (name: string) => options.includes(name);
+  const sizeOption = options.find((o) => /^(9|10|11|12)pt$/.test(o));
+  const paperOption = options.find((o) => o in PAPER_SIZES);
+
+  let layout: DocLayout;
+  if (docClass === "acmart") {
+    const twoColumn = ["sigconf", "sigplan", "acmtog"].some(has);
+    layout = twoColumn
+      ? {
+          docClass, family: "acm", columns: 2,
+          paperWidth: 612, paperHeight: 792, marginLeft: 53.5, marginTop: 75,
+          textWidth: 506, textHeight: 645, columnSep: 24,
+          fontSize: 9, baselineSkip: 11,
+        }
+      : {
+          docClass, family: "acm", columns: 1,
+          paperWidth: 612, paperHeight: 792, marginLeft: 90, marginTop: 80,
+          textWidth: 432, textHeight: 620, columnSep: 0,
+          fontSize: 10, baselineSkip: 12.5,
+        };
+  } else if (docClass === "ieeetran") {
+    const size = sizeOption ? Number.parseInt(sizeOption, 10) : 10;
+    layout = {
+      docClass, family: "times", columns: has("onecolumn") ? 1 : 2,
+      paperWidth: 612, paperHeight: 792, marginLeft: 48, marginTop: 54,
+      textWidth: 516, textHeight: 682, columnSep: 14.4,
+      fontSize: size, baselineSkip: size * 1.2,
+    };
+  } else {
+    // Standard classes (article, report, book) and a sensible default for
+    // anything else.
+    const size = sizeOption ? Number.parseInt(sizeOption, 10) : 10;
+    const baseline = { 9: 11, 10: 12, 11: 13.6, 12: 14.5 }[size] ?? 12;
+    const [paperWidth, paperHeight] =
+      PAPER_SIZES[paperOption ?? (docClass === "llncs" ? "a4paper" : "letterpaper")];
+    const twoColumn = has("twocolumn");
+    const single = { 9: 345, 10: 345, 11: 360, 12: 390 }[size] ?? 345;
+    const textWidth = twoColumn
+      ? Math.min(paperWidth - 144, 2 * single)
+      : Math.min(paperWidth - 144, single);
+    const textHeight = Math.floor((paperHeight - 252) / baseline) * baseline;
+    layout = {
+      docClass, family: "cm", columns: twoColumn ? 2 : 1,
+      paperWidth, paperHeight,
+      marginLeft: (paperWidth - textWidth) / 2,
+      marginTop: (paperHeight - textHeight) / 2 - 12,
+      textWidth, textHeight, columnSep: twoColumn ? 10 : 0,
+      fontSize: size, baselineSkip: baseline,
+    };
+  }
+
+  // The geometry package overrides the class defaults.
+  const geometry =
+    source.match(/\\usepackage\s*\[([^\]]*)\]\s*\{geometry\}/)?.[1] ??
+    source.match(/\\geometry\s*\{([^}]*)\}/)?.[1];
+  if (geometry) {
+    const kv = parseKeyValues(geometry);
+    const len = (key: string) => {
+      const value = kv.get(key);
+      return value ? lengthToPt(value) : null;
+    };
+    const paper = [...kv.keys()].find((k) => k in PAPER_SIZES);
+    if (paper) [layout.paperWidth, layout.paperHeight] = PAPER_SIZES[paper];
+    const margin = len("margin");
+    const hmargin = len("hmargin") ?? margin;
+    const vmargin = len("vmargin") ?? margin;
+    const left = len("left") ?? len("lmargin") ?? hmargin;
+    const right = len("right") ?? len("rmargin") ?? hmargin ?? left;
+    const top = len("top") ?? len("tmargin") ?? vmargin;
+    const bottom = len("bottom") ?? len("bmargin") ?? vmargin ?? top;
+    if (left != null && right != null) {
+      layout.marginLeft = left;
+      layout.textWidth = layout.paperWidth - left - right;
+    }
+    if (top != null && bottom != null) {
+      layout.marginTop = top;
+      layout.textHeight = layout.paperHeight - top - bottom;
+    }
+  }
+  if (/^\s*\\twocolumn\b/m.test(source)) layout.columns = 2;
+  if (layout.columns === 2 && !layout.columnSep) layout.columnSep = 10;
+  return layout;
+}
 
 // Signatures for macros the default parser does not know, so their arguments
 // are attached instead of being left as loose groups.
@@ -276,6 +422,10 @@ type LabelTarget = { num: string; kind: string };
 
 const PLACEHOLDER = "\u0000";
 const PARBREAK = '<span class="tex-par"></span>';
+// Rendered fragments that are blocks of their own rather than paragraph text.
+const BLOCK_START = new RegExp(
+  `^\\s*(<(h[1-6]|figure|div|ul|ol|dl|section|blockquote|pre|table|header|hr|p)\\b|${"\u0000"}CCS)`,
+);
 const MAX_EXPANSION_DEPTH = 20;
 
 function esc(value: string): string {
@@ -288,6 +438,21 @@ function esc(value: string): string {
 
 function isSafeUrl(url: string) {
   return /^(https?:|mailto:)/i.test(url.trim());
+}
+
+function toRoman(num: number) {
+  const map: [number, string][] = [
+    [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"],
+    [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
+  ];
+  let out = "";
+  for (const [value, symbol] of map) {
+    while (num >= value) {
+      out += symbol;
+      num -= value;
+    }
+  }
+  return out;
 }
 
 function toAlpha(num: number) {
@@ -433,7 +598,7 @@ class TexRenderer {
   private bibNumbers = new Map<string, string>();
   private citeFallback = new Map<string, number>();
   private footnotes: string[] = [];
-  private ccsConcepts: string[] = [];
+  private ccsConcepts: { path: string[]; weight: number }[] = [];
   private ccsPlaced = false;
   private titleHtml = "";
   private titleText = "";
@@ -444,12 +609,14 @@ class TexRenderer {
   private expansionDepth = 0;
   private notes = new Map<string, number>();
   private unknownMacros = new Set<string>();
+  private docClass: string;
 
-  constructor(parser: ReturnType<typeof getParser>) {
+  constructor(parser: ReturnType<typeof getParser>, docClass: string) {
     this.parser = parser;
+    this.docClass = docClass;
   }
 
-  render(root: Ast.Root): TexRenderResult {
+  render(root: Ast.Root): Omit<TexRenderResult, "layout"> {
     const docEnv = root.content.find(
       (n): n is Ast.Environment =>
         n.type === "environment" && envName(n) === "document",
@@ -461,10 +628,10 @@ class TexRenderer {
       this.inPreamble = true;
       this.renderNodes(preamble);
       this.inPreamble = false;
-      body = this.renderNodes(docEnv.content);
+      body = this.renderBlocks(docEnv.content);
     } else {
       this.hasChapters = /\\chapter\b/.test(printRaw(root.content));
-      body = this.renderNodes(root.content);
+      body = this.renderBlocks(root.content);
     }
 
     let html = "";
@@ -475,11 +642,13 @@ class TexRenderer {
     }
     if (this.footnotes.length) {
       html +=
-        '<section class="tex-footnotes"><hr><ol>' +
+        '<hr class="tex-fn-rule">' +
         this.footnotes
-          .map((note) => `<li>${note}</li>`)
-          .join("") +
-        "</ol></section>";
+          .map(
+            (note, i) =>
+              `<div class="tex-footnote"><sup>${i + 1}</sup> ${note}</div>`,
+          )
+          .join("");
     }
     html = this.resolvePlaceholders(html);
 
@@ -503,6 +672,61 @@ class TexRenderer {
   }
 
   // ---------------------------------------------------------------- nodes
+
+  /**
+   * Renders content that forms paragraphs: runs of inline content become
+   * <p> blocks, split at blank lines and around block-level output.
+   */
+  private renderBlocks(nodes: Ast.Node[]): string {
+    let out = "";
+    let para = "";
+    let noIndent = false;
+    const flush = () => {
+      const text = para.split(PARBREAK).join("");
+      if (text.replace(/&nbsp;/g, "").trim()) {
+        out += `<p${noIndent ? ' class="tex-noindent"' : ""}>${text.trim()}</p>`;
+      }
+      para = "";
+      noIndent = false;
+    };
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if (node.type === "parbreak") {
+        flush();
+        continue;
+      }
+      if (node.type === "macro" && !node.args?.length) {
+        const size = SIZE_DECLARATIONS[node.content];
+        const style = STYLE_DECLARATIONS[node.content];
+        if (size || style) {
+          flush();
+          const css = size ? `font-size:${size}` : style.replace("display:block;", "");
+          return out + `<div style="${css}">${this.renderBlocks(nodes.slice(i + 1))}</div>`;
+        }
+        if (node.content === "noindent") {
+          if (!para.trim()) noIndent = true;
+          continue;
+        }
+      }
+      let html = this.renderNode(node);
+      if (html.startsWith(PARBREAK)) {
+        flush();
+        html = html.slice(PARBREAK.length);
+      }
+      if (BLOCK_START.test(html)) {
+        const continuesParagraph =
+          para.trim() !== "" && /^\s*<div class="tex-display"/.test(html);
+        flush();
+        out += html;
+        // Text right after display math continues the same paragraph.
+        if (continuesParagraph) noIndent = true;
+      } else {
+        para += html;
+      }
+    }
+    flush();
+    return out;
+  }
 
   private renderNodes(nodes: Ast.Node[]): string {
     let out = "";
@@ -690,16 +914,19 @@ class TexRenderer {
             day: "numeric",
           }),
         );
-      case "keywords":
-        return `<p class="tex-keywords"><strong>Keywords:</strong> ${this.renderNodes(
-          lastRequiredArg(node),
-        )}</p>`;
+      case "keywords": {
+        const keywords = this.renderNodes(lastRequiredArg(node));
+        return this.docClass === "acmart"
+          ? `<h2 class="tex-meta-head">Keywords</h2><p class="tex-keywords tex-noindent">${keywords}</p>`
+          : `<p class="tex-keywords tex-noindent"><strong>Keywords:</strong> ${keywords}</p>`;
+      }
       case "ccsdesc": {
-        const text = rawText(lastRequiredArg(node))
+        const path = rawText(lastRequiredArg(node))
           .split(/[~\u00a0]/)
-          .map((part) => esc(part.trim()))
-          .join(" → ");
-        this.ccsConcepts.push(text);
+          .map((part) => part.trim())
+          .filter(Boolean);
+        const weight = Number(rawText(optionalArg(node))) || 0;
+        this.ccsConcepts.push({ path, weight });
         if (this.ccsPlaced) return "";
         this.ccsPlaced = true;
         return `${PLACEHOLDER}CCS${PLACEHOLDER}`;
@@ -901,6 +1128,20 @@ class TexRenderer {
         c.chapter++;
         c.section = c.subsection = c.subsubsection = 0;
         num = this.appendix ? toAlpha(c.chapter) : String(c.chapter);
+      } else if (this.docClass === "ieeetran") {
+        // IEEE style: I. Section, A. Subsection, 1) Subsubsection.
+        if (level === 1) {
+          c.section++;
+          c.subsection = c.subsubsection = 0;
+          num = this.appendix ? toAlpha(c.section) : toRoman(c.section);
+        } else if (level === 2) {
+          c.subsection++;
+          c.subsubsection = 0;
+          num = toAlpha(c.subsection);
+        } else {
+          c.subsubsection++;
+          num = String(c.subsubsection);
+        }
       } else if (level === 1) {
         c.section++;
         c.subsection = c.subsubsection = 0;
@@ -918,13 +1159,20 @@ class TexRenderer {
         c.subsubsection++;
         num = `${this.sectionPrefix()}.${c.subsection}.${c.subsubsection}`;
       }
+      let refNum = num;
+      if (this.docClass === "ieeetran" && level >= 2) {
+        const sec = this.appendix ? toAlpha(c.section) : toRoman(c.section);
+        refNum = level === 2 ? `${sec}-${num}` : `${sec}-${toAlpha(c.subsection)}${num}`;
+      }
       this.lastTarget = {
-        num,
+        num: refNum,
         kind: level === 0 ? "chapter" : "section",
       };
     }
 
-    const numHtml = num ? `<span class="tex-secnum">${num}</span>` : "";
+    const shown =
+      this.docClass === "ieeetran" && num ? (level === 3 ? `${num})` : `${num}.`) : num;
+    const numHtml = shown ? `<span class="tex-secnum">${shown}</span>` : "";
     if (level >= 4) {
       return `${PARBREAK}<strong class="tex-runin">${titleHtml}</strong> `;
     }
@@ -956,10 +1204,14 @@ class TexRenderer {
     switch (base) {
       case "document":
         return this.renderNodes(node.content);
-      case "abstract":
-        return `<section class="tex-abstract"><h2>Abstract</h2>${this.renderNodes(
-          node.content,
-        )}</section>`;
+      case "abstract": {
+        const paragraphs = this.renderBlocks(node.content).replace(
+          /<p( class="([^"]*)")?>/g,
+          (_m, _c, cls: string | undefined) =>
+            `<p class="tex-abstract${cls ? ` ${cls}` : ""}">`,
+        );
+        return `<h2 class="tex-abstract-title">Abstract</h2>${paragraphs}`;
+      }
       case "itemize":
       case "enumerate":
       case "description":
@@ -1014,7 +1266,7 @@ class TexRenderer {
       case "comment":
       case "IEEEkeywords":
         if (base === "IEEEkeywords") {
-          return `<p class="tex-keywords"><strong>Index Terms</strong> - ${this.renderNodes(
+          return `<p class="tex-keywords tex-noindent"><strong><em>Index Terms</em>\u2014</strong>${this.renderNodes(
             node.content,
           )}</p>`;
         }
@@ -1099,8 +1351,10 @@ class TexRenderer {
 
   private renderFloat(node: Ast.Environment, kind: "figure" | "table") {
     this.floatStack.push(kind);
+    const placement = rawText(optionalArg(node)).replace(/[^htbpH!]/g, "");
+    const wide = envName(node).endsWith("*") ? " tex-float-wide" : "";
     try {
-      return `<figure class="tex-float tex-${kind}">${this.renderNodes(
+      return `<figure class="tex-float tex-${kind}${wide}" data-placement="${placement || "tbp"}">${this.renderNodes(
         node.content,
       )}</figure>`;
     } finally {
@@ -1271,12 +1525,12 @@ class TexRenderer {
     const items = entries
       .map(
         (entry) =>
-          `<li><span class="tex-bib-label">[${esc(
+          `<div class="tex-bibitem"><span class="tex-bib-label">[${esc(
             entry.label,
-          )}]</span> ${this.renderNodes(entry.content)}</li>`,
+          )}]</span> ${this.renderNodes(entry.content).split(PARBREAK).join(" ").trim()}</div>`,
       )
       .join("");
-    return `<section class="tex-bibliography"><h2>References</h2><ol>${items}</ol></section>`;
+    return `<h2 class="tex-bib-title">References</h2>${items}`;
   }
 
   // ------------------------------------------------------ title and refs
@@ -1295,10 +1549,32 @@ class TexRenderer {
     );
   }
 
+  /** CCS concepts grouped by top-level concept, as acmart prints them. */
   private renderCcs() {
-    return `<p class="tex-ccs"><strong>CCS Concepts:</strong> ${this.ccsConcepts.join(
-      "; ",
-    )}</p>`;
+    const groups = new Map<string, string[]>();
+    for (const { path, weight } of this.ccsConcepts) {
+      const [top, ...rest] = path;
+      if (!top) continue;
+      const leaf = rest.map(esc).join(" \u2192 ");
+      const styled = leaf
+        ? weight >= 500
+          ? `<strong>${leaf}</strong>`
+          : `<em>${leaf}</em>`
+        : "";
+      if (!groups.has(top)) groups.set(top, []);
+      if (styled) groups.get(top)!.push(styled);
+    }
+    const text = [...groups]
+      .map(
+        ([top, leaves]) =>
+          `\u2022 <strong>${esc(top)}</strong>${
+            leaves.length ? ` \u2192 ${leaves.join("; ")}` : ""
+          };`,
+      )
+      .join(" ");
+    return this.docClass === "acmart"
+      ? `<h2 class="tex-meta-head">CCS Concepts</h2><p class="tex-ccs tex-noindent">${text}</p>`
+      : `<p class="tex-ccs tex-noindent"><strong>CCS Concepts:</strong> ${text}</p>`;
   }
 
   private resolvePlaceholders(html: string) {
@@ -1352,6 +1628,7 @@ export function texToHtml(source: string): TexRenderResult {
   });
   const tree = parser.parse(cleaned);
   prepareTree(tree);
-  return new TexRenderer(parser).render(tree);
+  const layout = detectLayout(cleaned);
+  return { ...new TexRenderer(parser, layout.docClass).render(tree), layout };
 }
 

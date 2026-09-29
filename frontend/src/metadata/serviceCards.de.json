@@ -2609,6 +2609,7 @@
       "Tippen oder fügen Sie Ihr LaTeX in den Editor ein, wählen Sie ein Beispiel im Menü Vorlage oder klicken Sie auf „Open .tex file“, um ein Dokument von Ihrem Gerät zu laden.",
       "Bei aktivierter „Live preview“ aktualisiert sich das Dokument automatisch kurz nachdem Sie aufhören zu tippen. Schalten Sie sie aus und nutzen Sie „Render“ für manuelle Aktualisierungen.",
       "Was die Vorschau nicht darstellen kann, etwa TikZ-Diagramme oder Bilder, erscheint als Platzhalter und wird in einem Hinweis über der Vorschau aufgeführt.",
+      "Mit „Pages“ sehen Sie das Dokument auf Seiten im Papierformat mit denselben Spalten wie im PDF (etwa zweispaltig bei acmart sigconf oder IEEEtran), mit „Continuous“ als eine durchgehende Spalte.",
       "Klicken Sie auf „Fullscreen“, um das Dokument ohne Ablenkung zu lesen.",
       "Mit „Download .tex“ speichern Sie den Quelltext, mit „Download HTML“ exportieren Sie eine eigenständige Webseite und mit „Print / Save as PDF“ erstellen Sie über den Druckdialog ein PDF."
     ],

@@ -2631,6 +2631,7 @@
       "Type or paste your LaTeX into the editor, pick a sample from the Template menu, or click 'Open .tex file' to load a document from your device.",
       "With 'Live preview' switched on, the rendered document updates automatically a moment after you stop typing. Switch it off and use 'Render' to update manually.",
       "Anything the preview cannot draw, such as TikZ diagrams or images, is shown as a placeholder and listed in a note above the preview.",
+      "Use 'Pages' to see the document on paper-sized pages with the same columns as the PDF (for example two columns for acmart sigconf or IEEEtran), or 'Continuous' to read it as one scrolling column.",
       "Click 'Fullscreen' to read the rendered document without distractions.",
       "Use 'Download .tex' to save your source, 'Download HTML' to export a standalone web page, or 'Print / Save as PDF' to create a PDF with your browser's print dialog."
     ],

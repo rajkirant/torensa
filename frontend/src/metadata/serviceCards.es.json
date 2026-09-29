@@ -2625,6 +2625,7 @@
       "Escribe o pega tu LaTeX en el editor, elige un ejemplo en el menú Plantilla o haz clic en «Open .tex file» para cargar un documento de tu dispositivo.",
       "Con «Live preview» activado, el documento se actualiza automáticamente poco después de dejar de escribir. Desactívalo y usa «Render» para actualizar manualmente.",
       "Lo que la vista previa no puede dibujar, como diagramas TikZ o imágenes, aparece como un marcador y se indica en una nota sobre la vista previa.",
+      "Usa «Pages» para ver el documento en páginas de tamaño papel con las mismas columnas que el PDF (por ejemplo, dos columnas en acmart sigconf o IEEEtran), o «Continuous» para leerlo en una sola columna continua.",
       "Haz clic en «Fullscreen» para leer el documento sin distracciones.",
       "Usa «Download .tex» para guardar el código, «Download HTML» para exportar una página web independiente o «Print / Save as PDF» para crear un PDF desde el diálogo de impresión."
     ],

@@ -14,6 +14,15 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.3))(@types/react@19.2.7)(react@19.2.3)
+      '@fontsource/libertinus-sans':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/libertinus-serif':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/tinos':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@mui/icons-material':
         specifier: ^7.3.6
         version: 7.3.6(@mui/material@7.3.6(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.3))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.7)(react@19.2.3))(@types/react@19.2.7)(react@19.2.3))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@types/react@19.2.7)(react@19.2.3)
@@ -808,6 +817,15 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@fontsource/libertinus-sans@5.3.0':
+    resolution: {integrity: sha512-DePvNVfVYTFW+Z2gAd6xB5WE25bmPpS7gPauLSPbiBGsTmcXKAIWymxgCh790OdMrDObpi8j8SY/fraip+L+QQ==}
+
+  '@fontsource/libertinus-serif@5.3.0':
+    resolution: {integrity: sha512-re9MYtKfLFxZxlcfV127IqG87wM7kYF9o//xfZufzsr2z22+tfKu5xRJwS9oMksI1fuyh5H9OWQFtVYM8ypiDg==}
+
+  '@fontsource/tinos@5.3.0':
+    resolution: {integrity: sha512-VVDyyZdbcsLKxo/W7rClAvacD/7DsGc7J5xzzp51Tndib8kDkEe/0bqbb3Xb3iH6+IUjt07aRsvtQ9MGeGGi4w==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -4380,6 +4398,12 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
+
+  '@fontsource/libertinus-sans@5.3.0': {}
+
+  '@fontsource/libertinus-serif@5.3.0': {}
+
+  '@fontsource/tinos@5.3.0': {}
 
   '@humanfs/core@0.19.1': {}
 
