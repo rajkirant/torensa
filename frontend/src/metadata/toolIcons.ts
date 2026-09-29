@@ -44,6 +44,7 @@ import GppMaybeIcon from "@mui/icons-material/GppMaybe";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TimerIcon from "@mui/icons-material/Timer";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
+import FunctionsIcon from "@mui/icons-material/Functions";
 import type { SvgIconComponent } from "@mui/icons-material";
 
 export const toolIcons: Record<string, SvgIconComponent> = {
@@ -95,4 +96,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "scam-trends": TrendingUpIcon,
   "timer-stopwatch": TimerIcon,
   "positive-news": NewspaperIcon,
+  "tex-viewer": FunctionsIcon,
 };
