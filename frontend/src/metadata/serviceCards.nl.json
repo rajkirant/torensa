@@ -2587,7 +2587,7 @@
     "howTo": [
       "Typ of plak je LaTeX in de editor, kies een voorbeeld in het menu Sjabloon of klik op ‘Open .tex file’ om een document van je apparaat te laden.",
       "Met ‘Live preview’ aan wordt het document automatisch bijgewerkt kort nadat je stopt met typen. Zet het uit en gebruik ‘Render’ om handmatig bij te werken.",
-      "Wat het voorbeeld niet kan tekenen, zoals TikZ-diagrammen of afbeeldingen, verschijnt als tijdelijke aanduiding en staat in een melding boven het voorbeeld.",
+      "TikZ-diagrammen worden getekend door een TeX-engine die in je browser draait; het eerste duurt een paar seconden terwijl de engine laadt. Afbeeldingen maken geen deel uit van het .tex-bestand, verschijnen als tijdelijke aanduiding en staan in een melding boven het voorbeeld.",
       "Gebruik ‘Pages’ om het document op pagina's op papierformaat te zien met dezelfde kolommen als de PDF (bijvoorbeeld twee kolommen bij acmart sigconf of IEEEtran), of ‘Continuous’ om het als één doorlopende kolom te lezen.",
       "Klik op ‘Fullscreen’ om het document zonder afleiding te lezen.",
       "Gebruik ‘Download .tex’ om je bron op te slaan, ‘Download HTML’ om een zelfstandige webpagina te exporteren of ‘Print / Save as PDF’ om via het afdrukvenster een PDF te maken."
@@ -2599,7 +2599,7 @@
       },
       {
         "q": "Welke LaTeX-functies worden ondersteund?",
-        "a": "Titelblokken, abstracts, secties, lijsten, tabellen (inclusief booktabs-lijnen en \\multicolumn), bijschriften bij figuren en tabellen, voetnoten, stellingen, \\cite met thebibliography, \\ref en \\label, \\newcommand-macro's en inline of genummerde losstaande formules met KaTeX. Onbekende commando's worden als tekst getoond in plaats van het voorbeeld te stoppen."
+        "a": "Titelblokken, abstracts, secties, lijsten, tabellen (inclusief booktabs-lijnen en \\multicolumn), bijschriften bij figuren en tabellen, voetnoten, stellingen, \\cite met thebibliography, \\ref en \\label, \\newcommand-macro's, inline of genummerde losstaande formules met KaTeX en TikZ-figuren, die een echte TeX-engine in je browser compileert. Onbekende commando's worden als tekst getoond in plaats van het voorbeeld te stoppen."
       },
       {
         "q": "Hoe zet ik mijn .tex-bestand om naar PDF?",
@@ -2607,7 +2607,7 @@
       },
       {
         "q": "Waarom ontbreekt een deel van mijn document in het voorbeeld?",
-        "a": "De viewer is geen volledige TeX-engine. TikZ-tekeningen en afbeeldingen verschijnen als tijdelijke aanduiding en BibTeX-bibliografieën via \\bibliography worden niet opgenomen. Een melding boven het voorbeeld noemt wat is overgeslagen."
+        "a": "Afbeeldingen die met \\includegraphics worden geladen zijn aparte bestanden en verschijnen daarom als tijdelijke aanduiding; BibTeX-bibliografieën via \\bibliography worden niet opgenomen. Een TikZ-figuur die een pakket nodig heeft dat de TeX-engine in de browser niet heeft, verschijnt ook als tijdelijke aanduiding. Een melding boven het voorbeeld noemt wat is overgeslagen."
       },
       {
         "q": "Kan ik de TeX-viewer offline gebruiken?",

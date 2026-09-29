@@ -19,3 +19,6 @@ dist/
 
 # Claude Code
 .claude/settings.local.json
+
+# TikZJax assets copied from node_modules at build time
+frontend/public/tikzjax/
