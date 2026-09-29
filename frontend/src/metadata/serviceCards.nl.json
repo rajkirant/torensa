@@ -2565,10 +2565,10 @@
     "description": "Schrijf of open een .tex-bestand en zie het direct opgemaakt. Gratis online LaTeX-viewer met live voorbeeld, formules en export naar HTML of PDF in je browser.",
     "path": "/tex-viewer",
     "ctaLabel": "LaTeX bekijken",
-    "offlineEnabled": false,
+    "offlineEnabled": true,
     "authRequired": false,
     "aiPowered": false,
-    "detailedDescription": "De TeX-viewer is een gratis online LaTeX-editor met voorbeeldweergave. Typ of plak LaTeX, of open een bestaand .tex-bestand, en zie het opgemaakte document live naast je broncode bijwerken. Secties, lijsten, tekstopmaak, citaten en inline of losstaande formules, inclusief equation- en align-blokken (met KaTeX), worden ondersteund. Download je bron als .tex, exporteer het resultaat als zelfstandige HTML-pagina of print het als PDF. Alles draait in je browser met latex.js, dus je document wordt nooit geüpload.",
+    "detailedDescription": "De TeX-viewer is een gratis online LaTeX-editor met voorbeeldweergave. Typ of plak LaTeX, of open een bestaand .tex-bestand, en zie het document live naast je broncode bijwerken. Hij begrijpt de opbouw van de meeste papers: titel- en auteursblok, abstract, genummerde secties, lijsten, tabellen, figuren met bijschriften, voetnoten, citaten met bibliografie, kruisverwijzingen en genummerde formules met KaTeX, ook met klassen als article, acmart en IEEEtran. Download je bron als .tex, exporteer een zelfstandige HTML-pagina of print als PDF. Alles draait in je browser, dus je document wordt nooit geüpload.",
     "categoryId": "documents",
     "keywords": [
       "tex viewer",
@@ -2587,30 +2587,30 @@
     "howTo": [
       "Typ of plak je LaTeX in de editor, kies een voorbeeld in het menu Sjabloon of klik op ‘Open .tex file’ om een document van je apparaat te laden.",
       "Met ‘Live preview’ aan wordt het document automatisch bijgewerkt kort nadat je stopt met typen. Zet het uit en gebruik ‘Render’ om handmatig bij te werken.",
-      "Bevat het document een syntaxfout, dan toont het voorbeeld de regel en kolom waar het parsen misging.",
+      "Wat het voorbeeld niet kan tekenen, zoals TikZ-diagrammen of afbeeldingen, verschijnt als tijdelijke aanduiding en staat in een melding boven het voorbeeld.",
       "Klik op ‘Fullscreen’ om het document zonder afleiding te lezen.",
       "Gebruik ‘Download .tex’ om je bron op te slaan, ‘Download HTML’ om een zelfstandige webpagina te exporteren of ‘Print / Save as PDF’ om via het afdrukvenster een PDF te maken."
     ],
     "faqs": [
       {
         "q": "Wordt mijn LaTeX-document naar een server geüpload?",
-        "a": "Nee. Parsen en weergeven gebeurt volledig in je browser met latex.js. Je bron wordt alleen in de lokale opslag van je browser bewaard, zodat hij er nog is als je terugkomt."
+        "a": "Nee. Parsen en weergeven gebeurt volledig in je browser. Je bron wordt alleen in de lokale opslag van je browser bewaard, zodat hij er nog is als je terugkomt."
       },
       {
         "q": "Welke LaTeX-functies worden ondersteund?",
-        "a": "Veelgebruikte functies: de klassen article, book en report, secties, lijsten, tekststijlen en -groottes, citaten, \\maketitle en inline of losstaande formules met KaTeX, inclusief equation- en align-blokken (zonder nummering). Tabellen, voetnoten, TikZ, BibTeX-bibliografieën en eigen klassen worden niet ondersteund."
+        "a": "Titelblokken, abstracts, secties, lijsten, tabellen (inclusief booktabs-lijnen en \\multicolumn), bijschriften bij figuren en tabellen, voetnoten, stellingen, \\cite met thebibliography, \\ref en \\label, \\newcommand-macro's en inline of genummerde losstaande formules met KaTeX. Onbekende commando's worden als tekst getoond in plaats van het voorbeeld te stoppen."
       },
       {
         "q": "Hoe zet ik mijn .tex-bestand om naar PDF?",
-        "a": "Laat het document weergeven, klik op ‘Print / Save as PDF’ en kies ‘Opslaan als PDF’ als bestemming in het afdrukvenster van je browser."
+        "a": "Laat het document weergeven, klik op ‘Print / Save as PDF’ en kies ‘Opslaan als PDF’ in het afdrukvenster. Compileer het bestand met een volledige TeX-distributie voor de exacte opmaak van een tijdschrift."
       },
       {
-        "q": "Waarom toont mijn document een fout?",
-        "a": "De viewer meldt de regel en kolom waar de parser stopte. Veelvoorkomende oorzaken zijn ongebalanceerde accolades, een ontbrekende \\end{...} of een commando of pakket dat latex.js niet ondersteunt."
+        "q": "Waarom ontbreekt een deel van mijn document in het voorbeeld?",
+        "a": "De viewer is geen volledige TeX-engine. TikZ-tekeningen en afbeeldingen verschijnen als tijdelijke aanduiding en BibTeX-bibliografieën via \\bibliography worden niet opgenomen. Een melding boven het voorbeeld noemt wat is overgeslagen."
       },
       {
         "q": "Kan ik de TeX-viewer offline gebruiken?",
-        "a": "De parser draait in je browser, maar de lettertypen en stijlen van het voorbeeld worden van een CDN geladen. Voor een correcte weergave is dus een internetverbinding nodig."
+        "a": "Ja. De renderer en de wiskundelettertypen zijn onderdeel van de site, dus zodra de pagina geladen is, werkt hij ook zonder internetverbinding."
       }
     ]
   }

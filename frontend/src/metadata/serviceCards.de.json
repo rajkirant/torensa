@@ -2586,10 +2586,10 @@
     "description": "Schreiben oder öffnen Sie eine .tex-Datei und sehen Sie sie sofort gesetzt. Kostenloser LaTeX-Viewer mit Live-Vorschau, Formeln und HTML- oder PDF-Export.",
     "path": "/tex-viewer",
     "ctaLabel": "LaTeX ansehen",
-    "offlineEnabled": false,
+    "offlineEnabled": true,
     "authRequired": false,
     "aiPowered": false,
-    "detailedDescription": "Der TeX-Viewer ist ein kostenloser Online-LaTeX-Editor mit Vorschau. Tippen oder fügen Sie LaTeX ein oder öffnen Sie eine vorhandene .tex-Datei – das gesetzte Dokument aktualisiert sich live neben Ihrem Quelltext. Abschnitte, Listen, Textformatierung, Zitate sowie Inline- und abgesetzte Formeln einschließlich equation- und align-Blöcken (mit KaTeX) werden unterstützt. Laden Sie den Quelltext als .tex herunter, exportieren Sie das Ergebnis als eigenständige HTML-Seite oder drucken Sie es als PDF. Die Darstellung läuft vollständig im Browser mit latex.js – Ihr Dokument wird nie hochgeladen.",
+    "detailedDescription": "Der TeX-Viewer ist ein kostenloser Online-LaTeX-Editor mit Vorschau. Tippen oder fügen Sie LaTeX ein oder öffnen Sie eine vorhandene .tex-Datei – das Dokument aktualisiert sich live neben Ihrem Quelltext. Er versteht den Aufbau der meisten Paper: Titel- und Autorenblock, Abstract, nummerierte Abschnitte, Listen, Tabellen, Abbildungen mit Beschriftungen, Fußnoten, Zitate mit Literaturverzeichnis, Querverweise und nummerierte Formeln mit KaTeX – auch mit Klassen wie article, acmart und IEEEtran. Laden Sie den Quelltext als .tex herunter, exportieren Sie eine eigenständige HTML-Seite oder drucken Sie als PDF. Alles läuft im Browser, Ihr Dokument wird nie hochgeladen.",
     "categoryId": "documents",
     "keywords": [
       "tex viewer",
@@ -2608,30 +2608,30 @@
     "howTo": [
       "Tippen oder fügen Sie Ihr LaTeX in den Editor ein, wählen Sie ein Beispiel im Menü Vorlage oder klicken Sie auf „Open .tex file“, um ein Dokument von Ihrem Gerät zu laden.",
       "Bei aktivierter „Live preview“ aktualisiert sich das Dokument automatisch kurz nachdem Sie aufhören zu tippen. Schalten Sie sie aus und nutzen Sie „Render“ für manuelle Aktualisierungen.",
-      "Enthält das Dokument einen Syntaxfehler, zeigt die Vorschau Zeile und Spalte der Fehlerstelle an.",
+      "Was die Vorschau nicht darstellen kann, etwa TikZ-Diagramme oder Bilder, erscheint als Platzhalter und wird in einem Hinweis über der Vorschau aufgeführt.",
       "Klicken Sie auf „Fullscreen“, um das Dokument ohne Ablenkung zu lesen.",
       "Mit „Download .tex“ speichern Sie den Quelltext, mit „Download HTML“ exportieren Sie eine eigenständige Webseite und mit „Print / Save as PDF“ erstellen Sie über den Druckdialog ein PDF."
     ],
     "faqs": [
       {
         "q": "Wird mein LaTeX-Dokument auf einen Server hochgeladen?",
-        "a": "Nein. Parsen und Darstellen erfolgen vollständig in Ihrem Browser mit latex.js. Der Quelltext wird nur im lokalen Speicher Ihres Browsers abgelegt, damit er beim nächsten Besuch noch da ist."
+        "a": "Nein. Parsen und Darstellen erfolgen vollständig in Ihrem Browser. Der Quelltext wird nur im lokalen Speicher Ihres Browsers abgelegt, damit er beim nächsten Besuch noch da ist."
       },
       {
         "q": "Welche LaTeX-Funktionen werden unterstützt?",
-        "a": "Gängige Funktionen: die Klassen article, book und report, Abschnitte, Listen, Schriftstile und -größen, Zitate, \\maketitle sowie Inline- und abgesetzte Formeln mit KaTeX, einschließlich equation- und align-Blöcken (ohne Nummerierung). Tabellen, Fußnoten, TikZ, BibTeX-Literaturverzeichnisse und eigene Klassen werden nicht unterstützt."
+        "a": "Titelblöcke, Abstracts, Abschnitte, Listen, Tabellen (inklusive booktabs-Linien und \\multicolumn), Beschriftungen von Abbildungen und Tabellen, Fußnoten, Theoreme, \\cite mit thebibliography, \\ref und \\label, \\newcommand-Makros sowie Inline- und nummerierte abgesetzte Formeln mit KaTeX. Unbekannte Befehle werden als Text angezeigt, statt die Vorschau anzuhalten."
       },
       {
         "q": "Wie wandle ich meine .tex-Datei in ein PDF um?",
-        "a": "Lassen Sie das Dokument darstellen, klicken Sie auf „Print / Save as PDF“ und wählen Sie im Druckdialog „Als PDF speichern“."
+        "a": "Lassen Sie das Dokument darstellen, klicken Sie auf „Print / Save as PDF“ und wählen Sie im Druckdialog „Als PDF speichern“. Für das exakte Layout einer Zeitschrift kompilieren Sie die Datei mit einer vollständigen TeX-Distribution."
       },
       {
-        "q": "Warum zeigt mein Dokument einen Fehler an?",
-        "a": "Der Viewer meldet Zeile und Spalte, an der der Parser angehalten hat. Häufige Ursachen sind unausgeglichene Klammern, ein fehlendes \\end{...} oder ein Befehl bzw. Paket, das latex.js nicht unterstützt."
+        "q": "Warum fehlt ein Teil meines Dokuments in der Vorschau?",
+        "a": "Der Viewer ist keine vollständige TeX-Engine. TikZ-Zeichnungen und Bilder erscheinen als Platzhalter, und mit \\bibliography geladene BibTeX-Verzeichnisse werden nicht eingebunden. Ein Hinweis über der Vorschau listet alles Ausgelassene auf."
       },
       {
         "q": "Funktioniert der TeX-Viewer offline?",
-        "a": "Der Parser läuft im Browser, doch Schriften und Stile der Vorschau werden von einem CDN geladen. Für eine korrekte Darstellung ist daher eine Internetverbindung nötig."
+        "a": "Ja. Renderer und Formelschriften sind Teil der Website. Nach dem Laden der Seite funktioniert das Tool auch ohne Internetverbindung."
       }
     ]
   }

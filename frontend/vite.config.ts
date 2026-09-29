@@ -97,9 +97,6 @@ const requiredSharedChunkBases = [
   "workbox-window.prod.es5",
 ];
 
-// Heavy vendor chunks used only by online-only tools; skip them in the precache.
-const onlineOnlyVendorChunkBases = ["latex-js"];
-
 function matchesChunkBase(url: string, base: string) {
   return (
     url.startsWith(`assets/${base}-`) &&
@@ -117,10 +114,6 @@ function shouldKeepPrecacheUrl(url: string) {
 
   for (const base of requiredSharedChunkBases) {
     if (matchesChunkBase(url, base)) return true;
-  }
-
-  for (const base of onlineOnlyVendorChunkBases) {
-    if (matchesChunkBase(url, base)) return false;
   }
 
   // Keep unknown chunks by default to avoid breaking runtime.
@@ -195,6 +188,17 @@ export default defineConfig({
             options: {
               cacheName: "html-navigations",
               networkTimeoutSeconds: 5,
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+          {
+            // KaTeX math fonts (TeX Viewer) are cached on first use so the
+            // preview still typesets math offline.
+            urlPattern: /\/assets\/KaTeX_[^/]+\.woff2$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "katex-fonts",
+              expiration: { maxEntries: 30 },
               cacheableResponse: { statuses: [200] },
             },
           },
@@ -288,8 +292,12 @@ export default defineConfig({
             return "diff";
           }
 
-          if (fromPkg(id, "latex.js")) {
-            return "latex-js";
+          if (fromPkg(id, "katex")) {
+            return "katex";
+          }
+
+          if (id.includes("/@unified-latex")) {
+            return "unified-latex";
           }
 
           // ---- Everything else ----

@@ -101,10 +101,11 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - [Build PDF](https://torensa.com/pdf-builder)
 
 ### TeX Viewer - Online LaTeX Editor with Live Preview
-- TeX Viewer is a free online LaTeX editor and previewer. Type or paste LaTeX, or open an existing .tex file, and see the typeset document update live beside your source.
-- Sections, lists, text formatting, quotes, and inline or display math, including equation and align blocks rendered with KaTeX, are supported.
+- TeX Viewer is a free online LaTeX editor and previewer. Type or paste LaTeX, or open an existing .tex file, and see the document update live beside your source.
+- It handles the structure most papers use, including title and author blocks, abstracts, numbered sections, lists, tables, figures and captions, footnotes, citations with a bibliography, cross-references, and numbered equations typeset with KaTeX, and it works with classes such as article, acmart and IEEEtran.
 - Download your source as .tex, export the result as a standalone HTML page, or print it to PDF.
-- Rendering runs entirely in your browser with latex.js, so your document is never uploaded.
+- Everything runs in your browser, so your document is never uploaded.
+- Works fully offline once loaded.
 - [View LaTeX](https://torensa.com/tex-viewer)
 
 ## Entertainment Tools
