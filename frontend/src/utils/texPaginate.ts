@@ -217,13 +217,17 @@ export function paginate(doc: Document, layout: DocLayout): number {
     pages.push(page);
 
     let available = px(layout.textHeight);
+    let titleGap = 0;
     if (pages.length === 1 && titleBlock) {
       inner.appendChild(titleBlock);
-      available -= titleBlock.getBoundingClientRect().height + lineHeight;
+      // Space between the title block and the text, about 18pt in acmart.
+      titleGap = lineHeight * 1.6;
+      available -= titleBlock.getBoundingClientRect().height + titleGap;
     }
     const row = doc.createElement("div");
     row.className = "tex-columns";
     row.style.gap = `${layout.columnSep}pt`;
+    if (titleGap) row.style.marginTop = `${titleGap}px`;
     inner.appendChild(row);
     columns = [];
     for (let i = 0; i < cols; i++) {
@@ -251,12 +255,52 @@ export function paginate(doc: Document, layout: DocLayout): number {
   const deferred: HTMLElement[] = [];
   let guard = 0;
 
+  /** Pushes anything that no longer fits at the bottom of the column back to the queue. */
+  const settle = (col: Column) => {
+    for (let i = 0; i < 50; i++) {
+      const last = col.el.lastElementChild as HTMLElement | null;
+      if (!last || col.el.childElementCount < 2 || fits(last)) return;
+      const rest = isSplittableText(last)
+        ? splitText(last, col.limit)
+        : isList(last)
+          ? splitList(last, col.limit)
+          : null;
+      if (rest) {
+        queue.unshift(rest);
+        return;
+      }
+      last.remove();
+      queue.unshift(last);
+    }
+  };
+
+  /** Moves headings left at the bottom of the column (e.g. "6" before "6.1") back to the queue. */
+  const pullTrailingHeadings = (col: Column) => {
+    let last = col.el.lastElementChild;
+    while (last && isHeading(last) && col.el.childElementCount > 1) {
+      last.remove();
+      queue.unshift(last as HTMLElement);
+      last = col.el.lastElementChild;
+    }
+  };
+
+  /** Places a float at the top of the column, below any floats already there. */
+  const placeAtTop = (col: Column, float: HTMLElement) => {
+    float.classList.add("tex-top-float");
+    const firstText = Array.from(col.el.children).find(
+      (child) => child !== float && !child.classList.contains("tex-top-float"),
+    );
+    col.el.insertBefore(float, firstText ?? null);
+    settle(col);
+  };
+
   while ((queue.length || deferred.length) && guard++ < 20000) {
     const col = current();
     // Floats waiting for a new column go to its top.
     if (!col.el.childElementCount && deferred.length) {
       const float = deferred.shift()!;
       col.el.appendChild(float);
+      float.classList.add("tex-top-float");
       fitWidth(float, px(colWidth));
       if (!fits(float) && col.el.childElementCount > 1) {
         float.remove();
@@ -275,6 +319,15 @@ export function paginate(doc: Document, layout: DocLayout): number {
     fitWidth(block, px(colWidth));
 
     if (fits(block)) {
+      // Like LaTeX, a float allowed at the top ("t", the default) goes to
+      // the top of the current column when there is room for it.
+      const placement = block.dataset.placement ?? "";
+      if (isFloat(block) && col.el.childElementCount > 1 && !/[hH]/.test(placement)) {
+        if (/t/.test(placement)) {
+          placeAtTop(col, block);
+        }
+        continue;
+      }
       // Keep headings with at least two lines of what follows.
       if (
         isHeading(block) &&
@@ -284,6 +337,7 @@ export function paginate(doc: Document, layout: DocLayout): number {
       ) {
         block.remove();
         queue.unshift(block);
+        pullTrailingHeadings(col);
         nextColumn();
       }
       continue;
@@ -334,12 +388,8 @@ export function paginate(doc: Document, layout: DocLayout): number {
 
     block.remove();
     queue.unshift(block);
-    // Don't leave a heading stranded at the bottom of the column.
-    const previous = col.el.lastElementChild;
-    if (previous && isHeading(previous) && col.el.childElementCount > 1) {
-      previous.remove();
-      queue.unshift(previous as HTMLElement);
-    }
+    // Don't leave headings stranded at the bottom of the column.
+    pullTrailingHeadings(col);
     nextColumn();
   }
 
