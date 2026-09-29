@@ -2597,5 +2597,64 @@
         "a": "No. Laps, durations, and settings never leave your device - nothing is uploaded, stored, or logged."
       }
     ]
+  },
+  {
+    "id": "tex-viewer",
+    "component": "TexViewer",
+    "name": "TeX Viewer",
+    "title": "TeX Viewer - Online LaTeX Editor with Live Preview",
+    "description": "Write or open a .tex file and see it rendered instantly. Free online LaTeX viewer with live preview, math support, and HTML or PDF export in your browser.",
+    "path": "/tex-viewer",
+    "ctaLabel": "View LaTeX",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "TeX Viewer is a free online LaTeX editor and previewer. Type or paste LaTeX, or open an existing .tex file, and see the typeset document update live beside your source. Sections, lists, text formatting, quotes, and inline or display math, including equation and align blocks rendered with KaTeX, are supported. Download your source as .tex, export the result as a standalone HTML page, or print it to PDF. Rendering runs entirely in your browser with latex.js, so your document is never uploaded.",
+    "categoryId": "documents",
+    "keywords": [
+      "tex viewer",
+      "latex viewer",
+      "latex editor online",
+      "online latex preview",
+      "tex to html",
+      "latex to pdf",
+      "view tex file",
+      "latex renderer",
+      "math equation viewer",
+      "katex",
+      "free latex editor",
+      "latex live preview"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Type or paste your LaTeX into the editor, pick a sample from the Template menu, or click 'Open .tex file' to load a document from your device.",
+      "With 'Live preview' switched on, the rendered document updates automatically a moment after you stop typing. Switch it off and use 'Render' to update manually.",
+      "If the document has a syntax error, the preview shows the line and column where parsing failed so you can fix it quickly.",
+      "Click 'Fullscreen' to read the rendered document without distractions.",
+      "Use 'Download .tex' to save your source, 'Download HTML' to export a standalone web page, or 'Print / Save as PDF' to create a PDF with your browser's print dialog."
+    ],
+    "faqs": [
+      {
+        "q": "Is my LaTeX document uploaded to a server?",
+        "a": "No. Parsing and rendering happen entirely in your browser using latex.js. Your source is only stored in your browser's local storage so it is still there when you come back."
+      },
+      {
+        "q": "Which LaTeX features are supported?",
+        "a": "Common document features work: \\documentclass article, book and report, sections, lists, text styles and sizes, quotes, \\maketitle, and inline or display math rendered with KaTeX, including equation and align blocks (without numbering). Tables, footnotes, TikZ, BibTeX bibliographies, and custom classes are not supported."
+      },
+      {
+        "q": "How do I convert my .tex file to PDF?",
+        "a": "Render the document, then click 'Print / Save as PDF' and choose 'Save as PDF' as the destination in your browser's print dialog."
+      },
+      {
+        "q": "Why does my document show an error?",
+        "a": "The viewer reports the line and column where the LaTeX parser stopped. Common causes are unbalanced braces, a missing \\end{...}, or a command or package that latex.js does not support."
+      },
+      {
+        "q": "Can I use the TeX Viewer offline?",
+        "a": "The parser runs in your browser, but the fonts and styles used by the preview are loaded from a CDN, so an internet connection is needed for the preview to look right."
+      }
+    ]
   }
 ]

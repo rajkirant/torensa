@@ -97,6 +97,9 @@ const requiredSharedChunkBases = [
   "workbox-window.prod.es5",
 ];
 
+// Heavy vendor chunks used only by online-only tools; skip them in the precache.
+const onlineOnlyVendorChunkBases = ["latex-js"];
+
 function matchesChunkBase(url: string, base: string) {
   return (
     url.startsWith(`assets/${base}-`) &&
@@ -114,6 +117,10 @@ function shouldKeepPrecacheUrl(url: string) {
 
   for (const base of requiredSharedChunkBases) {
     if (matchesChunkBase(url, base)) return true;
+  }
+
+  for (const base of onlineOnlyVendorChunkBases) {
+    if (matchesChunkBase(url, base)) return false;
   }
 
   // Keep unknown chunks by default to avoid breaking runtime.
@@ -279,6 +286,10 @@ export default defineConfig({
 
           if (fromPkg(id, "diff")) {
             return "diff";
+          }
+
+          if (fromPkg(id, "latex.js")) {
+            return "latex-js";
           }
 
           // ---- Everything else ----

@@ -100,6 +100,13 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - Everything runs in your browser using html2canvas and jsPDF — no account or internet connection required after the page loads.
 - [Build PDF](https://torensa.com/pdf-builder)
 
+### TeX Viewer - Online LaTeX Editor with Live Preview
+- TeX Viewer is a free online LaTeX editor and previewer. Type or paste LaTeX, or open an existing .tex file, and see the typeset document update live beside your source.
+- Sections, lists, text formatting, quotes, and inline or display math, including equation and align blocks rendered with KaTeX, are supported.
+- Download your source as .tex, export the result as a standalone HTML page, or print it to PDF.
+- Rendering runs entirely in your browser with latex.js, so your document is never uploaded.
+- [View LaTeX](https://torensa.com/tex-viewer)
+
 ## Entertainment Tools
 
 ### Birthday Cake Generator - Create Realistic AI Birthday Cakes

@@ -2577,5 +2577,62 @@
         "a": "Nein. Rundenzeiten, Dauern und Einstellungen verlassen Ihr Gerät nicht – es wird nichts hochgeladen, gespeichert oder protokolliert."
       }
     ]
+  },
+  {
+    "id": "tex-viewer",
+    "component": "TexViewer",
+    "name": "TeX-Viewer",
+    "title": "TeX-Viewer – Online-LaTeX-Editor mit Live-Vorschau",
+    "description": "Schreiben oder öffnen Sie eine .tex-Datei und sehen Sie sie sofort gesetzt. Kostenloser LaTeX-Viewer mit Live-Vorschau, Formeln und HTML- oder PDF-Export.",
+    "path": "/tex-viewer",
+    "ctaLabel": "LaTeX ansehen",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Der TeX-Viewer ist ein kostenloser Online-LaTeX-Editor mit Vorschau. Tippen oder fügen Sie LaTeX ein oder öffnen Sie eine vorhandene .tex-Datei – das gesetzte Dokument aktualisiert sich live neben Ihrem Quelltext. Abschnitte, Listen, Textformatierung, Zitate sowie Inline- und abgesetzte Formeln einschließlich equation- und align-Blöcken (mit KaTeX) werden unterstützt. Laden Sie den Quelltext als .tex herunter, exportieren Sie das Ergebnis als eigenständige HTML-Seite oder drucken Sie es als PDF. Die Darstellung läuft vollständig im Browser mit latex.js – Ihr Dokument wird nie hochgeladen.",
+    "categoryId": "documents",
+    "keywords": [
+      "tex viewer",
+      "latex viewer",
+      "latex editor online",
+      "latex vorschau",
+      "tex zu html",
+      "latex zu pdf",
+      "tex datei öffnen",
+      "formeln anzeigen",
+      "katex",
+      "kostenloser latex editor"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Tippen oder fügen Sie Ihr LaTeX in den Editor ein, wählen Sie ein Beispiel im Menü Vorlage oder klicken Sie auf „Open .tex file“, um ein Dokument von Ihrem Gerät zu laden.",
+      "Bei aktivierter „Live preview“ aktualisiert sich das Dokument automatisch kurz nachdem Sie aufhören zu tippen. Schalten Sie sie aus und nutzen Sie „Render“ für manuelle Aktualisierungen.",
+      "Enthält das Dokument einen Syntaxfehler, zeigt die Vorschau Zeile und Spalte der Fehlerstelle an.",
+      "Klicken Sie auf „Fullscreen“, um das Dokument ohne Ablenkung zu lesen.",
+      "Mit „Download .tex“ speichern Sie den Quelltext, mit „Download HTML“ exportieren Sie eine eigenständige Webseite und mit „Print / Save as PDF“ erstellen Sie über den Druckdialog ein PDF."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein LaTeX-Dokument auf einen Server hochgeladen?",
+        "a": "Nein. Parsen und Darstellen erfolgen vollständig in Ihrem Browser mit latex.js. Der Quelltext wird nur im lokalen Speicher Ihres Browsers abgelegt, damit er beim nächsten Besuch noch da ist."
+      },
+      {
+        "q": "Welche LaTeX-Funktionen werden unterstützt?",
+        "a": "Gängige Funktionen: die Klassen article, book und report, Abschnitte, Listen, Schriftstile und -größen, Zitate, \\maketitle sowie Inline- und abgesetzte Formeln mit KaTeX, einschließlich equation- und align-Blöcken (ohne Nummerierung). Tabellen, Fußnoten, TikZ, BibTeX-Literaturverzeichnisse und eigene Klassen werden nicht unterstützt."
+      },
+      {
+        "q": "Wie wandle ich meine .tex-Datei in ein PDF um?",
+        "a": "Lassen Sie das Dokument darstellen, klicken Sie auf „Print / Save as PDF“ und wählen Sie im Druckdialog „Als PDF speichern“."
+      },
+      {
+        "q": "Warum zeigt mein Dokument einen Fehler an?",
+        "a": "Der Viewer meldet Zeile und Spalte, an der der Parser angehalten hat. Häufige Ursachen sind unausgeglichene Klammern, ein fehlendes \\end{...} oder ein Befehl bzw. Paket, das latex.js nicht unterstützt."
+      },
+      {
+        "q": "Funktioniert der TeX-Viewer offline?",
+        "a": "Der Parser läuft im Browser, doch Schriften und Stile der Vorschau werden von einem CDN geladen. Für eine korrekte Darstellung ist daher eine Internetverbindung nötig."
+      }
+    ]
   }
 ]

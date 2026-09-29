@@ -2593,5 +2593,62 @@
         "a": "No. Las vueltas, las duraciones y los ajustes nunca salen de tu dispositivo: no se sube, guarda ni registra nada."
       }
     ]
+  },
+  {
+    "id": "tex-viewer",
+    "component": "TexViewer",
+    "name": "Visor TeX",
+    "title": "Visor TeX – Editor LaTeX en línea con vista previa en vivo",
+    "description": "Escribe o abre un archivo .tex y míralo renderizado al instante. Visor LaTeX gratis con vista previa en vivo, fórmulas y exportación HTML o PDF en el navegador.",
+    "path": "/tex-viewer",
+    "ctaLabel": "Ver LaTeX",
+    "offlineEnabled": false,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "El Visor TeX es un editor y visor de LaTeX en línea y gratuito. Escribe o pega LaTeX, o abre un archivo .tex existente, y verás el documento compuesto actualizarse en vivo junto al código. Admite secciones, listas, formato de texto, citas y fórmulas en línea o destacadas, incluidos bloques equation y align (con KaTeX). Descarga el código como .tex, exporta el resultado como página HTML independiente o imprímelo en PDF. Todo se procesa en tu navegador con latex.js, así que tu documento nunca se sube.",
+    "categoryId": "documents",
+    "keywords": [
+      "visor tex",
+      "visor latex",
+      "editor latex online",
+      "vista previa latex",
+      "tex a html",
+      "latex a pdf",
+      "abrir archivo tex",
+      "ver fórmulas",
+      "katex",
+      "editor latex gratis"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Escribe o pega tu LaTeX en el editor, elige un ejemplo en el menú Plantilla o haz clic en «Open .tex file» para cargar un documento de tu dispositivo.",
+      "Con «Live preview» activado, el documento se actualiza automáticamente poco después de dejar de escribir. Desactívalo y usa «Render» para actualizar manualmente.",
+      "Si el documento tiene un error de sintaxis, la vista previa muestra la línea y la columna donde falló el análisis.",
+      "Haz clic en «Fullscreen» para leer el documento sin distracciones.",
+      "Usa «Download .tex» para guardar el código, «Download HTML» para exportar una página web independiente o «Print / Save as PDF» para crear un PDF desde el diálogo de impresión."
+    ],
+    "faqs": [
+      {
+        "q": "¿Se sube mi documento LaTeX a un servidor?",
+        "a": "No. El análisis y la representación se hacen por completo en tu navegador con latex.js. El código solo se guarda en el almacenamiento local de tu navegador para que siga ahí cuando vuelvas."
+      },
+      {
+        "q": "¿Qué funciones de LaTeX se admiten?",
+        "a": "Las más comunes: clases article, book y report, secciones, listas, estilos y tamaños de texto, citas, \\maketitle y fórmulas en línea o destacadas con KaTeX, incluidos bloques equation y align (sin numeración). No se admiten tablas, notas al pie, TikZ, bibliografías BibTeX ni clases personalizadas."
+      },
+      {
+        "q": "¿Cómo convierto mi archivo .tex a PDF?",
+        "a": "Renderiza el documento, haz clic en «Print / Save as PDF» y elige «Guardar como PDF» como destino en el diálogo de impresión del navegador."
+      },
+      {
+        "q": "¿Por qué mi documento muestra un error?",
+        "a": "El visor indica la línea y la columna donde se detuvo el analizador. Las causas habituales son llaves sin cerrar, un \\end{...} que falta o un comando o paquete que latex.js no admite."
+      },
+      {
+        "q": "¿Puedo usar el Visor TeX sin conexión?",
+        "a": "El analizador funciona en tu navegador, pero las fuentes y estilos de la vista previa se cargan desde un CDN, así que se necesita conexión a internet para que se vea bien."
+      }
+    ]
   }
 ]
