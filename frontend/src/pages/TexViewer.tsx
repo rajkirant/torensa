@@ -178,7 +178,8 @@ html{background:#fff;color:#111}
 body{margin:0 auto;max-width:46em;padding:2.5rem 2rem;font-family:var(--tex-serif);font-size:17px;line-height:1.45;text-align:justify;hyphens:auto;overflow-wrap:break-word}
 a{color:#1a4fb5}
 code{font-family:var(--tex-mono);font-size:.88em}
-p{margin:0;text-indent:1.5em}
+p{margin:0;text-indent:var(--tex-indent,1.5em)}
+.katex{font-size:1em}
 p.tex-noindent,p.tex-cont,h2+p,h3+p,h4+p,h1+p,hr+p,.tex-titleblock+p{text-indent:0}
 p.tex-split{text-align-last:justify}
 .tex-titleblock{text-align:center;margin-bottom:1.6em}
@@ -230,16 +231,18 @@ hr.tex-fn-rule{width:30%;margin:1.2em 0 .3em;border:0;border-top:1px solid #111}
 .tex-fullwidth .tex-tikz svg{width:100%}
 sup.tex-a{font-size:.75em;vertical-align:.3em;margin:0 -.15em 0 -.36em}
 sub.tex-e{font-size:1em;vertical-align:-.5ex;margin:0 -.1em 0 -.15em}
-/* acmart */
+/* acmart: title in Biolinum (sans), headings in Libertine bold 10.9pt */
+.tex-cls-acmart{--tex-indent:1.1em}
 .tex-cls-acmart h1.tex-title{font-family:var(--tex-sans);font-weight:bold;font-size:1.9em}
 .tex-cls-acmart .tex-author{font-size:1.33em}
-.tex-cls-acmart h2,.tex-cls-acmart .tex-abstract-title,.tex-cls-acmart .tex-meta-head{font-family:var(--tex-sans);font-weight:bold;font-size:1.2em;text-transform:uppercase;letter-spacing:.02em;text-align:left;margin:1em 0 .3em}
+.tex-cls-acmart h2,.tex-cls-acmart h3,.tex-cls-acmart .tex-abstract-title,.tex-cls-acmart .tex-meta-head{font-family:var(--tex-serif);font-weight:bold;font-size:1.21em;line-height:1.1;text-align:left;margin:1.15em 0 .35em}
+.tex-cls-acmart h2,.tex-cls-acmart .tex-abstract-title,.tex-cls-acmart .tex-meta-head{text-transform:uppercase}
 .tex-cls-acmart .tex-abstract-title{margin-top:0}
 .tex-cls-acmart p.tex-abstract{font-size:1em;margin:0}
-.tex-cls-acmart h3{font-family:var(--tex-sans);font-weight:bold;font-size:1.1em}
-.tex-cls-acmart .tex-secnum{margin-right:.6em}
+.tex-cls-acmart .tex-secnum{margin-right:1em}
 .tex-cls-acmart .tex-bibitem{font-size:.8em}
 /* IEEEtran */
+.tex-cls-ieeetran{--tex-indent:1em}
 .tex-cls-ieeetran h1.tex-title{font-weight:normal;font-size:2.4em}
 .tex-cls-ieeetran h2{font-size:1em;font-weight:normal;font-variant:small-caps;text-align:center;margin:.9em 0 .3em}
 .tex-cls-ieeetran h3{font-size:1em;font-weight:normal;font-style:italic}
