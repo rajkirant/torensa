@@ -4,6 +4,9 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -21,6 +24,16 @@ import { formatApiError } from "../utils/apiError";
 type TodoItem = { id: number; text: string; completed: boolean };
 type TodoCategory = { id: number; name: string; items: TodoItem[] };
 
+const HIDE_COMPLETED_KEY = "torensa_todo_hide_completed";
+
+function loadHiddenCompleted(): Record<number, boolean> {
+  try {
+    return JSON.parse(localStorage.getItem(HIDE_COMPLETED_KEY) ?? "{}");
+  } catch {
+    return {};
+  }
+}
+
 export default function ToDo() {
   const [categories, setCategories] = useState<TodoCategory[]>([]);
   const [categoryName, setCategoryName] = useState("");
@@ -30,6 +43,17 @@ export default function ToDo() {
   const [collapsedCategories, setCollapsedCategories] = useState<
     Record<number, boolean>
   >({});
+  // Categories whose completed items are hidden (remembered in this browser).
+  const [hideCompleted, setHideCompleted] =
+    useState<Record<number, boolean>>(loadHiddenCompleted);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(HIDE_COMPLETED_KEY, JSON.stringify(hideCompleted));
+    } catch {
+      /* ignore */
+    }
+  }, [hideCompleted]);
 
   useEffect(() => {
     let cancelled = false;
@@ -197,6 +221,15 @@ export default function ToDo() {
     });
   };
 
+  const toggleHideCompleted = (categoryId: number) => {
+    setHideCompleted((current) => {
+      const next = { ...current };
+      if (next[categoryId]) delete next[categoryId];
+      else next[categoryId] = true;
+      return next;
+    });
+  };
+
   const toggleCategory = (categoryId: number) => {
     setCollapsedCategories((current) => ({
       ...current,
@@ -254,6 +287,10 @@ export default function ToDo() {
                 (item) => item.completed,
               ).length;
               const isExpanded = !collapsedCategories[category.id];
+              const hidingCompleted = Boolean(hideCompleted[category.id]);
+              const visibleItems = hidingCompleted
+                ? category.items.filter((item) => !item.completed)
+                : category.items;
               return (
                 <Box
                   key={category.id}
@@ -293,6 +330,31 @@ export default function ToDo() {
                     <Typography variant="caption" color="text.secondary">
                       {completed}/{category.items.length}
                     </Typography>
+                    <Tooltip
+                      title={
+                        hidingCompleted
+                          ? "Show completed items"
+                          : "Hide completed items"
+                      }
+                    >
+                      <IconButton
+                        size="small"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleHideCompleted(category.id);
+                        }}
+                        aria-pressed={hidingCompleted}
+                        aria-label={`${
+                          hidingCompleted ? "Show" : "Hide"
+                        } completed items in ${category.name}`}
+                      >
+                        {hidingCompleted ? (
+                          <VisibilityOffOutlinedIcon fontSize="small" />
+                        ) : (
+                          <VisibilityOutlinedIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    </Tooltip>
                     <Tooltip title="Remove category">
                       <IconButton
                         size="small"
@@ -315,7 +377,7 @@ export default function ToDo() {
                     />
                   </Stack>
                   <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                    {category.items.map((item) => (
+                    {visibleItems.map((item) => (
                       <Stack
                         key={item.id}
                         direction="row"
@@ -358,6 +420,25 @@ export default function ToDo() {
                         </Tooltip>
                       </Stack>
                     ))}
+                    {hidingCompleted && completed > 0 && (
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        sx={{ px: 2, pt: 1 }}
+                      >
+                        <Typography variant="caption" color="text.secondary">
+                          {completed} completed {completed === 1 ? "item" : "items"} hidden
+                        </Typography>
+                        <Button
+                          size="small"
+                          onClick={() => toggleHideCompleted(category.id)}
+                          sx={{ textTransform: "none", minWidth: 0 }}
+                        >
+                          Show
+                        </Button>
+                      </Stack>
+                    )}
                     <Stack direction="row" spacing={1} sx={{ p: 1.5 }}>
                       <TextField
                         label="Add item"
