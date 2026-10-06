@@ -49,6 +49,31 @@ import { useTranslation } from "react-i18next";
 const INITIAL_VISIBLE_CARDS = 9;
 const LOAD_MORE_STEP = 6;
 
+// Tools always listed first on the home page, in this order.
+const PINNED_TOOL_IDS = ["habit-tracker"];
+const SHORT_DESCRIPTION_MAX = 100;
+
+function pinFirst(cards: ServiceCardConfig[]) {
+  const rank = (card: ServiceCardConfig) => {
+    const index = PINNED_TOOL_IDS.indexOf(card.id);
+    return index === -1 ? PINNED_TOOL_IDS.length : index;
+  };
+  // Array.prototype.sort is stable, so unpinned tools keep their order.
+  return [...cards].sort((a, b) => rank(a) - rank(b));
+}
+
+/**
+ * Card text for the home page: the description's first sentence, cut at a
+ * word boundary if it is still long. The full description stays the page's
+ * meta description.
+ */
+function shortDescription(description: string) {
+  const firstSentence = description.match(/^.+?[.!?](?=\s|$)/)?.[0] ?? description;
+  if (firstSentence.length <= SHORT_DESCRIPTION_MAX) return firstSentence;
+  const cut = firstSentence.slice(0, SHORT_DESCRIPTION_MAX);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,;:\u2013\u2014-]+$/, "")}\u2026`;
+}
+
 /* ===================== HERO BANNER ===================== */
 function HeroBanner({
   isMobile,
@@ -221,7 +246,7 @@ export default function Home() {
 
   // Safety guard (never crash)
   const allCards = Array.isArray(typedServiceCards)
-    ? getActiveServiceCards(typedServiceCards)
+    ? pinFirst(getActiveServiceCards(typedServiceCards))
     : [];
   const [searchTerm, setSearchTerm] = React.useState("");
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
@@ -425,7 +450,7 @@ export default function Home() {
               >
                 {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
                 <h3>{card.name}</h3>
-                <p style={secondaryText}>{card.description}</p>
+                <p style={secondaryText}>{shortDescription(card.description)}</p>
                 <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
               </div>
             );
@@ -523,7 +548,7 @@ export default function Home() {
               >
                 {Icon && <Icon sx={{ mb: 1, fontSize: 32 }} />}
                 <h3>{card.name}</h3>
-                <p style={secondaryText}>{card.description}</p>
+                <p style={secondaryText}>{shortDescription(card.description)}</p>
                 <PrimaryButton size="small">{card.ctaLabel}</PrimaryButton>
               </div>
             );
