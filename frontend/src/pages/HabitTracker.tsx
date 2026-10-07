@@ -11,10 +11,16 @@ import Typography from "@mui/material/Typography";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
 import PageContainer from "../components/PageContainer";
+import SearchField from "../components/inputs/SearchField";
 import { ActionButton } from "../components/buttons/ActionButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import useToolStatus from "../hooks/useToolStatus";
 import { apiFetch } from "../utils/api";
+import {
+  highlightMatch,
+  matchesQuery,
+  normalizeQuery,
+} from "../utils/highlightMatch";
 import {
   BarChart,
   Bar,
@@ -64,6 +70,8 @@ const HabitTracker: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
   const [newPoints, setNewPoints] = useState<number | "">(1);
+  const [search, setSearch] = useState("");
+  const query = normalizeQuery(search);
   const { error, success, setError, setSuccess, clear } = useToolStatus();
 
   /* ── fetch habits + logs on mount ── */
@@ -211,6 +219,10 @@ const HabitTracker: React.FC = () => {
 
   const maxPossible = habits.reduce((s, h) => s + h.points, 0);
 
+  const visibleHabits = query
+    ? habits.filter((h) => matchesQuery(h.name, query))
+    : habits;
+
   /* ── chart data (last 14 days) ── */
 
   const chartData = Array.from({ length: 14 }, (_, i) => {
@@ -334,8 +346,25 @@ const HabitTracker: React.FC = () => {
               </Stack>
             </Stack>
 
+            <Box sx={{ px: 2, pt: 1.5, pb: 1 }}>
+              <SearchField
+                value={search}
+                onChange={setSearch}
+                placeholder="Search habits"
+              />
+            </Box>
+
+            {query && visibleHabits.length === 0 && (
+              <Typography
+                color="text.secondary"
+                sx={{ textAlign: "center", py: 3 }}
+              >
+                No habits match "{search.trim()}".
+              </Typography>
+            )}
+
             <Stack>
-              {habits.map((habit) => {
+              {visibleHabits.map((habit) => {
                 const done = isDone(habit.id);
                 return (
                   <Stack
@@ -366,7 +395,7 @@ const HabitTracker: React.FC = () => {
                         transition: "opacity 0.15s",
                       }}
                     >
-                      {habit.name}
+                      {highlightMatch(habit.name, query)}
                     </Typography>
                     <Chip
                       size="small"

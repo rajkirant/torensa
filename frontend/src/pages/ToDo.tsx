@@ -17,9 +17,15 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import PageContainer from "../components/PageContainer";
+import SearchField from "../components/inputs/SearchField";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { apiFetch } from "../utils/api";
 import { formatApiError } from "../utils/apiError";
+import {
+  highlightMatch,
+  matchesQuery,
+  normalizeQuery,
+} from "../utils/highlightMatch";
 
 type TodoItem = { id: number; text: string; completed: boolean };
 type TodoCategory = { id: number; name: string; items: TodoItem[] };
@@ -46,6 +52,9 @@ export default function ToDo() {
   // Categories whose completed items are hidden (remembered in this browser).
   const [hideCompleted, setHideCompleted] =
     useState<Record<number, boolean>>(loadHiddenCompleted);
+  const [search, setSearch] = useState("");
+  const query = normalizeQuery(search);
+  const searching = query.length > 0;
 
   useEffect(() => {
     try {
@@ -237,6 +246,20 @@ export default function ToDo() {
     }));
   };
 
+  // While searching, keep only categories whose name or items match.
+  const visibleCategories = categories
+    .map((category) => ({
+      category,
+      nameMatches: searching && matchesQuery(category.name, query),
+      matchingItems: searching
+        ? category.items.filter((item) => matchesQuery(item.text, query))
+        : category.items,
+    }))
+    .filter(
+      ({ nameMatches, matchingItems }) =>
+        !searching || nameMatches || matchingItems.length > 0,
+    );
+
   return (
     <PageContainer maxWidth={900}>
       <Stack spacing={3}>
@@ -270,6 +293,20 @@ export default function ToDo() {
           </Stack>
         </Box>
 
+        {categories.length > 0 && (
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder="Search items"
+          />
+        )}
+
+        {searching && visibleCategories.length === 0 && (
+          <Typography color="text.secondary" sx={{ textAlign: "center", py: 3 }}>
+            No items match "{search.trim()}".
+          </Typography>
+        )}
+
         {categories.length === 0 ? (
           <Box sx={{ textAlign: "center", py: 7, opacity: 0.65 }}>
             <ListAltOutlinedIcon
@@ -282,15 +319,21 @@ export default function ToDo() {
           </Box>
         ) : (
           <Stack spacing={2}>
-            {categories.map((category) => {
+            {visibleCategories.map(({ category, nameMatches, matchingItems }) => {
               const completed = category.items.filter(
                 (item) => item.completed,
               ).length;
-              const isExpanded = !collapsedCategories[category.id];
+              // Search results are always shown, even in collapsed categories
+              // and including hidden completed items.
+              const isExpanded = searching || !collapsedCategories[category.id];
               const hidingCompleted = Boolean(hideCompleted[category.id]);
-              const visibleItems = hidingCompleted
-                ? category.items.filter((item) => !item.completed)
-                : category.items;
+              const visibleItems = searching
+                ? nameMatches
+                  ? category.items
+                  : matchingItems
+                : hidingCompleted
+                  ? category.items.filter((item) => !item.completed)
+                  : category.items;
               return (
                 <Box
                   key={category.id}
@@ -325,7 +368,7 @@ export default function ToDo() {
                   >
                     <FolderOpenOutlinedIcon color="primary" fontSize="small" />
                     <Typography fontWeight={700} sx={{ flex: 1 }}>
-                      {category.name}
+                      {highlightMatch(category.name, query)}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       {completed}/{category.items.length}
@@ -405,7 +448,7 @@ export default function ToDo() {
                             opacity: item.completed ? 0.55 : 1,
                           }}
                         >
-                          {item.text}
+                          {highlightMatch(item.text, query)}
                         </Typography>
                         <Tooltip title="Remove item">
                           <IconButton
@@ -420,7 +463,7 @@ export default function ToDo() {
                         </Tooltip>
                       </Stack>
                     ))}
-                    {hidingCompleted && completed > 0 && (
+                    {!searching && hidingCompleted && completed > 0 && (
                       <Stack
                         direction="row"
                         alignItems="center"
