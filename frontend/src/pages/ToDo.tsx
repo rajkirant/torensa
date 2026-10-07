@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
@@ -20,9 +17,15 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import PageContainer from "../components/PageContainer";
+import SearchField from "../components/inputs/SearchField";
 import { ActionButton } from "../components/buttons/ActionButton";
 import { apiFetch } from "../utils/api";
 import { formatApiError } from "../utils/apiError";
+import {
+  highlightMatch,
+  matchesQuery,
+  normalizeQuery,
+} from "../utils/highlightMatch";
 
 type TodoItem = { id: number; text: string; completed: boolean };
 type TodoCategory = { id: number; name: string; items: TodoItem[] };
@@ -35,40 +38,6 @@ function loadHiddenCompleted(): Record<number, boolean> {
   } catch {
     return {};
   }
-}
-
-function matches(text: string, query: string) {
-  return text.toLocaleLowerCase().includes(query);
-}
-
-/** Wraps each occurrence of the search query in a highlight. */
-function highlight(text: string, query: string): React.ReactNode {
-  if (!query) return text;
-  const lower = text.toLocaleLowerCase();
-  const parts: React.ReactNode[] = [];
-  let start = 0;
-  let index = lower.indexOf(query);
-  while (index !== -1) {
-    if (index > start) parts.push(text.slice(start, index));
-    parts.push(
-      <Box
-        component="mark"
-        key={index}
-        sx={{
-          bgcolor: "rgba(250,204,21,0.35)",
-          color: "inherit",
-          borderRadius: 0.5,
-          px: 0.25,
-        }}
-      >
-        {text.slice(index, index + query.length)}
-      </Box>,
-    );
-    start = index + query.length;
-    index = lower.indexOf(query, start);
-  }
-  if (start < text.length) parts.push(text.slice(start));
-  return parts;
 }
 
 export default function ToDo() {
@@ -84,7 +53,7 @@ export default function ToDo() {
   const [hideCompleted, setHideCompleted] =
     useState<Record<number, boolean>>(loadHiddenCompleted);
   const [search, setSearch] = useState("");
-  const query = search.trim().toLocaleLowerCase();
+  const query = normalizeQuery(search);
   const searching = query.length > 0;
 
   useEffect(() => {
@@ -281,9 +250,9 @@ export default function ToDo() {
   const visibleCategories = categories
     .map((category) => ({
       category,
-      nameMatches: searching && matches(category.name, query),
+      nameMatches: searching && matchesQuery(category.name, query),
       matchingItems: searching
-        ? category.items.filter((item) => matches(item.text, query))
+        ? category.items.filter((item) => matchesQuery(item.text, query))
         : category.items,
     }))
     .filter(
@@ -325,32 +294,10 @@ export default function ToDo() {
         </Box>
 
         {categories.length > 0 && (
-          <TextField
-            placeholder="Search items"
+          <SearchField
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            onKeyDown={(event) => event.key === "Escape" && setSearch("")}
-            size="small"
-            fullWidth
-            inputProps={{ "aria-label": "Search items" }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" />
-                </InputAdornment>
-              ),
-              endAdornment: search ? (
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    onClick={() => setSearch("")}
-                    aria-label="Clear search"
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              ) : null,
-            }}
+            onChange={setSearch}
+            placeholder="Search items"
           />
         )}
 
@@ -421,7 +368,7 @@ export default function ToDo() {
                   >
                     <FolderOpenOutlinedIcon color="primary" fontSize="small" />
                     <Typography fontWeight={700} sx={{ flex: 1 }}>
-                      {highlight(category.name, query)}
+                      {highlightMatch(category.name, query)}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       {completed}/{category.items.length}
@@ -501,7 +448,7 @@ export default function ToDo() {
                             opacity: item.completed ? 0.55 : 1,
                           }}
                         >
-                          {highlight(item.text, query)}
+                          {highlightMatch(item.text, query)}
                         </Typography>
                         <Tooltip title="Remove item">
                           <IconButton
