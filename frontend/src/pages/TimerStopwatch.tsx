@@ -71,17 +71,82 @@ type Lap = {
   total: number;
 };
 
+/**
+ * Saved in localStorage so a running stopwatch or countdown keeps going when
+ * the user leaves the page, reloads, or restarts the browser. Only start/end
+ * timestamps are stored; the display is recomputed from the clock.
+ */
+type SavedState = {
+  tab: "stopwatch" | "timer";
+  sw: { base: number; startedAt: number; running: boolean; laps: Lap[] };
+  timer: {
+    hours: string;
+    minutes: string;
+    seconds: string;
+    endsAt: number;
+    remaining: number;
+    duration: number;
+    running: boolean;
+    sound: boolean;
+  };
+};
+
+const STORAGE_KEY = "torensa_timer_stopwatch_v1";
+
+const DEFAULT_STATE: SavedState = {
+  tab: "stopwatch",
+  sw: { base: 0, startedAt: 0, running: false, laps: [] },
+  timer: {
+    hours: "0",
+    minutes: "5",
+    seconds: "0",
+    endsAt: 0,
+    remaining: 0,
+    duration: 0,
+    running: false,
+    sound: true,
+  },
+};
+
+function loadState(): SavedState {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+    if (!saved || typeof saved !== "object") return DEFAULT_STATE;
+    return {
+      tab: saved.tab === "timer" ? "timer" : "stopwatch",
+      sw: { ...DEFAULT_STATE.sw, ...saved.sw },
+      timer: { ...DEFAULT_STATE.timer, ...saved.timer },
+    };
+  } catch {
+    return DEFAULT_STATE;
+  }
+}
+
+function saveState(state: SavedState) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    /* storage unavailable (private mode, quota) */
+  }
+}
+
 const TimerStopwatch: React.FC = () => {
-  const [tab, setTab] = useState<"stopwatch" | "timer">("stopwatch");
+  // Read once on mount; everything below is initialised from it.
+  const [initial] = useState(loadState);
+  const [tab, setTab] = useState<"stopwatch" | "timer">(initial.tab);
   const { error, success, info, setError, setSuccess, setInfo, clear } =
     useToolStatus();
 
   /* ===================== STOPWATCH ===================== */
-  const [swElapsed, setSwElapsed] = useState(0);
-  const [swRunning, setSwRunning] = useState(false);
-  const [laps, setLaps] = useState<Lap[]>([]);
-  const swBaseRef = useRef(0);
-  const swStartedAtRef = useRef(0);
+  const [swElapsed, setSwElapsed] = useState(() =>
+    initial.sw.running
+      ? initial.sw.base + (Date.now() - initial.sw.startedAt)
+      : initial.sw.base,
+  );
+  const [swRunning, setSwRunning] = useState(initial.sw.running);
+  const [laps, setLaps] = useState<Lap[]>(initial.sw.laps);
+  const swBaseRef = useRef(initial.sw.base);
+  const swStartedAtRef = useRef(initial.sw.startedAt);
 
   // Elapsed time is always derived from wall-clock timestamps, so a throttled
   // tick never accumulates drift.
@@ -162,14 +227,18 @@ const TimerStopwatch: React.FC = () => {
   }, [laps]);
 
   /* ===================== COUNTDOWN TIMER ===================== */
-  const [hours, setHours] = useState("0");
-  const [minutes, setMinutes] = useState("5");
-  const [seconds, setSeconds] = useState("0");
-  const [remaining, setRemaining] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [timerRunning, setTimerRunning] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const endsAtRef = useRef(0);
+  const [hours, setHours] = useState(initial.timer.hours);
+  const [minutes, setMinutes] = useState(initial.timer.minutes);
+  const [seconds, setSeconds] = useState(initial.timer.seconds);
+  const [remaining, setRemaining] = useState(() =>
+    initial.timer.running
+      ? Math.max(0, initial.timer.endsAt - Date.now())
+      : initial.timer.remaining,
+  );
+  const [duration, setDuration] = useState(initial.timer.duration);
+  const [timerRunning, setTimerRunning] = useState(initial.timer.running);
+  const [soundEnabled, setSoundEnabled] = useState(initial.timer.sound);
+  const endsAtRef = useRef(initial.timer.endsAt);
   const soundEnabledRef = useRef(soundEnabled);
 
   useEffect(() => {
@@ -257,6 +326,61 @@ const TimerStopwatch: React.FC = () => {
     setSeconds(String(totalSeconds % 60));
     clear();
   };
+
+  // A countdown that ran out while the page was closed finishes on return.
+  useEffect(() => {
+    if (initial.timer.running && initial.timer.endsAt <= Date.now()) {
+      const finishedAt = new Date(initial.timer.endsAt).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      setTimerRunning(false);
+      setRemaining(0);
+      endsAtRef.current = 0;
+      setTab("timer");
+      setSuccess(`Time is up! The countdown finished at ${finishedAt}.`);
+    }
+    // Run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save whenever the state changes. While running, only timestamps are
+  // stored, so the per-tick display updates don't trigger writes.
+  const pausedElapsed = swRunning ? 0 : swElapsed;
+  const pausedRemaining = timerRunning ? 0 : remaining;
+  useEffect(() => {
+    saveState({
+      tab,
+      sw: {
+        base: swBaseRef.current,
+        startedAt: swStartedAtRef.current,
+        running: swRunning,
+        laps,
+      },
+      timer: {
+        hours,
+        minutes,
+        seconds,
+        endsAt: endsAtRef.current,
+        remaining: pausedRemaining,
+        duration,
+        running: timerRunning,
+        sound: soundEnabled,
+      },
+    });
+  }, [
+    tab,
+    swRunning,
+    pausedElapsed,
+    laps,
+    hours,
+    minutes,
+    seconds,
+    timerRunning,
+    pausedRemaining,
+    duration,
+    soundEnabled,
+  ]);
 
   const presets = [60, 180, 300, 600, 900, 1500, 3600];
   const progress =
