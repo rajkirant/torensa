@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import SearchIcon from "@mui/icons-material/Search";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
@@ -34,6 +37,40 @@ function loadHiddenCompleted(): Record<number, boolean> {
   }
 }
 
+function matches(text: string, query: string) {
+  return text.toLocaleLowerCase().includes(query);
+}
+
+/** Wraps each occurrence of the search query in a highlight. */
+function highlight(text: string, query: string): React.ReactNode {
+  if (!query) return text;
+  const lower = text.toLocaleLowerCase();
+  const parts: React.ReactNode[] = [];
+  let start = 0;
+  let index = lower.indexOf(query);
+  while (index !== -1) {
+    if (index > start) parts.push(text.slice(start, index));
+    parts.push(
+      <Box
+        component="mark"
+        key={index}
+        sx={{
+          bgcolor: "rgba(250,204,21,0.35)",
+          color: "inherit",
+          borderRadius: 0.5,
+          px: 0.25,
+        }}
+      >
+        {text.slice(index, index + query.length)}
+      </Box>,
+    );
+    start = index + query.length;
+    index = lower.indexOf(query, start);
+  }
+  if (start < text.length) parts.push(text.slice(start));
+  return parts;
+}
+
 export default function ToDo() {
   const [categories, setCategories] = useState<TodoCategory[]>([]);
   const [categoryName, setCategoryName] = useState("");
@@ -46,6 +83,9 @@ export default function ToDo() {
   // Categories whose completed items are hidden (remembered in this browser).
   const [hideCompleted, setHideCompleted] =
     useState<Record<number, boolean>>(loadHiddenCompleted);
+  const [search, setSearch] = useState("");
+  const query = search.trim().toLocaleLowerCase();
+  const searching = query.length > 0;
 
   useEffect(() => {
     try {
@@ -237,6 +277,20 @@ export default function ToDo() {
     }));
   };
 
+  // While searching, keep only categories whose name or items match.
+  const visibleCategories = categories
+    .map((category) => ({
+      category,
+      nameMatches: searching && matches(category.name, query),
+      matchingItems: searching
+        ? category.items.filter((item) => matches(item.text, query))
+        : category.items,
+    }))
+    .filter(
+      ({ nameMatches, matchingItems }) =>
+        !searching || nameMatches || matchingItems.length > 0,
+    );
+
   return (
     <PageContainer maxWidth={900}>
       <Stack spacing={3}>
@@ -270,6 +324,42 @@ export default function ToDo() {
           </Stack>
         </Box>
 
+        {categories.length > 0 && (
+          <TextField
+            placeholder="Search items"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            onKeyDown={(event) => event.key === "Escape" && setSearch("")}
+            size="small"
+            fullWidth
+            inputProps={{ "aria-label": "Search items" }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" />
+                </InputAdornment>
+              ),
+              endAdornment: search ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    onClick={() => setSearch("")}
+                    aria-label="Clear search"
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+            }}
+          />
+        )}
+
+        {searching && visibleCategories.length === 0 && (
+          <Typography color="text.secondary" sx={{ textAlign: "center", py: 3 }}>
+            No items match "{search.trim()}".
+          </Typography>
+        )}
+
         {categories.length === 0 ? (
           <Box sx={{ textAlign: "center", py: 7, opacity: 0.65 }}>
             <ListAltOutlinedIcon
@@ -282,15 +372,21 @@ export default function ToDo() {
           </Box>
         ) : (
           <Stack spacing={2}>
-            {categories.map((category) => {
+            {visibleCategories.map(({ category, nameMatches, matchingItems }) => {
               const completed = category.items.filter(
                 (item) => item.completed,
               ).length;
-              const isExpanded = !collapsedCategories[category.id];
+              // Search results are always shown, even in collapsed categories
+              // and including hidden completed items.
+              const isExpanded = searching || !collapsedCategories[category.id];
               const hidingCompleted = Boolean(hideCompleted[category.id]);
-              const visibleItems = hidingCompleted
-                ? category.items.filter((item) => !item.completed)
-                : category.items;
+              const visibleItems = searching
+                ? nameMatches
+                  ? category.items
+                  : matchingItems
+                : hidingCompleted
+                  ? category.items.filter((item) => !item.completed)
+                  : category.items;
               return (
                 <Box
                   key={category.id}
@@ -325,7 +421,7 @@ export default function ToDo() {
                   >
                     <FolderOpenOutlinedIcon color="primary" fontSize="small" />
                     <Typography fontWeight={700} sx={{ flex: 1 }}>
-                      {category.name}
+                      {highlight(category.name, query)}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       {completed}/{category.items.length}
@@ -405,7 +501,7 @@ export default function ToDo() {
                             opacity: item.completed ? 0.55 : 1,
                           }}
                         >
-                          {item.text}
+                          {highlight(item.text, query)}
                         </Typography>
                         <Tooltip title="Remove item">
                           <IconButton
@@ -420,7 +516,7 @@ export default function ToDo() {
                         </Tooltip>
                       </Stack>
                     ))}
-                    {hidingCompleted && completed > 0 && (
+                    {!searching && hidingCompleted && completed > 0 && (
                       <Stack
                         direction="row"
                         alignItems="center"
