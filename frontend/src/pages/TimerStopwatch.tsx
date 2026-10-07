@@ -9,6 +9,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { Helmet } from "react-helmet-async";
 import PageContainer from "../components/PageContainer";
 import { ActionButton } from "../components/buttons/ActionButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
@@ -37,32 +38,58 @@ function formatDuration(ms: number, withCentiseconds: boolean) {
   return withCentiseconds ? `${base}.${pad(centiseconds)}` : base;
 }
 
-/** Short beep sequence played when a countdown reaches zero. */
-function playAlarm() {
-  type WindowWithAudio = Window & { webkitAudioContext?: typeof AudioContext };
-  const AudioCtx =
-    window.AudioContext ?? (window as WindowWithAudio).webkitAudioContext;
-  if (!AudioCtx) return;
+// The alarm rings for up to a minute unless the user stops it.
+const RING_PERIOD_S = 1.5;
+const RING_REPEATS = 40;
 
-  const ctx = new AudioCtx();
-  const start = ctx.currentTime;
+function scheduleBeep(ctx: AudioContext, at: number) {
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(880, at);
+  gain.gain.setValueAtTime(0.0001, at);
+  gain.gain.exponentialRampToValueAtTime(0.3, at + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.18);
+  oscillator.connect(gain).connect(ctx.destination);
+  oscillator.start(at);
+  oscillator.stop(at + 0.2);
+}
 
-  [0, 0.45, 0.9].forEach((offset) => {
-    const oscillator = ctx.createOscillator();
-    const gain = ctx.createGain();
+/**
+ * Countdown alarm scheduled on the Web Audio clock. Browsers throttle page
+ * timers in background tabs (down to once a minute), but audio scheduled
+ * ahead of time still plays on time, so the alarm rings exactly at zero.
+ */
+class CountdownAlarm {
+  private ctx: AudioContext | null = null;
 
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(880, start + offset);
-    gain.gain.setValueAtTime(0.0001, start + offset);
-    gain.gain.exponentialRampToValueAtTime(0.25, start + offset + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + offset + 0.32);
+  /** Rings starting `delayMs` from now. Replaces any scheduled alarm. */
+  schedule(delayMs: number) {
+    this.cancel();
+    type WindowWithAudio = Window & { webkitAudioContext?: typeof AudioContext };
+    const AudioCtx =
+      window.AudioContext ?? (window as WindowWithAudio).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    this.ctx = ctx;
+    const startAt = ctx.currentTime + Math.max(0, delayMs) / 1000;
+    for (let ring = 0; ring < RING_REPEATS; ring++) {
+      const base = startAt + ring * RING_PERIOD_S;
+      for (const offset of [0, 0.25, 0.5, 0.75]) scheduleBeep(ctx, base + offset);
+    }
+  }
 
-    oscillator.connect(gain).connect(ctx.destination);
-    oscillator.start(start + offset);
-    oscillator.stop(start + offset + 0.35);
-  });
+  cancel() {
+    if (this.ctx) {
+      void this.ctx.close();
+      this.ctx = null;
+    }
+  }
 
-  window.setTimeout(() => void ctx.close(), 1600);
+  /** False if the browser blocked audio (no user interaction yet). */
+  get audible() {
+    return this.ctx?.state === "running";
+  }
 }
 
 type Lap = {
@@ -239,6 +266,43 @@ const TimerStopwatch: React.FC = () => {
   const [timerRunning, setTimerRunning] = useState(initial.timer.running);
   const [soundEnabled, setSoundEnabled] = useState(initial.timer.sound);
   const endsAtRef = useRef(initial.timer.endsAt);
+  const alarmRef = useRef<CountdownAlarm | null>(null);
+  if (!alarmRef.current) alarmRef.current = new CountdownAlarm();
+  const alarm = alarmRef.current;
+  // Ringing now (shows the Stop alarm button); finished stays set until the
+  // user starts, resets or dismisses, and drives the page title.
+  const [ringing, setRinging] = useState(false);
+  const [finished, setFinished] = useState(false);
+
+  const stopAlarm = () => {
+    alarm.cancel();
+    setRinging(false);
+    setFinished(false);
+  };
+
+  // Stop sound when leaving the page.
+  useEffect(() => () => alarm.cancel(), [alarm]);
+
+  // After a reload the browser only allows sound once the user interacts
+  // with the page, so re-arm a running countdown's alarm on the first click
+  // or key press.
+  useEffect(() => {
+    if (!initial.timer.running || initial.timer.endsAt <= Date.now()) return;
+    if (initial.timer.sound) alarm.schedule(initial.timer.endsAt - Date.now());
+    const rearm = () => {
+      if (!alarm.audible && endsAtRef.current > Date.now() && soundEnabledRef.current) {
+        alarm.schedule(endsAtRef.current - Date.now());
+      }
+    };
+    window.addEventListener("pointerdown", rearm, { once: true });
+    window.addEventListener("keydown", rearm, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", rearm);
+      window.removeEventListener("keydown", rearm);
+    };
+    // Run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const soundEnabledRef = useRef(soundEnabled);
 
   useEffect(() => {
@@ -263,7 +327,13 @@ const TimerStopwatch: React.FC = () => {
     endsAtRef.current = 0;
     clear();
     setSuccess("Time is up!");
-    if (soundEnabledRef.current) playAlarm();
+    setFinished(true);
+    if (soundEnabledRef.current) {
+      // Normally already ringing from the audio clock; if the alarm was never
+      // armed (e.g. audio was blocked after a reload), try to ring now.
+      if (!alarm.audible) alarm.schedule(0);
+      setRinging(true);
+    }
   };
 
   // Kept in a ref so the countdown interval never has to be torn down and
@@ -297,17 +367,21 @@ const TimerStopwatch: React.FC = () => {
     }
 
     if (remaining <= 0) setDuration(target);
+    stopAlarm();
+    if (soundEnabled) alarm.schedule(target);
     endsAtRef.current = Date.now() + target;
     setRemaining(target);
     setTimerRunning(true);
   };
 
   const pauseTimer = () => {
+    alarm.cancel();
     setRemaining(Math.max(0, endsAtRef.current - Date.now()));
     setTimerRunning(false);
   };
 
   const resetTimer = () => {
+    stopAlarm();
     setTimerRunning(false);
     setRemaining(0);
     setDuration(0);
@@ -317,6 +391,7 @@ const TimerStopwatch: React.FC = () => {
   };
 
   const applyPreset = (totalSeconds: number) => {
+    stopAlarm();
     setTimerRunning(false);
     setRemaining(0);
     setDuration(0);
@@ -339,10 +414,60 @@ const TimerStopwatch: React.FC = () => {
       endsAtRef.current = 0;
       setTab("timer");
       setSuccess(`Time is up! The countdown finished at ${finishedAt}.`);
+      setFinished(true);
+      if (initial.timer.sound) {
+        alarm.schedule(0);
+        // Browsers usually block sound until the user interacts with the page.
+        setRinging(alarm.audible);
+      }
     }
     // Run once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!ringing) return;
+    const id = window.setTimeout(
+      () => setRinging(false),
+      RING_PERIOD_S * RING_REPEATS * 1000,
+    );
+    return () => window.clearTimeout(id);
+  }, [ringing]);
+
+  // Sound switch: arm or disarm the alarm of a running countdown.
+  const toggleSound = (enabled: boolean) => {
+    setSoundEnabled(enabled);
+    if (!enabled) {
+      alarm.cancel();
+      setRinging(false);
+    } else if (timerRunning) {
+      alarm.schedule(endsAtRef.current - Date.now());
+    }
+  };
+
+  // Browser tab title: show the live time while something is running, so it
+  // can be followed from other tabs. Only changes once per second.
+  const titleParts: string[] = [];
+  if (finished) titleParts.push("\u23f0 Time's up!");
+  else if (timerRunning) titleParts.push(`\u23f3 ${formatDuration(remaining, false)}`);
+  if (swRunning) titleParts.push(`\u23f1 ${formatDuration(swElapsed, false)}`);
+  // Nothing running: show the paused time of the open tab, if any.
+  if (!titleParts.length) {
+    const paused = tab === "timer" ? remaining : swElapsed;
+    if (paused > 0) titleParts.push(`\u23f8 ${formatDuration(paused, false)}`);
+  }
+  const pageTitle = titleParts.length
+    ? `${titleParts.join(" \u00b7 ")} \u2013 Timer & Stopwatch`
+    : "";
+  const titleElement = useMemo(
+    () =>
+      pageTitle ? (
+        <Helmet>
+          <title>{pageTitle}</title>
+        </Helmet>
+      ) : null,
+    [pageTitle],
+  );
 
   // Save whenever the state changes. While running, only timestamps are
   // stored, so the per-tick display updates don't trigger writes.
@@ -401,6 +526,7 @@ const TimerStopwatch: React.FC = () => {
 
   return (
     <PageContainer maxWidth={860}>
+      {titleElement}
       <Stack spacing={2}>
         <Tabs
           value={tab}
@@ -598,13 +724,18 @@ const TimerStopwatch: React.FC = () => {
                   onClick={resetTimer}
                   disabled={!timerRunning && remaining === 0 && duration === 0}
                 />
+                {ringing && (
+                  <ActionButton color="error" onClick={stopAlarm}>
+                    Stop alarm
+                  </ActionButton>
+                )}
               </Stack>
 
               <FormControlLabel
                 control={
                   <Switch
                     checked={soundEnabled}
-                    onChange={(e) => setSoundEnabled(e.target.checked)}
+                    onChange={(e) => toggleSound(e.target.checked)}
                   />
                 }
                 label={"Sound alert when time is up"}
