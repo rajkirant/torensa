@@ -42,6 +42,11 @@ const pending = new Map<
 let queue: Promise<unknown> = Promise.resolve();
 const memoryCache = new Map<string, Promise<string | null>>();
 
+// TikZJax runs e-TeX, which lacks the \ifincsname primitive that LaTeX's
+// definition of ~ uses, so any ~ in a picture would stop TeX. Outside a
+// \csname it is always false.
+const ENGINE_PREAMBLE = "\\let\\ifincsname\\iffalse\n";
+
 /** Short stable hash, used to give each diagram's ids a unique prefix. */
 function hashKey(key: string) {
   let h = 5381;
@@ -182,7 +187,11 @@ export function renderTikz(job: TikzJob): Promise<string | null> {
     .catch(() => undefined)
     .then(async () => {
       await withTimeout(startWorker());
-      const html = await withTimeout(call("texify", [job.source, job.dataset]));
+      const dataset = {
+        ...job.dataset,
+        addToPreamble: ENGINE_PREAMBLE + (job.dataset.addToPreamble ?? ""),
+      };
+      const html = await withTimeout(call("texify", [job.source, dataset]));
       if (typeof html !== "string") return null;
       const svg = sanitizeSvg(html, `d${hashKey(job.key)}x`);
       if (svg) writeCache(job.key, svg);

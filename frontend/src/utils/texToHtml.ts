@@ -724,6 +724,7 @@ class TexRenderer {
           .join("");
     }
     html = this.resolvePlaceholders(html);
+    this.resolveTikzReferences();
 
     const notes: string[] = [];
     for (const [note, count] of this.notes) {
@@ -1659,43 +1660,78 @@ class TexRenderer {
       : `<p class="tex-ccs tex-noindent"><strong>CCS Concepts:</strong> ${text}</p>`;
   }
 
+  /** Text of a cross-reference; `space` joins a name such as "Figure" to its number. */
+  private refText(kind: string, keys: string, space: string) {
+    return keys
+      .split(",")
+      .map((key) => {
+        const target = this.labels.get(key.trim());
+        if (!target) return "??";
+        const num = target.num || "??";
+        if (kind === "eqref") return `(${num})`;
+        if (kind === "autoref" || kind === "cref" || kind === "Cref") {
+          const word = LABEL_KIND_NAMES[target.kind] ?? "";
+          return `${word ? `${word}${space}` : ""}${num}`;
+        }
+        return num;
+      })
+      .join(", ");
+  }
+
+  /** Text of a citation, such as "[3, p. 5]". */
+  private citeText(keys: string, noteText: string, escape: (text: string) => string) {
+    const nums = keys
+      .split(",")
+      .map((key) => key.trim())
+      .filter(Boolean)
+      .map((key) => {
+        // Without a thebibliography list (e.g. BibTeX), number citations
+        // in the order they first appear.
+        const num =
+          this.bibNumbers.get(key) ??
+          (this.bibNumbers.size
+            ? "?"
+            : String(this.citeFallback.get(key) ?? "?"));
+        return escape(num);
+      });
+    return `[${nums.join(", ")}${noteText ? `, ${noteText}` : ""}]`;
+  }
+
+  /**
+   * TikZ pictures are compiled on their own, without the document's labels
+   * and bibliography, so a \ref or \cite inside one would stop TeX. Replace
+   * them with their resolved text, once every label is known.
+   */
+  private resolveTikzReferences() {
+    for (const job of this.tikzJobs) {
+      const source = job.source
+        .replace(
+          /\\(ref|pageref|autoref|cref|Cref|eqref)\*?\s*\{([^}]*)\}/g,
+          (_m, kind: string, keys: string) => this.refText(kind, keys, "~"),
+        )
+        .replace(
+          /\\(?:cite[a-z]*|parencite|textcite|autocite)\*?\s*(?:\[([^\]]*)\])?\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}/g,
+          (_m, note: string | undefined, keys: string) =>
+            this.citeText(keys, note ?? "", (text) => text),
+        );
+      if (source !== job.source) {
+        job.source = source;
+        job.key = JSON.stringify([source, job.dataset]);
+      }
+    }
+  }
+
   private resolvePlaceholders(html: string) {
     const pattern = new RegExp(`${PLACEHOLDER}([^${PLACEHOLDER}]*)${PLACEHOLDER}`, "g");
     return html.replace(pattern, (_m, token: string) => {
       if (token === "CCS") return this.renderCcs();
       if (token.startsWith("REF:")) {
         const [, kind, keys] = token.match(/^REF:([^:]+):([\s\S]*)$/) ?? [];
-        return keys
-          .split(",")
-          .map((key) => {
-            const target = this.labels.get(key.trim());
-            if (!target) return "??";
-            const num = target.num || "??";
-            if (kind === "eqref") return `(${num})`;
-            if (kind === "autoref" || kind === "cref" || kind === "Cref") {
-              const word = LABEL_KIND_NAMES[target.kind] ?? "";
-              return `${word ? `${word}&nbsp;` : ""}${num}`;
-            }
-            return num;
-          })
-          .join(", ");
+        return this.refText(kind, keys, "&nbsp;");
       }
       if (token.startsWith("CITE:")) {
         const [keys, noteText] = token.slice(5).split("|");
-        const nums = keys
-          .split(",")
-          .filter(Boolean)
-          .map((key) => {
-            // Without a thebibliography list (e.g. BibTeX), number citations
-            // in the order they first appear.
-            const num =
-              this.bibNumbers.get(key) ??
-              (this.bibNumbers.size
-                ? "?"
-                : String(this.citeFallback.get(key) ?? "?"));
-            return esc(num);
-          });
-        return `[${nums.join(", ")}${noteText ? `, ${noteText}` : ""}]`;
+        return this.citeText(keys, noteText, esc);
       }
       return "";
     });
