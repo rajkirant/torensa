@@ -163,6 +163,8 @@ class HabitLog(models.Model):
         related_name="logs",
     )
     date = models.DateField()
+    # Optional note about the day's completion.
+    note = models.TextField(blank=True, default="")
 
     class Meta:
         unique_together = ("user", "habit", "date")
