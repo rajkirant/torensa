@@ -140,6 +140,9 @@ class Habit(models.Model):
     name = models.CharField(max_length=255)
     points = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    # Deleted habits are kept so the points they earned on past days stay in
+    # the history.
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["created_at"]
@@ -160,6 +163,8 @@ class HabitLog(models.Model):
         related_name="logs",
     )
     date = models.DateField()
+    # Optional note about the day's completion.
+    note = models.TextField(blank=True, default="")
 
     class Meta:
         unique_together = ("user", "habit", "date")
