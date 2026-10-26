@@ -31,6 +31,28 @@ def _health_response():
     }
 
 
+def _is_migrate_task(event):
+    # Sent only by the deploy workflow with `aws lambda invoke`. HTTP requests
+    # arrive through API Gateway with a requestContext, so a web request can
+    # never trigger this.
+    return event.get("torensa_task") == "migrate" and "requestContext" not in event
+
+
+def _run_migrations():
+    import io
+
+    import django
+    from django.core.management import call_command
+
+    django.setup()
+    output = io.StringIO()
+    try:
+        call_command("migrate", interactive=False, stdout=output, stderr=output)
+    except Exception as exc:
+        return {"ok": False, "error": repr(exc), "output": output.getvalue()[-4000:]}
+    return {"ok": True, "output": output.getvalue()[-4000:]}
+
+
 def _get_handler():
     global _handler
     if _handler is None:
@@ -90,6 +112,9 @@ def _public_cors_headers(event):
 def lambda_handler(event, context):
     if _is_health_check(event):
         return _health_response()
+
+    if _is_migrate_task(event):
+        return _run_migrations()
 
     path = event.get("rawPath") or event.get("path") or ""
     if _PUBLIC_CHATBOT_RE.match(path) and event.get("requestContext", {}).get("http", {}).get("method") == "OPTIONS":

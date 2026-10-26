@@ -64,3 +64,23 @@ jobs:
           aws lambda update-function-code \
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
             --image-uri "$IMAGE_URI"
+
+      - name: Run database migrations
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }}
+          aws lambda invoke \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
+            --cli-binary-format raw-in-base64-out \
+            --payload '{"torensa_task": "migrate"}' \
+            migrate-result.json > migrate-invoke.json
+          cat migrate-invoke.json
+          python3 - <<'PY'
+          import json, sys
+          invoke = json.load(open("migrate-invoke.json"))
+          result = json.load(open("migrate-result.json"))
+          print(result.get("output", ""))
+          if invoke.get("FunctionError") or not result.get("ok"):
+              print("Migration failed:", result.get("error") or result)
+              sys.exit(1)
+          PY
