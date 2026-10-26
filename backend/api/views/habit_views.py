@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.utils import timezone
 from datetime import date, timedelta
 
 from ..models import Habit, HabitLog
@@ -10,12 +11,30 @@ from ..models import Habit, HabitLog
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def habits_view(request):
-    """GET: list habits. POST: create a habit."""
+    """GET: list habits. POST: create a habit.
+
+    With ?include_deleted=1, GET also returns deleted habits that were ticked
+    on some day, marked with "deleted": true, so their points still count in
+    the history.
+    """
     if request.method == "GET":
-        habits = Habit.objects.filter(user=request.user).values(
-            "id", "name", "points", "created_at"
-        )
-        return Response(list(habits))
+        habits = Habit.objects.filter(user=request.user, deleted_at__isnull=True)
+        result = [
+            {**habit, "deleted": False}
+            for habit in habits.values("id", "name", "points", "created_at")
+        ]
+        if request.query_params.get("include_deleted") in ("1", "true"):
+            deleted = (
+                Habit.objects.filter(
+                    user=request.user,
+                    deleted_at__isnull=False,
+                    logs__isnull=False,
+                )
+                .distinct()
+                .values("id", "name", "points", "created_at")
+            )
+            result += [{**habit, "deleted": True} for habit in deleted]
+        return Response(result)
 
     # POST
     name = (request.data.get("name") or "").strip()
@@ -53,13 +72,30 @@ def habits_view(request):
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def habit_delete_view(request, habit_id):
-    """Delete a habit owned by the current user."""
-    deleted, _ = Habit.objects.filter(id=habit_id, user=request.user).delete()
-    if not deleted:
+    """Delete a habit owned by the current user.
+
+    The habit is only marked as deleted, so the days it was ticked keep their
+    points. Ticks from ?today=YYYY-MM-DD onwards are removed, since the habit
+    is no longer part of those days.
+    """
+    habit = Habit.objects.filter(
+        id=habit_id, user=request.user, deleted_at__isnull=True
+    ).first()
+    if not habit:
         return Response(
             {"error": "Habit not found."},
             status=status.HTTP_404_NOT_FOUND,
         )
+
+    raw_today = request.query_params.get("today")
+    if raw_today:
+        try:
+            habit.logs.filter(date__gte=date.fromisoformat(raw_today)).delete()
+        except ValueError:
+            pass
+
+    habit.deleted_at = timezone.now()
+    habit.save(update_fields=["deleted_at"])
     return Response({"success": True})
 
 
@@ -76,7 +112,9 @@ def habit_toggle_view(request, habit_id):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    habit = Habit.objects.filter(id=habit_id, user=request.user).first()
+    habit = Habit.objects.filter(
+        id=habit_id, user=request.user, deleted_at__isnull=True
+    ).first()
     if not habit:
         return Response(
             {"error": "Habit not found."},

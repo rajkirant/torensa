@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from .views.subtitle_download_views import _vtt_to_srt
 from .views.tool_chat_views import _build_context
-from .models import TodoCategory, TodoItem
+from .models import Habit, HabitLog, TodoCategory, TodoItem
 
 
 class SubtitleDownloadTests(TestCase):
@@ -76,6 +76,52 @@ class TodoApiTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertFalse(TodoItem.objects.filter(category=category).exists())
+
+
+class HabitApiTests(TestCase):
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=True)
+        self.user = User.objects.create_user(username="habit-user", password="StrongPass123!")
+        self.client.force_login(self.user)
+
+    def _csrf(self):
+        return self.client.get("/api/me/").json()["csrfToken"]
+
+    def test_deleting_habit_keeps_points_on_past_days(self):
+        habit = Habit.objects.create(user=self.user, name="Run", points=5)
+        other = Habit.objects.create(user=self.user, name="Read", points=2)
+        for day in ("2026-10-24", "2026-10-25", "2026-10-26"):
+            HabitLog.objects.create(user=self.user, habit=habit, date=day)
+        token = self._csrf()
+
+        response = self.client.delete(
+            f"/api/habits/{habit.id}/?today=2026-10-26",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, 200)
+
+        # Past ticks stay; today's tick goes with the habit.
+        logs = self.client.get("/api/habits/logs/?days=14&today=2026-10-26").json()
+        self.assertEqual(logs, {"2026-10-24": [habit.id], "2026-10-25": [habit.id]})
+
+        # The deleted habit leaves the list but its points stay available.
+        self.assertEqual([h["id"] for h in self.client.get("/api/habits/").json()], [other.id])
+        with_deleted = self.client.get("/api/habits/?include_deleted=1").json()
+        self.assertEqual(
+            {(h["id"], h["points"], h["deleted"]) for h in with_deleted},
+            {(other.id, 2, False), (habit.id, 5, True)},
+        )
+
+        # A deleted habit can no longer be ticked or deleted again.
+        toggle = self.client.post(
+            f"/api/habits/{habit.id}/toggle/",
+            data=json.dumps({"date": "2026-10-26"}),
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(toggle.status_code, 404)
+        again = self.client.delete(f"/api/habits/{habit.id}/", HTTP_X_CSRFTOKEN=token)
+        self.assertEqual(again.status_code, 404)
 
 
 class AuthCsrfTests(TestCase):

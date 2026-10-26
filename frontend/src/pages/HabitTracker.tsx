@@ -38,6 +38,8 @@ interface Habit {
   id: number;
   name: string;
   points: number;
+  /** Deleted habits are kept so their past points still count. */
+  deleted?: boolean;
 }
 
 /** dateKey → list of completed habit ids */
@@ -66,6 +68,7 @@ const BAR_COLORS = [
 
 const HabitTracker: React.FC = () => {
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [deletedHabits, setDeletedHabits] = useState<Habit[]>([]);
   const [log, setLog] = useState<DailyLog>({});
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
@@ -81,12 +84,14 @@ const HabitTracker: React.FC = () => {
     const load = async () => {
       try {
         const [habitsRes, logsRes] = await Promise.all([
-          apiFetch("/api/habits/"),
+          apiFetch("/api/habits/?include_deleted=1"),
           apiFetch(`/api/habits/logs/?days=14&today=${today()}`),
         ]);
         if (cancelled) return;
         if (habitsRes.ok && logsRes.ok) {
-          setHabits(await habitsRes.json());
+          const all: Habit[] = await habitsRes.json();
+          setHabits(all.filter((h) => !h.deleted));
+          setDeletedHabits(all.filter((h) => h.deleted));
           setLog(await logsRes.json());
         } else {
           setError("Failed to load habits.");
@@ -142,19 +147,24 @@ const HabitTracker: React.FC = () => {
 
   const removeHabit = async (id: number) => {
     try {
-      const res = await apiFetch(`/api/habits/${id}/`, { method: "DELETE" });
+      // Past days keep the points this habit earned; only today's tick goes.
+      const key = today();
+      const res = await apiFetch(`/api/habits/${id}/?today=${key}`, {
+        method: "DELETE",
+      });
       if (!res.ok) {
         setError("Failed to remove habit.");
         return;
       }
+      const removed = habits.find((h) => h.id === id);
       setHabits((prev) => prev.filter((h) => h.id !== id));
+      if (removed) {
+        setDeletedHabits((prev) => [...prev, { ...removed, deleted: true }]);
+      }
       setLog((prev) => {
-        const next = { ...prev };
-        for (const key of Object.keys(next)) {
-          next[key] = next[key].filter((hid) => hid !== id);
-          if (next[key].length === 0) delete next[key];
-        }
-        return next;
+        const done = prev[key] ?? [];
+        if (!done.includes(id)) return prev;
+        return { ...prev, [key]: done.filter((hid) => hid !== id) };
       });
     } catch {
       setError("Network error.");
@@ -225,13 +235,18 @@ const HabitTracker: React.FC = () => {
 
   /* ── chart data (last 14 days) ── */
 
+  // Points by habit id, including deleted habits that were ticked before.
+  const pointsById = new Map(
+    [...deletedHabits, ...habits].map((h) => [h.id, h.points]),
+  );
+
   const chartData = Array.from({ length: 14 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (13 - i));
     const key = dateKey(d);
     const completedIds = log[key] ?? [];
-    const pts = habits.reduce(
-      (sum, h) => sum + (completedIds.includes(h.id) ? h.points : 0),
+    const pts = completedIds.reduce(
+      (sum, id) => sum + (pointsById.get(id) ?? 0),
       0,
     );
     return {

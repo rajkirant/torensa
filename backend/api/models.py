@@ -140,6 +140,9 @@ class Habit(models.Model):
     name = models.CharField(max_length=255)
     points = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    # Deleted habits are kept so the points they earned on past days stay in
+    # the history.
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["created_at"]
