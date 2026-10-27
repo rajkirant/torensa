@@ -66,6 +66,35 @@ class TodoApiTests(TestCase):
         self.client.force_login(self.other_user)
         self.assertEqual(self.client.get("/api/todo/categories/").json(), [])
 
+    def test_note_on_completed_item(self):
+        category = TodoCategory.objects.create(user=self.user, name="Work")
+        item = TodoItem.objects.create(category=category, text="Ship feature")
+        token = self._csrf()
+
+        def patch(data):
+            return self.client.patch(
+                f"/api/todo/items/{item.id}/",
+                data=json.dumps(data),
+                content_type="application/json",
+                HTTP_X_CSRFTOKEN=token,
+            )
+
+        # Only completed items take a note.
+        self.assertEqual(patch({"note": "Done in v2"}).status_code, 400)
+        self.assertEqual(patch({"completed": True}).json()["note"], "")
+        self.assertEqual(patch({"note": "  Done in v2 "}).json()["note"], "Done in v2")
+        self.assertEqual(patch({"note": "x" * 501}).status_code, 400)
+        self.assertEqual(patch({}).status_code, 400)
+        self.assertEqual(
+            self.client.get("/api/todo/categories/").json()[0]["items"][0]["note"],
+            "Done in v2",
+        )
+
+        # Unchecking keeps the note; an empty note clears it.
+        unchecked = patch({"completed": False}).json()
+        self.assertEqual((unchecked["completed"], unchecked["note"]), (False, "Done in v2"))
+        self.assertEqual(patch({"note": ""}).json()["note"], "")
+
     def test_deleting_category_cascades_items(self):
         category = TodoCategory.objects.create(user=self.user, name="Home")
         TodoItem.objects.create(category=category, text="Clean")
@@ -122,39 +151,6 @@ class HabitApiTests(TestCase):
         self.assertEqual(toggle.status_code, 404)
         again = self.client.delete(f"/api/habits/{habit.id}/", HTTP_X_CSRFTOKEN=token)
         self.assertEqual(again.status_code, 404)
-
-
-    def test_note_on_completed_habit(self):
-        habit = Habit.objects.create(user=self.user, name="Run", points=5)
-        HabitLog.objects.create(user=self.user, habit=habit, date="2026-10-26")
-        token = self._csrf()
-
-        def set_note(note, day="2026-10-26"):
-            return self.client.patch(
-                f"/api/habits/{habit.id}/note/",
-                data=json.dumps({"date": day, "note": note}),
-                content_type="application/json",
-                HTTP_X_CSRFTOKEN=token,
-            )
-
-        self.assertEqual(set_note("  5 km in 28 min ").json()["note"], "5 km in 28 min")
-        logs = self.client.get("/api/habits/logs/?days=14&today=2026-10-26&notes=1").json()
-        self.assertEqual(logs["logs"], {"2026-10-26": [habit.id]})
-        self.assertEqual(logs["notes"], {"2026-10-26": {str(habit.id): "5 km in 28 min"}})
-        # Without ?notes=1 the response keeps its original shape.
-        self.assertEqual(
-            self.client.get("/api/habits/logs/?days=14&today=2026-10-26").json(),
-            {"2026-10-26": [habit.id]},
-        )
-
-        # Only completed days take a note, and notes are limited in length.
-        self.assertEqual(set_note("x", day="2026-10-25").status_code, 404)
-        self.assertEqual(set_note("x" * 501).status_code, 400)
-
-        # An empty note clears it.
-        set_note("")
-        logs = self.client.get("/api/habits/logs/?days=14&today=2026-10-26&notes=1").json()
-        self.assertEqual(logs["notes"], {})
 
 
 class AuthCsrfTests(TestCase):

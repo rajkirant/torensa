@@ -163,8 +163,6 @@ class HabitLog(models.Model):
         related_name="logs",
     )
     date = models.DateField()
-    # Optional note about the day's completion.
-    note = models.TextField(blank=True, default="")
 
     class Meta:
         unique_together = ("user", "habit", "date")
@@ -199,6 +197,8 @@ class TodoItem(models.Model):
     )
     text = models.CharField(max_length=500)
     completed = models.BooleanField(default=False)
+    # Optional note, added once the item is completed.
+    note = models.TextField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
@@ -27,7 +28,15 @@ import {
   normalizeQuery,
 } from "../utils/highlightMatch";
 
-type TodoItem = { id: number; text: string; completed: boolean };
+type TodoItem = {
+  id: number;
+  text: string;
+  completed: boolean;
+  /** Optional note on a completed item. */
+  note?: string;
+};
+
+const NOTE_MAX_LENGTH = 500;
 type TodoCategory = { id: number; name: string; items: TodoItem[] };
 
 const HIDE_COMPLETED_KEY = "torensa_todo_hide_completed";
@@ -151,6 +160,55 @@ export default function ToDo() {
     }
   };
 
+  // Item whose note is being edited, and the draft text.
+  const [noteEditing, setNoteEditing] = useState<number | null>(null);
+  const [noteDraft, setNoteDraft] = useState("");
+
+  const setItemNote = (categoryId: number, itemId: number, note: string) => {
+    setCategories((current) =>
+      current.map((category) =>
+        category.id === categoryId
+          ? {
+              ...category,
+              items: category.items.map((item) =>
+                item.id === itemId ? { ...item, note } : item,
+              ),
+            }
+          : category,
+      ),
+    );
+  };
+
+  const startNote = (item: TodoItem) => {
+    setNoteEditing(item.id);
+    setNoteDraft(item.note ?? "");
+  };
+
+  const saveNote = async (categoryId: number, item: TodoItem) => {
+    const note = noteDraft.trim();
+    const previous = item.note ?? "";
+    setNoteEditing(null);
+    if (note === previous) return;
+    setItemNote(categoryId, item.id, note);
+    try {
+      const response = await apiFetch(`/api/todo/items/${item.id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note }),
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        setItemNote(categoryId, item.id, previous);
+        setError(
+          formatApiError(data, `Unable to save note (${response.status}).`),
+        );
+      }
+    } catch {
+      setItemNote(categoryId, item.id, previous);
+      setError("Unable to reach the server. Please try again.");
+    }
+  };
+
   const toggleItem = async (categoryId: number, itemId: number) => {
     const category = categories.find((entry) => entry.id === categoryId);
     const item = category?.items.find((entry) => entry.id === itemId);
@@ -252,7 +310,11 @@ export default function ToDo() {
       category,
       nameMatches: searching && matchesQuery(category.name, query),
       matchingItems: searching
-        ? category.items.filter((item) => matchesQuery(item.text, query))
+        ? category.items.filter(
+            (item) =>
+              matchesQuery(item.text, query) ||
+              (item.completed && matchesQuery(item.note ?? "", query)),
+          )
         : category.items,
     }))
     .filter(
@@ -420,12 +482,15 @@ export default function ToDo() {
                     />
                   </Stack>
                   <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                    {visibleItems.map((item) => (
-                      <Stack
+                    {visibleItems.map((item) => {
+                      // Notes belong to completed items; an unchecked item
+                      // keeps its note but does not show it.
+                      const note = item.completed ? (item.note ?? "") : "";
+                      const editingNote =
+                        item.completed && noteEditing === item.id;
+                      return (
+                      <Box
                         key={item.id}
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
                         sx={{
                           px: 1.5,
                           py: 0.5,
@@ -434,6 +499,7 @@ export default function ToDo() {
                           },
                         }}
                       >
+                      <Stack direction="row" alignItems="center" spacing={1}>
                         <Checkbox
                           checked={item.completed}
                           onChange={() => void toggleItem(category.id, item.id)}
@@ -450,6 +516,24 @@ export default function ToDo() {
                         >
                           {highlightMatch(item.text, query)}
                         </Typography>
+                        {item.completed && (
+                          <Tooltip
+                            title={note ? "Edit note" : "Add a note (optional)"}
+                          >
+                            <IconButton
+                              size="small"
+                              color={note ? "primary" : "default"}
+                              onClick={() =>
+                                editingNote
+                                  ? setNoteEditing(null)
+                                  : startNote(item)
+                              }
+                              aria-label={`${note ? "Edit" : "Add"} note for ${item.text}`}
+                            >
+                              <EditNoteOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
                         <Tooltip title="Remove item">
                           <IconButton
                             size="small"
@@ -462,7 +546,54 @@ export default function ToDo() {
                           </IconButton>
                         </Tooltip>
                       </Stack>
-                    ))}
+                      {editingNote ? (
+                        <TextField
+                          autoFocus
+                          fullWidth
+                          multiline
+                          maxRows={4}
+                          size="small"
+                          placeholder="Add a note (optional)"
+                          value={noteDraft}
+                          onChange={(event) =>
+                            setNoteDraft(
+                              event.target.value.slice(0, NOTE_MAX_LENGTH),
+                            )
+                          }
+                          onBlur={() => void saveNote(category.id, item)}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" && !event.shiftKey) {
+                              event.preventDefault();
+                              (event.target as HTMLElement).blur();
+                            } else if (event.key === "Escape") {
+                              setNoteDraft(item.note ?? "");
+                              setNoteEditing(null);
+                            }
+                          }}
+                          inputProps={{ "aria-label": `Note for ${item.text}` }}
+                          sx={{ mt: 0.5, mb: 0.5, pl: 4.5 }}
+                        />
+                      ) : (
+                        note && (
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            onClick={() => startNote(item)}
+                            sx={{
+                              pl: 5,
+                              pb: 0.5,
+                              cursor: "pointer",
+                              whiteSpace: "pre-wrap",
+                              wordBreak: "break-word",
+                            }}
+                          >
+                            {highlightMatch(note, query)}
+                          </Typography>
+                        )
+                      )}
+                      </Box>
+                      );
+                    })}
                     {!searching && hidingCompleted && completed > 0 && (
                       <Stack
                         direction="row"
