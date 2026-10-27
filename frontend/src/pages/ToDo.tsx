@@ -55,7 +55,8 @@ export default function ToDo() {
   const [itemDrafts, setItemDrafts] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [collapsedCategories, setCollapsedCategories] = useState<
+  // Categories start collapsed; this holds the ones the user opened.
+  const [expandedCategories, setExpandedCategories] = useState<
     Record<number, boolean>
   >({});
   // Categories whose completed items are hidden (remembered in this browser).
@@ -121,6 +122,8 @@ export default function ToDo() {
       }
       const category = await response.json();
       setCategories((current) => [...current, category]);
+      // Open a new category so items can be added to it straight away.
+      setExpandedCategories((current) => ({ ...current, [category.id]: true }));
       setCategoryName("");
     } catch {
       setError("Unable to reach the server. Please try again.");
@@ -281,7 +284,7 @@ export default function ToDo() {
     setCategories((current) =>
       current.filter((category) => category.id !== categoryId),
     );
-    setCollapsedCategories((current) => {
+    setExpandedCategories((current) => {
       const next = { ...current };
       delete next[categoryId];
       return next;
@@ -298,7 +301,7 @@ export default function ToDo() {
   };
 
   const toggleCategory = (categoryId: number) => {
-    setCollapsedCategories((current) => ({
+    setExpandedCategories((current) => ({
       ...current,
       [categoryId]: !current[categoryId],
     }));
@@ -387,7 +390,7 @@ export default function ToDo() {
               ).length;
               // Search results are always shown, even in collapsed categories
               // and including hidden completed items.
-              const isExpanded = searching || !collapsedCategories[category.id];
+              const isExpanded = searching || Boolean(expandedCategories[category.id]);
               const hidingCompleted = Boolean(hideCompleted[category.id]);
               const visibleItems = searching
                 ? nameMatches
