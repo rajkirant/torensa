@@ -130,59 +130,10 @@ def habit_toggle_view(request, habit_id):
     return Response({"done": created, "date": str(log_date)})
 
 
-NOTE_MAX_LENGTH = 500
-
-
-@api_view(["PATCH"])
-@permission_classes([IsAuthenticated])
-def habit_note_view(request, habit_id):
-    """Set or clear the note on a habit's completion for a date."""
-    try:
-        log_date = date.fromisoformat(request.data.get("date") or "")
-    except (TypeError, ValueError):
-        return Response(
-            {"error": "Invalid date format. Use YYYY-MM-DD."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    note = request.data.get("note")
-    if not isinstance(note, str):
-        return Response(
-            {"error": "Note must be text."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-    note = note.strip()
-    if len(note) > NOTE_MAX_LENGTH:
-        return Response(
-            {"error": f"Note must be at most {NOTE_MAX_LENGTH} characters."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    log = HabitLog.objects.filter(
-        user=request.user,
-        habit_id=habit_id,
-        habit__deleted_at__isnull=True,
-        date=log_date,
-    ).first()
-    if not log:
-        return Response(
-            {"error": "Habit is not completed on that date."},
-            status=status.HTTP_404_NOT_FOUND,
-        )
-
-    log.note = note
-    log.save(update_fields=["note"])
-    return Response({"note": log.note, "date": str(log_date)})
-
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def habit_logs_view(request):
-    """Return completion logs for the last N days (default 14).
-
-    The result maps each date to the ids of the habits completed that day.
-    With ?notes=1 it is {"logs": <that map>, "notes": {date: {id: note}}}.
-    """
+    """Return completion logs for the last N days (default 14)."""
     try:
         days = int(request.query_params.get("days", 14))
         days = min(max(days, 1), 90)
@@ -197,17 +148,12 @@ def habit_logs_view(request):
     since = anchor - timedelta(days=days - 1)
     logs = HabitLog.objects.filter(
         user=request.user, date__gte=since
-    ).values_list("habit_id", "date", "note")
+    ).values_list("habit_id", "date")
 
     # group by date string
     result: dict[str, list[int]] = {}
-    notes: dict[str, dict[int, str]] = {}
-    for habit_id, log_date, note in logs:
+    for habit_id, log_date in logs:
         key = str(log_date)
         result.setdefault(key, []).append(habit_id)
-        if note:
-            notes.setdefault(key, {})[habit_id] = note
 
-    if request.query_params.get("notes") in ("1", "true"):
-        return Response({"logs": result, "notes": notes})
     return Response(result)

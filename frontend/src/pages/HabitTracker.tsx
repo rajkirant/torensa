@@ -10,7 +10,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddIcon from "@mui/icons-material/Add";
-import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import PageContainer from "../components/PageContainer";
 import SearchField from "../components/inputs/SearchField";
 import { ActionButton } from "../components/buttons/ActionButton";
@@ -46,11 +45,6 @@ interface Habit {
 /** dateKey → list of completed habit ids */
 type DailyLog = Record<string, number[]>;
 
-/** dateKey → habit id → note on that day's completion */
-type DailyNotes = Record<string, Record<number, string>>;
-
-const NOTE_MAX_LENGTH = 500;
-
 /* ── helpers ───────────────────────────────────────────── */
 
 const dateKey = (d: Date) =>
@@ -76,10 +70,6 @@ const HabitTracker: React.FC = () => {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [deletedHabits, setDeletedHabits] = useState<Habit[]>([]);
   const [log, setLog] = useState<DailyLog>({});
-  const [notes, setNotes] = useState<DailyNotes>({});
-  // Habit whose note is being edited, and the draft text.
-  const [noteEditing, setNoteEditing] = useState<number | null>(null);
-  const [noteDraft, setNoteDraft] = useState("");
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
   const [newPoints, setNewPoints] = useState<number | "">(1);
@@ -95,16 +85,14 @@ const HabitTracker: React.FC = () => {
       try {
         const [habitsRes, logsRes] = await Promise.all([
           apiFetch("/api/habits/?include_deleted=1"),
-          apiFetch(`/api/habits/logs/?days=14&today=${today()}&notes=1`),
+          apiFetch(`/api/habits/logs/?days=14&today=${today()}`),
         ]);
         if (cancelled) return;
         if (habitsRes.ok && logsRes.ok) {
           const all: Habit[] = await habitsRes.json();
           setHabits(all.filter((h) => !h.deleted));
           setDeletedHabits(all.filter((h) => h.deleted));
-          const logs = await logsRes.json();
-          setLog(logs.logs ?? {});
-          setNotes(logs.notes ?? {});
+          setLog(await logsRes.json());
         } else {
           setError("Failed to load habits.");
         }
@@ -232,57 +220,6 @@ const HabitTracker: React.FC = () => {
 
   const isDone = (habitId: number) => (log[today()] ?? []).includes(habitId);
 
-  /* ── notes on today's completions ── */
-
-  const noteFor = (habitId: number) => notes[today()]?.[habitId] ?? "";
-
-  const setNoteLocally = (key: string, habitId: number, note: string) => {
-    setNotes((prev) => {
-      const day = { ...(prev[key] ?? {}) };
-      if (note) day[habitId] = note;
-      else delete day[habitId];
-      return { ...prev, [key]: day };
-    });
-  };
-
-  const startNote = (habitId: number) => {
-    setNoteEditing(habitId);
-    setNoteDraft(noteFor(habitId));
-  };
-
-  const saveNote = async (habitId: number) => {
-    const key = today();
-    const note = noteDraft.trim();
-    setNoteEditing(null);
-    if (note === noteFor(habitId)) return;
-    const previous = noteFor(habitId);
-    setNoteLocally(key, habitId, note);
-    try {
-      const res = await apiFetch(`/api/habits/${habitId}/note/`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: key, note }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        setNoteLocally(key, habitId, previous);
-        setError(data?.error || "Failed to save note.");
-      }
-    } catch {
-      setNoteLocally(key, habitId, previous);
-      setError("Network error.");
-    }
-  };
-
-  const toggleHabit = (habitId: number) => {
-    // Unticking removes that day's completion, and its note with it.
-    if (isDone(habitId)) {
-      setNoteLocally(today(), habitId, "");
-      if (noteEditing === habitId) setNoteEditing(null);
-    }
-    void toggle(habitId);
-  };
-
   /* ── points ── */
 
   const todayPoints = habits.reduce(
@@ -366,18 +303,13 @@ const HabitTracker: React.FC = () => {
               type="number"
               value={newPoints}
               onChange={(e) =>
-                setNewPoints(
-                  e.target.value === "" ? "" : Number(e.target.value),
-                )
+                setNewPoints(e.target.value === "" ? "" : Number(e.target.value))
               }
               inputProps={{ min: 1, max: 1000 }}
               sx={{ width: { xs: "100%", sm: 120 } }}
               size="small"
             />
-            <ActionButton
-              onClick={() => void addHabit()}
-              startIcon={<AddIcon />}
-            >
+            <ActionButton onClick={() => void addHabit()} startIcon={<AddIcon />}>
               Add
             </ActionButton>
           </Stack>
@@ -449,11 +381,12 @@ const HabitTracker: React.FC = () => {
             <Stack>
               {visibleHabits.map((habit) => {
                 const done = isDone(habit.id);
-                const note = done ? noteFor(habit.id) : "";
-                const editingNote = done && noteEditing === habit.id;
                 return (
-                  <Box
+                  <Stack
                     key={habit.id}
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
                     sx={{
                       px: 2,
                       py: 1,
@@ -464,101 +397,38 @@ const HabitTracker: React.FC = () => {
                       "&:hover": { bgcolor: "rgba(59,130,246,0.08)" },
                     }}
                   >
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Checkbox
-                        checked={done}
-                        onChange={() => toggleHabit(habit.id)}
-                        sx={{ p: 0.5 }}
-                      />
-                      <Typography
-                        sx={{
-                          flex: 1,
-                          textDecoration: done ? "line-through" : "none",
-                          opacity: done ? 0.6 : 1,
-                          transition: "opacity 0.15s",
-                        }}
+                    <Checkbox
+                      checked={done}
+                      onChange={() => void toggle(habit.id)}
+                      sx={{ p: 0.5 }}
+                    />
+                    <Typography
+                      sx={{
+                        flex: 1,
+                        textDecoration: done ? "line-through" : "none",
+                        opacity: done ? 0.6 : 1,
+                        transition: "opacity 0.15s",
+                      }}
+                    >
+                      {highlightMatch(habit.name, query)}
+                    </Typography>
+                    <Chip
+                      size="small"
+                      label={`+${habit.points}`}
+                      color={done ? "success" : "default"}
+                      variant={done ? "filled" : "outlined"}
+                      sx={{ minWidth: 48, fontWeight: 700 }}
+                    />
+                    <Tooltip title="Remove habit">
+                      <IconButton
+                        size="small"
+                        onClick={() => void removeHabit(habit.id)}
+                        sx={{ opacity: 0.5, "&:hover": { opacity: 1 } }}
                       >
-                        {highlightMatch(habit.name, query)}
-                      </Typography>
-                      <Chip
-                        size="small"
-                        label={`+${habit.points}`}
-                        color={done ? "success" : "default"}
-                        variant={done ? "filled" : "outlined"}
-                        sx={{ minWidth: 48, fontWeight: 700 }}
-                      />
-                      {done && (
-                        <Tooltip
-                          title={note ? "Edit note" : "Add a note (optional)"}
-                        >
-                          <IconButton
-                            size="small"
-                            onClick={() =>
-                              editingNote
-                                ? setNoteEditing(null)
-                                : startNote(habit.id)
-                            }
-                            aria-label={`${note ? "Edit" : "Add"} note for ${habit.name}`}
-                            color={note ? "primary" : "default"}
-                          >
-                            <EditNoteOutlinedIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      <Tooltip title="Remove habit">
-                        <IconButton
-                          size="small"
-                          onClick={() => void removeHabit(habit.id)}
-                          sx={{ opacity: 0.5, "&:hover": { opacity: 1 } }}
-                        >
-                          <DeleteOutlineIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Stack>
-                    {editingNote ? (
-                      <TextField
-                        autoFocus
-                        fullWidth
-                        multiline
-                        maxRows={4}
-                        size="small"
-                        placeholder="Add a note, e.g. how it went (optional)"
-                        value={noteDraft}
-                        onChange={(e) =>
-                          setNoteDraft(e.target.value.slice(0, NOTE_MAX_LENGTH))
-                        }
-                        onBlur={() => void saveNote(habit.id)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault();
-                            (e.target as HTMLElement).blur();
-                          } else if (e.key === "Escape") {
-                            setNoteDraft(noteFor(habit.id));
-                            setNoteEditing(null);
-                          }
-                        }}
-                        inputProps={{ "aria-label": `Note for ${habit.name}` }}
-                        sx={{ mt: 0.75, pl: 4.5 }}
-                      />
-                    ) : (
-                      note && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          onClick={() => startNote(habit.id)}
-                          sx={{
-                            pl: 5,
-                            pt: 0.25,
-                            cursor: "pointer",
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word",
-                          }}
-                        >
-                          {note}
-                        </Typography>
-                      )
-                    )}
-                  </Box>
+                        <DeleteOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
                 );
               })}
             </Stack>

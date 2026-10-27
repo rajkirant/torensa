@@ -5,15 +5,18 @@ from rest_framework.response import Response
 
 from ..models import TodoCategory, TodoItem
 
+NOTE_MAX_LENGTH = 500
+
+
+def _serialize_item(item):
+    return {"id": item.id, "text": item.text, "completed": item.completed, "note": item.note}
+
 
 def _serialize_category(category):
     return {
         "id": category.id,
         "name": category.name,
-        "items": [
-            {"id": item.id, "text": item.text, "completed": item.completed}
-            for item in category.items.all()
-        ],
+        "items": [_serialize_item(item) for item in category.items.all()],
     }
 
 
@@ -58,10 +61,7 @@ def todo_item_create_view(request, category_id):
         return Response({"error": "Category not found."}, status=status.HTTP_404_NOT_FOUND)
 
     item = TodoItem.objects.create(category=category, text=text)
-    return Response(
-        {"id": item.id, "text": item.text, "completed": item.completed},
-        status=status.HTTP_201_CREATED,
-    )
+    return Response(_serialize_item(item), status=status.HTTP_201_CREATED)
 
 
 @api_view(["PATCH", "DELETE"])
@@ -75,8 +75,32 @@ def todo_item_detail_view(request, item_id):
         item.delete()
         return Response({"success": True})
 
-    if "completed" not in request.data or not isinstance(request.data["completed"], bool):
-        return Response({"error": "Completed must be a boolean."}, status=status.HTTP_400_BAD_REQUEST)
-    item.completed = request.data["completed"]
-    item.save(update_fields=["completed"])
-    return Response({"id": item.id, "text": item.text, "completed": item.completed})
+    # PATCH takes "completed", "note" or both. A note can only be added to a
+    # completed item; it is kept if the item is unchecked again.
+    if "completed" not in request.data and "note" not in request.data:
+        return Response({"error": "Nothing to update."}, status=status.HTTP_400_BAD_REQUEST)
+    fields = []
+    if "completed" in request.data:
+        if not isinstance(request.data["completed"], bool):
+            return Response({"error": "Completed must be a boolean."}, status=status.HTTP_400_BAD_REQUEST)
+        item.completed = request.data["completed"]
+        fields.append("completed")
+    if "note" in request.data:
+        note = request.data["note"]
+        if not isinstance(note, str):
+            return Response({"error": "Note must be text."}, status=status.HTTP_400_BAD_REQUEST)
+        note = note.strip()
+        if len(note) > NOTE_MAX_LENGTH:
+            return Response(
+                {"error": f"Note must be at most {NOTE_MAX_LENGTH} characters."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if note and not item.completed:
+            return Response(
+                {"error": "Only completed items can have a note."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        item.note = note
+        fields.append("note")
+    item.save(update_fields=fields)
+    return Response(_serialize_item(item))

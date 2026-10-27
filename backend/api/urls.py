@@ -51,7 +51,6 @@ from .views.habit_views import (
     habit_delete_view,
     habit_toggle_view,
     habit_logs_view,
-    habit_note_view,
 )
 from .views.todo_views import (
     todo_categories_view,
@@ -138,7 +137,6 @@ urlpatterns = [
     path("habits/", habits_view),
     path("habits/<int:habit_id>/", habit_delete_view),
     path("habits/<int:habit_id>/toggle/", habit_toggle_view),
-    path("habits/<int:habit_id>/note/", habit_note_view),
     path("habits/logs/", habit_logs_view),
     # To Do list
     path("todo/categories/", todo_categories_view),
