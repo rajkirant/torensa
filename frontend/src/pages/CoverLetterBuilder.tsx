@@ -88,7 +88,28 @@ const DETAIL_FIELDS: Field[] = [
   },
 ];
 
+/** Today's date as the browser writes it, e.g. "19 November 2026". */
+function todayText() {
+  return new Date().toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 const DEFAULT_OPTIONS: LetterOption[] = [
+  {
+    key: "date",
+    label: "Date",
+    text: "{{letterDate}}",
+    fields: [
+      {
+        key: "letterDate",
+        label: "Date (leave empty for today)",
+        placeholder: todayText(),
+      },
+    ],
+  },
   {
     key: "techTransfer",
     label: "Different tech stack (e.g. .NET job)",
@@ -166,6 +187,8 @@ const TEMPLATES: Template[] = [
     body: `{{yourName}}
 {{yourEmail}} | {{yourPhone}}
 
+{{date}}
+
 Dear {{hiringManager}},
 
 I am writing to apply for the {{role}} position at {{company}}. {{referral}} With {{yearsExperience}} years of experience as a {{currentRole}}, I have a strong track record in {{keySkills}}.
@@ -185,7 +208,9 @@ Kind regards,
     id: "career-change",
     name: "Career change",
     summary: "Leads with transferable skills, for a new stack or field.",
-    body: `Dear {{hiringManager}},
+    body: `{{date}}
+
+Dear {{hiringManager}},
 
 I am excited to apply for the {{role}} role at {{company}}. {{referral}}
 
@@ -205,7 +230,9 @@ Best regards,
     id: "graduate",
     name: "Graduate / entry level",
     summary: "Highlights projects and eagerness to learn.",
-    body: `Dear {{hiringManager}},
+    body: `{{date}}
+
+Dear {{hiringManager}},
 
 I am writing to apply for the {{role}} position at {{company}}. {{referral}} As a {{currentRole}}, I have built a solid foundation in {{keySkills}}.
 
@@ -329,7 +356,7 @@ const EMPTY_STATE: SavedState = {
   templateId: null,
   bodies: {},
   values: { targetTech: ".NET" },
-  checked: {},
+  checked: { date: true },
   optionTexts: {},
   customOptions: [],
   jobDescription: "",
@@ -461,11 +488,15 @@ export default function CoverLetterBuilder() {
     return result;
   }, []);
 
-  const letter = useMemo(
-    () =>
-      template ? renderLetter(body, options, checked, values, labels) : "",
-    [template, body, options, checked, values, labels],
-  );
+  const letter = useMemo(() => {
+    if (!template) return "";
+    // An empty date means today.
+    const filled = {
+      ...values,
+      letterDate: values.letterDate?.trim() || todayText(),
+    };
+    return renderLetter(body, options, checked, filled, labels);
+  }, [template, body, options, checked, values, labels]);
 
   const setValue = (key: string, value: string) =>
     setValues((current) => ({ ...current, [key]: value }));
