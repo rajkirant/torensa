@@ -108,6 +108,15 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - Works fully offline once loaded.
 - [View LaTeX](https://torensa.com/tex-viewer)
 
+### Cover Letter Builder - Free Templates with Smart Options
+- Cover Letter Builder helps you write a tailored cover letter in minutes. Pick a template, fill in your details once, and tick the options that fit the job: a sentence explaining how your skills transfer to a different tech stack such as .NET, your visa status and right to work, your notice period, relocation, remote working or a referral.
+- Each option fills its own placeholder in the letter, and every template and sentence can be edited.
+- You can also add your own options.
+- The preview updates as you type, and you can copy the letter, download it as text or print it to PDF.
+- Everything is saved in your browser and never uploaded.
+- Works fully offline once loaded.
+- [Build Cover Letter](https://torensa.com/cover-letter-builder)
+
 ## Entertainment Tools
 
 ### Birthday Cake Generator - Create Realistic AI Birthday Cakes
@@ -167,6 +176,12 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - [Open Image Generator](https://torensa.com/image-generator)
 
 ## Data & Media Tools
+
+### To Do List - Organize Your Tasks
+- Keep your tasks organized in custom categories.
+- Add, remove, and complete items while your list stays saved to your account.
+- Requires login.
+- [Open To Do](https://torensa.com/to-do)
 
 ### Subtitle Downloader - Download Movie Subtitles Free
 - Paste a video URL to fetch subtitles as an SRT file.
@@ -326,4 +341,4 @@ Torensa provides free online tools designed to enhance work efficiency, streamli
 - Most tools process data entirely client-side in the browser — no files are sent to external servers.
 - Tools that require a server (document conversion, AI features, background removal, speech-to-text) process files in memory and do not store them.
 - New tools are added continuously.
-- Most tools require no account or login. Bulk Email Sender - Send Mass Emails Free Online, Habit Tracker - Track Daily Goals & Habits Online require login.
+- Most tools require no account or login. To Do List - Organize Your Tasks, Bulk Email Sender - Send Mass Emails Free Online, Habit Tracker - Track Daily Goals & Habits Online require login.

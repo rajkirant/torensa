@@ -1,4 +1,5 @@
 import EmailIcon from "@mui/icons-material/Email";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import ShareIcon from "@mui/icons-material/Share";
 import BarcodeReaderIcon from "@mui/icons-material/BarcodeReader";
@@ -95,4 +96,5 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "scam-trends": TrendingUpIcon,
   "timer-stopwatch": TimerIcon,
   "tex-viewer": FunctionsIcon,
+  "cover-letter-builder": ContactMailIcon,
 };

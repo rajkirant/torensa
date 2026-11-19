@@ -2617,5 +2617,58 @@
         "a": "Yes. The renderer and the math fonts are part of the site, so once the page has loaded it keeps working without an internet connection."
       }
     ]
+  },
+  {
+    "id": "cover-letter-builder",
+    "component": "CoverLetterBuilder",
+    "name": "Cover Letter Builder",
+    "title": "Cover Letter Builder - Free Templates with Smart Options",
+    "description": "Build a cover letter from editable templates. Tick options such as visa status or a new tech stack to add ready-made sentences, then copy, download or print.",
+    "path": "/cover-letter-builder",
+    "ctaLabel": "Build Cover Letter",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Cover Letter Builder helps you write a tailored cover letter in minutes. Pick a template, fill in your details once, and tick the options that fit the job: a sentence explaining how your skills transfer to a different tech stack such as .NET, your visa status and right to work, your notice period, relocation, remote working or a referral. Each option fills its own placeholder in the letter, and every template and sentence can be edited. You can also add your own options. The preview updates as you type, and you can copy the letter, download it as text or print it to PDF. Everything is saved in your browser and never uploaded.",
+    "categoryId": "documents",
+    "keywords": [
+      "cover letter builder",
+      "cover letter generator",
+      "cover letter template",
+      "free cover letter",
+      "job application letter",
+      "cover letter for career change",
+      "visa status cover letter",
+      "cover letter maker",
+      "tailored cover letter",
+      "software developer cover letter"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Choose one of the templates: Professional, Career change, Graduate / entry level or Short email.",
+      "Fill in your details, such as your name, the company, the job title and your key skills. They are used wherever the template shows a placeholder such as {{company}}.",
+      "Tick the options that fit the job, for example 'Different tech stack' for a .NET role or 'Visa status'. Each ticked option adds its sentence where its placeholder is, and you can edit the sentence and its details.",
+      "Edit the template text freely, or add your own option. Click a placeholder chip to insert it at the cursor.",
+      "Check the preview, where details you have not filled in are highlighted, then copy the letter, download it as .txt or print it to PDF."
+    ],
+    "faqs": [
+      {
+        "q": "Is my cover letter uploaded anywhere?",
+        "a": "No. The letter is built entirely in your browser, and your details, edits and options are only saved in your browser's local storage."
+      },
+      {
+        "q": "How do the checkboxes work?",
+        "a": "Each option has a placeholder, such as {{visa}}, in the template. When the option is ticked, its sentence replaces the placeholder; when it is unticked, the placeholder disappears and the letter closes up around it."
+      },
+      {
+        "q": "Can I change the wording of the templates and sentences?",
+        "a": "Yes. The template text and every option's sentence are editable, and you can restore the original at any time. You can also add your own options with their own sentences."
+      },
+      {
+        "q": "How do I save the letter as a PDF?",
+        "a": "Click 'Print / PDF' and choose 'Save as PDF' as the destination in your browser's print dialog."
+      }
+    ]
   }
 ]

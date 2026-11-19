@@ -2611,5 +2611,56 @@
         "a": "Sí. El renderizador y las fuentes matemáticas forman parte del sitio, así que una vez cargada la página sigue funcionando sin conexión a internet."
       }
     ]
+  },
+  {
+    "id": "cover-letter-builder",
+    "component": "CoverLetterBuilder",
+    "name": "Creador de Cartas",
+    "title": "Creador de Cartas de Presentación - Plantillas Gratis",
+    "description": "Crea una carta de presentación con plantillas editables. Marca opciones como tu visado o un nuevo stack para añadir frases y luego copia, descarga o imprime.",
+    "path": "/cover-letter-builder",
+    "ctaLabel": "Crear carta",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "El Creador de Cartas te ayuda a escribir una carta de presentación a medida en minutos. Elige una plantilla, introduce tus datos una vez y marca las opciones que encajan con la oferta: una frase sobre cómo tus habilidades se trasladan a otro stack técnico como .NET, tu situación de visado y permiso de trabajo, tu plazo de preaviso, la reubicación, el trabajo en remoto o una recomendación. Cada opción rellena su propio marcador, y todas las plantillas y frases se pueden editar. También puedes añadir tus propias opciones. La vista previa se actualiza al escribir y puedes copiar la carta, descargarla como texto o imprimirla en PDF. Todo se guarda solo en tu navegador.",
+    "categoryId": "documents",
+    "keywords": [
+      "creador de cartas de presentación",
+      "carta de presentación",
+      "plantilla carta de presentación",
+      "carta de presentación gratis",
+      "carta para cambio de carrera",
+      "carta de presentación visado",
+      "generador de cartas",
+      "carta de presentación desarrollador"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Elige una plantilla: Professional, Career change, Graduate / entry level o Short email.",
+      "Introduce tus datos, como tu nombre, la empresa, el puesto y tus habilidades clave. Sustituyen marcadores como {{company}} en la plantilla.",
+      "Marca las opciones que encajan, por ejemplo 'Different tech stack' para un puesto de .NET o 'Visa status'. La frase de cada opción aparece en su marcador y se puede editar.",
+      "Edita libremente el texto de la plantilla o añade tus propias opciones. Pulsa un chip de marcador para insertarlo en el cursor.",
+      "Revisa la vista previa, donde se resaltan los datos que faltan, y copia la carta, descárgala como .txt o imprímela en PDF."
+    ],
+    "faqs": [
+      {
+        "q": "¿Se sube mi carta a algún servidor?",
+        "a": "No. La carta se crea por completo en tu navegador y tus datos y cambios solo se guardan en su almacenamiento local."
+      },
+      {
+        "q": "¿Cómo funcionan las casillas?",
+        "a": "Cada opción tiene un marcador, como {{visa}}, en la plantilla. Si la marcas, su frase sustituye al marcador; si no, el marcador desaparece."
+      },
+      {
+        "q": "¿Puedo cambiar los textos?",
+        "a": "Sí. El texto de la plantilla y cada frase se pueden editar y restaurar en cualquier momento. También puedes añadir tus propias opciones."
+      },
+      {
+        "q": "¿Cómo guardo la carta en PDF?",
+        "a": "Pulsa 'Print / PDF' y elige 'Guardar como PDF' en el diálogo de impresión de tu navegador."
+      }
+    ]
   }
 ]
