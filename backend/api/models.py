@@ -415,3 +415,27 @@ class Donation(models.Model):
     def __str__(self):
         who = self.user.username if self.user else "anonymous"
         return f"{who} — {self.currency} {self.amount} ({self.status})"
+
+
+class SavedCoverLetter(models.Model):
+    """A cover letter a user saved from the Cover Letter Builder."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="cover_letters",
+    )
+    title = models.CharField(max_length=255)
+    # The finished letter text.
+    content = models.TextField()
+    # The builder's state (template, details, ticked options...) so the
+    # letter can be reopened and edited.
+    state = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    def __str__(self):
+        return f"{self.title} — {self.user.username}"

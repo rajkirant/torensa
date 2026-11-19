@@ -77,6 +77,11 @@ from .views.chatbot_billing_views import (
 )
 from .views.review_views import reviews_view, review_delete_view
 from .views.donation_views import donation_config_view, donation_intent_view
+from .views.saved_cover_letter_views import (
+    saved_cover_letters_view,
+    saved_cover_letter_detail_view,
+)
+from .views.cover_letter_views import cover_letter_docx_view
 
 urlpatterns = [
     path("hello/", hello),
@@ -143,6 +148,9 @@ urlpatterns = [
     path("todo/categories/<int:category_id>/", todo_category_delete_view),
     path("todo/categories/<int:category_id>/items/", todo_item_create_view),
     path("todo/items/<int:item_id>/", todo_item_detail_view),
+    path("cover-letters/", saved_cover_letters_view),
+    path("cover-letters/docx/", cover_letter_docx_view),
+    path("cover-letters/<int:letter_id>/", saved_cover_letter_detail_view),
     # CSV Builder
     path("csv/", csv_list_create),
     path("csv/<int:csv_id>/", csv_detail),

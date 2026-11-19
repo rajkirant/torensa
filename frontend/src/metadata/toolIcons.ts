@@ -85,7 +85,6 @@ export const toolIcons: Record<string, SvgIconComponent> = {
   "bmi-calculator": MonitorWeightIcon,
   "resume-builder": DescriptionIcon,
   "pdf-builder": EditNoteIcon,
-  "cover-letter-tailor": EditNoteIcon,
   "ai-humaniser": PsychologyIcon,
   "clearwave": WavesIcon,
   "csv-builder": TableChartIcon,

@@ -153,6 +153,83 @@ class HabitApiTests(TestCase):
         self.assertEqual(again.status_code, 404)
 
 
+class CoverLetterApiTests(TestCase):
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=True)
+        self.user = User.objects.create_user(username="letter-user", password="StrongPass123!")
+        self.other_user = User.objects.create_user(username="letter-other", password="StrongPass123!")
+        self.client.force_login(self.user)
+
+    def _csrf(self):
+        return self.client.get("/api/me/").json()["csrfToken"]
+
+    def _send(self, method, url, data, token):
+        return getattr(self.client, method)(
+            url, data=json.dumps(data), content_type="application/json", HTTP_X_CSRFTOKEN=token
+        )
+
+    def test_saved_letters_are_user_scoped(self):
+        token = self._csrf()
+        created = self._send(
+            "post",
+            "/api/cover-letters/",
+            {"title": "Contoso - .NET", "content": "Dear Sir,", "state": {"templateId": "professional"}},
+            token,
+        )
+        self.assertEqual(created.status_code, 201)
+        letter_id = created.json()["id"]
+
+        self.assertEqual([l["title"] for l in self.client.get("/api/cover-letters/").json()], ["Contoso - .NET"])
+        detail = self.client.get(f"/api/cover-letters/{letter_id}/").json()
+        self.assertEqual((detail["content"], detail["state"]), ("Dear Sir,", {"templateId": "professional"}))
+
+        updated = self._send("patch", f"/api/cover-letters/{letter_id}/", {"content": "Dear Madam,"}, token)
+        self.assertEqual(updated.json()["content"], "Dear Madam,")
+        self.assertEqual(self._send("post", "/api/cover-letters/", {"title": "x", "content": " "}, token).status_code, 400)
+
+        self.client.logout()
+        self.client.force_login(self.other_user)
+        self.assertEqual(self.client.get("/api/cover-letters/").json(), [])
+        self.assertEqual(self.client.get(f"/api/cover-letters/{letter_id}/").status_code, 404)
+        self.client.logout()
+        self.assertEqual(self.client.get("/api/cover-letters/").status_code, 403)
+
+    def test_tailor_returns_text(self):
+        from unittest import mock
+
+        token = self._csrf()
+        with mock.patch(
+            "api.views.cover_letter_views._call_cover_letter_model",
+            return_value=("Tailored letter", "test-model"),
+        ) as model:
+            response = self._send(
+                "post",
+                "/ai/cover-letter-tailor/",
+                {"coverLetter": "Original letter", "jobDescription": "A .NET role"},
+                token,
+            )
+        self.assertEqual(response.json(), {"coverLetter": "Tailored letter", "model": "test-model"})
+        model.assert_called_once_with("Original letter", "A .NET role")
+        missing = self._send("post", "/ai/cover-letter-tailor/", {"coverLetter": "x"}, token)
+        self.assertEqual(missing.status_code, 400)
+
+    def test_docx_round_trip(self):
+        token = self._csrf()
+        response = self._send(
+            "post", "/api/cover-letters/docx/", {"content": "Raj Kiran\nraj@example.com\n\nDear team,"}, token
+        )
+        self.assertEqual(response.status_code, 200)
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        upload = SimpleUploadedFile(
+            "letter.docx",
+            response.content,
+            content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        )
+        opened = self.client.post("/ai/cover-letter-tailor/", {"file": upload}, HTTP_X_CSRFTOKEN=token)
+        self.assertEqual(opened.json()["coverLetter"], "Raj Kiran\nraj@example.com\n\nDear team,")
+
+
 class AuthCsrfTests(TestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
