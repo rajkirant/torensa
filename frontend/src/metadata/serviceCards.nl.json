@@ -2574,5 +2574,56 @@
         "a": "Ja. De renderer en de wiskundelettertypen zijn onderdeel van de site, dus zodra de pagina geladen is, werkt hij ook zonder internetverbinding."
       }
     ]
+  },
+  {
+    "id": "cover-letter-builder",
+    "component": "CoverLetterBuilder",
+    "name": "Sollicitatiebrief Maker",
+    "title": "Sollicitatiebrief Maker - Gratis Sjablonen met Opties",
+    "description": "Maak een sollicitatiebrief met bewerkbare sjablonen. Vink opties aan zoals je visumstatus of een nieuwe tech stack voor vaste zinnen en kopieer of print.",
+    "path": "/cover-letter-builder",
+    "ctaLabel": "Brief maken",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Met de Sollicitatiebrief Maker schrijf je in een paar minuten een brief op maat. Kies een sjabloon, vul je gegevens één keer in en vink de opties aan die bij de vacature passen: een zin over hoe je vaardigheden overdraagbaar zijn naar een andere tech stack zoals .NET, je visumstatus en werkvergunning, je opzegtermijn, verhuizen, thuiswerken of een doorverwijzing. Elke optie vult haar eigen plaatshouder in, en alle sjablonen en zinnen zijn te bewerken. Je kunt ook eigen opties toevoegen. Het voorbeeld werkt bij terwijl je typt, en je kunt de brief kopiëren, als tekst downloaden of als PDF afdrukken. Alles blijft in je browser.",
+    "categoryId": "documents",
+    "keywords": [
+      "sollicitatiebrief maker",
+      "sollicitatiebrief sjabloon",
+      "motivatiebrief maken",
+      "gratis sollicitatiebrief",
+      "sollicitatiebrief carrièreswitch",
+      "sollicitatiebrief visum",
+      "cover letter",
+      "sollicitatiebrief developer"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Kies een sjabloon: Professional, Career change, Graduate / entry level of Short email.",
+      "Vul je gegevens in, zoals je naam, het bedrijf, de functie en je belangrijkste vaardigheden. Ze vervangen plaatshouders zoals {{company}} in het sjabloon.",
+      "Vink passende opties aan, bijvoorbeeld 'Different tech stack' voor een .NET-functie of 'Visa status'. De zin van elke optie verschijnt op haar plaatshouder en is te bewerken.",
+      "Bewerk de sjabloontekst vrij of voeg eigen opties toe. Klik op een plaatshouder-chip om hem bij de cursor in te voegen.",
+      "Controleer het voorbeeld, waarin ontbrekende gegevens gemarkeerd zijn, en kopieer de brief, download hem als .txt of print hem als PDF."
+    ],
+    "faqs": [
+      {
+        "q": "Wordt mijn brief geüpload?",
+        "a": "Nee. De brief wordt volledig in je browser gemaakt en je gegevens en wijzigingen worden alleen in de lokale opslag van je browser bewaard."
+      },
+      {
+        "q": "Hoe werken de selectievakjes?",
+        "a": "Elke optie heeft een plaatshouder, zoals {{visa}}, in het sjabloon. Is de optie aangevinkt, dan vervangt haar zin de plaatshouder; anders verdwijnt de plaatshouder."
+      },
+      {
+        "q": "Kan ik de teksten aanpassen?",
+        "a": "Ja. De sjabloontekst en elke zin zijn te bewerken en altijd te herstellen. Je kunt ook eigen opties toevoegen."
+      },
+      {
+        "q": "Hoe sla ik de brief op als PDF?",
+        "a": "Klik op 'Print / PDF' en kies 'Opslaan als PDF' in het afdrukvenster van je browser."
+      }
+    ]
   }
 ]

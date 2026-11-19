@@ -2595,5 +2595,57 @@
         "a": "Ja. Renderer und Formelschriften sind Teil der Website. Nach dem Laden der Seite funktioniert das Tool auch ohne Internetverbindung."
       }
     ]
+  },
+  {
+    "id": "cover-letter-builder",
+    "component": "CoverLetterBuilder",
+    "name": "Anschreiben-Generator",
+    "title": "Anschreiben-Generator - Kostenlose Vorlagen mit Optionen",
+    "description": "Erstelle ein Anschreiben aus bearbeitbaren Vorlagen. Wähle Optionen wie Visumstatus oder neuen Tech-Stack für fertige Sätze, dann kopieren, laden oder drucken.",
+    "path": "/cover-letter-builder",
+    "ctaLabel": "Anschreiben erstellen",
+    "offlineEnabled": true,
+    "authRequired": false,
+    "aiPowered": false,
+    "detailedDescription": "Mit dem Anschreiben-Generator erstellst du in wenigen Minuten ein passendes Anschreiben. Wähle eine Vorlage, gib deine Daten einmal ein und kreuze die Optionen an, die zur Stelle passen: ein Satz dazu, wie sich deine Fähigkeiten auf einen anderen Tech-Stack wie .NET übertragen lassen, dein Visumstatus und deine Arbeitserlaubnis, deine Kündigungsfrist, ein Umzug, Remote-Arbeit oder eine Empfehlung. Jede Option füllt ihren eigenen Platzhalter, und alle Vorlagen und Sätze sind bearbeitbar. Du kannst auch eigene Optionen hinzufügen. Die Vorschau aktualisiert sich beim Tippen, und du kannst das Anschreiben kopieren, als Text herunterladen oder als PDF drucken. Alles wird nur in deinem Browser gespeichert.",
+    "categoryId": "documents",
+    "keywords": [
+      "anschreiben generator",
+      "anschreiben vorlage",
+      "bewerbungsschreiben erstellen",
+      "kostenloses anschreiben",
+      "anschreiben quereinstieg",
+      "anschreiben visum",
+      "cover letter",
+      "bewerbung anschreiben",
+      "anschreiben softwareentwickler"
+    ],
+    "isActive": true,
+    "advancedOptionsEnabled": false,
+    "howTo": [
+      "Wähle eine Vorlage: Professional, Career change, Graduate / entry level oder Short email.",
+      "Gib deine Daten ein, etwa Name, Firma, Stellenbezeichnung und wichtigste Fähigkeiten. Sie ersetzen Platzhalter wie {{company}} in der Vorlage.",
+      "Kreuze passende Optionen an, zum Beispiel 'Different tech stack' für eine .NET-Stelle oder 'Visa status'. Der Satz jeder Option erscheint an ihrem Platzhalter und lässt sich bearbeiten.",
+      "Bearbeite den Vorlagentext frei oder füge eigene Optionen hinzu. Ein Klick auf einen Platzhalter-Chip fügt ihn an der Cursorposition ein.",
+      "Prüfe die Vorschau, in der fehlende Angaben markiert sind, und kopiere das Anschreiben, lade es als .txt herunter oder drucke es als PDF."
+    ],
+    "faqs": [
+      {
+        "q": "Wird mein Anschreiben hochgeladen?",
+        "a": "Nein. Das Anschreiben entsteht komplett in deinem Browser, und deine Daten und Änderungen werden nur im lokalen Speicher deines Browsers gesichert."
+      },
+      {
+        "q": "Wie funktionieren die Kontrollkästchen?",
+        "a": "Jede Option hat einen Platzhalter wie {{visa}} in der Vorlage. Ist die Option angekreuzt, ersetzt ihr Satz den Platzhalter; sonst verschwindet der Platzhalter einfach."
+      },
+      {
+        "q": "Kann ich die Texte ändern?",
+        "a": "Ja. Vorlagentext und alle Sätze sind bearbeitbar und lassen sich jederzeit zurücksetzen. Du kannst auch eigene Optionen hinzufügen."
+      },
+      {
+        "q": "Wie speichere ich das Anschreiben als PDF?",
+        "a": "Klicke auf 'Print / PDF' und wähle im Druckdialog deines Browsers 'Als PDF speichern'."
+      }
+    ]
   }
 ]
