@@ -2154,58 +2154,6 @@
     ]
   },
   {
-    "id": "cover-letter-tailor",
-    "component": "CoverLetterTailor",
-    "name": "Cover Letter Tailor",
-    "title": "Cover Letter Tailor - Update DOCX Cover Letters for Jobs",
-    "description": "Upload a .docx cover letter, paste a job description, and generate a tailored Word document that highlights relevant skills from the role.",
-    "path": "/cover-letter-tailor",
-    "ctaLabel": "Tailor Letter",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "aiPowered": true,
-    "detailedDescription": "Cover Letter Tailor updates an existing .docx cover letter for a specific job. Upload your Word document, paste the job description, and the tool rewrites the letter to emphasize relevant skills, responsibilities, and keywords while keeping your original facts intact. The result downloads as a new .docx file.",
-    "categoryId": "documents",
-    "keywords": [
-      "cover letter tailor",
-      "cover letter generator",
-      "job application cover letter",
-      "docx cover letter editor",
-      "ai cover letter",
-      "custom cover letter",
-      "tailor cover letter to job description",
-      "cover letter updater",
-      "word cover letter"
-    ],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Upload your existing cover letter as a .docx file.",
-      "Paste the job description into the text box.",
-      "Click Update Cover Letter.",
-      "Download the tailored .docx file when it is ready.",
-      "Review the final document before sending it with your job application."
-    ],
-    "faqs": [
-      {
-        "q": "Will the tool invent experience I do not have?",
-        "a": "No. The model is instructed to keep your original facts intact and only emphasize skills that are reasonably supported by your existing cover letter."
-      },
-      {
-        "q": "What file format can I upload?",
-        "a": "Upload a .docx Word document. Older .doc files are not supported for this tool."
-      },
-      {
-        "q": "Does the output stay editable?",
-        "a": "Yes. The tailored cover letter downloads as a new .docx file that you can open and edit in Microsoft Word, Google Docs, or another compatible editor."
-      },
-      {
-        "q": "Should I review the generated cover letter?",
-        "a": "Yes. Always review the final document to confirm the tone, details, and claims are accurate before submitting it."
-      }
-    ]
-  },
-  {
     "id": "ai-humaniser",
     "component": "AiHumaniser",
     "name": "AI Text Humaniser",
@@ -2622,52 +2570,59 @@
     "id": "cover-letter-builder",
     "component": "CoverLetterBuilder",
     "name": "Cover Letter Builder",
-    "title": "Cover Letter Builder - Free Templates with Smart Options",
-    "description": "Build a cover letter from editable templates. Tick options such as visa status or a new tech stack to add ready-made sentences, then copy, download or print.",
+    "title": "Cover Letter Builder - Templates and AI Tailoring",
+    "description": "Build a cover letter from templates and ready-made sentences, tailor it to a job description with AI, save it to your account and download it as Word or PDF.",
     "path": "/cover-letter-builder",
     "ctaLabel": "Build Cover Letter",
     "offlineEnabled": true,
     "authRequired": false,
-    "aiPowered": false,
-    "detailedDescription": "Cover Letter Builder helps you write a tailored cover letter in minutes. Pick a template, fill in your details once, and tick the options that fit the job: a sentence explaining how your skills transfer to a different tech stack such as .NET, your visa status and right to work, your notice period, relocation, remote working or a referral. Each option fills its own placeholder in the letter, and every template and sentence can be edited. You can also add your own options. The preview updates as you type, and you can copy the letter, download it as text or print it to PDF. Everything is saved in your browser and never uploaded.",
+    "aiPowered": true,
+    "detailedDescription": "Cover Letter Builder helps you write a tailored cover letter in minutes. Pick a template or import your own .docx letter, fill in your details once, and tick the options that fit the job: a sentence explaining how your skills transfer to a different tech stack such as .NET, your visa status and right to work, your notice period, relocation, remote working or a referral. Each option fills its own placeholder, and every template and sentence can be edited. Paste a job description and AI rewrites the letter to highlight your most relevant skills without inventing experience. Log in to save your letters to your account and open them later. Copy the result, or download it as Word, text or PDF.",
     "categoryId": "documents",
     "keywords": [
       "cover letter builder",
       "cover letter generator",
+      "ai cover letter",
+      "tailor cover letter to job description",
       "cover letter template",
       "free cover letter",
       "job application letter",
       "cover letter for career change",
       "visa status cover letter",
-      "cover letter maker",
-      "tailored cover letter",
+      "save cover letter",
+      "cover letter docx",
       "software developer cover letter"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Choose one of the templates: Professional, Career change, Graduate / entry level or Short email.",
+      "Choose a template (Professional, Career change, Graduate / entry level or Short email), or 'Your own letter' to import a .docx or paste your text.",
       "Fill in your details, such as your name, the company, the job title and your key skills. They are used wherever the template shows a placeholder such as {{company}}.",
-      "Tick the options that fit the job, for example 'Different tech stack' for a .NET role or 'Visa status'. Each ticked option adds its sentence where its placeholder is, and you can edit the sentence and its details.",
-      "Edit the template text freely, or add your own option. Click a placeholder chip to insert it at the cursor.",
-      "Check the preview, where details you have not filled in are highlighted, then copy the letter, download it as .txt or print it to PDF."
+      "Tick the options that fit the job, for example 'Different tech stack' for a .NET role or 'Visa status'. Each ticked option adds its editable sentence where its placeholder is.",
+      "To tailor the letter, paste the job description and click 'Tailor with AI'. Switch between 'Your letter' and 'AI tailored' above the preview, and edit the AI version freely.",
+      "Log in and click 'Save' to keep the letter in your account; reopen it later from 'My saved letters'.",
+      "Copy the letter, download it as .docx or .txt, or print it to PDF."
     ],
     "faqs": [
       {
-        "q": "Is my cover letter uploaded anywhere?",
-        "a": "No. The letter is built entirely in your browser, and your details, edits and options are only saved in your browser's local storage."
+        "q": "How does AI tailoring work?",
+        "a": "Paste the job description and click 'Tailor with AI'. Your letter and the job description are sent to the AI, which rewrites the letter to emphasise the skills the job asks for that your letter supports. It keeps your facts and does not invent experience, so always review the result."
       },
       {
         "q": "How do the checkboxes work?",
         "a": "Each option has a placeholder, such as {{visa}}, in the template. When the option is ticked, its sentence replaces the placeholder; when it is unticked, the placeholder disappears and the letter closes up around it."
       },
       {
-        "q": "Can I change the wording of the templates and sentences?",
-        "a": "Yes. The template text and every option's sentence are editable, and you can restore the original at any time. You can also add your own options with their own sentences."
+        "q": "Can I save my cover letters?",
+        "a": "Yes. When you are logged in, 'Save' stores the letter, with its template, details and options, in your account, so you can open and update it later from any device."
       },
       {
-        "q": "How do I save the letter as a PDF?",
-        "a": "Click 'Print / PDF' and choose 'Save as PDF' as the destination in your browser's print dialog."
+        "q": "Can I start from my existing cover letter?",
+        "a": "Yes. Choose 'Your own letter' and import a .docx file or paste the text, then tailor it to a job with AI."
+      },
+      {
+        "q": "Is my data private?",
+        "a": "Building a letter happens in your browser. The letter is only sent to our server when you tailor it with AI, download it as .docx or save it to your account."
       }
     ]
   }

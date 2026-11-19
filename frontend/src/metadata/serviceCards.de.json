@@ -2243,58 +2243,6 @@
     ]
   },
   {
-    "id": "cover-letter-tailor",
-    "component": "CoverLetterTailor",
-    "name": "Cover Letter Tailor",
-    "title": "Cover Letter Tailor - Update DOCX Cover Letters for Jobs",
-    "description": "Upload a .docx cover letter, paste a job description, and generate a tailored Word document that highlights relevant skills from the role.",
-    "path": "/cover-letter-tailor",
-    "ctaLabel": "Tailor Letter",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "aiPowered": true,
-    "detailedDescription": "Cover Letter Tailor updates an existing .docx cover letter for a specific job. Upload your Word document, paste the job description, and the tool rewrites the letter to emphasize relevant skills, responsibilities, and keywords while keeping your original facts intact. The result downloads as a new .docx file.",
-    "categoryId": "documents",
-    "keywords": [
-      "cover letter tailor",
-      "cover letter generator",
-      "job application cover letter",
-      "docx cover letter editor",
-      "ai cover letter",
-      "custom cover letter",
-      "tailor cover letter to job description",
-      "cover letter updater",
-      "word cover letter"
-    ],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Upload your existing cover letter as a .docx file.",
-      "Paste the job description into the text box.",
-      "Click Update Cover Letter.",
-      "Download the tailored .docx file when it is ready.",
-      "Review the final document before sending it with your job application."
-    ],
-    "faqs": [
-      {
-        "q": "Will the tool invent experience I do not have?",
-        "a": "No. The model is instructed to keep your original facts intact and only emphasize skills that are reasonably supported by your existing cover letter."
-      },
-      {
-        "q": "What file format can I upload?",
-        "a": "Upload a .docx Word document. Older .doc files are not supported for this tool."
-      },
-      {
-        "q": "Does the output stay editable?",
-        "a": "Yes. The tailored cover letter downloads as a new .docx file that you can open and edit in Microsoft Word, Google Docs, or another compatible editor."
-      },
-      {
-        "q": "Should I review the generated cover letter?",
-        "a": "Yes. Always review the final document to confirm the tone, details, and claims are accurate before submitting it."
-      }
-    ]
-  },
-  {
     "id": "ai-humaniser",
     "component": "AiHumaniser",
     "name": "KI-Text-Humanisierer – KI-Texte menschlich klingen lassen",
@@ -2600,51 +2548,53 @@
     "id": "cover-letter-builder",
     "component": "CoverLetterBuilder",
     "name": "Anschreiben-Generator",
-    "title": "Anschreiben-Generator - Kostenlose Vorlagen mit Optionen",
-    "description": "Erstelle ein Anschreiben aus bearbeitbaren Vorlagen. Wähle Optionen wie Visumstatus oder neuen Tech-Stack für fertige Sätze, dann kopieren, laden oder drucken.",
+    "title": "Anschreiben-Generator - Vorlagen und KI-Anpassung",
+    "description": "Erstelle ein Anschreiben aus Vorlagen und fertigen Sätzen, passe es per KI an eine Stellenanzeige an, speichere es im Konto und lade es als Word oder PDF.",
     "path": "/cover-letter-builder",
     "ctaLabel": "Anschreiben erstellen",
     "offlineEnabled": true,
     "authRequired": false,
-    "aiPowered": false,
-    "detailedDescription": "Mit dem Anschreiben-Generator erstellst du in wenigen Minuten ein passendes Anschreiben. Wähle eine Vorlage, gib deine Daten einmal ein und kreuze die Optionen an, die zur Stelle passen: ein Satz dazu, wie sich deine Fähigkeiten auf einen anderen Tech-Stack wie .NET übertragen lassen, dein Visumstatus und deine Arbeitserlaubnis, deine Kündigungsfrist, ein Umzug, Remote-Arbeit oder eine Empfehlung. Jede Option füllt ihren eigenen Platzhalter, und alle Vorlagen und Sätze sind bearbeitbar. Du kannst auch eigene Optionen hinzufügen. Die Vorschau aktualisiert sich beim Tippen, und du kannst das Anschreiben kopieren, als Text herunterladen oder als PDF drucken. Alles wird nur in deinem Browser gespeichert.",
+    "aiPowered": true,
+    "detailedDescription": "Mit dem Anschreiben-Generator erstellst du in wenigen Minuten ein passendes Anschreiben. Wähle eine Vorlage oder importiere dein eigenes .docx-Anschreiben, gib deine Daten einmal ein und kreuze passende Optionen an: wie sich deine Fähigkeiten auf einen anderen Tech-Stack wie .NET übertragen lassen, dein Visumstatus, deine Kündigungsfrist, ein Umzug, Remote-Arbeit oder eine Empfehlung. Alle Vorlagen und Sätze sind bearbeitbar. Füge eine Stellenanzeige ein, und die KI schreibt das Anschreiben so um, dass deine passendsten Fähigkeiten hervorgehoben werden, ohne Erfahrung zu erfinden. Melde dich an, um Anschreiben im Konto zu speichern. Kopiere das Ergebnis oder lade es als Word, Text oder PDF herunter.",
     "categoryId": "documents",
     "keywords": [
       "anschreiben generator",
+      "ki anschreiben",
+      "anschreiben an stellenanzeige anpassen",
       "anschreiben vorlage",
       "bewerbungsschreiben erstellen",
       "kostenloses anschreiben",
+      "anschreiben speichern",
       "anschreiben quereinstieg",
       "anschreiben visum",
-      "cover letter",
-      "bewerbung anschreiben",
-      "anschreiben softwareentwickler"
+      "cover letter"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Wähle eine Vorlage: Professional, Career change, Graduate / entry level oder Short email.",
-      "Gib deine Daten ein, etwa Name, Firma, Stellenbezeichnung und wichtigste Fähigkeiten. Sie ersetzen Platzhalter wie {{company}} in der Vorlage.",
-      "Kreuze passende Optionen an, zum Beispiel 'Different tech stack' für eine .NET-Stelle oder 'Visa status'. Der Satz jeder Option erscheint an ihrem Platzhalter und lässt sich bearbeiten.",
-      "Bearbeite den Vorlagentext frei oder füge eigene Optionen hinzu. Ein Klick auf einen Platzhalter-Chip fügt ihn an der Cursorposition ein.",
-      "Prüfe die Vorschau, in der fehlende Angaben markiert sind, und kopiere das Anschreiben, lade es als .txt herunter oder drucke es als PDF."
+      "Wähle eine Vorlage oder 'Your own letter', um eine .docx-Datei zu importieren oder deinen Text einzufügen.",
+      "Gib deine Daten ein, etwa Name, Firma, Stellenbezeichnung und wichtigste Fähigkeiten. Sie ersetzen Platzhalter wie {{company}}.",
+      "Kreuze passende Optionen an, zum Beispiel 'Different tech stack' für eine .NET-Stelle oder 'Visa status'.",
+      "Füge die Stellenanzeige ein und klicke auf 'Tailor with AI'. Über der Vorschau wechselst du zwischen deiner Version und der KI-Version, die du frei bearbeiten kannst.",
+      "Melde dich an und klicke auf 'Save', um das Anschreiben im Konto zu speichern und später unter 'My saved letters' zu öffnen.",
+      "Kopiere das Anschreiben, lade es als .docx oder .txt herunter oder drucke es als PDF."
     ],
     "faqs": [
       {
-        "q": "Wird mein Anschreiben hochgeladen?",
-        "a": "Nein. Das Anschreiben entsteht komplett in deinem Browser, und deine Daten und Änderungen werden nur im lokalen Speicher deines Browsers gesichert."
+        "q": "Wie funktioniert die KI-Anpassung?",
+        "a": "Füge die Stellenanzeige ein und klicke auf 'Tailor with AI'. Die KI schreibt dein Anschreiben so um, dass die gefragten Fähigkeiten hervorgehoben werden, behält deine Fakten bei und erfindet keine Erfahrung. Prüfe das Ergebnis immer."
       },
       {
-        "q": "Wie funktionieren die Kontrollkästchen?",
-        "a": "Jede Option hat einen Platzhalter wie {{visa}} in der Vorlage. Ist die Option angekreuzt, ersetzt ihr Satz den Platzhalter; sonst verschwindet der Platzhalter einfach."
+        "q": "Kann ich meine Anschreiben speichern?",
+        "a": "Ja. Angemeldet speichert 'Save' das Anschreiben mit Vorlage, Daten und Optionen in deinem Konto, sodass du es später auf jedem Gerät öffnen kannst."
       },
       {
-        "q": "Kann ich die Texte ändern?",
-        "a": "Ja. Vorlagentext und alle Sätze sind bearbeitbar und lassen sich jederzeit zurücksetzen. Du kannst auch eigene Optionen hinzufügen."
+        "q": "Kann ich mit meinem eigenen Anschreiben beginnen?",
+        "a": "Ja. Wähle 'Your own letter', importiere eine .docx-Datei oder füge den Text ein und passe ihn dann per KI an eine Stelle an."
       },
       {
-        "q": "Wie speichere ich das Anschreiben als PDF?",
-        "a": "Klicke auf 'Print / PDF' und wähle im Druckdialog deines Browsers 'Als PDF speichern'."
+        "q": "Sind meine Daten privat?",
+        "a": "Das Erstellen passiert in deinem Browser. Das Anschreiben wird nur an unseren Server gesendet, wenn du es per KI anpasst, als .docx herunterlädst oder im Konto speicherst."
       }
     ]
   }

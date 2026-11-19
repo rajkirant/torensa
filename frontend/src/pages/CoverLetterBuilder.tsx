@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -8,6 +12,9 @@ import PrintIcon from "@mui/icons-material/Print";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import LinearProgress from "@mui/material/LinearProgress";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -21,11 +28,19 @@ import { ActionButton } from "../components/buttons/ActionButton";
 import { TransparentButton } from "../components/buttons/TransparentButton";
 import ToolStatusAlerts from "../components/alerts/ToolStatusAlerts";
 import useToolStatus from "../hooks/useToolStatus";
+import { apiFetch } from "../utils/api";
+import { useAuth } from "../utils/auth";
+import downloadBlob from "../utils/downloadBlob";
 
 /* ── data ─────────────────────────────────────────────── */
 
 /** A value typed once and used as {{key}} in templates and option sentences. */
-type Field = { key: string; label: string; placeholder?: string; multiline?: boolean };
+type Field = {
+  key: string;
+  label: string;
+  placeholder?: string;
+  multiline?: boolean;
+};
 
 /** A checkbox that fills the {{key}} placeholder with a sentence. */
 type LetterOption = {
@@ -44,14 +59,31 @@ const DETAIL_FIELDS: Field[] = [
   { key: "yourEmail", label: "Your email" },
   { key: "yourPhone", label: "Your phone" },
   { key: "company", label: "Company" },
-  { key: "role", label: "Job title", placeholder: "e.g. Senior .NET Developer" },
-  { key: "hiringManager", label: "Hiring manager", placeholder: "e.g. Ms Smith, or Hiring Manager" },
-  { key: "currentRole", label: "Your current role", placeholder: "e.g. Software Engineer" },
-  { key: "yearsExperience", label: "Years of experience", placeholder: "e.g. 5" },
+  {
+    key: "role",
+    label: "Job title",
+    placeholder: "e.g. Senior .NET Developer",
+  },
+  {
+    key: "hiringManager",
+    label: "Hiring manager",
+    placeholder: "e.g. Ms Smith, or Hiring Manager",
+  },
+  {
+    key: "currentRole",
+    label: "Your current role",
+    placeholder: "e.g. Software Engineer",
+  },
+  {
+    key: "yearsExperience",
+    label: "Years of experience",
+    placeholder: "e.g. 5",
+  },
   {
     key: "keySkills",
     label: "Key skills or achievements",
-    placeholder: "e.g. building REST APIs and cloud services used by 2 million people",
+    placeholder:
+      "e.g. building REST APIs and cloud services used by 2 million people",
     multiline: true,
   },
 ];
@@ -60,11 +92,18 @@ const DEFAULT_OPTIONS: LetterOption[] = [
   {
     key: "techTransfer",
     label: "Different tech stack (e.g. .NET job)",
-    text:
-      "Although most of my recent work has been in {{currentStack}} rather than {{targetTech}}, the fundamentals of software engineering carry over directly. Today, AI-assisted coding tools make it much faster to pick up a new language and its ecosystem, so I am confident I can transfer my skills quickly and become productive in {{targetTech}} early on.",
+    text: "Although most of my recent work has been in {{currentStack}} rather than {{targetTech}}, the fundamentals of software engineering carry over directly. Today, AI-assisted coding tools make it much faster to pick up a new language and its ecosystem, so I am confident I can transfer my skills quickly and become productive in {{targetTech}} early on.",
     fields: [
-      { key: "targetTech", label: "Job's technology", placeholder: "e.g. .NET" },
-      { key: "currentStack", label: "Your current stack", placeholder: "e.g. Java and Python" },
+      {
+        key: "targetTech",
+        label: "Job's technology",
+        placeholder: "e.g. .NET",
+      },
+      {
+        key: "currentStack",
+        label: "Your current stack",
+        placeholder: "e.g. Java and Python",
+      },
     ],
   },
   {
@@ -72,7 +111,11 @@ const DEFAULT_OPTIONS: LetterOption[] = [
     label: "Visa status",
     text: "I hold {{visaStatus}}, which gives me the right to work in {{workCountry}} without sponsorship.",
     fields: [
-      { key: "visaStatus", label: "Visa status", placeholder: "e.g. a Graduate visa valid until 2028" },
+      {
+        key: "visaStatus",
+        label: "Visa status",
+        placeholder: "e.g. a Graduate visa valid until 2028",
+      },
       { key: "workCountry", label: "Country", placeholder: "e.g. the UK" },
     ],
   },
@@ -80,13 +123,21 @@ const DEFAULT_OPTIONS: LetterOption[] = [
     key: "availability",
     label: "Availability / notice period",
     text: "I am available to start {{startDate}}.",
-    fields: [{ key: "startDate", label: "Start date", placeholder: "e.g. immediately, or after a one-month notice period" }],
+    fields: [
+      {
+        key: "startDate",
+        label: "Start date",
+        placeholder: "e.g. immediately, or after a one-month notice period",
+      },
+    ],
   },
   {
     key: "relocation",
     label: "Open to relocation",
     text: "I would be happy to relocate to {{location}} for this role.",
-    fields: [{ key: "location", label: "Location", placeholder: "e.g. London" }],
+    fields: [
+      { key: "location", label: "Location", placeholder: "e.g. London" },
+    ],
   },
   {
     key: "workMode",
@@ -97,7 +148,13 @@ const DEFAULT_OPTIONS: LetterOption[] = [
     key: "referral",
     label: "Referred by someone",
     text: "{{referrer}} suggested that I apply for this position.",
-    fields: [{ key: "referrer", label: "Referred by", placeholder: "e.g. Jane Doe, a developer on your team" }],
+    fields: [
+      {
+        key: "referrer",
+        label: "Referred by",
+        placeholder: "e.g. Jane Doe, a developer on your team",
+      },
+    ],
   },
 ];
 
@@ -179,7 +236,29 @@ My CV is attached. Thank you for your time.
 Best,
 {{yourName}}`,
   },
+  {
+    id: "own",
+    name: "Your own letter",
+    summary:
+      "Start from your existing letter: import a .docx or paste the text.",
+    body: "",
+  },
 ];
+
+const MAX_JOB_DESCRIPTION_CHARS = 12000;
+const DOCX_ACCEPT =
+  ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+/** Reads an error message from a failed API response. */
+async function errorFrom(response: Response, fallback: string) {
+  const data = await response.json().catch(() => null);
+  return (
+    (data && typeof data.error === "string" && data.error) ||
+    `${fallback} (${response.status})`
+  );
+}
+
+type SavedSummary = { id: number; title: string; updatedAt: string };
 
 /* ── letter rendering ─────────────────────────────────── */
 
@@ -211,18 +290,20 @@ function renderLetter(
     return checked[key] ? fillFields(option.text.trim()) : "";
   });
 
-  return fillFields(withOptions)
-    .split("\n")
-    // Close gaps left by empty options; a space before ".NET" stays.
-    .map((line) =>
-      line
-        .replace(/[ \t]{2,}/g, " ")
-        .replace(/ +([.,;:!?])(?=\s|$)/g, "$1")
-        .trim(),
-    )
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return (
+    fillFields(withOptions)
+      .split("\n")
+      // Close gaps left by empty options; a space before ".NET" stays.
+      .map((line) =>
+        line
+          .replace(/[ \t]{2,}/g, " ")
+          .replace(/ +([.,;:!?])(?=\s|$)/g, "$1")
+          .trim(),
+      )
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim()
+  );
 }
 
 /* ── saved state ──────────────────────────────────────── */
@@ -236,6 +317,12 @@ type SavedState = {
   checked: Record<string, boolean>;
   optionTexts: Record<string, string>;
   customOptions: LetterOption[];
+  jobDescription: string;
+  /** The AI-tailored letter, if one was made. */
+  tailored: string;
+  /** Saved letter on the server that this draft belongs to. */
+  savedId: number | null;
+  savedTitle: string;
 };
 
 const EMPTY_STATE: SavedState = {
@@ -245,12 +332,18 @@ const EMPTY_STATE: SavedState = {
   checked: {},
   optionTexts: {},
   customOptions: [],
+  jobDescription: "",
+  tailored: "",
+  savedId: null,
+  savedTitle: "",
 };
 
 function loadState(): SavedState {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
-    return saved && typeof saved === "object" ? { ...EMPTY_STATE, ...saved } : EMPTY_STATE;
+    return saved && typeof saved === "object"
+      ? { ...EMPTY_STATE, ...saved }
+      : EMPTY_STATE;
   } catch {
     return EMPTY_STATE;
   }
@@ -267,13 +360,28 @@ const panelSx = {
 
 export default function CoverLetterBuilder() {
   const [initial] = useState(loadState);
-  const [templateId, setTemplateId] = useState<string | null>(initial.templateId);
+  const [templateId, setTemplateId] = useState<string | null>(
+    initial.templateId,
+  );
   const [bodies, setBodies] = useState(initial.bodies);
   const [values, setValues] = useState(initial.values);
   const [checked, setChecked] = useState(initial.checked);
   const [optionTexts, setOptionTexts] = useState(initial.optionTexts);
   const [customOptions, setCustomOptions] = useState(initial.customOptions);
   const [newOptionLabel, setNewOptionLabel] = useState("");
+  const [jobDescription, setJobDescription] = useState(initial.jobDescription);
+  const [tailored, setTailored] = useState(initial.tailored);
+  const [view, setView] = useState<"letter" | "tailored">(
+    initial.tailored ? "tailored" : "letter",
+  );
+  const [savedId, setSavedId] = useState<number | null>(initial.savedId);
+  const [savedTitle, setSavedTitle] = useState(initial.savedTitle);
+  const [savedLetters, setSavedLetters] = useState<SavedSummary[]>([]);
+  const [busy, setBusy] = useState<"" | "tailor" | "import" | "save" | "docx">(
+    "",
+  );
+  const importRef = useRef<HTMLInputElement | null>(null);
+  const { user } = useAuth();
   const bodyRef = useRef<HTMLTextAreaElement | null>(null);
   // Cursor in the template text, once the user has placed it there.
   const cursorRef = useRef<{ start: number; end: number } | null>(null);
@@ -283,12 +391,52 @@ export default function CoverLetterBuilder() {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ templateId, bodies, values, checked, optionTexts, customOptions }),
+        JSON.stringify({
+          templateId,
+          bodies,
+          values,
+          checked,
+          optionTexts,
+          customOptions,
+          jobDescription,
+          tailored,
+          savedId,
+          savedTitle,
+        }),
       );
     } catch {
       /* storage full or unavailable */
     }
-  }, [templateId, bodies, values, checked, optionTexts, customOptions]);
+  }, [
+    templateId,
+    bodies,
+    values,
+    checked,
+    optionTexts,
+    customOptions,
+    jobDescription,
+    tailored,
+    savedId,
+    savedTitle,
+  ]);
+
+  // Logged-in users' saved letters.
+  useEffect(() => {
+    if (!user) {
+      setSavedLetters([]);
+      return;
+    }
+    let cancelled = false;
+    apiFetch("/api/cover-letters/")
+      .then((response) => (response.ok ? response.json() : []))
+      .then((letters: SavedSummary[]) => {
+        if (!cancelled) setSavedLetters(letters);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   const template = TEMPLATES.find((entry) => entry.id === templateId) ?? null;
   const body = template ? (bodies[template.id] ?? template.body) : "";
@@ -314,7 +462,8 @@ export default function CoverLetterBuilder() {
   }, []);
 
   const letter = useMemo(
-    () => (template ? renderLetter(body, options, checked, values, labels) : ""),
+    () =>
+      template ? renderLetter(body, options, checked, values, labels) : "",
     [template, body, options, checked, values, labels],
   );
 
@@ -340,7 +489,8 @@ export default function CoverLetterBuilder() {
       ({ start, end } = cursorRef.current);
     } else {
       const anchor = body.indexOf("{{availability}}");
-      start = end = anchor === -1 ? body.length : anchor + "{{availability}}".length;
+      start = end =
+        anchor === -1 ? body.length : anchor + "{{availability}}".length;
       text = anchor === -1 ? `\n\n${token}` : ` ${token}`;
     }
     setBody(body.slice(0, start) + text + body.slice(end));
@@ -357,13 +507,19 @@ export default function CoverLetterBuilder() {
 
   const rememberCursor = () => {
     const area = bodyRef.current;
-    if (area) cursorRef.current = { start: area.selectionStart, end: area.selectionEnd };
+    if (area)
+      cursorRef.current = {
+        start: area.selectionStart,
+        end: area.selectionEnd,
+      };
   };
 
   const setOptionText = (option: LetterOption, text: string) => {
     if (option.custom) {
       setCustomOptions((current) =>
-        current.map((entry) => (entry.key === option.key ? { ...entry, text } : entry)),
+        current.map((entry) =>
+          entry.key === option.key ? { ...entry, text } : entry,
+        ),
       );
     } else {
       setOptionTexts((current) => ({ ...current, [option.key]: text }));
@@ -380,12 +536,25 @@ export default function CoverLetterBuilder() {
   const addCustomOption = () => {
     const label = newOptionLabel.trim();
     if (!label) return;
-    const base = label.replace(/[^A-Za-z0-9]+/g, " ").trim().split(" ").slice(0, 3);
+    const base = label
+      .replace(/[^A-Za-z0-9]+/g, " ")
+      .trim()
+      .split(" ")
+      .slice(0, 3);
     const stem =
-      "custom" + base.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join("");
+      "custom" +
+      base
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+        )
+        .join("");
     let key = stem;
-    for (let n = 2; options.some((option) => option.key === key); n++) key = `${stem}${n}`;
-    setCustomOptions((current) => [...current, { key, label, text: "", custom: true }]);
+    for (let n = 2; options.some((option) => option.key === key); n++)
+      key = `${stem}${n}`;
+    setCustomOptions((current) => [
+      ...current,
+      { key, label, text: "", custom: true },
+    ]);
     setChecked((current) => ({ ...current, [key]: true }));
     setNewOptionLabel("");
     // Put the new placeholder where the cursor is, or at the end.
@@ -393,7 +562,9 @@ export default function CoverLetterBuilder() {
   };
 
   const removeCustomOption = (key: string) => {
-    setCustomOptions((current) => current.filter((option) => option.key !== key));
+    setCustomOptions((current) =>
+      current.filter((option) => option.key !== key),
+    );
     setChecked((current) => {
       const next = { ...current };
       delete next[key];
@@ -405,25 +576,243 @@ export default function CoverLetterBuilder() {
     (option) => checked[option.key] && !body.includes(`{{${option.key}}}`),
   );
 
+  // The version the preview shows, which copy, download, print and save use.
+  const showingTailored = view === "tailored" && Boolean(tailored);
+  const output = showingTailored ? tailored : letter;
+
+  const defaultTitle = () => {
+    const parts = [values.company, values.role]
+      .map((part) => (part ?? "").trim())
+      .filter(Boolean);
+    return parts.length ? parts.join(" - ") : "Cover letter";
+  };
+
+  const tailorWithAi = async () => {
+    clear();
+    if (!letter.trim()) {
+      setError("Write your letter first, then tailor it.");
+      return;
+    }
+    setBusy("tailor");
+    try {
+      const response = await apiFetch("/ai/cover-letter-tailor/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          coverLetter: letter,
+          jobDescription: jobDescription.trim(),
+        }),
+      });
+      if (!response.ok)
+        throw new Error(
+          await errorFrom(response, "Could not tailor the letter"),
+        );
+      const data = await response.json();
+      setTailored(data.coverLetter);
+      setView("tailored");
+      setSuccess(
+        "Tailored to the job description. Review and edit it before sending.",
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not tailor the letter.",
+      );
+    } finally {
+      setBusy("");
+    }
+  };
+
+  /** Replaces the template text with the text of a .docx letter. */
+  const importDocx = async (file: File | undefined) => {
+    if (!file) return;
+    clear();
+    setBusy("import");
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const response = await apiFetch("/ai/cover-letter-tailor/", {
+        method: "POST",
+        body: form,
+      });
+      if (!response.ok)
+        throw new Error(await errorFrom(response, "Could not open the file"));
+      const data = await response.json();
+      cursorRef.current = null;
+      setBody(data.coverLetter);
+      setView("letter");
+      setSuccess(
+        `Imported ${file.name}. Add {{placeholders}} or tick options to reuse it.`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not open the file.");
+    } finally {
+      setBusy("");
+      if (importRef.current) importRef.current.value = "";
+    }
+  };
+
+  const saveLetter = async () => {
+    clear();
+    if (!template) return;
+    const title = savedTitle.trim() || defaultTitle();
+    setBusy("save");
+    try {
+      const payload = {
+        title,
+        content: output,
+        state: {
+          templateId: template.id,
+          body,
+          values,
+          checked,
+          optionTexts,
+          customOptions,
+          jobDescription,
+          tailored,
+          view,
+        },
+      };
+      const response = await apiFetch(
+        savedId ? `/api/cover-letters/${savedId}/` : "/api/cover-letters/",
+        {
+          method: savedId ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
+      if (!response.ok)
+        throw new Error(await errorFrom(response, "Could not save the letter"));
+      const saved: SavedSummary = await response.json();
+      setSavedId(saved.id);
+      setSavedTitle(saved.title);
+      setSavedLetters((current) => [
+        { id: saved.id, title: saved.title, updatedAt: saved.updatedAt },
+        ...current.filter((entry) => entry.id !== saved.id),
+      ]);
+      setSuccess(`Saved "${saved.title}" to your account.`);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not save the letter.",
+      );
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const openSaved = async (id: number) => {
+    clear();
+    try {
+      const response = await apiFetch(`/api/cover-letters/${id}/`);
+      if (!response.ok)
+        throw new Error(await errorFrom(response, "Could not open the letter"));
+      const data = await response.json();
+      const state = (data.state ?? {}) as Record<string, unknown>;
+      const id_ =
+        typeof state.templateId === "string" &&
+        TEMPLATES.some((t) => t.id === state.templateId)
+          ? state.templateId
+          : "own";
+      cursorRef.current = null;
+      setTemplateId(id_);
+      setBodies((current) => ({
+        ...current,
+        [id_]: typeof state.body === "string" ? state.body : data.content,
+      }));
+      setValues((state.values as Record<string, string>) ?? {});
+      setChecked((state.checked as Record<string, boolean>) ?? {});
+      setOptionTexts((state.optionTexts as Record<string, string>) ?? {});
+      setCustomOptions((state.customOptions as LetterOption[]) ?? []);
+      setJobDescription(
+        typeof state.jobDescription === "string" ? state.jobDescription : "",
+      );
+      const savedTailored =
+        typeof state.tailored === "string" ? state.tailored : "";
+      setTailored(savedTailored);
+      setView(savedTailored && state.view !== "letter" ? "tailored" : "letter");
+      setSavedId(data.id);
+      setSavedTitle(data.title);
+      setSuccess(`Opened "${data.title}".`);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not open the letter.",
+      );
+    }
+  };
+
+  const deleteSaved = async (entry: SavedSummary) => {
+    if (!window.confirm(`Delete "${entry.title}" from your account?`)) return;
+    clear();
+    const response = await apiFetch(`/api/cover-letters/${entry.id}/`, {
+      method: "DELETE",
+    }).catch(() => null);
+    if (!response?.ok) {
+      setError("Could not delete the letter.");
+      return;
+    }
+    setSavedLetters((current) =>
+      current.filter((item) => item.id !== entry.id),
+    );
+    if (savedId === entry.id) setSavedId(null);
+  };
+
+  /** Starts a fresh letter that is not linked to a saved one. */
+  const startNew = () => {
+    cursorRef.current = null;
+    setSavedId(null);
+    setSavedTitle("");
+    setTailored("");
+    setJobDescription("");
+    setView("letter");
+    setTemplateId(null);
+  };
+
+  const downloadDocx = async () => {
+    clear();
+    setBusy("docx");
+    try {
+      const response = await apiFetch("/api/cover-letters/docx/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: output }),
+      });
+      if (!response.ok)
+        throw new Error(
+          await errorFrom(response, "Could not create the Word file"),
+        );
+      downloadBlob(await response.blob(), `${fileStem()}.docx`);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not create the Word file.",
+      );
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const fileStem = () => {
+    const company = (values.company ?? "")
+      .trim()
+      .replace(/[^A-Za-z0-9]+/g, "-");
+    return `cover-letter${company ? `-${company}` : ""}`;
+  };
+
   const copyLetter = async () => {
     clear();
     try {
-      await navigator.clipboard.writeText(letter);
+      await navigator.clipboard.writeText(output);
       setSuccess("Cover letter copied to the clipboard.");
     } catch {
-      setError("Could not copy. Select the text in the preview and copy it instead.");
+      setError(
+        "Could not copy. Select the text in the preview and copy it instead.",
+      );
     }
   };
 
   const downloadLetter = () => {
-    const blob = new Blob([letter + "\n"], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    const company = (values.company ?? "").trim().replace(/[^A-Za-z0-9]+/g, "-");
-    link.href = url;
-    link.download = `cover-letter${company ? `-${company}` : ""}.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(
+      new Blob([output + "\n"], { type: "text/plain;charset=utf-8" }),
+      `${fileStem()}.txt`,
+    );
   };
 
   const printLetter = () => {
@@ -442,11 +831,81 @@ export default function CoverLetterBuilder() {
       </style></head><body></body></html>`,
     );
     doc.close();
-    doc.body.textContent = letter;
+    doc.body.textContent = output;
     frame.contentWindow?.focus();
     frame.contentWindow?.print();
     setTimeout(() => frame.remove(), 1000);
   };
+
+  const savedPanel = user ? (
+    <Box sx={panelSx}>
+      <Typography variant="subtitle2" fontWeight={700} mb={1}>
+        My saved letters
+      </Typography>
+      {savedLetters.length === 0 ? (
+        <Typography variant="body2" color="text.secondary">
+          Nothing saved yet. Use "Save" next to the preview to keep a letter in
+          your account.
+        </Typography>
+      ) : (
+        <Stack spacing={0.5}>
+          {savedLetters.map((entry) => (
+            <Stack
+              key={entry.id}
+              direction="row"
+              alignItems="center"
+              spacing={1}
+            >
+              <FolderOpenOutlinedIcon fontSize="small" color="primary" />
+              <Button
+                onClick={() => void openSaved(entry.id)}
+                sx={{
+                  textTransform: "none",
+                  flex: 1,
+                  justifyContent: "flex-start",
+                  minWidth: 0,
+                }}
+                aria-label={`Open ${entry.title}`}
+              >
+                <Typography
+                  noWrap
+                  fontWeight={savedId === entry.id ? 700 : 400}
+                >
+                  {entry.title}
+                </Typography>
+              </Button>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ whiteSpace: "nowrap" }}
+              >
+                {new Date(entry.updatedAt).toLocaleDateString()}
+              </Typography>
+              <Tooltip title="Delete">
+                <IconButton
+                  size="small"
+                  onClick={() => void deleteSaved(entry)}
+                  aria-label={`Delete ${entry.title}`}
+                >
+                  <DeleteOutlineIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          ))}
+        </Stack>
+      )}
+    </Box>
+  ) : (
+    <Typography variant="body2" color="text.secondary">
+      <a
+        href="/login?redirect=/cover-letter-builder"
+        style={{ color: "inherit" }}
+      >
+        Log in
+      </a>{" "}
+      to save cover letters to your account and open them later.
+    </Typography>
+  );
 
   /* ── step 1: choose a template ── */
 
@@ -454,6 +913,7 @@ export default function CoverLetterBuilder() {
     return (
       <PageContainer maxWidth={1000}>
         <Stack spacing={2}>
+          {savedPanel}
           <Typography variant="subtitle1" fontWeight={700}>
             Choose a template
           </Typography>
@@ -488,7 +948,11 @@ export default function CoverLetterBuilder() {
                 }}
               >
                 <Typography fontWeight={700}>{entry.name}</Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
                   {entry.summary}
                 </Typography>
                 <Typography
@@ -504,7 +968,8 @@ export default function CoverLetterBuilder() {
                     maskImage: "linear-gradient(#000 60%, transparent)",
                   }}
                 >
-                  {entry.body}
+                  {entry.body ||
+                    "Import a .docx cover letter or paste your text, then tailor it to a job with AI."}
                 </Typography>
               </Box>
             ))}
@@ -519,16 +984,19 @@ export default function CoverLetterBuilder() {
   return (
     <PageContainer maxWidth={1200}>
       <Stack spacing={2}>
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          flexWrap="wrap"
+          useFlexGap
+        >
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => {
-              cursorRef.current = null;
-              setTemplateId(null);
-            }}
+            onClick={startNew}
             sx={{ textTransform: "none" }}
           >
-            Templates
+            New letter
           </Button>
           <Typography fontWeight={700} sx={{ flex: 1 }}>
             {template.name}
@@ -541,7 +1009,10 @@ export default function CoverLetterBuilder() {
           sx={{
             display: "grid",
             gap: 2,
-            gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) minmax(0, 1fr)" },
+            gridTemplateColumns: {
+              xs: "1fr",
+              md: "minmax(0, 1fr) minmax(0, 1fr)",
+            },
             alignItems: "start",
           }}
         >
@@ -565,7 +1036,9 @@ export default function CoverLetterBuilder() {
                     label={field.label}
                     placeholder={field.placeholder}
                     value={values[field.key] ?? ""}
-                    onChange={(event) => setValue(field.key, event.target.value)}
+                    onChange={(event) =>
+                      setValue(field.key, event.target.value)
+                    }
                     multiline={field.multiline}
                     sx={field.multiline ? { gridColumn: "1 / -1" } : undefined}
                   />
@@ -577,9 +1050,14 @@ export default function CoverLetterBuilder() {
               <Typography variant="subtitle2" fontWeight={700}>
                 Include in the letter
               </Typography>
-              <Typography variant="caption" color="text.secondary" component="p" mb={1}>
-                Ticking an option puts its sentence where its placeholder is in the template.
-                You can edit each sentence.
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                component="p"
+                mb={1}
+              >
+                Ticking an option puts its sentence where its placeholder is in
+                the template. You can edit each sentence.
               </Typography>
               <Stack spacing={1}>
                 {options.map((option) => {
@@ -634,7 +1112,9 @@ export default function CoverLetterBuilder() {
                               label={field.label}
                               placeholder={field.placeholder}
                               value={values[field.key] ?? ""}
-                              onChange={(event) => setValue(field.key, event.target.value)}
+                              onChange={(event) =>
+                                setValue(field.key, event.target.value)
+                              }
                             />
                           ))}
                           <TextField
@@ -644,14 +1124,19 @@ export default function CoverLetterBuilder() {
                             label="Sentence"
                             placeholder="Write the sentence to add"
                             value={option.text}
-                            onChange={(event) => setOptionText(option, event.target.value)}
+                            onChange={(event) =>
+                              setOptionText(option, event.target.value)
+                            }
                           />
                           {edited && (
                             <Button
                               size="small"
                               startIcon={<RestartAltIcon />}
                               onClick={() => resetOptionText(option)}
-                              sx={{ alignSelf: "flex-start", textTransform: "none" }}
+                              sx={{
+                                alignSelf: "flex-start",
+                                textTransform: "none",
+                              }}
                             >
                               Restore original sentence
                             </Button>
@@ -670,7 +1155,9 @@ export default function CoverLetterBuilder() {
                   placeholder="e.g. Security clearance"
                   value={newOptionLabel}
                   onChange={(event) => setNewOptionLabel(event.target.value)}
-                  onKeyDown={(event) => event.key === "Enter" && addCustomOption()}
+                  onKeyDown={(event) =>
+                    event.key === "Enter" && addCustomOption()
+                  }
                 />
                 <IconButton
                   color="primary"
@@ -685,9 +1172,29 @@ export default function CoverLetterBuilder() {
 
             <Box sx={panelSx}>
               <Stack direction="row" alignItems="center" spacing={1} mb={1}>
-                <Typography variant="subtitle2" fontWeight={700} sx={{ flex: 1 }}>
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={700}
+                  sx={{ flex: 1 }}
+                >
                   Template text
                 </Typography>
+                <input
+                  ref={importRef}
+                  type="file"
+                  accept={DOCX_ACCEPT}
+                  hidden
+                  onChange={(event) => void importDocx(event.target.files?.[0])}
+                />
+                <Button
+                  size="small"
+                  startIcon={<UploadFileIcon />}
+                  disabled={busy !== ""}
+                  onClick={() => importRef.current?.click()}
+                  sx={{ textTransform: "none" }}
+                >
+                  Import .docx
+                </Button>
                 <Button
                   size="small"
                   startIcon={<RestartAltIcon />}
@@ -716,27 +1223,125 @@ export default function CoverLetterBuilder() {
                 inputProps={{ "aria-label": "Template text", spellCheck: true }}
                 sx={{ "& textarea": { fontSize: 14, lineHeight: 1.5 } }}
               />
-              <Typography variant="caption" color="text.secondary" component="p" mt={1}>
-                Edit freely. Text in {"{{double braces}}"} is replaced: your details, or the
-                sentence of a ticked option. Your changes are saved in this browser.
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                component="p"
+                mt={1}
+              >
+                Edit freely. Text in {"{{double braces}}"} is replaced: your
+                details, or the sentence of a ticked option. Your changes are
+                saved in this browser.
               </Typography>
               {missingPlaceholders.length > 0 && (
-                <Typography variant="caption" color="warning.main" component="p" mt={0.5}>
+                <Typography
+                  variant="caption"
+                  color="warning.main"
+                  component="p"
+                  mt={0.5}
+                >
                   Not in the template, so not shown:{" "}
-                  {missingPlaceholders.map((option) => option.label).join(", ")}. Click its
-                  placeholder chip to insert it.
+                  {missingPlaceholders.map((option) => option.label).join(", ")}
+                  . Click its placeholder chip to insert it.
                 </Typography>
+              )}
+            </Box>
+
+            <Box sx={panelSx}>
+              <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+                <AutoAwesomeIcon fontSize="small" color="primary" />
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={700}
+                  sx={{ flex: 1 }}
+                >
+                  Tailor to a job description (AI)
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color={
+                    jobDescription.length > MAX_JOB_DESCRIPTION_CHARS
+                      ? "error.main"
+                      : "text.disabled"
+                  }
+                >
+                  {jobDescription.length}/{MAX_JOB_DESCRIPTION_CHARS}
+                </Typography>
+              </Stack>
+              <TextField
+                fullWidth
+                multiline
+                minRows={5}
+                maxRows={14}
+                placeholder="Paste the job description. AI rewrites your letter to highlight your most relevant skills, without inventing experience."
+                value={jobDescription}
+                onChange={(event) => setJobDescription(event.target.value)}
+                inputProps={{ "aria-label": "Job description" }}
+              />
+              <ActionButton
+                sx={{ mt: 1.5 }}
+                startIcon={<AutoAwesomeIcon />}
+                loading={busy === "tailor"}
+                disabled={
+                  busy !== "" ||
+                  !jobDescription.trim() ||
+                  jobDescription.length > MAX_JOB_DESCRIPTION_CHARS
+                }
+                onClick={() => void tailorWithAi()}
+              >
+                {tailored ? "Tailor again" : "Tailor with AI"}
+              </ActionButton>
+              {busy === "tailor" && (
+                <LinearProgress
+                  sx={{ mt: 1.5 }}
+                  aria-label="Tailoring the letter"
+                />
               )}
             </Box>
           </Stack>
 
           {/* ── right: preview ── */}
           <Box sx={{ ...panelSx, position: { md: "sticky" }, top: { md: 16 } }}>
-            <Stack direction="row" alignItems="center" spacing={1} mb={1.5} flexWrap="wrap" useFlexGap>
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              mb={1.5}
+              flexWrap="wrap"
+              useFlexGap
+            >
               <Typography variant="subtitle2" fontWeight={700} sx={{ flex: 1 }}>
                 Preview
               </Typography>
-              <ActionButton size="small" startIcon={<ContentCopyIcon />} onClick={() => void copyLetter()}>
+              {tailored && (
+                <ToggleButtonGroup
+                  size="small"
+                  exclusive
+                  value={showingTailored ? "tailored" : "letter"}
+                  onChange={(_event, value) => value && setView(value)}
+                  aria-label="Letter version"
+                >
+                  <ToggleButton value="letter" sx={{ textTransform: "none" }}>
+                    Your letter
+                  </ToggleButton>
+                  <ToggleButton value="tailored" sx={{ textTransform: "none" }}>
+                    AI tailored
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              )}
+            </Stack>
+            <Stack
+              direction="row"
+              spacing={1}
+              mb={1.5}
+              flexWrap="wrap"
+              useFlexGap
+            >
+              <ActionButton
+                size="small"
+                startIcon={<ContentCopyIcon />}
+                onClick={() => void copyLetter()}
+              >
                 Copy
               </ActionButton>
               <TransparentButton
@@ -747,43 +1352,107 @@ export default function CoverLetterBuilder() {
               />
               <TransparentButton
                 size="small"
+                label="Download .docx"
+                startIcon={<DownloadIcon />}
+                disabled={busy !== ""}
+                onClick={() => void downloadDocx()}
+              />
+              <TransparentButton
+                size="small"
                 label="Print / PDF"
                 startIcon={<PrintIcon />}
                 onClick={printLetter}
               />
             </Stack>
-            <Box
-              aria-label="Cover letter preview"
-              sx={{
-                p: { xs: 2, sm: 3 },
-                borderRadius: 1,
-                bgcolor: "#fff",
-                color: "#111827",
-                fontFamily: 'Georgia, "Times New Roman", serif',
-                fontSize: 15,
-                lineHeight: 1.6,
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-word",
-                minHeight: 300,
-              }}
+            {user ? (
+              <Stack direction="row" spacing={1} mb={1.5}>
+                <TextField
+                  size="small"
+                  fullWidth
+                  label={savedId ? "Saved as" : "Save as"}
+                  placeholder={defaultTitle()}
+                  value={savedTitle}
+                  onChange={(event) => setSavedTitle(event.target.value)}
+                />
+                <ActionButton
+                  size="small"
+                  startIcon={<BookmarkAddOutlinedIcon />}
+                  loading={busy === "save"}
+                  disabled={busy !== "" || !output.trim()}
+                  onClick={() => void saveLetter()}
+                  sx={{ whiteSpace: "nowrap" }}
+                >
+                  {savedId ? "Update" : "Save"}
+                </ActionButton>
+              </Stack>
+            ) : (
+              <Box mb={1.5}>{savedPanel}</Box>
+            )}
+            {showingTailored ? (
+              <TextField
+                fullWidth
+                multiline
+                minRows={18}
+                value={tailored}
+                onChange={(event) => setTailored(event.target.value)}
+                inputProps={{ "aria-label": "AI tailored letter" }}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    bgcolor: "#fff",
+                    color: "#111827",
+                    fontFamily: 'Georgia, "Times New Roman", serif',
+                    fontSize: 15,
+                    lineHeight: 1.6,
+                  },
+                }}
+              />
+            ) : (
+              <Box
+                aria-label="Cover letter preview"
+                sx={{
+                  p: { xs: 2, sm: 3 },
+                  borderRadius: 1,
+                  bgcolor: "#fff",
+                  color: "#111827",
+                  fontFamily: 'Georgia, "Times New Roman", serif',
+                  fontSize: 15,
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                  minHeight: 300,
+                }}
+              >
+                {letter.split(/(\[[^\]\n]+\])/g).map((part, index) =>
+                  /^\[[^\]\n]+\]$/.test(part) ? (
+                    <Box
+                      component="mark"
+                      key={index}
+                      sx={{
+                        bgcolor: "rgba(250,204,21,0.45)",
+                        color: "inherit",
+                        px: 0.25,
+                        borderRadius: 0.5,
+                      }}
+                    >
+                      {part}
+                    </Box>
+                  ) : (
+                    part
+                  ),
+                )}
+              </Box>
+            )}
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              component="p"
+              mt={1}
             >
-              {letter.split(/(\[[^\]\n]+\])/g).map((part, index) =>
-                /^\[[^\]\n]+\]$/.test(part) ? (
-                  <Box
-                    component="mark"
-                    key={index}
-                    sx={{ bgcolor: "rgba(250,204,21,0.45)", color: "inherit", px: 0.25, borderRadius: 0.5 }}
-                  >
-                    {part}
-                  </Box>
-                ) : (
-                  part
-                ),
-              )}
-            </Box>
-            <Typography variant="caption" color="text.secondary" component="p" mt={1}>
-              Highlighted [labels] are details you have not filled in yet.
+              {showingTailored
+                ? "The AI version is editable. Changes to your details or options update 'Your letter'; tailor again to refresh this version."
+                : "Highlighted [labels] are details you have not filled in yet."}
             </Typography>
+            {user && <Box mt={2}>{savedPanel}</Box>}
           </Box>
         </Box>
       </Stack>

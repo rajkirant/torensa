@@ -5,7 +5,7 @@ from .views.cron_ai_views import cron_ai_view
 from .views.image_generate_views import image_generate_view
 from .views.transcribe_views import transcribe_view
 from .views.ai_humaniser_views import ai_humaniser_view
-from .views.cover_letter_views import cover_letter_update_view
+from .views.cover_letter_views import cover_letter_tailor_view, cover_letter_update_view
 from .views.scam_detector_views import scam_detector_view
 from .views.scam_trends_views import scam_trends_view
 from .views.birthday_cake_views import birthday_cake_view
@@ -22,6 +22,7 @@ urlpatterns = [
     path("transcribe/", transcribe_view),
     path("humanise/", ai_humaniser_view),
     path("cover-letter-update/", cover_letter_update_view),
+    path("cover-letter-tailor/", cover_letter_tailor_view),
     path("scam-detector/", scam_detector_view),
     path("scam-trends/", scam_trends_view),
     path("birthday-cake/", birthday_cake_view),

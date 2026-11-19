@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, Suspense } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 import App from "./App";
@@ -103,6 +103,12 @@ function RootRoutes({
                 {STATIC_ROUTE_PATHS.map(({ path, component: Component }) => (
                   <Route key={path} path={path} element={<Component />} />
                 ))}
+
+                {/* Cover Letter Tailor became part of Cover Letter Builder. */}
+                <Route
+                  path="cover-letter-tailor"
+                  element={<Navigate to={`${prefix}/cover-letter-builder`} replace />}
+                />
 
                 {tools.map((tool) => {
                   const key = tool.id.toLowerCase();

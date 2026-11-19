@@ -2205,58 +2205,6 @@
     ]
   },
   {
-    "id": "cover-letter-tailor",
-    "component": "CoverLetterTailor",
-    "name": "Adaptador de carta de presentación",
-    "title": "Adaptador de carta de presentación - Personaliza cartas DOCX para ofertas",
-    "description": "Sube una carta de presentación .docx, pega la descripción del puesto y genera un Word adaptado que destaque las habilidades relevantes para esa oferta.",
-    "path": "/cover-letter-tailor",
-    "ctaLabel": "Adaptar carta",
-    "offlineEnabled": false,
-    "authRequired": false,
-    "aiPowered": true,
-    "detailedDescription": "Adaptador de carta de presentación actualiza una carta .docx existente para un puesto específico. Sube tu documento de Word, pega la descripción del puesto y la herramienta reescribirá la carta para enfatizar las habilidades, responsabilidades y palabras clave relevantes, manteniendo intactos tus datos originales. El resultado se descarga como un nuevo archivo .docx.",
-    "categoryId": "documents",
-    "keywords": [
-      "adaptador de carta de presentación",
-      "generador de carta de presentación",
-      "carta de presentación para empleo",
-      "editor de carta de presentación docx",
-      "carta de presentación con ia",
-      "carta de presentación personalizada",
-      "adaptar carta de presentación a oferta",
-      "actualizador de carta de presentación",
-      "carta de presentación en word"
-    ],
-    "isActive": true,
-    "advancedOptionsEnabled": false,
-    "howTo": [
-      "Sube tu carta de presentación existente como archivo .docx.",
-      "Pega la descripción del puesto en el cuadro de texto.",
-      "Haz clic en Actualizar carta de presentación.",
-      "Descarga el archivo .docx adaptado cuando esté listo.",
-      "Revisa el documento final antes de enviarlo con tu solicitud."
-    ],
-    "faqs": [
-      {
-        "q": "¿La herramienta inventará experiencia que no tengo?",
-        "a": "No. El modelo tiene instrucciones de mantener intactos tus datos originales y solo enfatizar habilidades que estén razonablemente respaldadas por tu carta de presentación existente."
-      },
-      {
-        "q": "¿Qué formato de archivo puedo subir?",
-        "a": "Sube un documento Word .docx. Los archivos .doc más antiguos no son compatibles con esta herramienta."
-      },
-      {
-        "q": "¿El resultado sigue siendo editable?",
-        "a": "Sí. La carta adaptada se descarga como un nuevo archivo .docx que puedes abrir y editar en Microsoft Word, Google Docs u otro editor compatible."
-      },
-      {
-        "q": "¿Debo revisar la carta generada?",
-        "a": "Sí. Revisa siempre el documento final para confirmar que el tono, los datos y las afirmaciones son correctos antes de enviarlo."
-      }
-    ]
-  },
-  {
     "id": "ai-humaniser",
     "component": "AiHumaniser",
     "name": "Humanizador de texto con IA",
@@ -2616,50 +2564,51 @@
     "id": "cover-letter-builder",
     "component": "CoverLetterBuilder",
     "name": "Creador de Cartas",
-    "title": "Creador de Cartas de Presentación - Plantillas Gratis",
-    "description": "Crea una carta de presentación con plantillas editables. Marca opciones como tu visado o un nuevo stack para añadir frases y luego copia, descarga o imprime.",
+    "title": "Creador de Cartas - Plantillas y Adaptación con IA",
+    "description": "Crea una carta de presentación con plantillas y frases listas, adáptala a una oferta con IA, guárdala en tu cuenta y descárgala en Word o PDF cuando quieras.",
     "path": "/cover-letter-builder",
     "ctaLabel": "Crear carta",
     "offlineEnabled": true,
     "authRequired": false,
-    "aiPowered": false,
-    "detailedDescription": "El Creador de Cartas te ayuda a escribir una carta de presentación a medida en minutos. Elige una plantilla, introduce tus datos una vez y marca las opciones que encajan con la oferta: una frase sobre cómo tus habilidades se trasladan a otro stack técnico como .NET, tu situación de visado y permiso de trabajo, tu plazo de preaviso, la reubicación, el trabajo en remoto o una recomendación. Cada opción rellena su propio marcador, y todas las plantillas y frases se pueden editar. También puedes añadir tus propias opciones. La vista previa se actualiza al escribir y puedes copiar la carta, descargarla como texto o imprimirla en PDF. Todo se guarda solo en tu navegador.",
+    "aiPowered": true,
+    "detailedDescription": "El Creador de Cartas te ayuda a escribir una carta de presentación a medida en minutos. Elige una plantilla o importa tu propia carta en .docx, introduce tus datos una vez y marca las opciones que encajan: cómo tus habilidades se trasladan a otro stack como .NET, tu visado, tu preaviso, la reubicación, el trabajo en remoto o una recomendación. Todas las plantillas y frases se pueden editar. Pega una oferta de empleo y la IA reescribe la carta para destacar tus habilidades más relevantes sin inventar experiencia. Inicia sesión para guardar tus cartas en tu cuenta. Copia el resultado o descárgalo en Word, texto o PDF.",
     "categoryId": "documents",
     "keywords": [
       "creador de cartas de presentación",
-      "carta de presentación",
+      "carta de presentación con ia",
+      "adaptar carta de presentación a oferta",
       "plantilla carta de presentación",
       "carta de presentación gratis",
+      "guardar carta de presentación",
       "carta para cambio de carrera",
-      "carta de presentación visado",
-      "generador de cartas",
-      "carta de presentación desarrollador"
+      "carta de presentación visado"
     ],
     "isActive": true,
     "advancedOptionsEnabled": false,
     "howTo": [
-      "Elige una plantilla: Professional, Career change, Graduate / entry level o Short email.",
-      "Introduce tus datos, como tu nombre, la empresa, el puesto y tus habilidades clave. Sustituyen marcadores como {{company}} en la plantilla.",
-      "Marca las opciones que encajan, por ejemplo 'Different tech stack' para un puesto de .NET o 'Visa status'. La frase de cada opción aparece en su marcador y se puede editar.",
-      "Edita libremente el texto de la plantilla o añade tus propias opciones. Pulsa un chip de marcador para insertarlo en el cursor.",
-      "Revisa la vista previa, donde se resaltan los datos que faltan, y copia la carta, descárgala como .txt o imprímela en PDF."
+      "Elige una plantilla o 'Your own letter' para importar un .docx o pegar tu texto.",
+      "Introduce tus datos, como tu nombre, la empresa, el puesto y tus habilidades clave. Sustituyen marcadores como {{company}}.",
+      "Marca las opciones que encajan, por ejemplo 'Different tech stack' para un puesto de .NET o 'Visa status'.",
+      "Pega la oferta y pulsa 'Tailor with AI'. Sobre la vista previa puedes cambiar entre tu carta y la versión de la IA, que puedes editar.",
+      "Inicia sesión y pulsa 'Save' para guardar la carta en tu cuenta y abrirla después en 'My saved letters'.",
+      "Copia la carta, descárgala en .docx o .txt o imprímela en PDF."
     ],
     "faqs": [
       {
-        "q": "¿Se sube mi carta a algún servidor?",
-        "a": "No. La carta se crea por completo en tu navegador y tus datos y cambios solo se guardan en su almacenamiento local."
+        "q": "¿Cómo funciona la adaptación con IA?",
+        "a": "Pega la oferta y pulsa 'Tailor with AI'. La IA reescribe tu carta para destacar las habilidades que pide el puesto, mantiene tus datos y no inventa experiencia. Revisa siempre el resultado."
       },
       {
-        "q": "¿Cómo funcionan las casillas?",
-        "a": "Cada opción tiene un marcador, como {{visa}}, en la plantilla. Si la marcas, su frase sustituye al marcador; si no, el marcador desaparece."
+        "q": "¿Puedo guardar mis cartas?",
+        "a": "Sí. Con la sesión iniciada, 'Save' guarda la carta con su plantilla, datos y opciones en tu cuenta para abrirla después desde cualquier dispositivo."
       },
       {
-        "q": "¿Puedo cambiar los textos?",
-        "a": "Sí. El texto de la plantilla y cada frase se pueden editar y restaurar en cualquier momento. También puedes añadir tus propias opciones."
+        "q": "¿Puedo empezar con mi propia carta?",
+        "a": "Sí. Elige 'Your own letter', importa un .docx o pega el texto y luego adáptalo a una oferta con IA."
       },
       {
-        "q": "¿Cómo guardo la carta en PDF?",
-        "a": "Pulsa 'Print / PDF' y elige 'Guardar como PDF' en el diálogo de impresión de tu navegador."
+        "q": "¿Mis datos son privados?",
+        "a": "La carta se crea en tu navegador. Solo se envía a nuestro servidor cuando la adaptas con IA, la descargas en .docx o la guardas en tu cuenta."
       }
     ]
   }
