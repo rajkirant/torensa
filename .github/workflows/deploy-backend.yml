@@ -16,6 +16,12 @@ on:
         type: boolean
         default: false
 
+# One backend deploy at a time: a second run waits instead of updating the
+# Lambda while another update is still in progress.
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
 # Needed for AWS OIDC
 permissions:
   id-token: write
@@ -61,6 +67,8 @@ jobs:
           IMAGE_URI: ${{ steps.login_ecr.outputs.registry }}/${{ secrets.LAMBDA_ECR_REPOSITORY }}@${{ steps.build_image.outputs.digest }}
         run: |
           echo "Deploying image: $IMAGE_URI"
+          aws lambda wait function-updated \
+            --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }}
           aws lambda update-function-code \
             --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
             --image-uri "$IMAGE_URI"
