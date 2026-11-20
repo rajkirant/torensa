@@ -36,12 +36,26 @@ RUN curl -fsSL \
         && chmod +x /usr/local/bin/deno \
         && rm -f /tmp/deno.zip
 
-# FFmpeg (static build) for video/audio conversions.
-RUN curl -fsSL "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz" \
-      | tar xJ -C /tmp/ \
-    && cp /tmp/ffmpeg-*/ffmpeg /usr/local/bin/ffmpeg \
+# FFmpeg (static build) for video/audio conversions. Tries each source in
+# turn with retries, so one download site being down does not stop a deploy.
+RUN for url in \
+      "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz" \
+      "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz"; \
+    do \
+      rm -rf /tmp/ffmpeg /tmp/ffmpeg.tar.xz && mkdir -p /tmp/ffmpeg; \
+      if curl -fsSL --retry 5 --retry-all-errors --retry-delay 5 \
+            --connect-timeout 30 --max-time 600 "$url" -o /tmp/ffmpeg.tar.xz \
+         && tar xJf /tmp/ffmpeg.tar.xz -C /tmp/ffmpeg; then \
+        break; \
+      fi; \
+      echo "FFmpeg download failed from $url"; \
+    done \
+    && bin="$(ls /tmp/ffmpeg/*/ffmpeg /tmp/ffmpeg/*/bin/ffmpeg 2>/dev/null | head -1)" \
+    && test -n "$bin" \
+    && cp "$bin" /usr/local/bin/ffmpeg \
     && chmod +x /usr/local/bin/ffmpeg \
-    && rm -rf /tmp/ffmpeg-*
+    && /usr/local/bin/ffmpeg -version | head -1 \
+    && rm -rf /tmp/ffmpeg /tmp/ffmpeg.tar.xz
 
 # Install Python dependencies into Lambda task root.
 COPY backend/requirements.txt /tmp/backend-requirements.txt
