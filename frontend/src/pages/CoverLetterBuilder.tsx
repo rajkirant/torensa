@@ -41,6 +41,7 @@ type Field = {
   label: string;
   placeholder?: string;
   multiline?: boolean;
+  required?: boolean;
 };
 
 /** A checkbox that fills the {{key}} placeholder with a sentence. */
@@ -55,21 +56,43 @@ type LetterOption = {
 
 type Template = { id: string; name: string; summary: string; body: string };
 
-const DETAIL_FIELDS: Field[] = [
-  { key: "yourName", label: "Your name" },
-  { key: "yourEmail", label: "Your email" },
-  { key: "yourPhone", label: "Your phone" },
-  { key: "company", label: "Company" },
+/** Details of the job being applied for: empty for every new letter. */
+const JOB_FIELDS: Field[] = [
+  { key: "company", label: "Company", required: true },
   {
     key: "role",
     label: "Job title",
     placeholder: "e.g. Senior .NET Developer",
+    required: true,
   },
   {
     key: "hiringManager",
-    label: "Hiring manager",
-    placeholder: "e.g. Ms Smith, or Hiring Manager",
+    label: "Hiring manager (optional)",
+    placeholder: "Leave empty for 'Hiring Manager'",
   },
+];
+
+/**
+ * Values that belong to one job. They are kept only for this browser tab
+ * (so a reload keeps them) and cleared for a new letter, so details from an
+ * earlier application never end up in the next one.
+ */
+const JOB_KEYS = [
+  "company",
+  "role",
+  "hiringManager",
+  "targetTech",
+  "referrer",
+  "location",
+];
+
+const REQUIRED_JOB_FIELDS = JOB_FIELDS.filter((field) => field.required);
+
+/** Details about the applicant, remembered between letters. */
+const DETAIL_FIELDS: Field[] = [
+  { key: "yourName", label: "Your name" },
+  { key: "yourEmail", label: "Your email" },
+  { key: "yourPhone", label: "Your phone" },
   {
     key: "currentRole",
     label: "Your current role",
@@ -367,6 +390,26 @@ function renderLetter(
 /* ── saved state ──────────────────────────────────────── */
 
 const STORAGE_KEY = "torensa_cover_letter_v1";
+// Per-tab storage for the current job's details (see JOB_KEYS).
+const JOB_STORAGE_KEY = "torensa_cover_letter_job_v1";
+
+type JobState = {
+  values: Record<string, string>;
+  jobDescription: string;
+  tailored: string;
+  savedId: number | null;
+  savedTitle: string;
+};
+
+const pickJobValues = (values: Record<string, string>) =>
+  Object.fromEntries(
+    JOB_KEYS.filter((key) => values[key]).map((key) => [key, values[key]]),
+  );
+
+const withoutJobValues = (values: Record<string, string>) =>
+  Object.fromEntries(
+    Object.entries(values).filter(([key]) => !JOB_KEYS.includes(key)),
+  );
 
 type SavedState = {
   templateId: string | null;
@@ -386,7 +429,7 @@ type SavedState = {
 const EMPTY_STATE: SavedState = {
   templateId: null,
   bodies: {},
-  values: { targetTech: ".NET" },
+  values: {},
   checked: { date: true },
   optionTexts: {},
   customOptions: [],
@@ -396,15 +439,29 @@ const EMPTY_STATE: SavedState = {
   savedTitle: "",
 };
 
-function loadState(): SavedState {
+function readJson(storage: () => Storage, key: string) {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
-    return saved && typeof saved === "object"
-      ? { ...EMPTY_STATE, ...saved }
-      : EMPTY_STATE;
+    const value = JSON.parse(storage().getItem(key) ?? "null");
+    return value && typeof value === "object" ? value : null;
   } catch {
-    return EMPTY_STATE;
+    return null;
   }
+}
+
+function loadState(): SavedState {
+  const saved = readJson(() => localStorage, STORAGE_KEY) ?? {};
+  // Job details only come from this tab's storage, never from an earlier visit.
+  const job: Partial<JobState> =
+    readJson(() => sessionStorage, JOB_STORAGE_KEY) ?? {};
+  return {
+    ...EMPTY_STATE,
+    ...saved,
+    values: { ...withoutJobValues(saved.values ?? {}), ...(job.values ?? {}) },
+    jobDescription: job.jobDescription ?? "",
+    tailored: job.tailored ?? "",
+    savedId: job.savedId ?? null,
+    savedTitle: job.savedTitle ?? "",
+  };
 }
 
 /* ── component ────────────────────────────────────────── */
@@ -456,16 +513,20 @@ export default function CoverLetterBuilder() {
         JSON.stringify({
           templateId,
           bodies,
-          values,
+          values: withoutJobValues(values),
           checked,
           optionTexts,
           customOptions,
-          jobDescription,
-          tailored,
-          savedId,
-          savedTitle,
         }),
       );
+      const job: JobState = {
+        values: pickJobValues(values),
+        jobDescription,
+        tailored,
+        savedId,
+        savedTitle,
+      };
+      sessionStorage.setItem(JOB_STORAGE_KEY, JSON.stringify(job));
     } catch {
       /* storage full or unavailable */
     }
@@ -570,12 +631,18 @@ export default function CoverLetterBuilder() {
     const filled = {
       ...values,
       letterDate: values.letterDate?.trim() || todayText(),
+      hiringManager: values.hiringManager?.trim() || "Hiring Manager",
     };
     return renderLetter(body, options, checked, filled, labels);
   }, [template, body, options, checked, values, labels]);
 
   const setValue = (key: string, value: string) =>
     setValues((current) => ({ ...current, [key]: value }));
+
+  const missingJobFields = REQUIRED_JOB_FIELDS.filter(
+    (field) => !values[field.key]?.trim(),
+  );
+  const jobReady = missingJobFields.length === 0;
 
   const setBody = (value: string) => {
     if (!template) return;
@@ -865,6 +932,7 @@ export default function CoverLetterBuilder() {
   /** Starts a fresh letter that is not linked to a saved one. */
   const startNew = () => {
     cursorRef.current = null;
+    setValues((current) => withoutJobValues(current));
     setSavedId(null);
     setSavedTitle("");
     setTailored("");
@@ -1265,7 +1333,7 @@ export default function CoverLetterBuilder() {
           <Stack spacing={2}>
             <Box sx={panelSx}>
               <Typography variant="subtitle2" fontWeight={700} mb={1.5}>
-                Your details
+                This job
               </Typography>
               <Box
                 sx={{
@@ -1274,6 +1342,37 @@ export default function CoverLetterBuilder() {
                   gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                 }}
               >
+                {JOB_FIELDS.map((field) => (
+                  <TextField
+                    key={field.key}
+                    size="small"
+                    label={field.label}
+                    placeholder={field.placeholder}
+                    value={values[field.key] ?? ""}
+                    onChange={(event) =>
+                      setValue(field.key, event.target.value)
+                    }
+                    required={field.required}
+                    error={field.required && !values[field.key]?.trim()}
+                    helperText={
+                      field.required && !values[field.key]?.trim()
+                        ? "Required for this job"
+                        : undefined
+                    }
+                    sx={
+                      field.key === "hiringManager"
+                        ? { gridColumn: "1 / -1" }
+                        : undefined
+                    }
+                  />
+                ))}
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ gridColumn: "1 / -1", mt: 0.5 }}
+                >
+                  About you (remembered for your next letters)
+                </Typography>
                 {DETAIL_FIELDS.map((field) => (
                   <TextField
                     key={field.key}
@@ -1577,6 +1676,7 @@ export default function CoverLetterBuilder() {
                 loading={busy === "tailor"}
                 disabled={
                   busy !== "" ||
+                  !jobReady ||
                   !jobDescription.trim() ||
                   jobDescription.length > MAX_JOB_DESCRIPTION_CHARS
                 }
@@ -1633,6 +1733,7 @@ export default function CoverLetterBuilder() {
               <ActionButton
                 size="small"
                 startIcon={<ContentCopyIcon />}
+                disabled={!jobReady}
                 onClick={() => void copyLetter()}
               >
                 Copy
@@ -1641,22 +1742,38 @@ export default function CoverLetterBuilder() {
                 size="small"
                 label="Download .txt"
                 startIcon={<DownloadIcon />}
+                disabled={!jobReady}
                 onClick={downloadLetter}
               />
               <TransparentButton
                 size="small"
                 label="Download .docx"
                 startIcon={<DownloadIcon />}
-                disabled={busy !== ""}
+                disabled={busy !== "" || !jobReady}
                 onClick={() => void downloadDocx()}
               />
               <TransparentButton
                 size="small"
                 label="Print / PDF"
                 startIcon={<PrintIcon />}
+                disabled={!jobReady}
                 onClick={printLetter}
               />
             </Stack>
+            {!jobReady && (
+              <Typography
+                variant="body2"
+                color="warning.main"
+                mb={1.5}
+                role="status"
+              >
+                Fill in{" "}
+                {missingJobFields
+                  .map((field) => field.label.toLowerCase())
+                  .join(" and ")}{" "}
+                for this job to copy, download, save or tailor the letter.
+              </Typography>
+            )}
             {user ? (
               <Stack direction="row" spacing={1} mb={1.5}>
                 <TextField
@@ -1671,7 +1788,7 @@ export default function CoverLetterBuilder() {
                   size="small"
                   startIcon={<BookmarkAddOutlinedIcon />}
                   loading={busy === "save"}
-                  disabled={busy !== "" || !output.trim()}
+                  disabled={busy !== "" || !jobReady || !output.trim()}
                   onClick={() => void saveLetter()}
                   sx={{ whiteSpace: "nowrap" }}
                 >
