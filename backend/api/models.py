@@ -439,3 +439,24 @@ class SavedCoverLetter(models.Model):
 
     def __str__(self):
         return f"{self.title} — {self.user.username}"
+
+
+class CoverLetterTemplate(models.Model):
+    """A cover letter template a user saved from the Cover Letter Builder."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="cover_letter_templates",
+    )
+    name = models.CharField(max_length=100)
+    # Template text with {{placeholders}}.
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name", "id"]
+
+    def __str__(self):
+        return f"{self.name} — {self.user.username}"

@@ -10,6 +10,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DownloadIcon from "@mui/icons-material/Download";
 import PrintIcon from "@mui/icons-material/Print";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -287,6 +288,36 @@ async function errorFrom(response: Response, fallback: string) {
 
 type SavedSummary = { id: number; title: string; updatedAt: string };
 
+/** A template the user saved: in their account, or in this browser. */
+type MyTemplate = {
+  id: string;
+  name: string;
+  body: string;
+  source: "account" | "browser";
+  serverId?: number;
+};
+
+const LOCAL_TEMPLATES_KEY = "torensa_cover_letter_templates_v1";
+
+function loadBrowserTemplates(): MyTemplate[] {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LOCAL_TEMPLATES_KEY) ?? "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+type ServerTemplate = { id: number; name: string; body: string };
+
+const fromServer = (entry: ServerTemplate): MyTemplate => ({
+  id: `acct-${entry.id}`,
+  name: entry.name,
+  body: entry.body,
+  source: "account",
+  serverId: entry.id,
+});
+
 /* ── letter rendering ─────────────────────────────────── */
 
 const PLACEHOLDER = /\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g;
@@ -404,9 +435,13 @@ export default function CoverLetterBuilder() {
   const [savedId, setSavedId] = useState<number | null>(initial.savedId);
   const [savedTitle, setSavedTitle] = useState(initial.savedTitle);
   const [savedLetters, setSavedLetters] = useState<SavedSummary[]>([]);
-  const [busy, setBusy] = useState<"" | "tailor" | "import" | "save" | "docx">(
-    "",
-  );
+  const [accountTemplates, setAccountTemplates] = useState<MyTemplate[]>([]);
+  const [browserTemplates, setBrowserTemplates] =
+    useState<MyTemplate[]>(loadBrowserTemplates);
+  const [templateName, setTemplateName] = useState("");
+  const [busy, setBusy] = useState<
+    "" | "tailor" | "import" | "save" | "docx" | "template"
+  >("");
   const importRef = useRef<HTMLInputElement | null>(null);
   const { user } = useAuth();
   const bodyRef = useRef<HTMLTextAreaElement | null>(null);
@@ -447,10 +482,22 @@ export default function CoverLetterBuilder() {
     savedTitle,
   ]);
 
-  // Logged-in users' saved letters.
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        LOCAL_TEMPLATES_KEY,
+        JSON.stringify(browserTemplates),
+      );
+    } catch {
+      /* storage full or unavailable */
+    }
+  }, [browserTemplates]);
+
+  // Logged-in users' saved letters and templates.
   useEffect(() => {
     if (!user) {
       setSavedLetters([]);
+      setAccountTemplates([]);
       return;
     }
     let cancelled = false;
@@ -460,12 +507,41 @@ export default function CoverLetterBuilder() {
         if (!cancelled) setSavedLetters(letters);
       })
       .catch(() => undefined);
+    apiFetch("/api/cover-letter-templates/")
+      .then((response) => (response.ok ? response.json() : []))
+      .then((entries: ServerTemplate[]) => {
+        if (!cancelled) setAccountTemplates(entries.map(fromServer));
+      })
+      .catch(() => undefined);
     return () => {
       cancelled = true;
     };
   }, [user]);
 
-  const template = TEMPLATES.find((entry) => entry.id === templateId) ?? null;
+  const myTemplates = useMemo(
+    () => [...accountTemplates, ...browserTemplates],
+    [accountTemplates, browserTemplates],
+  );
+  const allTemplates: Template[] = useMemo(
+    () => [
+      ...TEMPLATES,
+      ...myTemplates.map((entry) => ({
+        id: entry.id,
+        name: entry.name,
+        summary:
+          entry.source === "account"
+            ? "Your template, saved in your account."
+            : "Your template, saved in this browser.",
+        body: entry.body,
+      })),
+    ],
+    [myTemplates],
+  );
+
+  const template =
+    allTemplates.find((entry) => entry.id === templateId) ?? null;
+  const myTemplate =
+    myTemplates.find((entry) => entry.id === templateId) ?? null;
   const body = template ? (bodies[template.id] ?? template.body) : "";
 
   const options: LetterOption[] = useMemo(
@@ -740,7 +816,7 @@ export default function CoverLetterBuilder() {
       const state = (data.state ?? {}) as Record<string, unknown>;
       const id_ =
         typeof state.templateId === "string" &&
-        TEMPLATES.some((t) => t.id === state.templateId)
+        allTemplates.some((t) => t.id === state.templateId)
           ? state.templateId
           : "own";
       cursorRef.current = null;
@@ -938,6 +1014,183 @@ export default function CoverLetterBuilder() {
     </Typography>
   );
 
+  /**
+   * Saves the current template text as a new template, or with `update`
+   * over the user's template being edited. Templates go to the account
+   * when logged in, otherwise to this browser.
+   */
+  const saveTemplate = async (update: boolean) => {
+    if (!template) return;
+    clear();
+    if (!body.trim()) {
+      setError("The template is empty.");
+      return;
+    }
+    const target = update ? myTemplate : null;
+    const name =
+      templateName.trim() ||
+      target?.name ||
+      (myTemplate ? `${template.name} (copy)` : `My ${template.name} template`);
+    setBusy("template");
+    try {
+      let saved: MyTemplate;
+      if (target?.source === "browser" || (!target && !user)) {
+        saved = {
+          id: target?.id ?? `local-${Date.now()}`,
+          name,
+          body,
+          source: "browser",
+        };
+        setBrowserTemplates((current) =>
+          target
+            ? current.map((entry) => (entry.id === target.id ? saved : entry))
+            : [...current, saved],
+        );
+      } else {
+        const response = await apiFetch(
+          target
+            ? `/api/cover-letter-templates/${target.serverId}/`
+            : "/api/cover-letter-templates/",
+          {
+            method: target ? "PATCH" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, body }),
+          },
+        );
+        if (!response.ok)
+          throw new Error(
+            await errorFrom(response, "Could not save the template"),
+          );
+        saved = fromServer(await response.json());
+        setAccountTemplates((current) =>
+          target
+            ? current.map((entry) => (entry.id === target.id ? saved : entry))
+            : [...current, saved],
+        );
+      }
+      // The saved template now holds these edits, so the template that was
+      // being edited goes back to its saved text and the new one opens.
+      setBodies((current) => {
+        const next = { ...current };
+        delete next[template.id];
+        delete next[saved.id];
+        return next;
+      });
+      cursorRef.current = null;
+      setTemplateId(saved.id);
+      setTemplateName("");
+      setSuccess(
+        `${update ? "Updated" : "Saved"} the template "${saved.name}"${
+          saved.source === "browser" ? " in this browser" : " to your account"
+        }.`,
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not save the template.",
+      );
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const deleteTemplate = async (entry: MyTemplate) => {
+    if (!window.confirm(`Delete the template "${entry.name}"?`)) return;
+    clear();
+    if (entry.source === "account") {
+      const response = await apiFetch(
+        `/api/cover-letter-templates/${entry.serverId}/`,
+        { method: "DELETE" },
+      ).catch(() => null);
+      if (!response?.ok) {
+        setError("Could not delete the template.");
+        return;
+      }
+      setAccountTemplates((current) =>
+        current.filter((item) => item.id !== entry.id),
+      );
+    } else {
+      setBrowserTemplates((current) =>
+        current.filter((item) => item.id !== entry.id),
+      );
+    }
+    setBodies((current) => {
+      const next = { ...current };
+      delete next[entry.id];
+      return next;
+    });
+  };
+
+  const templateCard = (entry: Template, mine?: MyTemplate) => (
+    <Box
+      key={entry.id}
+      role="button"
+      tabIndex={0}
+      aria-label={`Use the ${entry.name} template`}
+      onClick={() => setTemplateId(entry.id)}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setTemplateId(entry.id);
+        }
+      }}
+      sx={{
+        ...panelSx,
+        position: "relative",
+        cursor: "pointer",
+        transition: "border-color 0.15s, transform 0.15s",
+        "&:hover, &:focus-visible": {
+          borderColor: "primary.main",
+          transform: "translateY(-2px)",
+        },
+      }}
+    >
+      {mine && (
+        <Tooltip title="Delete template">
+          <IconButton
+            size="small"
+            aria-label={`Delete the ${entry.name} template`}
+            onClick={(event) => {
+              event.stopPropagation();
+              void deleteTemplate(mine);
+            }}
+            sx={{ position: "absolute", top: 8, right: 8 }}
+          >
+            <DeleteOutlineIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+      <Typography fontWeight={700} sx={{ pr: mine ? 4 : 0 }}>
+        {entry.name}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+        {entry.summary}
+      </Typography>
+      <Typography
+        component="pre"
+        variant="caption"
+        sx={{
+          m: 0,
+          maxHeight: 150,
+          overflow: "hidden",
+          whiteSpace: "pre-wrap",
+          fontFamily: "inherit",
+          opacity: 0.75,
+          maskImage: "linear-gradient(#000 60%, transparent)",
+        }}
+      >
+        {entry.body ||
+          "Import a .docx cover letter or paste your text, then tailor it to a job with AI."}
+      </Typography>
+    </Box>
+  );
+
+  const gridSx = {
+    display: "grid",
+    gap: 2,
+    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+  } as const;
+
   /* ── step 1: choose a template ── */
 
   if (!template) {
@@ -945,66 +1198,27 @@ export default function CoverLetterBuilder() {
       <PageContainer maxWidth={1000}>
         <Stack spacing={2}>
           {savedPanel}
-          <Typography variant="subtitle1" fontWeight={700}>
-            Choose a template
-          </Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-            }}
-          >
-            {TEMPLATES.map((entry) => (
-              <Box
-                key={entry.id}
-                role="button"
-                tabIndex={0}
-                aria-label={`Use the ${entry.name} template`}
-                onClick={() => setTemplateId(entry.id)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    setTemplateId(entry.id);
-                  }
-                }}
-                sx={{
-                  ...panelSx,
-                  cursor: "pointer",
-                  transition: "border-color 0.15s, transform 0.15s",
-                  "&:hover, &:focus-visible": {
-                    borderColor: "primary.main",
-                    transform: "translateY(-2px)",
-                  },
-                }}
-              >
-                <Typography fontWeight={700}>{entry.name}</Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1 }}
-                >
-                  {entry.summary}
-                </Typography>
-                <Typography
-                  component="pre"
-                  variant="caption"
-                  sx={{
-                    m: 0,
-                    maxHeight: 150,
-                    overflow: "hidden",
-                    whiteSpace: "pre-wrap",
-                    fontFamily: "inherit",
-                    opacity: 0.75,
-                    maskImage: "linear-gradient(#000 60%, transparent)",
-                  }}
-                >
-                  {entry.body ||
-                    "Import a .docx cover letter or paste your text, then tailor it to a job with AI."}
-                </Typography>
+          {myTemplates.length > 0 && (
+            <>
+              <Typography variant="subtitle1" fontWeight={700}>
+                My templates
+              </Typography>
+              <Box sx={gridSx}>
+                {myTemplates.map((mine) =>
+                  templateCard(
+                    allTemplates.find((entry) => entry.id === mine.id)!,
+                    mine,
+                  ),
+                )}
               </Box>
-            ))}
-          </Box>
+            </>
+          )}
+          <Typography variant="subtitle1" fontWeight={700}>
+            {myTemplates.length > 0
+              ? "Built-in templates"
+              : "Choose a template"}
+          </Typography>
+          <Box sx={gridSx}>{TEMPLATES.map((entry) => templateCard(entry))}</Box>
         </Stack>
       </PageContainer>
     );
@@ -1276,6 +1490,54 @@ export default function CoverLetterBuilder() {
                   . Click its placeholder chip to insert it.
                 </Typography>
               )}
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={1}
+                mt={1.5}
+                alignItems={{ sm: "center" }}
+              >
+                <TextField
+                  size="small"
+                  fullWidth
+                  label="Template name"
+                  placeholder={
+                    myTemplate?.name ?? `My ${template.name} template`
+                  }
+                  value={templateName}
+                  onChange={(event) => setTemplateName(event.target.value)}
+                  inputProps={{ maxLength: 100 }}
+                />
+                {myTemplate && (
+                  <ActionButton
+                    size="small"
+                    startIcon={<SaveOutlinedIcon />}
+                    loading={busy === "template"}
+                    disabled={busy !== ""}
+                    onClick={() => void saveTemplate(true)}
+                    sx={{ whiteSpace: "nowrap" }}
+                  >
+                    Update template
+                  </ActionButton>
+                )}
+                <TransparentButton
+                  size="small"
+                  label={myTemplate ? "Save as new" : "Save as template"}
+                  startIcon={<BookmarkAddOutlinedIcon />}
+                  disabled={busy !== ""}
+                  onClick={() => void saveTemplate(false)}
+                  sx={{ whiteSpace: "nowrap" }}
+                />
+              </Stack>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                component="p"
+                mt={0.5}
+              >
+                {user
+                  ? "Saved templates are kept in your account and listed under My templates."
+                  : "Saved templates are kept in this browser. Log in to keep them in your account."}
+              </Typography>
             </Box>
 
             <Box sx={panelSx}>

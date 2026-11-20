@@ -194,6 +194,39 @@ class CoverLetterApiTests(TestCase):
         self.client.logout()
         self.assertEqual(self.client.get("/api/cover-letters/").status_code, 403)
 
+    def test_templates_are_user_scoped(self):
+        token = self._csrf()
+        created = self._send(
+            "post",
+            "/api/cover-letter-templates/",
+            {"name": "  .NET roles ", "body": "Dear {{hiringManager}},"},
+            token,
+        )
+        self.assertEqual(created.status_code, 201)
+        template_id = created.json()["id"]
+        self.assertEqual(created.json()["name"], ".NET roles")
+
+        updated = self._send(
+            "patch", f"/api/cover-letter-templates/{template_id}/", {"body": "Hi {{hiringManager}},"}, token
+        )
+        self.assertEqual(updated.json()["body"], "Hi {{hiringManager}},")
+        self.assertEqual(
+            [(t["name"], t["body"]) for t in self.client.get("/api/cover-letter-templates/").json()],
+            [(".NET roles", "Hi {{hiringManager}},")],
+        )
+        self.assertEqual(
+            self._send("post", "/api/cover-letter-templates/", {"name": "", "body": "x"}, token).status_code, 400
+        )
+
+        self.client.logout()
+        self.client.force_login(self.other_user)
+        self.assertEqual(self.client.get("/api/cover-letter-templates/").json(), [])
+        other_token = self._csrf()
+        self.assertEqual(
+            self.client.delete(f"/api/cover-letter-templates/{template_id}/", HTTP_X_CSRFTOKEN=other_token).status_code,
+            404,
+        )
+
     def test_tailor_returns_text(self):
         from unittest import mock
 

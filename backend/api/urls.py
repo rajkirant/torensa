@@ -80,6 +80,8 @@ from .views.donation_views import donation_config_view, donation_intent_view
 from .views.saved_cover_letter_views import (
     saved_cover_letters_view,
     saved_cover_letter_detail_view,
+    cover_letter_templates_view,
+    cover_letter_template_detail_view,
 )
 from .views.cover_letter_views import cover_letter_docx_view
 
@@ -151,6 +153,8 @@ urlpatterns = [
     path("cover-letters/", saved_cover_letters_view),
     path("cover-letters/docx/", cover_letter_docx_view),
     path("cover-letters/<int:letter_id>/", saved_cover_letter_detail_view),
+    path("cover-letter-templates/", cover_letter_templates_view),
+    path("cover-letter-templates/<int:template_id>/", cover_letter_template_detail_view),
     # CSV Builder
     path("csv/", csv_list_create),
     path("csv/<int:csv_id>/", csv_detail),
